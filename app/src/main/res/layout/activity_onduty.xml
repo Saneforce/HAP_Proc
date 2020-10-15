@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Ocheck_in"
+    android:orientation="vertical">
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/sign_bg"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        >
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/alegreya_sans_sc"
+            android:text="@string/on_duty_checkin"
+            android:textColor="#FDFDFD"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <Button
+            android:layout_width="109dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="381dp"
+            android:layout_marginEnd="157dp"
+            android:background="@drawable/sign_bg"
+            android:fontFamily="@font/alegreya_sans_sc"
+            android:text="Submit"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold" />
+
+        <EditText
+            android:layout_width="367dp"
+            android:layout_height="112dp"
+            android:elevation="10dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="230dp"
+            android:layout_marginEnd="19dp"
+            android:background="@drawable/des_bg" />
+
+        <EditText
+            android:id="@+id/plc_id"
+            android:layout_width="367dp"
+            android:layout_height="40dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="130dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/des_bg"
+            android:importantForAutofill="no"
+            android:visibility="invisible" />
+
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="373dp"
+            android:layout_height="34dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="54dp"
+            android:layout_marginEnd="19dp" />
+
+        <Spinner
+            android:id="@+id/spinner2"
+            android:layout_width="371dp"
+            android:layout_height="36dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="130dp"
+            android:layout_marginEnd="12dp" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="106dp"
+            android:layout_height="23dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="187dp"
+            android:layout_marginEnd="284dp"
+            android:fontFamily="@font/alegreya_sans_sc"
+            android:text="Purpose Of Vist"
+            android:textColor="#090909" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="83dp"
+            android:layout_height="34dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="309dp"
+            android:fontFamily="@font/alegreya_sans_sc"
+            android:text="@string/select_type"
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="105dp"
+            android:layout_marginEnd="292dp"
+            android:fontFamily="@font/alegreya_sans_sc"
+            android:text="@string/enter_location"
+            android:textColor="#000000" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

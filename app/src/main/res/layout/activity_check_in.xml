@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Check_in">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/google_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:alpha="0.9"
+        android:background="#A3CEDA"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/acet_status"
+            android:layout_width="159dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="245dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/alegreya_sans_sc"
+            android:background="@drawable/des_bg"
+            android:clickable="false"
+            android:focusable="false"
+            android:hint="Select Shift Time"
+            android:inputType="none" />
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="133dp"
+        android:layout_height="163dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="69dp"
+        android:id="@+id/frame_Layout">
+    <TextureView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/texture"/>
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/button_capture"
+        android:layout_width="356dp"
+        android:layout_height="35dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="23dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="11dp"
+        android:background="@drawable/sign_bg"
+        android:text="Capture and Submit" />
+
+
+</RelativeLayout>
