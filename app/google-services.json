@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:57770165619:android:db8576355a63df83c43106",
         "android_client_info": {
-          "package_name": "com.example.sanloginui"
+          "package_name": "com.hap.checkinproc"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "57770165619-eo05mdjpm5mh8tjf6p9br2micp7dk780.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.sanloginui",
+            "package_name": "com.hap.checkinproc",
             "certificate_hash": "092f8e77821830c243af2346f788556c83e15f2e"
           }
         },
