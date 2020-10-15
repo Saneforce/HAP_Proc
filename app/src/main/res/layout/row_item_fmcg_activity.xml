@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#000"
+        android:textStyle="bold"
+        android:text="Field Name"
+        android:textSize="18sp"
+        android:id="@+id/txt_label"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:hint="Enter Text"
+            android:padding="8dp"
+            android:textColorHint="#787878"
+            android:singleLine="true"
+            android:id="@+id/edt_field"
+            android:visibility="gone"
+            android:background="@drawable/round_rect_light_grey"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:hint="Enter Numeric Value"
+            android:padding="8dp"
+            android:textColorHint="#787878"
+            android:digits="1234567890"
+            android:singleLine="true"
+            android:id="@+id/edt_field_numeric"
+            android:inputType="number"
+            android:visibility="gone"
+            android:background="@drawable/round_rect_light_grey"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:textColor="#000"
+            android:hint="Enter Text"
+            android:padding="5dp"
+            android:textColorHint="#787878"
+            android:id="@+id/edt_feed"
+            android:visibility="gone"
+            android:background="@drawable/round_rect_light_grey"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:id="@+id/rlay_date"
+            android:visibility="gone"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:text="From"
+                android:padding="8dp"
+                android:id="@+id/from_txt"/>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_rect_light_grey"
+                android:padding="8dp"
+                android:id="@+id/rlay_spin_fdt"
+                android:visibility="visible"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/from_txt">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:text=" Select "
+                    android:id="@+id/spin_txt_fdt"/>
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/spin_down_arrow"
+                    android:layout_toRightOf="@+id/spin_txt_fdt"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:text="To"
+                android:padding="8dp"
+                android:id="@+id/to_txt"
+                android:layout_marginLeft="20dp"
+                android:layout_toRightOf="@+id/rlay_spin_fdt"/>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_rect_light_grey"
+                android:padding="8dp"
+                android:id="@+id/rlay_spin_tdt"
+                android:visibility="visible"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/to_txt">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:text=" Select "
+                    android:id="@+id/spin_txt_tdt"/>
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:src="@drawable/spin_down_arrow"
+                    android:layout_toRightOf="@+id/spin_txt_tdt"
+                    android:layout_marginLeft="10dp"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_rect_light_grey"
+            android:padding="8dp"
+            android:id="@+id/rlay_spin"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:text=" Select "
+                android:id="@+id/spin_txt"/>
+            <ImageView
+                android:layout_width="12dp"
+                android:layout_height="12dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/spin_down_arrow"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rlay_currency"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_currency"
+                android:textColor="#000"
+                android:text="$"
+                android:layout_centerVertical="true"
+                android:singleLine="true"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:hint="Enter the value"
+                android:padding="8dp"
+                android:text="hello"
+                android:textColorHint="#787878"
+                android:digits="1234567890"
+                android:layout_marginLeft="5dp"
+                android:singleLine="true"
+                android:id="@+id/edt_field_currency"
+                android:inputType="number"
+                android:layout_toRightOf="@+id/txt_currency"
+                android:visibility="visible"
+                android:background="@drawable/round_rect_light_grey"/>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/dyn_lay"
+            android:visibility="gone"></RelativeLayout>
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/rlay_upload"
+            android:visibility="gone">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_rect_light_grey"
+                android:text="Upload"
+                android:textColor="#000"
+                android:id="@+id/btn_upload"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_upload"
+                android:background="@drawable/blue_txt_bg"
+                android:textColor="#fff"
+                android:padding="2dp"
+                android:layout_marginLeft="18dp"
+                android:layout_toRightOf="@+id/btn_upload"
+                android:layout_centerVertical="true"
+                android:singleLine="true"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
