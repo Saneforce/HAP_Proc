@@ -11,7 +11,7 @@
         android:id="@+id/toolbar2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/sign_bg"
+        android:background="@drawable/button_blueg"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme">
 
@@ -42,23 +42,67 @@
             android:padding="18dp"
             android:orientation="vertical"
             android:clipToPadding="false">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/alegreya_sans_sc"
-                android:text="DATE:"
-                android:textColor="@android:color/black"
-                android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/missed_date"
-                android:layout_width="379dp"
-                android:layout_height="38dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/textbox_bg"
-                android:elevation="10dp"
-                android:clickable="false"
-                android:focusable="false"/>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="123dp"
+                app:cardCornerRadius="10dp"
+                android:background="@color/cardview_light_background">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="58dp"
+                        android:fontFamily="@font/alegreya_sans_sc"
+                        android:text="missed date"
+                        android:textColor="@android:color/black"
+                        android:textStyle="bold" />
+
+
+                    <EditText
+                        android:hint="Select the Date"
+                        android:id="@+id/missed_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="49dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="2dp"
+                        android:background="@drawable/textbox_bg"
+                        android:clickable="false"
+                        android:elevation="5dp"
+                        android:focusable="false"
+                        android:fontFamily="@font/alegreya_sans_sc" />
+
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="match_parent"
+                        android:layout_height="41dp"
+                        android:background="@drawable/button_yellow"/>
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/alegreya_sans_sc"
+                        android:text="Missed Date"
+                        android:textAllCaps="false"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </RelativeLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,7 +116,7 @@
             <EditText
                 android:id="@+id/missed_shift"
                 android:layout_width="379dp"
-                android:layout_height="38dp"
+                android:layout_height="45dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/textbox_bg"
                 android:elevation="10dp"
@@ -91,7 +135,7 @@
             <EditText
                 android:id="@+id/missed_checkin"
                 android:layout_width="379dp"
-                android:layout_height="38dp"
+                android:layout_height="45dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/textbox_bg"
                 android:elevation="10dp"
@@ -111,7 +155,7 @@
             <EditText
                 android:id="@+id/missed_checkout"
                 android:layout_width="379dp"
-                android:layout_height="38dp"
+                android:layout_height="45dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/textbox_bg"
                 android:elevation="10dp"
