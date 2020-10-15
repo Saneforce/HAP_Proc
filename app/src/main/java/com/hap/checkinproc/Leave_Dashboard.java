@@ -6,13 +6,56 @@ import androidx.cardview.widget.CardView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
-public class Leave_Dashboard extends AppCompatActivity  implements View.OnClickListener {
+import com.hap.checkinproc.Leave_Request;
+import com.hap.checkinproc.Missed_Punch;
+import com.hap.checkinproc.Permission_Request;
+import com.hap.checkinproc.R;
+import com.hap.checkinproc.Weekly_Off;
+
+public class Leave_Dashboard extends AppCompatActivity  {
+
+    String[] mobileArray = {"Leave Request","Permission Request","Missed Punch","Weekly Off"};
+    String[] mobileArray2 = {"Leave Status","Permission Status","On-duty Status","Missed Punch Status","weekly-off Status","extended shift Status"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave_dashboard);
+
+        ArrayAdapter adapter = new ArrayAdapter<String>(Leave_Dashboard.this,R.layout.layout_checkin,R.id.tv_element, mobileArray);
+
+        ListView listView = (ListView) findViewById(R.id.mobile_list);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                switch (position) {
+                    case 0:
+                        startActivity(new Intent(Leave_Dashboard.this, Leave_Request.class));break;
+                    case 1:
+                        startActivity(new Intent(Leave_Dashboard.this, Permission_Request.class));break;
+                    case 2:
+                        startActivity(new Intent(Leave_Dashboard.this, Missed_Punch.class));break;
+                    case 3:
+                        startActivity(new Intent(Leave_Dashboard.this, Weekly_Off.class));break;
+
+
+                }
+            }
+        });
+
+        ArrayAdapter adapter2 = new ArrayAdapter<String>(Leave_Dashboard.this,R.layout.layout_checkin,R.id.tv_element, mobileArray2);
+
+       // ListView listView2 = (ListView) findViewById(R.id.mobile_list2);
+        //listView2.setAdapter(adapter2);
+
+/*
         CardView cardview1 = findViewById(R.id.leave_request);
         CardView cardview2 = findViewById(R.id.permission_request);
         CardView cardview3 = findViewById(R.id.missed_punch);
@@ -23,6 +66,8 @@ public class Leave_Dashboard extends AppCompatActivity  implements View.OnClickL
         cardview2.setOnClickListener(this);
         cardview3.setOnClickListener(this);
         cardview4.setOnClickListener(this);
+
+
 
 
 
@@ -56,6 +101,6 @@ public class Leave_Dashboard extends AppCompatActivity  implements View.OnClickL
 
                 startActivity(i4);
                 break;
-        }
+        }*/
     }
 }
