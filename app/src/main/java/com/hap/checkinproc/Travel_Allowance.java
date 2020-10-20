@@ -41,7 +41,6 @@ public class Travel_Allowance extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_travel__allowance);
 
-
         SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         Scode = (shared.getString("Sfcode", "null"));
         Dcode=(shared.getString("Divcode","null"));

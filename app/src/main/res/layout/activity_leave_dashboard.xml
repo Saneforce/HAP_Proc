@@ -230,7 +230,7 @@
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
-            android:layout_height="243dp"
+            android:layout_height="226dp"
             android:layout_margin="10dp"
             app:cardCornerRadius="10dp">
 
@@ -271,7 +271,6 @@
                         android:layout_height="match_parent"
                         android:dividerHeight="0dp">
 
-
                     </ListView>
                 </LinearLayout>
 
@@ -282,8 +281,8 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_width="wrap_content"
+            android:layout_height="379dp"
             android:layout_margin="10dp"
             app:cardCornerRadius="10dp">
 
@@ -293,9 +292,9 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="59dp"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="250dp"
+                    android:layout_marginBottom="341dp"
                     android:background="@drawable/button_yellow" />
 
                 <TextView
@@ -312,41 +311,62 @@
                     android:textStyle="bold" />
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="250dp"
+                    android:layout_width="390dp"
+                    android:layout_height="334dp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginBottom="0dp"
                     android:orientation="vertical">
 
-                    <EditText
+                    <!--<EditText
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:background="@drawable/des_bg"/>
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="@drawable/des_bg"/>
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="@drawable/des_bg"/>
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="@drawable/des_bg"/>
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="@drawable/des_bg"/>
+                        android:background="@drawable/des_bg"
+                        android:focusable="false"
+                        android:text="Leave Status" />
 
-                   <!-- <ListView
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:background="@drawable/des_bg"
+                        android:focusable="false"
+                        android:text="Permission Status"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:background="@drawable/des_bg"
+                        android:focusable="false"
+                        android:text="On-Duty Status"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:background="@drawable/des_bg"
+                        android:focusable="false"
+                        android:text="Missed Punch Status"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:background="@drawable/des_bg"
+                        android:text="Weekoff Status"
+                        android:focusable="false"
+                        />
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:background="@drawable/des_bg"
+                        android:focusable="false"
+                        android:text="Extended Shift Status"/>-->
+
+                    <ListView
                         android:id="@+id/mobile_list2"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:dividerHeight="0dp">
 
 
-                    </ListView>-->
+                    </ListView>
                 </LinearLayout>
 
 

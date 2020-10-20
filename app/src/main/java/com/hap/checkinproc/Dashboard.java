@@ -26,22 +26,21 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_dashboard);
         username=findViewById(R.id.username);
         CardView cardview1 = findViewById(R.id.cardview1);
-     CardView cardview2 = findViewById(R.id.sec_card_view);
+        CardView cardview2 = findViewById(R.id.sec_card_view);
         CardView cardview3 = findViewById(R.id.cardview3);
         CardView cardview4 = findViewById(R.id.cardview4);
         CardView cardview8 = findViewById(R.id.cardview8);
-
         CardView cardview5 = findViewById(R.id.cardview5);
 
 
 
 //profile image set
-        profileImage=(ImageView)findViewById(R.id.profile_image);
+        /*profileImage=(ImageView)findViewById(R.id.profile_image);
         Intent intent = getIntent();
         pic = intent.getStringExtra("photo");
         Log.e("avra",pic );
         Glide.with(this).load(pic).into(profileImage);
-
+*/
         SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         type = (shared.getInt("Sfftype", 0));
 
