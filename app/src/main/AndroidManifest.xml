@@ -26,23 +26,23 @@
 
 
         </activity>
-        <activity android:name=".Reports" />
-        <activity android:name=".Dashboard_Two" />
-        <activity android:name=".Weekly_Off" />
-        <activity android:name=".Missed_Punch" />
-        <activity android:name=".Permission_Request" />
-        <activity android:name=".Leave_Request" />
-        <activity android:name=".Travel_Allowance" />
-        <activity android:name=".Leave_Dashboard" />
-        <activity android:name=".Ocheck_in" />
+        <activity android:name=".Activity_Hap.Reports" />
+        <activity android:name=".Activity_Hap.Dashboard_Two" />
+        <activity android:name=".Activity_Hap.Weekly_Off" />
+        <activity android:name=".Activity_Hap.Missed_Punch" />
+        <activity android:name=".Activity_Hap.Permission_Request" />
+        <activity android:name=".Activity_Hap.Leave_Request" />
+        <activity android:name=".Activity_Hap.Travel_Allowance" />
+        <activity android:name=".Activity_Hap.Leave_Dashboard" />
+        <activity android:name=".Activity_Hap.Ocheck_in" />
         <activity
-            android:name=".Check_in"
+            android:name=".Activity_Hap.Check_in"
             android:noHistory="true" />
-        <activity android:name=".Dashboard" />
+        <activity android:name=".Activity_Hap.Dashboard" />
         <activity
-            android:name=".Login"
+            android:name=".Activity_Hap.Login"
             android:noHistory="true" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".Activity_Hap.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

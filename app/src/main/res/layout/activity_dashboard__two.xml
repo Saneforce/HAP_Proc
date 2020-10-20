@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Dashboard_Two"
+    tools:context=".Activity_Hap.Dashboard_Two"
     android:orientation="vertical">
 
 

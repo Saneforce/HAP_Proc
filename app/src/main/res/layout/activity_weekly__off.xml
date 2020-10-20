@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Weekly_Off"
+    tools:context=".Activity_Hap.Weekly_Off"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -115,7 +115,7 @@
 
             <EditText
                 android:id="@+id/remarks_week"
-                android:layout_width="368dp"
+                android:layout_width="match_parent"
                 android:layout_height="110dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/textbox_bg"

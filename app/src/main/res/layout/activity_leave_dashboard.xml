@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Leave_Dashboard"
+    tools:context=".Activity_Hap.Leave_Dashboard"
     android:orientation="vertical">
 
 
@@ -223,159 +223,120 @@
         </androidx.cardview.widget.CardView>
     </LinearLayout>-->
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="226dp"
-            android:layout_margin="10dp"
-            app:cardCornerRadius="10dp">
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="210dp"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <View
-
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="197dp"
-                    android:background="@drawable/button_yellow" />
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/alegreya_sans_sc"
-                    android:text="Request"
-                    android:textAllCaps="false"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    <View
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="0dp">
-
-                    <ListView
-                        android:id="@+id/mobile_list"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:dividerHeight="0dp">
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="174dp"
+                        android:background="@drawable/button_yellow" />
 
-                    </ListView>
-                </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/alegreya_sans_sc"
+                        android:text="Request"
+                        android:textAllCaps="false"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="182dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="0dp">
+
+                        <ListView
+                            android:id="@+id/mobile_list"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:dividerHeight="0dp">
+
+                        </ListView>
+                    </LinearLayout>
 
 
-            </RelativeLayout>
+                </RelativeLayout>
 
 
-        </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="379dp"
-            android:layout_margin="10dp"
-            app:cardCornerRadius="10dp">
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="313dp"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp">
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <View
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="59dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="341dp"
-                    android:background="@drawable/button_yellow" />
+                    android:layout_height="match_parent">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/alegreya_sans_sc"
-                    android:text="status"
-                    android:textAllCaps="false"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
 
-                <LinearLayout
-                    android:layout_width="390dp"
-                    android:layout_height="334dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="0dp"
-                    android:orientation="vertical">
-
-                    <!--<EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="@drawable/des_bg"
-                        android:focusable="false"
-                        android:text="Leave Status" />
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="@drawable/des_bg"
-                        android:focusable="false"
-                        android:text="Permission Status"/>
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="@drawable/des_bg"
-                        android:focusable="false"
-                        android:text="On-Duty Status"/>
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="@drawable/des_bg"
-                        android:focusable="false"
-                        android:text="Missed Punch Status"/>
-
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="@drawable/des_bg"
-                        android:text="Weekoff Status"
-                        android:focusable="false"
-                        />
-                    <EditText
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp"
-                        android:background="@drawable/des_bg"
-                        android:focusable="false"
-                        android:text="Extended Shift Status"/>-->
-
-                    <ListView
-                        android:id="@+id/mobile_list2"
+                    <View
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:dividerHeight="0dp">
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="275dp"
+                        android:background="@drawable/button_yellow" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/alegreya_sans_sc"
+                        android:text="status"
+                        android:textAllCaps="false"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="275dp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="0dp"
+                        android:orientation="vertical">
 
 
-                    </ListView>
-                </LinearLayout>
+                        <ListView
+                            android:id="@+id/mobile_list2"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:dividerHeight="0dp">
 
 
-            </RelativeLayout>
+                        </ListView>
+                    </LinearLayout>
 
 
-        </androidx.cardview.widget.CardView>
+                </RelativeLayout>
 
-    </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
 
 
 

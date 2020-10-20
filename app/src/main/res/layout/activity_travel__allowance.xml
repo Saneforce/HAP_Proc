@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Travel_Allowance"
+    tools:context=".Activity_Hap.Travel_Allowance"
     android:orientation="vertical"
     >
 

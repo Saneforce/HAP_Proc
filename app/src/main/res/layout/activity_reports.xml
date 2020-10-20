@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Reports">
+    tools:context=".Activity_Hap.Reports">
 
 
     <androidx.recyclerview.widget.RecyclerView
