@@ -6,7 +6,7 @@
     android:layout_centerHorizontal="false"
     android:background="#f9f9f9"
     android:orientation="vertical"
-    tools:context=".Login"
+    tools:context=".Activity_Hap.Login"
     android:padding="20dp">
 
     <ImageView

@@ -8,14 +8,14 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:241925764312:android:4ffd10294ec238ce83d3ad",
+        "mobilesdk_app_id": "1:241925764312:android:a148ad184e7dfc3783d3ad",
         "android_client_info": {
           "package_name": "com.hap.checkinproc"
         }
       },
       "oauth_client": [
         {
-          "client_id": "241925764312-ro9fo8okfkg5o1dufeatrhvug4nhlku9.apps.googleusercontent.com",
+          "client_id": "241925764312-aqojl4bfbs9rk6knnejvbbfhpl8ko574.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.hap.checkinproc",

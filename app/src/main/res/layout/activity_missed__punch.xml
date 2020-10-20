@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Missed_Punch"
+    tools:context=".Activity_Hap.Missed_Punch"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -115,7 +115,7 @@
 
             <EditText
                 android:id="@+id/missed_shift"
-                android:layout_width="379dp"
+                android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/textbox_bg"
@@ -134,7 +134,7 @@
 
             <EditText
                 android:id="@+id/missed_checkin"
-                android:layout_width="379dp"
+                android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/textbox_bg"
@@ -154,7 +154,7 @@
 
             <EditText
                 android:id="@+id/missed_checkout"
-                android:layout_width="379dp"
+                android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/textbox_bg"
@@ -175,11 +175,14 @@
 
             <EditText
                 android:id="@+id/reason_missed"
-                android:layout_width="368dp"
+                android:layout_width="match_parent"
                 android:layout_height="110dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/textbox_bg"
-                android:elevation="10dp" />
+                android:elevation="10dp"
+                android:textAlignment="textStart"
+
+                />
 
 
 
