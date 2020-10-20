@@ -30,7 +30,6 @@ public class  Permission_Request extends AppCompatActivity {
 
         eText1=(EditText) findViewById(R.id.permission_date);
         eText1.setInputType(InputType.TYPE_NULL);
-
         eText1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -56,8 +55,9 @@ public class  Permission_Request extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final Calendar cldr = Calendar.getInstance();
-                int hour = cldr.get(Calendar.HOUR_OF_DAY);
+                int hour = cldr.get(Calendar.HOUR);
                 int minutes = cldr.get(Calendar.MINUTE);
+                int aa = cldr.get(Calendar.AM_PM);
                 // time picker dialog
                 picker = new TimePickerDialog(Permission_Request.this,
                         new TimePickerDialog.OnTimeSetListener() {
@@ -65,7 +65,7 @@ public class  Permission_Request extends AppCompatActivity {
                             public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
                                 eText.setText(sHour + ":" + sMinute);
                             }
-                        }, hour, minutes, true);
+                        }, hour, minutes, false);
                 picker.show();
             }
         });
@@ -76,7 +76,7 @@ public class  Permission_Request extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final Calendar cldr = Calendar.getInstance();
-                int hour = cldr.get(Calendar.HOUR_OF_DAY);
+                int hour = cldr.get(Calendar.HOUR);
                 int minutes = cldr.get(Calendar.MINUTE);
                 // time picker dialog
                 picker = new TimePickerDialog(Permission_Request.this,
@@ -85,7 +85,7 @@ public class  Permission_Request extends AppCompatActivity {
                             public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
                                 eText2.setText(sHour + ":" + sMinute);
                             }
-                        }, hour, minutes, true);
+                        }, hour, minutes, false);
                 picker.show();
             }
         });

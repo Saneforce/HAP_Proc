@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "57770165619",
-    "firebase_url": "https://sanloginui-19647.firebaseio.com",
-    "project_id": "sanloginui-19647",
-    "storage_bucket": "sanloginui-19647.appspot.com"
+    "project_number": "241925764312",
+    "firebase_url": "https://happroc.firebaseio.com",
+    "project_id": "happroc",
+    "storage_bucket": "happroc.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:57770165619:android:db8576355a63df83c43106",
+        "mobilesdk_app_id": "1:241925764312:android:4ffd10294ec238ce83d3ad",
         "android_client_info": {
           "package_name": "com.hap.checkinproc"
         }
       },
       "oauth_client": [
         {
-          "client_id": "57770165619-eo05mdjpm5mh8tjf6p9br2micp7dk780.apps.googleusercontent.com",
+          "client_id": "241925764312-ro9fo8okfkg5o1dufeatrhvug4nhlku9.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.hap.checkinproc",
@@ -23,20 +23,20 @@
           }
         },
         {
-          "client_id": "57770165619-0j7hhlcbg6q3p6jo8g0v1itrea9uumlf.apps.googleusercontent.com",
+          "client_id": "241925764312-o7scuesihsujof412eopr0hj45cnkuu1.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyApnfk3QQbR2LolWSPtEzpWnlDdeqONQjA"
+          "current_key": "AIzaSyAr1WVd-OHcFPWUebJJUmgJBCc_qCg9j_Y"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "57770165619-0j7hhlcbg6q3p6jo8g0v1itrea9uumlf.apps.googleusercontent.com",
+              "client_id": "241925764312-o7scuesihsujof412eopr0hj45cnkuu1.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

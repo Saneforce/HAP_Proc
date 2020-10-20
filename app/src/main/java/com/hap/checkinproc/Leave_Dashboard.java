@@ -52,8 +52,8 @@ public class Leave_Dashboard extends AppCompatActivity  {
 
         ArrayAdapter adapter2 = new ArrayAdapter<String>(Leave_Dashboard.this,R.layout.layout_checkin,R.id.tv_element, mobileArray2);
 
-       // ListView listView2 = (ListView) findViewById(R.id.mobile_list2);
-        //listView2.setAdapter(adapter2);
+        ListView listView2 = (ListView) findViewById(R.id.mobile_list2);
+        listView2.setAdapter(adapter2);
 
 /*
         CardView cardview1 = findViewById(R.id.leave_request);

@@ -193,8 +193,11 @@
                         android:layout_marginBottom="2dp"
                         android:background="@drawable/textbox_bg"
                         android:elevation="10dp"
-                        android:inputType="number"
-                        android:clickable="false"/>
+                        android:clickable="false"
+                        android:textAlignment="center"
+                      android:text="0"
+                        android:focusable="false"
+                       />
 
                     <View
                         android:id="@+id/divider4"
