@@ -45,8 +45,6 @@ public class Leave_Request extends AppCompatActivity {
         //difference();
         setListeners();
 
-
-
         eText=(EditText) findViewById(R.id.from_date);
         eText.setInputType(InputType.TYPE_NULL);
 
@@ -91,9 +89,6 @@ public class Leave_Request extends AppCompatActivity {
                             }
                         }, year, month, day);
                 picker.show();
-
-
-
 
             }
         });

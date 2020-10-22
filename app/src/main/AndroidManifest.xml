@@ -21,11 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".Activity.ViewActivity"
-            android:screenOrientation="portrait">
-
-
-        </activity>
+        <activity android:name=".Activity_Hap.Leave_Approval"></activity>
+        <activity
+            android:name=".Activity.ViewActivity"
+            android:screenOrientation="portrait"></activity>
         <activity android:name=".Activity_Hap.Reports" />
         <activity android:name=".Activity_Hap.Dashboard_Two" />
         <activity android:name=".Activity_Hap.Weekly_Off" />
@@ -35,6 +34,7 @@
         <activity android:name=".Activity_Hap.Travel_Allowance" />
         <activity android:name=".Activity_Hap.Leave_Dashboard" />
         <activity android:name=".Activity_Hap.Ocheck_in" />
+        <activity android:name=".Activity_Hap.Approvals" />
         <activity
             android:name=".Activity_Hap.Check_in"
             android:noHistory="true" />

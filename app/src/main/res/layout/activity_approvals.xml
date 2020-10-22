@@ -226,7 +226,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
+<!--
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="210dp"
@@ -277,11 +277,11 @@
                 </RelativeLayout>
 
 
-            </androidx.cardview.widget.CardView>
+            </androidx.cardview.widget.CardView>-->
 
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
-                android:layout_height="313dp"
+                android:layout_height="350dp"
                 android:layout_margin="10dp"
                 app:cardCornerRadius="10dp">
 
@@ -294,16 +294,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="275dp"
+                        android:layout_marginBottom="311dp"
                         android:background="@drawable/button_yellow" />
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="35dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="8dp"
                         android:fontFamily="@font/alegreya_sans_sc"
-                        android:text="status"
+                        android:text="My Approvals"
                         android:textAllCaps="false"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="#FFFFFF"
@@ -312,11 +312,10 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="275dp"
+                        android:layout_height="318dp"
                         android:layout_alignParentBottom="true"
                         android:layout_marginBottom="0dp"
                         android:orientation="vertical">
-
 
                         <ListView
                             android:id="@+id/mobile_list2"
@@ -327,7 +326,6 @@
 
                         </ListView>
                     </LinearLayout>
-
 
                 </RelativeLayout>
 
