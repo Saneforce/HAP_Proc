@@ -41,12 +41,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         Glide.with(this).load(pic).into(profileImage);
 */
         SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        type = (shared.getInt("Sfftype", 0));
+        type = (shared.getInt("CheckCount", 0));
 
 
-        if(type!=1){
+        if(type == 0){
 
             cardview8.setVisibility(View.GONE);
+
         }else {
 
         }
@@ -56,6 +57,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         cardview3.setOnClickListener(this);
         cardview4.setOnClickListener(this);
         cardview5.setOnClickListener(this);
+        cardview8.setOnClickListener(this);
 
 
 
@@ -104,6 +106,14 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
                 startActivity(i5);
                 break;
+
+            case R.id.cardview8:
+
+                Intent  i8 = new Intent(this, Approvals.class);
+
+                startActivity(i8);
+                break;
+
 
             default:
                 break;

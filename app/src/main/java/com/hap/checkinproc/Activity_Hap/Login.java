@@ -88,18 +88,15 @@ public class Login extends AppCompatActivity {
 
      firebaseAuth = FirebaseAuth.getInstance();
     //this is where we start the Auth state Listener to listen for whether the user is signed in or not
-     authStateListener = new FirebaseAuth.AuthStateListener() {
-        @Override
-        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user != null) {
-                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-            } else {
-                // User is signed out
-                Log.d(TAG, "onAuthStateChanged:signed_out");
-            }
-        }
-    };
+     authStateListener = firebaseAuth -> {
+         FirebaseUser user = firebaseAuth.getCurrentUser();
+         if (user != null) {
+             Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+         } else {
+             // User is signed out
+             Log.d(TAG, "onAuthStateChanged:signed_out");
+         }
+     };
 
     GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(String.valueOf(R.string.default_web_client_id))//you can also use R.string.default_web_client_id
@@ -210,11 +207,11 @@ public class Login extends AppCompatActivity {
                           intent.putExtra("photo",photo);
                           String code = response.body().getData().get(0).getSfCode();
                           String div = response.body().getData().get(0).getDivisionCode();
-                          Integer type = response.body().getData().get(0).getSFFType();
+                          Integer type = response.body().getData().get(0).getCheckCount();
                           SharedPreferences.Editor editor = sharedPreferences.edit();
                           editor.putString("Sfcode", code);
                           editor.putString("Divcode",div);
-                          editor.putInt("Sfftype",type);
+                          editor.putInt("CheckCount",type);
                           editor.apply();
                           startActivity(intent);
 
