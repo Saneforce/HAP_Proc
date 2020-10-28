@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Leave_Request"
+    tools:context=".Activity_Hap.Leave_Request"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
@@ -193,8 +193,11 @@
                         android:layout_marginBottom="2dp"
                         android:background="@drawable/textbox_bg"
                         android:elevation="10dp"
-                        android:inputType="number"
-                        android:clickable="false"/>
+                        android:clickable="false"
+                        android:textAlignment="center"
+                      android:text="0"
+                        android:focusable="false"
+                       />
 
                     <View
                         android:id="@+id/divider4"

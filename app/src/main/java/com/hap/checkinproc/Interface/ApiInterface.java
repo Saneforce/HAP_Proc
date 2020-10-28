@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Interface;
 
+import com.hap.checkinproc.Model_Class.Approval;
 import com.hap.checkinproc.Model_Class.Example;
 import com.hap.checkinproc.Model_Class.Location;
 import com.hap.checkinproc.Model_Class.Model;
@@ -37,5 +38,11 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("db_activity.php?axn=get/view")
     Call<ResponseBody> getView(@Field("data") String userData);
+
+    /*LEAVE APPROVAL*/
+
+    @GET("Db_Hap.php?")
+    Call<List<Approval>>approval(@Query("axn")String axn,@Query("divisionCode")String divisionCode, @Query("Sf_code")String Sf_code,@Query("rSF")String rSf,@Query("State_Code")String State_code);
+
 
 }
