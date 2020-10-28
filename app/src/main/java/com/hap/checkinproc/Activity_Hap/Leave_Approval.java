@@ -46,23 +46,23 @@ public class Leave_Approval extends AppCompatActivity {
 
         System.out.println("Dcode"+Dcode+"Scode"+Scode);
 
-        Call<List<Approval>> approvals = apiInterface.approval("vwLeave",Dcode,Scode,Rf_code,"24");
+        Call<List<Approval>> approvals = apiInterface.approval("vwLeave","3","MGR4762","MGR4762","24");
         Log.e("approval", String.valueOf(Rf_code));
         approvals.enqueue(new Callback<List<Approval>>() {
             @Override
             public void onResponse(Call<List<Approval>> call, Response<List<Approval>> response) {
                approvalList=response.body();
-                Log.e("approv", response.body().toString());
-                Log.e("approvals", approvalList.toString());
+                Log.e("approvals", String.valueOf(approvalList.size()));
+
             }
 
             @Override
             public void onFailure(Call<List<Approval>> call, Throwable t) {
+                System.out.println("on failure");
+
 
             }
         });
-
-
 
 
     }

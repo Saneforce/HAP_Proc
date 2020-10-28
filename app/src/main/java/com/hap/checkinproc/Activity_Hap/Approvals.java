@@ -13,7 +13,7 @@ import com.hap.checkinproc.R;
 
 public class Approvals extends AppCompatActivity  {
 
-  //  String[] mobileArray = {"Leave Request","Permission Request","Missed Punch","Weekly Off"};
+  String[] mobileArray = {"Leave","Permission","On-duty","Missed-Punch","Extended Shift"};
     String[] mobileArray2 = {"Leave","Permission","On-duty","Missed Punch","Extended Shift","Travel Allowance","Tour plan"};
 
     @Override
@@ -21,13 +21,12 @@ public class Approvals extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_approvals);
 
-       /* ArrayAdapter adapter = new ArrayAdapter<String>(Approvals.this,R.layout.layout_leave_type,R.id.tv_element, mobileArray);
+        ArrayAdapter adapter = new ArrayAdapter<String>(Approvals.this,R.layout.layout_leave_type,R.id.tv_element, mobileArray);
 
-        ListView listView = (ListView) findViewById(R.id.mobile_list);
+        ListView listView = (ListView) findViewById(R.id.mobile_list1);
         listView.setAdapter(adapter);
-*/
-        ArrayAdapter adapter2 = new ArrayAdapter<String>(Approvals.this,R.layout.layout_leave_type,R.id.tv_element, mobileArray2);
 
+        ArrayAdapter adapter2 = new ArrayAdapter<String>(Approvals.this,R.layout.layout_leave_type,R.id.tv_element, mobileArray2);
         ListView listView2 = (ListView) findViewById(R.id.mobile_list2);
         listView2.setAdapter(adapter2);
         listView2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -38,13 +37,19 @@ public class Approvals extends AppCompatActivity  {
                 switch (position) {
                     case 0:
                         startActivity(new Intent(Approvals.this, Leave_Approval.class));break;
-                  /*  case 1:
-                        startActivity(new Intent(Leave_Dashboard.this, Permission_Request.class));break;
+                    case 1:
+                        startActivity(new Intent(Approvals.this, Permision_approval.class));break;
                     case 2:
-                        startActivity(new Intent(Leave_Dashboard.this, Missed_Punch.class));break;
+                        startActivity(new Intent(Approvals.this, Onduty_approval.class));break;
                     case 3:
-                        startActivity(new Intent(Leave_Dashboard.this, Weekly_Off.class));break;
-*/
+                        startActivity(new Intent(Approvals.this, Missedpunch_approval.class));break;
+                    case 4:
+                        startActivity(new Intent(Approvals.this, Extendedshift_approval.class));break;
+                    case 5:
+                        startActivity(new Intent(Approvals.this, Ta_approval.class));break;
+
+
+
 
                 }
             }

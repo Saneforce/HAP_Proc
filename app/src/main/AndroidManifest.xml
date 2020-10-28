@@ -21,10 +21,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".Activity_Hap.Leave_Approval"></activity>
+        <activity android:name=".Activity_Hap.Ta_approval"></activity>
+        <activity android:name=".Activity_Hap.Extendedshift_approval" />
+        <activity android:name=".Activity_Hap.Missedpunch_approval" />
+        <activity android:name=".Activity_Hap.Onduty_approval" />
+        <activity android:name=".Activity_Hap.Permision_approval" />
+        <activity android:name=".Activity_Hap.Leave_Approval" />
         <activity
             android:name=".Activity.ViewActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity android:name=".Activity_Hap.Reports" />
         <activity android:name=".Activity_Hap.Dashboard_Two" />
         <activity android:name=".Activity_Hap.Weekly_Off" />
