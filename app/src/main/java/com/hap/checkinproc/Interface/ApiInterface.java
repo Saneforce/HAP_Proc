@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -33,5 +34,8 @@ public interface ApiInterface {
    @POST("Db_Hap.php?")
    Call<JsonObject> JsonSave(@Query("axn")String axn, @Query("divisionCode")String divisionCode, @Query("Sf_code")String Sf_code,@Query("State_Code")String State_code,@Query("desig")String desig, @Field("data") String body);
 
+    @FormUrlEncoded
+    @POST("db_activity.php?axn=get/view")
+    Call<ResponseBody> getView(@Field("data") String userData);
 
 }

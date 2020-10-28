@@ -3,6 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hap.checkinproc">
 
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -12,28 +21,32 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name="com.hap.checkinproc.Reports"></activity>
-        <activity android:name="com.hap.checkinproc.Dashboard_Two" />
-        <activity android:name="com.hap.checkinproc.Weekly_Off" />
-        <activity android:name="com.hap.checkinproc.Missed_Punch" />
-        <activity android:name="com.hap.checkinproc.Permission_Request" />
-        <activity android:name="com.hap.checkinproc.Leave_Request" />
-        <activity android:name="com.hap.checkinproc.Travel_Allowance" />
-        <activity android:name="com.hap.checkinproc.Leave_Dashboard" />
-        <activity android:name="com.hap.checkinproc.Ocheck_in" />
-        <activity
-            android:name="com.hap.checkinproc.Check_in"
-            android:noHistory="true" />
-        <activity android:name="com.hap.checkinproc.Dashboard" />
-        <activity
-            android:name="com.hap.checkinproc.Login"
-            android:noHistory="true" />
-        <activity android:name="com.hap.checkinproc.MainActivity">
+        <activity android:name=".Activity.ViewActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity android:name=".Reports" />
+        <activity android:name=".Dashboard_Two" />
+        <activity android:name=".Weekly_Off" />
+        <activity android:name=".Missed_Punch" />
+        <activity android:name=".Permission_Request" />
+        <activity android:name=".Leave_Request" />
+        <activity android:name=".Travel_Allowance" />
+        <activity android:name=".Leave_Dashboard" />
+        <activity android:name=".Ocheck_in" />
+        <activity
+            android:name=".Check_in"
+            android:noHistory="true" />
+        <activity android:name=".Dashboard" />
+        <activity
+            android:name=".Login"
+            android:noHistory="true" />
+        <activity android:name=".MainActivity">
         </activity>
 
         <meta-data
@@ -53,14 +66,5 @@
                 android:resource="@xml/provider_paths" />
         </provider>
     </application>
-
-    <uses-feature android:name="android.hardware.camera" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>

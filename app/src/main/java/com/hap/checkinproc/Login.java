@@ -84,7 +84,7 @@ public class Login extends AppCompatActivity {
             }
         });
 
-     firebaseAuth = com.google.firebase.auth.FirebaseAuth.getInstance();
+     firebaseAuth = FirebaseAuth.getInstance();
     //this is where we start the Auth state Listener to listen for whether the user is signed in or not
      authStateListener = new FirebaseAuth.AuthStateListener() {
         @Override
@@ -100,7 +100,7 @@ public class Login extends AppCompatActivity {
     };
 
     GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))//you can also use R.string.default_web_client_id
+            .requestIdToken("57770165619-0j7hhlcbg6q3p6jo8g0v1itrea9uumlf.apps.googleusercontent.com")//you can also use R.string.default_web_client_id
             .requestEmail()
             .build();
             googleApiClient = new GoogleApiClient.Builder(this)
