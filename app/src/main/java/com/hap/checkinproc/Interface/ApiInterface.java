@@ -2,9 +2,13 @@ package com.hap.checkinproc.Interface;
 
 import com.hap.checkinproc.Model_Class.Approval;
 import com.hap.checkinproc.Model_Class.Example;
+import com.hap.checkinproc.Model_Class.Extended;
 import com.hap.checkinproc.Model_Class.Location;
+import com.hap.checkinproc.Model_Class.Missed;
 import com.hap.checkinproc.Model_Class.Model;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Model_Class.Onduty;
+import com.hap.checkinproc.Model_Class.Permission;
 
 import java.util.List;
 
@@ -20,7 +24,6 @@ public interface ApiInterface {
    /*login*/
     @GET("Db_Hap.php?")
     Call<Model> login(@Query("axn") String axn, @Query("Email") String Email);
-
 
     /*shift time*/
     @GET("Db_Native.php?")
@@ -42,7 +45,24 @@ public interface ApiInterface {
     /*LEAVE APPROVAL*/
 
     @GET("Db_Hap.php?")
-    Call<List<Approval>>approval(@Query("axn")String axn,@Query("divisionCode")String divisionCode, @Query("Sf_code")String Sf_code,@Query("rSF")String rSf,@Query("State_Code")String State_code);
+    Call<List<Approval>>approval(@Query("axn")String axn,@Query("divisionCode")String divisionCode, @Query("sfCode")String Sf_code,@Query("rSF")String rSf,@Query("State_Code")String State_code);
+
+    /*permission approval*/
+    @GET("Db_Hap.php?")
+    Call<List<Permission>>permission(@Query("axn")String axn, @Query("divisionCode")String divisionCode, @Query("sfCode")String Sf_code, @Query("rSF")String rSf, @Query("State_Code")String State_code);
+    /*onduty approval*/
+
+   @GET("Db_Hap.php?")
+    Call<List<Onduty>>onduty(@Query("axn")String axn, @Query("divisionCode")String divisionCode, @Query("sfCode")String Sf_code, @Query("rSF")String rSf, @Query("State_Code")String State_code);
+
+   /*missed punch*/
+
+ @GET("Db_Hap.php?")
+ Call<List<Missed>>missed(@Query("axn")String axn, @Query("divisionCode")String divisionCode, @Query("sfCode")String Sf_code, @Query("rSF")String rSf, @Query("State_Code")String State_code);
+
+  /*Extended*/
+  @GET("Db_Hap.php?")
+  Call<List<Extended>>extended(@Query("axn")String axn, @Query("divisionCode")String divisionCode, @Query("sfCode")String Sf_code, @Query("rSF")String rSf, @Query("State_Code")String State_code);
 
 
 }

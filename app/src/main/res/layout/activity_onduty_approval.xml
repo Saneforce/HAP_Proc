@@ -38,23 +38,27 @@
         app:cardCornerRadius="10dp">
 
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="39dp"
             android:background="@drawable/button_yellow">
 
             <TextView
-                android:layout_width="377dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
                 android:fontFamily="@font/alegreya_sans_sc"
                 android:text="On-Duty"
                 android:textAlignment="center"
-                android:textColor="#000000"
+                android:textColor="#FFFFFF"
                 android:textStyle="bold" />
 
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
 
@@ -74,14 +78,14 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="1dp"
             android:layout_weight="1"
-            android:text="Name" />
+            android:text=" Name" />
 
         <TextView
             android:id="@+id/textView35"
             android:layout_width="53dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="    Date" />
+            android:text="          Date" />
 
 
         <TextView
@@ -89,10 +93,22 @@
             android:layout_width="34dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="  Click here" />
+            android:text="      Click here" />
 
 
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recycler_view4"/>
     </LinearLayout>
 
 

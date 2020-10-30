@@ -3,28 +3,24 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:orientation="horizontal"
-    android:id="@+id/leaveapproval"
-    android:padding="5dp">
-
+    android:layout_margin="10dp">
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/textView40"
         android:layout_width="25dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="TextView" />
 
     <TextView
-        android:id="@+id/applied_date"
+        android:id="@+id/textView41"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="TextView" />
 
     <TextView
-        android:id="@+id/leave_days"
+        android:id="@+id/textView42"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -32,12 +28,12 @@
 
 
     <Button
-        android:id="@+id/leave_open"
-        android:layout_width="1dp"
+        android:id="@+id/button"
+        android:layout_width="50dp"
         android:layout_height="25dp"
         android:layout_weight="1"
-        android:background="@drawable/g_sign"
+        android:background="@drawable/button_green"
         android:text="open"
-        android:textColor="#FFFFFF"
         android:textSize="14sp" />
+
 </LinearLayout>
