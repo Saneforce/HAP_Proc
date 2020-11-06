@@ -1,8 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
-    <color name="white">#fff</color>
+    <color name="colorPrimary">#14ACC3</color>
+    <color name="colorPrimary_light">#60758B</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#D81B60</color>
+    <color name="transparent">#00000000</color>
+    <color name="color_white">#FFFFFF</color>
+    <color name="bg_color">#F1F1F1</color>
 
+    <color name="jointowrk_title_bg_color">#DDDCDC</color>
+    <color name="txt_color_black">#000000</color>
+    <color name="txt_hintcolor">#E6E2E2</color>
+    <color name="greenColor">#72D043</color>
+    <color name="admin_card_strokecolor">#706F6F</color>
+    <color name="txt_template_color">#F8AB58</color>
+    <color name="layout_bg_color">#F2F2F2</color>
+    <color name="view_bg_color">#FD9427</color>
+    <color name="view_bg_header">#F4F3F4</color>
+    <color name="view_division">#F1E7E7</color>
+    <color name="dark_grey">#3E3E3E</color>
+
+    <color name="grey_100">#F5F5F5</color>
+    <color name="grey_200">#EEEEEE</color>
+    <color name="grey_300">#E0E0E0</color>
+    <color name="grey_400">#BDBDBD</color>
+    <color name="grey_50">#FAFAFA</color>
+    <color name="grey_500">#9E9E9E</color>
+    <color name="grey_600">#757575</color>
+    <color name="grey_700">#616161</color>
+    <color name="grey_800">#424242</color>
+    <color name="grey_900">#212121</color>
+    <color name="green">#1C8A1C</color>
+    <color name="color_red">#E53935</color>
+    <color name="color_light_red">#F5B6B6</color>
+    <color name="lightBlue">#CACBE0</color>
+    <color name="lightBlueDark">#FF5593D1</color>
+    <color name="darkBlue">#FF50606F</color>
 </resources>

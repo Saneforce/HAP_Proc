@@ -9,18 +9,22 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 
 public class Approvals extends AppCompatActivity  {
 
   String[] mobileArray = {"Leave","Permission","On-duty","Missed-Punch","Extended Shift"};
     String[] mobileArray2 = {"Leave","Permission","On-duty","Missed Punch","Extended Shift","Travel Allowance","Tour plan"};
-
+    Shared_Common_Pref shared_common_pref;
+    Common_Class common_class;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_approvals);
-
+        shared_common_pref = new Shared_Common_Pref(this);
+        common_class = new Common_Class(this);
         ArrayAdapter adapter = new ArrayAdapter<String>(Approvals.this,R.layout.layout_leave_type,R.id.tv_element, mobileArray);
 
         ListView listView = (ListView) findViewById(R.id.mobile_list1);
@@ -47,7 +51,8 @@ public class Approvals extends AppCompatActivity  {
                         startActivity(new Intent(Approvals.this, Extendedshift_approval.class));break;
                     case 5:
                         startActivity(new Intent(Approvals.this, Ta_approval.class));break;
-
+                    case 6:
+                        common_class.CommonIntentwithFinish(Tp_Approval.class);
 
 
 

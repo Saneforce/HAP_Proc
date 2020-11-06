@@ -5,7 +5,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class RecyclerViewApproval extends RecyclerView.Adapter {
+public class RecyclerViewLeaveApproval extends RecyclerView.Adapter {
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

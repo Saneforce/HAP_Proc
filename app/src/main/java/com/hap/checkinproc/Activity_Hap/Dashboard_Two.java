@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.hap.checkinproc.R;
 
-public class Dashboard_Two extends AppCompatActivity implements View.OnClickListener {
+public class  Dashboard_Two extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

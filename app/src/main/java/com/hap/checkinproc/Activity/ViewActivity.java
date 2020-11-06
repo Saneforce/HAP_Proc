@@ -124,6 +124,13 @@ public class ViewActivity extends AppCompatActivity {
                 else
                     timePicker(pos,value);
             }
+
+            @Override
+            public void Getjsoninterface(String Success) {
+
+            }
+
+
         });
 /*
         AdapterForDynamicView.bindListernerForDateRange(new TwoTypeparameter() {
