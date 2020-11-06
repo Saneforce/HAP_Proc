@@ -38,7 +38,7 @@ public class Leave_Request extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave__request);
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        getWindow().setStatusBarColor(getResources().getColor(R.color.white));
+        getWindow().setStatusBarColor(getResources().getColor(R.color.color_white));
         leavetype = findViewById(R.id.leave_type);
         setPopupList();
         //we need to show the list when clicking on the field

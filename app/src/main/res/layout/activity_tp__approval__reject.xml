@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activity_Hap.Leave_Approval">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_blueg"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
+
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/alegreya_sans_sc"
+            android:text="Leave Approvals"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="2">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:orientation="horizontal"
+            android:padding="30dp"
+            android:weightSum="2">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Name :"
+
+                    android:textColor="@color/txt_color_black"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Emp Code :"
+                    android:textColor="@color/txt_color_black"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="HQ"
+                    android:textColor="@color/txt_color_black"
+
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Designation :"
+
+                    android:textColor="@color/txt_color_black"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Mobile Number :"
+
+                    android:textColor="@color/txt_color_black"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Plan Date :"
+                    android:textColor="@color/txt_color_black"
+
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Work Type :"
+
+                    android:textColor="@color/txt_color_black"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Route : "
+
+                    android:textColor="@color/txt_color_black"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Distributor :"
+                    android:textColor="@color/txt_color_black"
+
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+
+                    android:text="Remarks :"
+                    android:textColor="@color/txt_color_black"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="15dp">
+
+                <TextView
+                    android:id="@+id/name"
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Name"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/empcode"
+
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+
+                    android:text="Emp Code"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/hq"
+
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="HQ"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/designation"
+
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Designation"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Mobile Number"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/plandate"
+
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Plan Date"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/worktype"
+
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Work Type"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/route"
+
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Route"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/distributor"
+
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Distributor"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/remarks"
+
+                    android:layout_width="100dp"
+                    android:layout_height="200dp"
+                    android:layout_weight="1"
+                    android:text="Remarks"
+                    android:textSize="@dimen/C13dp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1.7"
+            android:gravity="center"
+            android:padding="20dp"
+            android:weightSum="4">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_green"
+                android:fontFamily="@font/alegreya_sans_sc"
+                android:gravity="center"
+                android:text="Approve"
+                android:textColor="@color/color_white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_amber"
+                android:gravity="center"
+                android:text="Reject"
+                android:textColor="@color/color_white"
+
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".Activity_Hap.Ta_approval"></activity>
+        <activity android:name=".Activity_Hap.Ta_approval" />
         <activity android:name=".Activity_Hap.Extendedshift_approval" />
         <activity android:name=".Activity_Hap.Missedpunch_approval" />
         <activity android:name=".Activity_Hap.Onduty_approval" />
@@ -38,22 +38,18 @@
         <activity android:name=".Activity_Hap.Leave_Request" />
         <activity android:name=".Activity_Hap.Travel_Allowance" />
         <activity android:name=".Activity_Hap.Leave_Dashboard" />
-        <activity android:name=".Activity_Hap.Ocheck_in" />
         <activity android:name=".Activity_Hap.Approvals" />
-        <activity
-            android:name=".Activity_Hap.Check_in"
-            android:noHistory="true" />
         <activity android:name=".Activity_Hap.Dashboard" />
         <activity
             android:name=".Activity_Hap.Login"
-            android:noHistory="true" />
-        <activity android:name=".Activity_Hap.MainActivity">
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activity_Hap.MainActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -71,6 +67,13 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+        <activity android:name=".Activity_Hap.Tp_Mydayplan" />
+        <activity android:name=".Activity_Hap.Tp_Calander" />
+        <activity android:name=".Activity_Hap.Mydayplan_Activity" />
+        <activity android:name=".Activity_Hap.Tp_Month_Select" />
+        <activity android:name=".Activity_Hap.Tp_Approval" />
+        <activity android:name=".Activity_Hap.Tp_Approval_Reject"></activity>
     </application>
 
 </manifest>

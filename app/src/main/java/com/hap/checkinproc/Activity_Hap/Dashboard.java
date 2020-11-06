@@ -30,6 +30,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         CardView cardview4 = findViewById(R.id.cardview4);
         CardView cardview8 = findViewById(R.id.cardview8);
         CardView cardview5 = findViewById(R.id.cardview5);
+        CardView cardview9 = findViewById(R.id.cardview9);
+        CardView tourplan = findViewById(R.id.tourplan);
 
 
 
@@ -58,6 +60,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         cardview4.setOnClickListener(this);
         cardview5.setOnClickListener(this);
         cardview8.setOnClickListener(this);
+        cardview9.setOnClickListener(this);
+        tourplan.setOnClickListener(this);
 
 
 
@@ -70,48 +74,62 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-
+        Intent  I;
         switch (view.getId()){
+
             case R.id.cardview1:
 
-                Intent  i = new Intent(this, Check_in.class);
+                /*Intent  i = new Intent(this, Check_in.class);
 
-            startActivity(i);
+            startActivity(i);*/
             break;
             case R.id.sec_card_view:
-                Intent i1 = new Intent(this, Ocheck_in.class);
-                startActivity(i1);
+               /* Intent i1 = new Intent(this, Ocheck_in.class);
+                startActivity(i1);*/
 
                 Toast.makeText(this, "Checking", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.cardview3:
 
-                Intent  i2 = new Intent(this, Leave_Dashboard.class);
+                  I = new Intent(this, Leave_Dashboard.class);
 
-                startActivity(i2);
+                startActivity(I);
                 break;
 
 
             case R.id.cardview4:
 
-                Intent  i3 = new Intent(this, Travel_Allowance.class);
+                I = new Intent(this, Travel_Allowance.class);
 
-                startActivity(i3);
+                startActivity(I);
                 break;
 
             case R.id.cardview5:
 
-                Intent  i5 = new Intent(this, Reports.class);
+                I = new Intent(this, Reports.class);
 
-                startActivity(i5);
+                startActivity(I);
                 break;
 
             case R.id.cardview8:
 
-                Intent  i8 = new Intent(this, Approvals.class);
+                I = new Intent(this, Approvals.class);
 
-                startActivity(i8);
+                startActivity(I);
+                break;
+            case R.id.cardview9:
+
+                I = new Intent(this, Mydayplan_Activity.class);
+
+                startActivity(I);
+                break;
+
+            case R.id.tourplan:
+
+                I = new Intent(this, Tp_Month_Select.class);
+
+                startActivity(I);
                 break;
 
 

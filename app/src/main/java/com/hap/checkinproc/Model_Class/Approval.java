@@ -58,7 +58,26 @@ public class Approval {
     @SerializedName("Leave_Name")
     @Expose
     private String leaveName;
-
+    public Approval(String sFMobile, String sfCode, Integer leaveId, String reason, String applieddate, String address, String fieldForceName, String reportingToSF, String designation, String hQ, String empCode, String fromDate, String toDate, Integer leaveDays, Integer divisionCode, String sfDesignationShortName, Integer leaveType, String leaveName) {
+        this.sFMobile = sFMobile;
+        this.sfCode = sfCode;
+        this.leaveId = leaveId;
+        this.reason = reason;
+        this.applieddate = applieddate;
+        this.address = address;
+        this.fieldForceName = fieldForceName;
+        this.reportingToSF = reportingToSF;
+        this.designation = designation;
+        this.hQ = hQ;
+        this.empCode = empCode;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
+        this.leaveDays = leaveDays;
+        this.divisionCode = divisionCode;
+        this.sfDesignationShortName = sfDesignationShortName;
+        this.leaveType = leaveType;
+        this.leaveName = leaveName;
+    }
     public String getSFMobile() {
         return sFMobile;
     }

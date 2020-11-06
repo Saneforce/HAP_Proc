@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".Activity_Hap.Tp_Month_Select">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/button_blueg"
+        android:gravity="center"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
+
+        <ImageView
+            android:id="@+id/backarow"
+            android:layout_width="20dp"
+            android:layout_height="40dp"
+            android:src="@drawable/backarrow" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/alegreya_sans_sc"
+            android:gravity="center"
+            android:text="@string/monthselection"
+            android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/CurrentMoth"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginStart="57dp"
+            android:layout_marginEnd="53dp"
+            android:background="@drawable/sign_bg"
+            android:elevation="1dp"
+            android:gravity="center"
+            android:fontFamily="@font/alegreya_sans_sc"
+            android:text="CurrentMoth"
+            android:textAlignment="center"
+            android:textColor="@color/color_white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/NextMonth"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="false"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="57dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="53dp"
+            android:background="@drawable/sign_bg"
+            android:fontFamily="@font/alegreya_sans_sc"
+            android:gravity="center"
+            android:text="NextMonth"
+            android:textAlignment="center"
+            android:textColor="@color/color_white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</LinearLayout>
