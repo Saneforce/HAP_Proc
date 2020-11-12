@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
 import com.bumptech.glide.Glide;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -43,7 +44,7 @@ import retrofit2.Response;
 import static android.widget.Toast.LENGTH_LONG;
 
 public class Login extends AppCompatActivity {
-    TextInputEditText name,password;
+    TextInputEditText name, password;
     Button btnLogin;
     ImageView profileImage;
     String photo;
@@ -51,41 +52,42 @@ public class Login extends AppCompatActivity {
     SignInButton signInButton;
     private static final String TAG = "LoginActivity";
     private GoogleApiClient googleApiClient;
-    private  final static int RC_SIGN_IN = 1;
+    private final static int RC_SIGN_IN = 1;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
     SharedPreferences sharedPreferences;
-    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String MyPREFERENCES = "MyPrefs";
     private ProgressDialog mProgress;
 
     Shared_Common_Pref shared_common_pref;
-       @Override
-        protected void onCreate(Bundle savedInstanceState) {
-           super.onCreate(savedInstanceState);
-           setContentView(R.layout.activity_login);
-           name = (TextInputEditText) findViewById(R.id.username);
-           password = (TextInputEditText) findViewById(R.id.password);
-           shared_common_pref = new Shared_Common_Pref(this);
-           btnLogin = (Button) findViewById(R.id.btnLogin);
-           profileImage = (ImageView) findViewById(R.id.profile_image);
-           sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-           mProgress = new ProgressDialog(this);
-           String titleId = "Signing in...";
-           mProgress.setTitle(titleId);
-           mProgress.setMessage("Please Wait...");
-           name.setText("thirumalaivasan786@gmail.com");
-           btnLogin.setOnClickListener(new View.OnClickListener() {
-               @Override
-               public void onClick(View view) {
-                   if (TextUtils.isEmpty(name.getText().toString())) {
-                       Toast.makeText(Login.this, "username/password required", Toast.LENGTH_SHORT).show();
-                   } else {
-                       //proceed to login
-                       mProgress.show();
-                       login();
-                   }
-               }
-           });
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        name = (TextInputEditText) findViewById(R.id.username);
+        password = (TextInputEditText) findViewById(R.id.password);
+        shared_common_pref = new Shared_Common_Pref(this);
+        btnLogin = (Button) findViewById(R.id.btnLogin);
+        profileImage = (ImageView) findViewById(R.id.profile_image);
+        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        mProgress = new ProgressDialog(this);
+        String titleId = "Signing in...";
+        mProgress.setTitle(titleId);
+        mProgress.setMessage("Please Wait...");
+        name.setText("thirumalaivasan786@gmail.com");
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (TextUtils.isEmpty(name.getText().toString())) {
+                    Toast.makeText(Login.this, "username/password required", Toast.LENGTH_SHORT).show();
+                } else {
+                    //proceed to login
+                    mProgress.show();
+                    login();
+                }
+            }
+        });
 
      /*firebaseAuth = FirebaseAuth.getInstance();
     //this is where we start the Auth state Listener to listen for whether the user is signed in or not
@@ -189,57 +191,59 @@ public class Login extends AppCompatActivity {
         }
     }
 */
-       }
-           public void login () {
+    }
 
-               ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-               Call<Model> modelCall = apiInterface.login("get/GoogleLogin", name.getText().toString());
-               modelCall.enqueue(new Callback<Model>() {
-                   @Override
-                   public void onResponse(Call<Model> call, Response<Model> response) {
+    public void login() {
 
-                       if (response.isSuccessful()) {
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", name.getText().toString());
+        modelCall.enqueue(new Callback<Model>() {
+            @Override
+            public void onResponse(Call<Model> call, Response<Model> response) {
 
-                           //      Log.e("sfName",response.body().getData().get(0).getSfCode());
+                if (response.isSuccessful()) {
 
-                           if (response.body().getSuccess() == true) {
-                               Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
-                               Intent intent = new Intent(Login.this, Dashboard.class);
-                               intent.putExtra("photo", photo);
-                               String code = response.body().getData().get(0).getSfCode();
-                               String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
-                               String div = response.body().getData().get(0).getDivisionCode();
-                               Integer type = response.body().getData().get(0).getCheckCount();
-                               SharedPreferences.Editor editor = sharedPreferences.edit();
-                               Shared_Common_Pref.Sf_Code=code;
-                               Shared_Common_Pref.Div_Code=div;
-                               Shared_Common_Pref.StateCode=Sf_type;
-                             /*  shared_common_pref.save(Shared_Common_Pref.Sf_Code,code);
-                               shared_common_pref.save(Shared_Common_Pref.Div_Code,div);
-                               shared_common_pref.save(Shared_Common_Pref.StateCode,Sf_type);*/
-                               Log.e("LOGIN_RESPONSE", String.valueOf(response.body().getData().get(0).getSfCode()));
-                               editor.putString("Sf_Type", Sf_type);
-                               editor.putString("Sfcode", code);
-                               editor.putString("Divcode", div);
-                               editor.putInt("CheckCount", type);
-                               editor.putString("State_Code", Sf_type);
-                               editor.apply();
-                               startActivity(intent);
+                    //      Log.e("sfName",response.body().getData().get(0).getSfCode());
 
-                           } else {
-                               mProgress.dismiss();
-                               Toast.makeText(getApplicationContext(), "Check username and password", Toast.LENGTH_LONG).show();
-                           }
-                       }
+                    if (response.body().getSuccess() == true) {
+                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(Login.this, Dashboard.class);
+                        intent.putExtra("photo", photo);
+                        String code = response.body().getData().get(0).getSfCode();
+                        String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
+                        String div = response.body().getData().get(0).getDivisionCode();
+                        Integer type = response.body().getData().get(0).getCheckCount();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        Shared_Common_Pref.Sf_Code = code;
+                        Shared_Common_Pref.Sf_Name = response.body().getData().get(0).getSfName();
+                        Shared_Common_Pref.Div_Code = div;
+                        Shared_Common_Pref.StateCode = Sf_type;
+                        shared_common_pref.save(Shared_Common_Pref.Sf_Code, code);
+                        shared_common_pref.save(Shared_Common_Pref.Div_Code, div);
+                        shared_common_pref.save(Shared_Common_Pref.StateCode, Sf_type);
+                        Log.e("LOGIN_RESPONSE", String.valueOf(response.body().getData().get(0).getSfCode()));
+                        editor.putString("Sf_Type", Sf_type);
+                        editor.putString("Sfcode", code);
+                        editor.putString("Divcode", div);
+                        editor.putInt("CheckCount", type);
+                        editor.putString("State_Code", Sf_type);
+                        editor.apply();
+                        startActivity(intent);
 
-                   }
+                    } else {
+                        mProgress.dismiss();
+                        Toast.makeText(getApplicationContext(), "Check username and password", Toast.LENGTH_LONG).show();
+                    }
+                }
 
-                   @Override
-                   public void onFailure(Call<Model> call, Throwable t) {
+            }
 
-                       Toast.makeText(getApplicationContext(), "Not Working", Toast.LENGTH_LONG).show();
+            @Override
+            public void onFailure(Call<Model> call, Throwable t) {
 
-                   }
-               });
-           }
-       }
+                Toast.makeText(getApplicationContext(), "Not Working", Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
+}

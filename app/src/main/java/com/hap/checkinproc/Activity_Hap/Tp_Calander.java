@@ -47,7 +47,7 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class Tp_Calander extends AppCompatActivity implements View.OnClickListener,UpdateUi {
+public class Tp_Calander extends AppCompatActivity implements View.OnClickListener, UpdateUi {
     private Button selectedDayMonthYearButton;
     private final SimpleDateFormat dateFormatter = new SimpleDateFormat(
             "dd-MMM-yyyy");
@@ -82,7 +82,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
         currentMonth = this.findViewById(R.id.title);
         goback = this.findViewById(R.id.btnback);
         gson = new Gson();
-        btnsubmit=findViewById(R.id.btnsubmit);
+        btnsubmit = findViewById(R.id.btnsubmit);
         btnsubmit.setOnClickListener(this);
         common_class.getintentValues("Monthselection");
         calendarView = this.findViewById(R.id.gridcalander);
@@ -179,10 +179,11 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
                 common_class.CommonIntentwithFinish(Tp_Month_Select.class);
                 break;
 
-            case  R.id.btnsubmit:
-              common_class.GetTP_Result("TourPlanSubmit","",SelectedMonth);
+            case R.id.btnsubmit:
+                int SM = SelectedMonth + 1;
+                common_class.GetTP_Result("TourPlanSubmit", "", SM);
 
-              break;
+                break;
         }
     }
 
@@ -193,7 +194,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void Getjsoninterface(String Success) {
-        Toast.makeText(this, "RESULT"+Success, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "RESULT" + Success, Toast.LENGTH_SHORT).show();
     }
 
 

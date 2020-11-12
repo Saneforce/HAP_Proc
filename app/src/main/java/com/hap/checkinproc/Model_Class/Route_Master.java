@@ -24,6 +24,15 @@ public class Route_Master {
     @Expose
     private String stockistCode;
 
+    public Route_Master(String id, String name, String target, String minProd, String fieldCode, String stockistCode) {
+        this.id = id;
+        this.name = name;
+        this.target = target;
+        this.minProd = minProd;
+        this.fieldCode = fieldCode;
+        this.stockistCode = stockistCode;
+    }
+
     public String getId() {
         return id;
     }

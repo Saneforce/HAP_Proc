@@ -20,9 +20,12 @@
     <dimen name="C13dp">13dp</dimen>
     <dimen name="C14dp">14dp</dimen>
     <dimen name="C15dp">15dp</dimen>
-    <dimen name="C16dp">16dp</dimen>
+    <dimen name="C16dp">14dp</dimen>
     <dimen name="C17dp">17dp</dimen>
     <dimen name="C100dp">100dp</dimen>
     <dimen name="C10dp">10dp</dimen>
     <dimen name="C20dp">20dp</dimen>
+    <dimen name="C50dp">50dp</dimen>
+    <dimen name="C60dp">60dp</dimen>
+    <dimen name="C70dp">70dp</dimen>
 </resources>

@@ -1,13 +1,18 @@
 package com.hap.checkinproc.Common_Class;
 
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -19,10 +24,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity.Util.UpdateUi;
+import com.hap.checkinproc.Activity_Hap.MainActivity;
 import com.hap.checkinproc.Activity_Hap.Tp_Calander;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Tp_View_Master;
+import com.hap.checkinproc.Model_Class.Work_Type_Model;
 import com.hap.checkinproc.R;
 
 import org.json.JSONArray;
@@ -37,6 +44,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,6 +62,8 @@ public class Common_Class {
     public Context context;
     Shared_Common_Pref shared_common_pref;
     ProgressDialog nDialog;
+    Type userType;
+    ;
     Gson gson;
 
     // Gson gson;
@@ -79,7 +90,7 @@ public class Common_Class {
 
     }
 
-    public void ProgressdialogShow(int flag,String message) {
+    public void ProgressdialogShow(int flag, String message) {
 
         if (flag == 1) {
             nDialog.setMessage("Loading.......");
@@ -112,6 +123,21 @@ public class Common_Class {
         return false;
     }
 
+
+    public void makeCall(int mobilenumber) {
+        final int REQUEST_PHONE_CALL = 1;
+        Intent callIntent = new Intent(Intent.ACTION_CALL);
+        callIntent.setData(Uri.parse("tel:" + mobilenumber));
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.CALL_PHONE}, REQUEST_PHONE_CALL);
+        } else {
+            activity.startActivity(callIntent);
+        }
+
+
+    }
+
+
     public JsonArray FilterGson(final Iterable<JsonObject> SrcArray, String colName, String searchVal) {
         JsonArray ResArray = new JsonArray();
         for (JsonObject jObj : SrcArray) {
@@ -121,6 +147,14 @@ public class Common_Class {
         }
         return ResArray;
     }
+   /* public void Reurnypeface(class cl,){
+        userType = new TypeToken<ArrayList<Work_Type_Model>>() {
+        }.getType();
+        worktypelist = gson.fromJson(new Gson().toJson(noticeArrayList), userType);
+
+    }*/
+
+
 //    public void CustomerMe(final Context context_) {
 //        this.context = context_;
 //        shared_common_pref = new Shared_Common_Pref(activity);
@@ -195,7 +229,6 @@ public class Common_Class {
         intent.putExtra(key, value);
         Log.e("commanclasstitle", value);
         activity.startActivity(intent);
-        activity.finish();
     }
 
     public String getintentValues(String name) {
@@ -211,7 +244,6 @@ public class Common_Class {
     }
 
     public void GetTP_Result(String name, String values, int Month) {
-        final int[] a = {0};
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
         JSONObject sp = new JSONObject();
