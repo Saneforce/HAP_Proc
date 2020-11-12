@@ -7,12 +7,16 @@ import retrofit2.Response;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextClock;
@@ -25,6 +29,7 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.MVP.Main_Model;
 import com.hap.checkinproc.MVP.MasterSync_Implementations;
 import com.hap.checkinproc.MVP.Master_Sync_View;
@@ -49,10 +54,12 @@ import java.util.Map;
 
 import static com.hap.checkinproc.Common_Class.Common_Class.addquote;
 
-public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener {
+public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface {
     Spinner worktypespinner, worktypedistributor, worktyperoute;
     List<Work_Type_Model> worktypelist;
-    List<Route_Master> Route_Master;
+    List<Route_Master> Route_Masterlist;
+    List<Route_Master> FRoute_Master;
+    LinearLayout worktypelayout, distributors_layout, route_layout;
     List<Distributor_Master> distributor_master;
     private Main_Model.presenter presenter;
     Gson gson;
@@ -60,12 +67,14 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     EditText edt_remarks;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    String worktype_id, worktypeflag, distributorname, distributorid, routename, routeid, worktype_name;
+    String worktype_id, worktypename, distributorname, distributorid, routename, routeid;
     private TextClock tClock;
     Button submitbutton;
-    ProgressBar progressbar;
-    TextView tourdate;
+    CustomListViewDialog customDialog;
     ImageView backarow;
+    ProgressBar progressbar;
+    TextView worktype_text, distributor_text, route_text;
+    TextView tourdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,97 +85,30 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         common_class = new Common_Class(this);
         edt_remarks = findViewById(R.id.edt_remarks);
         backarow = findViewById(R.id.backarow);
-        backarow.setOnClickListener(this);
+        gson = new Gson();
         tourdate = findViewById(R.id.tourdate);
         gson = new Gson();
         Log.e("TOuR_PLAN_DATE", common_class.getintentValues("TourDate"));
         tourdate.setText(common_class.getintentValues("TourDate"));
-        worktypespinner = findViewById(R.id.worktypespinner);
-        worktypedistributor = findViewById(R.id.worktypedistributor);
-        worktyperoute = findViewById(R.id.worktyperoute);
+        route_text = findViewById(R.id.route_text);
+        worktypelayout = findViewById(R.id.worktypelayout);
+        //worktyperoute = findViewById(R.id.worktyperoute);
+        distributors_layout = findViewById(R.id.distributors_layout);
+        route_layout = findViewById(R.id.route_layout);
         submitbutton = findViewById(R.id.submitbutton);
+        worktype_text = findViewById(R.id.worktype_text);
+        distributor_text = findViewById(R.id.distributor_text);
         presenter = new MasterSync_Implementations(this, new Master_Sync_View());
         presenter.requestDataFromServer();
+        backarow.setOnClickListener(this);
         submitbutton.setOnClickListener(this);
+        worktypelayout.setOnClickListener(this);
+        distributors_layout.setOnClickListener(this);
+        route_layout.setOnClickListener(this);
 
     }
 
-    public void loaddistriSpinner() {
-        ArrayList<String> distributor = new ArrayList<>();
-        for (int i = 0; i < distributor_master.size(); i++) {
 
-            distributor.add(distributor_master.get(i).getName());
-
-        }
-
-        worktypedistributor.setAdapter(new ArrayAdapter<>(Tp_Mydayplan.this, android.R.layout.simple_spinner_dropdown_item, distributor));
-        worktypedistributor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                distributorname = distributor_master.get(position).getName();
-                distributorid = String.valueOf(distributor_master.get(position).getDisCatCode());
-            }
-
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-    public void loadroute() {
-        ArrayList<String> route = new ArrayList<>();
-        for (int i = 0; i < Route_Master.size(); i++) {
-
-            route.add(Route_Master.get(i).getName());
-
-        }
-
-        worktyperoute.setAdapter(new ArrayAdapter<>(Tp_Mydayplan.this, android.R.layout.simple_spinner_dropdown_item, route));
-        worktyperoute.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                routename = Route_Master.get(position).getName();
-                routeid = Route_Master.get(position).getId();
-            }
-
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-    }
-
-    public void loadWorktypeSpinner() {
-
-        Log.e("WOrktype_Length", String.valueOf(worktypelist.size()));
-        ArrayList<String> worktype = new ArrayList<>();
-
-
-        for (int i = 0; i < worktypelist.size(); i++) {
-            worktype.add(worktypelist.get(i).getName());
-        }
-        worktypespinner.setAdapter(new ArrayAdapter<>(Tp_Mydayplan.this, android.R.layout.simple_spinner_dropdown_item, worktype));
-        worktypespinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                worktype_id = String.valueOf(worktypelist.get(position).getId());
-                worktypeflag = worktypelist.get(position).getFWFlg();
-                worktype_name = worktypelist.get(position).getName();
-            }
-
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-    }
 
     @Override
     public void showProgress() {
@@ -190,11 +132,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         //Toast.makeText(this, "Position" + position, Toast.LENGTH_SHORT).show();
         Log.e("ROUTE_MASTER_Object", String.valueOf(noticeArrayList));
         Log.e("TAG", "response Tbmydayplan: " + new Gson().toJson(noticeArrayList));
-       /* Type userType = new TypeToken<ArrayList<Route_Master>>(){}.getType();
-        List<Route_Master> userList = gson.fromJson(noticeArrayList.toString(), userType);
-        userList.size();
 
-        Log.e("ROUTE_MASTER_Size", String.valueOf(userList.size()));*/
 
         if (position == 0) {
 
@@ -202,24 +140,20 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             userType = new TypeToken<ArrayList<Work_Type_Model>>() {
             }.getType();
             worktypelist = gson.fromJson(new Gson().toJson(noticeArrayList), userType);
-
             shared_common_pref.save("masterWorktype", new Gson().toJson(noticeArrayList));
-            loadWorktypeSpinner();
 
         } else if (position == 1) {
             userType = new TypeToken<ArrayList<Distributor_Master>>() {
             }.getType();
             distributor_master = gson.fromJson(new Gson().toJson(noticeArrayList), userType);
             shared_common_pref.save("masterdistributor", new Gson().toJson(noticeArrayList));
-            loaddistriSpinner();
+
         } else {
             userType = new TypeToken<ArrayList<Route_Master>>() {
             }.getType();
-            Route_Master = gson.fromJson(new Gson().toJson(noticeArrayList), userType);
-
+            Route_Masterlist = gson.fromJson(new Gson().toJson(noticeArrayList), userType);
+            FRoute_Master=Route_Masterlist;
             shared_common_pref.save("masterroute", new Gson().toJson(noticeArrayList));
-
-            loadroute();
         }
 
     }
@@ -231,21 +165,42 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     }
 
     @Override
+    public void OnclickMasterType(java.util.List<Work_Type_Model> myDataset, int position, List<Distributor_Master> Distributor_Master, List<Route_Master> route_Master, int type) {
+        customDialog.dismiss();
+        if (type == 1) {
+            worktype_text.setText(myDataset.get(position).getName());
+            worktype_id = String.valueOf(myDataset.get(position).getId());
+            Toast.makeText(this, "Selected Type" + position, Toast.LENGTH_SHORT).show();
+        } else if (type == 2) {
+            routeid = "";
+            routename = "";
+            distributor_text.setText(Distributor_Master.get(position).getName());
+            distributorid = String.valueOf(Distributor_Master.get(position).getId());
+            // loadroute(String.valueOf(Distributor_Master.get(position).getId()));
+        } else {
+            route_text.setText(route_Master.get(position).getName());
+            routename = route_Master.get(position).getName();
+            routeid = route_Master.get(position).getId();
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.submitbutton:
                 if (vali()) {
-                    progressbar.setVisibility(View.VISIBLE);
+                    common_class.ProgressdialogShow(1, "Tour  plan");
+
+
                     Calendar c = Calendar.getInstance();
                     String Dcr_Dste = new SimpleDateFormat("HH:mm a", Locale.ENGLISH).format(new Date());
                     JSONArray jsonarr = new JSONArray();
                     JSONObject jsonarrplan = new JSONObject();
-
                     String remarks = edt_remarks.getText().toString();
                     try {
                         JSONObject jsonobj = new JSONObject();
                         jsonobj.put("worktype_code", addquote(worktype_id));
-                        jsonobj.put("worktype_name", addquote(worktype_name));
+                        jsonobj.put("worktype_name", addquote(worktype_text.getText().toString()));
                         jsonobj.put("sfName", "'testonw'");
                         jsonobj.put("RouteCode", addquote(routeid));
                         jsonobj.put("objective", addquote(remarks));
@@ -262,9 +217,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                         jsonarrplan.put("Tour_Plan", jsonobj);
                         jsonarr.put(jsonarrplan);
                         Log.d("Mydayplan_Object", jsonarr.toString());
-
                         Map<String, String> QueryString = new HashMap<>();
-
                         QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
                         QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
                         QueryString.put("State_Code", Shared_Common_Pref.StateCode);
@@ -276,7 +229,8 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                             @Override
                             public void onResponse(Call<Object> call, Response<Object> response) {
                                 Log.e("RESPONSE_FROM_SERVER", response.body().toString());
-                                progressbar.setVisibility(View.GONE);
+                                common_class.ProgressdialogShow(2, "Tour  plan");
+
                                 if (response.code() == 200 || response.code() == 201) {
                                     common_class.CommonIntentwithFinish(Dashboard.class);
                                     Toast.makeText(Tp_Mydayplan.this, "Tour Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
@@ -287,7 +241,8 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
                             @Override
                             public void onFailure(Call<Object> call, Throwable t) {
-                                progressbar.setVisibility(View.GONE);
+                                common_class.ProgressdialogShow(2, "Tour  plan");
+
                                 Log.e("Reponse TAG", "onFailure : " + t.toString());
                             }
                         });
@@ -301,12 +256,38 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             case R.id.backarow:
                 common_class.CommonIntentwithFinish(Tp_Month_Select.class);
                 break;
+            case R.id.worktypelayout:
+                customDialog = new CustomListViewDialog(Tp_Mydayplan.this, worktypelist, 1, distributor_master, Route_Masterlist);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+                customDialog.show();
+
+                break;
+            case R.id.distributors_layout:
+                customDialog = new CustomListViewDialog(Tp_Mydayplan.this, worktypelist, 2, distributor_master, Route_Masterlist);
+                Window windoww = customDialog.getWindow();
+                windoww.setGravity(Gravity.CENTER);
+                windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+
+                break;
+            case R.id.route_layout:
+                customDialog = new CustomListViewDialog(Tp_Mydayplan.this, worktypelist, 3, distributor_master, Route_Masterlist);
+                Window windowww = customDialog.getWindow();
+                windowww.setGravity(Gravity.CENTER);
+                windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+
+                customDialog.show();
+
+                break;
         }
     }
 
     public boolean vali() {
         if (Common_Class.isNullOrEmpty(worktype_id)) {
-            Toast.makeText(this, "Select The Wrktype", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Select The Worktype", Toast.LENGTH_SHORT).show();
             return false;
         }
 

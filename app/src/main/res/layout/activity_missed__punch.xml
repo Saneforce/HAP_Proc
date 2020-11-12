@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_Hap.Missed_Punch"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".Activity_Hap.Missed_Punch">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar2"
@@ -28,76 +28,83 @@
             android:textStyle="bold" />
 
     </androidx.appcompat.widget.Toolbar>
+
     <ScrollView
         android:id="@+id/svw"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
         android:layout_below="@+id/toolbar2"
-        >
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="18dp"
+            android:clipToPadding="false"
             android:orientation="vertical"
-            android:clipToPadding="false">
+            android:padding="18dp">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="123dp"
-                app:cardCornerRadius="10dp"
-                android:background="@color/cardview_light_background">
+                android:layout_height="wrap_content"
+                android:background="@color/cardview_light_background"
+                app:cardCornerRadius="10dp">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginBottom="58dp"
-                        android:fontFamily="@font/alegreya_sans_sc"
-                        android:text="missed date"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold" />
-
-
-                    <EditText
-                        android:hint="Select the Date"
-                        android:id="@+id/missed_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="49dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="2dp"
-                        android:background="@drawable/textbox_bg"
-                        android:clickable="false"
-                        android:elevation="5dp"
-                        android:focusable="false"
-                        android:fontFamily="@font/alegreya_sans_sc" />
-
-                    <View
-                        android:id="@+id/divider2"
-                        android:layout_width="match_parent"
-                        android:layout_height="41dp"
-                        android:background="@drawable/button_yellow"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/textView9"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/alegreya_sans_sc"
+                        android:layout_gravity="center"
+                        android:background="@drawable/button_yellow"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:gravity="center"
                         android:text="Missed Date"
                         android:textAllCaps="false"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Missed date"
+                        android:textColor="@android:color/black"
+                        android:textStyle="bold" />
+
+                    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                        android:id="@+id/missed_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:background="@drawable/textbox_bg"
+                        android:elevation="@dimen/C5dp"
+                        android:padding="@dimen/C5dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/grey_500"
+                        app:hintText="@string/leave_type" />
+
+                </LinearLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone">
+
+
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="match_parent"
+                        android:layout_height="41dp"
+                        android:background="@drawable/button_yellow" />
+
                 </RelativeLayout>
 
 
@@ -112,16 +119,17 @@
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
 
-
             <EditText
                 android:id="@+id/missed_shift"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/textbox_bg"
-                android:elevation="10dp"
                 android:clickable="false"
-                android:focusable="false"/>
+                android:elevation="10dp"
+                android:focusable="false" />
+
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -138,9 +146,10 @@
                 android:layout_height="45dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/textbox_bg"
-                android:elevation="10dp"
                 android:clickable="false"
-                android:focusable="false"/>
+                android:elevation="10dp"
+                android:focusable="false" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -148,20 +157,20 @@
                 android:fontFamily="@font/alegreya_sans_sc"
                 android:text="Check-out time  and  Date"
                 android:textColor="@android:color/black"
-                android:textStyle="bold"
-              />
+                android:textStyle="bold" />
 
 
             <EditText
                 android:id="@+id/missed_checkout"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/textbox_bg"
-                android:elevation="10dp"
                 android:clickable="false"
+                android:padding="@dimen/C5dp"
+                android:elevation="10dp"
                 android:focusable="false"
-                android:hint="Select Time and Date"/>
+                android:hint="Select Time and Date" />
 
 
             <TextView
@@ -169,26 +178,28 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:fontFamily="@font/alegreya_sans_sc"
-                android:text="reason :"
+                android:text="Reason :"
                 android:textColor="@android:color/black"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/reason_missed"
                 android:layout_width="match_parent"
-                android:layout_height="110dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="@dimen/C100dp"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/textbox_bg"
-                android:elevation="10dp"
-                android:textAlignment="textStart"
-
-                />
-
+                android:elevation="@dimen/C5dp"
+                android:gravity="start"
+                android:hint="Reason"
+                android:padding="@dimen/C10dp"
+                android:textColor="@color/grey_500" />
 
 
             <Button
+                android:id="@+id/submit_missed"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/sign_bg"
                 android:fontFamily="@font/alegreya_sans_sc"
                 android:gravity="center_vertical"
@@ -196,8 +207,7 @@
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
-                tools:ignore="RtlCompat"
-                android:layout_marginTop="15dp"/>
+                tools:ignore="RtlCompat" />
         </LinearLayout>
     </ScrollView>
 

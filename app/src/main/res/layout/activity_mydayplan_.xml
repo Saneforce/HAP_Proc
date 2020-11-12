@@ -88,7 +88,7 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/distributors_lt"
+                    android:id="@+id/distributors_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C15dp"
@@ -102,19 +102,22 @@
                         android:textColor="#000000"
                         android:textStyle="bold"
                         android:layout_marginTop="15dp"/>
-
-                    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                        android:id="@+id/worktypedistributor"
+                    <TextView
+                        android:id="@+id/distributor_text"
                         android:layout_width="370dp"
                         android:layout_height="39dp"
                         android:layout_marginTop="10dp"
+                        android:textSize="13sp"
+                        android:padding="@dimen/C4dp"
+                        android:gravity="center_vertical"
+                        android:text="Select the worktype"
                         android:background="@drawable/round_white_backround"
-                        app:hintText="Select the Distributor "/>
+                        />
 
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/route_lt"
+                    android:id="@+id/route_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C15dp"
@@ -129,13 +132,17 @@
                         android:textStyle="bold"
                         android:layout_marginTop="15dp"/>
 
-                    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                        android:id="@+id/worktyperoute"
+                    <TextView
+                        android:id="@+id/route_text"
                         android:layout_width="370dp"
                         android:layout_height="39dp"
                         android:layout_marginTop="10dp"
+                        android:textSize="13sp"
+                        android:padding="@dimen/C4dp"
+                        android:gravity="center_vertical"
+                        android:text="Select the Route"
                         android:background="@drawable/round_white_backround"
-                        app:hintText="Select the Route "/>
+                        />
                 </LinearLayout>
 
                 <LinearLayout

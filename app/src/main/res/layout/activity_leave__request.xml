@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_Hap.Leave_Request"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".Activity_Hap.Leave_Request">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar4"
@@ -38,233 +38,424 @@
         android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:layout_below="@+id/toolbar4">
+        android:layout_below="@+id/toolbar4"
+        android:scrollbars="none">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="18dp"
+            android:clipToPadding="false"
             android:orientation="vertical"
-            android:clipToPadding="false">
+            android:padding="8dp">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="123dp"
+                android:layout_height="wrap_content"
+                android:background="#DF1515"
                 app:cardCornerRadius="10dp">
 
-                <RelativeLayout
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginBottom="58dp"
-                        android:fontFamily="@font/alegreya_sans_sc"
-                        android:text="TYPE OF LEAVE"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold" />
-
-
-                    <EditText
-                        android:hint="Select the leave type"
-                        android:id="@+id/leave_type"
                         android:layout_width="match_parent"
-                        android:layout_height="49dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="2dp"
-                        android:background="@drawable/textbox_bg"
-                        android:clickable="false"
-                        android:elevation="5dp"
-                        android:focusable="false"
-                        android:fontFamily="@font/alegreya_sans_sc" />
-
-                    <View
-                        android:id="@+id/divider2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_above="@+id/leave_type"
-                        android:layout_marginBottom="30dp"
-                        android:background="@drawable/button_yellow">
-                    </View>
-
-                    <TextView
-                        android:layout_marginTop="5dp"
-                        android:id="@+id/textView9"
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/alegreya_sans_sc"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:background="@drawable/button_yellow"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:gravity="center"
+                        android:padding="@dimen/C5dp"
                         android:text="Leave Request"
                         android:textAllCaps="false"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_centerHorizontal="true"/>
-                </RelativeLayout>
+                        android:textSize="13sp" />
 
 
-            </androidx.cardview.widget.CardView>
-
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="91dp">
-
-                <TextView
-                    android:layout_width="84dp"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="285dp"
-                    android:fontFamily="@font/alegreya_sans_sc"
-                    android:text="From Date:"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/from_date"
-                    android:layout_width="160dp"
-                    android:layout_height="45dp"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="43dp"
-                    android:layout_marginBottom="11dp"
-                    android:layout_toStartOf="@+id/to_date"
-                    android:background="@drawable/textbox_bg"
-                    android:clickable="false"
-                    android:elevation="3dp"
-                    android:focusable="false"
-                    android:hint="Select the date"
-                    android:inputType="date" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="116dp"
-                    android:fontFamily="@font/alegreya_sans_sc"
-                    android:text="To Date:"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold" />
-
-                <EditText
-                    android:id="@+id/to_date"
-                    android:layout_width="160dp"
-                    android:layout_height="46dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="7dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="@drawable/textbox_bg"
-                    android:clickable="false"
-                    android:elevation="3dp"
-                    android:focusable="false"
-                    android:hint="Select the date"
-                    android:inputType="date" />
-
-
-            </RelativeLayout>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="149dp"
-                android:layout_height="68dp"
-                app:cardCornerRadius="10dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-
-
-                    <EditText
-                        android:id="@+id/no_of_days"
-                        android:layout_width="148dp"
-                        android:layout_height="38dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="2dp"
-                        android:background="@drawable/textbox_bg"
-                        android:elevation="10dp"
-                        android:clickable="false"
-                        android:textAlignment="center"
-                      android:text="0"
-                        android:focusable="false"
-                       />
-
-                    <View
-                        android:id="@+id/divider4"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginBottom="40dp"
-                        android:background="@drawable/button_yellow" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/alegreya_sans_sc"
-                        android:text="no of days:"
-                        android:textColor="#ffff"
-                        android:textStyle="bold"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="4dp"
-                        />
+                        android:layout_alignParentBottom="true"
+                        android:layout_margin="5dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Type of leave"
+                        android:textColor="@color/dark_grey" />
 
-                </RelativeLayout>
+                    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                        android:id="@+id/distributor_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_margin="@dimen/C10dp"
+                        android:background="@drawable/textbox_bg"
+                        android:elevation="@dimen/C5dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:textColor="@color/grey_500"
+                        app:hintText="@string/leave_type" />
 
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:fontFamily="@font/poppins_semibold"
+                                android:text="From Date:"
+                                android:textColor="@color/dark_grey"
+
+                                />
+
+                            <EditText
+                                android:id="@+id/from_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:background="@drawable/textbox_bg"
+                                android:clickable="false"
+                                android:elevation="@dimen/C5dp"
+                                android:focusable="false"
+                                android:fontFamily="@font/poppins_regular"
+                                android:hint="Select the date"
+                                android:inputType="date"
+                                android:padding="@dimen/C8dp"
+                                android:textColor="@color/grey_500" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:fontFamily="@font/poppins_semibold"
+                                android:text="To Date:"
+                                android:textColor="@color/dark_grey" />
+
+                            <EditText
+                                android:id="@+id/to_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="5dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@drawable/textbox_bg"
+                                android:clickable="false"
+                                android:elevation="@dimen/C5dp"
+                                android:focusable="false"
+                                android:fontFamily="@font/poppins_regular"
+                                android:hint="Select the date"
+                                android:inputType="date"
+                                android:padding="@dimen/C8dp"
+                                android:textColor="@color/grey_500" />
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C10dp"
+                            android:orientation="vertical">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="150dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/C5dp"
+                                android:elevation="@dimen/C5dp"
+                                app:cardCornerRadius="10dp"
+                                app:cardElevation="@dimen/C5dp">
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:background="@drawable/button_yellow"
+                                        android:fontFamily="@font/poppins_semibold"
+                                        android:gravity="center"
+                                        android:padding="@dimen/C5dp"
+                                        android:text="no of days:"
+                                        android:textColor="#ffff" />
+
+                                    <EditText
+                                        android:id="@+id/no_of_days"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/C5dp"
+                                        android:background="@drawable/textbox_bg"
+                                        android:clickable="false"
+                                        android:focusable="false"
+                                        android:fontFamily="@font/poppins_regular"
+                                        android:text="0"
+                                        android:textAlignment="center"
+                                        android:textColor="@color/grey_500" />
+
+
+                                </LinearLayout>
+
+
+                            </androidx.cardview.widget.CardView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/check_half_linear"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginTop="@dimen/C10dp"
+                            android:orientation="vertical"
+
+                            android:visibility="gone">
+
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="150dp"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/C5dp"
+                                android:elevation="@dimen/C5dp"
+                                app:cardCornerRadius="10dp"
+                                app:cardElevation="@dimen/C5dp">
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:background="@drawable/button_yellow"
+                                        android:fontFamily="@font/poppins_semibold"
+                                        android:gravity="center"
+                                        android:padding="@dimen/C5dp"
+                                        android:text="Half day"
+                                        android:textColor="#ffff" />
+
+
+                                    <CheckBox
+                                        android:id="@+id/check_half"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:elevation="@dimen/C5dp"
+                                        android:gravity="center"
+                                        android:textColor="#888"
+                                        android:textSize="20sp">
+
+                                    </CheckBox>
+
+                                </LinearLayout>
+
+
+                            </androidx.cardview.widget.CardView>
+
+                        </LinearLayout>
+                    </RelativeLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/shit_linear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/C5dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:text="Shit Timing:"
+                            android:textColor="@color/dark_grey" />
+
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                            android:id="@+id/shift_timing"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_margin="@dimen/C5dp"
+                            android:background="@drawable/textbox_bg"
+                            android:elevation="@dimen/C5dp"
+                            android:fontFamily="@font/poppins_regular"
+                            android:textColor="@color/grey_500"
+                            app:hintText="@string/shit_type" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/half_day_linear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/C5dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:fontFamily="@font/poppins_semibold"
+                            android:text="Type of Half-Day:"
+                            android:textColor="@color/dark_grey" />
+
+                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                            android:id="@+id/type_half_day"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_margin="@dimen/C5dp"
+                            android:background="@drawable/textbox_bg"
+                            android:elevation="@dimen/C5dp"
+                            android:fontFamily="@font/poppins_regular"
+                            app:hintText="@string/half_day_type" />
+
+                    </LinearLayout>
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="Reason for leave:"
+                        android:textColor="@color/dark_grey" />
+
+                    <EditText
+                        android:id="@+id/reason_leave"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/C100dp"
+                        android:layout_margin="@dimen/C5dp"
+                        android:background="@drawable/textbox_bg"
+                        android:elevation="5dp"
+                        android:fontFamily="@font/poppins_regular"
+                        android:gravity="start"
+                        android:hint="Reason for leave"
+                        android:padding="@dimen/C8dp"
+                        android:textColor="@color/grey_500" />
+
+                    <Button
+                        android:id="@+id/submitButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/C15dp"
+                        android:background="@drawable/sign_bg"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:text="SUBMIT"
+                        android:textAlignment="center"
+                        android:textColor="#FFFFFF" />
+
+                </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 
 
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/alegreya_sans_sc"
-                android:text="reason for leave:"
-                android:textColor="@android:color/black"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/reason_leave"
-                android:layout_width="368dp"
-                android:layout_height="110dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/textbox_bg"
-                android:elevation="5dp"
-                android:hint="ggg"
-                 />
-
-            <Button
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/sign_bg"
-                android:fontFamily="@font/alegreya_sans_sc"
-                android:gravity="center_vertical"
-                android:text="SUBMIT"
-                android:textAlignment="center"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                tools:ignore="RtlCompat"
-                android:layout_marginTop="15dp"/>
+                android:layout_marginTop="@dimen/C10dp"
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Leave Availability Status"
+                    android:textColor="@color/green"></TextView>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="@dimen/C100dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:padding="@dimen/C10dp"
+                        android:text="Type"
+                        android:textColor="@android:color/black"></TextView>
+
+
+                    <TextView
+                        android:layout_width="@dimen/C100dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:padding="@dimen/C10dp"
+                        android:text="Eligibility"
+                        android:textColor="@android:color/black"></TextView>
+
+                    <TextView
+                        android:layout_width="@dimen/C100dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:padding="@dimen/C10dp"
+                        android:text="Taken"
+                        android:textColor="@android:color/black"></TextView>
+
+                    <TextView
+                        android:layout_width="@dimen/C100dp"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semibold"
+                        android:padding="@dimen/C10dp"
+                        android:text="Available"
+                        android:textColor="@android:color/black"></TextView>
+
+
+                </LinearLayout>
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/leave_remaining"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"></androidx.recyclerview.widget.RecyclerView>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/C10dp"
+                    android:text="Leave Status is not available"
+                    android:textColor="@color/green"></TextView>
+            </LinearLayout>
 
 
         </LinearLayout>
 
 
     </ScrollView>
-
-
-
 
 </LinearLayout>

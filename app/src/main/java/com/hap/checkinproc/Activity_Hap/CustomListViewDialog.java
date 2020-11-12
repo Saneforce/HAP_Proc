@@ -15,6 +15,8 @@ import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.hap.checkinproc.Activity.Util.UpdateUi;
+import com.hap.checkinproc.Model_Class.Distributor_Master;
+import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.Model_Class.Work_Type_Model;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.DataAdapter;
@@ -32,8 +34,6 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
     public CustomListViewDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
-
-
     public Activity activity;
     public Dialog dialog;
     public Button yes, no;
@@ -41,19 +41,21 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
     RecyclerView recyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     //RecyclerView.Adapter adapter;
-    CustomListViewDialog customDialog;
-
     DataAdapter da;
-    String type;
+    int type;
     List<Work_Type_Model> mDataset;
+    List<Distributor_Master> Distributor_Master;
+    List<Route_Master> route_Master;
 
-    public CustomListViewDialog(Activity a, List<Work_Type_Model> wk, String type) {
+    public CustomListViewDialog(Activity a, List<Work_Type_Model> wk, int type, List<Distributor_Master> distributor, List<Route_Master> routelist) {
         super(a);
         this.activity = a;
         this.type = type;
         //this.adapter = adapter;
         this.mDataset = wk;
-        this.da = new DataAdapter(mDataset, activity,type);
+        this.Distributor_Master = distributor;
+        this.route_Master = routelist;
+        this.da = new DataAdapter(mDataset, activity, type, Distributor_Master,route_Master);
         setupLayout();
 
 
@@ -68,7 +70,6 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.custom_dialog_layout);
-
         no = (Button) findViewById(R.id.no);
         searchView = findViewById(R.id.searchView);
         recyclerView = findViewById(R.id.recycler_view);

@@ -57,23 +57,16 @@ public class Tp_Approval_Adapter extends RecyclerView.Adapter<Tp_Approval_Adapte
             public void onClick(View view) {
                 Intent intent = new Intent(context, Tp_Approval_Reject.class);
                 intent.putExtra("Username", Tp_Approval_ModelsList.get(position).getFieldForceName());
-
                 intent.putExtra("Emp_Code", Tp_Approval_ModelsList.get(position).getEmpCode());
                 intent.putExtra("HQ", Tp_Approval_ModelsList.get(position).getHQ());
-
-
                 intent.putExtra("Designation", Tp_Approval_ModelsList.get(position).getDesignation());
-
                 intent.putExtra("MobileNumber", Tp_Approval_ModelsList.get(position).getSFMobile());
-
-                intent.putExtra("Plan_Date", Tp_Approval_ModelsList.get(position).getDayofplan());
-                intent.putExtra("Work_Type", Tp_Approval_ModelsList.get(position).getWorktypeCode());
+                intent.putExtra("Plan_Date", Tp_Approval_ModelsList.get(position).getStartDate());
+                intent.putExtra("Work_Type", Tp_Approval_ModelsList.get(position).getWorktypeName());
                 intent.putExtra("Route", Tp_Approval_ModelsList.get(position).getRouteName());
                 intent.putExtra("Distributor", Tp_Approval_ModelsList.get(position).getWorkedWithName());
-
+                intent.putExtra("Sf_Code", Tp_Approval_ModelsList.get(position).getSFCode());
                 intent.putExtra("Remarks", Tp_Approval_ModelsList.get(position).getRemarks());
-
-
                 context.startActivity(intent);
             }
         });

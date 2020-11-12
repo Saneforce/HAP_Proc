@@ -45,8 +45,14 @@
     <string name="txt_select_jointwork">Select the Joint work</string>
     <string name="txt_remarks">Remarks</string>
     <string name="txt_enter_remarks">Enter the Remarks</string>
-    <string name="txt_submit">Submit</string>
+    <string name="txt_enter_reason">Enter the Reason</string>
 
+    <string name="txt_submit">Submit</string>
+    <string name="reason">Reason</string>
+
+    <string name="leave_type">Leave Type</string>
+    <string name="shit_type">Shift Timing</string>
+    <string name="half_day_type">Halfday Type</string>
     <string name="material_calendar_monday">M</string>
     <string name="material_calendar_tuesday">T</string>
     <string name="material_calendar_wednesday">W</string>

@@ -1,142 +1,99 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.R;
 
 public class Dashboard extends AppCompatActivity implements View.OnClickListener {
     TextView username;
-    String pic;
-    ImageView profileImage;
+    LinearLayout linMyday, linCheckin, linRequstStaus, linReport, linOnDuty, linApprovals, linTaClaim, linExtShift, linTourPlan, linExit;
     Integer type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        username=findViewById(R.id.username);
-        CardView cardview1 = findViewById(R.id.cardview1);
-        CardView cardview2 = findViewById(R.id.sec_card_view);
-        CardView cardview3 = findViewById(R.id.cardview3);
-        CardView cardview4 = findViewById(R.id.cardview4);
-        CardView cardview8 = findViewById(R.id.cardview8);
-        CardView cardview5 = findViewById(R.id.cardview5);
-        CardView cardview9 = findViewById(R.id.cardview9);
-        CardView tourplan = findViewById(R.id.tourplan);
+        username = findViewById(R.id.username);
 
 
-
-//profile image set
-        /*profileImage=(ImageView)findViewById(R.id.profile_image);
-        Intent intent = getIntent();
-        pic = intent.getStringExtra("photo");
-        Log.e("avra",pic );
-        Glide.with(this).load(pic).into(profileImage);
-*/
         SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         type = (shared.getInt("CheckCount", 0));
 
 
-        if(type == 0){
-
-            cardview8.setVisibility(View.GONE);
-
-        }else {
-
-        }
-
-        cardview1.setOnClickListener(this);
-        cardview2.setOnClickListener(this);
-        cardview3.setOnClickListener(this);
-        cardview4.setOnClickListener(this);
-        cardview5.setOnClickListener(this);
-        cardview8.setOnClickListener(this);
-        cardview9.setOnClickListener(this);
-        tourplan.setOnClickListener(this);
+        linMyday = (findViewById(R.id.lin_myday_plan));
+        linCheckin = (findViewById(R.id.lin_check_in));
+        linRequstStaus = (findViewById(R.id.lin_request_status));
+        linReport = (findViewById(R.id.lin_report));
+        linOnDuty = (findViewById(R.id.lin_onduty));
+        linApprovals = (findViewById(R.id.lin_approvals));
+        linTaClaim = (findViewById(R.id.lin_ta_claim));
+        linExtShift = (findViewById(R.id.lin_extenden_shift));
+        linTourPlan = (findViewById(R.id.lin_tour_plan));
+        linExit = (findViewById(R.id.lin_exit));
 
 
+        linMyday.setOnClickListener(this);
+        linCheckin.setOnClickListener(this);
+        linRequstStaus.setOnClickListener(this);
+        linReport.setOnClickListener(this);
+        linOnDuty.setOnClickListener(this);
+        linApprovals.setOnClickListener(this);
+        linTaClaim.setOnClickListener(this);
+        linExtShift.setOnClickListener(this);
+        linTourPlan.setOnClickListener(this);
+        linExit.setOnClickListener(this);
 
-        }
+    }
 
     @Override
     public void onBackPressed() {
-            Toast.makeText(Dashboard.this,"There is no back action",Toast.LENGTH_LONG).show();
+        Toast.makeText(Dashboard.this, "There is no back action", Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onClick(View view) {
-        Intent  I;
-        switch (view.getId()){
+        Intent I;
+        switch (view.getId()) {
 
-            case R.id.cardview1:
-
-                /*Intent  i = new Intent(this, Check_in.class);
-
-            startActivity(i);*/
-            break;
-            case R.id.sec_card_view:
-               /* Intent i1 = new Intent(this, Ocheck_in.class);
-                startActivity(i1);*/
-
-                Toast.makeText(this, "Checking", Toast.LENGTH_SHORT).show();
+            case R.id.lin_check_in:
                 break;
 
-            case R.id.cardview3:
-
-                  I = new Intent(this, Leave_Dashboard.class);
-
-                startActivity(I);
+            case R.id.lin_request_status:
+                startActivity(new Intent(this, Leave_Dashboard.class));
                 break;
 
-
-            case R.id.cardview4:
-
-                I = new Intent(this, Travel_Allowance.class);
-
-                startActivity(I);
+            case R.id.lin_ta_claim:
+                startActivity(new Intent(this, Travel_Allowance.class));
                 break;
 
-            case R.id.cardview5:
-
-                I = new Intent(this, Reports.class);
-
-                startActivity(I);
+            case R.id.lin_report:
+                startActivity(new Intent(this, Reports.class));
                 break;
 
-            case R.id.cardview8:
-
-                I = new Intent(this, Approvals.class);
-
-                startActivity(I);
+            case R.id.lin_approvals:
+                startActivity(new Intent(this, Approvals.class));
                 break;
-            case R.id.cardview9:
-
-                I = new Intent(this, Mydayplan_Activity.class);
-
-                startActivity(I);
+            case R.id.lin_myday_plan:
+                startActivity(new Intent(this, Mydayplan_Activity.class));
                 break;
 
-            case R.id.tourplan:
-
-                I = new Intent(this, Tp_Month_Select.class);
-
-                startActivity(I);
+            case R.id.lin_tour_plan:
+                startActivity(new Intent(this, Tp_Month_Select.class));
                 break;
 
 
             default:
                 break;
-
         }
+
 
     }
 }

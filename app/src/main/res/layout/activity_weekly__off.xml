@@ -116,10 +116,14 @@
             <EditText
                 android:id="@+id/remarks_week"
                 android:layout_width="match_parent"
-                android:layout_height="110dp"
-                android:layout_marginTop="10dp"
+                android:layout_height="@dimen/C100dp"
+                android:layout_marginTop="15dp"
                 android:background="@drawable/textbox_bg"
-                android:elevation="10dp" />
+                android:elevation="@dimen/C5dp"
+                android:gravity="start"
+                android:hint="Reason"
+                android:padding="@dimen/C10dp"
+                android:textColor="@color/grey_500"  />
 
             <Button
                 android:layout_width="match_parent"
@@ -129,6 +133,7 @@
                 android:fontFamily="@font/alegreya_sans_sc"
                 android:gravity="center_vertical"
                 android:text="SUBMIT"
+                android:id="@+id/weeky_submit"
                 android:textAlignment="center"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
@@ -136,4 +141,4 @@
         </LinearLayout>
     </ScrollView>
 
-        </LinearLayout>
+</LinearLayout>

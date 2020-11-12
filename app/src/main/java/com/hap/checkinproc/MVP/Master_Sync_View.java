@@ -22,6 +22,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class Master_Sync_View implements Main_Model.GetRoutemastersyncResult {
 
     String commonworktype;
+    Shared_Common_Pref shared_common_pref;
 
     @Override
     public void GetRouteResult(Main_Model.GetRoutemastersyncResult.OnFinishedListenerroute onFinishedListener) {
