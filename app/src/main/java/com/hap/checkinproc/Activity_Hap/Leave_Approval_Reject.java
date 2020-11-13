@@ -1,10 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.appcompat.app.AppCompatActivity;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,9 +7,13 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -31,6 +30,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Leave_Approval_Reject extends AppCompatActivity implements View.OnClickListener {
     TextView name, empcode, hq, mobilenumber, designation, leavereason, leavetype, fromdate, todate, leavedays, tpapprovebutton, Lreject, L_rejectsave;
     String Sf_Code, Tour_plan_Date, LeaveId;
@@ -39,6 +42,7 @@ public class Leave_Approval_Reject extends AppCompatActivity implements View.OnC
     LinearLayout Approvereject, rejectonly;
     EditText reason;
     private WebView wv1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +82,14 @@ public class Leave_Approval_Reject extends AppCompatActivity implements View.OnC
         leavedays.setText(":" + i.getExtras().getString("leavedays"));
         Sf_Code = i.getExtras().getString("Sf_Code");
         LeaveId = i.getExtras().getString("LeaveId");
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
+
 
     }
 
@@ -169,6 +181,19 @@ public class Leave_Approval_Reject extends AppCompatActivity implements View.OnC
             view.loadUrl(url);
             return true;
         }
+    }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Leave_Approval_Reject.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
     }
 }
 

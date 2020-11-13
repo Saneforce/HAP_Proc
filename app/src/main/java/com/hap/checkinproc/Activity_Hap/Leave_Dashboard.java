@@ -3,9 +3,11 @@ package com.hap.checkinproc.Activity_Hap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.R;
@@ -68,7 +70,13 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         MissedStatus.setOnClickListener(this);
         WeeklyOffStatus.setOnClickListener(this);
         ExtdShift.setOnClickListener(this);
-
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
 
     }
 
@@ -109,5 +117,17 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
 
                 break;
         }
+    }
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Leave_Dashboard.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

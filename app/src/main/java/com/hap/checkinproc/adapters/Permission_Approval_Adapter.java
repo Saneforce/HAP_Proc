@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.hap.checkinproc.Activity_Hap.Leave_Approval_Reject;
 import com.hap.checkinproc.Activity_Hap.Permission_Approval_Reject;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Model_Class.Permission_Approval_Model;
 import com.hap.checkinproc.R;
 
@@ -22,6 +23,8 @@ public class Permission_Approval_Adapter extends RecyclerView.Adapter<Permission
     private List<Permission_Approval_Model> Permission_Approval_ModelsList;
     private int rowLayout;
     private Context context;
+    AdapterOnClick mAdapterOnClick;
+    Integer dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, textviewdate, open, NoofHours;
@@ -36,15 +39,23 @@ public class Permission_Approval_Adapter extends RecyclerView.Adapter<Permission
     }
 
 
-    public Permission_Approval_Adapter(List<Permission_Approval_Model> Permission_Approval_ModelsList, int rowLayout, Context context) {
+    public Permission_Approval_Adapter(List<Permission_Approval_Model> Permission_Approval_ModelsList, int rowLayout, Context context,AdapterOnClick mAdapterOnClick) {
         this.Permission_Approval_ModelsList = Permission_Approval_ModelsList;
         this.rowLayout = rowLayout;
         this.context = context;
+        this.mAdapterOnClick = mAdapterOnClick;
     }
 
     @Override
     public Permission_Approval_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapterOnClick.onIntentClick(dummy);
+            }
+        });
+
         return new Permission_Approval_Adapter.MyViewHolder(view);
     }
 
@@ -57,20 +68,8 @@ public class Permission_Approval_Adapter extends RecyclerView.Adapter<Permission
         holder.open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, Permission_Approval_Reject.class);
-                intent.putExtra("Sl_No", String.valueOf(Permission_Approval_ModelsList.get(position).getSlNo()));
-                intent.putExtra("Username", Permission_Approval_ModelsList.get(position).getFieldForceName());
-                intent.putExtra("Emp_Code", Permission_Approval_ModelsList.get(position).getEmpCode());
-                intent.putExtra("HQ", Permission_Approval_ModelsList.get(position).getHQ());
-                intent.putExtra("Designation", Permission_Approval_ModelsList.get(position).getDesignation());
-                intent.putExtra("MobileNumber", Permission_Approval_ModelsList.get(position).getSFMobile());
-                intent.putExtra("Reason", Permission_Approval_ModelsList.get(position).getReason());
-                intent.putExtra("fromtime", Permission_Approval_ModelsList.get(position).getFromTime());
-                intent.putExtra("totime", Permission_Approval_ModelsList.get(position).getToTime());
-                intent.putExtra("Sf_Code", Permission_Approval_ModelsList.get(position).getSfCode());
-                intent.putExtra("permissiondate", Permission_Approval_ModelsList.get(position).getPermissiondate());
-                intent.putExtra("NoofHours", Permission_Approval_ModelsList.get(position).getNoofHours());
-                context.startActivity(intent);
+
+                mAdapterOnClick.onIntentClick(position);
             }
         });
     }

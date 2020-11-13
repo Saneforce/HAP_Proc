@@ -1,18 +1,17 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.appcompat.app.AppCompatActivity;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -28,6 +27,10 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Missed_Punch_Approval_Reject extends AppCompatActivity implements View.OnClickListener {
     TextView name, empcode, hq, mobilenumber, designation, MPreject, misseddate, applieddate, shiftonduty, MPreason, checkintime, checkouttime, MPapprovebutton, MP_rejectsave;
@@ -50,7 +53,7 @@ public class Missed_Punch_Approval_Reject extends AppCompatActivity implements V
         mobilenumber = findViewById(R.id.mobilenumber);
         Approvereject = findViewById(R.id.Approvereject);
         rejectonly = findViewById(R.id.rejectonly);
-        MP_rejectsave = findViewById(R.id.MP_rejectsave);
+        MP_rejectsave = findViewById(R.id.mp_rejectsave);
 
         MPreason = findViewById(R.id.MPreason);
         MPreject = findViewById(R.id.MPreject);
@@ -80,7 +83,13 @@ public class Missed_Punch_Approval_Reject extends AppCompatActivity implements V
         Sf_Code = i.getExtras().getString("Sf_Code");
         Sl_No = i.getExtras().getString("Sl_No");
 
-
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
     }
 
 
@@ -159,7 +168,7 @@ public class Missed_Punch_Approval_Reject extends AppCompatActivity implements V
                 rejectonly.setVisibility(View.VISIBLE);
                 Approvereject.setVisibility(View.INVISIBLE);
                 break;
-            case R.id.MP_rejectsave:
+            case R.id.mp_rejectsave:
                 if (reason.getText().toString().equalsIgnoreCase("")) {
                     Toast.makeText(this, "Enter The Reason", Toast.LENGTH_SHORT).show();
                 } else {
@@ -167,6 +176,19 @@ public class Missed_Punch_Approval_Reject extends AppCompatActivity implements V
                 }
                 break;
         }
+    }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Missed_Punch_Approval_Reject.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
     }
 }
 

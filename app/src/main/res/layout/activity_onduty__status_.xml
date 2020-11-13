@@ -1,72 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Activity_Hap.Leave_Approval">
+    android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_blueg"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme">
-
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/alegreya_sans_sc"
-            android:text="On-duty Status"
-            android:textAllCaps="false"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </androidx.appcompat.widget.Toolbar>
-
-
-    <androidx.cardview.widget.CardView
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="5dp"
-        app:cardCornerRadius="10dp">
-        <LinearLayout
+        android:orientation="vertical"
+        tools:context=".Activity_Hap.Leave_Approval">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar3"
             android:layout_width="match_parent"
-            android:layout_height="39dp"
-            android:gravity="center"
-            android:background="@drawable/button_yellow">
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_blueg"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme">
+
 
             <TextView
-                android:layout_width="377dp"
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/alegreya_sans_sc"
-                android:text="On-duty STATUS"
+                android:text="ON-DUTY STATUS"
+                android:textAllCaps="false"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </androidx.appcompat.widget.Toolbar>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/C7dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_yellow"
+                android:fontFamily="@font/alegreya_sans_sc"
+                android:padding="@dimen/C5dp"
+                android:text="ON-DUTY STATUS"
                 android:textAlignment="center"
                 android:textColor="@color/color_white"
                 android:textStyle="bold" />
 
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="5dp"
-            android:layout_marginTop="40dp"
-            android:layout_marginRight="5dp">
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/ondutystatus"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/C5dp"
+                android:layout_marginBottom="60dp" />
         </LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <include layout="@layout/back_arrow"></include>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

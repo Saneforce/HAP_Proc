@@ -1,9 +1,13 @@
 package com.hap.checkinproc.Activity_Hap;
+
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.DialogFragment;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -15,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -44,6 +49,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
 public class Approvals extends AppCompatActivity implements View.OnClickListener {
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
@@ -59,6 +65,15 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         setContentView(R.layout.activity_approvals);
         shared_common_pref = new Shared_Common_Pref(this);
         common_class = new Common_Class(this);
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
+
 
         LeaveRequest = findViewById(R.id.lin_leave_req);
         PermissionRequest = findViewById(R.id.lin_per_req);
@@ -97,7 +112,6 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         MissedStatus.setOnClickListener(this);
         ExtdShift.setOnClickListener(this);
         lin_weekoff.setOnClickListener(this);
-
         getcountdetails();
     }
 
@@ -106,7 +120,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "ViewAllCount");
         QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("State_Code", Shared_Common_Pref.Div_Code);
+        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
         QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
         QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
         QueryString.put("desig", "MGR");
@@ -164,7 +178,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 startActivity(new Intent(Approvals.this, Extendedshift_approval.class));
                 break;
             case R.id.lin_travel_allow:
-                startActivity(new Intent(Approvals.this, Ta_approval.class));
+                //startActivity(new Intent(Approvals.this, Ta_approval.class));
                 break;
             case R.id.lin_tour_plan:
                 common_class.CommonIntentwithFinish(Tp_Approval.class);
@@ -191,4 +205,21 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
 
     }
+
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Approvals.super.onBackPressed();
+                }
+            });
+
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
+
 }

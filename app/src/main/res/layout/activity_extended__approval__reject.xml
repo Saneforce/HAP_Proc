@@ -1,10 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_marginBottom="@dimen/C60dp"
     tools:context=".Activity_Hap.Leave_Approval_Reject">
 
     <androidx.appcompat.widget.Toolbar
@@ -176,23 +186,6 @@
                             android:textSize="@dimen/C16dp"
                             android:textStyle="bold" />
 
-                        <!--  <TextView
-                              android:layout_width="100dp"
-                              android:layout_height="200dp"
-                              android:layout_weight="1"
-                              android:text="Checkin"
-                              android:textColor="@color/txt_color_black"
-                              android:textSize="@dimen/C16dp"
-                              android:textStyle="bold" />
-
-                          <TextView
-                              android:layout_width="100dp"
-                              android:layout_height="200dp"
-                              android:layout_weight="1"
-                              android:text="Check-out"
-                              android:textColor="@color/txt_color_black"
-                              android:textSize="@dimen/C16dp"
-                              android:textStyle="bold" />-->
                     </LinearLayout>
 
                     <LinearLayout
@@ -313,28 +306,6 @@
                             android:text="67.9876"
                             android:textSize="@dimen/C16dp"
                             android:textStyle="bold" />
-
-                        <!-- <TextView
-                             android:id="@+id/checkin"
-                             android:layout_width="100dp"
-                             android:layout_height="200dp"
-                             android:layout_weight="1"
-                             android:text="11:20:10"
-                             android:textColor="@color/green"
-
-                             android:textSize="@dimen/C16dp"
-                             android:textStyle="bold" />
-
-                         <TextView
-                             android:id="@+id/checkout"
-                             android:layout_width="100dp"
-                             android:layout_height="200dp"
-                             android:layout_weight="1"
-                             android:text="11:20:10"
-                             android:textColor="@color/green"
-
-                             android:textSize="@dimen/C16dp"
-                             android:textStyle="bold" />-->
                     </LinearLayout>
 
                 </LinearLayout>
@@ -440,3 +411,8 @@
 
 
 </LinearLayout>
+
+    <include layout="@layout/back_arrow"></include>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

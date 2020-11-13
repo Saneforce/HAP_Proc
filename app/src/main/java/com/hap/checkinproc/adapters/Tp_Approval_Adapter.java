@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.hap.checkinproc.Activity_Hap.Tp_Approval_Reject;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Model_Class.Tp_Approval_Model;
 import com.hap.checkinproc.R;
 
@@ -21,6 +22,8 @@ public class Tp_Approval_Adapter extends RecyclerView.Adapter<Tp_Approval_Adapte
     private List<Tp_Approval_Model> Tp_Approval_ModelsList;
     private int rowLayout;
     private Context context;
+    AdapterOnClick mAdapterOnClick;
+    Integer dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, textviewdate, open;
@@ -34,15 +37,22 @@ public class Tp_Approval_Adapter extends RecyclerView.Adapter<Tp_Approval_Adapte
     }
 
 
-    public Tp_Approval_Adapter(List<Tp_Approval_Model> Tp_Approval_ModelsList, int rowLayout, Context context) {
+    public Tp_Approval_Adapter(List<Tp_Approval_Model> Tp_Approval_ModelsList, int rowLayout, Context context, AdapterOnClick mAdapterOnClick) {
         this.Tp_Approval_ModelsList = Tp_Approval_ModelsList;
         this.rowLayout = rowLayout;
         this.context = context;
+        this.mAdapterOnClick = mAdapterOnClick;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapterOnClick.onIntentClick(dummy);
+            }
+        });
         return new MyViewHolder(view);
     }
 
@@ -55,19 +65,10 @@ public class Tp_Approval_Adapter extends RecyclerView.Adapter<Tp_Approval_Adapte
         holder.open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, Tp_Approval_Reject.class);
-                intent.putExtra("Username", Tp_Approval_ModelsList.get(position).getFieldForceName());
-                intent.putExtra("Emp_Code", Tp_Approval_ModelsList.get(position).getEmpCode());
-                intent.putExtra("HQ", Tp_Approval_ModelsList.get(position).getHQ());
-                intent.putExtra("Designation", Tp_Approval_ModelsList.get(position).getDesignation());
-                intent.putExtra("MobileNumber", Tp_Approval_ModelsList.get(position).getSFMobile());
-                intent.putExtra("Plan_Date", Tp_Approval_ModelsList.get(position).getStartDate());
-                intent.putExtra("Work_Type", Tp_Approval_ModelsList.get(position).getWorktypeName());
-                intent.putExtra("Route", Tp_Approval_ModelsList.get(position).getRouteName());
-                intent.putExtra("Distributor", Tp_Approval_ModelsList.get(position).getWorkedWithName());
-                intent.putExtra("Sf_Code", Tp_Approval_ModelsList.get(position).getSFCode());
-                intent.putExtra("Remarks", Tp_Approval_ModelsList.get(position).getRemarks());
-                context.startActivity(intent);
+
+
+                mAdapterOnClick.onIntentClick(position);
+
             }
         });
     }

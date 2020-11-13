@@ -1,5 +1,8 @@
 package com.hap.checkinproc.Activity_Hap;
+
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,7 +71,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     EditText edt_remarks;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    String worktype_id, worktypeflag, distributorname, distributorid, routename, routeid;
+    String worktype_id, worktypeflag, distributorname, distributorid, routename, routeid, Fieldworkflag = "";
     private TextClock tClock;
     Button submitbutton;
     CustomListViewDialog customDialog;
@@ -89,48 +92,31 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         worktypelayout = findViewById(R.id.worktypelayout);
         distributors_layout = findViewById(R.id.distributors_layout);
         route_layout = findViewById(R.id.route_layout);
-        submitbutton = findViewById(R.id.submitbutton);
+        submitbutton = findViewById(R.id.mydaysubmitbutton);
         worktype_text = findViewById(R.id.worktype_text);
         route_text = findViewById(R.id.route_text);
         distributor_text = findViewById(R.id.distributor_text);
         presenter = new MasterSync_Implementations(this, new Master_Sync_View());
         presenter.requestDataFromServer();
         backarow.setOnClickListener(this);
-        submitbutton.setOnClickListener(this);
         worktypelayout.setOnClickListener(this);
         distributors_layout.setOnClickListener(this);
         route_layout.setOnClickListener(this);
+        submitbutton.setOnClickListener(this);
         common_class.ProgressdialogShow(1, "Day plan");
-
-    }
-
- /*   public void loaddistriSpinner() {
-        ArrayList<String> distributor = new ArrayList<>();
-        for (int i = 0; i < distributor_master.size(); i++) {
-
-            distributor.add(distributor_master.get(i).getName());
-
-        }
-
-        worktypedistributor.setAdapter(new ArrayAdapter<>(Mydayplan_Activity.this, android.R.layout.simple_spinner_dropdown_item, distributor));
-        worktypedistributor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                distributorname = distributor_master.get(position).getName();
-                distributorid = String.valueOf(distributor_master.get(position).getDisCatCode());
-            }
-
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
             }
         });
-    }*/
+    }
+
 
     public void loadroute(String id) {
         Log.e("Select the Distributor", String.valueOf(id));
-        if (Common_Class.isNullOrEmpty(String.valueOf(id))) {
+        if (common_class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
         }
         FRoute_Master = new ArrayList<Route_Master>();
@@ -176,24 +162,17 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             userType = new TypeToken<ArrayList<Work_Type_Model>>() {
             }.getType();
             worktypelist = gson.fromJson(new Gson().toJson(noticeArrayList), userType);
-
-            shared_common_pref.save("masterWorktype", new Gson().toJson(noticeArrayList));
-            // loadWorktypeSpinner();
-
         } else if (position == 1) {
             userType = new TypeToken<ArrayList<Distributor_Master>>() {
             }.getType();
             distributor_master = gson.fromJson(new Gson().toJson(noticeArrayList), userType);
-
-            shared_common_pref.save("masterdistributor", new Gson().toJson(noticeArrayList));
-
             //loaddistriSpinner();
         } else {
             userType = new TypeToken<ArrayList<Route_Master>>() {
             }.getType();
             Route_Masterlist = gson.fromJson(new Gson().toJson(noticeArrayList), userType);
             FRoute_Master = Route_Masterlist;
-            shared_common_pref.save("masterroute", new Gson().toJson(noticeArrayList));
+
             common_class.ProgressdialogShow(2, "Day plan");
 
             Get_MydayPlan();
@@ -210,74 +189,11 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.submitbutton:
+            case R.id.mydaysubmitbutton:
                 if (vali()) {
-                    progressbar.setVisibility(View.VISIBLE);
-                    Calendar c = Calendar.getInstance();
-                    String Dcr_Dste = new SimpleDateFormat("HH:mm a", Locale.ENGLISH).format(new Date());
-                    JSONArray jsonarr = new JSONArray();
-                    JSONObject jsonarrplan = new JSONObject();
-
-                    String remarks = edt_remarks.getText().toString();
-                    try {
-                        JSONObject jsonobj = new JSONObject();
-                        jsonobj.put("wtype", addquote(worktype_id));
-                        jsonobj.put("sf_member_code", addquote(Shared_Common_Pref.Sf_Code));
-                        jsonobj.put("stockist", addquote(distributorid));
-                        jsonobj.put("stkName", distributorname);
-                        jsonobj.put("dcrtype", "APP");
-                        jsonobj.put("cluster", addquote(routeid));
-                        jsonobj.put("custid", "");
-                        jsonobj.put("address", "");
-                        jsonobj.put("remarks", addquote(remarks));
-                        jsonobj.put("OtherWors", "");
-                        jsonobj.put("FWFlg", addquote(worktypeflag));
-                        jsonobj.put("ClstrName", addquote(routename));
-                        jsonobj.put("AppVersion", "V_1.0.5");
-                        jsonobj.put("dcr_activity_date", Common_Class.GetDate());
-                        jsonobj.put("worked_with", "''");
-                        jsonarrplan.put("tbMyDayPlan", jsonobj);
-                        jsonarr.put(jsonarrplan);
-                        Log.d("Mydayplan_Object", jsonarr.toString());
-                        Map<String, String> QueryString = new HashMap<>();
-                        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-                        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-                        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
-                        QueryString.put("desig", "MGR");
-
-                        Log.d("QueryString", String.valueOf(QueryString));
-                        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                        Call<Object> Callto = apiInterface.Tb_Mydayplan(QueryString, jsonarr.toString());
-                        Callto.enqueue(new Callback<Object>() {
-
-                            @Override
-                            public void onResponse(Call<Object> call, Response<Object> response) {
-                                Log.e("RESPONSE_FROM_SERVER", response.body().toString());
-                                progressbar.setVisibility(View.GONE);
-                                if (response.code() == 200 || response.code() == 201) {
-                                    common_class.CommonIntentwithFinish(Tp_Calander.class);
-                                    Toast.makeText(Mydayplan_Activity.this, "Day Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
-                                }
-
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<Object> call, Throwable t) {
-                                progressbar.setVisibility(View.GONE);
-
-                                Log.e("Reponse TAG", "onFailure : " + t.toString());
-//                    Toast.makeText(getActivity(), "Myday Plan Not Submitted ", Toast.LENGTH_SHORT).show();
-//                    Intent i = new Intent(Leave_Activity.this, MainActivity.class);
-//                    startActivity(i);
-//                    getFragmentManager().beginTransaction().replace(R.id.DCRMain_Frame, new Home_Fragment_Activity()).commit();
-                            }
-                        });
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    savemydayplan();
                 }
+                break;
             case R.id.backarow:
                 common_class.CommonIntentwithFinish(Dashboard.class);
                 break;
@@ -295,7 +211,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 Window windoww = customDialog.getWindow();
                 windoww.setGravity(Gravity.CENTER);
                 windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
                 customDialog.show();
 
                 break;
@@ -304,7 +219,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 Window windowww = customDialog.getWindow();
                 windowww.setGravity(Gravity.CENTER);
                 windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
                 customDialog.show();
 
                 break;
@@ -312,22 +226,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         }
     }
 
-    public boolean vali() {
-        if (Common_Class.isNullOrEmpty(worktype_id)) {
-            Toast.makeText(this, "Select The Worktype", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (Common_Class.isNullOrEmpty(distributorid)) {
-            Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (Common_Class.isNullOrEmpty(routeid)) {
-            Toast.makeText(this, "Select The Route", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        return true;
-    }
 
     @Override
     public void OnclickMasterType(java.util.List<Work_Type_Model> myDataset, int position, List<Distributor_Master> Distributor_Master, List<Route_Master> route_Master, int type) {
@@ -335,11 +233,20 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         if (type == 1) {
             worktype_text.setText(myDataset.get(position).getName());
             worktype_id = String.valueOf(myDataset.get(position).getId());
-            Toast.makeText(this, "Selected Type" + position, Toast.LENGTH_SHORT).show();
+            Log.e("FIELD_WORK", myDataset.get(position).getFWFlg());
+            Fieldworkflag = myDataset.get(position).getFWFlg();
+            if (myDataset.get(position).getFWFlg().equals("F")) {
+                distributors_layout.setVisibility(View.VISIBLE);
+                route_layout.setVisibility(View.VISIBLE);
+            } else {
+                distributors_layout.setVisibility(View.GONE);
+                route_layout.setVisibility(View.GONE);
+            }
+
 
         } else if (type == 2) {
-            routeid = "";
-            routename = "";
+            routeid = null;
+            routename = null;
             route_text.setText("");
             distributor_text.setText(Distributor_Master.get(position).getName());
             distributorid = String.valueOf(Distributor_Master.get(position).getId());
@@ -377,18 +284,25 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     Log.e("GettodayResult", "response Tp_View: " + jsonObject.getJSONArray("GettodayResult"));
                     JSONArray jsoncc = jsonObject.getJSONArray("GettodayResult");
-                    Log.e("LENGTH", String.valueOf(jsoncc.getJSONObject(0).get("date")));
+                    Log.e("LENGTH", String.valueOf(jsoncc.length()));
                     if (jsoncc.length() > 0) {
-                        edt_remarks.setText(String.valueOf(jsoncc.getJSONObject(0).get("remarks")));
-                        worktype_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("worktype_name")));
-                        routename = String.valueOf(jsoncc.getJSONObject(0).get("RouteName"));
-                        route_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("RouteName")));
-                        routeid = String.valueOf(jsoncc.getJSONObject(0).get("RouteCode"));
-                        distributorname = String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Name"));
-                        distributorid = String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Code"));
-                        worktype_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("worktype_name")));
-                        loadroute(String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Code")));
-                        distributor_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Name")));
+                        if (String.valueOf(jsoncc.getJSONObject(0).get("worktype_name")).equals("Meeting")) {
+                            edt_remarks.setText(String.valueOf(jsoncc.getJSONObject(0).get("remarks")));
+                            worktype_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("worktype_name")));
+                            distributors_layout.setVisibility(View.GONE);
+                            route_layout.setVisibility(View.GONE);
+                            Fieldworkflag = "M";
+                        } else {
+                            routename = String.valueOf(jsoncc.getJSONObject(0).get("RouteName"));
+                            route_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("RouteName")));
+                            routeid = String.valueOf(jsoncc.getJSONObject(0).get("RouteCode"));
+                            distributorname = String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Name"));
+                            distributorid = String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Code"));
+                            worktype_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("worktype_name")));
+                            loadroute(String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Code")));
+                            distributor_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Name")));
+                            Fieldworkflag = "F";
+                        }
                     } else {
                         Toast.makeText(Mydayplan_Activity.this, "Your Not done Tour Plan", Toast.LENGTH_SHORT).show();
 
@@ -407,7 +321,108 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         });
     }
 
+    public boolean vali() {
+        if (worktype_text.getText().toString() == null || worktype_text.getText().toString().isEmpty() || worktype_text.getText().toString().equalsIgnoreCase("")) {
+            Toast.makeText(this, "Select The Worktype", Toast.LENGTH_SHORT).show();
+            //worktype_text.setError("Select The Worktype");
+            return false;
+        }
+        if (Fieldworkflag.equals("F") && (distributor_text.getText().toString() == null || distributor_text.getText().toString().isEmpty() || distributor_text.getText().toString().equalsIgnoreCase(""))) {
+            Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
+            //distributor_text.setError("Select The Distributor");
+            return false;
+        }
+        if (Fieldworkflag.equals("F") && (route_text.getText().toString() == null || route_text.getText().toString().isEmpty() || route_text.getText().toString().equalsIgnoreCase(""))) {
+            Toast.makeText(this, "Select The Route", Toast.LENGTH_SHORT).show();
+            //route_text.setError("Select The Route");
 
+            return false;
+        }
+        return true;
+    }
+
+
+    public void savemydayplan() {
+        progressbar.setVisibility(View.VISIBLE);
+        Calendar c = Calendar.getInstance();
+        String Dcr_Dste = new SimpleDateFormat("HH:mm a", Locale.ENGLISH).format(new Date());
+        JSONArray jsonarr = new JSONArray();
+        JSONObject jsonarrplan = new JSONObject();
+
+        String remarks = edt_remarks.getText().toString();
+        try {
+            JSONObject jsonobj = new JSONObject();
+            jsonobj.put("wtype", addquote(worktype_id));
+            jsonobj.put("sf_member_code", addquote(Shared_Common_Pref.Sf_Code));
+            jsonobj.put("stockist", addquote(distributorid));
+            jsonobj.put("stkName", distributorname);
+            jsonobj.put("dcrtype", "APP");
+            jsonobj.put("cluster", addquote(routeid));
+            jsonobj.put("custid", "");
+            jsonobj.put("address", "");
+            jsonobj.put("remarks", addquote(remarks));
+            jsonobj.put("OtherWors", "");
+            jsonobj.put("FWFlg", addquote(worktypeflag));
+            jsonobj.put("ClstrName", addquote(routename));
+            jsonobj.put("AppVersion", "V_1.0.5");
+            jsonobj.put("dcr_activity_date", Common_Class.GetDate());
+            jsonobj.put("worked_with", "''");
+            jsonarrplan.put("tbMyDayPlan", jsonobj);
+            jsonarr.put(jsonarrplan);
+            Log.d("Mydayplan_Object", jsonarr.toString());
+            Map<String, String> QueryString = new HashMap<>();
+            QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+            QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+            QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+            QueryString.put("desig", "MGR");
+
+            Log.d("QueryString", String.valueOf(QueryString));
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<Object> Callto = apiInterface.Tb_Mydayplan(QueryString, jsonarr.toString());
+            Callto.enqueue(new Callback<Object>() {
+
+                @Override
+                public void onResponse(Call<Object> call, Response<Object> response) {
+                    Log.e("RESPONSE_FROM_SERVER", response.body().toString());
+                    progressbar.setVisibility(View.GONE);
+                    if (response.code() == 200 || response.code() == 201) {
+                        common_class.CommonIntentwithFinish(Dashboard.class);
+                        Toast.makeText(Mydayplan_Activity.this, "Day Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+
+                @Override
+                public void onFailure(Call<Object> call, Throwable t) {
+                    progressbar.setVisibility(View.GONE);
+
+                    Log.e("Reponse TAG", "onFailure : " + t.toString());
+//                    Toast.makeText(getActivity(), "Myday Plan Not Submitted ", Toast.LENGTH_SHORT).show();
+//                    Intent i = new Intent(Leave_Activity.this, MainActivity.class);
+//                    startActivity(i);
+//                    getFragmentManager().beginTransaction().replace(R.id.DCRMain_Frame, new Home_Fragment_Activity()).commit();
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Mydayplan_Activity.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
+    }
 }
 
 

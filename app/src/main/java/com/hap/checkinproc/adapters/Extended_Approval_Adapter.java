@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.hap.checkinproc.Activity_Hap.Extended_Approval_Reject;
 import com.hap.checkinproc.Activity_Hap.Onduty_Approval_Reject;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Model_Class.Extended_Approval_Model;
 import com.hap.checkinproc.R;
 
@@ -22,6 +23,8 @@ public class Extended_Approval_Adapter extends RecyclerView.Adapter<Extended_App
     private List<Extended_Approval_Model> Extended_Approval_ModelsList;
     private int rowLayout;
     private Context context;
+    AdapterOnClick mAdapterOnClick;
+    Integer dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, textviewdate, open;
@@ -35,15 +38,22 @@ public class Extended_Approval_Adapter extends RecyclerView.Adapter<Extended_App
         }
     }
 
-    public Extended_Approval_Adapter(List<Extended_Approval_Model> Extended_Approval_ModelsList, int rowLayout, Context context) {
+    public Extended_Approval_Adapter(List<Extended_Approval_Model> Extended_Approval_ModelsList, int rowLayout, Context context, AdapterOnClick mAdapterOnClick) {
         this.Extended_Approval_ModelsList = Extended_Approval_ModelsList;
         this.rowLayout = rowLayout;
         this.context = context;
+        this.mAdapterOnClick = mAdapterOnClick;
     }
 
     @Override
     public Extended_Approval_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapterOnClick.onIntentClick(dummy);
+            }
+        });
         return new Extended_Approval_Adapter.MyViewHolder(view);
     }
 
@@ -57,25 +67,10 @@ public class Extended_Approval_Adapter extends RecyclerView.Adapter<Extended_App
         holder.open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, Extended_Approval_Reject.class);
-                intent.putExtra("Username", Extended_Approval_ModelsList.get(position).getSfName());
-                intent.putExtra("Emp_Code", Extended_Approval_ModelsList.get(position).getEmpCode());
-                intent.putExtra("HQ", Extended_Approval_ModelsList.get(position).getHQ());
-                intent.putExtra("Designation", Extended_Approval_ModelsList.get(position).getDesignation());
-                intent.putExtra("Applieddate", Extended_Approval_ModelsList.get(position).getEntrydate());
-                intent.putExtra("MobileNumber", Extended_Approval_ModelsList.get(position).getSFMobile());
-                intent.putExtra("workinghours", Extended_Approval_ModelsList.get(position).getNumberofH());
-                intent.putExtra("shiftdate", Extended_Approval_ModelsList.get(position).getEntrydate());
-                intent.putExtra("geoin", Extended_Approval_ModelsList.get(position).getCheckin());
-                intent.putExtra("geoout", Extended_Approval_ModelsList.get(position).getCheckout());
-                intent.putExtra("Sl_No", Extended_Approval_ModelsList.get(position).getSlNo());
-                //intent.putExtra("checkintime", Extended_Approval_ModelsList.get(position).getSTime());
-              /*  intent.putExtra("checkintime", Extended_Approval_ModelsList.get(position).getStartTime());
-                intent.putExtra("checkouttime", Extended_Approval_ModelsList.get(position).getEndTime());
-                intent.putExtra("Sf_Code", Extended_Approval_ModelsList.get(position).getSfCode());
-                intent.putExtra("duty_id", Extended_Approval_ModelsList.get(position).getDutyId());*/
 
-                context.startActivity(intent);
+
+                mAdapterOnClick.onIntentClick(position);
+
             }
         });
     }

@@ -9,8 +9,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
@@ -88,13 +90,22 @@ public class Weekly_Off extends AppCompatActivity {
             public void onClick(View v) {
                 if (!eText.getText().toString().matches("") && !remark.getText().toString().matches("")) {
                     weekOff();
-                } else if(eText.getText().toString().matches("")) {
+                } else if (eText.getText().toString().matches("")) {
                     Toast.makeText(Weekly_Off.this, "Enter Date", Toast.LENGTH_SHORT).show();
-                } else if(remark.getText().toString().matches("")) {
+                } else if (remark.getText().toString().matches("")) {
                     Toast.makeText(Weekly_Off.this, "Enter Remarks  ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
+
     }
 
 
@@ -212,6 +223,19 @@ public class Weekly_Off extends AppCompatActivity {
             public void onFailure(Call<JsonObject> call, Throwable t) {
             }
         });
+
+    }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Weekly_Off.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
 
     }
 

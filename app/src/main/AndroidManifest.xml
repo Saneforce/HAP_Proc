@@ -44,6 +44,7 @@
         <activity android:name=".Status_Activity.MissedPunch_Status_Activity" />
         <activity
             android:name=".Activity_Hap.Login"
+
             android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

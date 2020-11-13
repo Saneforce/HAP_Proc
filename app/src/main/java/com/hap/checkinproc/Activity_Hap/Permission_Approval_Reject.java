@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.OnBackPressedDispatcher;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -76,6 +79,15 @@ public class Permission_Approval_Reject extends Activity implements View.OnClick
         totime.setText(":" + i.getExtras().getString("totime"));
         Sf_Code = i.getExtras().getString("Sf_Code");
         Sl_No = i.getExtras().getString("Sl_No");
+
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
 
     }
 
@@ -162,6 +174,20 @@ public class Permission_Approval_Reject extends Activity implements View.OnClick
                 break;
         }
     }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Permission_Approval_Reject.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
 }
 
 

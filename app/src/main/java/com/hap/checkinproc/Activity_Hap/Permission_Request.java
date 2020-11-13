@@ -13,9 +13,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
@@ -67,6 +69,14 @@ public class Permission_Request extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_permission__request);
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
 
         takenHrs = (EditText) findViewById(R.id.hrs_one);
         hrsTwo = (EditText) findViewById(R.id.hrs_two);
@@ -478,6 +488,18 @@ public class Permission_Request extends AppCompatActivity {
             public void onFailure(Call<JsonObject> call, Throwable t) {
             }
         });
+
+    }
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Permission_Request.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
 
     }
 

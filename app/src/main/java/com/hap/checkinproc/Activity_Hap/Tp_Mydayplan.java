@@ -1,6 +1,8 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,7 +69,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     EditText edt_remarks;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    String worktype_id, worktypename, distributorname, distributorid, routename, routeid;
+    String worktype_id, worktypename, distributorname, distributorid, routename, routeid, Fieldworkflag = "";
     private TextClock tClock;
     Button submitbutton;
     CustomListViewDialog customDialog;
@@ -84,7 +86,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         shared_common_pref = new Shared_Common_Pref(this);
         common_class = new Common_Class(this);
         edt_remarks = findViewById(R.id.edt_remarks);
-        backarow = findViewById(R.id.backarow);
+
         gson = new Gson();
         tourdate = findViewById(R.id.tourdate);
         gson = new Gson();
@@ -105,9 +107,14 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         worktypelayout.setOnClickListener(this);
         distributors_layout.setOnClickListener(this);
         route_layout.setOnClickListener(this);
-
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
     }
-
 
 
     @Override
@@ -129,35 +136,50 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     public void setDataToRouteObject(Object noticeArrayList, int position) {
         Log.e("Calling Position", String.valueOf(position));
 
-        //Toast.makeText(this, "Position" + position, Toast.LENGTH_SHORT).show();
         Log.e("ROUTE_MASTER_Object", String.valueOf(noticeArrayList));
         Log.e("TAG", "response Tbmydayplan: " + new Gson().toJson(noticeArrayList));
-
-
         if (position == 0) {
-
             Log.e("SharedprefrenceVALUES", new Gson().toJson(noticeArrayList));
             userType = new TypeToken<ArrayList<Work_Type_Model>>() {
             }.getType();
             worktypelist = gson.fromJson(new Gson().toJson(noticeArrayList), userType);
-            shared_common_pref.save("masterWorktype", new Gson().toJson(noticeArrayList));
 
         } else if (position == 1) {
             userType = new TypeToken<ArrayList<Distributor_Master>>() {
             }.getType();
             distributor_master = gson.fromJson(new Gson().toJson(noticeArrayList), userType);
-            shared_common_pref.save("masterdistributor", new Gson().toJson(noticeArrayList));
+
 
         } else {
             userType = new TypeToken<ArrayList<Route_Master>>() {
             }.getType();
             Route_Masterlist = gson.fromJson(new Gson().toJson(noticeArrayList), userType);
-            FRoute_Master=Route_Masterlist;
-            shared_common_pref.save("masterroute", new Gson().toJson(noticeArrayList));
+            FRoute_Master = Route_Masterlist;
+
         }
 
     }
 
+    public void loadroute(String id) {
+        Log.e("Select the Distributor", String.valueOf(id));
+        if (common_class.isNullOrEmpty(String.valueOf(id))) {
+            Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
+        }
+        FRoute_Master = new ArrayList<Route_Master>();
+        ArrayList<String> route = new ArrayList<>();
+        for (int i = 0; i < Route_Masterlist.size(); i++) {
+
+            if (Route_Masterlist.get(i).getStockistCode().contains(id)) {
+                route.add(Route_Masterlist.get(i).getName());
+                FRoute_Master.add(new Route_Master(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getTarget(), Route_Masterlist.get(i).getMinProd(), Route_Masterlist.get(i).getFieldCode(), Route_Masterlist.get(i).getStockistCode()));
+
+            }
+
+
+        }
+
+
+    }
 
     @Override
     public void onResponseFailure(Throwable throwable) {
@@ -170,13 +192,21 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         if (type == 1) {
             worktype_text.setText(myDataset.get(position).getName());
             worktype_id = String.valueOf(myDataset.get(position).getId());
-            Toast.makeText(this, "Selected Type" + position, Toast.LENGTH_SHORT).show();
+            Log.e("FIELD_WORK", myDataset.get(position).getFWFlg());
+            Fieldworkflag = myDataset.get(position).getFWFlg();
+            if (myDataset.get(position).getFWFlg().equals("F")) {
+                distributors_layout.setVisibility(View.VISIBLE);
+                route_layout.setVisibility(View.VISIBLE);
+            } else {
+                distributors_layout.setVisibility(View.GONE);
+                route_layout.setVisibility(View.GONE);
+            }
         } else if (type == 2) {
-            routeid = "";
-            routename = "";
+            routeid = null;
+            routename = null;
             distributor_text.setText(Distributor_Master.get(position).getName());
             distributorid = String.valueOf(Distributor_Master.get(position).getId());
-            // loadroute(String.valueOf(Distributor_Master.get(position).getId()));
+            loadroute(String.valueOf(Distributor_Master.get(position).getId()));
         } else {
             route_text.setText(route_Master.get(position).getName());
             routename = route_Master.get(position).getName();
@@ -190,8 +220,6 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             case R.id.submitbutton:
                 if (vali()) {
                     common_class.ProgressdialogShow(1, "Tour  plan");
-
-
                     Calendar c = Calendar.getInstance();
                     String Dcr_Dste = new SimpleDateFormat("HH:mm a", Locale.ENGLISH).format(new Date());
                     JSONArray jsonarr = new JSONArray();
@@ -201,7 +229,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                         JSONObject jsonobj = new JSONObject();
                         jsonobj.put("worktype_code", addquote(worktype_id));
                         jsonobj.put("worktype_name", addquote(worktype_text.getText().toString()));
-                        jsonobj.put("sfName", "'testonw'");
+                        jsonobj.put("sfName", addquote(Shared_Common_Pref.Sf_Name));
                         jsonobj.put("RouteCode", addquote(routeid));
                         jsonobj.put("objective", addquote(remarks));
                         jsonobj.put("RouteName", addquote(routename));
@@ -230,19 +258,16 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                             public void onResponse(Call<Object> call, Response<Object> response) {
                                 Log.e("RESPONSE_FROM_SERVER", response.body().toString());
                                 common_class.ProgressdialogShow(2, "Tour  plan");
-
                                 if (response.code() == 200 || response.code() == 201) {
                                     common_class.CommonIntentwithFinish(Dashboard.class);
                                     Toast.makeText(Tp_Mydayplan.this, "Tour Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
                                 }
-
 
                             }
 
                             @Override
                             public void onFailure(Call<Object> call, Throwable t) {
                                 common_class.ProgressdialogShow(2, "Tour  plan");
-
                                 Log.e("Reponse TAG", "onFailure : " + t.toString());
                             }
                         });
@@ -252,7 +277,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                         e.printStackTrace();
                     }
                 }
-
+                break;
             case R.id.backarow:
                 common_class.CommonIntentwithFinish(Tp_Month_Select.class);
                 break;
@@ -278,27 +303,39 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 Window windowww = customDialog.getWindow();
                 windowww.setGravity(Gravity.CENTER);
                 windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
                 customDialog.show();
 
                 break;
         }
     }
 
+
     public boolean vali() {
-        if (Common_Class.isNullOrEmpty(worktype_id)) {
+        if (worktype_text.getText().toString() == null || worktype_text.getText().toString().isEmpty() || worktype_text.getText().toString().equalsIgnoreCase("")) {
             Toast.makeText(this, "Select The Worktype", Toast.LENGTH_SHORT).show();
             return false;
         }
-
-        if (Common_Class.isNullOrEmpty(distributorid)) {
+        if (Fieldworkflag.equals("F") && (distributor_text.getText().toString() == null || distributor_text.getText().toString().isEmpty() || distributor_text.getText().toString().equalsIgnoreCase(""))) {
             Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
             return false;
         }
-        if (Common_Class.isNullOrEmpty(routeid)) {
+        if (Fieldworkflag.equals("F") && (route_text.getText().toString() == null || route_text.getText().toString().isEmpty() || route_text.getText().toString().equalsIgnoreCase(""))) {
             Toast.makeText(this, "Select The Route", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
+    }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Tp_Mydayplan.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

@@ -1,144 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_Hap.Weekly_Off"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_blueg"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme">
-
-
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/alegreya_sans_sc"
-            android:lineSpacingExtra="18sp"
-            android:text="Week-off"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-    </androidx.appcompat.widget.Toolbar>
-    <ScrollView
-        android:id="@+id/svw"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:layout_below="@+id/toolbar2"
-        >
+        android:orientation="vertical"
+        tools:context=".Activity_Hap.Weekly_Off">
 
-        <LinearLayout
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar2"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="18dp"
-            android:orientation="vertical"
-            android:clipToPadding="false">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="123dp"
-                app:cardCornerRadius="10dp"
-                android:background="@color/cardview_light_background">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginBottom="58dp"
-                        android:fontFamily="@font/alegreya_sans_sc"
-                        android:text="Date"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold" />
-
-
-                    <EditText
-                        android:hint="Select the Date"
-                        android:id="@+id/week_off_date"
-                        android:layout_width="match_parent"
-                        android:layout_height="49dp"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="2dp"
-                        android:background="@drawable/textbox_bg"
-                        android:clickable="false"
-                        android:elevation="5dp"
-                        android:focusable="false"
-                        android:fontFamily="@font/alegreya_sans_sc" />
-
-                    <View
-                        android:id="@+id/divider2"
-                        android:layout_width="match_parent"
-                        android:layout_height="41dp"
-                        android:background="@drawable/button_yellow"/>
-
-                    <TextView
-                        android:layout_marginTop="5dp"
-                        android:id="@+id/textView9"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/alegreya_sans_sc"
-                        android:text="Weekof Entry"
-                        android:textAllCaps="false"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_centerHorizontal="true"/>
-                </RelativeLayout>
-
-
-            </androidx.cardview.widget.CardView>
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_blueg"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="?attr/actionBarTheme">
 
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:fontFamily="@font/alegreya_sans_sc"
-                android:text="Remarks:"
-                android:textColor="@android:color/black"
+                android:lineSpacingExtra="18sp"
+                android:text="Week-off"
+                android:textColor="#FFFFFF"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/remarks_week"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/C100dp"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/textbox_bg"
-                android:elevation="@dimen/C5dp"
-                android:gravity="start"
-                android:hint="Reason"
-                android:padding="@dimen/C10dp"
-                android:textColor="@color/grey_500"  />
+        </androidx.appcompat.widget.Toolbar>
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
-                android:background="@drawable/sign_bg"
-                android:fontFamily="@font/alegreya_sans_sc"
-                android:gravity="center_vertical"
-                android:text="SUBMIT"
-                android:id="@+id/weeky_submit"
-                android:textAlignment="center"
-                android:textColor="#FFFFFF"
-                android:textStyle="bold"
-                tools:ignore="RtlCompat" />
-        </LinearLayout>
-    </ScrollView>
+        <ScrollView
+            android:id="@+id/svw"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar2"
+            android:layout_marginBottom="60dp"
+            android:scrollbars="none">
 
-</LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:orientation="vertical"
+                android:padding="18dp">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="123dp"
+                    android:background="@color/cardview_light_background"
+                    app:cardCornerRadius="10dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginBottom="58dp"
+                            android:fontFamily="@font/alegreya_sans_sc"
+                            android:text="Date"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold" />
+
+
+                        <EditText
+                            android:id="@+id/week_off_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="49dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="2dp"
+                            android:background="@drawable/textbox_bg"
+                            android:clickable="false"
+                            android:elevation="5dp"
+                            android:focusable="false"
+                            android:fontFamily="@font/alegreya_sans_sc"
+                            android:hint="Select the Date" />
+
+                        <View
+                            android:id="@+id/divider2"
+                            android:layout_width="match_parent"
+                            android:layout_height="41dp"
+                            android:background="@drawable/button_yellow" />
+
+                        <TextView
+                            android:id="@+id/textView9"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/alegreya_sans_sc"
+                            android:text="Weekof Entry"
+                            android:textAllCaps="false"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                            android:textColor="#FFFFFF"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
+                    </RelativeLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/alegreya_sans_sc"
+                    android:text="Remarks:"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+
+                <EditText
+                    android:id="@+id/remarks_week"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/C100dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/textbox_bg"
+                    android:elevation="@dimen/C5dp"
+                    android:gravity="start"
+                    android:hint="Reason"
+                    android:padding="@dimen/C10dp"
+                    android:textColor="@color/grey_500" />
+
+                <Button
+                    android:id="@+id/weeky_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/sign_bg"
+                    android:fontFamily="@font/alegreya_sans_sc"
+                    android:gravity="center_vertical"
+                    android:text="SUBMIT"
+                    android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    tools:ignore="RtlCompat" />
+            </LinearLayout>
+        </ScrollView>
+
+    </LinearLayout>
+
+    <include layout="@layout/back_arrow"></include>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
