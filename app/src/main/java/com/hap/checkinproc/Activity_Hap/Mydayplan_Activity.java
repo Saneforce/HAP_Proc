@@ -1,5 +1,4 @@
 package com.hap.checkinproc.Activity_Hap;
-
 import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
