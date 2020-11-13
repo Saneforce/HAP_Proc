@@ -87,7 +87,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:clipToPadding="false"
-        android:padding="5dp">
+        android:padding="10dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview3"
@@ -124,8 +124,6 @@
                     android:textStyle="bold" />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
-
-
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview5"
             android:layout_width="0dp"
@@ -202,7 +200,6 @@ android:clipToPadding="false"
                     android:textStyle="bold" />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
-
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview8"
             android:layout_width="0dp"

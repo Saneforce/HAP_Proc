@@ -73,10 +73,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         switch (view.getId()){
             case R.id.cardview1:
-
-                Intent  i = new Intent(this, Check_in.class);
-
-            startActivity(i);
+                Intent  i = new Intent(this, Checkin.class);
+                startActivity(i);
             break;
             case R.id.sec_card_view:
                 Intent i1 = new Intent(this, Ocheck_in.class);

@@ -5,23 +5,30 @@
 
     <uses-feature android:name="android.hardware.camera" />
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
+        android:name=".HAPApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".Activity_Hap.Ta_approval"></activity>
+        <activity android:name=".Activity_Hap.Block_Information"></activity>
+        <activity android:name=".Activity_Hap.ImageCapture" />
+        <activity android:name=".Activity_Hap.Checkin" />
+        <activity android:name=".Activity_Hap.Ta_approval" />
         <activity android:name=".Activity_Hap.Extendedshift_approval" />
         <activity android:name=".Activity_Hap.Missedpunch_approval" />
         <activity android:name=".Activity_Hap.Onduty_approval" />
@@ -47,6 +54,17 @@
         <activity
             android:name=".Activity_Hap.Login"
             android:noHistory="true" />
+
+        <service
+            android:name=".common.SANGPSTracker"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service
+            android:name=".common.TimerService"
+            android:enabled="true"
+            android:exported="false" />
+
         <activity android:name=".Activity_Hap.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

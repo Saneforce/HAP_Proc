@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerHorizontal="false"
@@ -11,11 +12,11 @@
 
     <ImageView
         android:id="@+id/LogoImage"
-        android:layout_width="167dp"
-        android:layout_height="99dp"
+        android:layout_width="match_parent"
+        android:layout_height="159dp"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/todo"
-        android:src="@drawable/clogo" />
+        android:src="@mipmap/ic_launcher" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -35,12 +36,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="90dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:clipToPadding="false"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:visibility="invisible">
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -96,7 +98,8 @@
             android:text="@string/sign_in"
             android:textColor="#ffff"
             android:textStyle="bold"
-            android:clickable="false"/>
+            android:clickable="false"
+            android:visibility="gone"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -105,21 +108,53 @@
             android:gravity="center"
             android:text="@string/or"
             android:textColor="#000000"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"/>
 
-        <com.google.android.gms.common.SignInButton
+        <Button
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="Sign In"
+            android:background="@drawable/button_green"
+            android:textColor="@color/white"
+            android:textAllCaps="false"/>
+
+        <Button
+            android:id="@+id/btnReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="My Reports"
+            android:background="@drawable/button_blueg"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
             android:layout_marginBottom="20dp">
 
-        </com.google.android.gms.common.SignInButton>
+        </Button>
+        <Button
+            android:id="@+id/btnExit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Exit"
+            android:background="@drawable/button_amber"
+            android:textColor="@color/white"
+            android:textAllCaps="false"
+            android:layout_marginTop="20dp">
 
+        </Button>
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/textView45"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="15dp"
+        android:text="v3.0.0" />
 
 
 </LinearLayout>

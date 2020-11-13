@@ -196,8 +196,8 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
 
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<Example>> shiftCall = apiInterface.shiftTime(a,dc,sc);
-         shiftCall.enqueue(new Callback<List<Example>>() {
+        //Call<List<Example>> shiftCall = apiInterface.shiftTime(a,dc,sc);
+       /*  shiftCall.enqueue(new Callback<List<Example>>() {
           @Override
           public void onResponse(Call<List<Example>> call, Response<List<Example>> response) {
 
@@ -211,7 +211,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
           public void onFailure(Call<List<Example>> call, Throwable t) {
               Log.e("Check","check Null");
           }
-      });
+      });*/
 
     }
 

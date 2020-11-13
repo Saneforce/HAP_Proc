@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">FMCG</string>
-    <string name="loading_please_wait">loading please wait......</string>
+    <string name="loading_please_wait">Loading Please Wait......</string>
     <string name="todo">TODO</string>
     <string name="sign_in">Sign-In</string>
     <string name="password">password</string>
@@ -26,5 +26,13 @@
     <string name="weekly_off">Weekly Off</string>
     <string name="missed_punch">Missed Punch</string>
     <string name="permission">Permission</string>
+    <string name="web_client_id">92787437164-iv0q3cg155ve0a0pl21d4r6e6e295p09.apps.googleusercontent.com</string>
+    <string name="launch_activity">open</string>
+    <string name="remove_location_updates">Stop</string>
+    <string name="location_updated">Updating</string>
+    <string name="permission_rationale">Please Grant Location Permission</string>
+    <string name="ok">Ok</string>
+    <string name="permission_denied_explanation">Permission Denied</string>
+    <string name="settings">Settings</string>
 
 </resources>

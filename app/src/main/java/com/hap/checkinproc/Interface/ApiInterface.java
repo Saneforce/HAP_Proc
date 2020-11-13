@@ -1,19 +1,29 @@
 package com.hap.checkinproc.Interface;
 
+import com.google.gson.JsonArray;
 import com.hap.checkinproc.Model_Class.Approval;
 import com.hap.checkinproc.Model_Class.Example;
 import com.hap.checkinproc.Model_Class.Location;
 import com.hap.checkinproc.Model_Class.Model;
 import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.transform.Result;
+
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
@@ -21,12 +31,16 @@ public interface ApiInterface {
     @GET("Db_Hap.php?")
     Call<Model> login(@Query("axn") String axn, @Query("Email") String Email);
 
-
-    /*shift time*/
+/*
+    shift time*
     @GET("Db_Native.php?")
     Call<List<Example>>shiftTime(@Query("axn")String axn, @Query("divisionCode")String divisionCode, @Query("Sf_code")String Sf_code);
+*/
+    /*shift time*/
+    @GET("Db_Hap.php?")
+    Call<JsonArray>shiftTime(@Query("axn")String axn, @Query("divisionCode")String divisionCode, @Query("Sf_code")String Sf_code);
 
-    /*Locations*/
+  /*Locations*/
     @GET("Db_Hap.php?")
     Call<List<Location>>location(@Query("axn")String axn, @Query("divisionCode")String divisionCode, @Query("Sf_code")String Sf_code);
 
@@ -44,5 +58,7 @@ public interface ApiInterface {
     @GET("Db_Hap.php?")
     Call<List<Approval>>approval(@Query("axn")String axn,@Query("divisionCode")String divisionCode, @Query("Sf_code")String Sf_code,@Query("rSF")String rSf,@Query("State_Code")String State_code);
 
-
+    @Multipart
+    @POST("Db_Hap.php")
+    Call<Result> uploadImage(@Part MultipartBody.Part file);
 }
