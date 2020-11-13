@@ -14,6 +14,7 @@ import com.hap.checkinproc.Model_Class.Approval;
 import com.hap.checkinproc.Model_Class.Location;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.RecyclerViewAdapter;
+import com.hap.checkinproc.adapters.RecyclerViewLeaveApproval;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,14 +23,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Leave_Approval extends AppCompatActivity {
+public class  Leave_Approval extends AppCompatActivity {
 
 
     String Scode;
     String Dcode;
     String Rf_code;
 
-    List<Approval>approvalList ;
+    List<Approval> approvalList ;
 
 
     @Override
@@ -41,18 +42,26 @@ public class Leave_Approval extends AppCompatActivity {
         Scode = (shared.getString("Sfcode", "null"));
         Dcode=(shared.getString("Divcode","null"));
         Rf_code = Scode;
-
+        RecyclerView recyclerView = findViewById(R.id.recycler_view2);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         System.out.println("Dcode"+Dcode+"Scode"+Scode);
 
-        Call<List<Approval>> approvals = apiInterface.approval("vwLeave","3","MGR4762","MGR4762","24");
+
+       /* final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view2);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));*/
+
+        Call<List<Approval>> approvals = apiInterface.approval("vwLeave",Dcode,Scode,Rf_code,"24");
         Log.e("approval", String.valueOf(Rf_code));
         approvals.enqueue(new Callback<List<Approval>>() {
             @Override
             public void onResponse(Call<List<Approval>> call, Response<List<Approval>> response) {
                approvalList=response.body();
                 Log.e("approvals", String.valueOf(approvalList.size()));
+
+
+                RecyclerViewLeaveApproval adapter = new RecyclerViewLeaveApproval(approvalList, Leave_Approval.this);
+                recyclerView.setAdapter(adapter);
 
             }
 
@@ -63,6 +72,8 @@ public class Leave_Approval extends AppCompatActivity {
 
             }
         });
+
+
 
 
     }

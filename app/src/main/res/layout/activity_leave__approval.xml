@@ -32,29 +32,29 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="58dp"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
         app:cardCornerRadius="10dp">
 
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="39dp"
             android:background="@drawable/button_yellow">
 
             <TextView
-                android:layout_width="377dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:fontFamily="@font/alegreya_sans_sc"
-                android:text="LEAVE"
+                android:text="LEAVE   APPROVAL"
                 android:textAlignment="center"
-                android:textColor="#000000"
-                android:textStyle="bold" />
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:layout_centerHorizontal="true"/>
 
 
-        </LinearLayout>
-
+        </RelativeLayout>
 
 
     </androidx.cardview.widget.CardView>
@@ -73,28 +73,36 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="1dp"
             android:layout_weight="1"
-            android:text="Name" />
+            android:text="  Name"
+            android:textColor="#000000"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView35"
             android:layout_width="53dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Applied date" />
+            android:text="   Applied date"
+            android:textColor="#000000"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView36"
             android:layout_width="44dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Leave Days" />
+            android:text="  Leave Days"
+            android:textColor="#000000"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView37"
             android:layout_width="34dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:text="Click here" />
+            android:text="   Click here"
+            android:textColor="#000000"
+            android:textStyle="bold" />
 
 
 

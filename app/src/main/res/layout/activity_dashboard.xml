@@ -16,13 +16,13 @@
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/todo"
         android:src="@drawable/clogo"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginTop="50dp"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="4dp">
+        android:layout_marginTop="25dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
@@ -39,12 +39,13 @@
         android:clipToPadding="false"
         android:orientation="horizontal"
         android:padding="10dp"
+        android:layout_marginTop="35dp"
         >
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview1"
             android:layout_width="0dp"
-            android:layout_height="51dp"
+            android:layout_height="40dp"
 
             android:clipToPadding="false"
             android:layout_weight="1"
@@ -69,7 +70,7 @@
                     android:layout_alignParentEnd="false"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="57dp"
-                    android:layout_marginTop="11dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="53dp"
                     android:fontFamily="@font/alegreya_sans_sc"
                     android:text="Check-In"
@@ -92,15 +93,15 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview3"
             android:layout_width="0dp"
-            android:layout_height="52dp"
-
+            android:layout_height="40dp"
             android:clipToPadding="false"
             android:visibility="visible"
             android:layout_weight="1"
             android:elevation="5dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp"
-            app:cardMaxElevation="5dp">
+            app:cardMaxElevation="5dp"
+            android:layout_marginRight="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -113,12 +114,12 @@
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginRight="5dp"
                     android:layout_marginBottom="3dp"
                     android:fontFamily="@font/alegreya_sans_sc"
-                    android:text="Leave/permission"
+                    android:text="Requests/status"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -127,7 +128,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview5"
             android:layout_width="0dp"
-            android:layout_height="52dp"
+            android:layout_height="40dp"
 android:clipToPadding="false"
             android:layout_marginLeft="1dp"
             android:layout_weight="1"
@@ -148,7 +149,7 @@ android:clipToPadding="false"
                     android:layout_height="29dp"
 
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:fontFamily="@font/alegreya_sans_sc"
                     android:text="My Reports"
                     android:textColor="#FFFFFF"
@@ -169,14 +170,15 @@ android:clipToPadding="false"
         <androidx.cardview.widget.CardView
             android:id="@+id/sec_card_view"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:visibility="visible"
             android:layout_weight="1"
             android:elevation="5dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp"
             app:cardMaxElevation="5dp"
-            android:clipToPadding="false">
+            android:clipToPadding="false"
+            android:layout_marginRight="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -191,10 +193,10 @@ android:clipToPadding="false"
 
                     android:layout_alignParentEnd="false"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="13dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="35dp"
                     android:fontFamily="@font/alegreya_sans_sc"
-                    android:text="On duty Check-In"
+                    android:text="On-Duty "
                     android:textColor="#FFFCFC"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -203,7 +205,7 @@ android:clipToPadding="false"
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview8"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="1dp"
             android:layout_weight="1"
             android:elevation="5dp"
@@ -224,7 +226,7 @@ android:clipToPadding="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:fontFamily="@font/alegreya_sans_sc"
                     android:text="Approvals"
                     android:textColor="#FFFCFC"
@@ -247,14 +249,15 @@ android:clipToPadding="false"
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview4"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:clipToPadding="false"
             android:visibility="visible"
             android:layout_weight="1"
             android:elevation="5dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="10dp"
-            app:cardMaxElevation="5dp">
+            app:cardMaxElevation="5dp"
+            android:layout_marginRight="5dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -267,9 +270,9 @@ android:clipToPadding="false"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:fontFamily="@font/alegreya_sans_sc"
-                    android:text="Travel Allowance"
+                    android:text="TA &amp; claim"
                     android:textColor="#FFFFFF"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -279,7 +282,7 @@ android:clipToPadding="false"
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview7"
             android:layout_width="0dp"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="1dp"
             android:layout_weight="1"
             android:elevation="5dp"
@@ -297,12 +300,12 @@ android:clipToPadding="false"
 
                 <TextView
                     android:id="@+id/textView9"
-                    android:layout_width="154dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:layout_centerHorizontal="true"
+                    android:layout_marginTop="5dp"
                     android:fontFamily="@font/alegreya_sans_sc"
-                    android:text="Extended CheckIn"
+                    android:text="Extended Shift"
                     android:textColor="#FFFCFC"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -321,7 +324,7 @@ android:clipToPadding="false"
         <androidx.cardview.widget.CardView
             android:id="@+id/cardview6"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="40dp"
             android:clipToPadding="false"
             android:layout_weight="1"
             android:elevation="5dp"
@@ -341,7 +344,7 @@ android:clipToPadding="false"
                     android:layout_height="wrap_content"
 
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="13dp"
+                    android:layout_marginTop="5dp"
                     android:fontFamily="@font/alegreya_sans_sc"
                     android:text="Exit"
                     android:textColor="#FFFFFF"

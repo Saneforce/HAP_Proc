@@ -10,13 +10,12 @@ import android.widget.Toast;
 
 import com.hap.checkinproc.R;
 
-public class Dashboard_Two extends AppCompatActivity implements View.OnClickListener {
+public class  Dashboard_Two extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard__two);
-
 
         CardView cardview3 = findViewById(R.id.cardview3);
         CardView cardview4 = findViewById(R.id.cardview4);
@@ -65,8 +64,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 startActivity(i5);
                 break;
 
-
-            default:
+                default:
                 break;
 
 

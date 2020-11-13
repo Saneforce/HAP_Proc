@@ -3,9 +3,13 @@ package com.hap.checkinproc.Interface;
 import com.google.gson.JsonArray;
 import com.hap.checkinproc.Model_Class.Approval;
 import com.hap.checkinproc.Model_Class.Example;
+import com.hap.checkinproc.Model_Class.Extended;
 import com.hap.checkinproc.Model_Class.Location;
+import com.hap.checkinproc.Model_Class.Missed;
 import com.hap.checkinproc.Model_Class.Model;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Model_Class.Onduty;
+import com.hap.checkinproc.Model_Class.Permission;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -40,7 +44,7 @@ public interface ApiInterface {
     @GET("Db_Hap.php?")
     Call<JsonArray>shiftTime(@Query("axn")String axn, @Query("divisionCode")String divisionCode, @Query("Sf_code")String Sf_code);
 
-  /*Locations*/
+    /*Locations*/
     @GET("Db_Hap.php?")
     Call<List<Location>>location(@Query("axn")String axn, @Query("divisionCode")String divisionCode, @Query("Sf_code")String Sf_code);
 
@@ -56,7 +60,24 @@ public interface ApiInterface {
     /*LEAVE APPROVAL*/
 
     @GET("Db_Hap.php?")
-    Call<List<Approval>>approval(@Query("axn")String axn,@Query("divisionCode")String divisionCode, @Query("Sf_code")String Sf_code,@Query("rSF")String rSf,@Query("State_Code")String State_code);
+    Call<List<Approval>>approval(@Query("axn")String axn,@Query("divisionCode")String divisionCode, @Query("sfCode")String Sf_code,@Query("rSF")String rSf,@Query("State_Code")String State_code);
+
+    /*permission approval*/
+    @GET("Db_Hap.php?")
+    Call<List<Permission>>permission(@Query("axn")String axn, @Query("divisionCode")String divisionCode, @Query("sfCode")String Sf_code, @Query("rSF")String rSf, @Query("State_Code")String State_code);
+    /*onduty approval*/
+
+   @GET("Db_Hap.php?")
+    Call<List<Onduty>>onduty(@Query("axn")String axn, @Query("divisionCode")String divisionCode, @Query("sfCode")String Sf_code, @Query("rSF")String rSf, @Query("State_Code")String State_code);
+
+   /*missed punch*/
+
+ @GET("Db_Hap.php?")
+ Call<List<Missed>>missed(@Query("axn")String axn, @Query("divisionCode")String divisionCode, @Query("sfCode")String Sf_code, @Query("rSF")String rSf, @Query("State_Code")String State_code);
+
+  /*Extended*/
+  @GET("Db_Hap.php?")
+  Call<List<Extended>>extended(@Query("axn")String axn, @Query("divisionCode")String divisionCode, @Query("sfCode")String Sf_code, @Query("rSF")String rSf, @Query("State_Code")String State_code);
 
     @Multipart
     @POST("Db_Hap.php")
