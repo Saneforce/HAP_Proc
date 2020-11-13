@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.hap.checkinproc.Activity_Hap.Leave_Approval_Reject;
 import com.hap.checkinproc.Activity_Hap.Tp_Approval_Reject;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Model_Class.Leave_Approval_Model;
 import com.hap.checkinproc.R;
 
@@ -22,6 +23,8 @@ public class Leave_Approval_Adapter extends RecyclerView.Adapter<Leave_Approval_
     private List<Leave_Approval_Model> Leave_Approval_ModelsList;
     private int rowLayout;
     private Context context;
+    AdapterOnClick mAdapterOnClick;
+    Integer dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, textviewdate, open, leavedays;
@@ -36,15 +39,23 @@ public class Leave_Approval_Adapter extends RecyclerView.Adapter<Leave_Approval_
     }
 
 
-    public Leave_Approval_Adapter(List<Leave_Approval_Model> Leave_Approval_ModelsList, int rowLayout, Context context) {
+    public Leave_Approval_Adapter(List<Leave_Approval_Model> Leave_Approval_ModelsList, int rowLayout, Context context, AdapterOnClick mAdapterOnClick) {
         this.Leave_Approval_ModelsList = Leave_Approval_ModelsList;
         this.rowLayout = rowLayout;
+        this.mAdapterOnClick = mAdapterOnClick;
         this.context = context;
     }
 
     @Override
     public Leave_Approval_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapterOnClick.onIntentClick(dummy);
+            }
+        });
+
         return new Leave_Approval_Adapter.MyViewHolder(view);
     }
 
@@ -57,21 +68,9 @@ public class Leave_Approval_Adapter extends RecyclerView.Adapter<Leave_Approval_
         holder.open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, Leave_Approval_Reject.class);
-                intent.putExtra("LeaveId", String.valueOf(Leave_Approval_ModelsList.get(position).getLeaveId()));
-                intent.putExtra("Username", Leave_Approval_ModelsList.get(position).getFieldForceName());
-                intent.putExtra("Emp_Code", Leave_Approval_ModelsList.get(position).getEmpCode());
-                intent.putExtra("HQ", Leave_Approval_ModelsList.get(position).getHQ());
-                intent.putExtra("Designation", Leave_Approval_ModelsList.get(position).getDesignation());
-                intent.putExtra("MobileNumber", Leave_Approval_ModelsList.get(position).getSFMobile());
-                intent.putExtra("Reason", Leave_Approval_ModelsList.get(position).getReason());
-                intent.putExtra("Leavetype", Leave_Approval_ModelsList.get(position).getLeaveType());
-                intent.putExtra("fromdate", Leave_Approval_ModelsList.get(position).getFromDate());
-                intent.putExtra("todate", Leave_Approval_ModelsList.get(position).getToDate());
-                intent.putExtra("leavedays", String.valueOf(Leave_Approval_ModelsList.get(position).getLeaveDays()));
-                Log.e("LEAVE_APPROVAL_REJECT", String.valueOf(Leave_Approval_ModelsList.get(position).getLeaveDays()));
-                intent.putExtra("Sf_Code", Leave_Approval_ModelsList.get(position).getSfCode());
-                context.startActivity(intent);
+
+
+                mAdapterOnClick.onIntentClick(position);
             }
         });
     }

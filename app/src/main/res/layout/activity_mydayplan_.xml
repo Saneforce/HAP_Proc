@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -19,11 +25,12 @@
         <ImageView
             android:id="@+id/backarow"
             android:layout_width="20dp"
+            android:visibility="gone"
             android:layout_height="40dp"
             android:src="@drawable/backarrow" />
         <TextView
             android:id="@+id/textView9"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/alegreya_sans_sc"
             android:text="@string/DayPlan"
@@ -39,6 +46,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/C60dp"
         android:background="@color/bg_color"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
         <LinearLayout
@@ -82,7 +90,7 @@
                         android:textSize="13sp"
                         android:padding="@dimen/C4dp"
                         android:gravity="center_vertical"
-                        android:text="Select the worktype"
+                        android:hint="Select the worktype"
                         android:background="@drawable/round_white_backround"
                        />
                 </LinearLayout>
@@ -110,7 +118,7 @@
                         android:textSize="13sp"
                         android:padding="@dimen/C4dp"
                         android:gravity="center_vertical"
-                        android:text="Select the worktype"
+                        android:hint="Select the Distributor"
                         android:background="@drawable/round_white_backround"
                         />
 
@@ -140,7 +148,7 @@
                         android:textSize="13sp"
                         android:padding="@dimen/C4dp"
                         android:gravity="center_vertical"
-                        android:text="Select the Route"
+                        android:hint="Select the Route"
                         android:background="@drawable/round_white_backround"
                         />
                 </LinearLayout>
@@ -219,7 +227,7 @@
                     android:layout_gravity="center_vertical"
                     android:progress="10"/>
                 <Button
-                    android:id="@+id/submitbutton"
+                    android:id="@+id/mydaysubmitbutton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/C4dp"
@@ -242,3 +250,7 @@
 
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>
+    <include layout="@layout/back_arrow"></include>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

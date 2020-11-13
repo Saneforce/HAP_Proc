@@ -1,14 +1,8 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.appcompat.app.AppCompatActivity;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,16 +17,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity.Util.UpdateUi;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Tp_View_Master;
-import com.hap.checkinproc.Model_Class.Work_Type_Model;
 import com.hap.checkinproc.R;
 
 import java.lang.reflect.Type;
@@ -46,6 +41,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class Tp_Calander extends AppCompatActivity implements View.OnClickListener, UpdateUi {
     private Button selectedDayMonthYearButton;
@@ -53,7 +52,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
             "dd-MMM-yyyy");
     private TextView currentMonth;
     public Button btnsubmit;
-    public Button goback;
+    public ImageView goback;
     private RelativeLayout prevMonth;
     private RelativeLayout nextMonth;
     private GridView calendarView;
@@ -80,7 +79,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
         shared_common_pref = new Shared_Common_Pref(this);
         common_class = new Common_Class(this);
         currentMonth = this.findViewById(R.id.title);
-        goback = this.findViewById(R.id.btnback);
+        goback = this.findViewById(R.id.imag_back);
         gson = new Gson();
         btnsubmit = findViewById(R.id.btnsubmit);
         btnsubmit.setOnClickListener(this);
@@ -100,7 +99,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
         goback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                common_class.CommonIntentwithFinish(Tp_Month_Select.class);
+                mOnBackPressedDispatcher.onBackPressed();
             }
         });
         GetTp_List();
@@ -175,7 +174,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
             setGridCellAdapterToDate(month, year);
         }*/
         switch (v.getId()) {
-            case R.id.backarow:
+            case R.id.imag_back:
                 common_class.CommonIntentwithFinish(Tp_Month_Select.class);
                 break;
 
@@ -428,7 +427,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
                     int month = SelectedMonth + 1;
                     String TourMonth = theyear + "-" + month + "-" + theday;
                     Log.e("Grid_Selected_Date", theday + "-" + themonth + "-" + theyear + day_color[1]);
-                    Toast.makeText(_context, "SElected Date" + theday, Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(_context, "SElected Date" + theday, Toast.LENGTH_SHORT).show();
                     // common_class.CommonIntentwithFinish(Tp_Mydayplan.class);
                     common_class.CommonIntentwithoutFinishputextra(Tp_Mydayplan.class, "TourDate", TourMonth);
 
@@ -480,5 +479,20 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
 
 
     }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Tp_Calander.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
+
 
 }

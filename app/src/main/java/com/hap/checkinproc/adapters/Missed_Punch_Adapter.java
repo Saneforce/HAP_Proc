@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.hap.checkinproc.Activity_Hap.Missed_Punch_Approval_Reject;
 import com.hap.checkinproc.Activity_Hap.Permission_Approval_Reject;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Model_Class.Missed_Punch_Model;
 import com.hap.checkinproc.R;
 
@@ -21,6 +22,8 @@ public class Missed_Punch_Adapter extends RecyclerView.Adapter<Missed_Punch_Adap
     private List<Missed_Punch_Model> Missed_Punch_ModelsList;
     private int rowLayout;
     private Context context;
+    AdapterOnClick mAdapterOnClick;
+    Integer dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, textviewdate, open;
@@ -35,15 +38,23 @@ public class Missed_Punch_Adapter extends RecyclerView.Adapter<Missed_Punch_Adap
     }
 
 
-    public Missed_Punch_Adapter(List<Missed_Punch_Model> Missed_Punch_ModelsList, int rowLayout, Context context) {
+    public Missed_Punch_Adapter(List<Missed_Punch_Model> Missed_Punch_ModelsList, int rowLayout, Context context, AdapterOnClick mAdapterOnClick) {
         this.Missed_Punch_ModelsList = Missed_Punch_ModelsList;
         this.rowLayout = rowLayout;
         this.context = context;
+        this.mAdapterOnClick = mAdapterOnClick;
     }
 
     @Override
     public Missed_Punch_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAdapterOnClick.onIntentClick(dummy);
+            }
+        });
+
         return new Missed_Punch_Adapter.MyViewHolder(view);
     }
 
@@ -56,21 +67,8 @@ public class Missed_Punch_Adapter extends RecyclerView.Adapter<Missed_Punch_Adap
         holder.open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, Missed_Punch_Approval_Reject.class);
-                intent.putExtra("Sl_No", String.valueOf(Missed_Punch_ModelsList.get(position).getSlNo()));
-                intent.putExtra("Username", Missed_Punch_ModelsList.get(position).getSfName());
-                intent.putExtra("Emp_Code", Missed_Punch_ModelsList.get(position).getEmpCode());
-                intent.putExtra("HQ", Missed_Punch_ModelsList.get(position).getHQ());
-                intent.putExtra("Designation", Missed_Punch_ModelsList.get(position).getDesignation());
-                intent.putExtra("AppliedDate", Missed_Punch_ModelsList.get(position).getAppliedDate());
-                intent.putExtra("MobileNumber", Missed_Punch_ModelsList.get(position).getMobilenumber());
-                intent.putExtra("Reason", Missed_Punch_ModelsList.get(position).getReason());
-                intent.putExtra("Shiftonduty", Missed_Punch_ModelsList.get(position).getShiftName());
-                intent.putExtra("Sf_Code", Missed_Punch_ModelsList.get(position).getSfCode());
-                intent.putExtra("MissedPunchDate", Missed_Punch_ModelsList.get(position).getMissedPunchDate());
-                intent.putExtra("CheckinTime", Missed_Punch_ModelsList.get(position).getCheckinTime());
-                intent.putExtra("CheckoutTime", Missed_Punch_ModelsList.get(position).getCheckoutTme());
-                context.startActivity(intent);
+                mAdapterOnClick.onIntentClick(position);
+
             }
         });
     }

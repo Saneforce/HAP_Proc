@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -84,6 +86,16 @@ public class Extended_Approval_Reject extends AppCompatActivity implements View.
         geocheckin.setText("" + i.getExtras().getString("geoin"));
         geocheckout.setText(" " + i.getExtras().getString("geoout"));
         Sl_No = i.getExtras().getString("Sl_No");
+
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
+
 
     }
 
@@ -189,6 +201,20 @@ public class Extended_Approval_Reject extends AppCompatActivity implements View.
             view.loadUrl(url);
             return true;
         }
+    }
+
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Extended_Approval_Reject.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
     }
 }
 

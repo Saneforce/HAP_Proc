@@ -1,19 +1,25 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Onduty_Approval_Model;
@@ -47,6 +53,14 @@ public class Onduty_approval extends AppCompatActivity {
         Rf_code = Scode;
         gson = new Gson();
         getOndutyapproval();
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
     }
 
     public void getOndutyapproval() {
@@ -65,7 +79,29 @@ public class Onduty_approval extends AppCompatActivity {
                 }.getType();
                 approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
 
-                recyclerView.setAdapter(new Onduty_Approval_Adapter(approvalList, R.layout.onduty_approval_listitem, getApplicationContext()));
+                recyclerView.setAdapter(new Onduty_Approval_Adapter(approvalList, R.layout.onduty_approval_listitem, getApplicationContext(), new AdapterOnClick() {
+                    @Override
+                    public void onIntentClick(Integer Name) {
+
+                        Intent intent = new Intent(Onduty_approval.this, Onduty_Approval_Reject.class);
+                        intent.putExtra("Username", approvalList.get(Name).getFieldForceName());
+                        intent.putExtra("Emp_Code", approvalList.get(Name).getEmpCode());
+                        intent.putExtra("HQ", approvalList.get(Name).getHQ());
+                        intent.putExtra("Designation", approvalList.get(Name).getDesignation());
+                        intent.putExtra("Applieddate", approvalList.get(Name).getLoginDate());
+                        intent.putExtra("MobileNumber", approvalList.get(Name).getSFMobile());
+                        intent.putExtra("Odtype", approvalList.get(Name).getOndutytype());
+                        intent.putExtra("POV", approvalList.get(Name).getRmks());
+                        intent.putExtra("OdLocation", approvalList.get(Name).getODLocName());
+                        intent.putExtra("Geocheckin", approvalList.get(Name).getCheckin());
+                        intent.putExtra("geocheckout", approvalList.get(Name).getCheckout());
+                        intent.putExtra("checkintime", approvalList.get(Name).getStartTime());
+                        intent.putExtra("checkouttime", approvalList.get(Name).getEndTime());
+                        intent.putExtra("Sf_Code", approvalList.get(Name).getSfCode());
+                        intent.putExtra("duty_id", approvalList.get(Name).getDutyId());
+                        startActivity(intent);
+                    }
+                }));
                 common_class.ProgressdialogShow(2, "On-duty Approval");
             }
 
@@ -76,4 +112,18 @@ public class Onduty_approval extends AppCompatActivity {
         });
 
     }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Onduty_approval.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
 }

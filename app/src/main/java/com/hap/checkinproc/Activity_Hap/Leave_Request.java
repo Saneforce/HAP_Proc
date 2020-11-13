@@ -13,9 +13,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -94,7 +96,13 @@ public class Leave_Request extends AppCompatActivity {
         Submit = (Button) findViewById(R.id.submitButton);
 
         leaveType = (SearchableSpinner) findViewById(R.id.distributor_spinner);
-
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
         reasonForLeave = (EditText) findViewById(R.id.reason_leave);
         mCheckHalf = (LinearLayout) findViewById(R.id.check_half_linear);
         mShitTiming = (LinearLayout) findViewById(R.id.shit_linear);
@@ -544,5 +552,17 @@ public class Leave_Request extends AppCompatActivity {
         });
     }
 
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                  Leave_Request.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
+    }
 
 }

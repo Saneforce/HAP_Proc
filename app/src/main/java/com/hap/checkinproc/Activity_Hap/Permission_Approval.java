@@ -1,19 +1,25 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Leave_Approval_Model;
@@ -48,6 +54,13 @@ public class Permission_Approval extends AppCompatActivity {
         Rf_code = Scode;
         gson = new Gson();
         getpermissiondetails();
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
     }
 
 
@@ -67,7 +80,26 @@ public class Permission_Approval extends AppCompatActivity {
                 }.getType();
                 approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
 
-                recyclerView.setAdapter(new Permission_Approval_Adapter(approvalList, R.layout.permission_approval_listitem, getApplicationContext()));
+                recyclerView.setAdapter(new Permission_Approval_Adapter(approvalList, R.layout.permission_approval_listitem, getApplicationContext(), new AdapterOnClick() {
+                    @Override
+                    public void onIntentClick(Integer Name) {
+                        Intent intent = new Intent(Permission_Approval.this, Permission_Approval_Reject.class);
+                        intent.putExtra("Sl_No", String.valueOf(approvalList.get(Name).getSlNo()));
+                        intent.putExtra("Username", approvalList.get(Name).getFieldForceName());
+                        intent.putExtra("Emp_Code", approvalList.get(Name).getEmpCode());
+                        intent.putExtra("HQ", approvalList.get(Name).getHQ());
+                        intent.putExtra("Designation", approvalList.get(Name).getDesignation());
+                        intent.putExtra("MobileNumber", approvalList.get(Name).getSFMobile());
+                        intent.putExtra("Reason", approvalList.get(Name).getReason());
+                        intent.putExtra("fromtime", approvalList.get(Name).getFromTime());
+                        intent.putExtra("totime", approvalList.get(Name).getToTime());
+                        intent.putExtra("Sf_Code", approvalList.get(Name).getSfCode());
+                        intent.putExtra("permissiondate", approvalList.get(Name).getPermissiondate());
+                        intent.putExtra("NoofHours", approvalList.get(Name).getNoofHours());
+                        startActivity(intent);
+
+                    }
+                }));
                 common_class.ProgressdialogShow(2, "Permission Approval");
             }
 
@@ -78,5 +110,19 @@ public class Permission_Approval extends AppCompatActivity {
         });
 
     }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Permission_Approval.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
 
 }

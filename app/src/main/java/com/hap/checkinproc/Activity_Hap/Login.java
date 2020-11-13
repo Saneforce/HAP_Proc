@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -65,6 +66,11 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
         name = (TextInputEditText) findViewById(R.id.username);
         password = (TextInputEditText) findViewById(R.id.password);
         shared_common_pref = new Shared_Common_Pref(this);
@@ -202,9 +208,7 @@ public class Login extends AppCompatActivity {
             public void onResponse(Call<Model> call, Response<Model> response) {
 
                 if (response.isSuccessful()) {
-
                     //      Log.e("sfName",response.body().getData().get(0).getSfCode());
-
                     if (response.body().getSuccess() == true) {
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                         Intent intent = new Intent(Login.this, Dashboard.class);
@@ -229,7 +233,7 @@ public class Login extends AppCompatActivity {
                         editor.putString("State_Code", Sf_type);
                         editor.apply();
                         startActivity(intent);
-
+                        mProgress.dismiss();
                     } else {
                         mProgress.dismiss();
                         Toast.makeText(getApplicationContext(), "Check username and password", Toast.LENGTH_LONG).show();

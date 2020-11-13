@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_Hap.Check_in">
+    >
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/google_map"
@@ -43,10 +43,10 @@
         android:layout_marginEnd="12dp"
         android:layout_marginBottom="69dp"
         android:id="@+id/frame_Layout">
-    <TextureView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/texture"/>
+        <TextureView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/texture"/>
 
     </RelativeLayout>
 

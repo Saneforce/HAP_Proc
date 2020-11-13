@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,16 +81,14 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
         distributor.setText(":" + i.getExtras().getString("Distributor"));
         Sf_Code = i.getExtras().getString("Sf_Code");
         remarks.setText(i.getExtras().getString("Remarks"));
-        /*String username = i.getExtras().getString("Username");
-        String Emp_Code = i.getExtras().getString("Emp_Code");
-        String HQ = i.getExtras().getString("Emp_Code");
-        String Designation = i.getExtras().getString("Designation");
-        String MobileNumber = i.getExtras().getString("MobileNumber");
-        String Plan_Date = i.getExtras().getString("Plan_Date");
-        String Work_Type = i.getExtras().getString("Work_Type");
-        String Route = i.getExtras().getString("Route");
-        String Distributor = i.getExtras().getString("Distributor");
-        String Remarks = i.getExtras().getString("Remarks");*/
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
 
 
     }
@@ -177,6 +177,19 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
                 }
                 break;
         }
+    }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Tp_Approval_Reject.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
     }
 }
 

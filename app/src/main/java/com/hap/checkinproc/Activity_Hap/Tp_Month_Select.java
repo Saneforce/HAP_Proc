@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
@@ -37,6 +38,15 @@ public class Tp_Month_Select extends AppCompatActivity implements View.OnClickLi
         CurrentMoth.setOnClickListener(this);
         NextMonth.setOnClickListener(this);
         backarow.setOnClickListener(this);
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
+
     }
 
     @Override
@@ -56,4 +66,19 @@ public class Tp_Month_Select extends AppCompatActivity implements View.OnClickLi
 
         }
     }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Tp_Month_Select.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
+
 }

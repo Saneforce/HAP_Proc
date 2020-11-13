@@ -1,7 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,7 +10,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
+
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -44,14 +46,24 @@ public class Travel_Allowance extends AppCompatActivity {
 
         SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         Scode = (shared.getString("Sfcode", "null"));
-        Dcode=(shared.getString("Divcode","null"));
+        Dcode = (shared.getString("Divcode", "null"));
+
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
+
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<Location>> location = apiInterface.location("get/FieldForce_HQ",Dcode,Scode);
+        Call<List<Location>> location = apiInterface.location("get/FieldForce_HQ", Dcode, Scode);
         location.enqueue(new Callback<List<Location>>() {
             @Override
             public void onResponse(Call<List<Location>> call, Response<List<Location>> response) {
-                locationList=response.body();
+                locationList = response.body();
                 Log.e("azxs", String.valueOf(locationList.size()));
 
                 spinnerLoad();
@@ -65,7 +77,7 @@ public class Travel_Allowance extends AppCompatActivity {
         });
 
 
-        eText=(EditText) findViewById(R.id.editText1);
+        eText = (EditText) findViewById(R.id.editText1);
         eText.setInputType(InputType.TYPE_NULL);
         eText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,31 +99,23 @@ public class Travel_Allowance extends AppCompatActivity {
         });
 
 
-
-
-
-
     }
 
     private void spinnerLoad() {
-
 
 
         spinner3 = findViewById(R.id.spinner3);
 
         ArrayList<String> areaName = new ArrayList<>();
 
-        for (int i=0;i<locationList.size();i++) {
-
+        for (int i = 0; i < locationList.size(); i++) {
 
 
             areaName.add(locationList.get(i).getName());
 
 
-
-
         }
-        spinner3.setAdapter(new ArrayAdapter<>(Travel_Allowance.this,android.R.layout.simple_spinner_dropdown_item,areaName));
+        spinner3.setAdapter(new ArrayAdapter<>(Travel_Allowance.this, android.R.layout.simple_spinner_dropdown_item, areaName));
         spinner3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -124,5 +128,19 @@ public class Travel_Allowance extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Travel_Allowance.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

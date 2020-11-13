@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,8 +9,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -17,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 
@@ -51,6 +56,14 @@ public class Tp_Approval extends AppCompatActivity {
         gson = new Gson();
         gettp_Details();
 
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
+
     }
 
     public void gettp_Details() {
@@ -70,7 +83,24 @@ public class Tp_Approval extends AppCompatActivity {
                 }.getType();
                 Tp_Approval_Model = gson.fromJson(new Gson().toJson(response.body()), userType);
 
-                recyclerView.setAdapter(new Tp_Approval_Adapter(Tp_Approval_Model, R.layout.tpapproval_layout, getApplicationContext()));
+                recyclerView.setAdapter(new Tp_Approval_Adapter(Tp_Approval_Model, R.layout.tpapproval_layout, getApplicationContext(), new AdapterOnClick() {
+                    @Override
+                    public void onIntentClick(Integer Name) {
+                        Intent intent = new Intent(Tp_Approval.this, Tp_Approval_Reject.class);
+                        intent.putExtra("Username", Tp_Approval_Model.get(Name).getFieldForceName());
+                        intent.putExtra("Emp_Code", Tp_Approval_Model.get(Name).getEmpCode());
+                        intent.putExtra("HQ", Tp_Approval_Model.get(Name).getHQ());
+                        intent.putExtra("Designation", Tp_Approval_Model.get(Name).getDesignation());
+                        intent.putExtra("MobileNumber", Tp_Approval_Model.get(Name).getSFMobile());
+                        intent.putExtra("Plan_Date", Tp_Approval_Model.get(Name).getStartDate());
+                        intent.putExtra("Work_Type", Tp_Approval_Model.get(Name).getWorktypeName());
+                        intent.putExtra("Route", Tp_Approval_Model.get(Name).getRouteName());
+                        intent.putExtra("Distributor", Tp_Approval_Model.get(Name).getWorkedWithName());
+                        intent.putExtra("Sf_Code", Tp_Approval_Model.get(Name).getSFCode());
+                        intent.putExtra("Remarks", Tp_Approval_Model.get(Name).getRemarks());
+                     startActivity(intent);
+                    }
+                }));
             }
 
             @Override
@@ -78,6 +108,19 @@ public class Tp_Approval extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Tp_Approval.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
 
     }
 }

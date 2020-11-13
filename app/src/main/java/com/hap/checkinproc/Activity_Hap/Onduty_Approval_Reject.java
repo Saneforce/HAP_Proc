@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -92,6 +94,14 @@ public class Onduty_Approval_Reject extends AppCompatActivity implements View.On
         checkout.setText("" + i.getExtras().getString("checkouttime"));
         Sf_Code = i.getExtras().getString("Sf_Code");
         duty_id = i.getExtras().getString("Sf_Code");
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
 
     }
 
@@ -196,6 +206,20 @@ public class Onduty_Approval_Reject extends AppCompatActivity implements View.On
             return true;
         }
     }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Onduty_Approval_Reject.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
 }
 
 
