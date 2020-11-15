@@ -15,11 +15,15 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+import java.util.HashMap;
 import java.util.List;
 
 import javax.xml.transform.Result;
 
 import okhttp3.MultipartBody;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -28,6 +32,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 
 public interface ApiInterface {
@@ -56,6 +61,19 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("db_activity.php?axn=get/view")
     Call<ResponseBody> getView(@Field("data") String userData);
+    @FormUrlEncoded
+    @POST("db_activity.php?axn=get/menu")
+    Call<ResponseBody> getMenu(@Field("data") String userData);
+
+    @Multipart
+    @POST("db_activity.php?axn=upload/procpic")
+    Call<ResponseBody> uploadProcPic(@PartMap() HashMap<String, RequestBody> values, @Part MultipartBody.Part file);
+
+    @FormUrlEncoded
+    @POST("db_activity.php?axn=save/view")
+    Call<ResponseBody> saveView(@Field("data") String userData);
+
+
 
     /*LEAVE APPROVAL*/
 

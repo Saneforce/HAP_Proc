@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:background="#fff"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_rect_grey"
+            android:layout_marginTop="15dp"
+            android:padding="13dp"
+            android:id="@+id/r_lay_sec">
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:hint="Enter Text"
+                android:textColorHint="#787878"
+                android:singleLine="true"
+                android:id="@+id/edt_field"
+                android:visibility="gone"
+                android:background="@null"
+                app:fontFamily="@font/lato_bold"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000"
+                android:hint="Enter Numeric Value"
+                android:textColorHint="#787878"
+                android:digits="1234567890"
+                android:singleLine="true"
+                android:id="@+id/edt_field_numeric"
+                android:inputType="number"
+                android:visibility="gone"
+                android:background="@null"
+                app:fontFamily="@font/lato_bold"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:textColor="#000"
+                android:hint="Enter Text"
+                android:textColorHint="#787878"
+                android:id="@+id/edt_feed"
+                android:visibility="gone"
+                android:background="@null"
+                app:fontFamily="@font/lato_bold"/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rlay_spin"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:text=" Select "
+                    android:textSize="15sp"
+                    app:fontFamily="@font/lato_bold"
+                    android:id="@+id/spin_txt"/>
+                <ImageView
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/spin_down_arrow"
+                    android:layout_centerVertical="true"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rlay_currency"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txt_currency"
+                    android:textColor="#000"
+                    android:text="$"
+                    android:layout_centerVertical="true"
+                    android:singleLine="true"
+                    app:fontFamily="@font/lato_bold"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000"
+                    android:hint="Enter the value"
+                    android:text="hello"
+                    android:textColorHint="#787878"
+                    android:digits="1234567890"
+                    android:layout_marginLeft="5dp"
+                    android:singleLine="true"
+                    android:id="@+id/edt_field_currency"
+                    android:inputType="number"
+                    android:layout_toRightOf="@+id/txt_currency"
+                    android:visibility="visible"
+                    android:background="@null"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dyn_lay"
+                android:visibility="gone"> </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/dyn_l_lay"
+                android:visibility="gone"
+                android:orientation="vertical"> </LinearLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/rlay_upload"
+                android:visibility="gone">
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_rect_light_grey"
+                    android:text="Upload"
+                    android:textColor="#000"
+                    android:id="@+id/btn_upload"
+                    app:fontFamily="@font/lato_bold"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/txt_upload"
+                    android:background="@drawable/blue_txt_bg"
+                    android:textColor="#fff"
+                    android:padding="2dp"
+                    android:layout_marginLeft="18dp"
+                    android:layout_toRightOf="@+id/btn_upload"
+                    android:layout_centerVertical="true"
+                    android:singleLine="true"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/rlay_list"
+                android:visibility="gone">
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/dyn_list"
+                    android:nestedScrollingEnabled="true"
+                    android:divider="#fff"
+                    ></ListView>
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="3dp"
+                android:id="@+id/rlay_date"
+                android:visibility="gone"
+                >
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_rect_grey"
+                    android:padding="8dp"
+                    android:id="@+id/rlay_spin_fdt"
+                    android:visibility="visible"
+                    android:layout_marginTop="12dp"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text=" Select "
+                        app:fontFamily="@font/lato_bold"
+                        android:id="@+id/spin_txt_fdt"/>
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@drawable/spin_down_arrow"
+                        android:layout_toRightOf="@+id/spin_txt_fdt"
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerVertical="true"/>
+
+                </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#AAADB8"
+                    android:text="From"
+                    android:background="#fff"
+                    app:fontFamily="@font/lato_light"
+                    android:layout_marginLeft="13dp"
+                    android:id="@+id/from_txt"/>
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_rect_grey"
+                    android:padding="8dp"
+                    android:id="@+id/rlay_spin_tdt"
+                    android:visibility="visible"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginTop="12dp"
+                    android:layout_toRightOf="@+id/rlay_spin_fdt">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#000"
+                        android:text=" Select "
+                        app:fontFamily="@font/lato_bold"
+                        android:id="@+id/spin_txt_tdt"/>
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@drawable/spin_down_arrow"
+                        android:layout_toRightOf="@+id/spin_txt_tdt"
+                        android:layout_marginLeft="10dp"
+                        android:layout_centerVertical="true"/>
+                </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#AAADB8"
+                    android:text="To"
+                    android:id="@+id/to_txt"
+                    android:background="#fff"
+                    android:layout_marginLeft="43dp"
+                    app:fontFamily="@font/lato_light"
+                    android:layout_toRightOf="@+id/rlay_spin_fdt"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/txt_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="13dp"
+            android:background="#fff"
+            android:text="Field Name"
+            android:textColor="#AAADB8"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginTop="2dp"
+            app:fontFamily="@font/lato_light" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -7,5 +7,6 @@
     <color name="awhite">#A8FFFFFF</color>
     <color name="ablack">#5E1C1C1C</color>
     <color name="black">#1C1C1C</color>
+    <color name="status_bar">#4257CA</color>
 
 </resources>

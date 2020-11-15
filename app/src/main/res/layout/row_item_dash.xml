@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lay_row">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select the doctor"
+            android:textColor="#fff"
+            android:textSize="14sp"
+            android:padding="10dp"
+            android:layout_toRightOf="@+id/check"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="12dp"
+            android:id="@+id/txt_name"
+            app:fontFamily="@font/lato_bold"
+            />
+        <!--<View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:background="#000"
+            android:layout_below="@+id/txt_name"/>-->
+    </RelativeLayout>
+
+
+</RelativeLayout>

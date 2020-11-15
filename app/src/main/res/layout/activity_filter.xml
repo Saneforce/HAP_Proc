@@ -4,9 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_Hap.MainActivity"
-    >
-
+    tools:context=".Activity.FilterActivity">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,41 +34,14 @@
 
     </RelativeLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/btn_save"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="10dp"
-        android:visibility="gone"
-        android:text="Save"
-        android:background="@drawable/button_blueg"
-        android:textColor="#fff"/>
-
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5dp"
-        android:layout_marginTop="4dp"
-        android:dividerHeight="0dp"
+        android:id="@+id/list_filter"
         android:divider="#fff"
-        android:id="@+id/list_view"
-        android:layout_above="@+id/btn_save"
-        android:layout_below="@+id/lay_tool"
-        android:visibility="visible"
-        ></ListView>
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="5dp"
-        android:layout_marginTop="4dp"
-        android:dividerHeight="0dp"
-        android:id="@+id/relist_view"
-        android:visibility="gone"
-        android:layout_above="@+id/btn_save"
         android:layout_below="@+id/lay_tool"/>
 
+<!--
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -78,10 +49,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        app:srcCompat="@drawable/plus_icon"
-        android:visibility="gone"
-        />
-
+        app:srcCompat="@drawable/plus_icon"/>
+-->
 
 
 </RelativeLayout>
