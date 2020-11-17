@@ -76,6 +76,8 @@ public class Login extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
     SharedPreferences sharedPreferences;
+    SharedPreferences UserDetails;
+    public static final String CheckInDetail = "CheckInDetail" ;
     public static final String MyPREFERENCES = "MyPrefs" ;
     private ProgressDialog mProgress;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
@@ -98,6 +100,7 @@ public class Login extends AppCompatActivity {
         btnLogin=(Button)findViewById(R.id.btnLogin);
         profileImage=(ImageView)findViewById(R.id.profile_image);
         sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
            mProgress =new ProgressDialog(this);
            String titleId="Signing in...";
            mProgress.setTitle(titleId);
@@ -195,9 +198,23 @@ public class Login extends AppCompatActivity {
             }
         });
         Boolean Login= sharedPreferences.getBoolean("Login", false);
-        if(Login==true){
-            login(0);
+        Boolean CheckIn= sharedPreferences.getBoolean("Login", false);
+
+        if(Login==true||CheckIn==true){
+            if(Login==true && CheckIn==false) login(0);
+            if(checkPermission())
+            {
+                Intent playIntent = new Intent(this, SANGPSTracker.class);
+                bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
+                startService(playIntent);
+            }
+            if(CheckIn==true) {
+                Intent Dashboard=new Intent(Login.this, Dashboard_Two.class);
+                Dashboard.putExtra("Mode","CIN");
+                startActivity(Dashboard);
+            }
         }
+
     }
 
        @Override
@@ -331,10 +348,11 @@ public class Login extends AppCompatActivity {
                           if(requestCode==RC_SIGN_IN)
                                 intent = new Intent(Login.this, Dashboard.class);
                           else
-                                intent = new Intent(Login.this, Dashboard.class);
+                                intent = new Intent(Login.this, Dashboard_Two.class);
                           intent.putExtra("photo",photo);
                           String code = response.body().getData().get(0).getSfCode();
                           String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
+                          String sName = response.body().getData().get(0).getSfName();
                           String div = response.body().getData().get(0).getDivisionCode();
                           Integer type = response.body().getData().get(0).getCheckCount();
                           SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -348,8 +366,9 @@ public class Login extends AppCompatActivity {
                           Log.e("LOGIN_RESPONSE", String.valueOf(response.body().getData().get(0).getSfCode()));
                           editor.putString("Sf_Type", Sf_type);
                           editor.putString("Sfcode", code);
-                          editor.putString("Divcode", div);
-                          editor.putInt("CheckCount", type);
+                          editor.putString("SfName", sName);
+                          editor.putString("Divcode",div);
+                          editor.putInt("CheckCount",type);
                           editor.putString("State_Code", Sf_type);
                           editor.apply();
                           if(requestCode==RC_SIGN_IN || requestCode==0)

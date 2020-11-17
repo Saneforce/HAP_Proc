@@ -2,9 +2,14 @@ package com.hap.checkinproc.Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hap.checkinproc.Activity.Util.ImageFilePath;
 import com.hap.checkinproc.Activity.Util.ModelDynamicView;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
@@ -14,6 +19,9 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.AdapterForDynamicView;
 import com.hap.checkinproc.adapters.AdapterForSelectionList;
+import com.hap.checkinproc.adapters.FilterAdapter;
+import com.hap.checkinproc.adapters.FilterDemoAdapter;
+import com.hap.checkinproc.adapters.FilterRecycler;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -59,7 +67,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
+import id.zelory.compressor.Compressor;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -78,27 +90,255 @@ public class ViewActivity extends AppCompatActivity {
     Uri outputFileUri;
     public static int CAMERA_REQUEST=12;
     String filePathing="";
+    String frm_id;
+    FilterDemoAdapter adpt;
+    FloatingActionButton fab;
+    int value;
+    FilterRecycler fil_adpt;
+    RecyclerView relist_view;
+    Bundle extra;
+    SharedPreferences share,shareKey;
+    ImageView iv_dwnldmaster_back;
+    String fab_value="0";
+    TextView tool_header;
+    String btnShow="V";
+    Button btn_save;
+    String sfCode="sfcode";
+    public static String key="",header="";
+    SimpleDateFormat sdf;
+    SimpleDateFormat sdf_or;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
+        SharedPreferences.Editor edit=share.edit();
+        edit.putString("fab","1");
+        edit.commit();
+
+        try {
+            JSONArray jjj = new JSONArray(shareKey.getString("keys", "").toString());
+            if (jjj.length()!=0) {
+
+                Log.v("printing_json_je",jjj.toString());
+                JSONArray ja=new JSONArray();
+                for(int i=0;i<jjj.length();i++){
+                    if(i!=jjj.length()-1){
+                        JSONObject js=jjj.getJSONObject(i);
+                        Log.v("printing_json_ke",js.toString());
+                        ja.put(js);
+                    }
+                }
+                 edit=shareKey.edit();
+                Log.v("printing_json_fi",ja.toString());
+                edit.putString("keys",ja.toString());
+                edit.commit();
+            }
+        }catch(Exception e){}
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        header=tool_header.getText().toString();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
+         extra=getIntent().getExtras();
+        frm_id=extra.getString("frmid");
+        value= Integer.parseInt(extra.getString("btn_need"));
+        share=getSharedPreferences("existing",0);
+        shareKey=getSharedPreferences("key",0);
         progressDialog = createProgressDialog(this);
         apiService = ApiClient.getClient().create(ApiInterface.class);
+        fab=findViewById(R.id.fab);
         list=findViewById(R.id.list_view);
+        relist_view=findViewById(R.id.relist_view);
+        iv_dwnldmaster_back=findViewById(R.id.iv_dwnldmaster_back);
+        tool_header=findViewById(R.id.tool_header);
+        btn_save=findViewById(R.id.btn_save);
+        Log.v("printing_frm_id",frm_id+"");
+        sdf = new SimpleDateFormat("yyyy-MM-dd");
+        sdf_or = new SimpleDateFormat("dd-MM-yyyy");
+        if(value>0)
+            fab.setVisibility(View.VISIBLE);
+        else
+            fab.setVisibility(View.GONE);
+
+        iv_dwnldmaster_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences.Editor edit=share.edit();
+                edit.putString("fab","0");
+                edit.commit();
+                try {
+                    JSONArray jjj=new JSONArray(shareKey.getString("keys", ""));
+                    if (jjj.length()==0) {
+                        edit = shareKey.edit();
+                        JSONObject jkey1=new JSONObject();
+                        JSONArray jar=new JSONArray();
+                        JSONObject js=new JSONObject();
+                        js.put("PK_ID", ViewActivity.key);
+                        js.put("FK_ID", "");
+                        jkey1.put(ViewActivity.header, js);
+                        jar.put(jkey1);
+                        Log.v("printing_shareing23",jar.toString());
+                        edit.putString("keys", jar.toString());
+                        edit.putString("pk", ViewActivity.key);
+                        edit.commit();
+                    }
+                    else{
+                        edit = shareKey.edit();
+                        JSONObject jkey1=new JSONObject();
+                        JSONObject js=new JSONObject();
+                        js.put("PK_ID", ViewActivity.key);
+                        js.put("FK_ID", shareKey.getString("pk",""));
+                        jkey1.put(ViewActivity.header, js);
+                        jjj.put(jkey1);
+                        Log.v("printing_shareing",jjj.toString());
+                        edit.putString("keys", jjj.toString());
+                        edit.putString("pk", ViewActivity.key);
+                        edit.commit();
+                    }
+                }catch (Exception e){}
+
+                Intent i=new Intent(ViewActivity.this,ViewActivity.class);
+                i.putExtra("frmid",String.valueOf(value));
+                i.putExtra("btn_need","0");
+                startActivity(i);
+            }
+        });
+        Log.v("printing_share_key",shareKey.getString("keys","")+" hello ");
         callDynamicViewList();
+       /* if(!frm_id.equalsIgnoreCase("-1"))
+        callDynamicViewList();
+        else{
+            ArrayList<SelectionModel> arr=new ArrayList<>();
+            array_view.add(new ModelDynamicView("19", extra.getString("arr"), "", extra.getString("value"), arr, "", "", "", "", ""));
+           // array_view.add(new ModelDynamicView("66", "", "", "", arr, "", "", "", "", ""));
+            adp_view = new AdapterForDynamicView(ViewActivity.this, array_view);
+            list.setAdapter(adp_view);
+            adp_view.notifyDataSetChanged();
+            progressDialog.dismiss();
+        }*/
         //commonFun();
+        btn_save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                SharedPreferences.Editor edit = shareKey.edit();
+                try {
+                    JSONArray jjj=new JSONArray(shareKey.getString("keys", ""));
+                    if (jjj.length()==0) {
+
+                        JSONObject jkey1=new JSONObject();
+                        JSONArray jar=new JSONArray();
+                        JSONObject js=new JSONObject();
+                        js.put("PK_ID", ViewActivity.key);
+                        js.put("FK_ID", "");
+                        JSONArray jAA=new JSONArray();
+                        for(int i=0;i<array_view.size();i++){
+                            JSONObject jk=new JSONObject();
+                            if(!array_view.get(i).getViewid().equalsIgnoreCase("19")) {
+                                String col=array_view.get(i).getFieldname().replace(" ","_");
+                                jk.put("id", array_view.get(i).getViewid());
+                                if(array_view.get(i).getViewid().equalsIgnoreCase("8")) {
+                                    Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
+                                    jk.put("value", sdf.format(d));
+                                }
+                                else if(array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
+                                    ||  array_view.get(i).getViewid().equalsIgnoreCase("17")){
+                                    String pic="";
+                                    String[] picVal=array_view.get(i).getValue().split(",");
+                                    for(int k=0;k<picVal.length;k++){
+                                        Log.v("picVal_entry",picVal[k]);
+                                        getMulipart(picVal[k],0);
+                                        pic=pic+picVal[k].substring(picVal[k].lastIndexOf("/"));
+                                    }
+                                    jk.put("value", pic);
+                                }
+                                else
+                                jk.put("value", array_view.get(i).getValue());
+                                jk.put("col", col);
+                                jAA.put(jk);
+                            }
+                        }
+                        js.put("ctrl",jAA);
+                        jkey1.put(ViewActivity.header, js);
+                        jar.put(jkey1);
+                        Log.v("printing_shareing23",jar.toString());
+                        edit.putString("keys", jar.toString());
+                        edit.putString("pk", ViewActivity.key);
+                        edit.commit();
+                    }
+                    else{
+                        JSONObject jkey1=new JSONObject();
+                        JSONObject js=new JSONObject();
+                        js.put("PK_ID", ViewActivity.key);
+                        js.put("FK_ID", shareKey.getString("pk",""));
+                        JSONArray jAA=new JSONArray();
+                        for(int i=0;i<array_view.size();i++){
+                            JSONObject jk=new JSONObject();
+                            if(!array_view.get(i).getViewid().equalsIgnoreCase("19")) {
+                                String col=array_view.get(i).getFieldname().replace(" ","_");
+                                jk.put("id", array_view.get(i).getViewid());
+                                if(array_view.get(i).getViewid().equalsIgnoreCase("8")) {
+                                    Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
+                                    jk.put("value", sdf.format(d));
+                                }
+                                else if(array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
+                                        ||  array_view.get(i).getViewid().equalsIgnoreCase("17")){
+                                    String pic="";
+                                    String[] picVal=array_view.get(i).getValue().split(",");
+                                    for(int k=0;k<picVal.length;k++){
+                                        Log.v("picVal_entry",picVal[k]);
+                                        getMulipart(picVal[k],0);
+                                        pic=pic+picVal[k].substring(picVal[k].lastIndexOf("/")+1)+",";
+                                    }
+                                    jk.put("value", pic);
+                                }
+                                else
+                                jk.put("value", array_view.get(i).getValue());
+                                jk.put("col", col);
+                                jAA.put(jk);
+                            }
+                        }
+                        js.put("ctrl",jAA);
+                        jkey1.put(ViewActivity.header, js);
+                        jjj.put(jkey1);
+                        Log.v("printing_shareing",jjj.toString());
+                        edit.putString("keys", jjj.toString());
+                        edit.putString("pk", ViewActivity.key);
+                        edit.commit();
+                    }
+                    saveDynamicList();
+                }catch (Exception e){}
+            }
+        });
 
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(array_view.get(i).getViewid().equalsIgnoreCase("4")){
-                    popupSpinner(0,array_view.get(i).getA_list(),i);
+                if(array_view.size()==0){
+
                 }
-                else if(array_view.get(i).getViewid().equalsIgnoreCase("8")){
-                    datePick(i,8);
-                }
-                else    if( array_view.get(i).getViewid().equalsIgnoreCase("6")){
-                    popupSpinner(1,array_view.get(i).getA_list(),i);
+                else {
+                    if (array_view.get(i).getViewid().equalsIgnoreCase("4") || array_view.get(i).getViewid().equalsIgnoreCase("5")) {
+                        popupSpinner(0, array_view.get(i).getA_list(), i);
+                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
+                        datePick(i, 8);
+                    } else if (array_view.get(i).getViewid().equalsIgnoreCase("6") || array_view.get(i).getViewid().equalsIgnoreCase("7")) {
+                        popupSpinner(1, array_view.get(i).getA_list(), i);
+                    }
                 }
 
             }
@@ -247,7 +487,6 @@ public class ViewActivity extends AppCompatActivity {
                 if(filePath==null)
                     Toast.makeText(ViewActivity.this, "This file format not supported" , Toast.LENGTH_LONG).show();
                 else{
-
                     mm.setValue(filePathing);
                     adp_view.notifyDataSetChanged();
                 }
@@ -521,7 +760,7 @@ public class ViewActivity extends AppCompatActivity {
     public void callDynamicViewList(){
         JSONObject json=new JSONObject();
         try {
-            json.put("slno", "1");
+            json.put("slno", frm_id);
 
             Log.v("printing_sf_code",json.toString());
             Call<ResponseBody> approval=apiService.getView(json.toString());
@@ -548,47 +787,162 @@ public class ViewActivity extends AppCompatActivity {
                             Log.v("printing_dynamic_view",is.toString());
                             JSONArray jsonArray=new JSONArray(is.toString());
 
-                            for(int i=0;i<jsonArray.length();i++){
-                                ArrayList<SelectionModel>  arr=new ArrayList<>();
-                                JSONObject json=jsonArray.getJSONObject(i);
-                                JSONArray   jarray=json.getJSONArray("input");
-                                if(jarray.length()!=0){
-                                    for(int m=0;m<jarray.length();m++){
-                                        JSONObject  jjss=jarray.getJSONObject(m);
-                                        Log.v("json_input_iss",jjss.getString(json.getString("code")));
-                                        arr.add(new SelectionModel(jjss.getString(json.getString("name")),false,jjss.getString(json.getString("code"))));
-                                    }
+                            if(jsonArray.length()==0){
+                                Toast.makeText(ViewActivity.this,"No controls available for this form ",Toast.LENGTH_SHORT).show();
+                                progressDialog.dismiss();
+                            }
+                            else {
+                                JSONObject jsonjk = jsonArray.getJSONObject(0);
+                                if (jsonjk.getString("Control_id").equalsIgnoreCase("19")) {
+                                    callDynamicViewListView();
+                                } else {
+                                    if (share.getString("exist", "").equalsIgnoreCase("E") && share.getString("fab", "").equalsIgnoreCase("1")) {
+                                        ArrayList<SelectionModel> arr = new ArrayList<>();
+                                        array_view.add(new ModelDynamicView("19", share.getString("arr", ""), "", share.getString("value", ""), arr, "", "", "0", "", ""));
 
-                                }
-                                String  para="";
+                                    }
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        ArrayList<SelectionModel> arr = new ArrayList<>();
+                                        JSONObject json = jsonArray.getJSONObject(i);
+                                        JSONArray jarray = json.getJSONArray("input");
+
+                                        String para = "";
                                /* if(json.getString("Control_Id").equalsIgnoreCase("11"))
                                     para=json.getString("Table_code");
                                 else
                                     para=json.getString("Control_Para");*/
-                                array_view.add(new ModelDynamicView(json.getString("Control_id"),"",json.getString("Fld_Name"),"",arr,para,json.getString("Fld_ID"),json.getString("Frm_ID"),"",json.getString("Fld_Mandatory")));
+
+                                        Log.v("Printing_ctrl_id", json.getString("Control_id"));
+                                        if (json.getString("Control_id").equalsIgnoreCase("23")) {
+                                            String gettingfield = json.getString("Fld_Src_Field");
+                                            array_view.add(new ModelDynamicView(json.getString("Control_id"), gettingfield, json.getString("Fld_Name"), "", arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "", json.getString("Fld_Mandatory")));
+                                            fab_value=json.getString("type");
+                                            btnShow=json.getString("target");
+                                            tool_header.setText(json.getString("header"));
+                                            header=json.getString("header");
+                                        } else if (json.getString("Control_id").equalsIgnoreCase("19")) {
+                                            String gettingfield = json.getString("Fld_Src_Field");
+                                            array_view.add(new ModelDynamicView("19", jarray.toString(), "", gettingfield, arr, "", "", json.getString("Target_Form"), "", ""));
+                                            fab_value=json.getString("type");
+                                            btnShow=json.getString("target");
+                                            tool_header.setText(json.getString("header"));
+                                            header=json.getString("header");
+                                        } else {
+                                            if (jarray.length() != 0) {
+                                                for (int m = 0; m < jarray.length(); m++) {
+                                                    JSONObject jjss = jarray.getJSONObject(m);
+                                                    Log.v("json_input_iss", jjss.getString(json.getString("code")));
+                                                    arr.add(new SelectionModel(jjss.getString(json.getString("name")), false, jjss.getString(json.getString("code"))));
+                                                }
+
+                                            }
+                                            fab_value=json.getString("type");
+                                            btnShow=json.getString("target");
+                                            tool_header.setText(json.getString("header"));
+                                            header=json.getString("header");
+
+                                            array_view.add(new ModelDynamicView(json.getString("Control_id"), "", json.getString("Fld_Name"), "", arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "", json.getString("Fld_Mandatory")));
+                                        }
+                                    }
+                                /*
+                                arr.add(new SelectionModel("Male", false, "0"));
+                                arr.add(new SelectionModel("Female", false, "1"));
+                                arr.add(new SelectionModel("Others", false, "2"));
+                                arr.add(new SelectionModel("None", false, "3"));
+
+                                array_view.add(new ModelDynamicView("22", "", "Gender", "", arr, "", "22", "1", "", "0"));*/
+                                /*ArrayList<SelectionModel> arr = new ArrayList<>();
+                                ArrayList<SelectionModel> arr1 = new ArrayList<>();
+                                arr1.add(new SelectionModel("Male", false, "0"));
+                                arr1.add(new SelectionModel("Female", false, "1"));
+                                arr1.add(new SelectionModel("Others", false, "2"));
+                                arr1.add(new SelectionModel("None", false, "3"));
+                                array_view.add(new ModelDynamicView("23", "", "Gender", "", arr1, "", "23", "1", "", "0"));*/
+
+                                    adp_view = new AdapterForDynamicView(ViewActivity.this, array_view);
+                                    list.setAdapter(adp_view);
+                                    adp_view.notifyDataSetChanged();
+                                    if(Integer.parseInt(fab_value)>0) {
+                                        fab.setVisibility(View.VISIBLE);
+                                        value=Integer.parseInt(fab_value);
+                                    }
+                                    if(btnShow.equalsIgnoreCase("T"))
+                                        btn_save.setVisibility(View.VISIBLE);
+                                    else
+                                        btn_save.setVisibility(View.GONE);
+                                    progressDialog.dismiss();
+                                    key=sfCode+"_"+frm_id+"_"+System.currentTimeMillis();
+
+                                  /*  if(TextUtils.isEmpty(shareKey.getString("key","")))
+                                    {
+                                        JSONObject jkey=new JSONObject();
+                                        JSONObject jkey1=new JSONObject();
+                                        jkey.put("pk",key);
+                                        jkey.put("fk","");
+                                        jkey1.put(tool_header.getText().toString(),jkey);
+                                        SharedPreferences.Editor edit=shareKey.edit();
+                                        edit.putString("key",jkey1.toString());
+                                        edit.commit();
+                                    }
+                                    */
+                                }
+                                //commonFun();
+                                Log.v("Printing_arr_view", array_view.size() + "");
                             }
-                            ArrayList<SelectionModel>  arr=new ArrayList<>();
-                            arr.add(new SelectionModel("Male",false,"0"));
-                            arr.add(new SelectionModel("Female",false,"1"));
-                            arr.add(new SelectionModel("Others",false,"2"));
-                            arr.add(new SelectionModel("None",false,"3"));
-
-                            array_view.add(new ModelDynamicView("22","","Gender","",arr,"","22","1","","0"));
-                            arr=new ArrayList<>();
-                            ArrayList<SelectionModel>  arr1=new ArrayList<>();
-                            arr1.add(new SelectionModel("Male",false,"0"));
-                            arr1.add(new SelectionModel("Female",false,"1"));
-                            arr1.add(new SelectionModel("Others",false,"2"));
-                            arr1.add(new SelectionModel("None",false,"3"));
-                            array_view.add(new ModelDynamicView("23","","Gender","",arr1,"","23","1","","0"));
-
-                            adp_view=new AdapterForDynamicView(ViewActivity.this,array_view);
-                            list.setAdapter(adp_view);
-                            adp_view.notifyDataSetChanged();
-                            progressDialog.dismiss();
-                            //commonFun();
 
                         } catch (Exception e) {
+                            Log.v("Exception_fmcg",e.getMessage());
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+
+        }catch (Exception e){}
+
+    }
+    public void saveDynamicList(){
+        JSONObject json=new JSONObject();
+        try {
+            JSONArray ja=new JSONArray(shareKey.getString("keys",""));
+
+            json.put("data",ja);
+
+            Log.v("printing_sf_code",ja.toString());
+            Call<ResponseBody> approval=apiService.saveView(ja.toString());
+
+            approval.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
+                        Log.v("printing_res_track", response.body().byteStream() + "");
+                        JSONObject jsonObject = null;
+                        String jsonData = null;
+
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            ip = new InputStreamReader(response.body().byteStream());
+                            BufferedReader bf = new BufferedReader(ip);
+
+                            while ((line = bf.readLine()) != null) {
+                                is.append(line);
+                            }
+                            Log.v("printing_save_tp",is.toString());
+                            JSONObject jj=new JSONObject(is.toString());
+                            if(jj.getString("success").equalsIgnoreCase("true")){
+                                Intent i=new Intent(ViewActivity.this,ProcurementDashboardActivity.class);
+                                startActivity(i);
+                            }
+
+                        } catch (Exception e) {
+                            Log.v("Exception_fmcg",e.getMessage());
                         }
 
                     }
@@ -620,10 +974,6 @@ public class ViewActivity extends AppCompatActivity {
 
     public void commonFun(){
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
     }
@@ -647,5 +997,191 @@ public class ViewActivity extends AppCompatActivity {
             }
         });
     }
+    public  boolean validationOfField(){
+        boolean val=true;
+        for(int i=0;i<array_view.size();i++){
+            ModelDynamicView   mm=array_view.get(i);
+           // if(mm.getMandatory().equalsIgnoreCase("0")&&(!mm.getViewid().equalsIgnoreCase("0")))
+            //{
+                if(mm.getViewid().equalsIgnoreCase("5")||mm.getViewid().equalsIgnoreCase("7")){
+                    if(TextUtils.isEmpty(mm.getTvalue())||TextUtils.isEmpty(mm.getValue()))
+                        return  false;
+                }
+                else
+                {
+                    if(TextUtils.isEmpty(mm.getValue()))
+                        return  false;
+                }
+           // }
+        }
+        return val;
+    }
 
+    public void callDynamicViewListView(){
+        JSONObject json=new JSONObject();
+        try {
+            json.put("slno", frm_id);
+
+            Log.v("printing_sf_code",json.toString());
+            Call<ResponseBody> approval=apiService.getView(json.toString());
+
+            approval.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
+                        Log.v("printing_res_track", response.body().byteStream() + "");
+                        JSONObject jsonObject = null;
+                        String jsonData = null;
+
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            ip = new InputStreamReader(response.body().byteStream());
+                            BufferedReader bf = new BufferedReader(ip);
+
+                            while ((line = bf.readLine()) != null) {
+                                is.append(line);
+                            }
+                            // array_view.clear();
+                            Log.v("printing_dynamic_view",is.toString());
+                            JSONArray jsonArray=new JSONArray(is.toString());
+
+                         //   for(int i=0;i<jsonArray.length();i++){
+                                ArrayList<SelectionModel>  arr=new ArrayList<>();
+                                JSONObject json=jsonArray.getJSONObject(0);
+                                String gettingfield=json.getString("Fld_Src_Field");
+                                String[] splitbyComma=gettingfield.split(",");
+                               /* for(int k=0;k<splitbyComma.length;k++){
+                                    Log.v("printing_split_comma",splitbyComma[k]+" length "+splitbyComma[k].length()+" index "+splitbyComma[k].indexOf("/"));
+                                }*/
+                                JSONArray   jarray=json.getJSONArray("input");
+                               /* RecyclerView.LayoutManager lay= new LinearLayoutManager(ViewActivity.this);
+                                relist_view.setLayoutManager(lay);
+                                relist_view.addItemDecoration(new DividerItemDecoration(ViewActivity.this,
+                                        DividerItemDecoration.VERTICAL));
+                                fil_adpt=new FilterRecycler(ViewActivity.this,jarray,gettingfield,0);
+                                relist_view.setAdapter(fil_adpt);
+                                progressDialog.dismiss();*/
+
+                                adpt=new FilterDemoAdapter(ViewActivity.this,jarray,gettingfield,0,json.getString("Target_Form"));
+                                list.setAdapter(adpt);
+                                fab_value=json.getString("type");
+                                btnShow=json.getString("target");
+                                tool_header.setText(json.getString("header"));
+                            header=json.getString("header");
+                            key=sfCode+"_"+frm_id+"_"+System.currentTimeMillis();
+                                if(Integer.parseInt(fab_value)>0) {
+                                    fab.setVisibility(View.VISIBLE);
+                                    value=Integer.parseInt(fab_value);
+                                }
+                                if(btnShow.equalsIgnoreCase("T"))
+                                    btn_save.setVisibility(View.VISIBLE);
+                                else
+                                    btn_save.setVisibility(View.GONE);
+                                progressDialog.dismiss();
+
+                               /*
+
+                                String  para="";
+                               /* if(json.getString("Control_Id").equalsIgnoreCase("11"))
+                                    para=json.getString("Table_code");
+                                else
+                                    para=json.getString("Control_Para");*/
+                                //array_view.add(new ModelDynamicView(json.getString("Control_id"),"",json.getString("Fld_Name"),"",arr,json.getString("Fld_Length"),json.getString("Fld_ID"),json.getString("Frm_ID"),"",json.getString("Fld_Mandatory")));
+                           // }
+
+
+                          /*  adp_view=new AdapterForDynamicView(ViewActivity.this,array_view);
+                            list.setAdapter(adp_view);
+                            adp_view.notifyDataSetChanged();
+                            progressDialog.dismiss();*/
+                            //commonFun();
+
+                        } catch (Exception e) {
+                        }
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+
+        }catch (Exception e){}
+
+    }
+    public void getMulipart(String  path,int  x){
+        MultipartBody.Part imgg = convertimg("file", path);
+        HashMap<String, RequestBody> values = field("MR0417");
+        CallApiImage(values,imgg,x);
+    }
+    public MultipartBody.Part convertimg(String tag, String path){
+        MultipartBody.Part yy=null;
+        Log.v("full_profile",path);
+        try {
+            if (!TextUtils.isEmpty(path)) {
+
+                File file = new File(path);
+                if(path.contains(".png")||path.contains(".jpg")||path.contains(".jpeg"))
+                    file = new Compressor(getApplicationContext()).compressToFile(new File(path));
+                else
+                    file = new File(path);
+                RequestBody requestBody = RequestBody.create(MultipartBody.FORM, file);
+                yy = MultipartBody.Part.createFormData(tag, file.getName(), requestBody);
+            }
+        }catch (Exception e){}
+        Log.v("full_profile",yy+"");
+        return yy;
+    }
+    public HashMap<String, RequestBody> field(String val){
+        HashMap<String,RequestBody> xx=new HashMap<String,RequestBody>();
+        xx.put("data",createFromString(val));
+
+        return xx;
+
+    }
+    private RequestBody createFromString(String txt)
+    {
+        return RequestBody.create(MultipartBody.FORM,txt);
+    }
+    public void CallApiImage(HashMap<String,RequestBody> values, MultipartBody.Part imgg, final int x){
+        Call<ResponseBody> Callto;
+
+        Callto = apiService.uploadProcPic(values,imgg);
+
+        Callto.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.v("print_upload_file", "ggg" + response.isSuccessful() + response.body());
+                //uploading.setText("Uploading "+String.valueOf(count)+"/"+String.valueOf(count_check));
+
+                try {
+                    if (response.isSuccessful()) {
+
+
+                        Log.v("print_upload_file_true", "ggg" + response);
+                        JSONObject jb = null;
+                        String jsonData = null;
+                        jsonData = response.body().string();
+                        Log.v("request_data_upload", String.valueOf(jsonData));
+                        JSONObject  js=new JSONObject(jsonData);
+                        if(js.getString("success").equalsIgnoreCase("true")){
+                            Log.v("printing_dynamic_cou",js.getString("url"));
+
+                        }
+
+                    }
+
+                }catch (Exception e){}
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.v("print_failure", "ggg" + t.getMessage());
+            }
+        });
+    }
 }

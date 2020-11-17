@@ -118,6 +118,7 @@ public class SANGPSTracker extends Service {
 
         private Handler mServiceHandler;
         Context mContext;
+        public static SANGPSTracker sangpsTracker;
         /**
          * The current location.
          */
@@ -166,7 +167,13 @@ public class SANGPSTracker extends Service {
             Log.i(TAG, "Service started");
             boolean startedFromNotification = intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
                     false);
-
+            try {
+                mFusedLocationClient.requestLocationUpdates(mLocationRequest,
+                        mLocationCallback, Looper.myLooper());
+            } catch (SecurityException unlikely) {
+                //Utils.setRequestingLocationUpdates(this, false);
+                Log.e(TAG, "Lost location permission. Could not request updates. " + unlikely);
+            }
             // We got here because the user decided to remove location updates from the notification.
             if (startedFromNotification) {
                 removeLocationUpdates();
@@ -239,13 +246,7 @@ public class SANGPSTracker extends Service {
             Log.i(TAG, "Requesting location updates");
            // Utils.setRequestingLocationUpdates(this, true);
             startService(new Intent(this, SANGPSTracker.class));
-            try {
-                mFusedLocationClient.requestLocationUpdates(mLocationRequest,
-                        mLocationCallback, Looper.myLooper());
-            } catch (SecurityException unlikely) {
-                //Utils.setRequestingLocationUpdates(this, false);
-                Log.e(TAG, "Lost location permission. Could not request updates. " + unlikely);
-            }
+
         }
 
         /**
@@ -286,8 +287,10 @@ public class SANGPSTracker extends Service {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
                     .addAction(R.drawable.ic_launch, getString(R.string.launch_activity),
                             activityPendingIntent)
-                    .addAction(R.drawable.ic_cancel, getString(R.string.remove_location_updates),
-                            servicePendingIntent)
+                    //.addAction(R.drawable.ic_cancel, getString(R.string.remove_location_updates),
+                    //        servicePendingIntent)
+                    //.setSound()
+                    .setNotificationSilent()
                     .setContentText(text)
                     .setContentTitle(Utils.getLocationTitle(this))
                     .setOngoing(true)
