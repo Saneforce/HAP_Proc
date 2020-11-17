@@ -1,16 +1,18 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.hap.checkinproc.R;
 
-public class Dashboard_Two extends AppCompatActivity implements View.OnClickListener {
+public class  Dashboard_Two extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,14 +28,29 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         cardview4.setOnClickListener(this);
         cardView5.setOnClickListener(this);
 
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
+
+
 
 
     }
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Dashboard_Two.super.onBackPressed();
+                }
+            });
+
     @Override
     public void onBackPressed() {
-        // super.onBackPressed();
-        Toast.makeText(Dashboard_Two.this,"There is no back action",Toast.LENGTH_LONG).show();
-        return;
+
     }
 
     @Override
@@ -75,5 +92,5 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
     }
 
-    }
+}
 

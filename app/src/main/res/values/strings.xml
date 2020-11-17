@@ -34,5 +34,65 @@
     <string name="ok">Ok</string>
     <string name="permission_denied_explanation">Permission Denied</string>
     <string name="settings">Settings</string>
+    <string name="reason">Reason</string>
+    <string name="txt_jointwork">Joint work</string>
+    <string name="txt_select_jointwork">Select the Joint work</string>
+    <string name="txt_remarks">Remarks</string>
+    <string name="txt_enter_remarks">Enter the Remarks</string>
+    <string name="txt_enter_reason">Enter the Reason</string>
 
+
+
+    <string name="Tourplan">Tour  Plan</string>
+    <string name="Calander">Calendar</string>
+    <string name="monthselection">Month Selection</string>
+    <string name="mydayplan">My day Plan</string>
+
+
+
+    <string name="txt_password">Password</string>
+    <string name="txt_signin">Sign-In</string>
+    <string name="txt_worktype">Work Type</string>
+    <string name="txt_select_worktype">Select the Work Type</string>
+    <string name="txt_distributors">Distributors</string>
+    <string name="txt_select_distributors">Select the  Distributors</string>
+    <string name="txt_route">Route</string>
+    <string name="txt_route_man">Route *</string>
+    <string name="txt_select_route">Select the  Route</string>
+    <string name="txt_selecttheroute">Select the Route</string>
+    <string name="DayPlan">Day  Plan</string>
+    <string name="txt_submit">Submit</string>
+
+
+    <string name="leave_type">Leave Type</string>
+    <string name="shit_type">Shift Timing</string>
+    <string name="half_day_type">Halfday Type</string>
+    <string name="material_calendar_monday">M</string>
+    <string name="material_calendar_tuesday">T</string>
+    <string name="material_calendar_wednesday">W</string>
+    <string name="material_calendar_thursday">T</string>
+    <string name="material_calendar_friday">F</string>
+    <string name="material_calendar_saturday">S</string>
+    <string name="material_calendar_sunday">S</string>
+    <array name="MonthArray">
+        <item>January</item>
+        <item>February</item>
+        <item>March</item>
+        <item>April</item>
+        <item>May</item>
+        <item>June</item>
+        <item>July</item>
+        <item>August</item>
+        <item>September</item>
+        <item>October</item>
+        <item>November</item>
+        <item>December</item>
+    </array>
+    <string name="material_calendar_today_button">Today</string>
+    <string name="material_calendar_positive_button">OK</string>
+    <string name="material_calendar_negative_button">Cancel</string>
+    <string name="btnsummit">Submit For Approval
+</string>
+    <string name="goback">Back
+</string>
 </resources>

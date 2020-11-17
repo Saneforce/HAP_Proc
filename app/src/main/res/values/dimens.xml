@@ -1,3 +1,31 @@
 <resources>
-    <dimen name="fab_margin">16dp</dimen>
+
+
+    <dimen name="C1dp">1dp</dimen>
+    <dimen name="C2dp">2dp</dimen>
+    <dimen name="C3dp">3dp</dimen>
+    <dimen name="C4dp">4dp</dimen>
+    <dimen name="C5dp">5dp</dimen>
+    <dimen name="C6dp">6dp</dimen>
+    <dimen name="C7dp">7dp</dimen>
+    <dimen name="C8dp">8dp</dimen>
+    <dimen name="C9dp">9dp</dimen>
+    <dimen name="tv_size">5dp</dimen>
+
+
+    <dimen name="padding_left_right">9dp</dimen>
+
+    <dimen name="C11dp">11dp</dimen>
+    <dimen name="C12dp">12dp</dimen>
+    <dimen name="C13dp">13dp</dimen>
+    <dimen name="C14dp">14dp</dimen>
+    <dimen name="C15dp">15dp</dimen>
+    <dimen name="C16dp">14dp</dimen>
+    <dimen name="C17dp">17dp</dimen>
+    <dimen name="C100dp">100dp</dimen>
+    <dimen name="C10dp">10dp</dimen>
+    <dimen name="C20dp">20dp</dimen>
+    <dimen name="C50dp">50dp</dimen>
+    <dimen name="C60dp">60dp</dimen>
+    <dimen name="C70dp">70dp</dimen>
 </resources>

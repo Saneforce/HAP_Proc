@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/button_blueg"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme">
+
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/alegreya_sans_sc"
+            android:text="@string/Tourplan"
+            android:layout_marginRight="45dp"
+
+            android:textAllCaps="false"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textAlignment="center"
+            android:textStyle="bold" />
+    </androidx.appcompat.widget.Toolbar>
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_color"
+        android:layout_marginBottom="@dimen/C60dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/C10dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/tourdate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/basic"
+                        android:text="Time"
+                        android:textColor="@color/color_red" />
+
+
+
+                </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/C10dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:id="@+id/layoutData"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+
+
+                        <LinearLayout
+                            android:id="@+id/worktypelayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="@string/txt_worktype"
+                                android:textColor="#000000"
+                                android:textStyle="bold"
+                                android:layout_marginTop="15dp"/>
+
+
+                            <TextView
+                                android:id="@+id/worktype_text"
+                                android:layout_width="370dp"
+                                android:layout_height="39dp"
+                                android:layout_marginTop="10dp"
+                                android:textSize="13sp"
+                                android:padding="@dimen/C4dp"
+                                android:gravity="center_vertical"
+                                android:hint="Select the worktype"
+                                android:background="@drawable/round_white_backround"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/distributors_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C15dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="@string/txt_distributors"
+                                android:textColor="#000000"
+                                android:textStyle="bold"
+                                android:layout_marginTop="15dp"/>
+                            <TextView
+                                android:id="@+id/distributor_text"
+                                android:layout_width="370dp"
+                                android:layout_height="39dp"
+                                android:layout_marginTop="10dp"
+                                android:textSize="13sp"
+                                android:padding="@dimen/C4dp"
+                                android:gravity="center_vertical"
+                                android:hint="Select the Distributor"
+                                android:background="@drawable/round_white_backround"
+                                />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/route_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C15dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="@string/txt_route"
+                                android:textColor="#000000"
+                                android:textStyle="bold"
+                                android:layout_marginTop="15dp"/>
+
+                            <TextView
+                                android:id="@+id/route_text"
+                                android:layout_width="370dp"
+                                android:layout_height="39dp"
+                                android:layout_marginTop="10dp"
+                                android:textSize="13sp"
+                                android:padding="@dimen/C4dp"
+                                android:gravity="center_vertical"
+                                android:hint="Select the Route"
+                                android:background="@drawable/round_white_backround"
+                                />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/joint_work_lt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C15dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="@string/txt_jointwork"
+                                android:textColor="#000000"
+                                android:textStyle="bold"
+                                android:layout_marginTop="15dp"/>
+
+                            <TextView
+                                android:id="@+id/txt_jointwork"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:background="@drawable/round_white_backround"
+                                android:hint="@string/txt_select_jointwork"
+                                android:padding="@dimen/C10dp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/joint_work_listlt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C15dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="@string/txt_jointwork"
+                                android:textColor="#000000"
+                                android:textStyle="bold"
+                                android:layout_marginTop="15dp"/>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/jointwork_recycler"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+
+                                android:layout_marginTop="@dimen/C10dp" />
+                        </LinearLayout>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C15dp"
+                            android:text="@string/txt_remarks"
+                            android:textSize="@dimen/C12dp" />
+
+                        <androidx.appcompat.widget.AppCompatEditText
+                            android:id="@+id/edt_remarks"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/C100dp"
+                            android:layout_marginTop="@dimen/C10dp"
+                            android:background="@drawable/round_white_backround"
+                            android:gravity="top"
+                            android:hint="@string/txt_enter_remarks"
+                            android:padding="@dimen/C5dp"
+                            android:textSize="@dimen/C12dp" />
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progressbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:visibility="gone"
+                    android:layout_gravity="center_vertical"
+                    android:progress="10"/>
+                <Button
+                    android:id="@+id/submitbutton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/C4dp"
+                    android:layout_marginTop="@dimen/C20dp"
+                    android:layout_marginEnd="@dimen/C4dp"
+                    android:layout_marginBottom="@dimen/C10dp"
+                    android:background="@color/colorPrimary"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:elevation="@dimen/C4dp"
+                    android:text="@string/txt_submit"
+                    android:textAllCaps="false"
+                    android:textColor="@color/color_white"
+                    app:cornerRadius="@dimen/C4dp">
+
+                </Button>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>
+
+<include layout="@layout/back_arrow"></include>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
