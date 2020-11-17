@@ -49,4 +49,5 @@ public class Utils {
         return context.getString(R.string.location_updated,
                 DateFormat.getDateTimeInstance().format(new Date()));
     }
+
 }
