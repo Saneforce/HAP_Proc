@@ -3,7 +3,7 @@ package com.hap.checkinproc.Activity.Util;
 public class SelectionModel {
     String txt;
     boolean isClick;
-    String code;
+    String code,value,img_url,tmp_url;
 
     public SelectionModel(String txt, boolean isClick) {
         this.txt = txt;
@@ -14,9 +14,40 @@ public class SelectionModel {
         this.isClick = isClick;
         this.code=code;
     }
+    public SelectionModel(String txt, String value, String code,String img_url,String tmp_url) {
+        this.txt = txt;
+        this.value = value;
+        this.code=code;
+        this.img_url=img_url;
+        this.tmp_url=tmp_url;
+    }
     public SelectionModel(String txt, String code){
         this.txt=txt;
         this.code=code;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getImg_url() {
+        return img_url;
+    }
+
+    public void setImg_url(String img_url) {
+        this.img_url = img_url;
+    }
+
+    public String getTmp_url() {
+        return tmp_url;
+    }
+
+    public void setTmp_url(String tmp_url) {
+        this.tmp_url = tmp_url;
     }
 
     public String getTxt() {
