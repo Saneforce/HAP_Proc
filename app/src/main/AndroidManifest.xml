@@ -30,11 +30,8 @@
         <activity android:name=".Activity_Hap.Block_Information"></activity>
         <activity android:name=".Activity_Hap.ImageCapture" />
         <activity android:name=".Activity_Hap.Checkin" />
-        <activity android:name=".Activity_Hap.Ta_approval" />
         <activity android:name=".Activity_Hap.Extendedshift_approval" />
-        <activity android:name=".Activity_Hap.Missedpunch_approval" />
         <activity android:name=".Activity_Hap.Onduty_approval" />
-        <activity android:name=".Activity_Hap.Permision_approval" />
         <activity android:name=".Activity_Hap.Leave_Approval" />
         <activity
             android:name=".Activity.ViewActivity"
@@ -49,6 +46,32 @@
         <activity android:name=".Activity_Hap.Leave_Dashboard" />
         <activity android:name=".Activity_Hap.Ocheck_in" />
         <activity android:name=".Activity_Hap.Approvals" />
+
+        <activity android:name=".Status_Activity.Extended_Shift_Activity"></activity>
+        <activity android:name=".Status_Activity.WeekOff_Status_Activity" />
+        <activity android:name=".Status_Activity.MissedPunch_Status_Activity" />
+        <activity android:name=".Status_Activity.Leave_Status_Activity" />
+        <activity android:name=".Status_Activity.Permission_Status_Activity" />
+        <activity android:name=".Status_Activity.Onduty_Status_Activity"></activity>
+
+
+        <activity android:name=".Activity_Hap.Tp_Mydayplan" />
+        <activity android:name=".Activity_Hap.Tp_Calander" />
+        <activity android:name=".Activity_Hap.Mydayplan_Activity" />
+        <activity android:name=".Activity_Hap.Tp_Month_Select" />
+        <activity android:name=".Activity_Hap.Tp_Approval" />
+        <activity android:name=".Activity_Hap.Tp_Approval_Reject" />
+        <activity android:name=".Activity_Hap.Leave_Approval_Reject" />
+        <activity android:name=".Activity_Hap.Permission_Approval" />
+        <activity android:name=".Activity_Hap.Permission_Approval_Reject" />
+        <activity android:name=".Activity_Hap.Onduty_Approval_Reject" />
+        <activity android:name=".Activity_Hap.Webview_Activity" />
+        <activity android:name=".Activity_Hap.Missed_punch_Approval" />
+        <activity android:name=".Activity_Hap.Missed_Punch_Approval_Reject" />
+        <activity android:name=".Activity_Hap.Extended_Approval_Reject" />
+
+
+
         <activity
             android:name=".Activity_Hap.Check_in"
             android:noHistory="true" />

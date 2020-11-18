@@ -56,7 +56,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SANGPSTracker extends Service {
-
+    private static Location location=null;
         private static final String PACKAGE_NAME =
                 "com.google.android.gms.location.sample.locationupdatesforegroundservice";
 
@@ -404,10 +404,10 @@ public class SANGPSTracker extends Service {
             return false;
         }
 
-    Location location=null;
+
     public Location getLocation()
     {
-        location=null;
+
         try {
             mFusedLocationClient.getLastLocation()
                     .addOnCompleteListener(new OnCompleteListener<Location>() {

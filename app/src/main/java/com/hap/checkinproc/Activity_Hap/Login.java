@@ -44,6 +44,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.hap.checkinproc.BuildConfig;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Model;
@@ -67,7 +68,7 @@ public class Login extends AppCompatActivity {
     String photo;
     String idToken;
     Button signInButton, ReportsButton, ExitButton;
-
+    Shared_Common_Pref shared_common_pref;
     private static final String TAG = "LoginActivity";
     private GoogleApiClient googleApiClient;
     private  final static int RC_SIGN_IN = 1;
@@ -95,6 +96,7 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         name=(TextInputEditText)findViewById(R.id.username);
         password=(TextInputEditText)findViewById(R.id.password);
+        shared_common_pref = new Shared_Common_Pref(this);
         btnLogin=(Button)findViewById(R.id.btnLogin);
         profileImage=(ImageView)findViewById(R.id.profile_image);
         sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -349,14 +351,26 @@ public class Login extends AppCompatActivity {
                                 intent = new Intent(Login.this, Dashboard_Two.class);
                           intent.putExtra("photo",photo);
                           String code = response.body().getData().get(0).getSfCode();
+                          String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
                           String sName = response.body().getData().get(0).getSfName();
                           String div = response.body().getData().get(0).getDivisionCode();
                           Integer type = response.body().getData().get(0).getCheckCount();
                           SharedPreferences.Editor editor = sharedPreferences.edit();
+                          Shared_Common_Pref.Sf_Code = code;
+                          Shared_Common_Pref.Sf_Name = response.body().getData().get(0).getSfName();
+                          Shared_Common_Pref.Div_Code = div;
+                          Shared_Common_Pref.StateCode = Sf_type;
+                          shared_common_pref.save(Shared_Common_Pref.Sf_Code, code);
+                          shared_common_pref.save(Shared_Common_Pref.Div_Code, div);
+                          shared_common_pref.save(Shared_Common_Pref.StateCode, Sf_type);
+                          Log.e("LOGIN_RESPONSE", String.valueOf(response.body().getData().get(0).getSfCode()));
+                          editor.putString("Sf_Type", Sf_type);
                           editor.putString("Sfcode", code);
                           editor.putString("SfName", sName);
                           editor.putString("Divcode",div);
                           editor.putInt("CheckCount",type);
+                          editor.putString("State_Code", Sf_type);
+                          editor.apply();
                           if(requestCode==RC_SIGN_IN || requestCode==0)
                               editor.putBoolean("Login",true);
                           else
@@ -364,6 +378,7 @@ public class Login extends AppCompatActivity {
 
                           editor.apply();
                           startActivity(intent);
+                          mProgress.dismiss();
 
                       }else{
                           mProgress.dismiss();

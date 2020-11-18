@@ -19,6 +19,7 @@ import android.hardware.camera2.params.StreamConfigurationMap;
 import android.location.Location;
 import android.media.Image;
 import android.media.ImageReader;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -38,9 +39,11 @@ import android.widget.ListPopupWindow;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Example;
@@ -129,6 +132,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
     String lat;
     String log;
     String ID;
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,6 +155,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
 
         spinnerValue("get/Shift_timing",Dcode,Scode);
         button.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View view) {
 
@@ -173,7 +178,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
 
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        getWindow().setStatusBarColor(getResources().getColor(R.color.white));
+        getWindow().setStatusBarColor(getResources().getColor(R.color.color_white));
 
         acetStatus = findViewById(R.id.acet_status);
         //setPopupList();
@@ -291,6 +296,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
 
 
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int i, int i1) {
 
@@ -319,6 +325,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
 
 
     private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
         @Override
         public void onOpened(@NonNull CameraDevice camera) {
             cameraDevice = camera;

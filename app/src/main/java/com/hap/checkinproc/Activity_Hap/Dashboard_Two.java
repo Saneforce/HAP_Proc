@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -15,6 +16,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -158,53 +160,52 @@ Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
         rptCall.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                JsonArray res= response.body();
-                JsonObject fItm=res.get(0).getAsJsonObject();
+                JsonArray res = response.body();
+                JsonObject fItm = res.get(0).getAsJsonObject();
                 TextView txDyDet = findViewById(R.id.lTDyTx);
-                txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString()+"<br>"+fItm.get("AttDtNm").getAsString()));
-                JsonArray dyRpt=new JsonArray();
-                JsonObject newItem=new JsonObject();
-                newItem.addProperty("name","Shift");
-                newItem.addProperty("value",fItm.get("SFT_Name").getAsString());
-                newItem.addProperty("color","#333333");
+                txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br>" + fItm.get("AttDtNm").getAsString()));
+                JsonArray dyRpt = new JsonArray();
+                JsonObject newItem = new JsonObject();
+                newItem.addProperty("name", "Shift");
+                newItem.addProperty("value", fItm.get("SFT_Name").getAsString());
+                newItem.addProperty("color", "#333333");
                 dyRpt.add(newItem);
-                newItem=new JsonObject();
-                newItem.addProperty("name","Status");
-                newItem.addProperty("value",fItm.get("DayStatus").getAsString());
-                newItem.addProperty("color",fItm.get("StaColor").getAsString());
+                newItem = new JsonObject();
+                newItem.addProperty("name", "Status");
+                newItem.addProperty("value", fItm.get("DayStatus").getAsString());
+                newItem.addProperty("color", fItm.get("StaColor").getAsString());
                 dyRpt.add(newItem);
-                newItem=new JsonObject();
-                newItem.addProperty("name","Check-In");
-                newItem.addProperty("value",fItm.get("AttTm").getAsString());
-                newItem.addProperty("color","#333333");
+                newItem = new JsonObject();
+                newItem.addProperty("name", "Check-In");
+                newItem.addProperty("value", fItm.get("AttTm").getAsString());
+                newItem.addProperty("color", "#333333");
                 dyRpt.add(newItem);
-                if(!fItm.get("ET").isJsonNull()){
-                    newItem=new JsonObject();
-                    newItem.addProperty("name","Last Check-Out");
-                    newItem.addProperty("value",fItm.get("ET").getAsString());
-                    newItem.addProperty("color","#333333");
+                if (!fItm.get("ET").isJsonNull()) {
+                    newItem = new JsonObject();
+                    newItem.addProperty("name", "Last Check-Out");
+                    newItem.addProperty("value", fItm.get("ET").getAsString());
+                    newItem.addProperty("color", "#333333");
                     dyRpt.add(newItem);
                 }
-                newItem=new JsonObject();
-                newItem.addProperty("name","Geo In");
-                newItem.addProperty("value",fItm.get("GeoIn").getAsString());
-                newItem.addProperty("color","#333333");
+                newItem = new JsonObject();
+                newItem.addProperty("name", "Geo In");
+                newItem.addProperty("value", fItm.get("GeoIn").getAsString());
+                newItem.addProperty("color", "#333333");
                 dyRpt.add(newItem);
-                newItem=new JsonObject();
-                newItem.addProperty("name","Geo Out");
-                newItem.addProperty("value",fItm.get("GeoOut").getAsString());
-                newItem.addProperty("color","#333333");
+                newItem = new JsonObject();
+                newItem.addProperty("name", "Geo Out");
+                newItem.addProperty("value", fItm.get("GeoOut").getAsString());
+                newItem.addProperty("color", "#333333");
                 dyRpt.add(newItem);
 
 
                 recyclerView = (RecyclerView) findViewById(R.id.Rv_DyRpt);
-                mAdapter = new HomeRptRecyler(dyRpt,Dashboard_Two.this);
+                mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this);
 
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(mAdapter);
-
 
             }
 
@@ -214,7 +215,26 @@ Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
                 Log.d(Tag,String.valueOf(t));
             }
         });
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
+
+
+
+
     }
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Dashboard_Two.super.onBackPressed();
+                }
+            });
+
         private void GetMissedPunch () {
            // appendDS = appendDS + "&divisionCode=" + userData.divisionCode + "&sfCode=" + sSF + "&rSF=" + userData.sfCode + "&State_Code=" + userData.State_Code;
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -345,12 +365,7 @@ Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
             });
         }
 
-    @Override
-    public void onBackPressed() {
-        // super.onBackPressed();
-        Toast.makeText(Dashboard_Two.this,"There is no back action",Toast.LENGTH_LONG).show();
-        return;
-    }
+
 
     @Override
     public void onClick(View v) {

@@ -1,101 +1,132 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.Status_Activity.Extended_Shift_Activity;
+import com.hap.checkinproc.Status_Activity.Leave_Status_Activity;
+import com.hap.checkinproc.Status_Activity.MissedPunch_Status_Activity;
+import com.hap.checkinproc.Status_Activity.Onduty_Status_Activity;
+import com.hap.checkinproc.Status_Activity.Permission_Status_Activity;
+import com.hap.checkinproc.Status_Activity.WeekOff_Status_Activity;
 
-public class Leave_Dashboard extends AppCompatActivity  {
+public class Leave_Dashboard extends AppCompatActivity implements View.OnClickListener {
 
-    String[] mobileArray = {"Leave Request","Permission Request","Missed Punch","Weekly Off"};
-    String[] mobileArray2 = {"Leave Status","Permission Status","On-duty Status","Missed Punch Status","weekly-off Status","extended shift Status"};
+    Common_Class common_class;
+    LinearLayout LeaveRequest, PermissionRequest, MissedPunch, WeeklyOff;
+    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, ExtdShift;
+    TextView countLeaveRequest, countPermissionRequest, countMissedPunch, countWeeklyOff;
+    TextView countLeaveStatus, countPermissionStatus, countOnDutyStatus, countMissedStatus, countWeeklyOffStatus, countExtdShift;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave_dashboard);
+        common_class = new Common_Class(this);
+        /*Request Linear*/
+        LeaveRequest = findViewById(R.id.lin_leave_req);
+        PermissionRequest = findViewById(R.id.lin_per_req);
+        MissedPunch = findViewById(R.id.lin_miss_punch);
+        WeeklyOff = findViewById(R.id.lin_week_off);
 
-        ArrayAdapter adapter = new ArrayAdapter<String>(Leave_Dashboard.this,R.layout.layout_leave_type,R.id.tv_element, mobileArray);
+        /*Status Linear*/
+        LeaveStatus = findViewById(R.id.lin_leav_sta);
+        PermissionStatus = findViewById(R.id.lin_per_sta);
+        OnDutyStatus = findViewById(R.id.lin_duty_sta);
+        MissedStatus = findViewById(R.id.lin_miss_sta);
+        WeeklyOffStatus = findViewById(R.id.lin_week_off_sta);
+        ExtdShift = findViewById(R.id.lin_ext_shift);
 
-        ListView listView = (ListView) findViewById(R.id.mobile_list);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
+        /*Request text*/
+        countLeaveRequest = findViewById(R.id.txt_leave_req_count);
+        countPermissionRequest = findViewById(R.id.txt_per_req_count);
+        countMissedPunch = findViewById(R.id.txt_miss_punch_count);
+        countWeeklyOff = findViewById(R.id.txt_week_off_count);
+        /*Status text*/
+        LeaveRequest.setOnClickListener(this);
+        PermissionRequest.setOnClickListener(this);
+        MissedPunch.setOnClickListener(this);
+        WeeklyOff.setOnClickListener(this);
+        /*Status Linear*/
+        LeaveStatus.setOnClickListener(this);
+        PermissionStatus.setOnClickListener(this);
+        OnDutyStatus.setOnClickListener(this);
+        MissedStatus.setOnClickListener(this);
+        WeeklyOffStatus.setOnClickListener(this);
+        ExtdShift.setOnClickListener(this);
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-                switch (position) {
-                    case 0:
-                        startActivity(new Intent(Leave_Dashboard.this, Leave_Request.class));break;
-                    case 1:
-                        startActivity(new Intent(Leave_Dashboard.this, Permission_Request.class));break;
-                    case 2:
-                        startActivity(new Intent(Leave_Dashboard.this, Missed_Punch.class));break;
-                    case 3:
-                        startActivity(new Intent(Leave_Dashboard.this, Weekly_Off.class));break;
-
-
-                }
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
             }
         });
-
-        ArrayAdapter adapter2 = new ArrayAdapter<String>(Leave_Dashboard.this,R.layout.layout_leave_type,R.id.tv_element, mobileArray2);
-
-        ListView listView2 = (ListView) findViewById(R.id.mobile_list2);
-        listView2.setAdapter(adapter2);
-
-/*
-        CardView cardview1 = findViewById(R.id.leave_request);
-        CardView cardview2 = findViewById(R.id.permission_request);
-        CardView cardview3 = findViewById(R.id.missed_punch);
-        CardView cardview4 = findViewById(R.id.weekly_off);
-
-
-        cardview1.setOnClickListener(this);
-        cardview2.setOnClickListener(this);
-        cardview3.setOnClickListener(this);
-        cardview4.setOnClickListener(this);
-
-
-
-
-
     }
 
     @Override
     public void onClick(View v) {
-
         switch (v.getId()) {
-            case R.id.leave_request:
 
-                Intent i = new Intent(this, Leave_Request.class);
-
-                startActivity(i);
+            case R.id.lin_leave_req:
+                startActivity(new Intent(Leave_Dashboard.this, Leave_Request.class));
                 break;
-            case R.id.weekly_off:
-
-                Intent i2 = new Intent(this, Weekly_Off.class);
-
-                startActivity(i2);
+            case R.id.lin_per_req:
+                startActivity(new Intent(Leave_Dashboard.this, Permission_Request.class));
                 break;
-            case R.id.permission_request:
-
-                Intent i3 = new Intent(this, Permission_Request.class);
-
-                startActivity(i3);
+            case R.id.lin_miss_punch:
+                startActivity(new Intent(Leave_Dashboard.this, Missed_Punch.class));
                 break;
-            case R.id.missed_punch:
-
-                Intent i4 = new Intent(this,Missed_Punch.class);
-
-                startActivity(i4);
+            case R.id.lin_week_off:
+                startActivity(new Intent(Leave_Dashboard.this, Weekly_Off.class));
                 break;
-        }*/
+            case R.id.lin_leav_sta:
+                common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "0");
+
+                //startActivity(new Intent(Leave_Dashboard.this, Leave_Status_Activity.class));
+                break;
+            case R.id.lin_per_sta:
+               // startActivity(new Intent(Leave_Dashboard.this, Permission_Status_Activity.class));
+                common_class.CommonIntentwithoutFinishputextra(Permission_Status_Activity.class, "AMod", "0");
+                break;
+            case R.id.lin_duty_sta:
+                // startActivity(new Intent(Leave_Dashboard.this, Onduty_Status_Activity.class));
+                common_class.CommonIntentwithoutFinishputextra(Onduty_Status_Activity.class, "AMod", "0");
+                break;
+            case R.id.lin_miss_sta:
+                common_class.CommonIntentwithoutFinishputextra(MissedPunch_Status_Activity.class, "AMod", "0");
+                //startActivity(new Intent(Leave_Dashboard.this, MissedPunch_Status_Activity.class));
+                break;
+            case R.id.lin_week_off_sta:
+                //startActivity(new Intent(Leave_Dashboard.this, WeekOff_Status_Activity.class));
+                common_class.CommonIntentwithoutFinishputextra(WeekOff_Status_Activity.class, "AMod", "0");
+                break;
+            case R.id.lin_ext_shift:
+                //startActivity(new Intent(Leave_Dashboard.this, Extended_Shift_Activity.class));
+                common_class.CommonIntentwithoutFinishputextra(Extended_Shift_Activity.class, "AMod", "0");
+                break;
+        }
+    }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    Leave_Dashboard.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

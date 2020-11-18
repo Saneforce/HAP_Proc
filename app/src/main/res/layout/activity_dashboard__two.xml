@@ -299,6 +299,7 @@
                             android:textStyle="bold" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/cardview4"
                     android:layout_width="0dp"
@@ -329,6 +330,11 @@
                             android:textStyle="bold" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
+
+
+
+
+
             </LinearLayout>
 
             <LinearLayout
@@ -456,5 +462,5 @@
 
         </LinearLayout>
     </ScrollView>
-
+    <include layout="@layout/back_arrow"></include>
 </LinearLayout>

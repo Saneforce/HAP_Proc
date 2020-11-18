@@ -7,30 +7,28 @@
     android:layout_centerHorizontal="false"
     android:background="#f9f9f9"
     android:orientation="vertical"
-    tools:context=".Activity_Hap.Login"
-    android:padding="20dp">
+    android:padding="20dp"
+    tools:context=".Activity_Hap.Login">
 
     <ImageView
         android:id="@+id/LogoImage"
-        android:layout_width="match_parent"
-        android:layout_height="159dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:contentDescription="@string/todo"
-        android:src="@mipmap/ic_launcher" />
+        android:src="@drawable/clogo" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/C20dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:src="@drawable/profile_img"
             android:id="@+id/profile_image"
             android:layout_width="96dp"
             android:layout_height="96dp"
-
-
-            />
+            android:src="@drawable/profile_img"/>
     </LinearLayout>
 
 
@@ -42,7 +40,7 @@
         android:clipToPadding="false"
         android:orientation="vertical"
         android:padding="10dp"
-        android:visibility="invisible">
+        android:visibility="gone">
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -56,8 +54,8 @@
                 android:layout_height="46dp"
                 android:background="@android:color/transparent"
                 android:hint="@string/username"
-                android:padding="5dp"
-                android:inputType="text"/>
+                android:inputType="text"
+                android:padding="5dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -81,8 +79,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height= "wrap_content"
-        android:layout_marginTop="-15dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp">
 
@@ -92,14 +89,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/sign_bg"
+            android:clickable="false"
             android:elevation="7dp"
             android:gravity="center"
             android:padding="5dp"
             android:text="@string/sign_in"
             android:textColor="#ffff"
             android:textStyle="bold"
-            android:clickable="false"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:layout_width="match_parent"
@@ -109,40 +106,42 @@
             android:text="@string/or"
             android:textColor="#000000"
             android:textStyle="bold"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
+            android:layout_marginTop="20dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="20dp"
-            android:text="Sign In"
             android:background="@drawable/button_green"
-            android:textColor="@color/white"
-            android:textAllCaps="false"/>
+            android:text="Sign In"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/btnReport"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/button_blue"
             android:text="My Reports"
-            android:background="@drawable/button_blueg"
-            android:textColor="@color/white"
             android:textAllCaps="false"
-            android:layout_marginBottom="20dp">
+            android:textColor="@android:color/white">
 
         </Button>
+
         <Button
             android:id="@+id/btnExit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Exit"
+
             android:background="@drawable/button_amber"
-            android:textColor="@color/white"
+            android:text="Exit"
             android:textAllCaps="false"
-            android:layout_marginTop="20dp">
+            android:textColor="@android:color/white">
 
         </Button>
 
