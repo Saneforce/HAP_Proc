@@ -2,7 +2,9 @@ package com.hap.checkinproc.Activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -61,6 +63,9 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
     TextView txt_mode;
     Common_Class common_class;
     boolean updateMode=false;
+    SharedPreferences UserDetails;
+    public static final String MyPREFERENCES = "MyPrefs";
+    String SF_code="",div="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +89,9 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
         edt_to=findViewById(R.id.edt_to);
         edt_fare=findViewById(R.id.edt_fare);
         txt_mode=findViewById(R.id.txt_mode);
+        UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SF_code=UserDetails.getString("Sfcode","");
+        div=UserDetails.getString("div","");
         getTravelMode();
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -325,8 +333,8 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
             jj.put("km",edt_km.getText().toString());
             jj.put("rmk",edt_rmk.getText().toString());
             jj.put("mod",mode);
-            jj.put("sf","MGR4762");
-            jj.put("div","3");
+            jj.put("sf",SF_code);
+            jj.put("div",div);
             jj.put("url",url);
             jj.put("from",edt_frm.getText().toString());
             jj.put("to",edt_to.getText().toString());
@@ -372,8 +380,8 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
         try{
             JSONObject jj=new JSONObject();
 
-            jj.put("sf","MGR4762");
-            jj.put("div","3");
+            jj.put("sf",SF_code);
+            jj.put("div",div);
             //jj.put("url",url);
             //saveAllowance
             Log.v("printing_allow",jj.toString());

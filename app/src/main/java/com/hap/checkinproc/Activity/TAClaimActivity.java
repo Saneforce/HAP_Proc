@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ClipData;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -67,7 +69,9 @@ public class TAClaimActivity extends AppCompatActivity {
     String todayExp="";
     Uri outputFileUri;
     int pos=-1;
-
+    SharedPreferences UserDetails;
+    public static final String MyPREFERENCES = "MyPrefs";
+    String SF_code="",div="",State_Code="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +81,10 @@ public class TAClaimActivity extends AppCompatActivity {
         img_attach=findViewById(R.id.img_attach);
         btn_sub=findViewById(R.id.btn_sub);
         list=findViewById(R.id.list);
+        UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SF_code=UserDetails.getString("Sfcode","");
+        div=UserDetails.getString("div","");
+        State_Code=UserDetails.getString("State_Code","");
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         txt_date.setText(Common_Class.GetDateOnly()+"-"+ Common_Class.GetDay());
         String date= Common_Class.GetDate();
@@ -103,8 +111,6 @@ public class TAClaimActivity extends AppCompatActivity {
                 pos=pos1;
                 popupCapture();
             }
-
-
         });
         img_attach.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -192,8 +198,8 @@ public class TAClaimActivity extends AppCompatActivity {
                 jj.put("imgData",url_img);
                 ja.put(jj);
             }
-            jjMain.put("sf","MGR4762");
-            jjMain.put("div","3");
+            jjMain.put("sf",SF_code);
+            jjMain.put("div",div);
             jjMain.put("dailyExpense",ja);
             ja=new JSONArray();
             JSONObject jj=new JSONObject();
@@ -396,10 +402,10 @@ public class TAClaimActivity extends AppCompatActivity {
         try {
             JSONObject jj = new JSONObject();
             jj.put("Ta_Date", date);
-            jj.put("div", "3");
-            jj.put("sf", "MGR4762");
-            jj.put("rSF", "MGR4762");
-            jj.put("State_Code", "24");
+            jj.put("div", div);
+            jj.put("sf", SF_code);
+            jj.put("rSF", SF_code);
+            jj.put("State_Code", State_Code);
             Log.v("json_obj_ta", jj.toString());
             Call<ResponseBody> Callto = apiInterface.getDailyAllowance(jj.toString());
             Callto.enqueue(new Callback<ResponseBody>() {

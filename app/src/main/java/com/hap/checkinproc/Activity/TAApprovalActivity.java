@@ -2,6 +2,7 @@ package com.hap.checkinproc.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,22 +33,27 @@ public class TAApprovalActivity extends AppCompatActivity {
     ListView list;
     ApiInterface apiInterface;
     ArrayList<ApprovalModel> array=new ArrayList<>();
+    SharedPreferences UserDetails;
+    public static final String MyPREFERENCES = "MyPrefs";
+    String SF_code="",div="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_t_a_approval);
         list=findViewById(R.id.list);
+        UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SF_code=UserDetails.getString("Sfcode","");
+        div=UserDetails.getString("div","");
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         callApi("");
     }
     public void callApi(String date){
         try {
             JSONObject jj = new JSONObject();
-            jj.put("Ta_Date", "2020-11-13");
-            jj.put("div", "3");
-            jj.put("sf", "MGR5246");
-            jj.put("rSF", "MGR4762");
-            jj.put("State_Code", "24");
+            //jj.put("Ta_Date", "2020-11-13");
+            jj.put("div", div);
+            jj.put("sf", SF_code);  //MGR5246
+            jj.put("rSF", SF_code);
             Log.v("json_obj_ta", jj.toString());
             Call<ResponseBody> Callto = apiInterface.getTAAproval(jj.toString());
             Callto.enqueue(new Callback<ResponseBody>() {
