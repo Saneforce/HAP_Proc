@@ -1,11 +1,20 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,12 +25,10 @@ import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -48,19 +55,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import static com.hap.checkinproc.Common_Class.Common_Class.addquote;
 
 public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface {
     Spinner worktypespinner, worktypedistributor, worktyperoute;
-    List<Work_Type_Model> worktypelist;
-    List<Route_Master> Route_Masterlist;
-    List<Route_Master> FRoute_Master;
+    List<Common_Model> worktypelist = new ArrayList<>();
+    List<Common_Model> Route_Masterlist = new ArrayList<>();
+
+    List<Common_Model> FRoute_Master = new ArrayList<>();
     LinearLayout worktypelayout, distributors_layout, route_layout;
-    List<Distributor_Master> distributor_master;
+    List<Common_Model> distributor_master = new ArrayList<>();
     private Main_Model.presenter presenter;
     Gson gson;
     Type userType;
@@ -71,9 +75,11 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     private TextClock tClock;
     Button submitbutton;
     CustomListViewDialog customDialog;
+    ImageView backarow;
     ProgressBar progressbar;
     TextView worktype_text, distributor_text, route_text;
     TextView tourdate;
+    Common_Model Model_Pojo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +105,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         distributor_text = findViewById(R.id.distributor_text);
         presenter = new MasterSync_Implementations(this, new Master_Sync_View());
         presenter.requestDataFromServer();
-
+        // backarow.setOnClickListener(this);
         submitbutton.setOnClickListener(this);
         worktypelayout.setOnClickListener(this);
         distributors_layout.setOnClickListener(this);
@@ -137,22 +143,11 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         Log.e("TAG", "response Tbmydayplan: " + new Gson().toJson(noticeArrayList));
         if (position == 0) {
             Log.e("SharedprefrenceVALUES", new Gson().toJson(noticeArrayList));
-            userType = new TypeToken<ArrayList<Work_Type_Model>>() {
-            }.getType();
-            worktypelist = gson.fromJson(new Gson().toJson(noticeArrayList), userType);
-
+            GetJsonData(new Gson().toJson(noticeArrayList), "0");
         } else if (position == 1) {
-            userType = new TypeToken<ArrayList<Distributor_Master>>() {
-            }.getType();
-            distributor_master = gson.fromJson(new Gson().toJson(noticeArrayList), userType);
-
-
+            GetJsonData(new Gson().toJson(noticeArrayList), "1");
         } else {
-            userType = new TypeToken<ArrayList<Route_Master>>() {
-            }.getType();
-            Route_Masterlist = gson.fromJson(new Gson().toJson(noticeArrayList), userType);
-            FRoute_Master = Route_Masterlist;
-
+            GetJsonData(new Gson().toJson(noticeArrayList), "2");
         }
 
     }
@@ -162,16 +157,12 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         if (common_class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
         }
-        FRoute_Master = new ArrayList<Route_Master>();
-        ArrayList<String> route = new ArrayList<>();
         for (int i = 0; i < Route_Masterlist.size(); i++) {
-
-            if (Route_Masterlist.get(i).getStockistCode().contains(id)) {
-                route.add(Route_Masterlist.get(i).getName());
-                FRoute_Master.add(new Route_Master(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getTarget(), Route_Masterlist.get(i).getMinProd(), Route_Masterlist.get(i).getFieldCode(), Route_Masterlist.get(i).getStockistCode()));
-
+            Log.e("Stockist_Id", Route_Masterlist.get(i).getFlag());
+            if (Route_Masterlist.get(i).getFlag().contains(id)) {
+                Log.e("Froutr", Route_Masterlist.get(i).getName());
+                FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
             }
-
 
         }
 
@@ -184,14 +175,14 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     }
 
     @Override
-    public void OnclickMasterType(List<Work_Type_Model> myDataset, int position, List<Distributor_Master> Distributor_Master, List<Route_Master> route_Master, int type) {
+    public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
         if (type == 1) {
             worktype_text.setText(myDataset.get(position).getName());
             worktype_id = String.valueOf(myDataset.get(position).getId());
-            Log.e("FIELD_WORK", myDataset.get(position).getFWFlg());
-            Fieldworkflag = myDataset.get(position).getFWFlg();
-            if (myDataset.get(position).getFWFlg().equals("F")) {
+            Log.e("FIELD_WORK", myDataset.get(position).getFlag());
+            Fieldworkflag = myDataset.get(position).getFlag();
+            if (myDataset.get(position).getFlag().equals("F")) {
                 distributors_layout.setVisibility(View.VISIBLE);
                 route_layout.setVisibility(View.VISIBLE);
             } else {
@@ -201,13 +192,15 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         } else if (type == 2) {
             routeid = null;
             routename = null;
-            distributor_text.setText(Distributor_Master.get(position).getName());
-            distributorid = String.valueOf(Distributor_Master.get(position).getId());
-            loadroute(String.valueOf(Distributor_Master.get(position).getId()));
+            route_text.setText("");
+            distributor_text.setText(myDataset.get(position).getName());
+            distributorid = String.valueOf(myDataset.get(position).getId());
+            Log.e("StockistID",myDataset.get(position).getId());
+            loadroute(myDataset.get(position).getId());
         } else {
-            route_text.setText(route_Master.get(position).getName());
-            routename = route_Master.get(position).getName();
-            routeid = route_Master.get(position).getId();
+            route_text.setText(myDataset.get(position).getName());
+            routename = myDataset.get(position).getName();
+            routeid = myDataset.get(position).getId();
         }
     }
 
@@ -275,11 +268,9 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                     }
                 }
                 break;
-            case R.id.backarow:
-                common_class.CommonIntentwithFinish(Tp_Month_Select.class);
-                break;
+
             case R.id.worktypelayout:
-                customDialog = new CustomListViewDialog(Tp_Mydayplan.this, worktypelist, 1, distributor_master, Route_Masterlist);
+                customDialog = new CustomListViewDialog(Tp_Mydayplan.this, worktypelist, 1);
                 Window window = customDialog.getWindow();
                 window.setGravity(Gravity.CENTER);
                 window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -288,7 +279,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
                 break;
             case R.id.distributors_layout:
-                customDialog = new CustomListViewDialog(Tp_Mydayplan.this, worktypelist, 2, distributor_master, Route_Masterlist);
+                customDialog = new CustomListViewDialog(Tp_Mydayplan.this, distributor_master, 2);
                 Window windoww = customDialog.getWindow();
                 windoww.setGravity(Gravity.CENTER);
                 windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -296,7 +287,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
                 break;
             case R.id.route_layout:
-                customDialog = new CustomListViewDialog(Tp_Mydayplan.this, worktypelist, 3, distributor_master, Route_Masterlist);
+                customDialog = new CustomListViewDialog(Tp_Mydayplan.this, FRoute_Master, 3);
                 Window windowww = customDialog.getWindow();
                 windowww.setGravity(Gravity.CENTER);
                 windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -334,5 +325,36 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     @Override
     public void onBackPressed() {
 
+    }
+
+    private void GetJsonData(String jsonResponse, String type) {
+
+        try {
+            JSONArray jsonArray = new JSONArray(jsonResponse);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                String id = jsonObject1.optString("id");
+                String name = jsonObject1.optString("name");
+                String flag = jsonObject1.optString("FWFlg");
+                Model_Pojo = new Common_Model(id, name, flag);
+                if (type.equals("0")) {
+                    worktypelist.add(Model_Pojo);
+                } else if (type.equals("1")) {
+                    distributor_master.add(Model_Pojo);
+                } else {
+                    Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
+                    Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
+                    FRoute_Master.add(Model_Pojo);
+                    Route_Masterlist.add(Model_Pojo);
+                }
+
+
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

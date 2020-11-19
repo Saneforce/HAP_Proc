@@ -1,11 +1,25 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:statusBarColor">@color/status_bar</item>
+    </style>
+
+    <style name= "AppTheme" parent= "AppBaseTheme" >
+        <item name= "android:textViewStyle" > @style/RobotoTextViewStyle </item>
+        <item name= "android:buttonStyle" > @style/RobotoButtonStyle </item>
+    </style>
+    <style name= "RobotoTextViewStyle" parent= "android:Widget.TextView" >
+        <item name= "android:fontFamily" > @font/poppins_regular </item>
+        <item name= "android:textSize" > @dimen/C13dp </item>
+    </style>
+    <style name= "RobotoButtonStyle" parent= "android:Widget.Button" >
+        <item name= "android:fontFamily" > poppins_semibold </item>
+        <item name= "android:textSize" > @dimen/C13dp </item>
+        <item name= "android:padding" > 16dp </item>
     </style>
 
     <style name="AppTheme.NoActionBar">

@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -171,14 +169,13 @@
 
                     <TextView
                         android:id="@+id/txt_jointwork"
-                        android:layout_width="match_parent"
+                        android:layout_width="371dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/C10dp"
                         android:background="@drawable/round_white_backround"
                         android:hint="@string/txt_select_jointwork"
                         android:padding="@dimen/C10dp" />
                 </LinearLayout>
-
                 <LinearLayout
                     android:id="@+id/joint_work_listlt"
                     android:layout_width="match_parent"

@@ -13,15 +13,14 @@
             android:id="@+id/txtlable"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="@dimen/C13dp"
             android:layout_weight="1"
-            android:textFontWeight="800"
             android:text="TextView" />
         <TextView
             android:id="@+id/txtval"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="14sp"
+            android:textSize="@dimen/C13dp"
             android:layout_weight="1"
             android:textAlignment="textEnd"
             android:text="TextView" />

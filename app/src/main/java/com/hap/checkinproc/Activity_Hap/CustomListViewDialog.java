@@ -11,17 +11,21 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.hap.checkinproc.Activity.Util.UpdateUi;
+import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Model_Class.Distributor_Master;
 import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.Model_Class.Work_Type_Model;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.DataAdapter;
 
 import java.util.List;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class CustomListViewDialog extends Dialog implements View.OnClickListener, UpdateUi {
     public CustomListViewDialog(Context context, int themeResId) {
@@ -40,19 +44,17 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
     //RecyclerView.Adapter adapter;
     DataAdapter da;
     int type;
-    List<Work_Type_Model> mDataset;
-    List<com.hap.checkinproc.Model_Class.Distributor_Master> Distributor_Master;
-    List<Route_Master> route_Master;
+    List<Common_Model> mDataset;
 
-    public CustomListViewDialog(Activity a, List<Work_Type_Model> wk, int type, List<com.hap.checkinproc.Model_Class.Distributor_Master> distributor, List<Route_Master> routelist) {
+
+    public CustomListViewDialog(Activity a, List<Common_Model> wk, int type) {
         super(a);
         this.activity = a;
         this.type = type;
         //this.adapter = adapter;
         this.mDataset = wk;
-        this.Distributor_Master = distributor;
-        this.route_Master = routelist;
-        this.da = new DataAdapter(mDataset, activity, type, Distributor_Master,route_Master);
+
+        this.da = new DataAdapter(mDataset, activity, type);
         setupLayout();
 
 
@@ -92,21 +94,6 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
 
             }
         });
-       /* searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // filter recycler view when query submitted
-                adapter.getFilter().filter(query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String query) {
-                // filter recycler view when text is changed
-                adapter.getFilter().filter(query);
-                return false;
-            }
-        });*/
 
     }
 

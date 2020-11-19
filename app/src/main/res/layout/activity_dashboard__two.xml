@@ -33,7 +33,7 @@
                     android:padding="10dp"
                     android:paddingBottom="0dp"
                     android:textColor="@color/white"
-                    android:textSize="13sp"
+                    android:textSize="11sp"
                     android:text="HAP Check-In" />
 
             <TextView
@@ -143,13 +143,17 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_weight="2"
-                        android:padding="5dp">
+                        android:paddingTop="0dp"
+                        android:paddingBottom="0dp"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp">
                         <TextView
                             android:id="@+id/lTDyCap"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Today"
                             android:textFontWeight="900"
+                            android:textSize="@dimen/C13dp"
                             android:layout_weight="1"/>
                         <TextView
                             android:id="@+id/lTDyTx"
@@ -157,13 +161,14 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:textAlignment="textEnd"
+                            android:textSize="@dimen/C13dp"
                             android:text="TextView" />
 
                     </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="8dp"
+                        android:layout_height="4dp"
                         android:layout_weight="1"
                         android:background="@drawable/bottom_border"
                         >
@@ -215,6 +220,7 @@
                             android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
                             android:text="Today"
+                            android:textSize="@dimen/C13dp"
                             android:textFontWeight="900"/>
                             <ImageView
                                 android:id="@+id/nxt"
@@ -235,7 +241,7 @@
                                 android:layout_gravity="right"
                                 android:text="View All"
                                 android:textSize="11sp"
-                                android:padding="0dp"/>
+                                android:padding="10dp"/>
 
                         </LinearLayout>
 
@@ -243,7 +249,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="8dp"
+                        android:layout_height="4dp"
                         android:layout_weight="1"
                         android:background="@drawable/bottom_border"
                         >
@@ -293,10 +299,9 @@
                             android:layout_marginTop="13dp"
                             android:layout_marginEnd="36dp"
                             android:layout_marginBottom="3dp"
-                            android:fontFamily="@font/alegreya_sans_sc"
-                            android:text="Leave/permission"
-                            android:textColor="#FFFBFB"
-                            android:textStyle="bold" />
+                            android:text="Leave / permission"
+                            android:textSize="@dimen/C13dp"
+                            android:textColor="#FFFBFB" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -321,13 +326,11 @@
                             android:id="@+id/textView5"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="13dp"
-                            android:fontFamily="@font/alegreya_sans_sc"
                             android:text="Travel Allowance"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold" />
+                            android:textSize="@dimen/C13dp"
+                            android:textColor="#FFFFFF" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -366,17 +369,15 @@
                             android:id="@+id/textView6"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-
                             android:layout_alignParentStart="false"
                             android:layout_alignParentEnd="false"
                             android:layout_centerHorizontal="true"
                             android:layout_marginStart="51dp"
                             android:layout_marginTop="13dp"
                             android:layout_marginEnd="37dp"
-                            android:fontFamily="@font/alegreya_sans_sc"
                             android:text="My Reports"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold" />
+                            android:textSize="@dimen/C13dp"
+                            android:textColor="#FFFFFF" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -401,15 +402,13 @@
                             android:id="@+id/textView7"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-
                             android:layout_alignParentEnd="false"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="13dp"
                             android:layout_marginEnd="77dp"
-                            android:fontFamily="@font/alegreya_sans_sc"
                             android:text="Check-out"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold" />
+                            android:textSize="@dimen/C13dp"
+                            android:textColor="#FFFFFF" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -419,7 +418,6 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:clipToPadding="false"
-
                 >
                 <androidx.cardview.widget.CardView
                     android:id="@+id/StActivity"
@@ -443,17 +441,15 @@
                             android:id="@+id/txtactlbl"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-
                             android:layout_alignParentStart="false"
                             android:layout_alignParentEnd="false"
                             android:layout_centerHorizontal="true"
                             android:layout_marginStart="51dp"
                             android:layout_marginTop="13dp"
                             android:layout_marginEnd="37dp"
-                            android:fontFamily="@font/alegreya_sans_sc"
                             android:text="Start Activity"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold" />
+                            android:textSize="@dimen/C13dp"
+                            android:textColor="#FFFFFF" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
 

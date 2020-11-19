@@ -81,8 +81,8 @@ public class Leave_Request extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave__request);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        getWindow().setStatusBarColor(getResources().getColor(R.color.color_white));
+       // getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+       // getWindow().setStatusBarColor(getResources().getColor(R.color.color_white));
         gson = new Gson();
 
         //we need to show the list when clicking on the field
@@ -385,16 +385,21 @@ public class Leave_Request extends AppCompatActivity {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
 
-
                 userType = new TypeToken<ArrayList<Leave_Type>>() {
                 }.getType();
                 leavetypelist = gson.fromJson(new Gson().toJson(response.body()), userType);
-                Log.e("LeaveTypeList", String.valueOf(leavetypelist));
-                DistributorTypeAdapter();
+                if(leavetypelist!=null){
+                    DistributorTypeAdapter();
+                }
+                else{
+                    Log.d("LeaveTypeList", "Error");
+                    Toast.makeText(Leave_Request.this,"No Leave Types Found",Toast.LENGTH_LONG);
+                }
             }
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
+                Log.d("LeaveTypeList", "Error");
             }
         });
     }

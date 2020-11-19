@@ -39,19 +39,16 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/C5dp"
                 android:background="@drawable/g_sign"
-                android:padding="@dimen/C3dp">
+                android:padding="@dimen/C16dp">
 
                 <TextView
                     android:id="@+id/mydayplan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_semibold"
                     android:gravity="center"
                     android:text="My day plan"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textColor="#FFFFFF" />
             </LinearLayout>
 
             <LinearLayout
@@ -60,7 +57,7 @@
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/C5dp"
                 android:background="@drawable/button_green"
-                android:padding="@dimen/C3dp">
+                android:padding="@dimen/C16dp">
 
 
                 <TextView
@@ -68,11 +65,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_semibold"
                     android:gravity="center"
                     android:text="Check-In"
                     android:textColor="#FFFFFF"
-                    android:textSize="18sp"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -80,53 +75,47 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C5dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/C3dp">
+                android:orientation="horizontal">
 
 
                 <LinearLayout
                     android:id="@+id/lin_request_status"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/C5dp"
                     android:layout_weight="1"
                     android:background="@drawable/button_amber"
-                    android:padding="@dimen/C5dp">
+                    android:padding="@dimen/C16dp"
+                    >
 
                     <TextView
                         android:id="@+id/textView4"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_centerHorizontal="true"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/poppins_semibold"
                         android:gravity="center"
                         android:text="Requests/status"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textColor="#FFFFFF" />
                 </LinearLayout>
 
 
                 <LinearLayout
                     android:id="@+id/lin_report"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/g_sign"
-                    android:padding="@dimen/C5dp">
+                    android:padding="@dimen/C16dp">
 
                     <TextView
                         android:id="@+id/textView6"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/poppins_semibold"
                         android:gravity="center"
                         android:text="My Reports"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textColor="#FFFFFF" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -136,8 +125,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C5dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/C3dp">
+                android:orientation="horizontal">
 
                 <LinearLayout
                     android:id="@+id/lin_onduty"
@@ -146,19 +134,16 @@
                     android:layout_marginRight="@dimen/C5dp"
                     android:layout_weight="1"
                     android:background="@drawable/sign_bg"
-                    android:padding="@dimen/C5dp">
+                    android:padding="@dimen/C16dp">
 
                     <TextView
                         android:id="@+id/textView3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/poppins_semibold"
                         android:gravity="center"
                         android:text="On-Duty "
-                        android:textColor="#FFFCFC"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textColor="#FFFCFC" />
                 </LinearLayout>
 
 
@@ -168,18 +153,15 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/button_dgreen"
-                    android:padding="@dimen/C5dp">
+                    android:padding="@dimen/C16dp">
 
                     <TextView
                         android:id="@+id/textView11"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_semibold"
                         android:gravity="center"
                         android:text="Approvals"
-                        android:textColor="#FFFCFC"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textColor="#FFFCFC"/>
                 </LinearLayout>
 
 
@@ -190,50 +172,42 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C5dp"
-                android:orientation="horizontal"
-                android:padding="@dimen/C3dp">
+                android:orientation="horizontal">
 
 
                 <LinearLayout
                     android:id="@+id/lin_ta_claim"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginRight="@dimen/C5dp"
                     android:layout_weight="1"
                     android:background="@drawable/button_purple"
-                    android:padding="@dimen/C5dp">
+                    android:padding="@dimen/C16dp">
 
                     <TextView
                         android:id="@+id/textView5"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_semibold"
                         android:gravity="center"
                         android:text="TA &amp; claim"
-                        android:textColor="#FFFFFF"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textColor="#FFFFFF"/>
                 </LinearLayout>
 
 
                 <LinearLayout
                     android:id="@+id/lin_extenden_shift"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:background="@drawable/button_orange"
-                    android:padding="@dimen/C5dp">
-
+                    android:padding="@dimen/C16dp">
                     <TextView
                         android:id="@+id/textView9"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_semibold"
                         android:gravity="center"
                         android:text="Extended Shift"
-                        android:textColor="#FFFCFC"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textColor="#FFFCFC" />
                 </LinearLayout>
 
 
@@ -246,7 +220,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C5dp"
                 android:background="@drawable/button_purple"
-                android:padding="@dimen/C3dp">
+                android:padding="@dimen/C16dp">
 
 
                 <TextView
@@ -254,12 +228,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_semibold"
                     android:gravity="center"
                     android:text="Tour Plan"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textColor="#FFFFFF" />
 
 
             </LinearLayout>
@@ -270,19 +241,16 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C5dp"
                 android:background="@drawable/button_red"
-                android:padding="@dimen/C3dp">
+                android:padding="@dimen/C16dp">
 
                 <TextView
                     android:id="@+id/textView7"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:fontFamily="@font/alegreya_sans_sc"
                     android:gravity="center"
                     android:text="Exit"
-                    android:textColor="#FFFFFF"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textColor="#FFFFFF"/>
 
             </LinearLayout>
 
