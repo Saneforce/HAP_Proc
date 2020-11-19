@@ -79,7 +79,7 @@ public interface ApiInterface {
     Call<JsonArray> getDataArrayList(@Query("axn")String axn, @Query("Priod")int Priod, @Query("divisionCode")String divisionCode, @Query("sfCode")String Sf_code,@Query("rSF")String rSF,@Query("State_Code")String State_code,@Query("desig")String desig, @Field("data") String body);
 
 
-
+/*Those api done by ezhil*/
     @FormUrlEncoded
     @POST("db_activity.php?axn=get/view")
     Call<ResponseBody> getView(@Field("data") String userData);
@@ -95,9 +95,50 @@ public interface ApiInterface {
     @POST("db_activity.php?axn=save/view")
     Call<ResponseBody> saveView(@Field("data") String userData);
 
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=save/allowance")
+    Call<ResponseBody> saveAllowance(@Field("data") String userData);
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=update/allowance")
+    Call<ResponseBody> updateAllowance(@Field("data") String userData);
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=get/travelmode")
+    Call<ResponseBody> getTravelMode(@Field("data") String userData);
+
+    @Multipart
+    @POST("db_new_activity.php?axn=upload/img")
+    Call<ResponseBody> uploadimg(@PartMap() HashMap<String, RequestBody> values, @Part MultipartBody.Part file);
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=get/daexp")
+    Call<ResponseBody> getDailyAllowance(@Field("data") String userData);
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=save/daexp")
+    Call<ResponseBody> saveDailyAllowance(@Field("data") String userData);
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=get/allowance")
+    Call<ResponseBody> getAllowance(@Field("data") String userData);
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=get/taapproval")
+    Call<ResponseBody> getTAAproval(@Field("data") String userData);
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=save/taapprove")
+    Call<ResponseBody> saveTAApprove(@Field("data") String userData);
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=reject/taapprove")
+    Call<ResponseBody> rejectTAApprove(@Field("data") String userData);
 
 
-    /*LEAVE APPROVAL*/
+    /*Those api done by ezhil*/
+
+ /*LEAVE APPROVAL*/
 
     @GET("Db_Hap.php?")
     Call<List<Approval>> approval(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code, @Query("rSF") String rSf, @Query("State_Code") String State_code);

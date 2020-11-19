@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -93,6 +94,18 @@ public class Common_Class {
         }
     }
 
+    public static String GetDateOnly() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dpln = new SimpleDateFormat("dd-MM-yyyy");
+        String plantime = dpln.format(c.getTime());
+        return plantime;
+    }
+    public static String GetDay() {
+        Date dd=new Date();
+        SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE");
+
+        return simpleDateformat.format(dd);
+    }
 
     public boolean isNetworkAvailable(final Context context) {
         this.context = context;

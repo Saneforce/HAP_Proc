@@ -50,6 +50,9 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
     ImageView iv_nav;
     SharedPreferences share;
     SharedPreferences shareKey;
+    SharedPreferences UserDetails;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    TextView txt_name,txt_mail,txt_head_name;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +60,9 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
         apiService = ApiClient.getClient().create(ApiInterface.class);
         list_nav=findViewById(R.id.list_nav);
         iv_nav=findViewById(R.id.iv_nav);
+        txt_name=findViewById(R.id.txt_name);
+        txt_mail=findViewById(R.id.txt_mail);
+        txt_head_name=findViewById(R.id.txt_head_name);
         share=getSharedPreferences("existing",0);
         SharedPreferences.Editor edit=share.edit();
         edit.putString("exist","N");
@@ -67,6 +73,7 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
         edit1.putString("keys","[]");
         edit1.putString("pk","");
         edit1.commit();
+        UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         iv_nav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,6 +86,9 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                 }
             }
         });
+        txt_name.setText(UserDetails.getString("SfName",""));
+        txt_mail.setText(UserDetails.getString("email",""));
+        txt_head_name.setText(UserDetails.getString("SfName",""));
 
 
         callDynamicmenu();

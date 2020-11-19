@@ -27,6 +27,19 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
+        <activity android:name=".Activity.ApprovalViewActivity"></activity>
+        <activity android:name=".Activity.ViewTASummary"></activity>
+        <activity android:name=".Activity.TAClaimActivity"></activity>
+        <activity android:name=".Activity.TAApprovalActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name=".Activity.AllowanceActivity">
+        </activity>
         <activity android:name=".Activity_Hap.Block_Information"></activity>
         <activity android:name=".Activity_Hap.ImageCapture" />
         <activity android:name=".Activity_Hap.Checkin" />
@@ -91,11 +104,6 @@
             android:exported="false" />
 
         <activity android:name=".Activity_Hap.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".Activity.DesignActivity"></activity>
         <activity
@@ -104,6 +112,7 @@
         <activity
             android:name=".Activity.ProcurementDashboardActivity"
             android:screenOrientation="portrait">
+
 
 
         </activity>

@@ -103,11 +103,13 @@ public class ViewActivity extends AppCompatActivity {
     TextView tool_header;
     String btnShow="V";
     Button btn_save;
-    String sfCode="sfcode";
+    //String sfCode="sfcode";
     public static String key="",header="";
     SimpleDateFormat sdf;
     SimpleDateFormat sdf_or;
-
+    SharedPreferences UserDetails;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    String SF_code="";
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -167,7 +169,8 @@ public class ViewActivity extends AppCompatActivity {
             fab.setVisibility(View.VISIBLE);
         else
             fab.setVisibility(View.GONE);
-
+        UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SF_code=UserDetails.getString("Sfcode","");
         iv_dwnldmaster_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -235,93 +238,93 @@ public class ViewActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                if(validationOfField()){
                 SharedPreferences.Editor edit = shareKey.edit();
                 try {
-                    JSONArray jjj=new JSONArray(shareKey.getString("keys", ""));
-                    if (jjj.length()==0) {
+                    JSONArray jjj = new JSONArray(shareKey.getString("keys", ""));
+                    if (jjj.length() == 0) {
 
-                        JSONObject jkey1=new JSONObject();
-                        JSONArray jar=new JSONArray();
-                        JSONObject js=new JSONObject();
+                        JSONObject jkey1 = new JSONObject();
+                        JSONArray jar = new JSONArray();
+                        JSONObject js = new JSONObject();
                         js.put("PK_ID", ViewActivity.key);
                         js.put("FK_ID", "");
-                        JSONArray jAA=new JSONArray();
-                        for(int i=0;i<array_view.size();i++){
-                            JSONObject jk=new JSONObject();
-                            if(!array_view.get(i).getViewid().equalsIgnoreCase("19")) {
-                                String col=array_view.get(i).getFieldname().replace(" ","_");
+                        JSONArray jAA = new JSONArray();
+                        for (int i = 0; i < array_view.size(); i++) {
+                            JSONObject jk = new JSONObject();
+                            if (!array_view.get(i).getViewid().equalsIgnoreCase("19")) {
+                                String col = array_view.get(i).getFieldname().replace(" ", "_");
                                 jk.put("id", array_view.get(i).getViewid());
-                                if(array_view.get(i).getViewid().equalsIgnoreCase("8")) {
+                                if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
                                     Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
                                     jk.put("value", sdf.format(d));
-                                }
-                                else if(array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
-                                    ||  array_view.get(i).getViewid().equalsIgnoreCase("17")){
-                                    String pic="";
-                                    String[] picVal=array_view.get(i).getValue().split(",");
-                                    for(int k=0;k<picVal.length;k++){
-                                        Log.v("picVal_entry",picVal[k]);
-                                        getMulipart(picVal[k],0);
-                                        pic=pic+picVal[k].substring(picVal[k].lastIndexOf("/"));
+                                } else if (array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
+                                        || array_view.get(i).getViewid().equalsIgnoreCase("17")) {
+                                    String pic = "";
+                                    String[] picVal = array_view.get(i).getValue().split(",");
+                                    for (int k = 0; k < picVal.length; k++) {
+                                        Log.v("picVal_entry", picVal[k]);
+                                        getMulipart(picVal[k], 0);
+                                        pic = pic + picVal[k].substring(picVal[k].lastIndexOf("/"));
                                     }
                                     jk.put("value", pic);
-                                }
-                                else
-                                jk.put("value", array_view.get(i).getValue());
+                                } else
+                                    jk.put("value", array_view.get(i).getValue());
                                 jk.put("col", col);
                                 jAA.put(jk);
                             }
                         }
-                        js.put("ctrl",jAA);
+                        js.put("ctrl", jAA);
                         jkey1.put(ViewActivity.header, js);
                         jar.put(jkey1);
-                        Log.v("printing_shareing23",jar.toString());
+                        Log.v("printing_shareing23", jar.toString());
                         edit.putString("keys", jar.toString());
                         edit.putString("pk", ViewActivity.key);
                         edit.commit();
-                    }
-                    else{
-                        JSONObject jkey1=new JSONObject();
-                        JSONObject js=new JSONObject();
+                    } else {
+                        JSONObject jkey1 = new JSONObject();
+                        JSONObject js = new JSONObject();
                         js.put("PK_ID", ViewActivity.key);
-                        js.put("FK_ID", shareKey.getString("pk",""));
-                        JSONArray jAA=new JSONArray();
-                        for(int i=0;i<array_view.size();i++){
-                            JSONObject jk=new JSONObject();
-                            if(!array_view.get(i).getViewid().equalsIgnoreCase("19")) {
-                                String col=array_view.get(i).getFieldname().replace(" ","_");
+                        js.put("FK_ID", shareKey.getString("pk", ""));
+                        JSONArray jAA = new JSONArray();
+                        for (int i = 0; i < array_view.size(); i++) {
+                            JSONObject jk = new JSONObject();
+                            if (!array_view.get(i).getViewid().equalsIgnoreCase("19")) {
+                                String col = array_view.get(i).getFieldname().replace(" ", "_");
                                 jk.put("id", array_view.get(i).getViewid());
-                                if(array_view.get(i).getViewid().equalsIgnoreCase("8")) {
+                                if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
                                     Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
                                     jk.put("value", sdf.format(d));
-                                }
-                                else if(array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
-                                        ||  array_view.get(i).getViewid().equalsIgnoreCase("17")){
-                                    String pic="";
-                                    String[] picVal=array_view.get(i).getValue().split(",");
-                                    for(int k=0;k<picVal.length;k++){
-                                        Log.v("picVal_entry",picVal[k]);
-                                        getMulipart(picVal[k],0);
-                                        pic=pic+picVal[k].substring(picVal[k].lastIndexOf("/")+1)+",";
+                                } else if (array_view.get(i).getViewid().equalsIgnoreCase("15") || array_view.get(i).getViewid().equalsIgnoreCase("16")
+                                        || array_view.get(i).getViewid().equalsIgnoreCase("17")) {
+                                    String pic = "";
+                                    String[] picVal = array_view.get(i).getValue().split(",");
+                                    for (int k = 0; k < picVal.length; k++) {
+                                        Log.v("picVal_entry", picVal[k]);
+                                        getMulipart(picVal[k], 0);
+                                        pic = pic + picVal[k].substring(picVal[k].lastIndexOf("/") + 1) + ",";
                                     }
                                     jk.put("value", pic);
-                                }
-                                else
-                                jk.put("value", array_view.get(i).getValue());
+                                } else
+                                    jk.put("value", array_view.get(i).getValue());
                                 jk.put("col", col);
                                 jAA.put(jk);
                             }
                         }
-                        js.put("ctrl",jAA);
+                        js.put("ctrl", jAA);
                         jkey1.put(ViewActivity.header, js);
                         jjj.put(jkey1);
-                        Log.v("printing_shareing",jjj.toString());
+                        Log.v("printing_shareing", jjj.toString());
                         edit.putString("keys", jjj.toString());
                         edit.putString("pk", ViewActivity.key);
                         edit.commit();
                     }
                     saveDynamicList();
+
                 }catch (Exception e){}
+                }
+                else
+                    Toast.makeText(ViewActivity.this,"Please fill the mandatory fields",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -871,7 +874,7 @@ public class ViewActivity extends AppCompatActivity {
                                     else
                                         btn_save.setVisibility(View.GONE);
                                     progressDialog.dismiss();
-                                    key=sfCode+"_"+frm_id+"_"+System.currentTimeMillis();
+                                    key=SF_code+"_"+frm_id+"_"+System.currentTimeMillis();
 
                                   /*  if(TextUtils.isEmpty(shareKey.getString("key","")))
                                     {
@@ -1001,9 +1004,9 @@ public class ViewActivity extends AppCompatActivity {
         boolean val=true;
         for(int i=0;i<array_view.size();i++){
             ModelDynamicView   mm=array_view.get(i);
-           // if(mm.getMandatory().equalsIgnoreCase("0")&&(!mm.getViewid().equalsIgnoreCase("0")))
-            //{
-                if(mm.getViewid().equalsIgnoreCase("5")||mm.getViewid().equalsIgnoreCase("7")){
+            if(mm.getMandatory().equalsIgnoreCase("0")&&(!mm.getViewid().equalsIgnoreCase("22"))&&(!mm.getViewid().equalsIgnoreCase("23"))&&(!mm.getViewid().equalsIgnoreCase("19")))
+            {
+                if(mm.getViewid().equalsIgnoreCase("12")||mm.getViewid().equalsIgnoreCase("9")){
                     if(TextUtils.isEmpty(mm.getTvalue())||TextUtils.isEmpty(mm.getValue()))
                         return  false;
                 }
@@ -1012,7 +1015,7 @@ public class ViewActivity extends AppCompatActivity {
                     if(TextUtils.isEmpty(mm.getValue()))
                         return  false;
                 }
-           // }
+            }
         }
         return val;
     }
@@ -1070,7 +1073,7 @@ public class ViewActivity extends AppCompatActivity {
                                 btnShow=json.getString("target");
                                 tool_header.setText(json.getString("header"));
                             header=json.getString("header");
-                            key=sfCode+"_"+frm_id+"_"+System.currentTimeMillis();
+                            key=SF_code+"_"+frm_id+"_"+System.currentTimeMillis();
                                 if(Integer.parseInt(fab_value)>0) {
                                     fab.setVisibility(View.VISIBLE);
                                     value=Integer.parseInt(fab_value);
@@ -1184,4 +1187,6 @@ public class ViewActivity extends AppCompatActivity {
             }
         });
     }
+
+
 }

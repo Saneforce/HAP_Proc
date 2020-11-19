@@ -370,6 +370,7 @@ public class Login extends AppCompatActivity {
                           editor.putString("Divcode",div);
                           editor.putInt("CheckCount",type);
                           editor.putString("State_Code", Sf_type);
+                          editor.putString("email", "xxxxx@gmail.com");
                           editor.apply();
                           if(requestCode==RC_SIGN_IN || requestCode==0)
                               editor.putBoolean("Login",true);
