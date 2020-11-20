@@ -28,7 +28,7 @@
             android:id="@+id/profile_image"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:src="@drawable/profile_img"/>
+            android:src="@drawable/profile_img" />
     </LinearLayout>
 
 
@@ -111,9 +111,9 @@
         <Button
             android:id="@+id/sign_in_button"
             android:layout_width="match_parent"
-            android:layout_marginTop="20dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/button_green"
             android:text="Sign In"
@@ -137,7 +137,6 @@
             android:id="@+id/btnExit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:background="@drawable/button_amber"
             android:text="Exit"
             android:textAllCaps="false"

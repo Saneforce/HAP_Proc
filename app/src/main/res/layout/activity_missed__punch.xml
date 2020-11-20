@@ -94,7 +94,7 @@
                             android:fontFamily="@font/poppins_regular"
                             android:padding="@dimen/C5dp"
                             android:textColor="@color/grey_500"
-                            app:hintText="@string/leave_type" />
+                            app:hintText="@string/missed_punch" />
 
                     </LinearLayout>
 

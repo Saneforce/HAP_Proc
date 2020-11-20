@@ -1,13 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,37 +8,44 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.Status_Activity.View_All_Status_Activity;
 import com.hap.checkinproc.adapters.HomeRptRecyler;
-import com.hap.checkinproc.adapters.ShiftListItem;
 
-import java.util.Calendar;
 import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class  Dashboard_Two extends AppCompatActivity implements View.OnClickListener {
-    private static String Tag="HAP_Check-In";
+public class Dashboard_Two extends AppCompatActivity implements View.OnClickListener {
+    private static String Tag = "HAP_Check-In";
     SharedPreferences sharedPreferences;
     SharedPreferences UserDetails;
-    public static final String CheckInDetail = "CheckInDetail" ;
-    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String CheckInDetail = "CheckInDetail";
+    public static final String MyPREFERENCES = "MyPrefs";
 
     private RecyclerView recyclerView;
     private HomeRptRecyler mAdapter;
-    int cModMnth=1;
+    int cModMnth = 1;
+    Button viewAll;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +56,8 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         TextView txUserName = findViewById(R.id.txUserName);
-        String sUName=UserDetails.getString("SfName","");
-        txUserName.setText("HI! "+ sUName);
+        String sUName = UserDetails.getString("SfName", "");
+        txUserName.setText("HI! " + sUName);
 
         TextView txt = findViewById(R.id.MRQtxt);
         txt.setText("");
@@ -74,16 +73,16 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
         cardView5.setOnClickListener(this);
         StActivity.setOnClickListener(this);
 
-        Bundle params=getIntent().getExtras();
-        String InMode=params.getString("Mode");
+        Bundle params = getIntent().getExtras();
+        String InMode = params.getString("Mode");
 
-        if(InMode.equalsIgnoreCase("CIN")) {
+        if (InMode.equalsIgnoreCase("CIN")) {
 
             cardview3.setVisibility(View.VISIBLE);
             cardview4.setVisibility(View.VISIBLE);
             cardView5.setVisibility(View.VISIBLE);
             StActivity.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             cardview3.setVisibility(View.GONE);
             cardview4.setVisibility(View.GONE);
             cardView5.setVisibility(View.GONE);
@@ -92,66 +91,73 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
         getDyReports();
         getMnthReports(0);
         GetMissedPunch();
+
+        viewAll = findViewById(R.id.button3);
+        viewAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(Dashboard_Two.this, View_All_Status_Activity.class));
+            }
+        });
     }
 
     private void getMnthReports(int m) {
-        if(cModMnth==m) return;
-        String[] mns={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
-        Common_Class Dt=new Common_Class();
-        String sDt=Dt.GetDateTime(getApplicationContext(),"yyyy-MM-dd HH:mm:ss");
-        Date dt=Dt.getDate(sDt);
-        if (m==-1)
-        {
-            sDt=Dt.AddMonths(sDt,-1,"yyyy-MM-dd HH:mm:ss");
+        if (cModMnth == m) return;
+        String[] mns = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        Common_Class Dt = new Common_Class();
+        String sDt = Dt.GetDateTime(getApplicationContext(), "yyyy-MM-dd HH:mm:ss");
+        Date dt = Dt.getDate(sDt);
+        if (m == -1) {
+            sDt = Dt.AddMonths(sDt, -1, "yyyy-MM-dd HH:mm:ss");
         }
-        if(Dt.getDay(sDt)<23)
-        {
-            sDt=Dt.AddMonths(sDt,-1,"yyyy-MM-dd HH:mm:ss");
+        if (Dt.getDay(sDt) < 23) {
+            sDt = Dt.AddMonths(sDt, -1, "yyyy-MM-dd HH:mm:ss");
         }
-        int fmn=Dt.getMonth(sDt);
-        sDt=Dt.AddMonths(Dt.getYear(sDt)+"-"+Dt.getMonth(sDt)+"-22",1,"yyyy-MM-dd HH:mm:ss");
-        int tmn=Dt.getMonth(sDt);
-Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
+        int fmn = Dt.getMonth(sDt);
+        sDt = Dt.AddMonths(Dt.getYear(sDt) + "-" + Dt.getMonth(sDt) + "-22", 1, "yyyy-MM-dd HH:mm:ss");
+        int tmn = Dt.getMonth(sDt);
+        Log.d(Tag, sDt + "-" + String.valueOf(fmn) + "-" + String.valueOf(tmn));
         TextView txUserName = findViewById(R.id.txtMnth);
-        txUserName.setText("23,"+mns[fmn] +" - 22," +mns[tmn]);
+        txUserName.setText("23," + mns[fmn] + " - 22," + mns[tmn]);
 
         // appendDS = appendDS + "&divisionCode=" + userData.divisionCode + "&sfCode=" + sSF + "&rSF=" + userData.sfCode + "&State_Code=" + userData.State_Code;
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> rptMnCall = apiInterface.getDataArrayList("get/AttndMn",m,
+        Call<JsonArray> rptMnCall = apiInterface.getDataArrayList("get/AttndMn", m,
                 UserDetails.getString("Divcode", ""),
-                UserDetails.getString("Sfcode", ""),UserDetails.getString("Sfcode", ""), "", "", null);
+                UserDetails.getString("Sfcode", ""), UserDetails.getString("Sfcode", ""), "", "", null);
         rptMnCall.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                JsonArray res= response.body();
+                JsonArray res = response.body();
 
-                JsonArray dyRpt=new JsonArray();
-                for(int il=0;il<res.size();il++) {
+                JsonArray dyRpt = new JsonArray();
+                for (int il = 0; il < res.size(); il++) {
                     JsonObject Itm = res.get(il).getAsJsonObject();
                     JsonObject newItem = new JsonObject();
                     newItem.addProperty("name", Itm.get("Status").getAsString());
                     newItem.addProperty("value", Itm.get("StatusCnt").getAsString());
-                    newItem.addProperty("color", Itm.get("StusClr").getAsString().replace(" !important",""));
+                    newItem.addProperty("color", Itm.get("StusClr").getAsString().replace(" !important", ""));
                     dyRpt.add(newItem);
                 }
 
                 recyclerView = (RecyclerView) findViewById(R.id.Rv_MnRpt);
-                mAdapter = new HomeRptRecyler(dyRpt,Dashboard_Two.this);
+                mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this);
 
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(mAdapter);
-                Log.d(Tag,String.valueOf(response.body()));
+                Log.d(Tag, String.valueOf(response.body()));
             }
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
-                Log.d(Tag,String.valueOf(t));
+                Log.d(Tag, String.valueOf(t));
             }
         });
     }
-    private void getDyReports () {
+
+    private void getDyReports() {
         // appendDS = appendDS + "&divisionCode=" + userData.divisionCode + "&sfCode=" + sSF + "&rSF=" + userData.sfCode + "&State_Code=" + userData.State_Code;
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/AttnDySty",
@@ -161,58 +167,59 @@ Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 JsonArray res = response.body();
-                JsonObject fItm = res.get(0).getAsJsonObject();
-                TextView txDyDet = findViewById(R.id.lTDyTx);
-                txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br>" + fItm.get("AttDtNm").getAsString()));
-                JsonArray dyRpt = new JsonArray();
-                JsonObject newItem = new JsonObject();
-                newItem.addProperty("name", "Shift");
-                newItem.addProperty("value", fItm.get("SFT_Name").getAsString());
-                newItem.addProperty("color", "#333333");
-                dyRpt.add(newItem);
-                newItem = new JsonObject();
-                newItem.addProperty("name", "Status");
-                newItem.addProperty("value", fItm.get("DayStatus").getAsString());
-                newItem.addProperty("color", fItm.get("StaColor").getAsString());
-                dyRpt.add(newItem);
-                newItem = new JsonObject();
-                newItem.addProperty("name", "Check-In");
-                newItem.addProperty("value", fItm.get("AttTm").getAsString());
-                newItem.addProperty("color", "#333333");
-                dyRpt.add(newItem);
-                if (!fItm.get("ET").isJsonNull()) {
-                    newItem = new JsonObject();
-                    newItem.addProperty("name", "Last Check-Out");
-                    newItem.addProperty("value", fItm.get("ET").getAsString());
+                if(res.size()>0) {
+                    JsonObject fItm = res.get(0).getAsJsonObject();
+                    TextView txDyDet = findViewById(R.id.lTDyTx);
+                    txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br>" + fItm.get("AttDtNm").getAsString()));
+                    JsonArray dyRpt = new JsonArray();
+                    JsonObject newItem = new JsonObject();
+                    newItem.addProperty("name", "Shift");
+                    newItem.addProperty("value", fItm.get("SFT_Name").getAsString());
                     newItem.addProperty("color", "#333333");
                     dyRpt.add(newItem);
+                    newItem = new JsonObject();
+                    newItem.addProperty("name", "Status");
+                    newItem.addProperty("value", fItm.get("DayStatus").getAsString());
+                    newItem.addProperty("color", fItm.get("StaColor").getAsString());
+                    dyRpt.add(newItem);
+                    newItem = new JsonObject();
+                    newItem.addProperty("name", "Check-In");
+                    newItem.addProperty("value", fItm.get("AttTm").getAsString());
+                    newItem.addProperty("color", "#333333");
+                    dyRpt.add(newItem);
+                    if (!fItm.get("ET").isJsonNull()) {
+                        newItem = new JsonObject();
+                        newItem.addProperty("name", "Last Check-Out");
+                        newItem.addProperty("value", fItm.get("ET").getAsString());
+                        newItem.addProperty("color", "#333333");
+                        dyRpt.add(newItem);
+                    }
+                    newItem = new JsonObject();
+                    newItem.addProperty("name", "Geo In");
+                    newItem.addProperty("value", fItm.get("GeoIn").getAsString());
+                    newItem.addProperty("color", "#333333");
+                    dyRpt.add(newItem);
+                    newItem = new JsonObject();
+                    newItem.addProperty("name", "Geo Out");
+                    newItem.addProperty("value", fItm.get("GeoOut").getAsString());
+                    newItem.addProperty("color", "#333333");
+                    dyRpt.add(newItem);
+
+
+                    recyclerView = (RecyclerView) findViewById(R.id.Rv_DyRpt);
+                    mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this);
+
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                    recyclerView.setLayoutManager(mLayoutManager);
+                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+                    recyclerView.setAdapter(mAdapter);
                 }
-                newItem = new JsonObject();
-                newItem.addProperty("name", "Geo In");
-                newItem.addProperty("value", fItm.get("GeoIn").getAsString());
-                newItem.addProperty("color", "#333333");
-                dyRpt.add(newItem);
-                newItem = new JsonObject();
-                newItem.addProperty("name", "Geo Out");
-                newItem.addProperty("value", fItm.get("GeoOut").getAsString());
-                newItem.addProperty("color", "#333333");
-                dyRpt.add(newItem);
-
-
-                recyclerView = (RecyclerView) findViewById(R.id.Rv_DyRpt);
-                mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this);
-
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                recyclerView.setLayoutManager(mLayoutManager);
-                recyclerView.setItemAnimator(new DefaultItemAnimator());
-                recyclerView.setAdapter(mAdapter);
-
             }
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
 
-                Log.d(Tag,String.valueOf(t));
+                Log.d(Tag, String.valueOf(t));
             }
         });
         ImageView backView = findViewById(R.id.imag_back);
@@ -224,9 +231,8 @@ Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
         });
 
 
-
-
     }
+
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
@@ -235,29 +241,28 @@ Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
                 }
             });
 
-        private void GetMissedPunch () {
-           // appendDS = appendDS + "&divisionCode=" + userData.divisionCode + "&sfCode=" + sSF + "&rSF=" + userData.sfCode + "&State_Code=" + userData.State_Code;
-            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-            Call<JsonObject> modelCall = apiInterface.getDataList("CheckWeekofandmis",
-                    UserDetails.getString("Divcode",""),
-                    UserDetails.getString("Sfcode",""),"","",null);
-            modelCall.enqueue(new Callback<JsonObject>() {
-                @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    Log.d(Tag,String.valueOf(response.body()));
-                    JsonObject itm=response.body().getAsJsonObject();
-                    String mMessage="";
-                    try
-                    {
-                        mMessage=itm.get("Msg").getAsString();
-                        JsonArray MissedItems=itm.getAsJsonArray("GetMissed");
-                        if (MissedItems.size()>0){
-                            AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
-                                    .setTitle("HAP Check-In")
-                                    .setMessage(Html.fromHtml(mMessage))
-                                    .setPositiveButton("Missed Punch Request", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
+    private void GetMissedPunch() {
+        // appendDS = appendDS + "&divisionCode=" + userData.divisionCode + "&sfCode=" + sSF + "&rSF=" + userData.sfCode + "&State_Code=" + userData.State_Code;
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> modelCall = apiInterface.getDataList("CheckWeekofandmis",
+                UserDetails.getString("Divcode", ""),
+                UserDetails.getString("Sfcode", ""), "", "", null);
+        modelCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                Log.d(Tag, String.valueOf(response.body()));
+                JsonObject itm = response.body().getAsJsonObject();
+                String mMessage = "";
+                try {
+                    mMessage = itm.get("Msg").getAsString();
+                    JsonArray MissedItems = itm.getAsJsonArray("GetMissed");
+                    if (MissedItems.size() > 0) {
+                        AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
+                                .setTitle("HAP Check-In")
+                                .setMessage(Html.fromHtml(mMessage))
+                                .setPositiveButton("Missed Punch Request", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
                                            /* JsonObject mItem=MissedItems.get(0).getAsJsonObject();
                                             mItem.get("name").getAsString();
                                             mItem.get("name1").getAsString();
@@ -268,53 +273,53 @@ Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
                                             Dashboard_Two.this.startActivity(Dashboard);
 
                                             ((AppCompatActivity) Dashboard_Two.this).finish();*/
-                                        }
-                                    })
-                                    .show();
+                                    }
+                                })
+                                .show();
 
-                        }else{
-                            if (itm.getAsJsonArray("GetMissed").size()>0){
-                                if(itm.get("WKFlg").getAsInt()==1){
-                                    AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
-                                            .setTitle("HAP Check-In")
-                                            .setMessage(Html.fromHtml(mMessage))
-                                            .setPositiveButton("Weekoff", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                            /*Intent Dashboard=new Intent(Dashboard_Two.this, Dashboard_Two.class);
-                                            Dashboard_Two.this.startActivity(Dashboard);
-
-                                            ((AppCompatActivity) Dashboard_Two.this).finish();*/
-                                                }
-                                            }).setPositiveButton("Others", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
+                    } else {
+                        if (itm.getAsJsonArray("GetMissed").size() > 0) {
+                            if (itm.get("WKFlg").getAsInt() == 1) {
+                                AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
+                                        .setTitle("HAP Check-In")
+                                        .setMessage(Html.fromHtml(mMessage))
+                                        .setPositiveButton("Weekoff", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
 
                                             /*Intent Dashboard=new Intent(Dashboard_Two.this, Dashboard_Two.class);
                                             Dashboard_Two.this.startActivity(Dashboard);
 
                                             ((AppCompatActivity) Dashboard_Two.this).finish();*/
-                                                }
-                                            })
-                                            .show();
-                                }else{
-                                    AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
-                                            .setTitle("HAP Check-In")
-                                            .setMessage(Html.fromHtml(mMessage))
-                                            .setPositiveButton("Others", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                            }
+                                        }).setPositiveButton("Others", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
 
                                             /*Intent Dashboard=new Intent(Dashboard_Two.this, Dashboard_Two.class);
                                             Dashboard_Two.this.startActivity(Dashboard);
 
                                             ((AppCompatActivity) Dashboard_Two.this).finish();*/
-                                                }
-                                            })
-                                            .show();
-                                }
+                                            }
+                                        })
+                                        .show();
+                            } else {
+                                AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
+                                        .setTitle("HAP Check-In")
+                                        .setMessage(Html.fromHtml(mMessage))
+                                        .setPositiveButton("Others", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                            /*Intent Dashboard=new Intent(Dashboard_Two.this, Dashboard_Two.class);
+                                            Dashboard_Two.this.startActivity(Dashboard);
+
+                                            ((AppCompatActivity) Dashboard_Two.this).finish();*/
+                                            }
+                                        })
+                                        .show();
                             }
+                        }
                             /*
                             * if($scope.CheckyW.CheckWK.length>0){ // && $scope.CheckWk == 0){
             if($scope.CheckyW.==1){
@@ -335,15 +340,16 @@ Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
         }else{
             $state.go('fmcgmenu.home');
         }*/
-                        }
-                    }catch(Exception e){}
-
+                    }
+                } catch (Exception e) {
                 }
 
-                @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) {
+            }
 
-                }
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
            /* fmcgAPIservice.getDataList('POST', 'CheckWeekofandmis', [])
         .success(function(response) {
                 $scope.CheckyW=response;//[0]['Ycount'];
@@ -362,28 +368,27 @@ Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
             }).error(function() {
                 $ionicLoading.hide();
                 Toast('No Internet Connection.');*/
-            });
-        }
-
+        });
+    }
 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.cardview3:
-                Intent  i2 = new Intent(this, Leave_Dashboard.class);
+                Intent i2 = new Intent(this, Leave_Dashboard.class);
                 startActivity(i2);
                 break;
             case R.id.cardview4:
-                Intent  i3 = new Intent(this, Travel_Allowance.class);
+                Intent i3 = new Intent(this, Travel_Allowance.class);
                 startActivity(i3);
                 break;
             case R.id.cardview5:
-                Intent  i5 = new Intent(this, Reports.class);
+                Intent i5 = new Intent(this, Reports.class);
                 startActivity(i5);
                 break;
             case R.id.StActivity:
-                Intent  i6 = new Intent(this, ProcurementDashboardActivity.class);
+                Intent i6 = new Intent(this, ProcurementDashboardActivity.class);
                 startActivity(i6);
                 break;
             default:

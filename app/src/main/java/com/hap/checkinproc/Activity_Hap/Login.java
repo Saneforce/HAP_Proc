@@ -156,15 +156,15 @@ public class Login extends AppCompatActivity {
         signInButton.setOnClickListener(new  View.OnClickListener() {
             @Override
             public void onClick(View view) {
-               if(mLUService == null)
+              /* if(mLUService == null)
                    mLUService = new SANGPSTracker(getApplicationContext());
-              /* if(mTimerService == null)
+              *//* if(mTimerService == null)
                    mTimerService = new TimerService();
-               mTimerService.startTimerService();*/
+               mTimerService.startTimerService();*//*
 
                startService(new Intent(Login.this, TimerService.class));
                mLUService.requestLocationUpdates();
-               mProgress.show();
+               mProgress.show();*/
                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                startActivityForResult(signInIntent,RC_SIGN_IN);
             }

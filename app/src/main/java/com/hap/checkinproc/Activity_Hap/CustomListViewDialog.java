@@ -11,21 +11,16 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.SearchView;
-import android.widget.TextView;
+
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Activity.Util.UpdateUi;
 import com.hap.checkinproc.Common_Class.Common_Model;
-import com.hap.checkinproc.Model_Class.Distributor_Master;
-import com.hap.checkinproc.Model_Class.Route_Master;
-import com.hap.checkinproc.Model_Class.Work_Type_Model;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.DataAdapter;
 
 import java.util.List;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class CustomListViewDialog extends Dialog implements View.OnClickListener, UpdateUi {
     public CustomListViewDialog(Context context, int themeResId) {
@@ -35,6 +30,7 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
     public CustomListViewDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
+
     public Activity activity;
     public Dialog dialog;
     public Button yes, no;
@@ -56,8 +52,6 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
 
         this.da = new DataAdapter(mDataset, activity, type);
         setupLayout();
-
-
     }
 
     private void setupLayout() {
@@ -82,16 +76,14 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
         searchView.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
+
             }
 
-            public void beforeTextChanged(CharSequence s, int start,
-                                          int count, int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
-            public void onTextChanged(CharSequence s, int start,
-                                      int before, int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
                 da.getFilter().filter(s);
-
             }
         });
 
@@ -114,7 +106,7 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
 
     @Override
     public void update(int value, int pos) {
-        Log.e("CUSTOm_DIalog_Calling", "");
+        Log.e("Custom_Dialog_Calling", "");
         dismiss();
     }
 

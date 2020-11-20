@@ -53,6 +53,7 @@
         <activity android:name=".Status_Activity.Leave_Status_Activity" />
         <activity android:name=".Status_Activity.Permission_Status_Activity" />
         <activity android:name=".Status_Activity.Onduty_Status_Activity"></activity>
+        <activity android:name=".Status_Activity.View_All_Status_Activity"></activity>
 
 
         <activity android:name=".Activity_Hap.Tp_Mydayplan" />

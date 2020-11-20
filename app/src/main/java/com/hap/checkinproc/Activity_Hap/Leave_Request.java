@@ -3,10 +3,14 @@ package com.hap.checkinproc.Activity_Hap;
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,6 +20,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
@@ -24,13 +29,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.Leave_Type;
 import com.hap.checkinproc.Model_Class.RemainingLeave;
 import com.hap.checkinproc.R;
@@ -53,14 +61,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Leave_Request extends AppCompatActivity {
+public class Leave_Request extends AppCompatActivity implements View.OnClickListener, Master_Interface {
     DatePickerDialog picker;
     EditText eText;
     EditText etext2;
     EditText etext3;
     int daysBetween;
     Gson gson;
-    private SearchableSpinner leaveType, shiftType, halType;
     List<Leave_Type> leavetypelist;
     Type userType;
     Button Submit;
@@ -77,24 +84,28 @@ public class Leave_Request extends AppCompatActivity {
     String shiftTypeVal = "", halfTypeVal = "", halfChecked, getReason;
     Boolean oneTwo = false;
 
+    TextView shitType,leaveType,halfType;
+    CustomListViewDialog customDialog;
+    List<Common_Model> modelShiftType = new ArrayList<>();
+    List<Common_Model> modelleaveType = new ArrayList<>();
+    List<Common_Model> modelhalfdayType = new ArrayList<>();
+    Common_Model Model_Pojo;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave__request);
-       // getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-       // getWindow().setStatusBarColor(getResources().getColor(R.color.color_white));
         gson = new Gson();
-
-        //we need to show the list when clicking on the field
         Log.e("BOOLEAN_CHECK", String.valueOf(oneTwo));
-        leaveTypeMethod();
+
 
         eText = (EditText) findViewById(R.id.from_date);
         eText.setInputType(InputType.TYPE_NULL);
 
         Submit = (Button) findViewById(R.id.submitButton);
 
-        leaveType = (SearchableSpinner) findViewById(R.id.distributor_spinner);
+
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,14 +172,60 @@ public class Leave_Request extends AppCompatActivity {
         });
 
         leaveReaming();
-        addingShiftToSpinner();
-        shiftType = (SearchableSpinner) findViewById(R.id.shift_timing);
+        // addingShiftToSpinner();
+        shitType = findViewById(R.id.shift_timing);
+        shitType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        ShiftTypeAdapter(shitList);
+                modelShiftType.clear();
+                SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                String Scode = (shared.getString("Sfcode", "null"));
+                String Dcode = (shared.getString("Divcode", "null"));
+                spinnerValue("get/Shift_timing", Dcode, Scode);
 
+
+            }
+        });
+
+    /*adding spinner to leave type*/
+        leaveType = findViewById(R.id.leave_type);
+        leaveType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                modelleaveType.clear();
+                leaveTypeMethod();
+            }
+        });
+
+
+        /*adding spinner to half day*/
         addingHalfToSpinner();
-        halType = (SearchableSpinner) findViewById(R.id.type_half_day);
-        HalfTypeAdapter(halfTypeList);
+        halfType = findViewById(R.id.half_day_type);
+        halfType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                modelhalfdayType.clear();
+
+                for (int i = 0; i < halfTypeList.size(); i++) {
+                    String name = String.valueOf(halfTypeList.get(i));
+
+                    Model_Pojo = new Common_Model("id", name, "flag");
+                    Log.e("LeaveType_Request", "id");
+                    Log.e("LeaveType_Request", name);
+
+                    modelhalfdayType.add(Model_Pojo);
+                }
+
+                customDialog = new CustomListViewDialog(Leave_Request.this, modelhalfdayType, 6);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+            }
+        });
+
+
 
 
         Submit.setOnClickListener(new View.OnClickListener() {
@@ -213,73 +270,6 @@ public class Leave_Request extends AppCompatActivity {
     }
 
 
-    private void ShiftTypeAdapter(ArrayList<String> arrayList) {
-        // Creating ArrayAdapter using the string array and default spinner layout
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(Leave_Request.this, R.layout.spinner_search_item, R.id.text_item, arrayList);
-        // Specify layout to be used when list of choices appears
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-
-        String myString = "some value"; //the value you want the position for
-
-        ArrayAdapter myAdap = (ArrayAdapter) shiftType.getAdapter(); //cast to an ArrayAdapter
-
-        int spinnerPosition = myAdap.getPosition(myString);
-
-//set the default according to value
-        shiftType.setSelection(spinnerPosition);
-        // Applying the adapter to our spinner
-        shiftType.setAdapter(arrayAdapter);
-        shiftType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                shiftTypeVal = parent.getItemAtPosition(position).toString();
-                Log.e("HALF_TYPE", shiftTypeVal);
-
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-
-    private void HalfTypeAdapter(ArrayList<String> arrayList) {
-        // Creating ArrayAdapter using the string array and default spinner layout
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(Leave_Request.this, R.layout.spinner_search_item, R.id.text_item, arrayList);
-
-        // Specify layout to be used when list of choices appears
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Applying the adapter to our spinner
-        halType.setAdapter(arrayAdapter);
-        halType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                halfTypeVal = parent.getItemAtPosition(position).toString();
-                Log.e("HALF_TYPE", halfTypeVal);
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-    public void addingShiftToSpinner() {
-        shitList = new ArrayList<>();
-        shitList.add("08:30 to 10:30");
-        shitList.add("10:00 to 11:30");
-        shitList.add("10:00 to 11:30");
-        shitList.add("10:00 to 11:30");
-        shitList.add("10:00 to 11:30");
-        shitList.add("10:00 to 11:30");
-    }
 
     public void addingHalfToSpinner() {
         halfTypeList = new ArrayList<>();
@@ -347,31 +337,6 @@ public class Leave_Request extends AppCompatActivity {
         }
     }
 
-    private void DistributorTypeAdapter() {
-
-        ArrayList<String> worktype = new ArrayList<>();
-        for (int i = 0; i < leavetypelist.size(); i++) {
-            worktype.add(leavetypelist.get(i).getName());
-        }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(Leave_Request.this, R.layout.spinner_search_item, R.id.text_item, worktype);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        leaveType.setAdapter(arrayAdapter);
-
-        leaveType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                leavetype_id = "'" + String.valueOf(leavetypelist.get(position).getId()) + "'";
-
-                Log.e("LeaveTypeId", leavetype_id);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-    }
 
     /*Leave Type api call*/
 
@@ -388,13 +353,22 @@ public class Leave_Request extends AppCompatActivity {
                 userType = new TypeToken<ArrayList<Leave_Type>>() {
                 }.getType();
                 leavetypelist = gson.fromJson(new Gson().toJson(response.body()), userType);
-                if(leavetypelist!=null){
-                    DistributorTypeAdapter();
+                for (int i = 0; i < leavetypelist.size(); i++) {
+                    String id = String.valueOf(leavetypelist.get(i).getId());
+                    String name = leavetypelist.get(i).getName();
+                    Model_Pojo = new Common_Model(id, name, "flag");
+                    Log.e("LeaveType_Request", id);
+                    Log.e("LeaveType_Request", name);
+
+                    modelleaveType.add(Model_Pojo);
                 }
-                else{
-                    Log.d("LeaveTypeList", "Error");
-                    Toast.makeText(Leave_Request.this,"No Leave Types Found",Toast.LENGTH_LONG);
-                }
+
+                customDialog = new CustomListViewDialog(Leave_Request.this, modelleaveType, 5);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+
             }
 
             @Override
@@ -442,7 +416,6 @@ public class Leave_Request extends AppCompatActivity {
                 JsonObject jsonObjecta = response.body();
 
                 String Msg = String.valueOf(jsonObjecta.get("Msg"));
-                String Psql = String.valueOf(jsonObjecta.get("SPSQl"));
                 Msg = Msg.replace("\"", "");
                 Log.e("SDFDFD", jsonObjecta.get("success").toString());
                 Log.e("SDFDFDDFF", String.valueOf(Msg.length()));
@@ -535,8 +508,6 @@ public class Leave_Request extends AppCompatActivity {
 
     /*Leave reamining*/
     public void leaveReaming() {
-
-
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
         Call<Object> call = service.remainingLeave("2020", Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode);
         call.enqueue(new Callback<Object>() {
@@ -569,4 +540,72 @@ public class Leave_Request extends AppCompatActivity {
 
     }
 
+
+    private void spinnerValue(String a, String dc, String sc) {
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> shiftCall = apiInterface.shiftTime(a, dc, sc);
+        shiftCall.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+
+                String REPONSE = String.valueOf(response.body());
+
+
+                //Log.e("ShiftTime_Leave_Request", REPONSE);
+                try {
+                    JSONArray jsonArray = new JSONArray(REPONSE);
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        String id = jsonObject1.optString("id");
+                        String name = jsonObject1.optString("name");
+                        String flag = jsonObject1.optString("FWFlg");
+                        Model_Pojo = new Common_Model(id, name, flag);
+                        Log.e("ShiftTime_Leave_Request", id);
+                        Log.e("ShiftTime_Leave_Request", name);
+                        Log.e("ShiftTime_Leave_Request", flag);
+
+                        modelShiftType.add(Model_Pojo);
+                        Log.e("MODELSHIFTTYPE", String.valueOf(modelShiftType));
+
+
+                    }
+                    customDialog = new CustomListViewDialog(Leave_Request.this, modelShiftType, 4);
+                    Window window = customDialog.getWindow();
+                    window.setGravity(Gravity.CENTER);
+                    window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    customDialog.show();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
+        customDialog.dismiss();
+        if(type == 4) {
+            shitType.setText(myDataset.get(position).getName());
+        }else if(type == 5 ){
+            leaveType.setText(myDataset.get(position).getName());
+        }else if(type == 6){
+            halfType.setText(myDataset.get(position).getName());
+        }
+    }
 }

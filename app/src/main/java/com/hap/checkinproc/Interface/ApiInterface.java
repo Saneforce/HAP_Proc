@@ -181,6 +181,15 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_Hap.php?axn=dcr/save")
     Call<Object> Tb_Mydayplan(@QueryMap Map<String, String> params, @Field("data") String body);
+
+
+ @FormUrlEncoded
+ @POST("Db_Hap.php")
+ Call<Object> Getwe_Status(@Query("Priod") String Amod,  @Query("sfCode") String sFCode,
+                           @Query("axn") String axn,@Query("Status") String status,
+                           @Field("data") String data);
+
+
 }
 
 

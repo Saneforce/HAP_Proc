@@ -75,9 +75,9 @@
                                 android:background="@drawable/button_yellow"
                                 android:fontFamily="@font/alegreya_sans_sc"
                                 android:gravity="center"
+                                android:padding="@dimen/C10dp"
                                 android:text="Permission Request"
                                 android:textAllCaps="false"
-                                android:padding="@dimen/C10dp"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                                 android:textColor="#FFFFFF"
                                 android:textSize="18sp"
@@ -111,31 +111,6 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/shit_linear"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C10dp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:fontFamily="@font/alegreya_sans_sc"
-                        android:text="Shit Timing:"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold" />
-
-                    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                        android:id="@+id/shift_timing"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/C10dp"
-                        app:hintText="@string/shit_type" />
-
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -151,15 +126,18 @@
                         android:text="Shift Time:"
                         android:textColor="@android:color/black" />
 
-
-                    <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                        android:id="@+id/permission_spinner"
+                    <TextView
+                        android:id="@+id/shift_type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/C5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="@dimen/C10dp"
                         android:background="@drawable/textbox_bg"
                         android:elevation="@dimen/C5dp"
-                        android:padding="@dimen/C5dp" />
+                        android:gravity="center_vertical"
+                        android:hint="@string/shit_type"
+                        android:padding="@dimen/C10dp"
+                        android:textSize="13sp" />
                 </LinearLayout>
 
 
