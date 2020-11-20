@@ -4,16 +4,21 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -21,13 +26,16 @@ import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.AvalaibilityHours;
 import com.hap.checkinproc.R;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
@@ -46,7 +54,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Permission_Request extends AppCompatActivity {
+public class Permission_Request extends AppCompatActivity implements View.OnClickListener, Master_Interface {
 
     TimePickerDialog picker;
     EditText eText, eText2;
@@ -54,7 +62,6 @@ public class Permission_Request extends AppCompatActivity {
     DatePickerDialog picker1;
     EditText eText1, takenHrs, hrsTwo, hrsThree, reasonPermission;
     private ArrayList<String> shitList;
-    private SearchableSpinner permission_spinner;
     Date d1 = null;
     Date d2 = null;
     String clickedDate, fromTime = "", toTime = "", FTime, TTime, Clicked, TTTIme;
@@ -64,6 +71,12 @@ public class Permission_Request extends AppCompatActivity {
     Gson gson;
     String takenLeave = "";
     String ShiftName;
+
+
+    TextView shitType;
+    CustomListViewDialog customDialog;
+    List<Common_Model> modelShiftType = new ArrayList<>();
+    Common_Model Model_Pojo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,9 +173,25 @@ public class Permission_Request extends AppCompatActivity {
             }
         });
 
-        addingShiftToSpinner();
-        permission_spinner = (SearchableSpinner) findViewById(R.id.permission_spinner);
-        ShiftTypeAdapter(shitList);
+
+        // addingShiftToSpinner();
+        shitType = findViewById(R.id.shift_type);
+        shitType.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                modelShiftType.clear();
+                SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                String Scode = (shared.getString("Sfcode", "null"));
+                String Dcode = (shared.getString("Divcode", "null"));
+                spinnerValue("get/Shift_timing", Dcode, Scode);
+
+
+            }
+        });
+
+
+
 
         reasonPermission = (EditText) findViewById(R.id.reason_permission);
 
@@ -280,34 +309,6 @@ public class Permission_Request extends AppCompatActivity {
     }
 
 
-    private void ShiftTypeAdapter(ArrayList<String> arrayList) {
-        // Creating ArrayAdapter using the string array and default spinner layout
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(Permission_Request.this, R.layout.spinner_search_item, R.id.text_item, arrayList);
-        // Specify layout to be used when list of choices appears
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Applying the adapter to our spinner
-        permission_spinner.setAdapter(arrayAdapter);
-        permission_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                ShiftName = parent.getItemAtPosition(position).toString();
-
-                Log.e("HALF_TYPE", ShiftName);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-    public void addingShiftToSpinner() {
-        shitList = new ArrayList<>();
-        shitList.add("Shift Time");
-        shitList.add("08:30 to 10:30");
-        shitList.add("10:00 to 11:30");
-    }
 
 
 
@@ -490,6 +491,7 @@ public class Permission_Request extends AppCompatActivity {
         });
 
     }
+
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
@@ -501,6 +503,71 @@ public class Permission_Request extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+    }
+
+
+    private void spinnerValue(String a, String dc, String sc) {
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> shiftCall = apiInterface.shiftTime(a, dc, sc);
+        shiftCall.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+
+                String REPONSE = String.valueOf(response.body());
+
+
+                //Log.e("ShiftTime_Leave_Request", REPONSE);
+                try {
+                    JSONArray jsonArray = new JSONArray(REPONSE);
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        String id = jsonObject1.optString("id");
+                        String name = jsonObject1.optString("name");
+                        String flag = jsonObject1.optString("FWFlg");
+                        Model_Pojo = new Common_Model(id, name, flag);
+                        Log.e("ShiftTime_Leave_Request", id);
+                        Log.e("ShiftTime_Leave_Request", name);
+                        Log.e("ShiftTime_Leave_Request", flag);
+
+                        modelShiftType.add(Model_Pojo);
+                        Log.e("MODELSHIFTTYPE", String.valueOf(modelShiftType));
+
+
+                    }
+                    customDialog = new CustomListViewDialog(Permission_Request.this, modelShiftType, 7);
+                    Window window = customDialog.getWindow();
+                    window.setGravity(Gravity.CENTER);
+                    window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    customDialog.show();
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+
+            }
+        });
+
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
+        customDialog.dismiss();
+        if (type == 7) {
+            shitType.setText(myDataset.get(position).getName());
+        }
     }
 
 

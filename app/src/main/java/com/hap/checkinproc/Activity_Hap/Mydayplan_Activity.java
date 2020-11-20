@@ -2,6 +2,8 @@ package com.hap.checkinproc.Activity_Hap;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,6 +31,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -61,11 +64,11 @@ import static com.hap.checkinproc.Common_Class.Common_Class.addquote;
 
 public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface {
 
-    List<Common_Model> worktypelist =new ArrayList<>();
-    List<Common_Model> Route_Masterlist =new ArrayList<>();
-    List<Common_Model> FRoute_Master =new ArrayList<>();
-    LinearLayout worktypelayout, distributors_layout, route_layout;
-    List<Common_Model> distributor_master =new ArrayList<>();
+    List<Common_Model> worktypelist = new ArrayList<>();
+    List<Common_Model> Route_Masterlist = new ArrayList<>();
+    List<Common_Model> FRoute_Master = new ArrayList<>();
+    LinearLayout worktypelayout, distributors_layout, route_layout, joint_work_layout;
+    List<Common_Model> distributor_master = new ArrayList<>();
     private Main_Model.presenter presenter;
     Common_Model Model_Pojo;
     Gson gson;
@@ -80,6 +83,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     ImageView backarow;
     ProgressBar progressbar;
     TextView worktype_text, distributor_text, route_text;
+    RecyclerView jointwork_recycler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +95,12 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         edt_remarks = findViewById(R.id.edt_remarks);
         backarow = findViewById(R.id.backarow);
         gson = new Gson();
+        jointwork_recycler = findViewById(R.id.jointwork_recycler);
+        common_class = new Common_Class(this);
+        jointwork_recycler.setLayoutManager(new LinearLayoutManager(this));
         worktypelayout = findViewById(R.id.worktypelayout);
+
+        joint_work_layout = findViewById(R.id.joint_work_lt);
         distributors_layout = findViewById(R.id.distributors_layout);
         route_layout = findViewById(R.id.route_layout);
         submitbutton = findViewById(R.id.mydaysubmitbutton);
@@ -105,6 +114,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         distributors_layout.setOnClickListener(this);
         route_layout.setOnClickListener(this);
         submitbutton.setOnClickListener(this);
+        joint_work_layout.setOnClickListener(this);
         common_class.ProgressdialogShow(1, "Day plan");
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
@@ -122,11 +132,11 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
         }
 
-
+        FRoute_Master.clear();
         for (int i = 0; i < Route_Masterlist.size(); i++) {
-            if (Route_Masterlist.get(i).getId().contains(id)) {
+            if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
+                Log.e("Route_Masterlist", String.valueOf(id) + "STOCKIST" + Route_Masterlist.get(i).getFlag());
                 FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
-
             }
 
         }
@@ -153,20 +163,16 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     @Override
     public void setDataToRouteObject(Object noticeArrayList, int position) {
         Log.e("Calling Position", String.valueOf(position));
-
+        // Toast.makeText(this, "Position" + position, Toast.LENGTH_SHORT).show();
         Log.e("ROUTE_MASTER_Object", String.valueOf(noticeArrayList));
         Log.e("TAG", "response Tbmydayplan: " + new Gson().toJson(noticeArrayList));
         if (position == 0) {
-
             GetJsonData(new Gson().toJson(noticeArrayList), "0");
         } else if (position == 1) {
-
             GetJsonData(new Gson().toJson(noticeArrayList), "1");
         } else {
-
             GetJsonData(new Gson().toJson(noticeArrayList), "2");
             common_class.ProgressdialogShow(2, "Day plan");
-
             Get_MydayPlan();
         }
 
@@ -190,6 +196,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 common_class.CommonIntentwithFinish(Dashboard.class);
                 break;
             case R.id.worktypelayout:
+
                 customDialog = new CustomListViewDialog(Mydayplan_Activity.this, worktypelist, 1);
                 Window window = customDialog.getWindow();
                 window.setGravity(Gravity.CENTER);
@@ -205,6 +212,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
 
                 break;
             case R.id.route_layout:
+                Log.e("ROUTE_FILTER", String.valueOf(FRoute_Master.size()));
                 customDialog = new CustomListViewDialog(Mydayplan_Activity.this, FRoute_Master, 3);
                 Window windowww = customDialog.getWindow();
                 windowww.setGravity(Gravity.CENTER);
@@ -212,6 +220,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 customDialog.show();
 
                 break;
+
+
 
         }
     }
@@ -276,14 +286,14 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     JSONArray jsoncc = jsonObject.getJSONArray("GettodayResult");
                     Log.e("LENGTH", String.valueOf(jsoncc.length()));
                     if (jsoncc.length() > 0) {
-
-                        if (String.valueOf(jsoncc.getJSONObject(0).get("worktype_name")).equals("Meeting")) {
+                        if (String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag")).equals("Meeting")) {
                             edt_remarks.setText(String.valueOf(jsoncc.getJSONObject(0).get("remarks")));
                             worktype_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("worktype_name")));
                             distributors_layout.setVisibility(View.GONE);
                             route_layout.setVisibility(View.GONE);
-                            Fieldworkflag = "M";
+                            Fieldworkflag = String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag"));
                         } else {
+                            edt_remarks.setText(String.valueOf(jsoncc.getJSONObject(0).get("remarks")));
                             routename = String.valueOf(jsoncc.getJSONObject(0).get("RouteName"));
                             route_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("RouteName")));
                             routeid = String.valueOf(jsoncc.getJSONObject(0).get("RouteCode"));
@@ -292,7 +302,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                             worktype_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("worktype_name")));
                             loadroute(String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Code")));
                             distributor_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Name")));
-                            Fieldworkflag = "F";
+                            Fieldworkflag = String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag"));
                         }
                     } else {
                         Toast.makeText(Mydayplan_Activity.this, "Your Not done Tour Plan", Toast.LENGTH_SHORT).show();
@@ -315,17 +325,17 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     public boolean vali() {
         if (worktype_text.getText().toString() == null || worktype_text.getText().toString().isEmpty() || worktype_text.getText().toString().equalsIgnoreCase("")) {
             Toast.makeText(this, "Select The Worktype", Toast.LENGTH_SHORT).show();
-
+            //worktype_text.setError("Select The Worktype");
             return false;
         }
         if (Fieldworkflag.equals("F") && (distributor_text.getText().toString() == null || distributor_text.getText().toString().isEmpty() || distributor_text.getText().toString().equalsIgnoreCase(""))) {
             Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
-
+            //distributor_text.setError("Select The Distributor");
             return false;
         }
         if (Fieldworkflag.equals("F") && (route_text.getText().toString() == null || route_text.getText().toString().isEmpty() || route_text.getText().toString().equalsIgnoreCase(""))) {
             Toast.makeText(this, "Select The Route", Toast.LENGTH_SHORT).show();
-
+            //route_text.setError("Select The Route");
 
             return false;
         }
@@ -377,7 +387,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     Log.e("RESPONSE_FROM_SERVER", response.body().toString());
                     progressbar.setVisibility(View.GONE);
                     if (response.code() == 200 || response.code() == 201) {
-                        common_class.CommonIntentwithFinish(Dashboard.class);
+                        common_class.CommonIntentwithFinish(AllowanceActivity.class);
                         Toast.makeText(Mydayplan_Activity.this, "Day Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
                     }
 
@@ -414,6 +424,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     public void onBackPressed() {
 
     }
+
     private void GetJsonData(String jsonResponse, String type) {
 
         try {
@@ -421,13 +432,14 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                String id = jsonObject1.optString("id");
+                String id = String.valueOf(jsonObject1.optInt("id"));
                 String name = jsonObject1.optString("name");
                 String flag = jsonObject1.optString("FWFlg");
                 Model_Pojo = new Common_Model(id, name, flag);
                 if (type.equals("0")) {
                     worktypelist.add(Model_Pojo);
                 } else if (type.equals("1")) {
+                    Log.e("STOCKIST_ID", id);
                     distributor_master.add(Model_Pojo);
                 } else {
                     Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
@@ -438,7 +450,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
 
             }
 
-
+            //spinner.setSelection(adapter.getPosition("select worktype"));
+//            parseJsonData_cluster(clustspin_list);
         } catch (JSONException e) {
             e.printStackTrace();
         }

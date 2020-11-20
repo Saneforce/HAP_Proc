@@ -373,6 +373,7 @@
             android:id="@+id/btn_ta"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
+            android:visibility="gone"
             />
 
     </RelativeLayout>

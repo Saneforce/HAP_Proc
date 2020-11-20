@@ -1,3 +1,4 @@
+
 package com.hap.checkinproc.Activity_Hap;
 
 import androidx.activity.OnBackPressedDispatcher;
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,6 +29,7 @@ import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.Status_Activity.View_All_Status_Activity;
 import com.hap.checkinproc.adapters.HomeRptRecyler;
 import com.hap.checkinproc.adapters.ShiftListItem;
 
@@ -47,6 +50,10 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
     private RecyclerView recyclerView;
     private HomeRptRecyler mAdapter;
     int cModMnth=1;
+    Button viewButton;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,30 +75,36 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
         CardView cardview4 = findViewById(R.id.cardview4);
         CardView cardView5 = findViewById(R.id.cardview5);
         CardView StActivity = findViewById(R.id.StActivity);
-
+        CardView btnCheckout = findViewById(R.id.btnCheckout);
         cardview3.setOnClickListener(this);
         cardview4.setOnClickListener(this);
         cardView5.setOnClickListener(this);
         StActivity.setOnClickListener(this);
+        btnCheckout.setOnClickListener(this);
 
         Bundle params=getIntent().getExtras();
         String InMode=params.getString("Mode");
 
         if(InMode.equalsIgnoreCase("CIN")) {
-
             cardview3.setVisibility(View.VISIBLE);
             cardview4.setVisibility(View.VISIBLE);
             cardView5.setVisibility(View.VISIBLE);
             StActivity.setVisibility(View.VISIBLE);
+            btnCheckout.setVisibility(View.VISIBLE);
         }else{
             cardview3.setVisibility(View.GONE);
             cardview4.setVisibility(View.GONE);
             cardView5.setVisibility(View.GONE);
             StActivity.setVisibility(View.GONE);
+            btnCheckout.setVisibility(View.GONE);
         }
         getDyReports();
         getMnthReports(0);
         GetMissedPunch();
+
+
+        viewButton = findViewById(R.id.button3);
+        viewButton.setOnClickListener(this);
     }
 
     private void getMnthReports(int m) {
@@ -111,7 +124,7 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
         int fmn=Dt.getMonth(sDt);
         sDt=Dt.AddMonths(Dt.getYear(sDt)+"-"+Dt.getMonth(sDt)+"-22",1,"yyyy-MM-dd HH:mm:ss");
         int tmn=Dt.getMonth(sDt);
-Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
+        Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
         TextView txUserName = findViewById(R.id.txtMnth);
         txUserName.setText("23,"+mns[fmn] +" - 22," +mns[tmn]);
 
@@ -161,6 +174,10 @@ Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 JsonArray res = response.body();
+                if(res.size()<1){
+                    Toast.makeText(getApplicationContext(),"No Records Today", Toast.LENGTH_LONG).show();
+                    return;
+                }
                 JsonObject fItm = res.get(0).getAsJsonObject();
                 TextView txDyDet = findViewById(R.id.lTDyTx);
                 txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br>" + fItm.get("AttDtNm").getAsString()));
@@ -258,16 +275,16 @@ Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
                                     .setPositiveButton("Missed Punch Request", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialogInterface, int i) {
-                                           /* JsonObject mItem=MissedItems.get(0).getAsJsonObject();
-                                            mItem.get("name").getAsString();
-                                            mItem.get("name1").getAsString();
-                                            mItem.get("CInTm").getAsString();
-                                            mItem.get("COutTm").getAsString();
-*/
-                                            /*Intent Dashboard=new Intent(Dashboard_Two.this, Dashboard_Two.class);
-                                            Dashboard_Two.this.startActivity(Dashboard);
+                                            JsonObject mItem=MissedItems.get(0).getAsJsonObject();
+                                            Intent mIntent=new Intent(Dashboard_Two.this, Missed_Punch.class);
+                                            mIntent.putExtra("EDt",mItem.get("name").getAsString());
+                                            mIntent.putExtra("Shift",mItem.get("name1").getAsString());
+                                            mIntent.putExtra("CInTm",mItem.get("CInTm").getAsString());
+                                            mIntent.putExtra("COutTm",mItem.get("COutTm").getAsString());
 
-                                            ((AppCompatActivity) Dashboard_Two.this).finish();*/
+                                            Dashboard_Two.this.startActivity(mIntent);
+
+                                            ((AppCompatActivity) Dashboard_Two.this).finish();
                                         }
                                     })
                                     .show();
@@ -369,27 +386,56 @@ Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
 
     @Override
     public void onClick(View v) {
+        Intent  intent=null;
         switch (v.getId()){
             case R.id.cardview3:
-                Intent  i2 = new Intent(this, Leave_Dashboard.class);
-                startActivity(i2);
+                intent = new Intent(this, Leave_Dashboard.class);
                 break;
             case R.id.cardview4:
-                Intent  i3 = new Intent(this, Travel_Allowance.class);
-                startActivity(i3);
+                intent = new Intent(this, Travel_Allowance.class);
                 break;
             case R.id.cardview5:
-                Intent  i5 = new Intent(this, Reports.class);
-                startActivity(i5);
+                intent = new Intent(this, Reports.class);
                 break;
             case R.id.StActivity:
-                Intent  i6 = new Intent(this, ProcurementDashboardActivity.class);
-                startActivity(i6);
+                intent = new Intent(this, ProcurementDashboardActivity.class);
                 break;
+            case R.id.button3:
+                intent = new Intent(this, View_All_Status_Activity.class);
+                break;
+            case R.id.btnCheckout:
+                String mMessage="Do you want to Checkout?";
+                AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
+                        .setTitle("HAP Check-In")
+                        .setMessage(Html.fromHtml(mMessage))
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent takePhoto=new Intent(Dashboard_Two.this, ImageCapture.class);
+                                takePhoto.putExtra("Mode","COUT");
+                                startActivity(takePhoto);
+                                           /* JsonObject mItem=MissedItems.get(0).getAsJsonObject();
+                                            mItem.get("name").getAsString();
+                                            mItem.get("name1").getAsString();
+                                            mItem.get("CInTm").getAsString();
+                                            mItem.get("COutTm").getAsString();
+*/
+                                            /*Intent Dashboard=new Intent(Dashboard_Two.this, Dashboard_Two.class);
+                                            Dashboard_Two.this.startActivity(Dashboard);
+
+                                            ((AppCompatActivity) Dashboard_Two.this).finish();*/
+                            }
+                        })
+                        .show();
+                break;
+
             default:
                 break;
         }
-    }
+            if(intent!=null){
+                startActivity(intent);
+            }
+        }
 
 }
 

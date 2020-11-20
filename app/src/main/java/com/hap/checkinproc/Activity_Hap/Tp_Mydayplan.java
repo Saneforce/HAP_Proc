@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -61,7 +62,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     Spinner worktypespinner, worktypedistributor, worktyperoute;
     List<Common_Model> worktypelist = new ArrayList<>();
     List<Common_Model> Route_Masterlist = new ArrayList<>();
-
+    ;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     LinearLayout worktypelayout, distributors_layout, route_layout;
     List<Common_Model> distributor_master = new ArrayList<>();
@@ -71,7 +72,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     EditText edt_remarks;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    String worktype_id, worktypename, distributorname, distributorid, routename, routeid, Fieldworkflag = "";
+    String worktype_id, worktypename, distributorid, routename, routeid, Fieldworkflag = "";
     private TextClock tClock;
     Button submitbutton;
     CustomListViewDialog customDialog;
@@ -95,6 +96,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         gson = new Gson();
         Log.e("TOuR_PLAN_DATE", common_class.getintentValues("TourDate"));
         tourdate.setText(common_class.getintentValues("TourDate"));
+        Get_MydayPlan(common_class.getintentValues("TourDate"));
         route_text = findViewById(R.id.route_text);
         worktypelayout = findViewById(R.id.worktypelayout);
         //worktyperoute = findViewById(R.id.worktyperoute);
@@ -141,13 +143,21 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
         Log.e("ROUTE_MASTER_Object", String.valueOf(noticeArrayList));
         Log.e("TAG", "response Tbmydayplan: " + new Gson().toJson(noticeArrayList));
+
+
         if (position == 0) {
             Log.e("SharedprefrenceVALUES", new Gson().toJson(noticeArrayList));
             GetJsonData(new Gson().toJson(noticeArrayList), "0");
+
+
         } else if (position == 1) {
+
             GetJsonData(new Gson().toJson(noticeArrayList), "1");
+
         } else {
             GetJsonData(new Gson().toJson(noticeArrayList), "2");
+
+
         }
 
     }
@@ -157,10 +167,11 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         if (common_class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
         }
+
+        FRoute_Master.clear();
         for (int i = 0; i < Route_Masterlist.size(); i++) {
-            Log.e("Stockist_Id", Route_Masterlist.get(i).getFlag());
-            if (Route_Masterlist.get(i).getFlag().contains(id)) {
-                Log.e("Froutr", Route_Masterlist.get(i).getName());
+            if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
+                Log.e("Route_Masterlist", String.valueOf(id) + "STOCKIST" + Route_Masterlist.get(i).getFlag());
                 FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
             }
 
@@ -168,6 +179,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
 
     }
+
 
     @Override
     public void onResponseFailure(Throwable throwable) {
@@ -195,7 +207,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             route_text.setText("");
             distributor_text.setText(myDataset.get(position).getName());
             distributorid = String.valueOf(myDataset.get(position).getId());
-            Log.e("StockistID",myDataset.get(position).getId());
+            Log.e("StockistID", myDataset.get(position).getId());
             loadroute(myDataset.get(position).getId());
         } else {
             route_text.setText(myDataset.get(position).getName());
@@ -225,13 +237,14 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                         jsonobj.put("RouteName", addquote(routename));
                         jsonobj.put("Tour_Date", addquote(tourdate.getText().toString()));
                         jsonobj.put("Worked_with_Code", addquote(distributorid));
-                        jsonobj.put("Worked_with_Name", addquote(distributorname));
+                        jsonobj.put("Worked_with_Name", addquote(distributor_text.getText().toString()));
                         jsonobj.put("Multiretailername", "''");
                         jsonobj.put("MultiretailerCode", "''");
                         jsonobj.put("worked_with", "''");
                         jsonobj.put("jointWorkCode", "''");
                         jsonobj.put("HQ_Code", "''");
                         jsonobj.put("HQ_Name", "''");
+                        jsonobj.put("Flag", addquote(Fieldworkflag));
                         jsonarrplan.put("Tour_Plan", jsonobj);
                         jsonarr.put(jsonarrplan);
                         Log.d("Mydayplan_Object", jsonarr.toString());
@@ -268,7 +281,9 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                     }
                 }
                 break;
-
+           /* case R.id.backarow:
+                common_class.CommonIntentwithFinish(Tp_Month_Select.class);
+                break;*/
             case R.id.worktypelayout:
                 customDialog = new CustomListViewDialog(Tp_Mydayplan.this, worktypelist, 1);
                 Window window = customDialog.getWindow();
@@ -334,7 +349,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                String id = jsonObject1.optString("id");
+                String id = String.valueOf(jsonObject1.optInt("id"));
                 String name = jsonObject1.optString("name");
                 String flag = jsonObject1.optString("FWFlg");
                 Model_Pojo = new Common_Model(id, name, flag);
@@ -352,9 +367,73 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
             }
 
-
+            //spinner.setSelection(adapter.getPosition("select worktype"));
+//            parseJsonData_cluster(clustspin_list);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void Get_MydayPlan(String tourDate) {
+
+        Map<String, String> QueryString = new HashMap<>();
+        QueryString.put("axn", "Get/Tp_dayplan");
+        QueryString.put("Sf_code", Shared_Common_Pref.Sf_Code);
+        QueryString.put("Date", tourDate);
+        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+        QueryString.put("desig", "MGR");
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        JSONObject sp = new JSONObject();
+        jsonArray.put(jsonObject);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, jsonArray.toString());
+        Log.e("Log_TpQuerySTring", QueryString.toString());
+        Log.e("Log_Tp_SELECT", jsonArray.toString());
+
+        mCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                // locationList=response.body();
+
+                try {
+                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    Log.e("GettodayResult", "response Tp_View: " + jsonObject.getJSONArray("GettodayResult"));
+                    JSONArray jsoncc = jsonObject.getJSONArray("GettodayResult");
+                    Log.e("LENGTH", String.valueOf(jsoncc.length()));
+                    if (jsoncc.length() > 0) {
+                        if (String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag")).equals("M")) {
+                            edt_remarks.setText(String.valueOf(jsoncc.getJSONObject(0).get("remarks")));
+                            worktype_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("worktype_name")));
+                            distributors_layout.setVisibility(View.GONE);
+                            route_layout.setVisibility(View.GONE);
+                            Fieldworkflag = String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag"));
+                        } else {
+                            edt_remarks.setText(String.valueOf(jsoncc.getJSONObject(0).get("remarks")));
+                            routename = String.valueOf(jsoncc.getJSONObject(0).get("RouteName"));
+                            route_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("RouteName")));
+                            routeid = String.valueOf(jsoncc.getJSONObject(0).get("RouteCode"));
+                            distributorid = String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Code"));
+                            worktype_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("worktype_name")));
+                            loadroute(String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Code")));
+                            distributor_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Name")));
+                            Fieldworkflag = String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag"));
+                        }
+                    } else {
+
+
+                    }
+                    common_class.ProgressdialogShow(2, "Tour plan");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                common_class.ProgressdialogShow(2, "Tour plan");
+            }
+        });
     }
 }

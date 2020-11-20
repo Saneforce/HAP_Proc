@@ -91,6 +91,8 @@ public class ImageCapture extends AppCompatActivity implements
     SharedPreferences UserDetails;
     Common_Class DT= new Common_Class();
 
+    String mMode;
+
     public static final String CheckInDetail = "CheckInDetail" ;
     public static final String MyPREFERENCES = "MyPrefs" ;
     @Override
@@ -103,24 +105,29 @@ public class ImageCapture extends AppCompatActivity implements
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         Bundle params=getIntent().getExtras();
-        String SftId=params.getString("ShiftId");
-        if(!(SftId.isEmpty() || SftId.equalsIgnoreCase(""))) {
             try {
-                CheckInInf.put("Mode", params.getString("Mode"));
+                mMode=params.getString("Mode");
+                CheckInInf.put("Mode", mMode);
                 CheckInInf.put("Divcode", UserDetails.getString("Divcode",""));
                 CheckInInf.put("sfCode",UserDetails.getString("Sfcode",""));
-                CheckInInf.put("Shift_Selected_Id", SftId);
-                CheckInInf.put("Shift_Name", params.getString("ShiftName"));
-                CheckInInf.put("ShiftStart", params.getString("ShiftStart"));
-                CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
-                CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
-                CheckInInf.put("App_Version", Common_Class.Version_Name);
-                CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
-                CheckInInf.put("WrkType", "0");
-                CheckInInf.put("CheckDutyFlag", "0");
-                CheckInInf.put("PlcID", "");
-                CheckInInf.put("PlcNm", "");
-                CheckInInf.put("vstRmks", "");
+
+                String SftId=params.getString("ShiftId");
+                if (mMode.equalsIgnoreCase("CIN")) {
+                    if(!(SftId.isEmpty() || SftId.equalsIgnoreCase(""))) {
+                        CheckInInf.put("Shift_Selected_Id", SftId);
+                        CheckInInf.put("Shift_Name", params.getString("ShiftName"));
+                        CheckInInf.put("ShiftStart", params.getString("ShiftStart"));
+                        CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
+                        CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
+                        CheckInInf.put("App_Version", Common_Class.Version_Name);
+                        CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
+                        CheckInInf.put("WrkType", "0");
+                        CheckInInf.put("CheckDutyFlag", "0");
+                        CheckInInf.put("PlcID", "");
+                        CheckInInf.put("PlcNm", "");
+                        CheckInInf.put("vstRmks", "");
+                    }
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -133,7 +140,6 @@ public class ImageCapture extends AppCompatActivity implements
             else{
                 StartSelfiCamera();
             }
-        }
 
 
 
@@ -325,67 +331,119 @@ public class ImageCapture extends AppCompatActivity implements
            // LocationFinder locationFinder=new LocationFinder(this);
 
             Location location= Common_Class.location;//locationFinder.getLocation();
-            String CTime=DT.GetDateTime(getApplicationContext(),"yyyy-MM-dd HH:mm:ss");
+            String CTime=DT.GetDateTime(getApplicationContext(),"HH:mm:ss");
+            String CDate=DT.GetDateTime(getApplicationContext(),"yyyy-MM-dd");
 
-            CheckInInf.put("eDate", CTime);
-            CheckInInf.put("eTime", DT.GetDateTime(getApplicationContext(),"HH:mm:ss"));
+            CheckInInf.put("eDate", CDate+" "+CTime);
+            CheckInInf.put("eTime", CTime);
             CheckInInf.put("lat", location.getLatitude());
             CheckInInf.put("long", location.getLongitude());
             CheckInInf.put("iimgSrc", imagePath);
             CheckInInf.put("slfy", imageFileName);
+            CheckInInf.put("Rmks", "");
+            if(mMode.equalsIgnoreCase("CIN")) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString("Shift_Selected_Id", CheckInInf.getString("Shift_Selected_Id"));
+                editor.putString("Shift_Name", CheckInInf.getString("Shift_Name"));
+                editor.putString("ShiftStart", CheckInInf.getString("ShiftStart"));
+                editor.putString("ShiftEnd", CheckInInf.getString("ShiftEnd"));
+                editor.putString("ShiftCutOff", CheckInInf.getString("ShiftCutOff"));
+                if(sharedPreferences.getString("FTime","").equalsIgnoreCase(""))
+                    editor.putString("FTime", CTime);
+                editor.putString("Logintime", CTime);
+                editor.putBoolean("CheckIn", true);
+                editor.apply();
 
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("Shift_Selected_Id",CheckInInf.getString("Shift_Selected_Id"));
-            editor.putString("Shift_Name",CheckInInf.getString("Shift_Name"));
-            editor.putString("ShiftStart",CheckInInf.getString("ShiftStart"));
-            editor.putString("ShiftEnd",CheckInInf.getString("ShiftEnd"));
-            editor.putString("ShiftCutOff",CheckInInf.getString("ShiftCutOff"));
-            editor.putString("Logintime",CTime);
-            editor.putBoolean("CheckIn",true);
-            editor.apply();
+                JSONArray jsonarray = new JSONArray();
+                JSONObject paramObject = new JSONObject();
 
-            JSONArray jsonarray=new JSONArray();
-            JSONObject paramObject = new JSONObject();
+                paramObject.put("TP_Attendance", CheckInInf);
+                jsonarray.put(paramObject);
+                ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                Call<JsonObject> modelCall = apiInterface.JsonSave("dcr/save",
+                        UserDetails.getString("Divcode", ""),
+                        UserDetails.getString("Sfcode", ""), "", "", jsonarray.toString());
+                modelCall.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
-            paramObject.put("TP_Attendance",CheckInInf);
-            jsonarray.put(paramObject);
-            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-            Call<JsonObject> modelCall = apiInterface.JsonSave("dcr/save",
-                    UserDetails.getString("Divcode",""),
-                    UserDetails.getString("Sfcode",""),"","",jsonarray.toString());
-            modelCall.enqueue(new Callback<JsonObject>() {
-                @Override
-                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        if (response.isSuccessful()) {
+                            JsonObject itm = response.body().getAsJsonObject();
+                            String mMessage = "Your Check-In Submitted Successfully";
+                            try {
+                                mMessage = itm.get("Msg").getAsString();
+                            } catch (Exception e) {
+                            }
 
-                    if (response.isSuccessful()) {
-                        JsonObject itm=response.body().getAsJsonObject();
-                        String mMessage="Your Check-In Submitted Successfully";
-                        try
-                        {
-                             mMessage=itm.get("Msg").getAsString();
-                        }catch(Exception e){}
+                            AlertDialog alertDialog = new AlertDialog.Builder(ImageCapture.this)
+                                    .setTitle("HAP Check-In")
+                                    .setMessage(Html.fromHtml(mMessage))
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            Intent Dashboard = new Intent(ImageCapture.this, Dashboard_Two.class);
+                                            Dashboard.putExtra("Mode", "CIN");
+                                            ImageCapture.this.startActivity(Dashboard);
 
-                        AlertDialog alertDialog = new AlertDialog.Builder(ImageCapture.this)
-                                .setTitle("HAP Check-In")
-                                .setMessage(Html.fromHtml(mMessage))
-                                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        Intent Dashboard=new Intent(ImageCapture.this, Dashboard_Two.class);
-                                        Dashboard.putExtra("Mode","CIN");
-                                        ImageCapture.this.startActivity(Dashboard);
-
-                                        ((AppCompatActivity) ImageCapture.this).finish();
-                                    }
-                                })
-                                .show();
+                                            ((AppCompatActivity) ImageCapture.this).finish();
+                                        }
+                                    })
+                                    .show();
+                        }
                     }
-                }
 
-                @Override
-                public void onFailure(Call<JsonObject> call, Throwable t) { Log.d("HAP_receive",""); }
-            });
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        Log.d("HAP_receive", "");
+                    }
+                });
+            }else {
+                ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                Call<JsonObject> modelCall = apiInterface.JsonSave("dcr/save",
+                        UserDetails.getString("Divcode", ""),
+                        UserDetails.getString("Sfcode", ""), "", "", CheckInInf.toString());
+                modelCall.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
+                        if (response.isSuccessful()) {
+
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("Logintime", "");
+                            editor.putBoolean("CheckIn", false);
+                            editor.apply();
+
+                            JsonObject itm = response.body().getAsJsonObject();
+                            String mMessage = "Check in Time  : "+ sharedPreferences.getString("FTime","")+"<br>"+
+                                            "Check Out Time : "+ CTime;
+
+                            try {
+                                mMessage = itm.get("Msg").getAsString();
+                            } catch (Exception e) {
+                            }
+
+                            AlertDialog alertDialog = new AlertDialog.Builder(ImageCapture.this)
+                                    .setTitle("HAP Check-In")
+                                    .setMessage(Html.fromHtml(mMessage))
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            Intent Dashboard = new Intent(ImageCapture.this, Login.class);
+                                            startActivity(Dashboard);
+
+                                            ((AppCompatActivity) ImageCapture.this).finish();
+                                        }
+                                    })
+                                    .show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        Log.d("HAP_receive", "");
+                    }
+                });
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }

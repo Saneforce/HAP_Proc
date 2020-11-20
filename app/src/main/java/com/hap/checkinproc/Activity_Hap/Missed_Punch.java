@@ -100,6 +100,12 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                 missedPunchSubmit();
             }
         });
+        Bundle params=getIntent().getExtras();
+        missedDates = params.getString("name");
+        missedShift = params.getString("name1");
+        missedCHeckin = params.getString("CInTm");
+        checkIn.setText(missedCHeckin);
+        shiftType.setText(missedShift);
     }
 
 

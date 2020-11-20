@@ -26,6 +26,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 
 import com.hap.checkinproc.Activity.Util.SelectionModel;
+import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -354,6 +355,7 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
                             JSONObject js=new JSONObject(jsonData);
                             if(js.getString("success").equalsIgnoreCase("true")){
                                 Toast.makeText(AllowanceActivity.this," Submitted successfully ",Toast.LENGTH_SHORT).show();
+                                common_class.CommonIntentwithFinish(Dashboard.class);
                             }
                             else
                                 Toast.makeText(AllowanceActivity.this," Cannot submitted the data ",Toast.LENGTH_SHORT).show();
