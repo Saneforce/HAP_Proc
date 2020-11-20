@@ -27,15 +27,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".Activity.ApprovalViewActivity"></activity>
-        <activity android:name=".Activity.ViewTASummary"></activity>
-        <activity android:name=".Activity.TAClaimActivity"></activity>
-        <activity android:name=".Activity.TAApprovalActivity">
-
-        </activity>
-        <activity android:name=".Activity.AllowanceActivity">
-        </activity>
-        <activity android:name=".Activity_Hap.Block_Information"></activity>
+        <activity android:name=".Activity_Hap.OrderCategoryActivity"></activity>
+        <activity android:name=".Activity_Hap.AddNewRetailer" />
+        <activity android:name=".Activity_Hap.SecondaryOrderActivity" />
+        <activity android:name=".Activity_Hap.OrderDashBoard" />
+        <activity android:name=".Activity.ApprovalViewActivity" />
+        <activity android:name=".Activity.ViewTASummary" />
+        <activity android:name=".Activity.TAClaimActivity" />
+        <activity android:name=".Activity.TAApprovalActivity" />
+        <activity android:name=".Activity.AllowanceActivity" />
+        <activity android:name=".Activity_Hap.Block_Information" />
         <activity android:name=".Activity_Hap.ImageCapture" />
         <activity android:name=".Activity_Hap.Checkin" />
         <activity android:name=".Activity_Hap.Extendedshift_approval" />
@@ -54,16 +55,13 @@
         <activity android:name=".Activity_Hap.Leave_Dashboard" />
         <activity android:name=".Activity_Hap.Ocheck_in" />
         <activity android:name=".Activity_Hap.Approvals" />
-
-        <activity android:name=".Status_Activity.Extended_Shift_Activity"></activity>
+        <activity android:name=".Status_Activity.Extended_Shift_Activity" />
         <activity android:name=".Status_Activity.WeekOff_Status_Activity" />
         <activity android:name=".Status_Activity.MissedPunch_Status_Activity" />
         <activity android:name=".Status_Activity.Leave_Status_Activity" />
         <activity android:name=".Status_Activity.Permission_Status_Activity" />
-        <activity android:name=".Status_Activity.Onduty_Status_Activity"></activity>
-        <activity android:name=".Status_Activity.View_All_Status_Activity"></activity>
-
-
+        <activity android:name=".Status_Activity.Onduty_Status_Activity" />
+        <activity android:name=".Status_Activity.View_All_Status_Activity" />
         <activity android:name=".Activity_Hap.Tp_Mydayplan" />
         <activity android:name=".Activity_Hap.Tp_Calander" />
         <activity android:name=".Activity_Hap.Mydayplan_Activity" />
@@ -91,7 +89,6 @@
             android:name=".common.SANGPSTracker"
             android:enabled="true"
             android:exported="false" />
-
         <service
             android:name=".common.TimerService"
             android:enabled="true"
@@ -104,14 +101,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.DesignActivity"></activity>
+        <activity android:name=".Activity.DesignActivity" />
         <activity
             android:name=".Activity.FilterActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ProcurementDashboardActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key" />

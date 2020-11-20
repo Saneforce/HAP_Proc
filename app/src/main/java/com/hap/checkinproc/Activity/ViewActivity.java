@@ -113,7 +113,7 @@ public class ViewActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-
+/*chrcking*/
         SharedPreferences.Editor edit=share.edit();
         edit.putString("fab","1");
         edit.commit();

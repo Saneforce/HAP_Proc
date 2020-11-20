@@ -4,8 +4,24 @@ public class Common_Model {
     private String name;
     private String id;
     private String flag;
+    private String address;
 
-    public Common_Model(String id,String name,  String flag) {
+    public Common_Model(String name, String id, String flag, String address) {
+        this.name = name;
+        this.id = id;
+        this.flag = flag;
+        this.address = address;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Common_Model(String id, String name, String flag) {
         this.id = id;
         this.name = name;
         this.flag = flag;

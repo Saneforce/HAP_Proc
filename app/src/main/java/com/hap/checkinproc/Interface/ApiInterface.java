@@ -2,13 +2,16 @@ package com.hap.checkinproc.Interface;
 
 import com.google.gson.JsonArray;
 import com.hap.checkinproc.Model_Class.Approval;
+import com.hap.checkinproc.Model_Class.DateReport;
 import com.hap.checkinproc.Model_Class.Example;
+import com.hap.checkinproc.Model_Class.HeaderCat;
 import com.hap.checkinproc.Model_Class.Location;
 import com.hap.checkinproc.Model_Class.Missed;
 import com.hap.checkinproc.Model_Class.Model;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Model_Class.Onduty;
 import com.hap.checkinproc.Model_Class.Permission;
+import com.hap.checkinproc.Model_Class.ReportDataList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -79,7 +82,7 @@ public interface ApiInterface {
     Call<JsonArray> getDataArrayList(@Query("axn")String axn, @Query("Priod")int Priod, @Query("divisionCode")String divisionCode, @Query("sfCode")String Sf_code,@Query("rSF")String rSF,@Query("State_Code")String State_code,@Query("desig")String desig, @Field("data") String body);
 
 
-/*Those api done by ezhil*/
+
     @FormUrlEncoded
     @POST("db_activity.php?axn=get/view")
     Call<ResponseBody> getView(@Field("data") String userData);
@@ -95,50 +98,9 @@ public interface ApiInterface {
     @POST("db_activity.php?axn=save/view")
     Call<ResponseBody> saveView(@Field("data") String userData);
 
-    @FormUrlEncoded
-    @POST("db_new_activity.php?axn=save/allowance")
-    Call<ResponseBody> saveAllowance(@Field("data") String userData);
-
-    @FormUrlEncoded
-    @POST("db_new_activity.php?axn=update/allowance")
-    Call<ResponseBody> updateAllowance(@Field("data") String userData);
-
-    @FormUrlEncoded
-    @POST("db_new_activity.php?axn=get/travelmode")
-    Call<ResponseBody> getTravelMode(@Field("data") String userData);
-
-    @Multipart
-    @POST("db_new_activity.php?axn=upload/img")
-    Call<ResponseBody> uploadimg(@PartMap() HashMap<String, RequestBody> values, @Part MultipartBody.Part file);
-
-    @FormUrlEncoded
-    @POST("db_new_activity.php?axn=get/daexp")
-    Call<ResponseBody> getDailyAllowance(@Field("data") String userData);
-
-    @FormUrlEncoded
-    @POST("db_new_activity.php?axn=save/daexp")
-    Call<ResponseBody> saveDailyAllowance(@Field("data") String userData);
-
-    @FormUrlEncoded
-    @POST("db_new_activity.php?axn=get/allowance")
-    Call<ResponseBody> getAllowance(@Field("data") String userData);
-
-    @FormUrlEncoded
-    @POST("db_new_activity.php?axn=get/taapproval")
-    Call<ResponseBody> getTAAproval(@Field("data") String userData);
-
-    @FormUrlEncoded
-    @POST("db_new_activity.php?axn=save/taapprove")
-    Call<ResponseBody> saveTAApprove(@Field("data") String userData);
-
-    @FormUrlEncoded
-    @POST("db_new_activity.php?axn=reject/taapprove")
-    Call<ResponseBody> rejectTAApprove(@Field("data") String userData);
 
 
-    /*Those api done by ezhil*/
-
- /*LEAVE APPROVAL*/
+    /*LEAVE APPROVAL*/
 
     @GET("Db_Hap.php?")
     Call<List<Approval>> approval(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code, @Query("rSF") String rSf, @Query("State_Code") String State_code);
@@ -223,11 +185,88 @@ public interface ApiInterface {
     @POST("Db_Hap.php?axn=dcr/save")
     Call<Object> Tb_Mydayplan(@QueryMap Map<String, String> params, @Field("data") String body);
 
-    @FormUrlEncoded
-    @POST("Db_Hap.php")
-    Call<Object> Getwe_Status(@Query("Priod") String Amod, @Query("sfCode") String sFCode,
-                              @Query("axn") String axn, @Query("Status") String Status,
+
+ @FormUrlEncoded
+ @POST("Db_Hap.php")
+ Call<Object> Getwe_Status(@Query("Priod") String Amod,  @Query("sfCode") String sFCode,
+                           @Query("axn") String axn,@Query("Status") String status,
+                           @Field("data") String data);
+
+
+ @FormUrlEncoded
+ @POST("db_new_activity.php?axn=save/allowance")
+ Call<ResponseBody> saveAllowance(@Field("data") String userData);
+
+ @FormUrlEncoded
+ @POST("db_new_activity.php?axn=update/allowance")
+ Call<ResponseBody> updateAllowance(@Field("data") String userData);
+
+ @FormUrlEncoded
+ @POST("db_new_activity.php?axn=get/travelmode")
+ Call<ResponseBody> getTravelMode(@Field("data") String userData);
+
+ @Multipart
+ @POST("db_new_activity.php?axn=upload/img")
+ Call<ResponseBody> uploadimg(@PartMap() HashMap<String, RequestBody> values, @Part MultipartBody.Part file);
+ @FormUrlEncoded
+ @POST("db_new_activity.php?axn=get/daexp")
+ Call<ResponseBody> getDailyAllowance(@Field("data") String userData);
+
+ @FormUrlEncoded
+ @POST("db_new_activity.php?axn=save/daexp")
+ Call<ResponseBody> saveDailyAllowance(@Field("data") String userData);
+
+ @FormUrlEncoded
+ @POST("db_new_activity.php?axn=get/allowance")
+ Call<ResponseBody> getAllowance(@Field("data") String userData);
+
+ @FormUrlEncoded
+ @POST("db_new_activity.php?axn=get/taapproval")
+ Call<ResponseBody> getTAAproval(@Field("data") String userData);
+
+ @FormUrlEncoded
+ @POST("db_new_activity.php?axn=save/taapprove")
+ Call<ResponseBody> saveTAApprove(@Field("data") String userData);
+
+ @FormUrlEncoded
+ @POST("db_new_activity.php?axn=reject/taapprove")
+ Call<ResponseBody> rejectTAApprove(@Field("data") String userData);
+
+
+/*Done by Karthic */
+
+ /*category*/
+ @FormUrlEncoded
+ @POST("db_v14.php?axn=table/list")
+ Call<HeaderCat> SubCategory(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
+                             @Query("rSF") String rSF, @Query("State_Code") String StateCode,
+                             @Field("data") String data);
+ /*submitValue*/
+ @FormUrlEncoded
+ @POST("db_v14.php?axn=dcr/save")
+ Call<JsonObject> submitValue(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                               @Field("data") String data);
+
+ /*ReportView*/
+ @POST("db_v14.php?axn=get/ViewReport")
+ Call<ReportDataList> reportValues(@Query("Sf_code") String sFCode, @Query("fromdate") String fromdate, @Query("todate") String todate);
+
+ /*DateReportView*/
+ @POST("db_v14.php?axn=get/ViewReport_Details")
+ Call<DateReport> dateReport(@Query("Order_Id") String rsfCode, @Query("Sf_code") String sFCode );
+
+ /*
+  */
+ /*CHECKING*//*
+
+  @FormUrlEncoded
+  @POST("db_v14.php?axn=table/list")
+  Call<C1> CheckingSample(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
+                          @Query("rSF") String rSF, @Query("State_Code") String StateCode,
+                          @Field("data") String data);
+ */
+
+
 
 
 }

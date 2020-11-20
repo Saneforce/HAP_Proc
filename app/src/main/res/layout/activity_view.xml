@@ -4,72 +4,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_Hap.MainActivity"
-    >
+    tools:context=".Activity_Hap.MainActivity">
 
     <RelativeLayout
+        android:id="@+id/lay_tool"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/tool_bar_bg"
-        android:id="@+id/lay_tool"
+        android:background="@color/colorPrimaryDark"
         android:padding="8dp">
+
         <ImageView
             android:id="@+id/iv_dwnldmaster_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/left_arrow"
             android:layout_centerVertical="true"
-            />
+            android:src="@drawable/left_arrow" />
+
         <TextView
+            android:id="@+id/tool_header"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Activity"
-            android:textSize="18sp"
-            android:textColor="#fff"
-            android:textStyle="bold"
-            android:padding="8dp"
-            android:textAllCaps="true"
-            android:layout_toRightOf="@+id/iv_dwnldmaster_back"
             android:layout_centerVertical="true"
-            android:id="@+id/tool_header"
-            android:layout_marginLeft="20dp"/>
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/iv_dwnldmaster_back"
+            android:padding="8dp"
+            android:text="Activity"
+            android:textAllCaps="true"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
     <Button
+        android:id="@+id/btn_save"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_save"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_marginRight="10dp"
-        android:visibility="gone"
-        android:text="Save"
         android:background="@drawable/button_blueg"
-        android:textColor="#fff"/>
+        android:text="Save"
+        android:textColor="#fff"
+        android:visibility="gone" />
 
     <ListView
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5dp"
-        android:layout_marginTop="4dp"
-        android:dividerHeight="0dp"
-        android:divider="#fff"
-        android:id="@+id/list_view"
         android:layout_above="@+id/btn_save"
         android:layout_below="@+id/lay_tool"
-        android:visibility="visible"
-        ></ListView>
+        android:layout_marginTop="4dp"
+        android:divider="#fff"
+        android:dividerHeight="0dp"
+        android:padding="5dp"
+        android:visibility="visible"></ListView>
+
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/relist_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5dp"
+        android:layout_above="@+id/btn_save"
+        android:layout_below="@+id/lay_tool"
         android:layout_marginTop="4dp"
         android:dividerHeight="0dp"
-        android:id="@+id/relist_view"
-        android:visibility="gone"
-        android:layout_above="@+id/btn_save"
-        android:layout_below="@+id/lay_tool"/>
+        android:padding="5dp"
+        android:visibility="gone" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
@@ -78,10 +78,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        app:srcCompat="@drawable/plus_icon"
         android:visibility="gone"
-        />
-
+        app:srcCompat="@drawable/plus_icon" />
 
 
 </RelativeLayout>

@@ -62,7 +62,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-basement:17.5.0'
     implementation platform('com.google.firebase:firebase-bom:25.12.0')
 
-    //recycler
+    //Picasso
+    implementation 'com.squareup.picasso:picasso:2.5.2'
 
 
 }
