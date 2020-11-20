@@ -66,7 +66,7 @@ public class Login extends AppCompatActivity {
     Button btnLogin;
     ImageView profileImage;
     String photo;
-    String idToken;
+    String idToken,eMail;
     Button signInButton, ReportsButton, ExitButton;
     Shared_Common_Pref shared_common_pref;
     private static final String TAG = "LoginActivity";
@@ -76,7 +76,7 @@ public class Login extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
     SharedPreferences sharedPreferences;
-    SharedPreferences UserDetails;
+    SharedPreferences CheckInDetails;
     public static final String CheckInDetail = "CheckInDetail" ;
     public static final String MyPREFERENCES = "MyPrefs" ;
     private ProgressDialog mProgress;
@@ -100,12 +100,14 @@ public class Login extends AppCompatActivity {
         btnLogin=(Button)findViewById(R.id.btnLogin);
         profileImage=(ImageView)findViewById(R.id.profile_image);
         sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        UserDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
+        CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
            mProgress =new ProgressDialog(this);
            String titleId="Signing in...";
            mProgress.setTitle(titleId);
            mProgress.setMessage("Please Wait...");
 
+            eMail=sharedPreferences.getString("email", "");
+            name.setText(eMail);
             if(!checkPermission())
             {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -198,17 +200,20 @@ public class Login extends AppCompatActivity {
             }
         });
         Boolean Login= sharedPreferences.getBoolean("Login", false);
-        Boolean CheckIn= sharedPreferences.getBoolean("Login", false);
+        Boolean CheckIn= CheckInDetails.getBoolean("CheckIn", false);
 
         if(Login==true||CheckIn==true){
-            if(Login==true && CheckIn==false) login(0);
             if(checkPermission())
             {
                 Intent playIntent = new Intent(this, SANGPSTracker.class);
                 bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
                 startService(playIntent);
             }
-            if(CheckIn==true) {
+            if(Login==true && CheckIn==false) {
+                mProgress.show();
+                login(RC_SIGN_IN);
+            }
+            else if(CheckIn==true) {
                 Intent Dashboard=new Intent(Login.this, Dashboard_Two.class);
                 Dashboard.putExtra("Mode","CIN");
                 startActivity(Dashboard);
@@ -240,7 +245,7 @@ public class Login extends AppCompatActivity {
                 Log.d("LoginDetails", String.valueOf(account.getDisplayName()));
                 idToken = account.getIdToken();
                 name.setText(account.getEmail());
-
+                eMail=account.getEmail();
                 try{
                     Glide.with(this).load(account.getPhotoUrl()).into(profileImage);
                     Log.e("aara",account.getPhotoUrl().toString() );
@@ -332,8 +337,12 @@ public class Login extends AppCompatActivity {
         }
     }
     public void login(int requestCode) {
+            if(eMail.isEmpty()){
+                Toast.makeText(getApplicationContext(),"Invalid Email ID", Toast.LENGTH_LONG).show();
+                return;
+            }
           ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-          Call<Model> modelCall = apiInterface.login("get/GoogleLogin",name.getText().toString());
+          Call<Model> modelCall = apiInterface.login("get/GoogleLogin",eMail);
           modelCall.enqueue(new Callback<Model>() {
               @Override
               public void onResponse(Call<Model> call, Response<Model> response) {
@@ -370,6 +379,7 @@ public class Login extends AppCompatActivity {
                           editor.putString("Divcode",div);
                           editor.putInt("CheckCount",type);
                           editor.putString("State_Code", Sf_type);
+                          editor.putString("email", eMail);
                           editor.apply();
                           if(requestCode==RC_SIGN_IN || requestCode==0)
                               editor.putBoolean("Login",true);

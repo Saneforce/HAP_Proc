@@ -16,6 +16,8 @@ import retrofit2.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity.AllowanceActivity;
+import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -92,11 +94,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 break;
 
             case R.id.lin_ta_claim:
-                startActivity(new Intent(this, Travel_Allowance.class));
+                startActivity(new Intent(this, TAClaimActivity.class)); //Travel_Allowance
                 break;
 
             case R.id.lin_report:
-                startActivity(new Intent(this, Reports.class));
+                Intent Dashboard=new Intent(this, Dashboard_Two.class);
+                Dashboard.putExtra("Mode","RPT");
+                startActivity(Dashboard);
                 break;
 
             case R.id.lin_approvals:
@@ -149,8 +153,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     Log.e("MyDAY_LENGTH", String.valueOf(jsoncc.length()));
                     if (jsoncc.length() > 0) {
                         linCheckin.setVisibility(View.VISIBLE);
+                        linMyday.setVisibility(View.GONE);
                     } else {
                         linCheckin.setVisibility(View.GONE);
+                        linMyday.setVisibility(View.VISIBLE);
                     }
 
                 } catch (JSONException e) {

@@ -27,6 +27,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
+        <activity android:name=".Activity.ApprovalViewActivity"></activity>
+        <activity android:name=".Activity.ViewTASummary"></activity>
+        <activity android:name=".Activity.TAClaimActivity"></activity>
+        <activity android:name=".Activity.TAApprovalActivity">
+
+        </activity>
+        <activity android:name=".Activity.AllowanceActivity">
+        </activity>
         <activity android:name=".Activity_Hap.Block_Information"></activity>
         <activity android:name=".Activity_Hap.ImageCapture" />
         <activity android:name=".Activity_Hap.Checkin" />
@@ -105,6 +113,7 @@
         <activity
             android:name=".Activity.ProcurementDashboardActivity"
             android:screenOrientation="portrait">
+
 
 
         </activity>
