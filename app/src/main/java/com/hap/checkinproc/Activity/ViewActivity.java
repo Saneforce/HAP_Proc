@@ -108,7 +108,7 @@ public class ViewActivity extends AppCompatActivity {
     SimpleDateFormat sdf;
     SimpleDateFormat sdf_or;
     SharedPreferences UserDetails;
-    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String MyPREFERENCES = "MyPrefs";
     String SF_code="";
     @Override
     public void onBackPressed() {

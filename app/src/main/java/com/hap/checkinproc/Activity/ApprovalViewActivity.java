@@ -154,8 +154,6 @@ Button approve,reject;
                             String jsonData = null;
                             jsonData = response.body().string();
                             Log.v("response_data",jsonData);
-
-
                         }
                     }catch (Exception e){}
                 }

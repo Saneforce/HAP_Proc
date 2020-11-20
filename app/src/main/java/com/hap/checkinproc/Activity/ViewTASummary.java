@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +33,9 @@ public class ViewTASummary extends AppCompatActivity {
     ApiInterface apiInterface;
     ArrayList<SelectionModel> array=new ArrayList<>();
     TextView txt_start,txt_end,txt_start_km,txt_end_km,txt_tot;
+    SharedPreferences UserDetails;
+    public static final String MyPREFERENCES = "MyPrefs";
+    String SF_code="",div="",State_Code="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +46,10 @@ public class ViewTASummary extends AppCompatActivity {
         txt_start_km=findViewById(R.id.txt_start_km);
         txt_end_km=findViewById(R.id.txt_end_km);
         txt_tot=findViewById(R.id.txt_tot);
+        UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SF_code=UserDetails.getString("Sfcode","");
+        div=UserDetails.getString("div","");
+        State_Code=UserDetails.getString("State_Code","");
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         callApi("");
     }
@@ -49,10 +57,10 @@ public class ViewTASummary extends AppCompatActivity {
         try {
             JSONObject jj = new JSONObject();
             jj.put("Ta_Date", "2020-11-13");
-            jj.put("div", "3");
-            jj.put("sf", "MGR4762");
-            jj.put("rSF", "MGR4762");
-            jj.put("State_Code", "24");
+            jj.put("div", div);
+            jj.put("sf", SF_code);
+            jj.put("rSF", SF_code);
+            jj.put("State_Code", State_Code);
             Log.v("json_obj_ta", jj.toString());
             Call<ResponseBody> Callto = apiInterface.getAllowance(jj.toString());
             Callto.enqueue(new Callback<ResponseBody>() {

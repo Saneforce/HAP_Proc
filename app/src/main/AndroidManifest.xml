@@ -79,8 +79,6 @@
         <activity android:name=".Activity_Hap.Missed_Punch_Approval_Reject" />
         <activity android:name=".Activity_Hap.Extended_Approval_Reject" />
 
-
-
         <activity
             android:name=".Activity_Hap.Check_in"
             android:noHistory="true" />
@@ -113,9 +111,6 @@
         <activity
             android:name=".Activity.ProcurementDashboardActivity"
             android:screenOrientation="portrait">
-
-
-
         </activity>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
