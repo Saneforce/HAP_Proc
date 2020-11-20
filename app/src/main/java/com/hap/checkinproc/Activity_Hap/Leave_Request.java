@@ -97,10 +97,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave__request);
         gson = new Gson();
-        Log.e("BOOLEAN_CHECK", String.valueOf(oneTwo));
-
-
-        eText = (EditText) findViewById(R.id.from_date);
+         eText = (EditText) findViewById(R.id.from_date);
         eText.setInputType(InputType.TYPE_NULL);
 
         Submit = (Button) findViewById(R.id.submitButton);
