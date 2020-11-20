@@ -1,0 +1,163 @@
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    package=\"com.hap.checkinproc\">\r\n\r\n    <uses-feature android:name=\"android.hardware.camera\" />\r\n\r\n    <uses-permission android:name=\"android.permission.INTERNET\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.ACCESS_BACKGROUND_LOCATION\" />\r\n    <uses-permission android:name=\"android.permission.CAMERA\" />\r\n    <uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.CALL_PHONE\" />\r\n    <uses-permission android:name=\"android.permission.READ_EXTERNAL_STORAGE\" />\r\n    <uses-permission android:name=\"android.permission.FOREGROUND_SERVICE\" />\r\n\r\n    <application\r\n        android:name=\".HAPApp\"\r\n        android:allowBackup=\"true\"\r\n        android:hardwareAccelerated=\"true\"\r\n        android:icon=\"@mipmap/ic_launcher\"\r\n        android:label=\"@string/app_name\"\r\n        android:networkSecurityConfig=\"@xml/network_security_config\"\r\n        android:requestLegacyExternalStorage=\"true\"\r\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\r\n        android:supportsRtl=\"true\"\r\n        android:theme=\"@style/AppTheme\"\r\n        tools:targetApi=\"n\">\r\n        <activity android:name=\".Activity_Hap.Block_Information\"></activity>\r\n        <activity android:name=\".Activity_Hap.ImageCapture\" />\r\n        <activity android:name=\".Activity_Hap.Checkin\" />\r\n        <activity android:name=\".Activity_Hap.Ta_approval\" />\r\n        <activity android:name=\".Activity_Hap.Extendedshift_approval\" />\r\n        <activity android:name=\".Activity_Hap.Missedpunch_approval\" />\r\n        <activity android:name=\".Activity_Hap.Onduty_approval\" />\r\n        <activity android:name=\".Activity_Hap.Permision_approval\" />\r\n        <activity android:name=\".Activity_Hap.Leave_Approval\" />\r\n        <activity\r\n            android:name=\".Activity.ViewActivity\"\r\n            android:screenOrientation=\"portrait\" />\r\n        <activity android:name=\".Activity_Hap.Reports\" />\r\n        <activity android:name=\".Activity_Hap.Dashboard_Two\" />\r\n        <activity android:name=\".Activity_Hap.Weekly_Off\" />\r\n        <activity android:name=\".Activity_Hap.Missed_Punch\" />\r\n        <activity android:name=\".Activity_Hap.Permission_Request\" />\r\n        <activity android:name=\".Activity_Hap.Leave_Request\" />\r\n        <activity android:name=\".Activity_Hap.Travel_Allowance\" />\r\n        <activity android:name=\".Activity_Hap.Leave_Dashboard\" />\r\n        <activity android:name=\".Activity_Hap.Ocheck_in\" />\r\n        <activity android:name=\".Activity_Hap.Approvals\" />\r\n\r\n        <activity android:name=\".Status_Activity.Extended_Shift_Activity\"></activity>\r\n        <activity android:name=\".Status_Activity.WeekOff_Status_Activity\" />\r\n        <activity android:name=\".Status_Activity.MissedPunch_Status_Activity\" />\r\n        <activity android:name=\".Status_Activity.Leave_Status_Activity\" />\r\n        <activity android:name=\".Status_Activity.Permission_Status_Activity\" />\r\n        <activity android:name=\".Status_Activity.Onduty_Status_Activity\"></activity>\r\n\r\n\r\n        <activity android:name=\".Activity_Hap.Tp_Mydayplan\" />\r\n        <activity android:name=\".Activity_Hap.Tp_Calander\" />\r\n        <activity android:name=\".Activity_Hap.Mydayplan_Activity\" />\r\n        <activity android:name=\".Activity_Hap.Tp_Month_Select\" />\r\n        <activity android:name=\".Activity_Hap.Tp_Approval\" />\r\n        <activity android:name=\".Activity_Hap.Tp_Approval_Reject\" />\r\n        <activity android:name=\".Activity_Hap.Leave_Approval_Reject\" />\r\n        <activity android:name=\".Activity_Hap.Permission_Approval\" />\r\n        <activity android:name=\".Activity_Hap.Permission_Approval_Reject\" />\r\n        <activity android:name=\".Activity_Hap.Onduty_Approval_Reject\" />\r\n        <activity android:name=\".Activity_Hap.Webview_Activity\" />\r\n        <activity android:name=\".Activity_Hap.Missed_punch_Approval\" />\r\n        <activity android:name=\".Activity_Hap.Missed_Punch_Approval_Reject\" />\r\n        <activity android:name=\".Activity_Hap.Extended_Approval_Reject\" />\r\n\r\n\r\n\r\n        <activity\r\n            android:name=\".Activity_Hap.Check_in\"\r\n            android:noHistory=\"true\" />\r\n        <activity android:name=\".Activity_Hap.Dashboard\" />\r\n        <activity\r\n            android:name=\".Activity_Hap.Login\"\r\n            android:noHistory=\"true\" />\r\n\r\n        <service\r\n            android:name=\".common.SANGPSTracker\"\r\n            android:enabled=\"true\"\r\n            android:exported=\"false\" />\r\n\r\n        <service\r\n            android:name=\".common.TimerService\"\r\n            android:enabled=\"true\"\r\n            android:exported=\"false\" />\r\n\r\n        <activity android:name=\".Activity_Hap.MainActivity\">\r\n            <intent-filter>\r\n                <action android:name=\"android.intent.action.MAIN\" />\r\n\r\n                <category android:name=\"android.intent.category.LAUNCHER\" />\r\n            </intent-filter>\r\n        </activity>\r\n        <activity android:name=\".Activity.DesignActivity\"></activity>\r\n        <activity\r\n            android:name=\".Activity.FilterActivity\"\r\n            android:screenOrientation=\"portrait\"></activity>\r\n        <activity\r\n            android:name=\".Activity.ProcurementDashboardActivity\"\r\n            android:screenOrientation=\"portrait\">\r\n\r\n\r\n        </activity>\r\n        <meta-data\r\n            android:name=\"com.google.android.geo.API_KEY\"\r\n            android:value=\"@string/map_key\" />\r\n        <meta-data\r\n            android:name=\"preloaded_fonts\"\r\n            android:resource=\"@array/preloaded_fonts\" />\r\n\r\n        <provider\r\n            android:name=\"androidx.core.content.FileProvider\"\r\n            android:authorities=\"${applicationId}.provider\"\r\n            android:exported=\"false\"\r\n            android:grantUriPermissions=\"true\">\r\n            <meta-data\r\n                android:name=\"android.support.FILE_PROVIDER_PATHS\"\r\n                android:resource=\"@xml/provider_paths\" />\r\n        </provider>\r\n    </application>\r\n\r\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/AndroidManifest.xml	(revision 9d936ee083225bd10e7a55267bdded3391de7837)
++++ app/src/main/AndroidManifest.xml	(date 1605730044073)
+@@ -32,9 +32,7 @@
+         <activity android:name=".Activity_Hap.Checkin" />
+         <activity android:name=".Activity_Hap.Ta_approval" />
+         <activity android:name=".Activity_Hap.Extendedshift_approval" />
+-        <activity android:name=".Activity_Hap.Missedpunch_approval" />
+         <activity android:name=".Activity_Hap.Onduty_approval" />
+-        <activity android:name=".Activity_Hap.Permision_approval" />
+         <activity android:name=".Activity_Hap.Leave_Approval" />
+         <activity
+             android:name=".Activity.ViewActivity"
+Index: app/src/main/java/com/hap/checkinproc/Activity_Hap/Permision_approval.java
+===================================================================
+--- app/src/main/java/com/hap/checkinproc/Activity_Hap/Permision_approval.java	(revision 9d936ee083225bd10e7a55267bdded3391de7837)
++++ app/src/main/java/com/hap/checkinproc/Activity_Hap/Permision_approval.java	(revision 9d936ee083225bd10e7a55267bdded3391de7837)
+@@ -1,67 +0,0 @@
+-package com.hap.checkinproc.Activity_Hap;
+-
+-import androidx.appcompat.app.AppCompatActivity;
+-import androidx.recyclerview.widget.LinearLayoutManager;
+-import androidx.recyclerview.widget.RecyclerView;
+-
+-import android.content.SharedPreferences;
+-import android.os.Bundle;
+-
+-import com.hap.checkinproc.Interface.ApiClient;
+-import com.hap.checkinproc.Interface.ApiInterface;
+-import com.hap.checkinproc.Model_Class.Approval;
+-import com.hap.checkinproc.Model_Class.Permission;
+-import com.hap.checkinproc.R;
+-import com.hap.checkinproc.adapters.RecyclerViewLeaveApproval;
+-import com.hap.checkinproc.adapters.RecyclerViewPermission;
+-
+-import java.util.List;
+-
+-import retrofit2.Call;
+-import retrofit2.Callback;
+-import retrofit2.Response;
+-
+-public class Permision_approval extends AppCompatActivity {
+-
+-    String Scode;
+-    String Dcode;
+-    String Rf_code;
+-
+-    List<Permission> permissionList ;
+-
+-    @Override
+-    protected void onCreate(Bundle savedInstanceState) {
+-        super.onCreate(savedInstanceState);
+-        setContentView(R.layout.activity_permision_approval);
+-
+-        SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+-        Scode = (shared.getString("Sfcode", "null"));
+-        Dcode=(shared.getString("Divcode","null"));
+-        Rf_code = Scode;
+-
+-        RecyclerView recyclerView = findViewById(R.id.recycler_view3);
+-
+-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+-        Call<List<Permission>>permissions  = apiInterface.permission("ViewPermission",Dcode,Scode,Rf_code,"24");
+-        permissions.enqueue(new Callback<List<Permission>>() {
+-            @Override
+-            public void onResponse(Call<List<Permission>> call, Response<List<Permission>> response) {
+-
+-                permissionList=response.body();
+-
+-                RecyclerViewPermission adapter = new RecyclerViewPermission(permissionList, Permision_approval.this);
+-                recyclerView.setAdapter(adapter);
+-
+-
+-            }
+-
+-            @Override
+-            public void onFailure(Call<List<Permission>> call, Throwable t) {
+-
+-                System.out.println("on failure");
+-            }
+-        });
+-
+-    }
+-}
+\ No newline at end of file
+Index: app/src/main/java/com/hap/checkinproc/Activity_Hap/Missedpunch_approval.java
+===================================================================
+--- app/src/main/java/com/hap/checkinproc/Activity_Hap/Missedpunch_approval.java	(revision 9d936ee083225bd10e7a55267bdded3391de7837)
++++ app/src/main/java/com/hap/checkinproc/Activity_Hap/Missedpunch_approval.java	(revision 9d936ee083225bd10e7a55267bdded3391de7837)
+@@ -1,65 +0,0 @@
+-package com.hap.checkinproc.Activity_Hap;
+-
+-import androidx.appcompat.app.AppCompatActivity;
+-import androidx.recyclerview.widget.LinearLayoutManager;
+-import androidx.recyclerview.widget.RecyclerView;
+-
+-import android.content.SharedPreferences;
+-import android.os.Bundle;
+-
+-import com.hap.checkinproc.Interface.ApiClient;
+-import com.hap.checkinproc.Interface.ApiInterface;
+-import com.hap.checkinproc.Model_Class.Missed;
+-import com.hap.checkinproc.Model_Class.Onduty;
+-import com.hap.checkinproc.R;
+-import com.hap.checkinproc.adapters.RecyclerViewMissedpun;
+-import com.hap.checkinproc.adapters.RecyclerViewOnduty;
+-
+-import java.util.List;
+-
+-import retrofit2.Call;
+-import retrofit2.Callback;
+-import retrofit2.Response;
+-
+-public class Missedpunch_approval extends AppCompatActivity {
+-
+-    String Scode;
+-    String Dcode;
+-    String Rf_code;
+-
+-    List<Missed> missedList ;
+-
+-    @Override
+-    protected void onCreate(Bundle savedInstanceState) {
+-        super.onCreate(savedInstanceState);
+-        setContentView(R.layout.activity_missedpunch_approval);
+-
+-        SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+-        Scode = (shared.getString("Sfcode", "null"));
+-        Dcode=(shared.getString("Divcode","null"));
+-        Rf_code = Scode;
+-
+-        RecyclerView recyclerView = findViewById(R.id.recycler_view6);
+-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+-        Call<List<Missed>> misseds  = apiInterface.missed("vwmissedpunch",Dcode,Scode,Rf_code,"24");
+-        misseds.enqueue(new Callback<List<Missed>>() {
+-            @Override
+-            public void onResponse(Call<List<Missed>> call, Response<List<Missed>> response) {
+-                missedList=response.body();
+-
+-                RecyclerViewMissedpun adapter = new RecyclerViewMissedpun(missedList,Missedpunch_approval.this);
+-                recyclerView.setAdapter(adapter);
+-            }
+-
+-            @Override
+-            public void onFailure(Call<List<Missed>> call, Throwable t) {
+-
+-            }
+-        });
+-
+-
+-
+-
+-    }
+-}
+\ No newline at end of file
