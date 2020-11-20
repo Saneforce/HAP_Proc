@@ -6,13 +6,18 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import androidx.activity.OnBackPressedDispatcher;
@@ -21,9 +26,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.MissedPunch;
 import com.hap.checkinproc.R;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
@@ -41,11 +48,11 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, View.OnClickListener, Master_Interface {
 
 String Tag="HAP_Missed_Punch";
     EditText checkOutTime, checkIn, reasonMP;
-    SearchableSpinner missedDate;
+
     EditText shiftType;
     int day, month, year, hour, minute;
     int myday, myMonth, myYear;
@@ -55,6 +62,11 @@ String Tag="HAP_Missed_Punch";
     Type userType;
     String missedDates, missedShift, missedCHeckin, missedCheckOut;
     Button missedSubmit;
+    List<Common_Model> missed_punch = new ArrayList<>();
+    Common_Model Model_Pojo;
+    TextView misseddateselect;
+    LinearLayout misseddatelayout;
+    CustomListViewDialog customDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +74,11 @@ String Tag="HAP_Missed_Punch";
         setContentView(R.layout.activity_missed__punch);
 
         gson1 = new Gson();
-
-
+        misseddatelayout = findViewById(R.id.misseddatelayout);
+        misseddateselect = findViewById(R.id.misseddateselect);
         checkOutTime = (EditText) findViewById(R.id.missed_checkout);
+
+
         checkOutTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +92,7 @@ String Tag="HAP_Missed_Punch";
             }
         });
 
-
+        misseddatelayout.setOnClickListener(this);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +100,7 @@ String Tag="HAP_Missed_Punch";
                 mOnBackPressedDispatcher.onBackPressed();
             }
         });
-        missedDate = (SearchableSpinner) findViewById(R.id.missed_date);
+
 
         shiftType = (EditText) findViewById(R.id.missed_shift);
         checkIn = (EditText) findViewById(R.id.missed_checkin);
@@ -110,36 +124,6 @@ String Tag="HAP_Missed_Punch";
     }
 
 
-    private void DistributorTypeAdapter() {
-
-        ArrayList<String> worktype = new ArrayList<>();
-        for (int i = 0; i < leavetypelist.size(); i++) {
-            worktype.add(leavetypelist.get(i).getName());
-        }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(Missed_Punch.this, R.layout.spinner_search_item, R.id.text_item, worktype);
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        missedDate.setAdapter(arrayAdapter);
-
-        missedDate.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                missedDates = leavetypelist.get(position).getName();
-                missedShift = leavetypelist.get(position).getName1();
-                missedCHeckin = leavetypelist.get(position).getCheckinTime();
-                checkIn.setText(leavetypelist.get(position).getCheckinTime());
-                shiftType.setText(leavetypelist.get(position).getName1());
-
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
     public void leaveTypeMethod() {
 
         String commonLeaveType = "{\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
@@ -152,13 +136,10 @@ String Tag="HAP_Missed_Punch";
 
                 Log.e("RESPONSE_LOG", response.body().toString());
 
-                userType = new TypeToken<ArrayList<MissedPunch>>() {
-                }.getType();
-                Log.e("LeaveTypeList", String.valueOf(userType));
 
-                leavetypelist = gson1.fromJson(new Gson().toJson(response.body()), userType);
-                Log.e("LeaveTypeList", String.valueOf(leavetypelist));
-                DistributorTypeAdapter();
+                GetJsonData(new Gson().toJson(response.body()), "0");
+
+                //DistributorTypeAdapter();
             }
 
             @Override
@@ -195,9 +176,52 @@ String Tag="HAP_Missed_Punch";
         missedCheckOut = DateNTime;
     }
 
-
+    /*
+        missedDates = leavetypelist.get(position).getName();
+        missedShift = leavetypelist.get(position).getName1();
+        missedCHeckin = leavetypelist.get(position).getCheckinTime();
+                    checkIn.setText(leavetypelist.get(position).getCheckinTime());
+                    shiftType.setText(leavetypelist.get(position).getName1());
+    */
+    @Override
+    public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
+        customDialog.dismiss();
+        //id="Shift";
+        //name="date";
+        //flag="checkintime";
+        missedDates = myDataset.get(position).getName();
+        missedShift = myDataset.get(position).getId();
+        missedCHeckin = myDataset.get(position).getFlag();
+        checkIn.setText(myDataset.get(position).getFlag());
+        shiftType.setText(myDataset.get(position).getId());
+        misseddateselect.setText(myDataset.get(position).getName());
+        checkOutTime.setText(myDataset.get(position).getAddress());
+    }
 
     /*Submit Missed punch*/
+    private void GetJsonData(String jsonResponse, String type) {
+
+        try {
+            JSONArray jsonArray = new JSONArray(jsonResponse);
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+
+                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                String date = jsonObject1.optString("name");
+                String shift = jsonObject1.optString("name1");
+                String Checkin_Time = jsonObject1.optString("Checkin_Time");
+                String COutTime = jsonObject1.optString("COutTime");
+
+                Model_Pojo = new Common_Model(shift, date, Checkin_Time, COutTime);
+                missed_punch.add(Model_Pojo);
+
+            }
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void missedPunchSubmit() {
 
@@ -253,4 +277,18 @@ String Tag="HAP_Missed_Punch";
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.misseddatelayout:
+                customDialog = new CustomListViewDialog(Missed_Punch.this, missed_punch, 1);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+
+                break;
+
+        }
+    }
 }

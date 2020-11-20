@@ -266,7 +266,10 @@ public interface ApiInterface {
                           @Field("data") String data);
  */
 
-
+ @FormUrlEncoded
+ @POST("Db_Hap.php?axn=get/FieldForce_HQ")
+ Call<Object> getFieldForce_HQ( @Query("divisionCode") String disvisonCode, @Query("sf_code") String sFCode,@Field("data") String data
+ );
 
 
 }

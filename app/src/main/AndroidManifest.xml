@@ -77,6 +77,8 @@
         <activity android:name=".Activity_Hap.Missed_Punch_Approval_Reject" />
         <activity android:name=".Activity_Hap.Extended_Approval_Reject" />
 
+        <activity android:name=".Activity_Hap.On_Duty_Activity"></activity>
+
         <activity
             android:name=".Activity_Hap.Check_in"
             android:noHistory="true" />

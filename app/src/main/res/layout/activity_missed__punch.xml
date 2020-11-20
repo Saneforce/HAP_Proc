@@ -56,6 +56,7 @@
                     app:cardCornerRadius="10dp">
 
                     <LinearLayout
+                        android:id="@+id/misseddatelayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -85,16 +86,16 @@
                             android:textColor="@android:color/black"
                             android:textStyle="bold" />
 
-                        <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                            android:id="@+id/missed_date"
+                        <TextView
+                            android:id="@+id/misseddateselect"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
+                            android:layout_height="45dp"
+                            android:layout_marginTop="10dp"
                             android:background="@drawable/textbox_bg"
-                            android:elevation="@dimen/C5dp"
-                            android:fontFamily="@font/poppins_regular"
-                            android:padding="@dimen/C5dp"
-                            android:textColor="@color/grey_500"
-                            app:hintText="@string/missed_punch" />
+                            android:elevation="10dp"
+                            android:padding="@dimen/C15dp"
+                            android:gravity="start"
+                            android:hint="@string/selectmissed_date" />
 
                     </LinearLayout>
 
@@ -114,8 +115,8 @@
                     </RelativeLayout>
 
 
-                </androidx.cardview.widget.CardView>
 
+                </androidx.cardview.widget.CardView>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -215,6 +216,7 @@
                     android:textStyle="bold"
                     tools:ignore="RtlCompat" />
             </LinearLayout>
+
         </ScrollView>
 
 

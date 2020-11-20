@@ -31,7 +31,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -387,7 +386,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     Log.e("RESPONSE_FROM_SERVER", response.body().toString());
                     progressbar.setVisibility(View.GONE);
                     if (response.code() == 200 || response.code() == 201) {
-                        common_class.CommonIntentwithFinish(AllowanceActivity.class);
+                        common_class.CommonIntentwithFinish(Dashboard.class);
                         Toast.makeText(Mydayplan_Activity.this, "Day Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
                     }
 

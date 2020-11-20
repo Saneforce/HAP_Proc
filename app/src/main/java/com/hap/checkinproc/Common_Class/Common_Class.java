@@ -231,6 +231,13 @@ public class Common_Class {
         Log.e("commanclasstitle", value);
         activity.startActivity(intent);
     }
+    public void CommonIntentwithoutFinishputextratwo(Class classname, String key, String value, String key2,String value2) {
+        intent = new Intent(activity, classname);
+        intent.putExtra(key, value);
+        intent.putExtra(key2, value2);
+        Log.e("commanclasstitle", value);
+        activity.startActivity(intent);
+    }
 
     public String getintentValues(String name) {
         Intent intent = activity.getIntent();

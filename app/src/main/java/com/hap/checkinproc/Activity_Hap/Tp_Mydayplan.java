@@ -95,6 +95,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         tourdate = findViewById(R.id.tourdate);
         gson = new Gson();
         Log.e("TOuR_PLAN_DATE", common_class.getintentValues("TourDate"));
+        Log.e("TOuR_PLAN_DATE", common_class.getintentValues("TourDate"));
         tourdate.setText(common_class.getintentValues("TourDate"));
         Get_MydayPlan(common_class.getintentValues("TourDate"));
         route_text = findViewById(R.id.route_text);
@@ -262,7 +263,8 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                                 Log.e("RESPONSE_FROM_SERVER", response.body().toString());
                                 common_class.ProgressdialogShow(2, "Tour  plan");
                                 if (response.code() == 200 || response.code() == 201) {
-                                    common_class.CommonIntentwithFinish(Dashboard.class);
+                                    //common_class.CommonIntentwithFinish(Dashboard.class);
+                                    common_class.CommonIntentwithoutFinishputextra(Tp_Calander.class, "Monthselection", String.valueOf(common_class.getintentValues("TourMonth")));
                                     Toast.makeText(Tp_Mydayplan.this, "Tour Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
                                 }
 
@@ -333,7 +335,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Tp_Mydayplan.super.onBackPressed();
+                   common_class.CommonIntentwithoutFinishputextra(Tp_Calander.class,"Monthselection",String.valueOf(common_class.getintentValues("TourMonth")));
                 }
             });
 

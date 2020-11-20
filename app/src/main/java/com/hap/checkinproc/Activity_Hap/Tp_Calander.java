@@ -56,7 +56,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
     private RelativeLayout prevMonth;
     private RelativeLayout nextMonth;
     private GridView calendarView;
-    private GridCellAdapter adapter;
+    private Tp_Calander.GridCellAdapter adapter;
     private Calendar _calendar;
     private int month, year;
     private static final String dateTemplate = "MMMM yyyy";
@@ -132,7 +132,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
                 _calendar = Calendar.getInstance(Locale.getDefault());
                 month = SelectedMonth + 1;
                 year = _calendar.get(Calendar.YEAR);
-                adapter = new GridCellAdapter(getApplicationContext(), R.id.date, month, year, (ArrayList<com.hap.checkinproc.Model_Class.Tp_View_Master>) Tp_View_Master);
+                adapter = new Tp_Calander.GridCellAdapter(getApplicationContext(), R.id.date, month, year, (ArrayList<com.hap.checkinproc.Model_Class.Tp_View_Master>) Tp_View_Master);
                 adapter.notifyDataSetChanged();
                 calendarView.setAdapter(adapter);
                 Log.e("Work_Type_Model", String.valueOf(response.body().toString()));
@@ -148,7 +148,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
     }
 
     private void setGridCellAdapterToDate(int month, int year) {
-        adapter = new GridCellAdapter(getApplicationContext(), R.id.date, month, year, (ArrayList<com.hap.checkinproc.Model_Class.Tp_View_Master>) Tp_View_Master);
+        adapter = new Tp_Calander.GridCellAdapter(getApplicationContext(), R.id.date, month, year, (ArrayList<com.hap.checkinproc.Model_Class.Tp_View_Master>) Tp_View_Master);
         _calendar.set(year, month - 1, _calendar.get(Calendar.DAY_OF_MONTH));
         currentMonth.setText(android.text.format.DateFormat.format(dateTemplate, _calendar.getTime()));
         adapter.notifyDataSetChanged();
@@ -190,6 +190,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
     public void update(int value, int pos) {
 
     }
+
 
 
 
@@ -425,7 +426,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
                     Log.e("Grid_Selected_Date", theday + "-" + themonth + "-" + theyear + day_color[1]);
                     //Toast.makeText(_context, "SElected Date" + theday, Toast.LENGTH_SHORT).show();
                     // common_class.CommonIntentwithFinish(Tp_Mydayplan.class);
-                    common_class.CommonIntentwithoutFinishputextra(Tp_Mydayplan.class, "TourDate", TourMonth);
+                    common_class.CommonIntentwithoutFinishputextratwo(Tp_Mydayplan.class, "TourDate", TourMonth,"TourMonth", String.valueOf(month-1));
 
                 }
             });
@@ -480,7 +481,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Tp_Calander.super.onBackPressed();
+                    common_class.CommonIntentwithFinish(Tp_Month_Select.class);
                 }
             });
 

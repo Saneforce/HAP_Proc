@@ -14,7 +14,14 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="map_key" translatable="false">AIzaSyB_qsP8AOP_P0MdlPz-48TDaJYjTP3vbjo</string>
+    <string name="txt_haplocations">Select the HAP locations <font fgcolor='#E53935'> *</font></string>
+    <string name="txt_haplocationss">Select the HAP locations</string>
+    <string name="txt_purpose">Enter the Purpose of visit<font fgcolor='#E53935'> *</font></string>
+    <string name="txt_purposes">Enter the Purpose of visit</string>
+    <string name="txt_ondutylocations">Enter your ON-Duty Location<font fgcolor='#E53935'> *</font></string>
+    <string name="txt_ondutylocationss">Enter your ON-Duty Location</string>
 
+    <string name="selectmissed_date">Select Missed Date</string>
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="on_duty_checkin">On-Duty CheckIn</string>
