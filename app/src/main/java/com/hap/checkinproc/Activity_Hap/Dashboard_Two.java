@@ -88,7 +88,7 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
         if(InMode.equalsIgnoreCase("CIN")) {
             cardview3.setVisibility(View.VISIBLE);
             cardview4.setVisibility(View.VISIBLE);
-            cardView5.setVisibility(View.VISIBLE);
+            //cardView5.setVisibility(View.VISIBLE);
             StActivity.setVisibility(View.VISIBLE);
             btnCheckout.setVisibility(View.VISIBLE);
         }else{
@@ -284,7 +284,7 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
 
                                             Dashboard_Two.this.startActivity(mIntent);
 
-                                            ((AppCompatActivity) Dashboard_Two.this).finish();
+                                            //((AppCompatActivity) Dashboard_Two.this).finish();
                                         }
                                     })
                                     .show();
@@ -414,16 +414,6 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
                                 Intent takePhoto=new Intent(Dashboard_Two.this, ImageCapture.class);
                                 takePhoto.putExtra("Mode","COUT");
                                 startActivity(takePhoto);
-                                           /* JsonObject mItem=MissedItems.get(0).getAsJsonObject();
-                                            mItem.get("name").getAsString();
-                                            mItem.get("name1").getAsString();
-                                            mItem.get("CInTm").getAsString();
-                                            mItem.get("COutTm").getAsString();
-*/
-                                            /*Intent Dashboard=new Intent(Dashboard_Two.this, Dashboard_Two.class);
-                                            Dashboard_Two.this.startActivity(Dashboard);
-
-                                            ((AppCompatActivity) Dashboard_Two.this).finish();*/
                             }
                         })
                         .show();

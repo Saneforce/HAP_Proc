@@ -83,7 +83,7 @@ public class TAClaimActivity extends AppCompatActivity {
         list=findViewById(R.id.list);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SF_code=UserDetails.getString("Sfcode","");
-        div=UserDetails.getString("div","");
+        div=UserDetails.getString("Divcode","");
         State_Code=UserDetails.getString("State_Code","");
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         txt_date.setText(Common_Class.GetDateOnly()+"-"+ Common_Class.GetDay());
@@ -428,6 +428,7 @@ public class TAClaimActivity extends AppCompatActivity {
                                 array.add(new SelectionModel(json_o.getString("Name"),"",json_o.getString("ID"),"",""));
                             }
                             JSONArray ja1=js.getJSONArray("TodayExpense");
+                            if(ja1.length()!=0)
                             todayExp=ja1.getJSONObject(0).toString();
                             Log.v("todayExp_val",todayExp);
                             DailyExpenseAdapter adpt=new DailyExpenseAdapter(TAClaimActivity.this,array);

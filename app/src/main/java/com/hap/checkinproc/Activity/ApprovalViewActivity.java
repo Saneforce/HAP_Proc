@@ -2,6 +2,7 @@ package com.hap.checkinproc.Activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -40,6 +41,9 @@ TextView txt_name,txt_code,txt_hq,txt_des,txt_mob,txt_smod,txt_emod,txt_skm,txt_
 String sf_code="",sl_no="";
 Button approve,reject;
     ApiInterface apiInterface;
+    SharedPreferences UserDetails;
+    public static final String MyPREFERENCES = "MyPrefs";
+    String SF_code="",div="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +63,10 @@ Button approve,reject;
         txt_ekm=findViewById(R.id.txt_ekm);
         approve=findViewById(R.id.approve);
         reject=findViewById(R.id.reject);
+        UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        SF_code=UserDetails.getString("Sfcode","");
+        div=UserDetails.getString("Divcode","");
+
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         try{
@@ -140,7 +148,7 @@ Button approve,reject;
         try {
             JSONObject jj = new JSONObject();
             jj.put("Sl_No", sl_no);
-            jj.put("sf", "MGR5246");
+            jj.put("sf", SF_code);
             jj.put("AAmount", edt_amt.getText().toString());
             Log.v("json_obj_ta", jj.toString());
             Call<ResponseBody> Callto = apiInterface.saveTAApprove(jj.toString());

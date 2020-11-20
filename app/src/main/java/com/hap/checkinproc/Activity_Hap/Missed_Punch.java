@@ -43,7 +43,7 @@ import retrofit2.Response;
 
 public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
-
+String Tag="HAP_Missed_Punch";
     EditText checkOutTime, checkIn, reasonMP;
     SearchableSpinner missedDate;
     EditText shiftType;
@@ -106,6 +106,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
         missedCHeckin = params.getString("CInTm");
         checkIn.setText(missedCHeckin);
         shiftType.setText(missedShift);
+        Log.d(Tag,String.valueOf(params));
     }
 
 

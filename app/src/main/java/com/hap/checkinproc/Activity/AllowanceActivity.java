@@ -92,7 +92,7 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
         txt_mode=findViewById(R.id.txt_mode);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SF_code=UserDetails.getString("Sfcode","");
-        div=UserDetails.getString("div","");
+        div=UserDetails.getString("Divcode","");
         getTravelMode();
         pic.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -43,7 +43,7 @@ public class TAApprovalActivity extends AppCompatActivity {
         list=findViewById(R.id.list);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SF_code=UserDetails.getString("Sfcode","");
-        div=UserDetails.getString("div","");
+        div=UserDetails.getString("Divcode","");
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         callApi("");
     }
