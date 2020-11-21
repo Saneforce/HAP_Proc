@@ -100,7 +100,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.submitbutton:
                 if (vali()) {
-                    Intent intent = new Intent(this, Dashboard.class);
+                    Intent intent = new Intent(this, Check_in.class);
                     Bundle extras = new Bundle();
                     extras.putString("ODFlag", String.valueOf(flag));
                     extras.putString("onDutyPlcID", hapLocid);
