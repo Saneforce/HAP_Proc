@@ -20,7 +20,7 @@ public class Onduty_Approval_Adapter extends RecyclerView.Adapter<Onduty_Approva
     private int rowLayout;
     private Context context;
     AdapterOnClick mAdapterOnClick;
-    Integer dummy;
+    int dummy;
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, textviewdate, open, NoofHours;
 

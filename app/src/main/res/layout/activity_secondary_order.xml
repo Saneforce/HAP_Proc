@@ -136,6 +136,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:id="@+id/linear_reatiler_details"
                     android:layout_marginTop="10dp"
                     android:orientation="vertical">
 
@@ -162,6 +164,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="15dp"
                             android:text="c06c07"
+                            android:id="@+id/retailer_channel"
                             android:textColor="@android:color/black"
                             android:textSize="12dp"></TextView>
 
@@ -192,6 +195,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="15dp"
                             android:text="SCC001"
+                            android:id="@+id/txt_class"
                             android:textColor="@android:color/black"
                             android:textSize="12dp"></TextView>
 
@@ -282,6 +286,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="15dp"
                             android:text="38830"
+                            android:id="@+id/model_order_vlaue"
                             android:textColor="@android:color/black"
                             android:textSize="12dp"></TextView>
 
@@ -443,6 +448,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="15dp"
+                            android:id="@+id/txt_last_visited"
                             android:text="Nov 5 2020 12:09PM"
                             android:textColor="@android:color/black"
                             android:textSize="12dp"></TextView>
@@ -473,6 +479,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="15dp"
                             android:text="Test"
+                            android:id="@+id/txt_remarks"
                             android:textColor="@android:color/black"
                             android:textSize="12dp"></TextView>
 

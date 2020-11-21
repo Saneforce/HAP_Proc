@@ -56,7 +56,6 @@ public class ReportViewAdapter extends RecyclerView.Adapter<ReportViewAdapter.My
             public void onClick(View v) {
 
                 mViewReport.reportCliick(mDate.get(position).getOrderNo(), mDate.get(position).getOrderDate());
-
             }
         });
 

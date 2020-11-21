@@ -56,7 +56,7 @@ public class Missed_punch_Approval extends AppCompatActivity {
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
+                common_class.CommonIntentwithFinish(Approvals.class);
             }
         });
 
@@ -82,7 +82,7 @@ public class Missed_punch_Approval extends AppCompatActivity {
 
                 recyclerView.setAdapter(new Missed_Punch_Adapter(approvalList, R.layout.missed_punch_list_item, getApplicationContext(), new AdapterOnClick() {
                     @Override
-                    public void onIntentClick(Integer Name) {
+                    public void onIntentClick(int Name) {
 
                         Intent intent = new Intent(Missed_punch_Approval.this, Missed_Punch_Approval_Reject.class);
                         intent.putExtra("Sl_No", String.valueOf(approvalList.get(Name).getSlNo()));

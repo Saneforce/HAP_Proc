@@ -42,7 +42,7 @@ public class Leave_Approval_Reject extends AppCompatActivity implements View.OnC
     LinearLayout Approvereject, rejectonly;
     EditText reason;
     private WebView wv1;
-
+    Intent i;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +69,7 @@ public class Leave_Approval_Reject extends AppCompatActivity implements View.OnC
         tpapprovebutton.setOnClickListener(this);
         Lreject.setOnClickListener(this);
         L_rejectsave.setOnClickListener(this);
-        Intent i = getIntent();
+        i = getIntent();
         name.setText(":" + i.getExtras().getString("Username"));
         empcode.setText(":" + i.getExtras().getString("Emp_Code"));
         hq.setText(":" + i.getExtras().getString("HQ"));
@@ -83,10 +83,11 @@ public class Leave_Approval_Reject extends AppCompatActivity implements View.OnC
         Sf_Code = i.getExtras().getString("Sf_Code");
         LeaveId = i.getExtras().getString("LeaveId");
         ImageView backView = findViewById(R.id.imag_back);
+        mobilenumber.setOnClickListener(this);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
+                common_class.CommonIntentwithFinish(Leave_Approval.class);
             }
         });
 
@@ -172,6 +173,9 @@ public class Leave_Approval_Reject extends AppCompatActivity implements View.OnC
                     SendtpApproval("LeaveReject", 2);
                 }
                 break;
+            case R.id.mobilenumber:
+                common_class.makeCall(Integer.parseInt(i.getExtras().getString("MobileNumber")));
+                break;
         }
     }
 
@@ -195,6 +199,10 @@ public class Leave_Approval_Reject extends AppCompatActivity implements View.OnC
     public void onBackPressed() {
 
     }
+
+
+
+
 }
 
 

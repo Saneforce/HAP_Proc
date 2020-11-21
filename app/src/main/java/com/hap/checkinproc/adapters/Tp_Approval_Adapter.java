@@ -20,7 +20,7 @@ public class Tp_Approval_Adapter extends RecyclerView.Adapter<Tp_Approval_Adapte
     private int rowLayout;
     private Context context;
     AdapterOnClick mAdapterOnClick;
-    Integer dummy;
+    int dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, textviewdate, open;

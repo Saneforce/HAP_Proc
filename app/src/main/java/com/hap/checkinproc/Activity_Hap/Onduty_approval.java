@@ -57,7 +57,7 @@ public class Onduty_approval extends AppCompatActivity {
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
+                common_class.CommonIntentwithFinish(Approvals.class);
             }
         });
     }
@@ -80,9 +80,10 @@ public class Onduty_approval extends AppCompatActivity {
 
                 recyclerView.setAdapter(new Onduty_Approval_Adapter(approvalList, R.layout.onduty_approval_listitem, getApplicationContext(), new AdapterOnClick() {
                     @Override
-                    public void onIntentClick(Integer Name) {
+                    public void onIntentClick(int Name) {
 
                         Intent intent = new Intent(Onduty_approval.this, Onduty_Approval_Reject.class);
+
                         intent.putExtra("Username", approvalList.get(Name).getFieldForceName());
                         intent.putExtra("Emp_Code", approvalList.get(Name).getEmpCode());
                         intent.putExtra("HQ", approvalList.get(Name).getHQ());
@@ -97,8 +98,9 @@ public class Onduty_approval extends AppCompatActivity {
                         intent.putExtra("checkintime", approvalList.get(Name).getStartTime());
                         intent.putExtra("checkouttime", approvalList.get(Name).getEndTime());
                         intent.putExtra("Sf_Code", approvalList.get(Name).getSfCode());
-                        intent.putExtra("duty_id", approvalList.get(Name).getDutyId());
+                        intent.putExtra("duty_id", String.valueOf(approvalList.get(Name).getDutyId()));
                         startActivity(intent);
+                        finish();
                     }
                 }));
                 common_class.ProgressdialogShow(2, "On-duty Approval");

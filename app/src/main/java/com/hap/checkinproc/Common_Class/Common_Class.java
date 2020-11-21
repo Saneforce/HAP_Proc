@@ -56,8 +56,9 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name="Ver 2.3.2";
-    public static String Work_Type="0";
+    public static String Version_Name = "Ver 2.3.2";
+    public static String Work_Type = "0";
+
     public void CommonIntentwithFinish(Class classname) {
         intent = new Intent(activity, classname);
 
@@ -100,8 +101,9 @@ public class Common_Class {
         String plantime = dpln.format(c.getTime());
         return plantime;
     }
+
     public static String GetDay() {
-        Date dd=new Date();
+        Date dd = new Date();
         SimpleDateFormat simpleDateformat = new SimpleDateFormat("EEEE");
 
         return simpleDateformat.format(dd);
@@ -231,7 +233,8 @@ public class Common_Class {
         Log.e("commanclasstitle", value);
         activity.startActivity(intent);
     }
-    public void CommonIntentwithoutFinishputextratwo(Class classname, String key, String value, String key2,String value2) {
+
+    public void CommonIntentwithoutFinishputextratwo(Class classname, String key, String value, String key2, String value2) {
         intent = new Intent(activity, classname);
         intent.putExtra(key, value);
         intent.putExtra(key2, value2);
@@ -262,13 +265,11 @@ public class Common_Class {
         }
         jsonArray.put(jsonObject);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> mCall = apiInterface.GetResponseBody("3", "MGR4762", "MGR4762", "24", String.valueOf(Month), "2020", jsonArray.toString());
+        Call<JsonObject> mCall = apiInterface.GetResponseBody(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, String.valueOf(Month), String.valueOf(Calendar.getInstance().get(Calendar.YEAR)), jsonArray.toString());
         Log.e("Log_Tp_SELECT", jsonArray.toString());
         mCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                // locationList=response.body();
-
                 Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
 
                 try {
@@ -286,16 +287,6 @@ public class Common_Class {
 
             }
         });
-
-
     }
-
-
-   /* public static ArrayList <T> getFilterAray(Filterlist,) {
-        Collection<String> filtered = Collections2.filter(list,
-                Predicates.containsPattern("How"));
-
-        return  filtered;
-    }*/
 }
 

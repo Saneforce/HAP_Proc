@@ -20,7 +20,7 @@ public class Missed_Punch_Adapter extends RecyclerView.Adapter<Missed_Punch_Adap
     private int rowLayout;
     private Context context;
     AdapterOnClick mAdapterOnClick;
-    Integer dummy;
+    int dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, textviewdate, open;

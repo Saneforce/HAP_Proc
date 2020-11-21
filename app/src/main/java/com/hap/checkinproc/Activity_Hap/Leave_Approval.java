@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -37,11 +38,13 @@ public class Leave_Approval extends AppCompatActivity {
     Gson gson;
     private RecyclerView recyclerView;
     Type userType;
-
+    Common_Class common_class;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave__approval);
+        common_class = new Common_Class(this);
+
         recyclerView = findViewById(R.id.leaverecyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
@@ -50,7 +53,8 @@ public class Leave_Approval extends AppCompatActivity {
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
+                common_class.CommonIntentwithFinish(Approvals.class);
+
             }
         });
     }
@@ -76,9 +80,9 @@ public class Leave_Approval extends AppCompatActivity {
 
                 recyclerView.setAdapter(new Leave_Approval_Adapter(approvalList, R.layout.leave_approval_layout, getApplicationContext(), new AdapterOnClick() {
                     @Override
-                    public void onIntentClick(Integer Name) {
+                    public void onIntentClick(int Name) {
                         Intent intent = new Intent(Leave_Approval.this, Leave_Approval_Reject.class);
-                        intent.putExtra("LeaveId", String.valueOf(approvalList.get(Name)));
+                        intent.putExtra("LeaveId", String.valueOf(approvalList.get(Name).getLeaveId()));
                         intent.putExtra("Username", approvalList.get(Name).getFieldForceName());
                         intent.putExtra("Emp_Code", approvalList.get(Name).getEmpCode());
                         intent.putExtra("HQ", approvalList.get(Name).getHQ());

@@ -498,7 +498,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                 JsonObject jsonObjecta = response.body();
                 Log.e("TOTAL_REPOSNEaaa", String.valueOf(jsonObjecta));
 
-                startActivity(new Intent(Leave_Request.this, Dashboard.class));
+                startActivity(new Intent(Leave_Request.this, Leave_Dashboard.class));
             }
 
             @Override
@@ -542,6 +542,8 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
     }
 
+
+    /*ShiftType*/
 
     private void spinnerValue(String a, String dc, String sc) {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);

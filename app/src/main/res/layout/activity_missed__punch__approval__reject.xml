@@ -352,7 +352,7 @@
                         android:layout_gravity="center"
                         android:layout_marginTop="@dimen/C5dp"
                         android:background="@drawable/blue_txt_bg"
-                        android:fontFamily="@font/alegreya_sans_sc"
+                        android:padding="@dimen/C5dp"
                         android:gravity="center"
                         android:text="Save"
                         android:textAlignment="center"

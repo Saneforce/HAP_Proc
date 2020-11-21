@@ -46,17 +46,17 @@ public class Extendedshift_approval extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_extendedshift_approval);
+        common_class = new Common_Class(this);
 
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
+                common_class.CommonIntentwithFinish(Approvals.class);
             }
         });
 
         recyclerView = findViewById(R.id.extenrecyclerview);
-        common_class = new Common_Class(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         common_class.ProgressdialogShow(1, "On-duty Approval");
         Rf_code = Scode;
@@ -82,7 +82,7 @@ public class Extendedshift_approval extends AppCompatActivity {
 
                 recyclerView.setAdapter(new Extended_Approval_Adapter(approvalList, R.layout.extended_approval_listitem, getApplicationContext(), new AdapterOnClick() {
                     @Override
-                    public void onIntentClick(Integer Name) {
+                    public void onIntentClick(int Name) {
                         Intent intent = new Intent(Extendedshift_approval.this, Extended_Approval_Reject.class);
                         intent.putExtra("Username", approvalList.get(Name).getSfName());
                         intent.putExtra("Emp_Code", approvalList.get(Name).getEmpCode());
@@ -94,7 +94,7 @@ public class Extendedshift_approval extends AppCompatActivity {
                         intent.putExtra("shiftdate", approvalList.get(Name).getEntrydate());
                         intent.putExtra("geoin", approvalList.get(Name).getCheckin());
                         intent.putExtra("geoout", approvalList.get(Name).getCheckout());
-                        intent.putExtra("Sl_No", approvalList.get(Name).getSlNo());
+                        intent.putExtra("Sl_No", String.valueOf(approvalList.get(Name).getSlNo()));
                         //intent.putExtra("checkintime", Extended_Approval_ModelsList.get(position).getSTime());
               /*  intent.putExtra("checkintime", Extended_Approval_ModelsList.get(position).getStartTime());
                 intent.putExtra("checkouttime", Extended_Approval_ModelsList.get(position).getEndTime());
@@ -102,6 +102,7 @@ public class Extendedshift_approval extends AppCompatActivity {
                 intent.putExtra("duty_id", Extended_Approval_ModelsList.get(position).getDutyId());*/
 
                         startActivity(intent);
+
                     }
                 }));
                 common_class.ProgressdialogShow(2, "On-duty Approval");

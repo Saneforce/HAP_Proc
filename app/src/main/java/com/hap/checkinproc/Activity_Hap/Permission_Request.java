@@ -200,11 +200,11 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!eText.getText().toString().matches("") && !eText1.getText().toString().matches("") && !eText2.getText().toString().matches("") && !reasonPermission.getText().toString().matches("") && !ShiftName.matches("")) {
+                if (!eText.getText().toString().matches("") && !eText1.getText().toString().matches("") && !eText2.getText().toString().matches("") && !reasonPermission.getText().toString().matches("") && !shitType.getText().toString().matches("")) {
                     PermissionRequestOne();
                 } else if (eText1.getText().toString().matches("")) {
                     Toast.makeText(Permission_Request.this, "Enter Date", Toast.LENGTH_SHORT).show();
-                } else if (ShiftName.matches("")) {
+                } else if (shitType.getText().toString().matches("")) {
                     Toast.makeText(Permission_Request.this, "Enter Shite time", Toast.LENGTH_SHORT).show();
                 } else if (eText.getText().toString().matches("")) {
                     Toast.makeText(Permission_Request.this, "Enter From time", Toast.LENGTH_SHORT).show();
@@ -481,7 +481,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                 Log.e("SDFDFD", jsonObjecta.get("success").toString());
                 Log.e("SDFDFDDFF", String.valueOf(Msg.length()));
 
-                startActivity(new Intent(Permission_Request.this, Dashboard.class));
+                startActivity(new Intent(Permission_Request.this, Leave_Dashboard.class));
 
             }
 

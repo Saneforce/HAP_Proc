@@ -11,7 +11,7 @@ public class Onduty_Approval_Model {
     private String sfCode;
     @SerializedName("duty_id")
     @Expose
-    private Integer dutyId;
+    private String dutyId;
     @SerializedName("ondutytype")
     @Expose
     private String ondutytype;
@@ -63,11 +63,11 @@ public class Onduty_Approval_Model {
         this.sfCode = sfCode;
     }
 
-    public Integer getDutyId() {
+    public String getDutyId() {
         return dutyId;
     }
 
-    public void setDutyId(Integer dutyId) {
+    public void setDutyId(String dutyId) {
         this.dutyId = dutyId;
     }
 

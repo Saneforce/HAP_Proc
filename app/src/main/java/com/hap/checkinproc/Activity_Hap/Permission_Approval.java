@@ -56,7 +56,7 @@ public class Permission_Approval extends AppCompatActivity {
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
+                common_class.CommonIntentwithFinish(Approvals.class);
             }
         });
     }
@@ -80,7 +80,7 @@ public class Permission_Approval extends AppCompatActivity {
 
                 recyclerView.setAdapter(new Permission_Approval_Adapter(approvalList, R.layout.permission_approval_listitem, getApplicationContext(), new AdapterOnClick() {
                     @Override
-                    public void onIntentClick(Integer Name) {
+                    public void onIntentClick(int Name) {
                         Intent intent = new Intent(Permission_Approval.this, Permission_Approval_Reject.class);
                         intent.putExtra("Sl_No", String.valueOf(approvalList.get(Name).getSlNo()));
                         intent.putExtra("Username", approvalList.get(Name).getFieldForceName());
@@ -95,6 +95,7 @@ public class Permission_Approval extends AppCompatActivity {
                         intent.putExtra("permissiondate", approvalList.get(Name).getPermissiondate());
                         intent.putExtra("NoofHours", approvalList.get(Name).getNoofHours());
                         startActivity(intent);
+                        finish();
 
                     }
                 }));
@@ -114,6 +115,7 @@ public class Permission_Approval extends AppCompatActivity {
                 @Override
                 public void run() {
                     Permission_Approval.super.onBackPressed();
+
                 }
             });
 

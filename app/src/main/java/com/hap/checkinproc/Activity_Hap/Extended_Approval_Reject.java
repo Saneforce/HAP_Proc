@@ -86,12 +86,12 @@ public class Extended_Approval_Reject extends AppCompatActivity implements View.
         geocheckout.setText(" " + i.getExtras().getString("geoout"));
         Sl_No = i.getExtras().getString("Sl_No");
 
-
+mobilenumber.setOnClickListener(this);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
+                common_class.CommonIntentwithFinish(Extendedshift_approval.class);
             }
         });
 

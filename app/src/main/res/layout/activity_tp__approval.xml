@@ -19,21 +19,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/button_blueg"
+            app:titleTextColor="@android:color/white"
+            app:title="Tourplan Approval"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme">
 
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/alegreya_sans_sc"
-                android:text="Leave Approvals"
-                android:textAllCaps="false"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 
 
@@ -52,7 +42,7 @@
                 android:gravity="center">
 
                 <TextView
-                    android:layout_width="377dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:fontFamily="@font/alegreya_sans_sc"

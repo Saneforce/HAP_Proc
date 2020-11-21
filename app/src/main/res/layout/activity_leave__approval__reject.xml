@@ -333,7 +333,6 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:gravity="left"
                     android:text="@string/reason"
                     android:textColor="@color/txt_color_black"
@@ -344,7 +343,7 @@
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/reason"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/C60dp"
+                    android:layout_height="@dimen/C70dp"
                     android:layout_marginTop="@dimen/C10dp"
                     android:background="@drawable/round_white_backround"
                     android:gravity="top"
@@ -360,7 +359,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/C5dp"
                     android:background="@drawable/blue_txt_bg"
-                    android:fontFamily="@font/alegreya_sans_sc"
+                    android:padding="@dimen/C5dp"
                     android:gravity="center"
                     android:text="Save"
                     android:textAlignment="center"
@@ -387,9 +386,8 @@
                 android:layout_marginRight="5dp"
                 android:layout_marginBottom="3dp"
                 android:layout_weight="2"
-
                 android:background="@drawable/button_green"
-                android:fontFamily="@font/alegreya_sans_sc"
+                android:padding="@dimen/C5dp"
                 android:gravity="center"
                 android:text="Approve"
                 android:textColor="@android:color/white"
@@ -407,6 +405,7 @@
                 android:background="@drawable/button_amber"
                 android:gravity="center"
                 android:text="Reject"
+                android:padding="@dimen/C5dp"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
