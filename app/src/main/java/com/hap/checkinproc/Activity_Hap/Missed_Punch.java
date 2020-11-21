@@ -10,8 +10,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -19,13 +17,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -33,7 +31,6 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.MissedPunch;
 import com.hap.checkinproc.R;
-import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,7 +47,7 @@ import retrofit2.Response;
 
 public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, View.OnClickListener, Master_Interface {
 
-String Tag="HAP_Missed_Punch";
+    String Tag = "HAP_Missed_Punch";
     EditText checkOutTime, checkIn, reasonMP;
 
     EditText shiftType;
@@ -67,6 +64,7 @@ String Tag="HAP_Missed_Punch";
     TextView misseddateselect;
     LinearLayout misseddatelayout;
     CustomListViewDialog customDialog;
+    Button mButtonSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,25 +105,39 @@ String Tag="HAP_Missed_Punch";
         leaveTypeMethod();
 
         reasonMP = (EditText) findViewById(R.id.reason_missed);
-        missedSubmit = (Button) findViewById(R.id.submit_missed);
-        missedSubmit.setOnClickListener(new View.OnClickListener() {
+
+        Bundle params = getIntent().getExtras();
+
+        if (!(params == null)) {
+            missedDates = params.getString("EDt");
+            missedShift = params.getString("Shift");
+            missedCHeckin = params.getString("CInTm");
+            missedCheckOut = params.getString("COutTm");
+
+            checkIn.setText(missedCHeckin);
+            shiftType.setText(missedShift);
+            misseddateselect.setText(missedDates);
+            checkOutTime.setText(missedCheckOut);
+        }
+        Log.d(Tag, String.valueOf(params));
+
+
+        mButtonSubmit = (Button) findViewById(R.id.submit_missed);
+        mButtonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                missedPunchSubmit();
+
+                if (!misseddateselect.getText().toString().matches("") && !reasonMP.getText().toString().matches("")) {
+                    missedPunchSubmit();
+                } else if (misseddateselect.getText().toString().matches("")) {
+                    Toast.makeText(Missed_Punch.this, "Enter Shite time", Toast.LENGTH_SHORT).show();
+                } else if (reasonMP.getText().toString().matches("")) {
+                    Toast.makeText(Missed_Punch.this, "Enter Remarks", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
-        Bundle params=getIntent().getExtras();
-        missedDates = params.getString("EDt");
-        missedShift = params.getString("Shift");
-        missedCHeckin = params.getString("CInTm");
-        missedCheckOut = params.getString("COutTm");
 
-        checkIn.setText(missedCHeckin);
-        shiftType.setText(missedShift);
-        misseddateselect.setText(missedDates);
-        checkOutTime.setText(missedCheckOut);
-
-        Log.d(Tag,String.valueOf(params));
     }
 
 
@@ -141,8 +153,6 @@ String Tag="HAP_Missed_Punch";
 
                 Log.e("RESPONSE_LOG", response.body().toString());
                 GetJsonData(new Gson().toJson(response.body()), "0");
-
-                //DistributorTypeAdapter();
             }
 
             @Override
@@ -257,7 +267,7 @@ String Tag="HAP_Missed_Punch";
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject jsonObjecta = response.body();
                 Log.e("TOTAL_REPOSNEaaa", String.valueOf(jsonObjecta));
-                startActivity(new Intent(Missed_Punch.this, Dashboard.class));
+                startActivity(new Intent(Missed_Punch.this, Leave_Dashboard.class));
             }
 
             @Override

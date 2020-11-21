@@ -166,9 +166,9 @@
                             android:layout_margin="5dp"
                             android:background="@drawable/textbox_bg"
                             android:clickable="false"
-                            android:elevation="@dimen/C5dp"
                             android:focusable="false"
                             android:hint="From Time"
+                            android:elevation="@dimen/C5dp"
                             android:inputType="time"
                             android:padding="@dimen/C5dp"
                             android:textColor="@color/grey_500" />
@@ -194,15 +194,29 @@
                         <EditText
                             android:id="@+id/to_time"
                             android:layout_width="147dp"
-                            android:layout_height="43dp"
+                            android:layout_height="wrap_content"
                             android:layout_margin="5dp"
                             android:background="@drawable/textbox_bg"
                             android:clickable="false"
                             android:elevation="@dimen/C5dp"
+                            android:padding="@dimen/C5dp"
                             android:focusable="false"
                             android:hint="To Time"
                             android:inputType="time"
                             android:textColor="@color/grey_500" />
+
+
+                    <!--    android:id="@+id/from_time"
+                        android:layout_width="147dp"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:background="@drawable/textbox_bg"
+                        android:clickable="false"
+                        android:focusable="false"
+                        android:hint="From Time"
+                        android:inputType="time"
+                        android:padding="@dimen/C5dp"
+                        android:textColor="@color/grey_500"-->
                     </LinearLayout>
 
 

@@ -208,7 +208,7 @@ public class Weekly_Off extends AppCompatActivity {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
                         dialog.dismiss();
-                        startActivity(new Intent(Weekly_Off.this, Dashboard.class));
+                        startActivity(new Intent(Weekly_Off.this, Leave_Dashboard.class));
                     }
 
                     @Override

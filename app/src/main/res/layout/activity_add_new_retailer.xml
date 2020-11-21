@@ -35,18 +35,21 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:scrollbars="none"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/C60dp"
-                android:layout_height="match_parent">
+                android:scrollbars="none">
+
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
+
+
 
                         <TextView
                             android:layout_width="match_parent"
@@ -125,8 +128,7 @@
                             android:background="@drawable/text_bg"
                             android:gravity="start"
                             android:hint="Enter the New Retailer Name"
-                            android:padding="10dp"
-                            android:textColor="@android:color/white" />
+                            android:padding="10dp" />
 
                     </LinearLayout>
 
@@ -154,8 +156,7 @@
                             android:background="@drawable/text_bg"
                             android:gravity="start"
                             android:hint="Enter the Address"
-                            android:padding="10dp"
-                            android:textColor="@android:color/white" />
+                            android:padding="10dp" />
 
                     </LinearLayout>
 
@@ -183,8 +184,7 @@
                             android:background="@drawable/text_bg"
                             android:gravity="start"
                             android:hint="Enter the City"
-                            android:padding="10dp"
-                            android:textColor="@android:color/white" />
+                            android:padding="10dp" />
 
                     </LinearLayout>
 
@@ -212,8 +212,8 @@
                             android:background="@drawable/text_bg"
                             android:gravity="start"
                             android:hint="Enter the Phone No"
-                            android:padding="10dp"
-                            android:textColor="@android:color/white" />
+                            android:inputType="phone"
+                            android:padding="10dp" />
 
                     </LinearLayout>
 
@@ -275,6 +275,7 @@
                         </LinearLayout>
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -286,17 +287,16 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/button_dgreen"
-                            android:text="Submit"
                             android:padding="@dimen/C10dp"
+                            android:text="Submit"
                             android:textColor="@android:color/white"></Button>
 
-                          </LinearLayout>
+                    </LinearLayout>
 
 
                 </LinearLayout>
 
             </ScrollView>
-
 
 
         </LinearLayout>
