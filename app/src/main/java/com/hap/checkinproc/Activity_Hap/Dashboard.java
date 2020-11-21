@@ -115,7 +115,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             case R.id.lin_tour_plan:
                 startActivity(new Intent(this, Tp_Month_Select.class));
                 break;
-
+            case R.id.lin_onduty:
+                startActivity(new Intent(this, On_Duty_Activity.class));
+                break;
 
             default:
                 break;

@@ -1,19 +1,17 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.R;
-
 import java.util.Calendar;
-
 public class Tp_Month_Select extends AppCompatActivity implements View.OnClickListener {
     TextView CurrentMoth, NextMonth;
     int CM;
@@ -73,7 +71,7 @@ public class Tp_Month_Select extends AppCompatActivity implements View.OnClickLi
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Tp_Month_Select.super.onBackPressed();
+                    common_class.CommonIntentwithFinish(Dashboard.class);
                 }
             });
 
