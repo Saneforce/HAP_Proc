@@ -115,16 +115,17 @@ String Tag="HAP_Missed_Punch";
             }
         });
         Bundle params=getIntent().getExtras();
-        missedDates = params.getString("EDt");
-        missedShift = params.getString("Shift");
-        missedCHeckin = params.getString("CInTm");
-        missedCheckOut = params.getString("COutTm");
+        if(params!=null) {
+            missedDates = params.getString("EDt");
+            missedShift = params.getString("Shift");
+            missedCHeckin = params.getString("CInTm");
+            missedCheckOut = params.getString("COutTm");
 
-        checkIn.setText(missedCHeckin);
-        shiftType.setText(missedShift);
-        misseddateselect.setText(missedDates);
-        checkOutTime.setText(missedCheckOut);
-
+            checkIn.setText(missedCHeckin);
+            shiftType.setText(missedShift);
+            misseddateselect.setText(missedDates);
+            checkOutTime.setText(missedCheckOut);
+        }
         Log.d(Tag,String.valueOf(params));
     }
 

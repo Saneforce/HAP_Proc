@@ -100,8 +100,24 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
          eText = (EditText) findViewById(R.id.from_date);
         eText.setInputType(InputType.TYPE_NULL);
 
+        etext2 = (EditText) findViewById(R.id.to_date);
+        etext2.setInputType(InputType.TYPE_NULL);
+
         Submit = (Button) findViewById(R.id.submitButton);
 
+        Bundle params=getIntent().getExtras();
+        if(params!=null){
+            eText.setText(params.getString("EDt"));
+            etext2.setText(params.getString("EDt"));
+
+            String[] stDt=params.getString("EDt").split("/");
+            fromData= stDt[2]+"-"+stDt[1]+"-"+stDt[0];
+            toData= stDt[2]+"-"+stDt[1]+"-"+stDt[0];
+            difference();
+            //eText.setText(stDt[2]+"-"+stDt[1]+"-"+stDt[0]);
+            eText.setEnabled(false);
+            etext2.setEnabled(false);
+        }
 
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
@@ -144,8 +160,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             }
         });
 
-        etext2 = (EditText) findViewById(R.id.to_date);
-        etext2.setInputType(InputType.TYPE_NULL);
         etext2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

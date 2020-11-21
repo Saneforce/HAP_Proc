@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
 import androidx.core.content.res.ResourcesCompat;
 
 import com.hap.checkinproc.Activity.ViewActivity;
@@ -48,6 +49,7 @@ public class FilterDemoAdapter extends BaseAdapter {
     int x;
     SharedPreferences share;
     boolean forHeader=false;
+    CardView card_count;
     public FilterDemoAdapter(Context context, JSONArray ja,String value,int x,String target) {
         this.context = context;
         this.ja=ja;
@@ -86,7 +88,13 @@ public class FilterDemoAdapter extends BaseAdapter {
         header_view=view.findViewById(R.id.header_view);
         rlay=new LinearLayout(context);
         rlay.setOrientation(LinearLayout.VERTICAL);
+        card_count=view.findViewById(R.id.card_count);
         ki=0;
+        if(ja.length()==1) {
+            RelativeLayout.LayoutParams params_r = new RelativeLayout.LayoutParams((int) RelativeLayout.LayoutParams.MATCH_PARENT, (int) RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params_r.setMargins(0, 0, 0, 0);
+            card_count.setLayoutParams(params_r);
+        }
         try {
             JSONObject js=ja.getJSONObject(i);
             createTxtView(js);

@@ -243,7 +243,7 @@ public class SANGPSTracker extends Service {
     public void requestLocationUpdates() {
         Log.i(TAG, "Requesting location updates");
         // Utils.setRequestingLocationUpdates(this, true);
-        startService(new Intent(this, SANGPSTracker.class));
+        startService(new Intent(mContext, SANGPSTracker.class));
 
     }
 

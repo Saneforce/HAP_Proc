@@ -206,7 +206,12 @@ public class Login extends AppCompatActivity {
                 startService(playIntent);
             }
             if (Login == true && CheckIn == false) {
-                mProgress.show();
+
+                try {
+                    mProgress.show();
+                }catch (Exception e){
+
+                }
                 login(RC_SIGN_IN);
             } else if (CheckIn == true) {
                 Shared_Common_Pref.Sf_Code = sharedPreferences.getString("Sfcode","");
@@ -391,10 +396,18 @@ public class Login extends AppCompatActivity {
 
                         editor.apply();
                         startActivity(intent);
-                        mProgress.dismiss();
+                        try {
+                            mProgress.dismiss();
+                        }catch (Exception e){
+
+                        }
 
                     } else {
-                        mProgress.dismiss();
+                        try {
+                            mProgress.dismiss();
+                        }catch (Exception e){
+
+                        }
                         Toast.makeText(getApplicationContext(), "Check username and password", Toast.LENGTH_LONG).show();
                     }
                 }

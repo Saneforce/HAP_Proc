@@ -133,9 +133,9 @@ public class ImageCapture extends AppCompatActivity implements
             }
             if(!checkPermission())
             {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+               // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     requestPermissions();
-                }
+               // }
             }
             else{
                 StartSelfiCamera();
@@ -242,7 +242,7 @@ public class ImageCapture extends AppCompatActivity implements
     }
 
     //Location service part
-    @RequiresApi(api = Build.VERSION_CODES.Q)
+   // @RequiresApi(api = Build.VERSION_CODES.Q)
     private void requestPermissions()
     {
         boolean shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
