@@ -49,18 +49,6 @@
                 android:orientation="vertical"
                 android:padding="18dp">
 
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/cardview_light_background"
-                    app:cardCornerRadius="10dp">
-
-                    <LinearLayout
-                        android:id="@+id/misseddatelayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
                         <TextView
                             android:id="@+id/textView9"
                             android:layout_width="match_parent"
@@ -68,7 +56,6 @@
                             android:layout_centerHorizontal="true"
                             android:layout_gravity="center"
                             android:background="@drawable/button_yellow"
-                            android:fontFamily="@font/poppins_semibold"
                             android:gravity="center"
                             android:text="Missed Date"
                             android:textAllCaps="false"
@@ -77,10 +64,17 @@
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
+                <LinearLayout
+                    android:id="@+id/misseddatelayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
                             android:fontFamily="@font/poppins_semibold"
                             android:text="Missed date"
                             android:textColor="@android:color/black"
@@ -90,10 +84,10 @@
                             android:id="@+id/misseddateselect"
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
-                            android:layout_marginTop="10dp"
+                            android:layout_margin="2dp"
                             android:background="@drawable/textbox_bg"
                             android:elevation="10dp"
-                            android:padding="@dimen/C15dp"
+                            android:padding="@dimen/C10dp"
                             android:gravity="start"
                             android:hint="@string/selectmissed_date" />
 
@@ -116,12 +110,10 @@
 
 
 
-                </androidx.cardview.widget.CardView>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="@font/alegreya_sans_sc"
                     android:text="Shift time"
                     android:textColor="@android:color/black"
                     android:textStyle="bold" />
@@ -132,8 +124,10 @@
                     android:layout_height="45dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/textbox_bg"
+                    android:textSize="@dimen/C13dp"
                     android:clickable="false"
                     android:elevation="10dp"
+                    android:padding="@dimen/C10dp"
                     android:focusable="false" />
 
 
@@ -141,7 +135,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="@font/alegreya_sans_sc"
                     android:text="Check-in time"
                     android:textColor="@android:color/black"
                     android:textStyle="bold" />
@@ -155,13 +148,14 @@
                     android:background="@drawable/textbox_bg"
                     android:clickable="false"
                     android:elevation="10dp"
-                    android:focusable="false" />
+                    android:padding="@dimen/C10dp"
+                    android:focusable="false"
+                    android:textSize="@dimen/C13dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="@font/alegreya_sans_sc"
                     android:text="Check-out time  and  Date"
                     android:textColor="@android:color/black"
                     android:textStyle="bold" />
@@ -170,21 +164,21 @@
                 <EditText
                     android:id="@+id/missed_checkout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="45dp"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/textbox_bg"
                     android:clickable="false"
                     android:elevation="10dp"
                     android:focusable="false"
                     android:hint="Select Time and Date"
-                    android:padding="@dimen/C5dp" />
+                    android:padding="@dimen/C10dp"
+                    android:textSize="@dimen/C13dp" />
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:fontFamily="@font/alegreya_sans_sc"
                     android:text="Reason :"
                     android:textColor="@android:color/black"
                     android:textStyle="bold" />
@@ -199,7 +193,8 @@
                     android:gravity="start"
                     android:hint="Reason"
                     android:padding="@dimen/C10dp"
-                    android:textColor="@color/grey_500" />
+                    android:textColor="@color/grey_500"
+                    android:textSize="@dimen/C13dp" />
 
 
                 <Button

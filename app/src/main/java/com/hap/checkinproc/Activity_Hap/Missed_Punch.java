@@ -115,11 +115,16 @@ String Tag="HAP_Missed_Punch";
             }
         });
         Bundle params=getIntent().getExtras();
-        missedDates = params.getString("name");
-        missedShift = params.getString("name1");
+        missedDates = params.getString("EDt");
+        missedShift = params.getString("Shift");
         missedCHeckin = params.getString("CInTm");
+        missedCheckOut = params.getString("COutTm");
+
         checkIn.setText(missedCHeckin);
         shiftType.setText(missedShift);
+        misseddateselect.setText(missedDates);
+        checkOutTime.setText(missedCheckOut);
+
         Log.d(Tag,String.valueOf(params));
     }
 
@@ -135,8 +140,6 @@ String Tag="HAP_Missed_Punch";
             public void onResponse(Call<Object> call, Response<Object> response) {
 
                 Log.e("RESPONSE_LOG", response.body().toString());
-
-
                 GetJsonData(new Gson().toJson(response.body()), "0");
 
                 //DistributorTypeAdapter();

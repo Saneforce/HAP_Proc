@@ -154,15 +154,15 @@ public class Login extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              /* if(mLUService == null)
+               if(mLUService == null)
                    mLUService = new SANGPSTracker(getApplicationContext());
-              *//* if(mTimerService == null)
+              /* if(mTimerService == null)
                    mTimerService = new TimerService();
-               mTimerService.startTimerService();*//*
+               mTimerService.startTimerService();*/
 
                startService(new Intent(Login.this, TimerService.class));
                mLUService.requestLocationUpdates();
-               mProgress.show();*/
+               mProgress.show();
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
@@ -199,6 +199,7 @@ public class Login extends AppCompatActivity {
         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
 
         if (Login == true || CheckIn == true) {
+
             if (checkPermission()) {
                 Intent playIntent = new Intent(this, SANGPSTracker.class);
                 bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
@@ -208,6 +209,10 @@ public class Login extends AppCompatActivity {
                 mProgress.show();
                 login(RC_SIGN_IN);
             } else if (CheckIn == true) {
+                Shared_Common_Pref.Sf_Code = sharedPreferences.getString("Sfcode","");
+                Shared_Common_Pref.Sf_Name = sharedPreferences.getString("SfName","");
+                Shared_Common_Pref.Div_Code = sharedPreferences.getString("Divcode","");
+                Shared_Common_Pref.StateCode = sharedPreferences.getString("State_Code","");
                 Intent Dashboard = new Intent(Login.this, Dashboard_Two.class);
                 Dashboard.putExtra("Mode", "CIN");
                 startActivity(Dashboard);

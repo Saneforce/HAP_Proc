@@ -34,7 +34,7 @@
                     android:paddingBottom="0dp"
                     android:textColor="@color/white"
                     android:textSize="11sp"
-                    android:text="HAP Check-In" />
+                    android:text="@string/app_name" />
 
             <TextView
                 android:id="@+id/txtver"
@@ -46,7 +46,7 @@
                 android:textSize="8sp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="-14dp"
-                android:text="Ver 3.0.0" />
+                android:text="@string/AppVer" />
         </RelativeLayout>
 
         <Space

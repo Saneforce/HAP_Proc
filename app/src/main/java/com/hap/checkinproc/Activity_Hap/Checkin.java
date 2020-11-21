@@ -22,6 +22,12 @@ import retrofit2.Response;
 
 public class Checkin extends AppCompatActivity {
 
+    private static String Tag="HAP_Check-In";
+    SharedPreferences sharedPreferences;
+    SharedPreferences CheckInDetails;
+    public static final String spCheckIn = "CheckInDetail" ;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+
     private JsonArray ShiftItems = new JsonArray();
     private RecyclerView recyclerView;
     private ShiftListItem mAdapter;
@@ -32,6 +38,8 @@ public class Checkin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkin);
+        SharedPreferences CheckInDetails = getSharedPreferences(spCheckIn, MODE_PRIVATE);
+        String SFTID=CheckInDetails.getString("Shift_Selected_Id","");
         intent = getIntent();
         Bundle extras = intent.getExtras();
         if (extras != null) {
@@ -39,12 +47,30 @@ public class Checkin extends AppCompatActivity {
             onDutyPlcID = extras.getString("onDutyPlcID");
             onDutyPlcNm = extras.getString("onDutyPlcNm");
             vstPurpose = extras.getString("vstPurpose");
+            if (onDutyPlcID==null) {
+                SFTID="0";
+                onDutyPlcID="";
+            }
         }
+        if(SFTID!=""){
+            Intent takePhoto=new Intent(this, ImageCapture.class);
+            takePhoto.putExtra("Mode","CIn");
+            takePhoto.putExtra("ShiftId",SFTID);
+            takePhoto.putExtra("ShiftName",CheckInDetails.getString("Shift_Name",""));
+            takePhoto.putExtra("ShiftStart",CheckInDetails.getString("ShiftStart",""));
+            takePhoto.putExtra("ShiftEnd",CheckInDetails.getString("ShiftEnd",""));
+            takePhoto.putExtra("ShiftCutOff",CheckInDetails.getString("ShiftCutOff",""));
 
-
-        SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            takePhoto.putExtra("ODFlag",ODFlag);
+            takePhoto.putExtra("onDutyPlcID",onDutyPlcID);
+            takePhoto.putExtra("onDutyPlcNm",onDutyPlcNm);
+            takePhoto.putExtra("vstPurpose",vstPurpose);
+            startActivity(takePhoto);
+        }
+        SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         String Scode = (shared.getString("Sfcode", "null"));
         String Dcode = (shared.getString("Divcode", "null"));
+
         spinnerValue("get/Shift_timing", Dcode, Scode);
 
     }

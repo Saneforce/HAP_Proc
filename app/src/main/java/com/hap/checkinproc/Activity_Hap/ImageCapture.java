@@ -338,6 +338,9 @@ public class ImageCapture extends AppCompatActivity implements
             CheckInInf.put("eTime", CTime);
             CheckInInf.put("lat", location.getLatitude());
             CheckInInf.put("long", location.getLongitude());
+            CheckInInf.put("Lattitude", location.getLatitude());
+            CheckInInf.put("Langitude", location.getLongitude());
+
             CheckInInf.put("iimgSrc", imagePath);
             CheckInInf.put("slfy", imageFileName);
             CheckInInf.put("Rmks", "");
@@ -399,7 +402,7 @@ public class ImageCapture extends AppCompatActivity implements
                 });
             }else {
                 ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                Call<JsonObject> modelCall = apiInterface.JsonSave("dcr/save",
+                Call<JsonObject> modelCall = apiInterface.JsonSave("get/logouttime",
                         UserDetails.getString("Divcode", ""),
                         UserDetails.getString("Sfcode", ""), "", "", CheckInInf.toString());
                 modelCall.enqueue(new Callback<JsonObject>() {
@@ -407,6 +410,7 @@ public class ImageCapture extends AppCompatActivity implements
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
                         if (response.isSuccessful()) {
+                            Log.e("TOTAL_REPOSNEaaa", String.valueOf(response.body()));
 
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.putString("Logintime", "");
