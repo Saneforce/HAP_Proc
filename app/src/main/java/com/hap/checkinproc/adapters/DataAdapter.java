@@ -1,4 +1,5 @@
 package com.hap.checkinproc.adapters;
+
 import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -7,18 +8,23 @@ import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
+
 import java.util.ArrayList;
 import java.util.List;
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolder> implements Filterable {
     List<Common_Model> contactList;
     Master_Interface updateUi;
     int typeName;
     private List<Common_Model> contactListFiltered;
+
     public DataAdapter(List<Common_Model> myDataset, Context context, int type) {
         contactList = myDataset;
         typeName = type;
@@ -37,7 +43,13 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
     @Override
     public void onBindViewHolder(@NonNull FruitViewHolder fruitViewHolder, int i) {
         final Common_Model contact = contactListFiltered.get(i);
-        fruitViewHolder.mTextView.setText(contact.getName());
+        fruitViewHolder.mTextViewOne.setText(contact.getName());
+        String getAddress = contact.getAddress();
+        if (isNullOrEmpty(getAddress)) {
+            fruitViewHolder.mTextViewTwo.setVisibility(View.GONE);
+        } else {
+            fruitViewHolder.mTextViewTwo.setText(contact.getAddress());
+        }
     }
 
     @Override
@@ -74,7 +86,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
                     contactListFiltered = filteredList;
 
 
-
                 }
 
                 FilterResults filterResults = new FilterResults();
@@ -94,10 +105,12 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
     }
 
     public class FruitViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView mTextView;
+        public TextView mTextViewOne, mTextViewTwo;
+
         public FruitViewHolder(View v) {
             super(v);
-            mTextView =  v.findViewById(R.id.textView);
+            mTextViewOne = v.findViewById(R.id.txt_one);
+            mTextViewTwo = v.findViewById(R.id.txt_two);
             v.setOnClickListener(this);
         }
 
@@ -107,5 +120,10 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
         }
     }
 
+    public static boolean isNullOrEmpty(String str) {
+        if (str != null && !str.isEmpty())
+            return false;
+        return true;
+    }
 
 }

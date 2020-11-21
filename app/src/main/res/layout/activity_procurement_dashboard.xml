@@ -13,7 +13,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/tool_bar_bg"
+            android:background="@color/colorPrimaryDark"
             android:id="@+id/lay_tool"
             android:padding="8dp">
             <ImageView

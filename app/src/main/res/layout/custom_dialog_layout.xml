@@ -50,14 +50,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight=".5"
+            android:visibility="invisible"
             android:background="@color/color_white" />
 
         <Button
             android:id="@+id/no"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="wrap_content"
             android:layout_weight=".1"
-            android:background="@color/colorPrimary"
+            android:padding="@dimen/C5dp"
+            android:background="@color/colorPrimaryDark"
             android:text="Close"
             android:textColor="@color/color_white" />
 

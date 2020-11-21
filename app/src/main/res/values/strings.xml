@@ -42,12 +42,10 @@
     <string name="txt_enter_reason">Enter the Reason</string>
 
 
-
     <string name="Tourplan">Tour  Plan</string>
     <string name="Calander">Calendar</string>
     <string name="monthselection">Month Selection</string>
     <string name="mydayplan">My day Plan</string>
-
 
 
     <string name="txt_password">Password</string>
@@ -95,4 +93,21 @@
 </string>
     <string name="goback">Back
 </string>
+
+    <!--Order Deatils-->
+    <string name="my_orders">My Orders</string>
+    <string name="Rep_orders">Reports</string>
+    <string name="pri_orders">Orders</string>
+    <string name="order_type">Order Type</string>
+    <string name="head_quater">Headquaters</string>
+    <string name="route">Route</string>
+    <string name="retailer">Retailer</string>
+    <string name="retailer_class">Retailer Class</string>
+    <string name="retailer_channel">Retailer Channel</string>
+    <string name="event_capture">Event Capture</string>
+    <string name="order">Orders</string>
+    <string name="add_retailer">Add New Retailer</string>
+    <string name="remarks">Enter the Remarks (or) Select from Templates</string>
+    <string name="from_date">From :</string>
+    <string name="to_date">To :</string>
 </resources>

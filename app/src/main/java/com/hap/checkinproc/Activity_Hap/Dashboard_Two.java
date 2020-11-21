@@ -47,6 +47,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     int cModMnth = 1;
     Button viewAll;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -388,8 +389,12 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 startActivity(i5);
                 break;
             case R.id.StActivity:
-                Intent i6 = new Intent(this, ProcurementDashboardActivity.class);
-                startActivity(i6);
+             /*   Intent i6 = new Intent(this, ProcurementDashboardActivity.class);
+                startActivity(i6);*/
+
+
+                startActivity(new Intent(this,OrderDashBoard.class));
+
                 break;
             default:
                 break;
