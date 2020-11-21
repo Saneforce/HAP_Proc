@@ -246,35 +246,26 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
                 Log.e("halfType", leavetype_id);
 
-                if (oneTwo == false) {
-                    if (!eText.getText().toString().matches("") && !etext2.getText().toString().matches("") && !leavetype_id.matches("") && !reasonForLeave.getText().toString().matches((""))) {
-                        LeaveSubmitOne();
-                    } else if (leavetype_id.matches("")) {
-                        Toast.makeText(Leave_Request.this, "Enter Leave Type", Toast.LENGTH_SHORT).show();
-                    } else if (eText.getText().toString().matches("")) {
-                        Toast.makeText(Leave_Request.this, "Enter From date", Toast.LENGTH_SHORT).show();
-                    } else if (etext2.getText().toString().matches("")) {
-                        Toast.makeText(Leave_Request.this, "Enter To date", Toast.LENGTH_SHORT).show();
-                    } else if (reasonForLeave.getText().toString().matches((""))) {
-                        Toast.makeText(Leave_Request.this, "Enter Reason", Toast.LENGTH_SHORT).show();
-                    }
-                } else if (oneTwo == true) {
-                    if (!eText.getText().toString().matches("") && !etext2.getText().toString().matches("") && !shiftTypeVal.matches("") && !halfTypeVal.matches("") && !leavetype_id.matches("") && !reasonForLeave.getText().toString().matches((""))) {
-                        LeaveSubmitOne();
-                    } else if (leavetype_id.matches("")) {
-                        Toast.makeText(Leave_Request.this, "Enter Leave Type", Toast.LENGTH_SHORT).show();
-                    } else if (eText.getText().toString().matches("")) {
-                        Toast.makeText(Leave_Request.this, "Enter From date", Toast.LENGTH_SHORT).show();
-                    } else if (etext2.getText().toString().matches("")) {
-                        Toast.makeText(Leave_Request.this, "Enter To date", Toast.LENGTH_SHORT).show();
-                    } else if (shiftTypeVal.matches("")) {
-                        Toast.makeText(Leave_Request.this, "Enter Shift Time", Toast.LENGTH_SHORT).show();
-                    } else if (halfTypeVal.matches("")) {
-                        Toast.makeText(Leave_Request.this, "Enter HalfDay Type", Toast.LENGTH_SHORT).show();
-                    } else if (reasonForLeave.getText().toString().matches((""))) {
-                        Toast.makeText(Leave_Request.this, "Enter Reason", Toast.LENGTH_SHORT).show();
+                if (leaveType.getText().toString().matches("")) {
+                    Toast.makeText(Leave_Request.this, "Enter Leave Type", Toast.LENGTH_SHORT).show();return;
+                } else if (eText.getText().toString().matches("")) {
+                    Toast.makeText(Leave_Request.this, "Enter From date", Toast.LENGTH_SHORT).show();return;
+                } else if (etext2.getText().toString().matches("")) {
+                    Toast.makeText(Leave_Request.this, "Enter To date", Toast.LENGTH_SHORT).show();return;
+                } else if (reasonForLeave.getText().toString().matches((""))) {
+                    Toast.makeText(Leave_Request.this, "Enter Reason", Toast.LENGTH_SHORT).show();return;
+                }
+                if (oneTwo == true) {
+                    if (shitType.getText().toString().matches("")) {
+                        Toast.makeText(Leave_Request.this, "Enter Shift Time", Toast.LENGTH_SHORT).show();return;
+                    } else if (halfType.getText().toString().matches("")) {
+                        Toast.makeText(Leave_Request.this, "Enter HalfDay Type", Toast.LENGTH_SHORT).show();return;
                     }
                 }
+                if (reasonForLeave.getText().toString().matches((""))) {
+                    Toast.makeText(Leave_Request.this, "Enter Reason", Toast.LENGTH_SHORT).show();return;
+                }
+                LeaveSubmitOne();
 
             }
         });
@@ -428,7 +419,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
                 String Msg = String.valueOf(jsonObjecta.get("Msg"));
                 Msg = Msg.replace("\"", "");
-                Log.e("SDFDFD", jsonObjecta.get("success").toString());
+                Log.e("SDFDFD", String.valueOf(jsonObjecta));
                 Log.e("SDFDFDDFF", String.valueOf(Msg.length()));
 
 
