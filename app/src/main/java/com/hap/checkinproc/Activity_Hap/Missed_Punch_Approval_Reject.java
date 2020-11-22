@@ -39,7 +39,7 @@ public class Missed_Punch_Approval_Reject extends AppCompatActivity implements V
     Common_Class common_class;
     LinearLayout Approvereject, rejectonly;
     EditText reason;
-
+    Intent i;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,7 +68,7 @@ public class Missed_Punch_Approval_Reject extends AppCompatActivity implements V
         MPapprovebutton.setOnClickListener(this);
         MPreject.setOnClickListener(this);
         MP_rejectsave.setOnClickListener(this);
-        Intent i = getIntent();
+        i = getIntent();
         name.setText("" + i.getExtras().getString("Username"));
         empcode.setText(":" + i.getExtras().getString("Emp_Code"));
         hq.setText("" + i.getExtras().getString("HQ"));
@@ -82,12 +82,12 @@ public class Missed_Punch_Approval_Reject extends AppCompatActivity implements V
         checkouttime.setText("" + i.getExtras().getString("CheckinTime"));
         Sf_Code = i.getExtras().getString("Sf_Code");
         Sl_No = i.getExtras().getString("Sl_No");
-
+        mobilenumber.setOnClickListener(this);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
+                common_class.CommonIntentwithFinish(Missed_punch_Approval.class);
             }
         });
     }
@@ -174,6 +174,9 @@ public class Missed_Punch_Approval_Reject extends AppCompatActivity implements V
                 } else {
                     SendtpApproval("MissedApprovalR", 2);
                 }
+                break;
+            case R.id.mobilenumber:
+                common_class.makeCall(Integer.parseInt(i.getExtras().getString("MobileNumber")));
                 break;
         }
     }

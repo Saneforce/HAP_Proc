@@ -40,7 +40,7 @@ import java.util.ArrayList;
 public class AdapterForDynamicView extends BaseAdapter {
     Context context;
     ArrayList<ModelDynamicView> array=new ArrayList<>();
-    RelativeLayout dyn_lay,r_lay_sec;
+    RelativeLayout dyn_lay,r_lay_sec,r_lay_fist;
     static UpdateUi updateUi;
     Button btn_upload;
     RelativeLayout rlay_list;
@@ -83,6 +83,7 @@ public class AdapterForDynamicView extends BaseAdapter {
         dyn_l_lay=(LinearLayout) view.findViewById(R.id.dyn_l_lay);
         dyn_list=view.findViewById(R.id.dyn_list);
         r_lay_sec=view.findViewById(R.id.r_lay_sec);
+        r_lay_fist=view.findViewById(R.id.r_lay_fist);
         //RelativeLayout rlay_head=(RelativeLayout) view.findViewById(R.id.rlay_head);
         RelativeLayout rlay_upload=(RelativeLayout) view.findViewById(R.id.rlay_upload);
         TextView spin_txt=(TextView)view.findViewById(R.id.spin_txt);
@@ -213,9 +214,15 @@ public class AdapterForDynamicView extends BaseAdapter {
 
         }
         else    if(mm.getViewid().equalsIgnoreCase("19")){
+            r_lay_sec.setBackgroundResource(0);
             rlay_list.setVisibility(View.VISIBLE);
             dyn_list.setVisibility(View.VISIBLE);
-           /* LinearLayout.LayoutParams params_r = new LinearLayout.LayoutParams((int) LinearLayout.LayoutParams.MATCH_PARENT,(int) LinearLayout.LayoutParams.WRAP_CONTENT);
+            RelativeLayout.LayoutParams params_r = new RelativeLayout.LayoutParams((int) RelativeLayout.LayoutParams.MATCH_PARENT,(int) RelativeLayout.LayoutParams.WRAP_CONTENT);
+            params_r.setMargins(0,0,0,0);
+            r_lay_sec.setLayoutParams(params_r);
+            r_lay_fist.setLayoutParams(params_r);
+            /*
+*/           /* LinearLayout.LayoutParams params_r = new LinearLayout.LayoutParams((int) LinearLayout.LayoutParams.MATCH_PARENT,(int) LinearLayout.LayoutParams.WRAP_CONTENT);
             params_r.setMargins(0,0,0,0);
             r_lay_sec.setLayoutParams(params_r);*/
             try {

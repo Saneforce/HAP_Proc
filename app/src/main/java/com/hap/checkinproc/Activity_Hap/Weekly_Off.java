@@ -57,6 +57,14 @@ public class Weekly_Off extends AppCompatActivity {
         remark = (EditText) findViewById(R.id.remarks_week);
         weeklySubmit = (Button) findViewById(R.id.weeky_submit);
         gson = new Gson();
+
+        Bundle params=getIntent().getExtras();
+        if(params!=null){
+            String[] stDt=params.getString("EDt").split("/");
+            eText.setText(stDt[2]+"-"+stDt[1]+"-"+stDt[0]);
+            eText.setEnabled(false);
+        }
+
         MaxMinDate();
         eText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -202,9 +210,9 @@ public class Weekly_Off extends AppCompatActivity {
                 JsonObject jsonObjecta = response.body();
 
                 Log.e("TOTAL_REPOSNE", String.valueOf(jsonObjecta));
-                String Msg = String.valueOf(jsonObjecta.get("msg"));
+                String Msg = jsonObjecta.get("msg").getAsString();
 
-                AlertDialogBox.showDialog(Weekly_Off.this, "Confrimation", Msg, "OK", "", false, new AlertBox() {
+                AlertDialogBox.showDialog(Weekly_Off.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
                         dialog.dismiss();

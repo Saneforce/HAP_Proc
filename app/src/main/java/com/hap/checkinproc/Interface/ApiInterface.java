@@ -264,6 +264,9 @@ public interface ApiInterface {
     @POST("Db_Hap.php?axn=get/precall")
     Call<RetailerViewDetails> getRetailerDetails(@Query("divisionCode") String divisionCode, @Query("sf_code") String sFCode, @Query("Msl_No") String retailerID);
 
+    @FormUrlEncoded
+    @POST("Db_Hap.php")
+    Call<Object>Get_Object(@QueryMap Map<String, String> params, @Field("data") String body);
 
 }
 

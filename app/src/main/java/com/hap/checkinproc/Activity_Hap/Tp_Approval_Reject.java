@@ -39,6 +39,7 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
     Common_Class common_class;
     LinearLayout Approvereject, rejectonly;
     EditText reason;
+    Intent i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
         tpapprovebutton.setOnClickListener(this);
         tpreject.setOnClickListener(this);
         tp_rejectsave.setOnClickListener(this);
-        Intent i = getIntent();
+        i = getIntent();
         name.setText(":" + i.getExtras().getString("Username"));
         empcode.setText(":" + i.getExtras().getString("Emp_Code"));
         hq.setText(":" + i.getExtras().getString("HQ"));
@@ -81,11 +82,12 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
         Sf_Code = i.getExtras().getString("Sf_Code");
         remarks.setText(i.getExtras().getString("Remarks"));
 
+        mobilenumber.setOnClickListener(this);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
+                common_class.CommonIntentwithFinish(Tp_Approval.class);
             }
         });
 
@@ -174,6 +176,9 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
                 } else {
                     SendtpApproval("NTPApprovalR", 2);
                 }
+                break;
+            case R.id.mobilenumber:
+                common_class.makeCall(Integer.parseInt(i.getExtras().getString("MobileNumber")));
                 break;
         }
     }

@@ -206,7 +206,12 @@ public class Login extends AppCompatActivity {
                 startService(playIntent);
             }
             if (Login == true && CheckIn == false) {
-                mProgress.show();
+
+                try {
+                    mProgress.show();
+                }catch (Exception e){
+
+                }
                 login(RC_SIGN_IN);
             } else if (CheckIn == true) {
                 Shared_Common_Pref.Sf_Code = sharedPreferences.getString("Sfcode", "");
@@ -342,7 +347,7 @@ public class Login extends AppCompatActivity {
             return;
         }
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail);
+        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "thirumalaivasan786@gmail.com");
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
@@ -358,8 +363,7 @@ public class Login extends AppCompatActivity {
                             intent = new Intent(Login.this, Dashboard.class);
                             //  intent = new Intent(Login.this, OrderDashBoard.class);
                         else
-
-                            intent = new Intent(Login.this, Dashboard_Two.class);
+                        intent = new Intent(Login.this, Dashboard_Two.class);
                         intent.putExtra("photo", photo);
                         String code = response.body().getData().get(0).getSfCode();
                         String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
@@ -391,10 +395,18 @@ public class Login extends AppCompatActivity {
 
                         editor.apply();
                         startActivity(intent);
-                        mProgress.dismiss();
+                        try {
+                            mProgress.dismiss();
+                        }catch (Exception e){
+
+                        }
 
                     } else {
-                        mProgress.dismiss();
+                        try {
+                            mProgress.dismiss();
+                        }catch (Exception e){
+
+                        }
                         Toast.makeText(getApplicationContext(), "Check username and password", Toast.LENGTH_LONG).show();
                     }
                 }

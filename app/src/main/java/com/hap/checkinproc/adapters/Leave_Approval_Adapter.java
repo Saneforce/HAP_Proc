@@ -20,7 +20,7 @@ public class Leave_Approval_Adapter extends RecyclerView.Adapter<Leave_Approval_
     private int rowLayout;
     private Context context;
     AdapterOnClick mAdapterOnClick;
-    Integer dummy;
+    int dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, textviewdate, open, leavedays;

@@ -1,14 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +8,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -24,16 +20,17 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-
 import com.hap.checkinproc.Model_Class.Tp_Approval_Model;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.Tp_Approval_Adapter;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Tp_Approval extends AppCompatActivity {
     Gson gson;
@@ -42,12 +39,12 @@ public class Tp_Approval extends AppCompatActivity {
     private RecyclerView recyclerView;
     TextView title;
     private Toolbar toolbar;
-
+    Common_Class common_class;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tp__approval);
-
+        common_class = new Common_Class(this);
 
         recyclerView = findViewById(R.id.tprecyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -58,7 +55,7 @@ public class Tp_Approval extends AppCompatActivity {
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
+                common_class.CommonIntentwithFinish(Approvals.class);
             }
         });
 
@@ -83,7 +80,7 @@ public class Tp_Approval extends AppCompatActivity {
 
                 recyclerView.setAdapter(new Tp_Approval_Adapter(Tp_Approval_Model, R.layout.tpapproval_layout, getApplicationContext(), new AdapterOnClick() {
                     @Override
-                    public void onIntentClick(Integer Name) {
+                    public void onIntentClick(int Name) {
                         Intent intent = new Intent(Tp_Approval.this, Tp_Approval_Reject.class);
                         intent.putExtra("Username", Tp_Approval_Model.get(Name).getFieldForceName());
                         intent.putExtra("Emp_Code", Tp_Approval_Model.get(Name).getEmpCode());
@@ -97,6 +94,8 @@ public class Tp_Approval extends AppCompatActivity {
                         intent.putExtra("Sf_Code", Tp_Approval_Model.get(Name).getSFCode());
                         intent.putExtra("Remarks", Tp_Approval_Model.get(Name).getRemarks());
                         startActivity(intent);
+                        finish();
+
                     }
                 }));
             }

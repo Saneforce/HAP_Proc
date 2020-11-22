@@ -94,14 +94,13 @@ public class Onduty_Approval_Reject extends AppCompatActivity implements View.On
         checkin.setText("" + i.getExtras().getString("checkintime"));
         checkout.setText("" + i.getExtras().getString("checkouttime"));
         Sf_Code = i.getExtras().getString("Sf_Code");
-        duty_id = i.getExtras().getString("Sf_Code");
-
+        duty_id = i.getExtras().getString("duty_id");
+mobilenumber.setOnClickListener(this);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
-            }
+                common_class.CommonIntentwithFinish(Onduty_approval.class);            }
         });
 
     }
@@ -142,7 +141,7 @@ public class Onduty_Approval_Reject extends AppCompatActivity implements View.On
                 // locationList=response.body();
                 Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
                 try {
-                    common_class.CommonIntentwithFinish(Permission_Approval.class);
+                    common_class.CommonIntentwithFinish(Onduty_approval.class);
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     if (flag == 1) {
                         common_class.ProgressdialogShow(2, "");

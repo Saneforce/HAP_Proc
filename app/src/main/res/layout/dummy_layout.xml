@@ -9,7 +9,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:id="@+id/r_lay_fist">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

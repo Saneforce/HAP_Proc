@@ -183,7 +183,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 //startActivity(new Intent(Approvals.this, Ta_approval.class));
                 break;
             case R.id.lin_tour_plan:
-                common_class.CommonIntentwithFinish(Tp_Approval.class);
+                startActivity(new Intent(Approvals.this, Tp_Approval.class));
                 break;
             case R.id.lin_leav_sta:
                 common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "1");
@@ -220,12 +220,17 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
 }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        getcountdetails();
+    }
 
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Approvals.super.onBackPressed();
+                    common_class.CommonIntentwithFinish(Dashboard.class);
                 }
             });
 
