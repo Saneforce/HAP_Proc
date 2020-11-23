@@ -137,7 +137,7 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 JsonArray res= response.body();
-
+Log.d("Respose_data",String.valueOf(response.body()));
                 JsonArray dyRpt=new JsonArray();
                 for(int il=0;il<res.size();il++) {
                     JsonObject Itm = res.get(il).getAsJsonObject();
@@ -290,8 +290,11 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
                                     .show();
 
                         }else{
-                            if (itm.getAsJsonArray("GetMissed").size()>0){
+
+                            JsonArray WKItems=itm.getAsJsonArray("CheckWK");
+                            if (WKItems.size()>0){
                                 if(itm.get("WKFlg").getAsInt()==1){
+                                    Log.d("WEEKOFF",String.valueOf(itm.get("WKFlg").getAsInt()));
                                     AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
                                             .setTitle("HAP Check-In")
                                             .setMessage(Html.fromHtml(mMessage))
@@ -299,19 +302,23 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
 
-                                            /*Intent Dashboard=new Intent(Dashboard_Two.this, Dashboard_Two.class);
-                                            Dashboard_Two.this.startActivity(Dashboard);
+                                                    JsonObject mItem=WKItems.get(0).getAsJsonObject();
+                                                    Intent iWeekOff=new Intent(Dashboard_Two.this, Weekly_Off.class);
+                                                    iWeekOff.putExtra("EDt",mItem.get("EDt").getAsString());
+                                                    Dashboard_Two.this.startActivity(iWeekOff);
 
-                                            ((AppCompatActivity) Dashboard_Two.this).finish();*/
+                                                    ((AppCompatActivity) Dashboard_Two.this).finish();
                                                 }
-                                            }).setPositiveButton("Others", new DialogInterface.OnClickListener() {
+                                            }).setNegativeButton("Others", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
 
-                                            /*Intent Dashboard=new Intent(Dashboard_Two.this, Dashboard_Two.class);
-                                            Dashboard_Two.this.startActivity(Dashboard);
+                                                    JsonObject mItem=WKItems.get(0).getAsJsonObject();
+                                                    Intent iLeave=new Intent(Dashboard_Two.this, Leave_Request.class);
+                                                    iLeave.putExtra("EDt",mItem.get("EDt").getAsString());
+                                                    Dashboard_Two.this.startActivity(iLeave);
 
-                                            ((AppCompatActivity) Dashboard_Two.this).finish();*/
+                                                    ((AppCompatActivity) Dashboard_Two.this).finish();
                                                 }
                                             })
                                             .show();
@@ -323,35 +330,18 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
 
-                                            /*Intent Dashboard=new Intent(Dashboard_Two.this, Dashboard_Two.class);
-                                            Dashboard_Two.this.startActivity(Dashboard);
 
-                                            ((AppCompatActivity) Dashboard_Two.this).finish();*/
+                                                    JsonObject mItem=WKItems.get(0).getAsJsonObject();
+                                                    Intent iLeave=new Intent(Dashboard_Two.this, Leave_Request.class);
+                                                    iLeave.putExtra("EDt",mItem.get("EDt").getAsString());
+                                                    Dashboard_Two.this.startActivity(iLeave);
+
+                                                    ((AppCompatActivity) Dashboard_Two.this).finish();
                                                 }
                                             })
                                             .show();
                                 }
                             }
-                            /*
-                            * if($scope.CheckyW.CheckWK.length>0){ // && $scope.CheckWk == 0){
-            if($scope.CheckyW.==1){
-                navigator.notification.confirm(
-                    $scope.CheckyW.Msg,
-                    onConfirmW,
-                    'HAP Check-In',
-                    ['Weekoff','Others']
-                );
-            }else{
-                navigator.notification.confirm(
-                    $scope.CheckyW.Msg,
-                    onConfirmL,
-                    'HAP Check-In',
-                    ['Others']
-                );
-            }
-        }else{
-            $state.go('fmcgmenu.home');
-        }*/
                         }
                     }catch(Exception e){}
 

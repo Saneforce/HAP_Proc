@@ -66,6 +66,7 @@ public class Checkin extends AppCompatActivity {
             takePhoto.putExtra("onDutyPlcNm",onDutyPlcNm);
             takePhoto.putExtra("vstPurpose",vstPurpose);
             startActivity(takePhoto);
+            finish();
         }
         SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         String Scode = (shared.getString("Sfcode", "null"));
