@@ -41,7 +41,7 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
     TextView txtOrder, txtRetailer, txtAddRetailer, txtRetailerChannel, txtClass, txtModelOrderValue, txtLastVisited, txtReamrks;
     CustomListViewDialog customDialog;
 
-    ImageView imgBack;
+
     EditText toolSearch;
     Button mSubmit;
     List<Common_Model> listOrderType = new ArrayList<>();
@@ -61,7 +61,21 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_secondary_order);
+        TextView txtHelp = findViewById(R.id.toolbar_help);
+        ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
+            }
+        });
         initilaize();
 
         RetailerType();

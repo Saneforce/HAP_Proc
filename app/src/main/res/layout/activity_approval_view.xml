@@ -333,9 +333,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
                     android:id="@+id/list_view"
-                    android:layout_marginBottom="4dp"
-
-                    ></ListView>
+                    android:layout_marginBottom="4dp"></ListView>
 
             </RelativeLayout>
 

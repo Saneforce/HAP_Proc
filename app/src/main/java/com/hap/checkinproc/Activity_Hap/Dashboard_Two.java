@@ -60,6 +60,21 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard__two);
 
+        TextView txtHelp = findViewById(R.id.toolbar_help);
+        ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+            }
+        });
         sharedPreferences = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
@@ -388,7 +403,8 @@ Log.d("Respose_data",String.valueOf(response.body()));
                 intent = new Intent(this, Reports.class);
                 break;
             case R.id.StActivity:
-                intent = new Intent(this, ProcurementDashboardActivity.class);
+                //intent = new Intent(this, ProcurementDashboardActivity.class);
+                intent = new Intent(this, OrderDashBoard.class);
                 break;
             case R.id.button3:
                 intent = new Intent(this, View_All_Status_Activity.class);

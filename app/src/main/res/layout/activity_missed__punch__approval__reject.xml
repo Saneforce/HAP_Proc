@@ -13,27 +13,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".Activity_Hap.Leave_Approval_Reject">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_blueg"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme">
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/alegreya_sans_sc"
-            android:text="Missed Punch Approvals"
-            android:textAllCaps="false"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </androidx.appcompat.widget.Toolbar>
+    <include layout="@layout/custom_toolbar_help"></include>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

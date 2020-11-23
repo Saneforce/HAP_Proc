@@ -3,6 +3,7 @@ package com.hap.checkinproc.Activity_Hap;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,11 +23,26 @@ public class Tp_Month_Select extends AppCompatActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tp__month__select);
+        TextView txtHelp = findViewById(R.id.toolbar_help);
+        ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+            }
+        });
         CurrentMoth = findViewById(R.id.CurrentMoth);
         NextMonth = findViewById(R.id.NextMonth);
         common_class = new Common_Class(this);
         Calendar cal = Calendar.getInstance();
-        backarow = findViewById(R.id.backarow);
+
         CM = cal.get(Calendar.MONTH);
         NM = cal.get(Calendar.MONTH) + 1;
         String currrentmonth = common_class.GetMonthname(CM);
@@ -37,8 +53,6 @@ public class Tp_Month_Select extends AppCompatActivity implements View.OnClickLi
         NextMonth.setText(nextmonth);
         CurrentMoth.setOnClickListener(this);
         NextMonth.setOnClickListener(this);
-        backarow.setOnClickListener(this);
-
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,10 +72,6 @@ public class Tp_Month_Select extends AppCompatActivity implements View.OnClickLi
             case R.id.NextMonth:
                 common_class.CommonIntentwithoutFinishputextra(Tp_Calander.class, "Monthselection", String.valueOf(NM));
 
-                break;
-
-            case R.id.backarow:
-                common_class.CommonIntentwithFinish(Dashboard.class);
                 break;
 
         }

@@ -347,7 +347,7 @@ public class Login extends AppCompatActivity {
             return;
         }
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "thirumalaivasan786@gmail.com");
+        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "dillibabu.j@hap.in");
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {

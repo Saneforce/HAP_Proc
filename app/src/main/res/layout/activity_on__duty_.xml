@@ -7,75 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".Activity_Hap.Dashboard">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
-        android:gravity="top"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="@id/constrain_dashboard"
-        >
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="0dp"
-            android:backgroundTint="@color/cardview_light_background"
-            />
-        <RelativeLayout
-            android:id="@+id/rlayHead"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            >
-            <TextView
-                android:id="@+id/AppTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:paddingBottom="0dp"
-                android:textColor="@color/white"
-                android:textSize="11sp"
-                android:text="@string/app_name" />
-
-            <TextView
-                android:id="@+id/txtver"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/AppTitle"
-                android:paddingBottom="0dp"
-                android:textColor="@color/white"
-                android:textSize="8sp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="-14dp"
-                android:text="@string/AppVer" />
-        </RelativeLayout>
-
-        <Space
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-        <TextView
-            android:id="@+id/textView38"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:paddingBottom="0dp"
-            android:text="Help"
-            android:textColor="@color/white"
-            android:layout_gravity="center_vertical"
-            android:textSize="13sp" />
-
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:padding="5dp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/ic_home"
-            android:layout_marginRight="10dp"/>
-
-    </LinearLayout>
+    <include layout="@layout/custom_toolbar_help"></include>
 
     <LinearLayout
         android:id="@+id/linearLayout"

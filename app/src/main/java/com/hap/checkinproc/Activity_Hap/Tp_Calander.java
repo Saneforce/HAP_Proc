@@ -3,6 +3,7 @@ package com.hap.checkinproc.Activity_Hap;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -76,6 +77,22 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tp_clander);
+
+        TextView txtHelp = findViewById(R.id.toolbar_help);
+        ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+            }
+        });
         shared_common_pref = new Shared_Common_Pref(this);
         common_class = new Common_Class(this);
         currentMonth = this.findViewById(R.id.title);
@@ -88,7 +105,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
         SelectedMonth = Integer.parseInt(common_class.getintentValues("Monthselection"));
         currentMonth.setText(common_class.GetMonthname(Integer.parseInt(common_class.getintentValues("Monthselection"))));
         Log.e("MONTH_SELECTion", common_class.getintentValues("Monthselection"));
-        backarow = findViewById(R.id.backarow);
+
         backarow.setOnClickListener(this);
         nDialog = new ProgressDialog(Tp_Calander.this);
         nDialog.setMessage("Loading.......");

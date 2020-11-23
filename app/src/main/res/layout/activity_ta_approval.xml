@@ -3,14 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Activity_Hap.Ta_approval">
+    android:orientation="vertical"
+    android:layout_height="match_parent">
 
+
+    <include layout="@layout/custom_toolbar_help" />
     <TextView
         android:id="@+id/textView38"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
+        android:layout_margin="@dimen/C5dp"
         tools:layout_editor_absoluteX="221dp"
         tools:layout_editor_absoluteY="181dp"
         tools:ignore="MissingConstraints" />
