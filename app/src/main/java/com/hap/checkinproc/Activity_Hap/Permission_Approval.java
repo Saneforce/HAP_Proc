@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
@@ -45,6 +46,21 @@ public class Permission_Approval extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_permission__approval);
+        TextView txtHelp = findViewById(R.id.toolbar_help);
+        ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+            }
+        });
         recyclerView = findViewById(R.id.permissionrecyclerview);
         common_class = new Common_Class(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

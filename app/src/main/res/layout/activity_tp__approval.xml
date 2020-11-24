@@ -14,17 +14,8 @@
         android:orientation="vertical"
         tools:context=".Activity_Hap.Leave_Approval">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_blueg"
-            app:titleTextColor="@android:color/white"
-            app:title="Tourplan Approval"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme">
 
-        </androidx.appcompat.widget.Toolbar>
+        <include layout="@layout/custom_toolbar_help" />
 
 
         <androidx.cardview.widget.CardView

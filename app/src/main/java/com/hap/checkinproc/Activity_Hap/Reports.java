@@ -4,7 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.RecyclerViewAdapter;
@@ -19,7 +23,21 @@ public class Reports extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reports);
+        TextView txtHelp = findViewById(R.id.toolbar_help);
+        ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
+            }
+        });
 
         initShift_Time();
 

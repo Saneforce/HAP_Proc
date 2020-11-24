@@ -96,6 +96,22 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave__request);
+
+        TextView txtHelp = findViewById(R.id.toolbar_help);
+        ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+            }
+        });
         gson = new Gson();
          eText = (EditText) findViewById(R.id.from_date);
         eText.setInputType(InputType.TYPE_NULL);
@@ -498,7 +514,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                 JsonObject jsonObjecta = response.body();
                 Log.e("TOTAL_REPOSNEaaa", String.valueOf(jsonObjecta));
 
-                startActivity(new Intent(Leave_Request.this, Leave_Dashboard.class));
+                startActivity(new Intent(Leave_Request.this, Dashboard.class));
             }
 
             @Override
@@ -542,8 +558,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
     }
 
-
-    /*ShiftType*/
 
     private void spinnerValue(String a, String dc, String sc) {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);

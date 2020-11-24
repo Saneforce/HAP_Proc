@@ -14,27 +14,7 @@
         tools:context=".Activity_Hap.Leave_Dashboard">
 
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_blueg"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme">
-
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/select_the_type"
-                android:textAllCaps="false"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:fontFamily="@font/poppins_bold"
-                android:textColor="#FFFFFF"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-        </androidx.appcompat.widget.Toolbar>
+        <include layout="@layout/custom_toolbar_help"></include>
 
         <ScrollView
             android:id="@+id/sv"

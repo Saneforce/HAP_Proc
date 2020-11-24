@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -46,6 +47,21 @@ public class Extendedshift_approval extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_extendedshift_approval);
+        TextView txtHelp = findViewById(R.id.toolbar_help);
+        ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+            }
+        });
         common_class = new Common_Class(this);
 
         ImageView backView = findViewById(R.id.imag_back);

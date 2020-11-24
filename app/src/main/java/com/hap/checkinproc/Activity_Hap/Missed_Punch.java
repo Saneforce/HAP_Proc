@@ -10,6 +10,8 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -24,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -31,6 +34,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.MissedPunch;
 import com.hap.checkinproc.R;
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,7 +74,21 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_missed__punch);
+        TextView txtHelp = findViewById(R.id.toolbar_help);
+        ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
+            }
+        });
         gson1 = new Gson();
         misseddatelayout = findViewById(R.id.misseddatelayout);
         misseddateselect = findViewById(R.id.misseddateselect);
@@ -153,6 +171,8 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
 
                 Log.e("RESPONSE_LOG", response.body().toString());
                 GetJsonData(new Gson().toJson(response.body()), "0");
+
+                //DistributorTypeAdapter();
             }
 
             @Override
@@ -267,7 +287,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject jsonObjecta = response.body();
                 Log.e("TOTAL_REPOSNEaaa", String.valueOf(jsonObjecta));
-                startActivity(new Intent(Missed_Punch.this, Dashboard.class));
+                startActivity(new Intent(Missed_Punch.this, Leave_Dashboard.class));
             }
 
             @Override

@@ -1,0 +1,62 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimaryDark"
+    android:orientation="horizontal"
+    android:paddingBottom="5dp">
+
+    <LinearLayout
+        android:id="@+id/rlayHead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/AppTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="HAP Check-In"
+            android:textColor="@color/white"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/txtver"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/AppTitle"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="-14dp"
+            android:text="Ver 3.0.0"
+            android:textColor="@color/white"
+            android:textSize="8sp" />
+    </LinearLayout>
+
+    <Space
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/toolbar_help"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Help"
+        android:layout_marginTop="@dimen/C3dp"
+        android:layout_marginRight="@dimen/C5dp"
+        android:textColor="@color/white"
+        android:textSize="13sp" />
+
+    <ImageView
+        android:id="@+id/toolbar_home"
+        android:layout_width="@dimen/C30dp"
+        android:layout_height="@dimen/C30dp"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:padding="5dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:layout_marginTop="@dimen/C3dp"
+        android:layout_marginRight="@dimen/C8dp"
+        android:src="@drawable/ic_home" />
+</LinearLayout>

@@ -1,15 +1,16 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Interface.AlertBox;
@@ -21,11 +22,28 @@ public class AddNewRetailer extends AppCompatActivity {
     ImageView imgBack;
     EditText toolSearch;
     Button mSubmit;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_retailer);
 
+        TextView txtHelp = findViewById(R.id.toolbar_help);
+        ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+            }
+        });
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -34,6 +52,8 @@ public class AddNewRetailer extends AppCompatActivity {
             }
         });
     }
+
+
 
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
             new OnBackPressedDispatcher(new Runnable() {

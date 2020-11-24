@@ -13,15 +13,7 @@
     android:layout_marginBottom="@dimen/C60dp"
     tools:context=".Activity_Hap.Leave_Approval_Reject">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_blueg"
-        app:titleTextColor="@android:color/white"
-        app:title="Extended Approvals">
-
-    </androidx.appcompat.widget.Toolbar>
+    <include layout="@layout/custom_toolbar_help"></include>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

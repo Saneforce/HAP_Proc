@@ -10,37 +10,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar3"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/button_blueg"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme">
-
-        <ImageView
-            android:id="@+id/backarow"
-            android:layout_width="20dp"
-            android:visibility="gone"
-            android:layout_height="40dp"
-            android:src="@drawable/backarrow" />
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/alegreya_sans_sc"
-            android:text="@string/DayPlan"
-            android:textAllCaps="false"
-            android:layout_marginRight="45dp"
-
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textAlignment="center"
-            android:textStyle="bold" />
-    </androidx.appcompat.widget.Toolbar>
+    <include layout="@layout/custom_toolbar_help"></include>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -14,32 +14,7 @@
         android:orientation="vertical"
         tools:context=".Activity_Hap.Leave_Request">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar4"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_blueg"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/alegreya_sans_sc"
-                android:text="Leave Request"
-                android:textAllCaps="false"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="270dp" />
-
-        </androidx.appcompat.widget.Toolbar>
+        <include layout="@layout/custom_toolbar_help"></include>
 
         <ScrollView
             android:id="@+id/sv"

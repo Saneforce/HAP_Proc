@@ -56,6 +56,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/helpstatus"
                 android:layout_width="match_parent"
+                android:layout_marginBottom="@dimen/C60dp"
                 android:layout_height="match_parent" />
         </LinearLayout>
 
@@ -63,7 +64,6 @@
             android:id="@+id/qanda"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/C5dp"
             android:orientation="vertical">
 
             <TextView
@@ -72,7 +72,6 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
                 android:padding="@dimen/C5dp"
@@ -90,6 +89,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/questionandanswerrecycler"
                     android:layout_width="match_parent"
+                    android:layout_marginBottom="@dimen/C60dp"
                     android:layout_height="match_parent" />
             </LinearLayout>
         </LinearLayout>
