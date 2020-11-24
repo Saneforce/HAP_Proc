@@ -322,10 +322,15 @@ public class ImageCapture extends AppCompatActivity implements
 
             CheckInInf.put("eDate", CDate + " " + CTime);
             CheckInInf.put("eTime", CTime);
-            CheckInInf.put("lat", location.getLatitude());
-            CheckInInf.put("long", location.getLongitude());
-            CheckInInf.put("Lattitude", location.getLatitude());
-            CheckInInf.put("Langitude", location.getLongitude());
+            double lat=0,lng=0;
+            if(location!=null){
+                lat=location.getLatitude();
+                lng=location.getLongitude();
+            }
+            CheckInInf.put("lat", lat);
+            CheckInInf.put("long", lng);
+            CheckInInf.put("Lattitude", lat);
+            CheckInInf.put("Langitude", lng);
 
             CheckInInf.put("iimgSrc", imagePath);
             CheckInInf.put("slfy", imageFileName);

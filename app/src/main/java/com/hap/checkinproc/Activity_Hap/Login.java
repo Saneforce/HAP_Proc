@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -49,8 +50,8 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.LocationReceiver;
-import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
+import com.hap.checkinproc.common.SANGPSTracker;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -60,6 +61,7 @@ import static android.widget.Toast.LENGTH_LONG;
 
 public class Login extends AppCompatActivity {
     TextInputEditText name, password;
+    TextView lblUserName,lblEmail;
     Button btnLogin;
     ImageView profileImage;
     String photo;
@@ -93,6 +95,8 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         name = (TextInputEditText) findViewById(R.id.username);
+        lblUserName = (TextView) findViewById(R.id.lblUserName);
+        lblEmail = (TextView) findViewById(R.id.lblEmail);
         password = (TextInputEditText) findViewById(R.id.password);
         shared_common_pref = new Shared_Common_Pref(this);
         btnLogin = (Button) findViewById(R.id.btnLogin);
@@ -105,11 +109,15 @@ public class Login extends AppCompatActivity {
         mProgress.setMessage("Please Wait...");
 
         eMail = sharedPreferences.getString("email", "");
+        String sSFName=sharedPreferences.getString("SfName", "");
+
+        lblUserName.setText(sSFName);
+        lblEmail.setText(eMail);
         name.setText(eMail);
         if (!checkPermission()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 requestPermissions();
-            }
+            //}
         } else {
         }
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -154,7 +162,12 @@ public class Login extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-      /*         if(mLUService == null)
+                Intent playIntent = new Intent(Login.this, SANGPSTracker.class);
+                bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
+                startService(playIntent);
+
+      /*        21
+       if(mLUService == null)
                    mLUService = new SANGPSTracker(getApplicationContext());
               *//* if(mTimerService == null)
                    mTimerService = new TimerService();
@@ -173,7 +186,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (mLUService == null)
-                    mLUService = new SANGPSTracker(getApplicationContext());
+                    mLUService = new SANGPSTracker(Login.this);
               /* if(mTimerService == null)
                    mTimerService = new TimerService();
                mTimerService.startTimerService();*/
@@ -289,7 +302,7 @@ public class Login extends AppCompatActivity {
         super.onResume();
         if (checkPermission()) {
             if (mLUService == null)
-                mLUService = new SANGPSTracker(getApplicationContext());
+                mLUService = new SANGPSTracker(Login.this);
 
             myReceiver = new LocationReceiver();
             /*if (Utils.requestingLocationUpdates(this)) {
@@ -303,7 +316,7 @@ public class Login extends AppCompatActivity {
 
             // Bind to the service. If the service is in foreground mode, this signals to the service
             // that since this activity is in the foreground, the service can exit foreground mode.
-            bindService(new Intent(this, SANGPSTracker.class), mServiceConection,
+            bindService(new Intent(Login.this, SANGPSTracker.class), mServiceConection,
                     Context.BIND_AUTO_CREATE);
             LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver,
                     new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
@@ -347,7 +360,7 @@ public class Login extends AppCompatActivity {
             return;
         }
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "thirumalaivasan786@gmail.com");
+        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail);
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
@@ -359,11 +372,13 @@ public class Login extends AppCompatActivity {
                     if (response.body().getSuccess() == true) {
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                         Intent intent;
-                        if (requestCode == RC_SIGN_IN)
+                        if (requestCode == RC_SIGN_IN) {
                             intent = new Intent(Login.this, Dashboard.class);
                             //  intent = new Intent(Login.this, OrderDashBoard.class);
-                        else
-                        intent = new Intent(Login.this, Dashboard_Two.class);
+                        }else{
+                            intent = new Intent(Login.this, Dashboard_Two.class);
+                            intent.putExtra("Mode", "RPT");
+                        }
                         intent.putExtra("photo", photo);
                         String code = response.body().getData().get(0).getSfCode();
                         String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
@@ -429,7 +444,6 @@ public class Login extends AppCompatActivity {
     }
 
     //Location service part
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     private void requestPermissions() {
         boolean shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
@@ -463,7 +477,7 @@ public class Login extends AppCompatActivity {
                 } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // Permission was granted.
                     if (mLUService == null)
-                        mLUService = new SANGPSTracker(getApplicationContext());
+                        mLUService = new SANGPSTracker(Login.this);
                     //mLUService.requestLocationUpdates();
                 } else {
                     // Permission denied.
@@ -493,7 +507,7 @@ public class Login extends AppCompatActivity {
     private final ServiceConnection mServiceConection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            mLUService = ((SANGPSTracker.LocationBinder) service).getLocationUpdateService(getApplicationContext());
+            mLUService = ((SANGPSTracker.LocationBinder) service).getLocationUpdateService(Login.this);
             mBound = true;
         }
 

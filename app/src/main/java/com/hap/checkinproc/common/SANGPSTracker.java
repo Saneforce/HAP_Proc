@@ -1,13 +1,19 @@
 package com.hap.checkinproc.common;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.location.Location;
@@ -19,17 +25,28 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.Block_Information;
@@ -45,10 +62,13 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.Executor;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.hap.checkinproc.HAPApp.activeActivity;
 
 //import android.support.annotation.NonNull;
 //import android.support.v4.app.NotificationCompat;
@@ -56,8 +76,10 @@ import retrofit2.Response;
 
 public class SANGPSTracker extends Service {
     private static Location location = null;
+    private BroadcastReceiver yourReceiver;
     private static final String PACKAGE_NAME =
             "com.google.android.gms.location.sample.locationupdatesforegroundservice";
+    private static final String ACTION_GPS = "android.location.PROVIDERS_CHANGED";
 
     private static final String TAG = SANGPSTracker.class.getSimpleName();
 
@@ -118,17 +140,20 @@ public class SANGPSTracker extends Service {
     private Handler mServiceHandler;
     Context mContext;
     public static SANGPSTracker sangpsTracker;
+
+    Activity mactivity;
     /**
      * The current location.
      */
     private Location mLocation;
-
+    private Boolean mShownSettings;
     public SANGPSTracker() {
 
     }
 
     public SANGPSTracker(Context context) {
-        mContext = context;
+        this.mContext = context;
+        mactivity = new Activity();
     }
 
     @Override
@@ -177,6 +202,7 @@ public class SANGPSTracker extends Service {
             removeLocationUpdates();
             stopSelf();
         }
+        registerReceiverGPS();
         // Tells the system to not try to recreate the service after it has been killed.
         return START_STICKY;
     }
@@ -472,5 +498,91 @@ public class SANGPSTracker extends Service {
                 Log.d(TAG, "onFailure");
             }
         });
+    }
+    private void registerReceiverGPS() {
+        if (yourReceiver == null) {
+            final IntentFilter theFilter = new IntentFilter();
+            theFilter.addAction(ACTION_GPS);
+            Log.d(TAG,"GPS Called Register");mShownSettings=false;
+            yourReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    CheckGPSSettings(context);
+                   /* if (intent != null) {
+                        String s = intent.getAction();
+                        if (s != null) {
+                            if (s.equals(ACTION_GPS)) {
+                                initFusedGPS();
+                             //   chkEnaGPS();
+                            }
+                        }
+                    }*/
+                }
+            };
+            Context context = getApplicationContext();
+            context.registerReceiver(yourReceiver, theFilter);
+        }
+    }
+    public void CheckGPSSettings(Context context)
+    {
+
+        ContentResolver contentResolver = context.getContentResolver();
+        // Find out what the settings say about which providers are enabled
+        //  String locationMode = "Settings.Secure.LOCATION_MODE_OFF";
+        int mode = Settings.Secure.getInt(
+                contentResolver, Settings.Secure.LOCATION_MODE, Settings.Secure.LOCATION_MODE_OFF);
+        if (mode == Settings.Secure.LOCATION_MODE_OFF ) {
+            if( mShownSettings!=true) {
+                Log.d(TAG, "GPS OFF");
+                ShowLocationWarn();
+            }
+        }else
+        {
+            Log.d(TAG,"GPS ON");mShownSettings=false;
+        }
+    }
+    public void ShowLocationWarn(){
+        mShownSettings=true;
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(mLocationRequest);
+        builder.setAlwaysShow(true);
+        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
+        settingsClient.checkLocationSettings(builder.build())
+                .addOnSuccessListener((Activity) activeActivity, new OnSuccessListener<LocationSettingsResponse>() {
+                    @SuppressLint("MissingPermission")
+                    @Override
+                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+//  GPS is already enable, callback GPS status through listener
+                        /*if (onGpsListener != null) {
+                            onGpsListener.gpsStatus(true);
+                        }*/
+                    }
+                })
+                .addOnFailureListener((Activity) activeActivity, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        int statusCode = ((ApiException) e).getStatusCode();
+                        switch (statusCode) {
+                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                                try {
+                                    // Show the dialog by calling startResolutionForResult(), and check the
+                                    // result in onActivityResult().
+                                    Log.i(TAG, "PendingIntent INSAP.");
+                                    ResolvableApiException rae = (ResolvableApiException) e;
+                                    rae.startResolutionForResult((Activity) activeActivity, 1000);
+                                } catch (IntentSender.SendIntentException sie) {
+                                    Log.i(TAG, "PendingIntent unable to execute request.");
+                                }
+                                break;
+                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                                String errorMessage = "Location settings are inadequate, and cannot be " +
+                                        "fixed here. Fix in Settings.";
+                                Log.e(TAG, errorMessage);
+                                Toast.makeText(mContext, errorMessage, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+
     }
 }

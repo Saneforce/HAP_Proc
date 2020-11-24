@@ -30,8 +30,9 @@
                 android:text="@string/select_the_type"
                 android:textAllCaps="false"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:fontFamily="@font/poppins_bold"
                 android:textColor="#FFFFFF"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
         </androidx.appcompat.widget.Toolbar>
 
@@ -69,7 +70,7 @@
                             android:textAllCaps="false"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"
                             android:textColor="#FFFFFF"
-                            android:textSize="18sp"
+                            android:textSize="13sp"
                             android:textStyle="bold" />
 
 
@@ -90,10 +91,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_alignParentLeft="true"
-                                    android:fontFamily="@font/poppins_semibold"
                                     android:text="Leave Request"
                                     android:textColor="@android:color/black"
-                                    android:textSize="16dp"></TextView>
+                                    android:textSize="13dp"></TextView>
 
 
                                 <LinearLayout
@@ -136,10 +136,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_alignParentLeft="true"
-                                    android:fontFamily="@font/poppins_semibold"
                                     android:text="Permission Request"
                                     android:textColor="@android:color/black"
-                                    android:textSize="16dp"></TextView>
+                                    android:textSize="13dp"></TextView>
 
 
                                 <LinearLayout
@@ -184,10 +183,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_alignParentLeft="true"
-                                    android:fontFamily="@font/poppins_semibold"
                                     android:text="Missed Punch"
                                     android:textColor="@android:color/black"
-                                    android:textSize="16dp"></TextView>
+                                    android:textSize="13dp"></TextView>
 
 
                                 <LinearLayout
@@ -234,10 +232,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_alignParentLeft="true"
-                                    android:fontFamily="@font/poppins_semibold"
                                     android:text="Weekly Off"
                                     android:textColor="@android:color/black"
-                                    android:textSize="16dp"></TextView>
+                                    android:textSize="13dp"></TextView>
 
 
                                 <LinearLayout
@@ -286,7 +283,7 @@
                             android:textAllCaps="false"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"
                             android:textColor="#FFFFFF"
-                            android:textSize="18sp"
+                            android:textSize="14sp"
                             android:textStyle="bold" />
 
                         <LinearLayout
@@ -306,10 +303,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_alignParentLeft="true"
-                                    android:fontFamily="@font/poppins_semibold"
                                     android:text="Leave Status"
                                     android:textColor="@android:color/black"
-                                    android:textSize="16dp"></TextView>
+                                    android:textSize="13dp"></TextView>
 
 
                                 <LinearLayout
@@ -354,10 +350,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_alignParentLeft="true"
-                                    android:fontFamily="@font/poppins_semibold"
                                     android:text="Permission Status"
                                     android:textColor="@android:color/black"
-                                    android:textSize="16dp"></TextView>
+                                    android:textSize="13dp"></TextView>
 
 
                                 <LinearLayout
@@ -403,10 +398,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_alignParentLeft="true"
-                                    android:fontFamily="@font/poppins_semibold"
                                     android:text="On-duty Status"
                                     android:textColor="@android:color/black"
-                                    android:textSize="16dp"></TextView>
+                                    android:textSize="13dp"></TextView>
 
 
                                 <LinearLayout
@@ -453,10 +447,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_alignParentLeft="true"
-                                    android:fontFamily="@font/poppins_semibold"
                                     android:text="Missed Punch Status"
                                     android:textColor="@android:color/black"
-                                    android:textSize="16dp"></TextView>
+                                    android:textSize="13dp"></TextView>
 
 
                                 <LinearLayout
@@ -501,10 +494,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_alignParentLeft="true"
-                                    android:fontFamily="@font/poppins_semibold"
                                     android:text="weekly-off Status"
                                     android:textColor="@android:color/black"
-                                    android:textSize="16dp"></TextView>
+                                    android:textSize="13dp"></TextView>
 
 
                                 <LinearLayout
@@ -550,10 +542,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentStart="true"
                                     android:layout_alignParentLeft="true"
-                                    android:fontFamily="@font/poppins_semibold"
                                     android:text="extended shift Status"
                                     android:textColor="@android:color/black"
-                                    android:textSize="16dp"></TextView>
+                                    android:textSize="13dp"></TextView>
 
 
                                 <LinearLayout
