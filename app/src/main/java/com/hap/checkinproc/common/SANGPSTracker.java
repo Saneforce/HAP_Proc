@@ -51,6 +51,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.Block_Information;
 import com.hap.checkinproc.Activity_Hap.MainActivity;
+import com.hap.checkinproc.HAPApp;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
@@ -363,18 +364,14 @@ public class SANGPSTracker extends Service {
         intent.putExtra(EXTRA_LOCATION, location);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
         if (location.isFromMockProvider() == true) {
-            Intent nwScr = new Intent(mContext, Block_Information.class);
-            nwScr.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-// intent.putExtra("Msg","")
-            startActivity(nwScr);
-        }
-        if (mContext != null) {
-            if (isTimeAutomatic(mContext) != true) {
+            if(HAPApp.activeActivity.getClass()!=Block_Information.class) {
                 Intent nwScr = new Intent(mContext, Block_Information.class);
                 nwScr.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+// intent.putExtra("Msg","")
                 startActivity(nwScr);
             }
         }
+
         // Update notification content if running as a foreground service.
         if (serviceIsRunningInForeground(this)) {
             mNotificationManager.notify(NOTIFICATION_ID, getNotification());

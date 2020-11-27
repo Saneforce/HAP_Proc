@@ -26,6 +26,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
@@ -52,9 +53,6 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
     int cModMnth=1;
     Button viewButton;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,8 +69,6 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
-
             }
         });
         sharedPreferences = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
@@ -254,16 +250,23 @@ Log.d("Respose_data",String.valueOf(response.body()));
                 mOnBackPressedDispatcher.onBackPressed();
             }
         });
+    }
 
-
-
-
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(Dashboard_Two.this, "There is no back action", Toast.LENGTH_LONG).show();
     }
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Dashboard_Two.super.onBackPressed();
+                    Boolean CheckIn = sharedPreferences.getBoolean("CheckIn", false);
+
+                    Log.d(Tag, String.valueOf(CheckIn));
+                    if (CheckIn != true) {
+                        Dashboard_Two.super.onBackPressed();
+                    }
+                    //
                 }
             });
 

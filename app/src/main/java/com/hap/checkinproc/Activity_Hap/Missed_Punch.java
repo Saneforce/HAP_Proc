@@ -2,6 +2,7 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -27,8 +28,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
@@ -287,7 +290,22 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject jsonObjecta = response.body();
                 Log.e("TOTAL_REPOSNEaaa", String.valueOf(jsonObjecta));
-                startActivity(new Intent(Missed_Punch.this, Leave_Dashboard.class));
+                String Msg = jsonObjecta.get("Msg").getAsString();
+                if(!Msg.equalsIgnoreCase("")){
+                    AlertDialogBox.showDialog(Missed_Punch.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
+                        @Override
+                        public void PositiveMethod(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                            if(jsonObjecta.get("success").getAsBoolean()==true)
+                                startActivity(new Intent(Missed_Punch.this, Leave_Dashboard.class));//openHome();
+                        }
+
+                        @Override
+                        public void NegativeMethod(DialogInterface dialog, int id) {
+
+                        }
+                    });
+                }
             }
 
             @Override

@@ -45,7 +45,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/button_yellow"
-                            android:padding="@dimen/C5dp"
+                            android:padding="@dimen/C10dp"
                             android:text="Request"
                             android:textAllCaps="false"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -97,7 +97,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
                             android:layout_marginTop="@dimen/C3dp"
-                            android:background="@android:color/black"></View>
+                            android:background="@color/grey_400"></View>
 
                         <LinearLayout
                             android:id="@+id/lin_per_req"
@@ -144,7 +144,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
                             android:layout_marginTop="@dimen/C3dp"
-                            android:background="@android:color/black"></View>
+                            android:background="@color/grey_400"></View>
 
                         <LinearLayout
                             android:id="@+id/lin_miss_punch"
@@ -192,7 +192,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
                             android:layout_marginTop="@dimen/C3dp"
-                            android:background="@android:color/black"></View>
+                            android:background="@color/grey_400"></View>
 
 
                         <LinearLayout
@@ -258,7 +258,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerHorizontal="true"
                             android:background="@drawable/button_yellow"
-                            android:padding="@dimen/C5dp"
+                            android:padding="@dimen/C10dp"
                             android:text="Status"
                             android:textAllCaps="false"
                             android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -311,7 +311,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
                             android:layout_marginTop="@dimen/C3dp"
-                            android:background="@android:color/black"></View>
+                            android:background="@color/grey_400"></View>
 
                         <LinearLayout
                             android:id="@+id/lin_per_sta"
@@ -359,7 +359,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
                             android:layout_marginTop="@dimen/C3dp"
-                            android:background="@android:color/black"></View>
+                            android:background="@color/grey_400"></View>
 
                         <LinearLayout
                             android:id="@+id/lin_duty_sta"
@@ -407,7 +407,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
                             android:layout_marginTop="@dimen/C3dp"
-                            android:background="@android:color/black"></View>
+                            android:background="@color/grey_400"></View>
 
 
                         <LinearLayout
@@ -454,7 +454,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
                             android:layout_marginTop="@dimen/C3dp"
-                            android:background="@android:color/black"></View>
+                            android:background="@color/grey_400"></View>
 
 
                         <LinearLayout
@@ -502,7 +502,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
                             android:layout_marginTop="@dimen/C3dp"
-                            android:background="@android:color/black"></View>
+                            android:background="@color/grey_400"></View>
 
 
                         <LinearLayout

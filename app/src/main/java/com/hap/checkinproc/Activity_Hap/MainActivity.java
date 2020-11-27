@@ -2,12 +2,14 @@ package com.hap.checkinproc.Activity_Hap;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
 
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 public class MainActivity extends AppCompatActivity      {
     private static int SPLASH_SCREEN = 3000;
@@ -20,6 +22,9 @@ public class MainActivity extends AppCompatActivity      {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                Intent tmrIntent = new Intent(MainActivity.this, TimerService.class);
+                //bindService(tmrIntent, mServiceConection, Context.BIND_AUTO_CREATE);
+                startService(tmrIntent);
                 Intent intent=new Intent(MainActivity.this, Login.class);
                 startActivity(intent);
                 finish();

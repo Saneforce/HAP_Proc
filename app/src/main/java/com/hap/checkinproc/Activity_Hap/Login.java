@@ -12,6 +12,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -43,6 +44,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.gson.JsonArray;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -52,6 +54,8 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.TimerService;
 import com.hap.checkinproc.common.SANGPSTracker;
+
+import org.json.JSONArray;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -76,8 +80,10 @@ public class Login extends AppCompatActivity {
     private FirebaseAuth.AuthStateListener authStateListener;
     SharedPreferences sharedPreferences;
     SharedPreferences CheckInDetails;
+    SharedPreferences Setups;
     public static final String CheckInDetail = "CheckInDetail";
     public static final String MyPREFERENCES = "MyPrefs";
+    public static final String SetupsInfo = "MySettings";
     private ProgressDialog mProgress;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
 
@@ -103,6 +109,7 @@ public class Login extends AppCompatActivity {
         profileImage = (ImageView) findViewById(R.id.profile_image);
         sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
+        Setups = getSharedPreferences(SetupsInfo, Context.MODE_PRIVATE);
         mProgress = new ProgressDialog(this);
         String titleId = "Signing in...";
         mProgress.setTitle(titleId);
@@ -158,7 +165,6 @@ public class Login extends AppCompatActivity {
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
 
-
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,16 +172,8 @@ public class Login extends AppCompatActivity {
                 bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
                 startService(playIntent);
 
-      /*        21
-       if(mLUService == null)
-                   mLUService = new SANGPSTracker(getApplicationContext());
-              *//* if(mTimerService == null)
-                   mTimerService = new TimerService();
-               mTimerService.startTimerService();*//*
-
-               startService(new Intent(Login.this, TimerService.class));
                mLUService.requestLocationUpdates();
-               mProgress.show();*/
+               mProgress.show();
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
             }
@@ -227,6 +225,7 @@ public class Login extends AppCompatActivity {
                 }
                 login(RC_SIGN_IN);
             } else if (CheckIn == true) {
+                getSetups();
                 Shared_Common_Pref.Sf_Code = sharedPreferences.getString("Sfcode", "");
                 Shared_Common_Pref.Sf_Name = sharedPreferences.getString("SfName", "");
                 Shared_Common_Pref.Div_Code = sharedPreferences.getString("Divcode", "");
@@ -353,7 +352,26 @@ public class Login extends AppCompatActivity {
             firebaseAuth.removeAuthStateListener(authStateListener);
         }
     }
+    public void getSetups(){
+        String SFCode=sharedPreferences.getString("Sfcode", "");
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> SetupCall = apiInterface.getSetups("get/setup", SFCode);
+        SetupCall.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                Log.d(TAG,String.valueOf(response.body()));
+                SharedPreferences.Editor editor = Setups.edit();
+                editor.putString("Setups",String.valueOf(response.body()));
+                editor.apply();
+            }
 
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+
+            }
+        });
+
+    }
     public void login(int requestCode) {
         if (eMail.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Invalid Email ID", Toast.LENGTH_LONG).show();
@@ -409,6 +427,7 @@ public class Login extends AppCompatActivity {
                             editor.putBoolean("Login", false);
 
                         editor.apply();
+                        getSetups();
                         startActivity(intent);
                         try {
                             mProgress.dismiss();
@@ -430,6 +449,11 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Model> call, Throwable t) {
+                try {
+                    mProgress.dismiss();
+                }catch (Exception e){
+
+                }
 
                 Toast.makeText(getApplicationContext(), "Not Working", Toast.LENGTH_LONG).show();
 

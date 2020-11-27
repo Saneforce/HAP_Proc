@@ -242,7 +242,7 @@
                                 android:layout_alignParentEnd="true"
                                 android:layout_alignParentRight="true"
                                 android:orientation="vertical"
-                                android:visibility="visible"
+                                android:visibility="gone"
                                 >
 
                                 <androidx.cardview.widget.CardView
@@ -299,7 +299,7 @@
                             android:id="@+id/shit_linear"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:orientation="vertical">
 
                             <TextView
@@ -333,7 +333,7 @@
                             android:id="@+id/half_day_linear"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:orientation="vertical">
 
                             <TextView

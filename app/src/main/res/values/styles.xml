@@ -15,6 +15,7 @@
     <style name= "RobotoTextViewStyle" parent= "android:Widget.TextView" >
         <item name= "android:fontFamily" > @font/poppins_regular </item>
         <item name= "android:textSize" > @dimen/C13dp </item>
+        <item name= "android:textColor" > @color/dark_grey </item>
     </style>
     <style name= "RobotoButtonStyle" parent= "android:Widget.Button" >
         <item name= "android:fontFamily" > poppins_semibold </item>

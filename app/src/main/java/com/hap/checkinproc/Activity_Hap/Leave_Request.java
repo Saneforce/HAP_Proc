@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,6 +44,7 @@ import com.hap.checkinproc.Model_Class.Leave_Type;
 import com.hap.checkinproc.Model_Class.RemainingLeave;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.LeaveRemaining;
+import com.hap.checkinproc.common.SANGPSTracker;
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.json.JSONArray;
@@ -62,6 +64,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Leave_Request extends AppCompatActivity implements View.OnClickListener, Master_Interface {
+    private static String Tag="HAP_Check-In";
+    SharedPreferences CheckInDetails;
+    SharedPreferences UserDetails;
+    public static final String CheckInfo = "CheckInDetail" ;
+    public static final String UserInfo = "MyPrefs" ;
     DatePickerDialog picker;
     EditText eText;
     EditText etext2;
@@ -97,6 +104,9 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave__request);
 
+        CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -108,8 +118,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
-
+                openHome();
             }
         });
         gson = new Gson();
@@ -293,7 +302,21 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         halfTypeList = new ArrayList<>();
         halfTypeList.add("First Half");
         halfTypeList.add("Second Half");
+    }
 
+    public void openHome() {
+        Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+        Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
+        Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
+        Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
+        Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
+        Log.d(Tag, String.valueOf(CheckIn));
+        if (CheckIn == true) {
+            Intent Dashboard = new Intent(Leave_Request.this, Dashboard_Two.class);
+            Dashboard.putExtra("Mode", "CIN");
+            startActivity(Dashboard);
+        }else
+            startActivity(new Intent(getApplicationContext(), Dashboard.class));
     }
 
     public void difference() {
@@ -433,18 +456,17 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
                 JsonObject jsonObjecta = response.body();
 
-                String Msg = String.valueOf(jsonObjecta.get("Msg"));
-                Msg = Msg.replace("\"", "");
                 Log.e("SDFDFD", String.valueOf(jsonObjecta));
+                String Msg = jsonObjecta.get("Msg").getAsString();
                 Log.e("SDFDFDDFF", String.valueOf(Msg.length()));
 
 
-                if (Msg.length() == 0) {
+                if (Msg.equalsIgnoreCase("")) {
                     // Toast.makeText(Leave_Request.this, "NULL VALUE", Toast.LENGTH_SHORT).show();
 
                     LeaveSubmitTwo();
                 } else {
-                    AlertDialogBox.showDialog(Leave_Request.this, "Confrimation", Msg, "OK", "", false, new AlertBox() {
+                    AlertDialogBox.showDialog(Leave_Request.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
                             dialog.dismiss();
@@ -480,7 +502,10 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         } else {
             halfTypeVal = "3";
         }
-
+        halfChecked="0";
+        if (mHalfCheck.isChecked()) {
+            halfChecked="1";
+        }
         JSONObject jsonleaveType = new JSONObject();
         JSONObject jsonleaveTypeS = new JSONObject();
         JSONArray jsonArray1 = new JSONArray();
@@ -494,6 +519,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             jsonleaveType.put("No_of_Days", dateDiff);
             jsonleaveType.put("HalfDay_Type", halfTypeVal);
             jsonleaveType.put("HalfDay", halfChecked);
+            jsonleaveType.put("Shift_Id", shiftTypeVal);
             jsonleaveTypeS.put("LeaveForm", jsonleaveType);
             jsonArray1.put(jsonleaveTypeS);
 
@@ -513,8 +539,21 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject jsonObjecta = response.body();
                 Log.e("TOTAL_REPOSNEaaa", String.valueOf(jsonObjecta));
+                String Msg = jsonObjecta.get("Msg").getAsString();
+                if(!Msg.equalsIgnoreCase("")){
+                    AlertDialogBox.showDialog(Leave_Request.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
+                        @Override
+                        public void PositiveMethod(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                            if(jsonObjecta.get("success").getAsBoolean()==true) openHome();
+                        }
 
-                startActivity(new Intent(Leave_Request.this, Dashboard.class));
+                        @Override
+                        public void NegativeMethod(DialogInterface dialog, int id) {
+
+                        }
+                    });
+                }
             }
 
             @Override
@@ -620,10 +659,13 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         customDialog.dismiss();
         if(type == 4) {
             shitType.setText(myDataset.get(position).getName());
+            shiftTypeVal=myDataset.get(position).getId();
         }else if(type == 5 ){
             leaveType.setText(myDataset.get(position).getName());
+            leavetype_id=myDataset.get(position).getId();
         }else if(type == 6){
             halfType.setText(myDataset.get(position).getName());
+
         }
     }
 }

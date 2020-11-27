@@ -135,13 +135,16 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:weightSum="2"
-                    android:padding="10dp">
+                    android:paddingTop="5dp"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp">
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_weight="2"
-                        android:padding="5dp">
+                        android:paddingBottom="5dp">
 
                         <ImageView
                             android:id="@+id/prev"
@@ -172,12 +175,14 @@
 
                             <Button
                                 android:id="@+id/button3"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                android:layout_width="60dp"
+                                android:layout_height="32dp"
                                 android:layout_gravity="right"
+                                android:background="@color/colorPrimaryDark"
+                                android:textColor="#ffffff"
                                 android:text="View All"
                                 android:textSize="11sp"
-                                android:padding="8dp"/>
+                                android:padding="2dp"/>
 
                         </LinearLayout>
 
@@ -228,13 +233,13 @@
 
                         <TextView
                             android:id="@+id/textView4"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+
                             android:layout_alignParentEnd="false"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="13dp"
-                            android:layout_marginEnd="36dp"
-                            android:layout_marginBottom="3dp"
+                            android:layout_centerVertical="true"
+                            android:textAlignment="center"
                             android:text="Leave / permission"
                             android:textSize="@dimen/C13dp"
                             android:textColor="#FFFBFB" />
@@ -269,13 +274,49 @@
                             android:textColor="#FFFFFF" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:clipToPadding="false"
+                >
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/StActivity"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:elevation="5dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="10dp"
+                    app:cardMaxElevation="5dp"
+                    android:visibility="visible">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/g_sign">
 
 
-
+                        <TextView
+                            android:id="@+id/txtactlbl"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="false"
+                            android:layout_alignParentEnd="false"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginStart="51dp"
+                            android:layout_marginTop="13dp"
+                            android:layout_marginEnd="37dp"
+                            android:text="Start Activity"
+                            android:textSize="@dimen/C13dp"
+                            android:textColor="#FFFFFF" />
+                    </RelativeLayout>
+                </androidx.cardview.widget.CardView>
 
 
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -293,7 +334,7 @@
                     app:cardCornerRadius="10dp"
                     app:cardElevation="10dp"
                     app:cardMaxElevation="5dp"
-                    android:visibility="visible">
+                    android:visibility="gone">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -347,48 +388,6 @@
                             android:textColor="#FFFFFF" />
                     </RelativeLayout>
                 </androidx.cardview.widget.CardView>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:clipToPadding="false"
-                >
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/StActivity"
-                    android:layout_width="0dp"
-                    android:layout_height="52dp"
-                    android:layout_margin="5dp"
-                    android:layout_weight="1"
-                    android:elevation="5dp"
-                    app:cardCornerRadius="10dp"
-                    app:cardElevation="10dp"
-                    app:cardMaxElevation="5dp"
-                    android:visibility="visible">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@drawable/g_sign">
-
-
-                        <TextView
-                            android:id="@+id/txtactlbl"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentStart="false"
-                            android:layout_alignParentEnd="false"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginStart="51dp"
-                            android:layout_marginTop="13dp"
-                            android:layout_marginEnd="37dp"
-                            android:text="Start Activity"
-                            android:textSize="@dimen/C13dp"
-                            android:textColor="#FFFFFF" />
-                    </RelativeLayout>
-                </androidx.cardview.widget.CardView>
-
 
             </LinearLayout>
 

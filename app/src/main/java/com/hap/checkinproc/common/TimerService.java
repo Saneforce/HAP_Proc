@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.hap.checkinproc.Activity_Hap.Block_Information;
 import com.hap.checkinproc.HAPApp;
 import com.hap.checkinproc.R;
 
@@ -26,7 +28,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class TimerService extends Service {
-    public static final int notify = 2000;  //interval between two services(Here Service run every 5 Minute)
+    public static final int notify = 1000;  //interval between two services(Here Service run every 5 Minute)
     private Handler mHandler = new Handler();   //run on another Thread to avoid crash
     private Timer mTimer = null;    //timer handling
 
@@ -79,6 +81,16 @@ public void startTimerService(){
                             rootView.removeView(el);
                         }
                     } catch(Exception e){}
+
+                    if (context != null) {
+                        if (isTimeAutomatic(context) != true ) {
+                            if(HAPApp.activeActivity.getClass()!=Block_Information.class){
+                                Intent nwScr = new Intent(context, Block_Information.class);
+                                nwScr.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(nwScr);
+                            }
+                        }
+                    }
                     if (sMsg != "") {
                         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                                 (RelativeLayout.LayoutParams.MATCH_PARENT), (RelativeLayout.LayoutParams.WRAP_CONTENT));
@@ -99,9 +111,17 @@ public void startTimerService(){
                         rootView.addView(relative);
                         Log.d("service is ", "running" + cAtivity.getClass().getName());
                     }
+
                 }
 
             });
+        }
+        public boolean isTimeAutomatic(Context c) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                return Settings.Global.getInt(c.getContentResolver(), Settings.Global.AUTO_TIME, 0) == 1;
+            } else {
+                return android.provider.Settings.System.getInt(c.getContentResolver(), android.provider.Settings.System.AUTO_TIME, 0) == 1;
+            }
         }
     }
 }

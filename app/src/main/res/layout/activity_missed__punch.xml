@@ -54,17 +54,17 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
-                            android:layout_marginBottom="5dp"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Missed date"
-                            android:textColor="@android:color/black"
-                            android:textStyle="bold" />
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:text="Missed date" />
 
                         <TextView
                             android:id="@+id/misseddateselect"
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
-                            android:layout_margin="2dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="5dp"
                             android:background="@drawable/textbox_bg"
                             android:elevation="10dp"
                             android:padding="@dimen/C10dp"
@@ -94,15 +94,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Shift time"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold" />
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Shift time" />
 
                 <EditText
                     android:id="@+id/missed_shift"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:background="@drawable/textbox_bg"
                     android:textSize="@dimen/C13dp"
                     android:clickable="false"
@@ -115,16 +116,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Check-in time"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold" />
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Check-in time" />
 
 
                 <EditText
                     android:id="@+id/missed_checkin"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:background="@drawable/textbox_bg"
                     android:clickable="false"
                     android:elevation="10dp"
@@ -136,16 +138,17 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Check-out time  and  Date"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold" />
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Check-out time  and  Date" />
 
 
                 <EditText
                     android:id="@+id/missed_checkout"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:background="@drawable/textbox_bg"
                     android:clickable="false"
                     android:elevation="10dp"
@@ -159,15 +162,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Reason :"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold" />
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Reason " />
 
                 <EditText
                     android:id="@+id/reason_missed"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/C100dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:background="@drawable/textbox_bg"
                     android:elevation="@dimen/C5dp"
                     android:gravity="start"
@@ -182,8 +186,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:background="@drawable/sign_bg"
-                    android:fontFamily="@font/alegreya_sans_sc"
                     android:gravity="center_vertical"
                     android:text="SUBMIT"
                     android:textAlignment="center"

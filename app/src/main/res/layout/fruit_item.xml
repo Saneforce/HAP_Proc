@@ -2,9 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="2dp"
-    app:cardElevation="1dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:id="@+id/linear_row"
@@ -17,7 +15,7 @@
             android:id="@+id/txt_one"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:padding="10dp"
             android:text="One"
             android:textColor="@android:color/black"></TextView>
 
@@ -25,8 +23,13 @@
             android:id="@+id/txt_two"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:padding="10dp"
             android:text="Two"></TextView>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="@dimen/C3dp"
+            android:background="@color/grey_400"></View>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

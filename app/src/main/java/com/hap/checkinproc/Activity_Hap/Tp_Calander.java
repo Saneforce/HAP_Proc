@@ -106,7 +106,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
         currentMonth.setText(common_class.GetMonthname(Integer.parseInt(common_class.getintentValues("Monthselection"))));
         Log.e("MONTH_SELECTion", common_class.getintentValues("Monthselection"));
 
-        backarow.setOnClickListener(this);
+       // backarow.setOnClickListener(this);
         nDialog = new ProgressDialog(Tp_Calander.this);
         nDialog.setMessage("Loading.......");
         nDialog.setTitle("Tour Plan");
