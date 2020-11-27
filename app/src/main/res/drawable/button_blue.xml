@@ -9,7 +9,7 @@
 
 
     <gradient
-        android:startColor="@color/colorPrimary"
-        android:endColor="#3F51B5"
+        android:startColor="@color/OnDuty"
+        android:endColor="@color/OnDuty"
         android:angle="-360" />
 </shape>

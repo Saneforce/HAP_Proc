@@ -356,7 +356,6 @@ public class SANGPSTracker extends Service {
 
     private void onNewLocation(Location location) {
         Log.i(TAG, "New location: " + location);
-
         mLocation = location;
         sendLocationDataToWebsite(location);
         // Notify anyone listening for broadcasts about the new location.
