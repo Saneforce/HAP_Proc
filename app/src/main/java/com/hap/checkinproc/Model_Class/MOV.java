@@ -8,13 +8,13 @@ public class MOV {
 
     @SerializedName("MorderSum")
     @Expose
-    private Object morderSum;
+    private Integer morderSum;
 
-    public Object getMorderSum() {
+    public Integer getMorderSum() {
         return morderSum;
     }
 
-    public void setMorderSum(Object morderSum) {
+    public void setMorderSum(Integer morderSum) {
         this.morderSum = morderSum;
     }
 

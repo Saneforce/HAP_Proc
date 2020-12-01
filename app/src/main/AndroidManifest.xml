@@ -29,8 +29,16 @@
         android:theme="@style/AppTheme"
         tools:targetApi="n">
         <activity android:name=".Activity_Hap.OrderCategoryActivity"></activity>
-        <activity android:name=".Activity_Hap.AddNewRetailer" />
-        <activity android:name=".Activity_Hap.SecondaryOrderActivity" />
+        <activity
+            android:name=".Activity_Hap.AddNewRetailer"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Activity_Hap.SecondaryOrderActivity"
+            android:windowSoftInputMode="stateAlwaysHidden">
+
+
+
+        </activity>
         <activity android:name=".Activity_Hap.OrderDashBoard" />
         <activity android:name=".Activity.ApprovalViewActivity" />
         <activity android:name=".Activity.ViewTASummary" />
@@ -77,6 +85,10 @@
         <activity android:name=".Activity_Hap.Missed_punch_Approval" />
         <activity android:name=".Activity_Hap.Missed_Punch_Approval_Reject" />
         <activity android:name=".Activity_Hap.Extended_Approval_Reject" />
+        <activity android:name=".Activity_Hap.ViewCartActivity"></activity>
+        <activity android:name=".Activity_Hap.ReportActivity"></activity>
+        <activity android:name=".Activity_Hap.ViewReportActivity"></activity>
+        <activity android:name=".Activity_Hap.TimeOut"></activity>
 
         <activity android:name=".Activity_Hap.On_Duty_Activity"></activity>
         <activity android:name=".Activity_Hap.Help_Activity"></activity>
@@ -87,7 +99,21 @@
         <activity android:name=".Activity_Hap.Dashboard" />
         <activity
             android:name=".Activity_Hap.Login"
-            android:noHistory="true" />
+            android:noHistory="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name=".MyFirebaseInstanceIdService"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <service
             android:name=".common.SANGPSTracker"
@@ -99,11 +125,7 @@
             android:exported="false" />
 
         <activity android:name=".Activity_Hap.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".Activity.DesignActivity" />
         <activity

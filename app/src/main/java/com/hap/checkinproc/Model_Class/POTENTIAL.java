@@ -20,7 +20,7 @@ public class POTENTIAL {
     private String listedDrAddress1;
     @SerializedName("ListedDr_Address2")
     @Expose
-    private String listedDrAddress2;
+    private Object listedDrAddress2;
     @SerializedName("ListedDr_Address3")
     @Expose
     private Object listedDrAddress3;
@@ -29,10 +29,10 @@ public class POTENTIAL {
     private Object listedDrPinCode;
     @SerializedName("ListedDr_Phone")
     @Expose
-    private Object listedDrPhone;
+    private String listedDrPhone;
     @SerializedName("ListedDr_Mobile")
     @Expose
-    private String listedDrMobile;
+    private Object listedDrMobile;
     @SerializedName("Code")
     @Expose
     private String code;
@@ -74,7 +74,7 @@ public class POTENTIAL {
     private Object listedDrDeactivateDate;
     @SerializedName("ListedDr_Sl_No")
     @Expose
-    private Integer listedDrSlNo;
+    private Object listedDrSlNo;
     @SerializedName("ListedDr_Special_No")
     @Expose
     private Object listedDrSpecialNo;
@@ -95,7 +95,7 @@ public class POTENTIAL {
     private Integer docClsCode;
     @SerializedName("LastUpdt_Date")
     @Expose
-    private LastUpdtDate lastUpdtDate;
+    private Object lastUpdtDate;
     @SerializedName("No_of_Visit")
     @Expose
     private Object noOfVisit;
@@ -116,7 +116,7 @@ public class POTENTIAL {
     private Object listedDrPin;
     @SerializedName("ListedDr_Profile")
     @Expose
-    private Object listedDrProfile;
+    private String listedDrProfile;
     @SerializedName("ListedDr_Visit_Days")
     @Expose
     private Object listedDrVisitDays;
@@ -134,16 +134,16 @@ public class POTENTIAL {
     private Object listedDrHospital;
     @SerializedName("ListedDr_Class_Patients")
     @Expose
-    private Object listedDrClassPatients;
+    private String listedDrClassPatients;
     @SerializedName("ListedDr_Consultation_Fee")
     @Expose
-    private Object listedDrConsultationFee;
+    private String listedDrConsultationFee;
     @SerializedName("visit_days")
     @Expose
     private Object visitDays;
     @SerializedName("Visit_Hours")
     @Expose
-    private Object visitHours;
+    private String visitHours;
     @SerializedName("SDP")
     @Expose
     private Object sDP;
@@ -197,28 +197,28 @@ public class POTENTIAL {
     private Object productDetailCode;
     @SerializedName("Credit_Days")
     @Expose
-    private String creditDays;
+    private Object creditDays;
     @SerializedName("Contact_Person_Name")
     @Expose
     private String contactPersonName;
     @SerializedName("Tin_No")
     @Expose
-    private String tinNo;
+    private Object tinNo;
     @SerializedName("Sales_Taxno")
     @Expose
-    private String salesTaxno;
+    private Object salesTaxno;
     @SerializedName("Advance_amount")
     @Expose
-    private Integer advanceAmount;
+    private Object advanceAmount;
     @SerializedName("Milk_Potential")
     @Expose
-    private String milkPotential;
+    private Object milkPotential;
     @SerializedName("UOM")
     @Expose
-    private String uOM;
+    private Object uOM;
     @SerializedName("UOM_Name")
     @Expose
-    private String uOMName;
+    private Object uOMName;
     @SerializedName("EntryMode_Code")
     @Expose
     private Object entryModeCode;
@@ -245,64 +245,76 @@ public class POTENTIAL {
     private Object cusAlter;
     @SerializedName("cityname")
     @Expose
-    private Object cityname;
+    private String cityname;
     @SerializedName("areaname")
     @Expose
-    private Object areaname;
+    private String areaname;
     @SerializedName("contactperson")
     @Expose
     private String contactperson;
     @SerializedName("designation")
     @Expose
-    private Object designation;
+    private String designation;
     @SerializedName("GST")
     @Expose
-    private Object gST;
+    private String gST;
     @SerializedName("PIN_Code")
     @Expose
-    private Object pINCode;
+    private String pINCode;
     @SerializedName("Demo_Given_Name")
     @Expose
     private Object demoGivenName;
     @SerializedName("ListedDr_Phone2")
     @Expose
-    private Object listedDrPhone2;
+    private String listedDrPhone2;
     @SerializedName("contactperson2")
     @Expose
-    private Object contactperson2;
+    private String contactperson2;
     @SerializedName("designation2")
     @Expose
-    private Object designation2;
+    private String designation2;
     @SerializedName("Land_Mark")
     @Expose
-    private Object landMark;
+    private String landMark;
     @SerializedName("UKey")
     @Expose
-    private Object uKey;
+    private String uKey;
     @SerializedName("Semen")
     @Expose
-    private Object semen;
+    private String semen;
     @SerializedName("Breed")
     @Expose
-    private Object breed;
+    private String breed;
     @SerializedName("NoOfAnimal")
     @Expose
-    private Object noOfAnimal;
+    private String noOfAnimal;
     @SerializedName("reject_remarks")
     @Expose
     private Object rejectRemarks;
     @SerializedName("Entry_Mode")
     @Expose
-    private Object entryMode;
+    private String entryMode;
     @SerializedName("contactperson3")
     @Expose
-    private Object contactperson3;
+    private String contactperson3;
     @SerializedName("ListedDr_Phone3")
     @Expose
-    private Object listedDrPhone3;
+    private String listedDrPhone3;
     @SerializedName("Purchase_slab")
     @Expose
     private Object purchaseSlab;
+    @SerializedName("Slab_Id")
+    @Expose
+    private String slabId;
+    @SerializedName("Slan_Name")
+    @Expose
+    private String slanName;
+    @SerializedName("Giftenrol_Id")
+    @Expose
+    private String giftenrolId;
+    @SerializedName("Giftenrol_Name")
+    @Expose
+    private String giftenrolName;
     @SerializedName("ContactPersionn")
     @Expose
     private String contactPersionn;
@@ -339,11 +351,11 @@ public class POTENTIAL {
         this.listedDrAddress1 = listedDrAddress1;
     }
 
-    public String getListedDrAddress2() {
+    public Object getListedDrAddress2() {
         return listedDrAddress2;
     }
 
-    public void setListedDrAddress2(String listedDrAddress2) {
+    public void setListedDrAddress2(Object listedDrAddress2) {
         this.listedDrAddress2 = listedDrAddress2;
     }
 
@@ -363,19 +375,19 @@ public class POTENTIAL {
         this.listedDrPinCode = listedDrPinCode;
     }
 
-    public Object getListedDrPhone() {
+    public String getListedDrPhone() {
         return listedDrPhone;
     }
 
-    public void setListedDrPhone(Object listedDrPhone) {
+    public void setListedDrPhone(String listedDrPhone) {
         this.listedDrPhone = listedDrPhone;
     }
 
-    public String getListedDrMobile() {
+    public Object getListedDrMobile() {
         return listedDrMobile;
     }
 
-    public void setListedDrMobile(String listedDrMobile) {
+    public void setListedDrMobile(Object listedDrMobile) {
         this.listedDrMobile = listedDrMobile;
     }
 
@@ -483,11 +495,11 @@ public class POTENTIAL {
         this.listedDrDeactivateDate = listedDrDeactivateDate;
     }
 
-    public Integer getListedDrSlNo() {
+    public Object getListedDrSlNo() {
         return listedDrSlNo;
     }
 
-    public void setListedDrSlNo(Integer listedDrSlNo) {
+    public void setListedDrSlNo(Object listedDrSlNo) {
         this.listedDrSlNo = listedDrSlNo;
     }
 
@@ -539,11 +551,11 @@ public class POTENTIAL {
         this.docClsCode = docClsCode;
     }
 
-    public LastUpdtDate getLastUpdtDate() {
+    public Object getLastUpdtDate() {
         return lastUpdtDate;
     }
 
-    public void setLastUpdtDate(LastUpdtDate lastUpdtDate) {
+    public void setLastUpdtDate(Object lastUpdtDate) {
         this.lastUpdtDate = lastUpdtDate;
     }
 
@@ -595,11 +607,11 @@ public class POTENTIAL {
         this.listedDrPin = listedDrPin;
     }
 
-    public Object getListedDrProfile() {
+    public String getListedDrProfile() {
         return listedDrProfile;
     }
 
-    public void setListedDrProfile(Object listedDrProfile) {
+    public void setListedDrProfile(String listedDrProfile) {
         this.listedDrProfile = listedDrProfile;
     }
 
@@ -643,19 +655,19 @@ public class POTENTIAL {
         this.listedDrHospital = listedDrHospital;
     }
 
-    public Object getListedDrClassPatients() {
+    public String getListedDrClassPatients() {
         return listedDrClassPatients;
     }
 
-    public void setListedDrClassPatients(Object listedDrClassPatients) {
+    public void setListedDrClassPatients(String listedDrClassPatients) {
         this.listedDrClassPatients = listedDrClassPatients;
     }
 
-    public Object getListedDrConsultationFee() {
+    public String getListedDrConsultationFee() {
         return listedDrConsultationFee;
     }
 
-    public void setListedDrConsultationFee(Object listedDrConsultationFee) {
+    public void setListedDrConsultationFee(String listedDrConsultationFee) {
         this.listedDrConsultationFee = listedDrConsultationFee;
     }
 
@@ -667,11 +679,11 @@ public class POTENTIAL {
         this.visitDays = visitDays;
     }
 
-    public Object getVisitHours() {
+    public String getVisitHours() {
         return visitHours;
     }
 
-    public void setVisitHours(Object visitHours) {
+    public void setVisitHours(String visitHours) {
         this.visitHours = visitHours;
     }
 
@@ -811,11 +823,11 @@ public class POTENTIAL {
         this.productDetailCode = productDetailCode;
     }
 
-    public String getCreditDays() {
+    public Object getCreditDays() {
         return creditDays;
     }
 
-    public void setCreditDays(String creditDays) {
+    public void setCreditDays(Object creditDays) {
         this.creditDays = creditDays;
     }
 
@@ -827,51 +839,51 @@ public class POTENTIAL {
         this.contactPersonName = contactPersonName;
     }
 
-    public String getTinNo() {
+    public Object getTinNo() {
         return tinNo;
     }
 
-    public void setTinNo(String tinNo) {
+    public void setTinNo(Object tinNo) {
         this.tinNo = tinNo;
     }
 
-    public String getSalesTaxno() {
+    public Object getSalesTaxno() {
         return salesTaxno;
     }
 
-    public void setSalesTaxno(String salesTaxno) {
+    public void setSalesTaxno(Object salesTaxno) {
         this.salesTaxno = salesTaxno;
     }
 
-    public Integer getAdvanceAmount() {
+    public Object getAdvanceAmount() {
         return advanceAmount;
     }
 
-    public void setAdvanceAmount(Integer advanceAmount) {
+    public void setAdvanceAmount(Object advanceAmount) {
         this.advanceAmount = advanceAmount;
     }
 
-    public String getMilkPotential() {
+    public Object getMilkPotential() {
         return milkPotential;
     }
 
-    public void setMilkPotential(String milkPotential) {
+    public void setMilkPotential(Object milkPotential) {
         this.milkPotential = milkPotential;
     }
 
-    public String getUOM() {
+    public Object getUOM() {
         return uOM;
     }
 
-    public void setUOM(String uOM) {
+    public void setUOM(Object uOM) {
         this.uOM = uOM;
     }
 
-    public String getUOMName() {
+    public Object getUOMName() {
         return uOMName;
     }
 
-    public void setUOMName(String uOMName) {
+    public void setUOMName(Object uOMName) {
         this.uOMName = uOMName;
     }
 
@@ -939,19 +951,19 @@ public class POTENTIAL {
         this.cusAlter = cusAlter;
     }
 
-    public Object getCityname() {
+    public String getCityname() {
         return cityname;
     }
 
-    public void setCityname(Object cityname) {
+    public void setCityname(String cityname) {
         this.cityname = cityname;
     }
 
-    public Object getAreaname() {
+    public String getAreaname() {
         return areaname;
     }
 
-    public void setAreaname(Object areaname) {
+    public void setAreaname(String areaname) {
         this.areaname = areaname;
     }
 
@@ -963,27 +975,27 @@ public class POTENTIAL {
         this.contactperson = contactperson;
     }
 
-    public Object getDesignation() {
+    public String getDesignation() {
         return designation;
     }
 
-    public void setDesignation(Object designation) {
+    public void setDesignation(String designation) {
         this.designation = designation;
     }
 
-    public Object getGST() {
+    public String getGST() {
         return gST;
     }
 
-    public void setGST(Object gST) {
+    public void setGST(String gST) {
         this.gST = gST;
     }
 
-    public Object getPINCode() {
+    public String getPINCode() {
         return pINCode;
     }
 
-    public void setPINCode(Object pINCode) {
+    public void setPINCode(String pINCode) {
         this.pINCode = pINCode;
     }
 
@@ -995,67 +1007,67 @@ public class POTENTIAL {
         this.demoGivenName = demoGivenName;
     }
 
-    public Object getListedDrPhone2() {
+    public String getListedDrPhone2() {
         return listedDrPhone2;
     }
 
-    public void setListedDrPhone2(Object listedDrPhone2) {
+    public void setListedDrPhone2(String listedDrPhone2) {
         this.listedDrPhone2 = listedDrPhone2;
     }
 
-    public Object getContactperson2() {
+    public String getContactperson2() {
         return contactperson2;
     }
 
-    public void setContactperson2(Object contactperson2) {
+    public void setContactperson2(String contactperson2) {
         this.contactperson2 = contactperson2;
     }
 
-    public Object getDesignation2() {
+    public String getDesignation2() {
         return designation2;
     }
 
-    public void setDesignation2(Object designation2) {
+    public void setDesignation2(String designation2) {
         this.designation2 = designation2;
     }
 
-    public Object getLandMark() {
+    public String getLandMark() {
         return landMark;
     }
 
-    public void setLandMark(Object landMark) {
+    public void setLandMark(String landMark) {
         this.landMark = landMark;
     }
 
-    public Object getUKey() {
+    public String getUKey() {
         return uKey;
     }
 
-    public void setUKey(Object uKey) {
+    public void setUKey(String uKey) {
         this.uKey = uKey;
     }
 
-    public Object getSemen() {
+    public String getSemen() {
         return semen;
     }
 
-    public void setSemen(Object semen) {
+    public void setSemen(String semen) {
         this.semen = semen;
     }
 
-    public Object getBreed() {
+    public String getBreed() {
         return breed;
     }
 
-    public void setBreed(Object breed) {
+    public void setBreed(String breed) {
         this.breed = breed;
     }
 
-    public Object getNoOfAnimal() {
+    public String getNoOfAnimal() {
         return noOfAnimal;
     }
 
-    public void setNoOfAnimal(Object noOfAnimal) {
+    public void setNoOfAnimal(String noOfAnimal) {
         this.noOfAnimal = noOfAnimal;
     }
 
@@ -1067,27 +1079,27 @@ public class POTENTIAL {
         this.rejectRemarks = rejectRemarks;
     }
 
-    public Object getEntryMode() {
+    public String getEntryMode() {
         return entryMode;
     }
 
-    public void setEntryMode(Object entryMode) {
+    public void setEntryMode(String entryMode) {
         this.entryMode = entryMode;
     }
 
-    public Object getContactperson3() {
+    public String getContactperson3() {
         return contactperson3;
     }
 
-    public void setContactperson3(Object contactperson3) {
+    public void setContactperson3(String contactperson3) {
         this.contactperson3 = contactperson3;
     }
 
-    public Object getListedDrPhone3() {
+    public String getListedDrPhone3() {
         return listedDrPhone3;
     }
 
-    public void setListedDrPhone3(Object listedDrPhone3) {
+    public void setListedDrPhone3(String listedDrPhone3) {
         this.listedDrPhone3 = listedDrPhone3;
     }
 
@@ -1097,6 +1109,38 @@ public class POTENTIAL {
 
     public void setPurchaseSlab(Object purchaseSlab) {
         this.purchaseSlab = purchaseSlab;
+    }
+
+    public String getSlabId() {
+        return slabId;
+    }
+
+    public void setSlabId(String slabId) {
+        this.slabId = slabId;
+    }
+
+    public String getSlanName() {
+        return slanName;
+    }
+
+    public void setSlanName(String slanName) {
+        this.slanName = slanName;
+    }
+
+    public String getGiftenrolId() {
+        return giftenrolId;
+    }
+
+    public void setGiftenrolId(String giftenrolId) {
+        this.giftenrolId = giftenrolId;
+    }
+
+    public String getGiftenrolName() {
+        return giftenrolName;
+    }
+
+    public void setGiftenrolName(String giftenrolName) {
+        this.giftenrolName = giftenrolName;
     }
 
     public String getContactPersionn() {

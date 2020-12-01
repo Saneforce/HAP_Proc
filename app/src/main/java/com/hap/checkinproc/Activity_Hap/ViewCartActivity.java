@@ -39,7 +39,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
-import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -688,8 +687,10 @@ public class ViewCartActivity extends AppCompatActivity {
         totalValueString = sendArray.toString();
 
 
+        Log.e("SUBMIT_VALUE", totalValueString);
+
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> responseBodyCall = apiInterface.submitValue(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, totalValueString);
+        Call<JsonObject> responseBodyCall = apiInterface.submitValue("3", "MGR4762", totalValueString);
 
         responseBodyCall.enqueue(new Callback<JsonObject>() {
             @Override
@@ -718,7 +719,6 @@ public class ViewCartActivity extends AppCompatActivity {
 
 
     }
-
 
 
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =

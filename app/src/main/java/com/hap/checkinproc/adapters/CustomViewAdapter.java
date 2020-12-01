@@ -84,13 +84,9 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
             holder.txtPrice.setText("Total :" + mProductArray.getProductRate());
             holder.txtQty.setText("Qty :" + mProductArray.getProductqty());
             holder.totalAmount.setText("Total :" + mProduct_arrays.get(position).getProductqty() * mProduct_arrays.get(position).getProductRate());
-            Picasso.with(context)
-                    .load(mProductArray.getCatImage())
-                    .error(R.drawable.no_prod)
-                    .into(holder.productImage);
-
-
+            Picasso.with(context).load(mProductArray.getCatImage()).error(R.drawable.no_prod).into(holder.productImage);
             holder.editCount.setText("" + quntaity);
+            holder.editCount.setSelection(holder.editCount.getText().length());
             holder.editCount.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {

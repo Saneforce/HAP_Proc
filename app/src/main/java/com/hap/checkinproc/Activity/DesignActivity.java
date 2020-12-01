@@ -3,6 +3,7 @@ package com.hap.checkinproc.Activity;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -17,7 +18,6 @@ import com.hap.checkinproc.R;
 
 import java.util.ArrayList;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class DesignActivity extends AppCompatActivity {
     RelativeLayout lay_header;
@@ -51,7 +51,8 @@ public class DesignActivity extends AppCompatActivity {
         //Sf_Name;Sf Name;Y;0,SF_Mobile;SF Mobile;Y;P,Profile_Pic;Profile Pic;Y;LI,SF_Email;SF Email;N;0,Territory_Code;Territory Code;N;0,Sf_Joining_Date;Sf Joining Date;N;0
     }
 
-    public void createDynamicView(String type,String pic){
+    @SuppressLint("ResourceType")
+    public void createDynamicView(String type, String pic){
 
         if(type.equalsIgnoreCase("Y") && pic.equalsIgnoreCase("0") ){
             rlay.addView(createHeader(ki,"Warren Hemandez"));
@@ -71,7 +72,7 @@ public class DesignActivity extends AppCompatActivity {
         }
         else if(type.equalsIgnoreCase("Y") && !pic.equalsIgnoreCase("0"))
         {
-            CircleImageView img=new CircleImageView(this);
+           /* CircleImageView img=new CircleImageView(this);
             img.setImageResource(R.drawable.profile);
             img.setId(89);
             RelativeLayout.LayoutParams params1 = new RelativeLayout.LayoutParams(80,80);
@@ -82,14 +83,15 @@ public class DesignActivity extends AppCompatActivity {
             params2.addRule(RelativeLayout.RIGHT_OF,img.getId());
             params2.addRule(RelativeLayout.CENTER_VERTICAL);
             params2.setMargins(10,0,0,0);
-            rlay.setLayoutParams(params2);
+            rlay.setLayoutParams(params2);*/
         }
 
         lay_header.addView(rlay);
 
 
     }
-    public TextView createHeader(int x,String value){
+    @SuppressLint("ResourceType")
+    public TextView createHeader(int x, String value){
         TextView txt=new TextView(this);
         txt.setText(value);
         if(x==0){

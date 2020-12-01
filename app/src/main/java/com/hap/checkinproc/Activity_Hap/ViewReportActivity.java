@@ -76,25 +76,19 @@ public class ViewReportActivity extends AppCompatActivity {
             }
         });
 
-
-
         txtProductId = (TextView) findViewById(R.id.txt_product_id);
         txtProductDate = (TextView) findViewById(R.id.txt_order_Date);
-
         txtProductId.setText(productId);
         txtProductDate.setText(orderDate);
-
         ViewDateReport();
     }
-
-
 
 
 
     public void ViewDateReport() {
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<DateReport> responseBodyCall = apiInterface.dateReport(productId, Shared_Common_Pref.Sf_Code);
+        Call<DateReport> responseBodyCall = apiInterface.dateReport(productId, "27");
         responseBodyCall.enqueue(new Callback<DateReport>() {
             @Override
             public void onResponse(Call<DateReport> call, Response<DateReport> response) {

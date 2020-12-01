@@ -71,13 +71,25 @@
                         android:textSize="16dp"
                         android:textStyle="bold"></TextView>
 
-                    <Button
+
+
+                    <EditText
                         android:id="@+id/from_picker"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/text_bg" />
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_marginTop="@dimen/C10dp"
+                        android:background="@drawable/textbox_bg"
+                        android:clickable="false"
+                        android:elevation="@dimen/C5dp"
+                        android:focusable="false"
+                        android:fontFamily="@font/poppins_regular"
+                        android:inputType="date"
+                        android:padding="@dimen/C8dp"
+                        android:textColor="@color/grey_500" />
+
+
+
 
                 </LinearLayout>
 
@@ -98,13 +110,21 @@
                         android:textSize="16dp"
                         android:textStyle="bold"></TextView>
 
-                    <Button
+                    <EditText
                         android:id="@+id/to_picker"
                         android:layout_width="wrap_content"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:layout_margin="10dp"
-                        android:background="@drawable/text_bg" />
+                        android:layout_height="wrap_content"
+                        android:layout_margin="5dp"
+                        android:layout_marginTop="@dimen/C10dp"
+                        android:background="@drawable/textbox_bg"
+                        android:clickable="false"
+                        android:elevation="@dimen/C5dp"
+                        android:focusable="false"
+                        android:fontFamily="@font/poppins_regular"
+                        android:inputType="date"
+                        android:padding="@dimen/C8dp"
+                        android:textColor="@color/grey_500" />
+
                 </LinearLayout>
             </LinearLayout>
 

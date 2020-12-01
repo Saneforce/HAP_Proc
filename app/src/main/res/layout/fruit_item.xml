@@ -1,32 +1,40 @@
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    app:cardElevation="1dp">
+    app:cardElevation="2dp">
 
     <LinearLayout
         android:id="@+id/linear_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/C4dp"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
 
         <TextView
-            android:id="@+id/txt_one"
+            android:id="@+id/txt_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
             android:text="One"
             android:textColor="@android:color/black"></TextView>
 
         <TextView
-            android:id="@+id/txt_two"
+            android:id="@+id/txt_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="3dp"
+            android:textSize="12dp"
             android:text="Two"></TextView>
+
+        <TextView
+            android:id="@+id/txt_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            android:text="Three"></TextView>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

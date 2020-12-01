@@ -5,20 +5,14 @@ public class Common_Model {
     private String id;
     private String flag;
     private String address;
+private String phone;
 
-    public Common_Model(String name, String id, String flag, String address) {
+    public Common_Model(String name, String id, String flag, String address,String phone) {
         this.name = name;
         this.id = id;
         this.flag = flag;
         this.address = address;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
+        this.phone = phone;
     }
 
     public Common_Model(String id, String name, String flag) {
@@ -31,6 +25,24 @@ public class Common_Model {
         this.name = name;
         this.id = id;
     }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+
     public String getFlag() {
         return flag;
     }

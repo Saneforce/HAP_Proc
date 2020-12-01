@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.hap.checkinproc.Interface.ChildListInterface;
 import com.hap.checkinproc.Interface.ParentListInterface;
 import com.hap.checkinproc.Model_Class.HeaderCat;
@@ -103,7 +102,7 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
         holder.subProductChild.setHasFixedSize(true);
         holder.subProductChild.setNestedScrollingEnabled(false);
         holder.subProductChild.setItemAnimator(new DefaultItemAnimator());
-      ChildListAdapter eventListChildAdapter = new ChildListAdapter(this.activity, mProducts, new ChildListInterface() {
+        ChildListAdapter eventListChildAdapter = new ChildListAdapter(this.activity, mProducts, new ChildListInterface() {
 
             @Override
             public void onClickInterface(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy) {
@@ -190,6 +189,7 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
             }
         };
     }
+
     public void filterList(ArrayList<HeaderName> filterdNames) {
         this.eventInfor = filterdNames;
         notifyDataSetChanged();

@@ -85,6 +85,7 @@ public class Login extends AppCompatActivity {
     private LocationReceiver myReceiver;
     private TimerService mTimerService;
 
+    String deviceToken = "";
     // Tracks the bound state of the service.
     private boolean mBound = false;
 
@@ -103,6 +104,8 @@ public class Login extends AppCompatActivity {
         String titleId = "Signing in...";
         mProgress.setTitle(titleId);
         mProgress.setMessage("Please Wait...");
+
+        deviceToken = shared_common_pref.getvalue(Shared_Common_Pref.Dv_ID);
 
         eMail = sharedPreferences.getString("email", "");
         name.setText(eMail);
@@ -209,7 +212,7 @@ public class Login extends AppCompatActivity {
 
                 try {
                     mProgress.show();
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
                 login(RC_SIGN_IN);
@@ -347,7 +350,7 @@ public class Login extends AppCompatActivity {
             return;
         }
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "dillibabu.j@hap.in");
+        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
@@ -361,9 +364,8 @@ public class Login extends AppCompatActivity {
                         Intent intent;
                         if (requestCode == RC_SIGN_IN)
                             intent = new Intent(Login.this, Dashboard.class);
-                            //  intent = new Intent(Login.this, OrderDashBoard.class);
                         else
-                        intent = new Intent(Login.this, Dashboard_Two.class);
+                            intent = new Intent(Login.this, Dashboard_Two.class);
                         intent.putExtra("photo", photo);
                         String code = response.body().getData().get(0).getSfCode();
                         String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
@@ -397,14 +399,14 @@ public class Login extends AppCompatActivity {
                         startActivity(intent);
                         try {
                             mProgress.dismiss();
-                        }catch (Exception e){
+                        } catch (Exception e) {
 
                         }
 
                     } else {
                         try {
                             mProgress.dismiss();
-                        }catch (Exception e){
+                        } catch (Exception e) {
 
                         }
                         Toast.makeText(getApplicationContext(), "Check username and password", Toast.LENGTH_LONG).show();

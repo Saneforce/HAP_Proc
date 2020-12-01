@@ -6,10 +6,12 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class RetailerViewDetails {
-
     @SerializedName("SVL")
     @Expose
     private String sVL;
+    @SerializedName("ListedDrCode")
+    @Expose
+    private String listedDrCode;
     @SerializedName("DrCat")
     @Expose
     private String drCat;
@@ -25,24 +27,36 @@ public class RetailerViewDetails {
     @SerializedName("Address")
     @Expose
     private String address;
+    @SerializedName("SlabName")
+    @Expose
+    private String slabName;
+    @SerializedName("GST")
+    @Expose
+    private String gST;
+    @SerializedName("pincode")
+    @Expose
+    private String pincode;
+    @SerializedName("Giftenrol_Name")
+    @Expose
+    private String giftenrolName;
     @SerializedName("success")
     @Expose
     private Boolean success;
-    @SerializedName("PreviousOrder")
-    @Expose
-    private List<Object> previousOrder = null;
     @SerializedName("StockistDetails")
     @Expose
-    private Object stockistDetails;
+    private List<StockistDetail> stockistDetails = null;
     @SerializedName("OpeningStock")
     @Expose
-    private List<Object> openingStock = null;
+    private List<OpeningStock> openingStock = null;
     @SerializedName("MOQ")
     @Expose
     private List<Object> mOQ = null;
     @SerializedName("POTENTIAL")
     @Expose
     private List<POTENTIAL> pOTENTIAL = null;
+    @SerializedName("LastorderAmount")
+    @Expose
+    private Integer lastorderAmount;
     @SerializedName("MOV")
     @Expose
     private List<MOV> mOV = null;
@@ -71,6 +85,14 @@ public class RetailerViewDetails {
 
     public void setSVL(String sVL) {
         this.sVL = sVL;
+    }
+
+    public String getListedDrCode() {
+        return listedDrCode;
+    }
+
+    public void setListedDrCode(String listedDrCode) {
+        this.listedDrCode = listedDrCode;
     }
 
     public String getDrCat() {
@@ -113,6 +135,38 @@ public class RetailerViewDetails {
         this.address = address;
     }
 
+    public String getSlabName() {
+        return slabName;
+    }
+
+    public void setSlabName(String slabName) {
+        this.slabName = slabName;
+    }
+
+    public String getGST() {
+        return gST;
+    }
+
+    public void setGST(String gST) {
+        this.gST = gST;
+    }
+
+    public String getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
+
+    public String getGiftenrolName() {
+        return giftenrolName;
+    }
+
+    public void setGiftenrolName(String giftenrolName) {
+        this.giftenrolName = giftenrolName;
+    }
+
     public Boolean getSuccess() {
         return success;
     }
@@ -121,27 +175,19 @@ public class RetailerViewDetails {
         this.success = success;
     }
 
-    public List<Object> getPreviousOrder() {
-        return previousOrder;
-    }
-
-    public void setPreviousOrder(List<Object> previousOrder) {
-        this.previousOrder = previousOrder;
-    }
-
-    public Object getStockistDetails() {
+    public List<StockistDetail> getStockistDetails() {
         return stockistDetails;
     }
 
-    public void setStockistDetails(Object stockistDetails) {
+    public void setStockistDetails(List<StockistDetail> stockistDetails) {
         this.stockistDetails = stockistDetails;
     }
 
-    public List<Object> getOpeningStock() {
+    public List<OpeningStock> getOpeningStock() {
         return openingStock;
     }
 
-    public void setOpeningStock(List<Object> openingStock) {
+    public void setOpeningStock(List<OpeningStock> openingStock) {
         this.openingStock = openingStock;
     }
 
@@ -159,6 +205,14 @@ public class RetailerViewDetails {
 
     public void setPOTENTIAL(List<POTENTIAL> pOTENTIAL) {
         this.pOTENTIAL = pOTENTIAL;
+    }
+
+    public Integer getLastorderAmount() {
+        return lastorderAmount;
+    }
+
+    public void setLastorderAmount(Integer lastorderAmount) {
+        this.lastorderAmount = lastorderAmount;
     }
 
     public List<MOV> getMOV() {

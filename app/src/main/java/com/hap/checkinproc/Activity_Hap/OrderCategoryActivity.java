@@ -247,7 +247,7 @@ public class OrderCategoryActivity extends AppCompatActivity {
 
         String tempalteValue = "{\"tableName\":\"category_master\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<HeaderCat> ca = apiInterface.SubCategory(DIVISION_CODE, SF_CODE, SF_CODE, Shared_Common_Pref.StateCode, tempalteValue);
+        Call<HeaderCat> ca = apiInterface.SubCategory("3", "MGR4762", "MGR4762", "24", tempalteValue);
         ca.enqueue(new Callback<HeaderCat>() {
             @Override
             public void onResponse(Call<HeaderCat> call, Response<HeaderCat> response) {

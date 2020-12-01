@@ -42,13 +42,22 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull FruitViewHolder fruitViewHolder, int i) {
-        final Common_Model contact = contactListFiltered.get(i);
-        fruitViewHolder.mTextViewOne.setText(contact.getName());
+        Common_Model contact = contactListFiltered.get(i);
+        fruitViewHolder.mTextName.setText(contact.getName());
         String getAddress = contact.getAddress();
-        if (isNullOrEmpty(getAddress)) {
-            fruitViewHolder.mTextViewTwo.setVisibility(View.GONE);
+        String getPhone = contact.getPhone();
+        if (!isNullOrEmpty(getAddress)) {
+            fruitViewHolder.mTextAddress.setText(contact.getAddress());
+            fruitViewHolder.mTextAddress.setVisibility(View.VISIBLE);
         } else {
-            fruitViewHolder.mTextViewTwo.setText(contact.getAddress());
+            fruitViewHolder.mTextAddress.setVisibility(View.GONE);
+        }
+
+        if (!isNullOrEmpty(getPhone)) {
+            fruitViewHolder.mTextPhone.setText(contact.getPhone());
+            fruitViewHolder.mTextPhone.setVisibility(View.VISIBLE);
+        } else {
+            fruitViewHolder.mTextPhone.setVisibility(View.GONE);
         }
     }
 
@@ -76,7 +85,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
                     for (Common_Model row : contactList) {
                         // name match condition. this might differ depending on your requirement
                         // here we are looking for name or phone number match
-                        Log.e("Thirumalaivasan", row.getName().toLowerCase());
                         if (row.getName().toLowerCase().trim().replaceAll("\\s", "").contains(charString.toLowerCase().trim().replaceAll("\\s", ""))) {
                             filteredList.add(row);
                             Log.e("FIlter_Rowvalues", String.valueOf(row.getName().toLowerCase()));
@@ -105,12 +113,13 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
     }
 
     public class FruitViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView mTextViewOne, mTextViewTwo;
+        public TextView mTextName, mTextPhone,mTextAddress;
 
         public FruitViewHolder(View v) {
             super(v);
-            mTextViewOne = v.findViewById(R.id.txt_one);
-            mTextViewTwo = v.findViewById(R.id.txt_two);
+            mTextName = v.findViewById(R.id.txt_name);
+            mTextPhone = v.findViewById(R.id.txt_phone);
+            mTextAddress = v.findViewById(R.id.txt_address);
             v.setOnClickListener(this);
         }
 

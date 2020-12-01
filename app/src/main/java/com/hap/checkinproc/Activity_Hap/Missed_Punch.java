@@ -230,7 +230,7 @@ String Tag="HAP_Missed_Punch";
                 String Checkin_Time = jsonObject1.optString("Checkin_Time");
                 String COutTime = jsonObject1.optString("COutTime");
 
-                Model_Pojo = new Common_Model(shift, date, Checkin_Time, COutTime);
+                Model_Pojo = new Common_Model(shift, date, Checkin_Time, COutTime,"");
                 missed_punch.add(Model_Pojo);
 
             }

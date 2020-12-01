@@ -137,11 +137,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_in);
-
-
-
         Log.d(TAG, "onCreate: started.");
-
         //in itShift_Time();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLastLocation();

@@ -18,8 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.ViewReport;
@@ -41,8 +39,7 @@ import retrofit2.Response;
 public class ReportActivity extends AppCompatActivity {
     TextView toolHeader, txtTotalValue, txtProductDate;
     ImageView imgBack;
-    Button fromBtn, toBtn;
-    EditText toolSearch;
+    EditText edtFromDate,edtToDate;
     String fromDateString, dateTime, toDateString, SF_CODE;
     private int mYear, mMonth, mDay, mHour, mMinute;
     ReportViewAdapter mReportViewAdapter;
@@ -79,7 +76,6 @@ public class ReportActivity extends AppCompatActivity {
         });
 
 
-
         mArrayList = new ArrayList<>();
         txtTotalValue = (TextView) findViewById(R.id.total_value);
         @SuppressLint("WrongConstant")
@@ -89,8 +85,9 @@ public class ReportActivity extends AppCompatActivity {
         SF_CODE = sh.getString("Sf_Code", "");
 
         Log.e("SF_CODE", SF_CODE);
-        fromBtn = (Button) findViewById(R.id.from_picker);
-        toBtn = (Button) findViewById(R.id.to_picker);
+        //  fromBtn = (Button) findViewById(R.id.from_picker);
+        edtFromDate = findViewById(R.id.from_picker);
+        edtToDate =  findViewById(R.id.to_picker);
 
         txtTotalValue.setText("0");
         DateFormat df = new SimpleDateFormat("yyyy-MM-d");
@@ -98,14 +95,16 @@ public class ReportActivity extends AppCompatActivity {
         dateTime = df.format(calobj.getTime());
         System.out.println("Date_and_Time" + dateTime);
 
-        fromBtn.setText("" + dateTime);
-        toBtn.setText("" + dateTime);
+        edtFromDate.setText(dateTime);
+        edtToDate.setText(dateTime);
+
+        Log.e("DATE_FROM", dateTime);
         fromDateString = dateTime;
         toDateString = dateTime;
 
         ViewDateReport();
 
-        fromBtn.setOnClickListener(new View.OnClickListener() {
+        edtFromDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Calendar c = Calendar.getInstance();
@@ -122,7 +121,11 @@ public class ReportActivity extends AppCompatActivity {
                                                   int monthOfYear, int dayOfMonth) {
 
                                 fromDateString = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-                                fromBtn.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                                edtFromDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+
+
+                                Log.e("DATE_FROM", edtFromDate.getText().toString());
+
                                 ViewDateReport();
 
                             }
@@ -132,7 +135,7 @@ public class ReportActivity extends AppCompatActivity {
         });
 
 
-        toBtn.setOnClickListener(new View.OnClickListener() {
+        edtToDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Calendar c = Calendar.getInstance();
@@ -147,7 +150,9 @@ public class ReportActivity extends AppCompatActivity {
                                                   int monthOfYear, int dayOfMonth) {
 
                                 toDateString = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-                                toBtn.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                                edtToDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+
+                                Log.e("DATE_FROM", edtToDate.getText().toString());
                                 ViewDateReport();
                             }
                         }, mYear, mMonth, mDay);
@@ -163,14 +168,13 @@ public class ReportActivity extends AppCompatActivity {
     }
 
 
-
     public void ViewDateReport() {
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         Log.e("FROMDATA", "" + fromDateString);
         Log.e("TODATA", "" + toDateString);
-        Call<ReportDataList> responseBodyCall = apiInterface.reportValues(Shared_Common_Pref.Sf_Code, fromDateString, toDateString);
+        Call<ReportDataList> responseBodyCall = apiInterface.reportValues("27", fromDateString, toDateString);
         responseBodyCall.enqueue(new Callback<ReportDataList>() {
             @Override
             public void onResponse(Call<ReportDataList> call, Response<ReportDataList> response) {
@@ -215,6 +219,7 @@ public class ReportActivity extends AppCompatActivity {
             }
         });
     }
+
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
             new OnBackPressedDispatcher(new Runnable() {
                 @Override

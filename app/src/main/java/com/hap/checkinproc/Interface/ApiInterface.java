@@ -33,7 +33,7 @@ import retrofit2.http.QueryMap;
 public interface ApiInterface {
     /*login*/
     @GET("Db_Hap.php?")
-    Call<Model> login(@Query("axn") String axn, @Query("Email") String Email);
+    Call<Model> login(@Query("axn") String axn, @Query("Email") String Email, @Query("DvID") String deveiceId);
 
     /*
         shift time*
@@ -232,9 +232,7 @@ public interface ApiInterface {
     /*category*/
     @FormUrlEncoded
     @POST("db_v14.php?axn=table/list")
-    Call<HeaderCat> SubCategory(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
-                                @Query("rSF") String rSF, @Query("State_Code") String StateCode,
-                                @Field("data") String data);
+    Call<HeaderCat> SubCategory(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Field("data") String data);
 
     /*submitValue*/
     @FormUrlEncoded
@@ -252,22 +250,24 @@ public interface ApiInterface {
 
 
     /*Retailer Details*/
-
-
     @FormUrlEncoded
     @POST("Db_Hap.php?axn=get/FieldForce_HQ")
     Call<Object> getFieldForce_HQ(@Query("divisionCode") String disvisonCode, @Query("sf_code") String sFCode, @Field("data") String data);
 
-
-    /*Retailer View Details*/
-
-    @POST("Db_Hap.php?axn=get/precall")
-    Call<RetailerViewDetails> getRetailerDetails(@Query("divisionCode") String divisionCode, @Query("sf_code") String sFCode, @Query("Msl_No") String retailerID);
-
     @FormUrlEncoded
     @POST("Db_Hap.php")
-    Call<Object>Get_Object(@QueryMap Map<String, String> params, @Field("data") String body);
+    Call<Object> Get_Object(@QueryMap Map<String, String> params, @Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_V13.php?axn=dcr/save")
+    Call<JsonObject> addNewRetailer(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("State_Code") String StateCode, @Query("desig") String desig, @Field("data") String data);
+
+    @FormUrlEncoded
+    @POST("Db_V13.php?axn=table/list")
+    Call<JsonArray> retailerClass(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Field("data") String data);
+
+    @POST("Db_V13.php?axn=get/precall")
+    Call<RetailerViewDetails> retailerViewDetails(@Query("Msl_No") String retailerID, @Query("divisionCode") String divisionCode, @Query("sfCode") String sfCode);
+
 
 }
-
-

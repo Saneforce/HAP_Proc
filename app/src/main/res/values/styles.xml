@@ -36,4 +36,9 @@
         <item name="android:background">#00000000</item>
     </style>
 
+
+    <style name="ShapeAppearanceOverlay.App.CornerSize50Percent" parent="">
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

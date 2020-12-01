@@ -8,10 +8,11 @@
     android:padding="5dp">
 
     <TextView
-        android:layout_width="350dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="left"
         android:hint="Select the Item"
+        android:id="@+id/txt"
         android:text="Select Item"
         android:textColor="@color/dark_blue" />
 
@@ -19,16 +20,15 @@
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/txt"
         android:background="@drawable/search_backround"
         android:drawableLeft="@drawable/ic_search_icon"
-
-        android:gravity="center"
         android:paddingLeft="5dp"
         android:textAlignment="textStart"
         android:textColor="@color/dark_blue"
-        android:textColorHint="@color/colorAccent"
         android:textSize="15sp"
+        android:singleLine="true"
         android:textStyle="normal"
         tools:ignore="RtlCompat" />
 
@@ -40,30 +40,24 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="80dp" />
 
+
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/recycler_view"
-        android:orientation="horizontal">
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight=".5"
-            android:visibility="invisible"
-            android:background="@color/color_white" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/C5dp"
+        android:layout_alignParentRight="true">
 
         <Button
             android:id="@+id/no"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/C100dp"
             android:layout_height="wrap_content"
-            android:layout_weight=".1"
-            android:padding="@dimen/C5dp"
-            android:background="@color/colorPrimaryDark"
+            android:padding="@dimen/C8dp"
+            android:background="@drawable/button_blue"
             android:text="Close"
             android:textColor="@color/color_white" />
-
     </LinearLayout>
-
 
 </RelativeLayout>

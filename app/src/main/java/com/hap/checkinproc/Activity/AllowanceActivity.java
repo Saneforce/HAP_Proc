@@ -42,7 +42,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -54,7 +53,7 @@ import retrofit2.Response;
 public class AllowanceActivity extends AppCompatActivity {
 RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
     Uri outputFileUri;
-    CircleImageView capture_img;
+    ImageView capture_img;
     CardView card_travel;
     ApiInterface apiInterface;
     Button btn_submit,btn_ta;
