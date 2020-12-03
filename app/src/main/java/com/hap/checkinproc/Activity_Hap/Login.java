@@ -45,6 +45,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -78,12 +79,12 @@ public class Login extends AppCompatActivity {
     private final static int RC_MYREPORTS = 2;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
-    SharedPreferences sharedPreferences;
+    SharedPreferences UserDetails;
     SharedPreferences CheckInDetails;
     SharedPreferences Setups;
-    public static final String CheckInDetail = "CheckInDetail";
-    public static final String MyPREFERENCES = "MyPrefs";
-    public static final String SetupsInfo = "MySettings";
+    public static final String sCheckInDetail = "CheckInDetail";
+    public static final String sUserDetail = "MyPrefs";
+    public static final String sSetupsInfo = "MySettings";
     private ProgressDialog mProgress;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
 
@@ -107,20 +108,56 @@ public class Login extends AppCompatActivity {
         shared_common_pref = new Shared_Common_Pref(this);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         profileImage = (ImageView) findViewById(R.id.profile_image);
-        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
-        Setups = getSharedPreferences(SetupsInfo, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(sUserDetail, Context.MODE_PRIVATE);
+        CheckInDetails = getSharedPreferences(sCheckInDetail, Context.MODE_PRIVATE);
+        Setups = getSharedPreferences(sSetupsInfo, Context.MODE_PRIVATE);
         mProgress = new ProgressDialog(this);
         String titleId = "Signing in...";
         mProgress.setTitle(titleId);
         mProgress.setMessage("Please Wait...");
 
-        eMail = sharedPreferences.getString("email", "");
-        String sSFName=sharedPreferences.getString("SfName", "");
+        eMail = UserDetails.getString("email", "");
+        String sSFName=UserDetails.getString("SfName", "");
 
         lblUserName.setText(sSFName);
         lblEmail.setText(eMail);
         name.setText(eMail);
+        if(!eMail.equalsIgnoreCase("")){
+            //get/Shift_timing
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/Signout_Check",
+                    UserDetails.getString("Divcode", ""),
+                    UserDetails.getString("Sfcode", ""), "", "", null);
+            rptCall.enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    JsonArray res = response.body();
+                    if(res.size()<1){
+                        return;
+                    }
+                    JsonObject Itm = res.get(0).getAsJsonObject();
+                    Log.d("ResponseData",String.valueOf(response.body()));
+                    SharedPreferences.Editor cInEditor = CheckInDetails.edit();
+                    cInEditor.putString("Shift_Selected_Id", Itm.get("Sft_ID").getAsString());
+                    cInEditor.putString("Shift_Name", Itm.get("Sft_Name").getAsString());
+                    cInEditor.putString("ShiftStart", Itm.getAsJsonObject("Sft_STime").get("date").getAsString());
+                    cInEditor.putString("ShiftEnd", Itm.getAsJsonObject("sft_ETime").get("date").getAsString());
+                    cInEditor.putString("ShiftCutOff", Itm.getAsJsonObject("ACutOff").get("date").getAsString());
+                    if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
+                        cInEditor.putString("FTime", Itm.get("Edate").getAsString());
+                    cInEditor.putString("Logintime",  Itm.get("Edate").getAsString());
+                    Boolean Cin= (Itm.get("Type").getAsInt() == 0);
+                    cInEditor.putBoolean("CheckIn", Cin);
+                    cInEditor.apply();
+                    MovetoIn();
+                }
+
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                }
+            });
+        }
         if (!checkPermission()) {
             //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 requestPermissions();
@@ -200,13 +237,16 @@ public class Login extends AppCompatActivity {
         ExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                SharedPreferences.Editor editor = UserDetails.edit();
                 editor.putBoolean("Login", false);
                 editor.apply();
                 finishAffinity();
             }
-        });
-        Boolean Login = sharedPreferences.getBoolean("Login", false);
+        });MovetoIn();
+    }
+    public void MovetoIn(){
+
+        Boolean Login = UserDetails.getBoolean("Login", false);
         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
 
         if (Login == true || CheckIn == true) {
@@ -226,16 +266,15 @@ public class Login extends AppCompatActivity {
                 login(RC_SIGN_IN);
             } else if (CheckIn == true) {
                 getSetups();
-                Shared_Common_Pref.Sf_Code = sharedPreferences.getString("Sfcode", "");
-                Shared_Common_Pref.Sf_Name = sharedPreferences.getString("SfName", "");
-                Shared_Common_Pref.Div_Code = sharedPreferences.getString("Divcode", "");
-                Shared_Common_Pref.StateCode = sharedPreferences.getString("State_Code", "");
+                Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
+                Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
+                Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
+                Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
                 Intent Dashboard = new Intent(Login.this, Dashboard_Two.class);
                 Dashboard.putExtra("Mode", "CIN");
                 startActivity(Dashboard);
             }
         }
-
     }
 
     @Override
@@ -256,8 +295,6 @@ public class Login extends AppCompatActivity {
 
     private void handleSignInResult(GoogleSignInResult result, int requestCode) {
         if (result.isSuccess()) {
-
-
             GoogleSignInAccount account = result.getSignInAccount();
             //assert account != null;
             Log.d("LoginDetails", String.valueOf(account.getDisplayName()));
@@ -353,7 +390,7 @@ public class Login extends AppCompatActivity {
         }
     }
     public void getSetups(){
-        String SFCode=sharedPreferences.getString("Sfcode", "");
+        String SFCode=UserDetails.getString("Sfcode", "");
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonArray> SetupCall = apiInterface.getSetups("get/setup", SFCode);
         SetupCall.enqueue(new Callback<JsonArray>() {
@@ -390,20 +427,30 @@ public class Login extends AppCompatActivity {
                     if (response.body().getSuccess() == true) {
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                         Intent intent;
+                        Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+
                         if (requestCode == RC_SIGN_IN) {
-                            intent = new Intent(Login.this, Dashboard.class);
+                            if(CheckIn == true){
+                                intent = new Intent(Login.this, Dashboard_Two.class);
+                                intent.putExtra("Mode", "CIN");
+                            }else {
+                                intent = new Intent(Login.this, Dashboard.class);
+                            }
                             //  intent = new Intent(Login.this, OrderDashBoard.class);
                         }else{
                             intent = new Intent(Login.this, Dashboard_Two.class);
                             intent.putExtra("Mode", "RPT");
                         }
+                        Log.d("Sales",String.valueOf(response.body()));
                         intent.putExtra("photo", photo);
                         String code = response.body().getData().get(0).getSfCode();
                         String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
                         String sName = response.body().getData().get(0).getSfName();
                         String div = response.body().getData().get(0).getDivisionCode();
                         Integer type = response.body().getData().get(0).getCheckCount();
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        String DeptCd = response.body().getData().get(0).getDeptCd();
+                        String DeptType = response.body().getData().get(0).getDeptType();
+                        SharedPreferences.Editor editor = UserDetails.edit();
                         Shared_Common_Pref.Sf_Code = code;
                         Shared_Common_Pref.Sf_Name = response.body().getData().get(0).getSfName();
                         Shared_Common_Pref.Div_Code = div;
@@ -418,6 +465,9 @@ public class Login extends AppCompatActivity {
                         editor.putString("SfName", sName);
                         editor.putString("Divcode", div);
                         editor.putInt("CheckCount", type);
+                        editor.putString("DeptCd", DeptCd);
+                        editor.putString("DeptType", DeptType);
+                        Log.d("DeptType",String.valueOf(DeptType));
                         editor.putString("State_Code", Sf_type);
                         editor.putString("email", eMail);
                         editor.apply();

@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -437,9 +438,9 @@ public class TAClaimActivity extends AppCompatActivity {
         try {
             JSONObject jj = new JSONObject();
             jj.put("Ta_Date", date);
-            jj.put("div", "3,");
-            jj.put("sf", "MGR4762");
-            jj.put("rSF", "MGR4762");
+            jj.put("div", div);
+            jj.put("sf", SF_code);
+            jj.put("rSF", SF_code);
             jj.put("State_Code", State_Code);
             Log.v("json_obj_ta", jj.toString());
             Call<ResponseBody> Callto = apiInterface.getDailyAllowance(jj.toString());
@@ -497,7 +498,8 @@ public class TAClaimActivity extends AppCompatActivity {
         }catch (Exception e){}
     }
 
-    public void createDynamicViewForSingleRow(String name,ArrayList<SelectionModel> array,int position){
+    @SuppressLint("ResourceType")
+    public void createDynamicViewForSingleRow(String name, ArrayList<SelectionModel> array, int position){
         RelativeLayout rl=new RelativeLayout(this);
         RelativeLayout.LayoutParams layoutparams_1 = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,

@@ -20,6 +20,12 @@ public class Datum {
     @SerializedName("Division_Code")
     @Expose
     private String divisionCode;
+    @SerializedName("SFDept")
+    @Expose
+    private String deptCd;
+    @SerializedName("DeptType")
+    @Expose
+    private String deptType;
     @SerializedName("DisRad")
     @Expose
     private Double disRad;
@@ -136,6 +142,23 @@ public class Datum {
 
     public void setHOLocation(String hOLocation) {
         this.hOLocation = hOLocation;
+    }
+
+
+    public String getDeptCd() {
+        return deptCd;
+    }
+
+    public void setDeptCd(String deptCd) {
+        this.deptCd = deptCd;
+    }
+
+    public String getDeptType() {
+        return deptType;
+    }
+
+    public void setDeptType(String deptType) {
+        this.deptType = deptType;
     }
 
 }

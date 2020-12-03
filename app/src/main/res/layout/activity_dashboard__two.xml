@@ -7,8 +7,7 @@
     tools:context=".Activity_Hap.Dashboard_Two"
     android:orientation="vertical">
 
-    <include
-         layout="@layout/custom_toolbar_help"></include>
+    <include layout="@layout/custom_toolbar_help"></include>
     <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -90,7 +89,9 @@
                             android:text="Today"
                             android:textFontWeight="900"
                             android:textSize="@dimen/C13dp"
-                            android:layout_weight="1"/>
+                            android:layout_weight="1"
+                            android:layout_marginTop="5dp"
+                            android:textStyle="bold"/>
                         <TextView
                             android:id="@+id/lTDyTx"
                             android:layout_width="match_parent"
@@ -98,7 +99,8 @@
                             android:layout_weight="1"
                             android:textAlignment="textEnd"
                             android:textSize="@dimen/C13dp"
-                            android:text="TextView" />
+                            android:text="TextView"
+                            android:textStyle="bold" />
 
                     </LinearLayout>
 

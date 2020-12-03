@@ -144,7 +144,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="20dp"
-            android:background="@drawable/button_blue"
+            android:background="@drawable/button_blueg"
             android:text="My Reports"
             android:textAllCaps="false"
             android:textColor="@android:color/white">
@@ -155,7 +155,7 @@
             android:id="@+id/btnExit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/button_amber"
+            android:background="@drawable/button_red"
             android:text="Exit"
             android:textAllCaps="false"
             android:textColor="@android:color/white">

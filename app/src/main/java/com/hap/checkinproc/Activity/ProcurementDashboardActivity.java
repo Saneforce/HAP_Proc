@@ -1,14 +1,17 @@
 package com.hap.checkinproc.Activity;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,10 +24,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hap.checkinproc.Activity.Util.ListModel;
 import com.hap.checkinproc.Activity.Util.ModelDynamicView;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
+import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
+import com.hap.checkinproc.Activity_Hap.OrderDashBoard;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
@@ -86,6 +92,33 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                 }
             }
         });
+       ImageView ibtLogout=findViewById(R.id.ibtLogout);
+        ibtLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                new AlertDialog.Builder(ProcurementDashboardActivity.this)
+                        .setTitle("HAP Check-In")
+                        .setMessage(Html.fromHtml("Are you sure to <b><span style='color:#FF0000'>Stop</span></b> your Today Activity Now ?"))
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                Intent aIntent;
+                                aIntent = new Intent(getApplicationContext(), Dashboard_Two.class);
+                                aIntent.putExtra("Mode", "CIN");
+                                startActivity(aIntent);
+                                //((AppCompatActivity) Dashboard_Two.this).finish();
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                        .show();
+            }
+        });
         txt_name.setText(UserDetails.getString("SfName",""));
         txt_mail.setText(UserDetails.getString("email",""));
         txt_head_name.setText(UserDetails.getString("SfName",""));
@@ -94,6 +127,10 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
         callDynamicmenu();
     }
 
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(this, "There is no back action", Toast.LENGTH_LONG).show();
+    }
     public class AdapterForNavigation extends BaseAdapter{
         Context context;
         ArrayList<ListModel> arr=new ArrayList<>();

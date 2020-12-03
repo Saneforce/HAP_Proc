@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
@@ -46,9 +49,25 @@ public class HomeRptRecyler  extends RecyclerView.Adapter<HomeRptRecyler.ViewHol
 
         JsonObject itm=mArrayList.get(position).getAsJsonObject();
         holder.txtLable.setText(itm.get("name").getAsString());
-        holder.txtValue.setText(itm.get("value").getAsString());
+        holder.txtValue.setText(Html.fromHtml(itm.get("value").getAsString()));
         if(!itm.get("color").getAsString().equalsIgnoreCase(""))
         holder.txtValue.setTextColor(Color.parseColor(itm.get("color").getAsString()));
+        holder.txtValue.setMovementMethod(LinkMovementMethod.getInstance());
+        try {
+            if (itm.get("type").getAsString().equalsIgnoreCase("geo")) {
+                holder.txtValue.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.google.com/maps?q=" + holder.txtValue.getText()));
+                        mContext.startActivity(browserIntent);
+                    }
+                });
+            }
+        }
+        catch (Exception e){
+
+        }
     }
 
     @Override

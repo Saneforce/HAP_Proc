@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.IBinder;
@@ -21,9 +22,12 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.hap.checkinproc.Activity_Hap.Block_Information;
+import com.hap.checkinproc.Activity_Hap.Common_Class;
+import com.hap.checkinproc.Activity_Hap.Login;
 import com.hap.checkinproc.HAPApp;
 import com.hap.checkinproc.R;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -91,7 +95,40 @@ public void startTimerService(){
                             }
                         }
                     }
-                    if (sMsg != "") {
+
+                    SharedPreferences CheckInDetails = getSharedPreferences("CheckInDetail", Context.MODE_PRIVATE);
+                    String ACutOff=CheckInDetails.getString("ShiftCutOff","");
+                    if(!ACutOff.equalsIgnoreCase("")){
+
+                        Common_Class Dt=new Common_Class();
+                        Date CutOff=Dt.getDate(ACutOff);
+                        String sDt=Dt.GetDateTime(getApplicationContext(),"yyyy-MM-dd HH:mm:ss");
+                        Date Cdate=Dt.getDate(sDt);
+                        if (Cdate.getTime()>=CutOff.getTime()){
+                            Log.d("Cutoff","Time REached");
+                            SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = UserDetails.edit();
+                            editor.putBoolean("Login", false);
+                            editor.apply();
+                            SharedPreferences.Editor cInEditor = CheckInDetails.edit();
+                            cInEditor.remove("Shift_Selected_Id");
+                            cInEditor.remove("Shift_Name");
+                            cInEditor.remove("ShiftStart");
+                            cInEditor.remove("ShiftEnd");
+                            cInEditor.remove("ShiftCutOff");
+                            cInEditor.remove("FTime");
+                            cInEditor.remove("Logintime");
+                            cInEditor.putBoolean("CheckIn", false);
+                            cInEditor.apply();
+                            Intent nwScr = new Intent(context, Login.class);
+                            nwScr.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(nwScr);
+                            /*window.localStorage.removeItem("Sfift_End_Time");
+                            window.localStorage.removeItem("LOGIN");
+                            $state.go('signin');*/
+                        }
+                    }
+                    if (!sMsg.equalsIgnoreCase("")) {
                         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                                 (RelativeLayout.LayoutParams.MATCH_PARENT), (RelativeLayout.LayoutParams.WRAP_CONTENT));
                         lp.setMargins(13, 13, 13, 13);

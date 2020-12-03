@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -70,7 +71,7 @@ public class ImageCapture extends AppCompatActivity implements
 
     Camera mCamera;
     int mCamId = 0;
-    String[] flashModes = {"OFF", "Auto", "ON", "Torch"};//animal names array
+    String[] flashModes = {"OFF", "Auto", "ON", "Torch"};
     private File file;
 
     SurfaceView preview;
@@ -79,14 +80,14 @@ public class ImageCapture extends AppCompatActivity implements
 
     JSONObject CheckInInf;
 
-    SharedPreferences sharedPreferences;
+    SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     Common_Class DT = new Common_Class();
 
     String mMode;
 
-    public static final String CheckInDetail = "CheckInDetail";
-    public static final String MyPREFERENCES = "MyPrefs";
+    public static final String sCheckInDetail = "CheckInDetail";
+    public static final String sUserDetail = "MyPrefs";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -94,8 +95,8 @@ public class ImageCapture extends AppCompatActivity implements
         setContentView(R.layout.activity_image_capture);
 
         CheckInInf = new JSONObject();
-        sharedPreferences = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
-        UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        CheckInDetails = getSharedPreferences(sCheckInDetail, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(sUserDetail, Context.MODE_PRIVATE);
 
         Bundle params = getIntent().getExtras();
         try {
@@ -113,7 +114,6 @@ public class ImageCapture extends AppCompatActivity implements
                     CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
                     CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
                     CheckInInf.put("App_Version", Common_Class.Version_Name);
-                    CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
                     CheckInInf.put("WrkType", "0");
                     CheckInInf.put("CheckDutyFlag", "0");
                     CheckInInf.put("PlcID", "");
@@ -134,6 +134,8 @@ public class ImageCapture extends AppCompatActivity implements
 
         textureView = (TextureView) findViewById(R.id.ImagePreview);
         button = (Button) findViewById(R.id.button_capture);
+        Button btnRtPrv = (Button) findViewById(R.id.btnRtPrv);
+        Button btnOkPrv = (Button) findViewById(R.id.btnOkPrv);
         btnFlash = (ImageView) findViewById(R.id.button_flash);
         btnSwchCam = (ImageView) findViewById(R.id.button_switchCam);
         lstModalFlash = (LinearLayout) findViewById(R.id.lstMFlash);
@@ -177,6 +179,18 @@ public class ImageCapture extends AppCompatActivity implements
             }
         });
 
+        btnRtPrv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CloseImgPreview();
+            }
+        });
+        btnOkPrv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveImgPreview();
+            }
+        });
         skBarBright = (SeekBar) findViewById(R.id.skBarBright);
         skBarBright.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -304,14 +318,31 @@ public class ImageCapture extends AppCompatActivity implements
                     public void onPictureTaken(byte[] bytes, Camera camera) {
                         try {
                             save(bytes);
-                            saveCheckIn();
+                            ShowImgPreview();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
                 });
     }
-
+    private void ShowImgPreview(){
+        RelativeLayout vwPreview=findViewById(R.id.ImgPreview);
+        ImageView imgPreview=findViewById(R.id.imgPreviewImg);
+        vwPreview.setVisibility(View.VISIBLE);
+        imgPreview.setImageURI(Uri.fromFile(file));
+    }
+    private void CloseImgPreview(){
+        RelativeLayout vwPreview=findViewById(R.id.ImgPreview);
+        ImageView imgPreview=findViewById(R.id.imgPreviewImg);
+        vwPreview.setVisibility(View.GONE);
+    }
+    private void saveImgPreview(){
+        RelativeLayout vwPreview=findViewById(R.id.ImgPreview);
+        ImageView imgPreview=findViewById(R.id.imgPreviewImg);
+        vwPreview.setVisibility(View.GONE);
+        imgPreview.setImageURI(Uri.fromFile(file));
+        saveCheckIn();
+    }
     private void saveCheckIn() {
         try {
             // LocationFinder locationFinder=new LocationFinder(this);
@@ -336,13 +367,13 @@ public class ImageCapture extends AppCompatActivity implements
             CheckInInf.put("slfy", imageFileName);
             CheckInInf.put("Rmks", "");
             if (mMode.equalsIgnoreCase("CIN")) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                SharedPreferences.Editor editor = CheckInDetails.edit();
                 editor.putString("Shift_Selected_Id", CheckInInf.getString("Shift_Selected_Id"));
                 editor.putString("Shift_Name", CheckInInf.getString("Shift_Name"));
                 editor.putString("ShiftStart", CheckInInf.getString("ShiftStart"));
                 editor.putString("ShiftEnd", CheckInInf.getString("ShiftEnd"));
                 editor.putString("ShiftCutOff", CheckInInf.getString("ShiftCutOff"));
-                if (sharedPreferences.getString("FTime", "").equalsIgnoreCase(""))
+                if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
                     editor.putString("FTime", CTime);
                 editor.putString("Logintime", CTime);
                 editor.putBoolean("CheckIn", true);
@@ -403,13 +434,13 @@ public class ImageCapture extends AppCompatActivity implements
                         if (response.isSuccessful()) {
                             Log.e("TOTAL_REPOSNEaaa", String.valueOf(response.body()));
 
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            SharedPreferences.Editor editor = CheckInDetails.edit();
                             editor.putString("Logintime", "");
                             editor.putBoolean("CheckIn", false);
                             editor.apply();
 
                             JsonObject itm = response.body().getAsJsonObject();
-                            String mMessage = "Check in Time  : " + sharedPreferences.getString("FTime", "") + "<br>" +
+                            String mMessage = "Check in Time  : " + CheckInDetails.getString("FTime", "") + "<br>" +
                                     "Check Out Time : " + CTime;
 
                             try {
