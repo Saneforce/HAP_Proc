@@ -2,6 +2,7 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -28,6 +29,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -55,12 +57,19 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Permission_Request extends AppCompatActivity implements View.OnClickListener, Master_Interface {
+    private static String Tag="HAP_Check-In";
+    SharedPreferences CheckInDetails;
+    SharedPreferences UserDetails;
+    SharedPreferences Setups;
+    public static final String CheckInfo = "CheckInDetail" ;
+    public static final String UserInfo = "MyPrefs" ;
+    public static final String SetupsInfo = "MySettings";
 
     TimePickerDialog picker;
     EditText eText, eText2;
     String DateSelection;
     DatePickerDialog picker1;
-    EditText eText1, takenHrs, hrsTwo, hrsThree, reasonPermission;
+    EditText eText1, takenHrs, hrsCurr, hrsAvail, reasonPermission;
     private ArrayList<String> shitList;
     Date d1 = null;
     Date d2 = null;
@@ -71,6 +80,8 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
     Gson gson;
     String takenLeave = "";
     String ShiftName;
+    JsonObject aSetups;
+    int TotHrs,AvlHrs,tknHrs;
 
 
     TextView shitType;
@@ -82,6 +93,13 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_permission__request);
+        CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+        Setups = getSharedPreferences(SetupsInfo, Context.MODE_PRIVATE);
+        JsonParser jsonParser = new JsonParser();
+        JsonArray jArray = (JsonArray) jsonParser.parse(Setups.getString("Setups",""));
+        aSetups=jArray.get(0).getAsJsonObject();
+
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -93,8 +111,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
-
+                openHome();
             }
         });
 
@@ -106,10 +123,15 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
             }
         });
 
-        takenHrs = (EditText) findViewById(R.id.hrs_one);
-        hrsTwo = (EditText) findViewById(R.id.hrs_two);
-        hrsThree = (EditText) findViewById(R.id.hrs_three);
+        takenHrs = (EditText) findViewById(R.id.hrsTkn);
+        hrsCurr = (EditText) findViewById(R.id.hrsCurr);
+        hrsAvail = (EditText) findViewById(R.id.hrsAvail);
         gson = new Gson();
+        tknHrs=0;
+        TotHrs=aSetups.get("Permission_hours").getAsInt();
+        AvlHrs=TotHrs-tknHrs;
+        hrsAvail.setText(String.valueOf(AvlHrs));
+        takenHrs.setText(String.valueOf(tknHrs));
         eText1 = (EditText) findViewById(R.id.permission_date);
         eText1.setInputType(InputType.TYPE_NULL);
         eText1.setOnClickListener(new View.OnClickListener() {
@@ -235,6 +257,20 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
     }
 
+    public void openHome() {
+        Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+        Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
+        Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
+        Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
+        Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
+        Log.d(Tag, String.valueOf(CheckIn));
+        if (CheckIn == true) {
+            Intent Dashboard = new Intent(this, Dashboard_Two.class);
+            Dashboard.putExtra("Mode", "CIN");
+            startActivity(Dashboard);
+        }else
+            startActivity(new Intent(getApplicationContext(), Dashboard.class));
+    }
 
     private void fromTime(int hours, int mins) {
 
@@ -298,23 +334,26 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
         Log.e("ClickedfromTime", fromTime);
         Log.e("ClickedtoTime", toTime);
+        AvlHrs=TotHrs-tknHrs;
+        hrsAvail.setText(String.valueOf(AvlHrs));
         if (!fromTime.equals("") && !toTime.equals("")) {
             if (Integer.valueOf(fromTime) < Integer.valueOf(toTime)) {
 
                 differnce = Integer.valueOf(toTime) - Integer.valueOf(fromTime);
-
-                if (differnce > 2) {
-                    hrsTwo.setText("2");
-                    differnce = 2;
-
+                if (differnce > AvlHrs) {
+                    Toast.makeText(this, "Your Permission Limit Exceed. "+(AvlHrs)+" Hrs Only Available", Toast.LENGTH_SHORT).show();
+                    hrsCurr.setText("");
+                    eText2.setText("");
+                    return;
                 } else {
-                    hrsTwo.setText("" + differnce);
-
+                    AvlHrs=AvlHrs-differnce;
+                    hrsCurr.setText(String.valueOf(differnce));
                 }
+                hrsAvail.setText(String.valueOf(AvlHrs));
 
             } else {
                 Toast.makeText(this, "PLease choose higher than from time", Toast.LENGTH_SHORT).show();
-                hrsTwo.setText("");
+                hrsCurr.setText("");
                 eText2.setText("");
             }
 
@@ -351,10 +390,11 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                     Log.e("dsdsa", "" + takenLeave);
                     if (takenLeave != null) {
                         takenHrs.setText(takenLeave);
-
+                        tknHrs=Integer.parseInt(takenLeave);
                     } else {
                         takenHrs.setText("0");
-                    }
+                        tknHrs=0;
+                    }differ();
                 }
 
 
@@ -413,14 +453,12 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                 JsonObject jsonObjecta = response.body();
 
                 Log.e("TOTAL_REPOSNE_PER", String.valueOf(jsonObjecta));
-                String Msg = String.valueOf(jsonObjecta.get("Msg"));
-                String Psql = String.valueOf(jsonObjecta.get("SPSQl"));
-                Msg = Msg.replace("\"", "");
+                String Msg = jsonObjecta.get("Msg").getAsString();
                 Log.e("SDFDFD", jsonObjecta.get("success").toString());
                 Log.e("SDFDFDDFF", String.valueOf(Msg.length()));
 
 
-                if (Msg.length() == 0) {
+                if (Msg.equalsIgnoreCase("")) {
                     // Toast.makeText(Leave_Request.this, "NULL VALUE", Toast.LENGTH_SHORT).show();
 
                     PermissionRequestTwo();
@@ -490,13 +528,24 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                 JsonObject jsonObjecta = response.body();
 
                 Log.e("TOTAL_REPOSNE_PER", String.valueOf(jsonObjecta));
-                String Msg = String.valueOf(jsonObjecta.get("Msg"));
-                String Psql = String.valueOf(jsonObjecta.get("SPSQl"));
-                Msg = Msg.replace("\"", "");
+                String Msg = jsonObjecta.get("Msg").getAsString();
                 Log.e("SDFDFD", jsonObjecta.get("success").toString());
                 Log.e("SDFDFDDFF", String.valueOf(Msg.length()));
+                if(!Msg.equalsIgnoreCase("")){
+                    AlertDialogBox.showDialog(Permission_Request.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
+                        @Override
+                        public void PositiveMethod(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                            if(jsonObjecta.get("success").getAsBoolean()==true) openHome();
+                        }
 
-                startActivity(new Intent(Permission_Request.this, Leave_Dashboard.class));
+                        @Override
+                        public void NegativeMethod(DialogInterface dialog, int id) {
+
+                        }
+                    });
+                }
+                //startActivity(new Intent(Permission_Request.this, Leave_Dashboard.class));
 
             }
 

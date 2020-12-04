@@ -7,9 +7,11 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +21,18 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.hap.checkinproc.Activity_Hap.Block_Information;
+import com.hap.checkinproc.Activity_Hap.Common_Class;
+import com.hap.checkinproc.Activity_Hap.Login;
 import com.hap.checkinproc.HAPApp;
 import com.hap.checkinproc.R;
 
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class TimerService extends Service {
-    public static final int notify = 2000;  //interval between two services(Here Service run every 5 Minute)
+    public static final int notify = 1000;  //interval between two services(Here Service run every 5 Minute)
     private Handler mHandler = new Handler();   //run on another Thread to avoid crash
     private Timer mTimer = null;    //timer handling
 
@@ -79,7 +85,50 @@ public void startTimerService(){
                             rootView.removeView(el);
                         }
                     } catch(Exception e){}
-                    if (sMsg != "") {
+
+                    if (context != null) {
+                        if (isTimeAutomatic(context) != true ) {
+                            if(HAPApp.activeActivity.getClass()!=Block_Information.class){
+                                Intent nwScr = new Intent(context, Block_Information.class);
+                                nwScr.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(nwScr);
+                            }
+                        }
+                    }
+
+                    SharedPreferences CheckInDetails = getSharedPreferences("CheckInDetail", Context.MODE_PRIVATE);
+                    String ACutOff=CheckInDetails.getString("ShiftCutOff","");
+                    if(!ACutOff.equalsIgnoreCase("")){
+
+                        Common_Class Dt=new Common_Class();
+                        Date CutOff=Dt.getDate(ACutOff);
+                        String sDt=Dt.GetDateTime(getApplicationContext(),"yyyy-MM-dd HH:mm:ss");
+                        Date Cdate=Dt.getDate(sDt);
+                        if (Cdate.getTime()>=CutOff.getTime()){
+                            Log.d("Cutoff","Time REached");
+                            SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                            SharedPreferences.Editor editor = UserDetails.edit();
+                            editor.putBoolean("Login", false);
+                            editor.apply();
+                            SharedPreferences.Editor cInEditor = CheckInDetails.edit();
+                            cInEditor.remove("Shift_Selected_Id");
+                            cInEditor.remove("Shift_Name");
+                            cInEditor.remove("ShiftStart");
+                            cInEditor.remove("ShiftEnd");
+                            cInEditor.remove("ShiftCutOff");
+                            cInEditor.remove("FTime");
+                            cInEditor.remove("Logintime");
+                            cInEditor.putBoolean("CheckIn", false);
+                            cInEditor.apply();
+                            Intent nwScr = new Intent(context, Login.class);
+                            nwScr.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(nwScr);
+                            /*window.localStorage.removeItem("Sfift_End_Time");
+                            window.localStorage.removeItem("LOGIN");
+                            $state.go('signin');*/
+                        }
+                    }
+                    if (!sMsg.equalsIgnoreCase("")) {
                         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                                 (RelativeLayout.LayoutParams.MATCH_PARENT), (RelativeLayout.LayoutParams.WRAP_CONTENT));
                         lp.setMargins(13, 13, 13, 13);
@@ -99,9 +148,17 @@ public void startTimerService(){
                         rootView.addView(relative);
                         Log.d("service is ", "running" + cAtivity.getClass().getName());
                     }
+
                 }
 
             });
+        }
+        public boolean isTimeAutomatic(Context c) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                return Settings.Global.getInt(c.getContentResolver(), Settings.Global.AUTO_TIME, 0) == 1;
+            } else {
+                return android.provider.Settings.System.getInt(c.getContentResolver(), android.provider.Settings.System.AUTO_TIME, 0) == 1;
+            }
         }
     }
 }

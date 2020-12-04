@@ -52,6 +52,16 @@
                 android:id="@+id/txt_head_name"
                 />
 
+            <ImageView
+                android:id="@+id/ibtLogout"
+                android:layout_width="@dimen/C50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="8dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/C8dp"
+                android:src="@drawable/ic_logout" />
+
 
         </RelativeLayout>
 

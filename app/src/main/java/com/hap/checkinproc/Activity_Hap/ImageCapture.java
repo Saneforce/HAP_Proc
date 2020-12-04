@@ -1,20 +1,16 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.Manifest;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.location.Location;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IBinder;
 import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
@@ -29,12 +25,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -45,7 +41,6 @@ import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -55,15 +50,13 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ImageCapture extends AppCompatActivity implements
-    SurfaceHolder.Callback{
+        SurfaceHolder.Callback {
     Button button;
     TextureView textureView;
     ImageView btnFlash;
@@ -77,8 +70,8 @@ public class ImageCapture extends AppCompatActivity implements
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
 
     Camera mCamera;
-    int mCamId=0;
-    String[] flashModes={"OFF","Auto","ON","Torch"};//animal names array
+    int mCamId = 0;
+    String[] flashModes = {"OFF", "Auto", "ON", "Torch"};
     private File file;
 
     SurfaceView preview;
@@ -87,71 +80,69 @@ public class ImageCapture extends AppCompatActivity implements
 
     JSONObject CheckInInf;
 
-    SharedPreferences sharedPreferences;
+    SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
-    Common_Class DT= new Common_Class();
+    Common_Class DT = new Common_Class();
 
     String mMode;
 
-    public static final String CheckInDetail = "CheckInDetail" ;
-    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String sCheckInDetail = "CheckInDetail";
+    public static final String sUserDetail = "MyPrefs";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_capture);
 
-        CheckInInf=new JSONObject();
-        sharedPreferences = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
-        UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        CheckInInf = new JSONObject();
+        CheckInDetails = getSharedPreferences(sCheckInDetail, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(sUserDetail, Context.MODE_PRIVATE);
 
-        Bundle params=getIntent().getExtras();
-            try {
-                mMode=params.getString("Mode");
-                CheckInInf.put("Mode", mMode);
-                CheckInInf.put("Divcode", UserDetails.getString("Divcode",""));
-                CheckInInf.put("sfCode",UserDetails.getString("Sfcode",""));
+        Bundle params = getIntent().getExtras();
+        try {
+            mMode = params.getString("Mode");
+            CheckInInf.put("Mode", mMode);
+            CheckInInf.put("Divcode", UserDetails.getString("Divcode", ""));
+            CheckInInf.put("sfCode", UserDetails.getString("Sfcode", ""));
 
-                String SftId=params.getString("ShiftId");
-                if (mMode.equalsIgnoreCase("CIN")) {
-                    if(!(SftId.isEmpty() || SftId.equalsIgnoreCase(""))) {
-                        CheckInInf.put("Shift_Selected_Id", SftId);
-                        CheckInInf.put("Shift_Name", params.getString("ShiftName"));
-                        CheckInInf.put("ShiftStart", params.getString("ShiftStart"));
-                        CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
-                        CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
-                        CheckInInf.put("App_Version", Common_Class.Version_Name);
-                        CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
-                        CheckInInf.put("WrkType", "0");
-                        CheckInInf.put("CheckDutyFlag", "0");
-                        CheckInInf.put("PlcID", "");
-                        CheckInInf.put("PlcNm", "");
-                        CheckInInf.put("vstRmks", "");
-                    }
+            String SftId = params.getString("ShiftId");
+            if (mMode.equalsIgnoreCase("CIN")) {
+                if (!(SftId.isEmpty() || SftId.equalsIgnoreCase(""))) {
+                    CheckInInf.put("Shift_Selected_Id", SftId);
+                    CheckInInf.put("Shift_Name", params.getString("ShiftName"));
+                    CheckInInf.put("ShiftStart", params.getString("ShiftStart"));
+                    CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
+                    CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
+                    CheckInInf.put("App_Version", Common_Class.Version_Name);
+                    CheckInInf.put("WrkType", "0");
+                    CheckInInf.put("CheckDutyFlag", "0");
+                    CheckInInf.put("PlcID", "");
+                    CheckInInf.put("PlcNm", "");
+                    CheckInInf.put("vstRmks", "");
                 }
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-            if(!checkPermission())
-            {
-               // if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    requestPermissions();
-               // }
-            }
-            else{
-                StartSelfiCamera();
-            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        if (!checkPermission()) {
+            requestPermissions();
+
+        } else {
+            StartSelfiCamera();
+        }
 
 
-
-        textureView =(TextureView)findViewById(R.id.ImagePreview);
-        button =(Button)findViewById(R.id.button_capture);
-        btnFlash =(ImageView)findViewById(R.id.button_flash);
-        btnSwchCam =(ImageView)findViewById(R.id.button_switchCam);
-        lstModalFlash=(LinearLayout) findViewById(R.id.lstMFlash);
-        lstFlashMode=(ListView)findViewById(R.id.lstFlashMode);
+        textureView = (TextureView) findViewById(R.id.ImagePreview);
+        button = (Button) findViewById(R.id.button_capture);
+        Button btnRtPrv = (Button) findViewById(R.id.btnRtPrv);
+        Button btnOkPrv = (Button) findViewById(R.id.btnOkPrv);
+        btnFlash = (ImageView) findViewById(R.id.button_flash);
+        btnSwchCam = (ImageView) findViewById(R.id.button_switchCam);
+        lstModalFlash = (LinearLayout) findViewById(R.id.lstMFlash);
+        lstFlashMode = (ListView) findViewById(R.id.lstFlashMode);
 
         preview = (SurfaceView) findViewById(R.id.PREVIEW);
-        ArrayAdapter simpleAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,flashModes);
+        ArrayAdapter simpleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, flashModes);
         lstFlashMode.setAdapter(simpleAdapter);//sets the adapter for listView
 
         //perform listView item click event
@@ -164,8 +155,8 @@ public class ImageCapture extends AppCompatActivity implements
                     //params.setFlashMode(Parameters.FLASH_MODE_TORCH);
                     params.set("flash-mode", flashModes[i].toLowerCase());
                     mCamera.setParameters(params);
+                } catch (Exception e) {
                 }
-                catch (Exception e){}
             }
         });
 
@@ -188,32 +179,46 @@ public class ImageCapture extends AppCompatActivity implements
             }
         });
 
-        skBarBright=(SeekBar)findViewById(R.id.skBarBright);
+        btnRtPrv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CloseImgPreview();
+            }
+        });
+        btnOkPrv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                saveImgPreview();
+            }
+        });
+        skBarBright = (SeekBar) findViewById(R.id.skBarBright);
         skBarBright.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress,
                                           boolean fromUser) {
-                Toast.makeText(getApplicationContext(),"seekbar progress: "+progress, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "seekbar progress: " + progress, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(getApplicationContext(),"seekbar touch started!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "seekbar touch started!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(getApplicationContext(),"seekbar touch stopped!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "seekbar touch stopped!", Toast.LENGTH_SHORT).show();
             }
         });
     }
-    private void StartSelfiCamera(){
+
+    private void StartSelfiCamera() {
         /*mHolder = preview.getHolder();
         mHolder.addCallback(this);
         setDefaultCameraId("front");
         mCamera = Camera.open(mCamId);*/
         if (mCamera != null) {
-            preview=null;
+
+            preview = null;
             mHolder.removeCallback(ImageCapture.this);
             mCamera.setPreviewCallback(null);
             mCamera.stopPreview();
@@ -224,7 +229,7 @@ public class ImageCapture extends AppCompatActivity implements
         preview = (SurfaceView) findViewById(R.id.PREVIEW);
         mHolder = preview.getHolder();
         mHolder.addCallback(ImageCapture.this);
-        setDefaultCameraId((mCamId==0)? "front": "back");
+        setDefaultCameraId((mCamId == 0) ? "front" : "back");
         mCamera = Camera.open(mCamId);
         try {
             mCamera.setPreviewDisplay(mHolder);
@@ -234,21 +239,17 @@ public class ImageCapture extends AppCompatActivity implements
         setCameraDisplayOrientation();
         mCamera.startPreview();
     }
-    private boolean checkPermission()
-    {
+
+    private boolean checkPermission() {
         return (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
-        //PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
     }
 
     //Location service part
-   // @RequiresApi(api = Build.VERSION_CODES.Q)
-    private void requestPermissions()
-    {
+    private void requestPermissions() {
         boolean shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.CAMERA);
-        if(shouldProvideRationale)
-        {
+        if (shouldProvideRationale) {
             Snackbar.make(
                     findViewById(R.id.activity_main),
                     R.string.permission_rationale,
@@ -258,22 +259,20 @@ public class ImageCapture extends AppCompatActivity implements
                         public void onClick(View view) {
                             // Request permission
                             ActivityCompat.requestPermissions(ImageCapture.this,
-                                    new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},
+                                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                                     REQUEST_PERMISSIONS_REQUEST_CODE);
                         }
                     })
                     .show();
-        }
-        else
+        } else
             ActivityCompat.requestPermissions(ImageCapture.this,
-                    new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                     REQUEST_PERMISSIONS_REQUEST_CODE);
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode)
-        {
+        switch (requestCode) {
             case REQUEST_PERMISSIONS_REQUEST_CODE:
                 if (grantResults.length <= 0) {
                     // Permission was not granted.
@@ -306,52 +305,75 @@ public class ImageCapture extends AppCompatActivity implements
         }
     }
 
-    public void takePicture(){
-        long tsLong = System.currentTimeMillis()/1000;
-        imageFileName = Long.toString(tsLong)+".jpg";
+    public void takePicture() {
+        long tsLong = System.currentTimeMillis() / 1000;
+        imageFileName = Long.toString(tsLong) + ".jpg";
 
         //file  = new File(Environment.getExternalStorageDirectory() + "/"+ts+".jpg");
-        imagePath= Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/"+imageFileName;
-        file  = new File(imagePath);
+        imagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + imageFileName;
+        file = new File(imagePath);
         mCamera.takePicture(null, null,
                 new Camera.PictureCallback() {
                     @Override
                     public void onPictureTaken(byte[] bytes, Camera camera) {
                         try {
                             save(bytes);
-                            saveCheckIn();
+                            ShowImgPreview();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                     }
                 });
     }
-    private void saveCheckIn(){
+    private void ShowImgPreview(){
+        RelativeLayout vwPreview=findViewById(R.id.ImgPreview);
+        ImageView imgPreview=findViewById(R.id.imgPreviewImg);
+        vwPreview.setVisibility(View.VISIBLE);
+        imgPreview.setImageURI(Uri.fromFile(file));
+    }
+    private void CloseImgPreview(){
+        RelativeLayout vwPreview=findViewById(R.id.ImgPreview);
+        ImageView imgPreview=findViewById(R.id.imgPreviewImg);
+        vwPreview.setVisibility(View.GONE);
+    }
+    private void saveImgPreview(){
+        RelativeLayout vwPreview=findViewById(R.id.ImgPreview);
+        ImageView imgPreview=findViewById(R.id.imgPreviewImg);
+        vwPreview.setVisibility(View.GONE);
+        imgPreview.setImageURI(Uri.fromFile(file));
+        saveCheckIn();
+    }
+    private void saveCheckIn() {
         try {
-           // LocationFinder locationFinder=new LocationFinder(this);
+            // LocationFinder locationFinder=new LocationFinder(this);
 
-            Location location= Common_Class.location;//locationFinder.getLocation();
-            String CTime=DT.GetDateTime(getApplicationContext(),"HH:mm:ss");
-            String CDate=DT.GetDateTime(getApplicationContext(),"yyyy-MM-dd");
+            Location location = Common_Class.location;//locationFinder.getLocation();
+            String CTime = DT.GetDateTime(getApplicationContext(), "HH:mm:ss");
+            String CDate = DT.GetDateTime(getApplicationContext(), "yyyy-MM-dd");
 
-            CheckInInf.put("eDate", CDate+" "+CTime);
+            CheckInInf.put("eDate", CDate + " " + CTime);
             CheckInInf.put("eTime", CTime);
-            CheckInInf.put("lat", location.getLatitude());
-            CheckInInf.put("long", location.getLongitude());
-            CheckInInf.put("Lattitude", location.getLatitude());
-            CheckInInf.put("Langitude", location.getLongitude());
+            double lat=0,lng=0;
+            if(location!=null){
+                lat=location.getLatitude();
+                lng=location.getLongitude();
+            }
+            CheckInInf.put("lat", lat);
+            CheckInInf.put("long", lng);
+            CheckInInf.put("Lattitude", lat);
+            CheckInInf.put("Langitude", lng);
 
             CheckInInf.put("iimgSrc", imagePath);
             CheckInInf.put("slfy", imageFileName);
             CheckInInf.put("Rmks", "");
-            if(mMode.equalsIgnoreCase("CIN")) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+            if (mMode.equalsIgnoreCase("CIN")) {
+                SharedPreferences.Editor editor = CheckInDetails.edit();
                 editor.putString("Shift_Selected_Id", CheckInInf.getString("Shift_Selected_Id"));
                 editor.putString("Shift_Name", CheckInInf.getString("Shift_Name"));
                 editor.putString("ShiftStart", CheckInInf.getString("ShiftStart"));
                 editor.putString("ShiftEnd", CheckInInf.getString("ShiftEnd"));
                 editor.putString("ShiftCutOff", CheckInInf.getString("ShiftCutOff"));
-                if(sharedPreferences.getString("FTime","").equalsIgnoreCase(""))
+                if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
                     editor.putString("FTime", CTime);
                 editor.putString("Logintime", CTime);
                 editor.putBoolean("CheckIn", true);
@@ -400,7 +422,7 @@ public class ImageCapture extends AppCompatActivity implements
                         Log.d("HAP_receive", "");
                     }
                 });
-            }else {
+            } else {
                 ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                 Call<JsonObject> modelCall = apiInterface.JsonSave("get/logouttime",
                         UserDetails.getString("Divcode", ""),
@@ -412,14 +434,14 @@ public class ImageCapture extends AppCompatActivity implements
                         if (response.isSuccessful()) {
                             Log.e("TOTAL_REPOSNEaaa", String.valueOf(response.body()));
 
-                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            SharedPreferences.Editor editor = CheckInDetails.edit();
                             editor.putString("Logintime", "");
                             editor.putBoolean("CheckIn", false);
                             editor.apply();
 
                             JsonObject itm = response.body().getAsJsonObject();
-                            String mMessage = "Check in Time  : "+ sharedPreferences.getString("FTime","")+"<br>"+
-                                            "Check Out Time : "+ CTime;
+                            String mMessage = "Check in Time  : " + CheckInDetails.getString("FTime", "") + "<br>" +
+                                    "Check Out Time : " + CTime;
 
                             try {
                                 mMessage = itm.get("Msg").getAsString();
@@ -452,6 +474,7 @@ public class ImageCapture extends AppCompatActivity implements
             e.printStackTrace();
         }
     }
+
     private void save(byte[] bytes) throws IOException {
         OutputStream outputStream = null;
         outputStream = new FileOutputStream(file);
@@ -459,17 +482,18 @@ public class ImageCapture extends AppCompatActivity implements
         outputStream.close();
     }
 
-    private void setDefaultCameraId(String cam){
-        noOfCameras= Camera.getNumberOfCameras();
-        int facing=cam.equalsIgnoreCase("front")? Camera.CameraInfo.CAMERA_FACING_FRONT:Camera.CameraInfo.CAMERA_FACING_BACK;
-        Camera.CameraInfo cameraInfo=new Camera.CameraInfo();
-        for(int i=0;i<noOfCameras;i++){
-            Camera.getCameraInfo(i,cameraInfo);
-            if(cameraInfo.facing==facing){
-                mCamId=i;
+    private void setDefaultCameraId(String cam) {
+        noOfCameras = Camera.getNumberOfCameras();
+        int facing = cam.equalsIgnoreCase("front") ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
+        Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
+        for (int i = 0; i < noOfCameras; i++) {
+            Camera.getCameraInfo(i, cameraInfo);
+            if (cameraInfo.facing == facing) {
+                mCamId = i;
             }
         }
     }
+
     public void setCameraDisplayOrientation() {
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(mCamId, info);
@@ -502,6 +526,7 @@ public class ImageCapture extends AppCompatActivity implements
 
         mCamera.setDisplayOrientation(result);
     }
+
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
         try {

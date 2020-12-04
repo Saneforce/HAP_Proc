@@ -254,7 +254,7 @@ public class Common_Class {
         return plantime;
     }
 
-    public void GetTP_Result(String name, String values, int Month) {
+    public void GetTP_Result(String name, String values, int Month,int year) {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
         JSONObject sp = new JSONObject();
@@ -265,7 +265,7 @@ public class Common_Class {
         }
         jsonArray.put(jsonObject);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> mCall = apiInterface.GetResponseBody(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, String.valueOf(Month), String.valueOf(Calendar.getInstance().get(Calendar.YEAR)), jsonArray.toString());
+        Call<JsonObject> mCall = apiInterface.GetResponseBody(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, String.valueOf(Month), String.valueOf(year), jsonArray.toString());
         Log.e("Log_Tp_SELECT", jsonArray.toString());
         mCall.enqueue(new Callback<JsonObject>() {
             @Override

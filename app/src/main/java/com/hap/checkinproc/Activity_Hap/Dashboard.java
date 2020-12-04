@@ -1,10 +1,12 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +34,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Dashboard extends AppCompatActivity implements View.OnClickListener {
+    private static String Tag="HAP_Check-In";
+    SharedPreferences sharedPreferences;
+    SharedPreferences UserDetails;
+    public static final String CheckInDetail = "CheckInDetail" ;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+
     TextView username;
+    TextView lblUserName,lblEmail;
     LinearLayout linMyday, linCheckin, linRequstStaus, linReport, linOnDuty, linApprovals, linTaClaim, linExtShift, linTourPlan, linExit, lin_check_in;
     Integer type;
     Common_Class common_class;
@@ -42,11 +51,21 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         username = findViewById(R.id.username);
+        lblUserName = (TextView) findViewById(R.id.lblUserName);
+        lblEmail = (TextView) findViewById(R.id.lblEmail);
 
         Get_MydayPlan();
+
+        sharedPreferences = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         type = (shared.getInt("CheckCount", 0));
         common_class = new Common_Class(this);
+
+        String eMail = UserDetails.getString("email", "");
+        String sSFName=UserDetails.getString("SfName", "");
+        lblUserName.setText(sSFName);
+        lblEmail.setText(eMail);
 
         linMyday = (findViewById(R.id.lin_myday_plan));
 
@@ -118,7 +137,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             case R.id.lin_onduty:
                 startActivity(new Intent(this, On_Duty_Activity.class));
                 break;
-
+            case R.id.lin_exit:
+                SharedPreferences.Editor editor = UserDetails.edit();
+                editor.putBoolean("Login", false);
+                editor.apply();
+                finishAffinity();
+                //System.exit(0);
+                break;
             default:
                 break;
         }

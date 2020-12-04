@@ -42,7 +42,9 @@
         <activity android:name=".Activity_Hap.OrderDashBoard" />
         <activity android:name=".Activity.ApprovalViewActivity" />
         <activity android:name=".Activity.ViewTASummary" />
-        <activity android:name=".Activity.TAClaimActivity" />
+        <activity android:name=".Activity.TAClaimActivity">
+
+        </activity>
         <activity android:name=".Activity.TAApprovalActivity" />
         <activity android:name=".Activity.AllowanceActivity" />
         <activity android:name=".Activity_Hap.Block_Information" />

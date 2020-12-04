@@ -119,5 +119,54 @@
             android:layout_height="match_parent">
 
         </ListView>
+
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/ImgPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:background="#FFFFFF"
+        android:visibility="gone">
+        <ImageView
+            android:id="@+id/imgPreviewImg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/btnRtPrv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/color_red"
+            android:padding="@dimen/C15dp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:text="Retry"/>
+        <Button
+            android:id="@+id/btnOkPrv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/C15dp"
+            android:layout_weight="1"
+            android:background="@color/green"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:text="Ok"
+            />
+    </LinearLayout>
+    </RelativeLayout>
 </RelativeLayout>
+    <!--            android:layout_marginTop="2dp"-->
+    <!--            android:layout_marginBottom="2dp"-->
+    <!--            android:layout_marginLeft="50dp"-->
+    <!--            android:layout_marginRight="2dp"-->

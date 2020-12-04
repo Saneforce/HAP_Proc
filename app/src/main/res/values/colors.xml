@@ -55,4 +55,18 @@
     <color name="dividerList">#FAFAFA</color>
     <color name="greyColor">#2C000000</color>
     <color name="subHeader">#9C000000</color>
+
+   <!--button Colors-->
+   <color name="mDyPlan">#0080ff</color>
+   <color name="CheckIn">#009688</color>
+   <color name="Request">#840013</color>
+   <color name="Reports">#3f48ca</color>
+   <color name="OnDuty">#01a5e4</color>
+   <color name="Approvals">#014143</color>
+   <color name="TAClaim">#a14b9f</color>
+   <color name="Extended">#fd8024</color>
+   <color name="Exit">#d34836</color>
+
+
+
 </resources>

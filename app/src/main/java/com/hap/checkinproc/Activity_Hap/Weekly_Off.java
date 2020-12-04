@@ -226,13 +226,14 @@ public class Weekly_Off extends AppCompatActivity {
                 JsonObject jsonObjecta = response.body();
 
                 Log.e("TOTAL_REPOSNE", String.valueOf(jsonObjecta));
-                String Msg = jsonObjecta.get("msg").getAsString();
+                String Msg = jsonObjecta.get("Msg").getAsString();
 
                 AlertDialogBox.showDialog(Weekly_Off.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
                         dialog.dismiss();
-                        startActivity(new Intent(Weekly_Off.this, Leave_Dashboard.class));
+                        if(jsonObjecta.get("success").getAsBoolean()==true)
+                            startActivity(new Intent(Weekly_Off.this, Dashboard.class));
                     }
 
                     @Override

@@ -1,9 +1,13 @@
 package com.hap.checkinproc.Activity.Util;
 
+import java.util.ArrayList;
+
 public class SelectionModel {
     String txt;
     boolean isClick;
     String code,value,img_url,tmp_url;
+    ArrayList<SelectionModel> array=new ArrayList<>();
+
 
     public SelectionModel(String txt, boolean isClick) {
         this.txt = txt;
@@ -14,6 +18,10 @@ public class SelectionModel {
         this.isClick = isClick;
         this.code=code;
     }
+    public SelectionModel(String txt,ArrayList<SelectionModel> array){
+        this.txt = txt;
+        this.array=array;
+    }
     public SelectionModel(String txt, String value, String code,String img_url,String tmp_url) {
         this.txt = txt;
         this.value = value;
@@ -21,9 +29,24 @@ public class SelectionModel {
         this.img_url=img_url;
         this.tmp_url=tmp_url;
     }
+    public SelectionModel(String txt, String value, String code,String img_url,ArrayList<SelectionModel> array) {
+        this.txt = txt;
+        this.value = value;
+        this.code=code;
+        this.img_url=img_url;
+        this.array=array;
+    }
     public SelectionModel(String txt, String code){
         this.txt=txt;
         this.code=code;
+    }
+
+    public ArrayList<SelectionModel> getArray() {
+        return array;
+    }
+
+    public void setArray(ArrayList<SelectionModel> array) {
+        this.array = array;
     }
 
     public String getValue() {

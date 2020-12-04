@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Activity;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -7,18 +8,26 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +35,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
+import androidx.core.content.res.ResourcesCompat;
 
 import com.hap.checkinproc.Activity.Util.ImageFilePath;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
@@ -37,6 +47,7 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.DailyExpenseAdapter;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -72,6 +83,8 @@ public class TAClaimActivity extends AppCompatActivity {
     SharedPreferences UserDetails;
     public static final String MyPREFERENCES = "MyPrefs";
     String SF_code="",div="",State_Code="";
+    LinearLayout lay_row;
+    int cardViewCount=70,rlayCount=700;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +94,7 @@ public class TAClaimActivity extends AppCompatActivity {
         img_attach=findViewById(R.id.img_attach);
         btn_sub=findViewById(R.id.btn_sub);
         list=findViewById(R.id.list);
+        lay_row=findViewById(R.id.lay_row);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SF_code=UserDetails.getString("Sfcode","");
         div=UserDetails.getString("Divcode","");
@@ -116,7 +130,7 @@ public class TAClaimActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 pos=-1;
-            popupCapture();
+                popupCapture();
             }
         });
 
@@ -145,7 +159,7 @@ public class TAClaimActivity extends AppCompatActivity {
                 String fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(pickedImageCount).getUri());
                 Log.v("picked_fullPath", fullPath + "");
                 if(pos==-1)
-                picPath.add(fullPath);
+                    picPath.add(fullPath);
                 else{
                     SelectionModel m=array.get(pos);
                     filepathing=m.getImg_url();
@@ -196,10 +210,29 @@ public class TAClaimActivity extends AppCompatActivity {
                     url_img=url_img+imgUrl[j].substring(imgUrl[j].lastIndexOf("/")+1)+",";
                 }
                 jj.put("imgData",url_img);
+
+                Log.v("total_size__log",m.getArray().size()+"");
+                JSONArray jjarray=new JSONArray();
+                for(int k=0;k<m.getArray().size();k++){
+                    for(int h=0;h<m.getArray().get(k).getArray().size();h++){
+                        JSONObject jjjson=new JSONObject();
+                        jjjson.put("id",m.getArray().get(k).getArray().get(h).getCode());
+                        jjjson.put("val",m.getArray().get(k).getArray().get(h).getValue());
+                        jjjson.put("mainid",m.getCode());
+                        jjarray.put(jjjson);
+                    }
+
+
+                }
+                Log.v("printing_final_totl",jjarray.toString());
+                jj.put("value",jjarray);
                 ja.put(jj);
             }
+            Log.v("printing_final",ja.toString());
             jjMain.put("sf",SF_code);
             jjMain.put("div",div);
+            String dates=txt_date.getText().toString();
+            jjMain.put("date",dates.substring(0,dates.lastIndexOf("-"))+" 00:00:00");
             jjMain.put("dailyExpense",ja);
             ja=new JSONArray();
             JSONObject jj=new JSONObject();
@@ -240,12 +273,12 @@ public class TAClaimActivity extends AppCompatActivity {
                         jsonData = response.body().string();
                         Log.v("printing_json",jsonData);
                         JSONObject json=new JSONObject(jsonData);
-                       if(json.getString("success").equalsIgnoreCase("true"))
-                       {
-                           Toast.makeText(TAClaimActivity.this,"Submitted Successfully ",Toast.LENGTH_SHORT).show();
-                           Intent i=new Intent(TAClaimActivity.this,ViewTASummary.class);
-                           startActivity(i);
-                       }
+                        if(json.getString("success").equalsIgnoreCase("true"))
+                        {
+                            Toast.makeText(TAClaimActivity.this,"Submitted Successfully ",Toast.LENGTH_SHORT).show();
+                            Intent i=new Intent(TAClaimActivity.this,ViewTASummary.class);
+                            startActivity(i);
+                        }
                     }catch (Exception e){
                         Log.v("printing_excep_va",e.getMessage());
                     }
@@ -257,7 +290,10 @@ public class TAClaimActivity extends AppCompatActivity {
                 }
             });
 
-        }catch (Exception e){}
+
+        }catch (Exception e){
+            Log.v("printing_exception_are",e.getMessage());
+        }
 
     }
     public void getMulipart(String  path,int  x){
@@ -421,21 +457,36 @@ public class TAClaimActivity extends AppCompatActivity {
                             jsonData = response.body().string();
                             Log.v("response_data",jsonData);
                             array=new ArrayList<>();
+                            lay_row.removeAllViews();
                             JSONObject js=new JSONObject(jsonData);
                             JSONArray ja=js.getJSONArray("ExpenseWeb");
                             for(int i=0;i<ja.length();i++){
-                                JSONObject json_o=ja.getJSONObject(i);
-                                array.add(new SelectionModel(json_o.getString("Name"),"",json_o.getString("ID"),"",""));
+                                JSONObject json_oo=ja.getJSONObject(i);
+                                JSONObject json_o=json_oo.getJSONObject("value1");
+                                ArrayList<SelectionModel> arr=new ArrayList<>();
+                                ArrayList<SelectionModel> arr1=new ArrayList<>();
+                                JSONArray jjja=json_oo.getJSONArray("value");
+                                for(int j=0;j<jjja.length();j++){
+                                    JSONObject json_in=jjja.getJSONObject(j);
+                                    arr.add(new SelectionModel(json_in.getString("Ad_Fld_Name"),"",json_in.getString("Ad_Fld_ID"),"",""));
+                                }
+                                arr1.add(new SelectionModel("",arr));
+                                array.add(new SelectionModel(json_o.getString("Name"),"",json_o.getString("ID"),"",arr1));
                             }
                             JSONArray ja1=js.getJSONArray("TodayExpense");
                             if(ja1.length()!=0)
-                            todayExp=ja1.getJSONObject(0).toString();
+                                todayExp=ja1.getJSONObject(0).toString();
                             Log.v("todayExp_val",todayExp);
                             DailyExpenseAdapter adpt=new DailyExpenseAdapter(TAClaimActivity.this,array);
                             list.setAdapter(adpt);
 
+                            for(int i=0;i<array.size();i++){
+                                createDynamicViewForSingleRow(array.get(i).getTxt(),array.get(i).getArray(),i);
+                            }
+
                         }
-                    }catch (Exception e){}
+                    }
+                    catch (Exception e){}
                 }
 
                 @Override
@@ -445,5 +496,218 @@ public class TAClaimActivity extends AppCompatActivity {
             });
 
         }catch (Exception e){}
+    }
+
+    @SuppressLint("ResourceType")
+    public void createDynamicViewForSingleRow(String name, ArrayList<SelectionModel> array, int position){
+        RelativeLayout rl=new RelativeLayout(this);
+        RelativeLayout.LayoutParams layoutparams_1 = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        rl.setLayoutParams(layoutparams_1);
+        RelativeLayout.LayoutParams layoutparams_2 = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        layoutparams_2.addRule(RelativeLayout.CENTER_VERTICAL);
+        layoutparams_2.setMargins(5,0,0,0);
+        TextView txt = new TextView(this);
+        txt.setLayoutParams(layoutparams_2);
+        txt.setText(name);
+        Typeface typeface = ResourcesCompat.getFont(this, R.font.basic);
+        //txt.setTypeface(typeface,Typeface.BOLD);
+        txt.setTypeface(typeface);
+        txt.setTextSize(16f);
+        txt.setTextColor(Color.BLACK);
+        rl.addView(txt);
+        RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_END);
+        layoutparams_3.setMargins(0,10,0,0);
+        EditText edt=new EditText(this);
+        edt.setLayoutParams(layoutparams_3);
+        edt.setBackgroundResource(R.drawable.round_rect_with_blue_stroke);
+        edt.setEms(5);
+        edt.setPadding(9,9,9,9);
+        rl.addView(edt);
+        RelativeLayout.LayoutParams layoutparams_4 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        layoutparams_4.addRule(RelativeLayout.ALIGN_PARENT_END);
+        layoutparams_4.addRule(RelativeLayout.CENTER_VERTICAL);
+        layoutparams_4.setMargins(0,0,3,0);
+        ImageView img=new ImageView(this);
+        img.setImageResource(R.drawable.attach_icon);
+        img.setId(899);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pos=position;
+                popupCapture();
+            }
+        });
+        //layoutparams_3.addRule(RelativeLayout.CENTER_VERTICAL);
+        // layoutparams_3.setMargins(0,8,0,0);
+        img.setLayoutParams(layoutparams_4);
+        rl.addView(img);
+        //layoutparams_3.addRule(RelativeLayout.CENTER_VERTICAL);
+        lay_row.addView(rl);
+
+        if(array.get(0).getArray().size()!=0){
+            RelativeLayout r2=new RelativeLayout(this);
+            RelativeLayout.LayoutParams params_2 = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            r2.setLayoutParams(params_2);
+            r2.setId(rlayCount);
+            array.get(0).getArray().get(0).setTmp_url(String.valueOf(rlayCount));
+            rlayCount=rlayCount+1;
+
+            r2.addView(generateView(0,array.get(0).getArray(),array,0));
+            lay_row.addView(r2);
+        }
+    }
+
+    public CardView generateView(int x,ArrayList<SelectionModel> arr,ArrayList<SelectionModel> arrayList,int pos){
+        CardView cardview = new CardView(this);
+        cardview.setId(cardViewCount);
+        cardViewCount=cardViewCount+1;
+        RelativeLayout.LayoutParams layoutparams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.FILL_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        if(x!=0){
+            CardView cc=lay_row.findViewById(x);
+            layoutparams.addRule(RelativeLayout.BELOW,cc.getId());
+        }
+        cardview.setLayoutParams(layoutparams);
+
+        cardview.setRadius(5);
+
+        cardview.setPadding(18, 18, 18, 18);
+
+        cardview.setCardBackgroundColor(Color.GRAY);
+
+        cardview.setUseCompatPadding(true);
+        //cardview.setMaxCardElevation(2);
+        cardview.setCardElevation(5);
+
+        /*  cardview.setMaxCardElevation(6);*/
+        cardview.setRadius(8);
+        LinearLayout lay=new LinearLayout(this);
+        LinearLayout.LayoutParams params_3 = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        lay.setBackgroundColor(Color.parseColor("#ffffff"));
+        lay.setPadding(5,5,5,5);
+        params_3.setMargins(5,6,5,3);
+        lay.setOrientation(LinearLayout.VERTICAL);
+
+        try {
+            for (int i = 0; i < arr.size(); i++) {
+
+                SelectionModel mm=arr.get(i);
+                EditText edt1 = new EditText(this);
+                edt1.setLayoutParams(params_3);
+                edt1.setHint(arr.get(i).getTxt());
+                edt1.setHintTextColor(Color.parseColor("#C0C0C0"));
+                edt1.setBackgroundResource(R.drawable.round_rect_with_blue_stroke);
+                edt1.setText("");
+                edt1.setPadding(9, 9, 9, 9);
+                lay.addView(edt1);
+                edt1.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable editable) {
+                        mm.setValue(editable.toString());
+                    }
+                });
+            }
+        }catch (Exception e){
+
+        }
+
+       /* EditText edt2=new EditText(this);
+        edt2.setLayoutParams(params_3);
+        edt2.setBackgroundResource(R.drawable.round_rect_with_blue_stroke);
+        edt2.setText("");
+        edt2.setHint("Enter the value");
+        edt2.setHintTextColor(Color.parseColor("#C0C0C0"));
+        edt2.setPadding(9,9,9,9);
+
+        lay.addView(edt2);*/
+        LinearLayout.LayoutParams params_4 = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        params_4.setMargins(0,5,0,0);
+        RelativeLayout rlay_icon=new RelativeLayout(this);
+        RelativeLayout.LayoutParams params_5 = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        //rlay_icon.setLayoutParams(params_5);
+        params_5.addRule(RelativeLayout.ALIGN_PARENT_END);
+        params_5.setMargins(0,6,0,0);
+        ImageView img1=new ImageView(this);
+        img1.setImageResource(R.drawable.circle_plus_icon);
+        img1.setId(899);
+
+        img1.setId(500);
+        img1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int countt= Integer.parseInt(arr.get(0).getTmp_url());
+                ArrayList<SelectionModel> arr_new=new ArrayList<>();
+                for(int l=0;l<arr.size();l++){
+                    SelectionModel mm=arr.get(l);
+                    arr_new.add(new SelectionModel(mm.getTxt(),"",mm.getCode(),"",mm.getTmp_url()));
+
+                }
+                arrayList.add(new SelectionModel("",arr_new));
+                Log.v("arraylist_selection",arrayList.size()+"");
+                RelativeLayout rlays=lay_row.findViewById(countt);
+                rlays.addView(generateView(cardview.getId(),arr_new,arrayList,pos+1));
+                // lay_row.addView(rlays);
+            }
+        });
+
+        img1.setLayoutParams(params_5);
+        rlay_icon.addView(img1);
+        RelativeLayout.LayoutParams params_6 = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        //rlay_icon.setLayoutParams(params_5);
+
+        params_6.addRule(RelativeLayout.LEFT_OF, img1.getId());
+        params_6.setMargins(0,6,6,0);
+        ImageView img2=new ImageView(this);
+        img2.setImageResource(R.drawable.circle_minus_icon);
+        img2.setId(899);
+
+        //layoutparams_3.addRule(RelativeLayout.CENTER_VERTICAL);
+        // layoutparams_3.setMargins(0,8,0,0);
+        img2.setLayoutParams(params_6);
+        img2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int countt= Integer.parseInt(arr.get(0).getTmp_url());
+                RelativeLayout rlays=lay_row.findViewById(countt);
+                rlays.removeView(cardview);
+                Log.v("printing_pos_are ",pos+" end");
+                arrayList.remove(pos);
+                // lay_row.addView(rlays);
+            }
+        });
+        rlay_icon.addView(img2);
+        //lay.addView(edt1);
+        lay.addView(rlay_icon);
+
+        cardview.addView(lay);
+        return cardview;
     }
 }

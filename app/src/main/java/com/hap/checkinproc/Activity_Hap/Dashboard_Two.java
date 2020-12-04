@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +27,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
+import com.hap.checkinproc.Activity.TAClaimActivity;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
@@ -42,18 +45,16 @@ import retrofit2.Response;
 
 public class  Dashboard_Two extends AppCompatActivity implements View.OnClickListener {
     private static String Tag="HAP_Check-In";
-    SharedPreferences sharedPreferences;
+    SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     public static final String CheckInDetail = "CheckInDetail" ;
-    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String UserDetail = "MyPrefs" ;
 
     private RecyclerView recyclerView;
     private HomeRptRecyler mAdapter;
+    String viewMode="";
     int cModMnth=1;
     Button viewButton;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,20 +72,16 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
-
+                if(!viewMode.equalsIgnoreCase("CIN"))
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
             }
         });
-        sharedPreferences = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
-        UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
         TextView txUserName = findViewById(R.id.txUserName);
         String sUName=UserDetails.getString("SfName","");
         txUserName.setText("HI! "+ sUName);
-
-        TextView txt = findViewById(R.id.MRQtxt);
-        txt.setText("");
-        txt.setSelected(true);
 
         CardView cardview3 = findViewById(R.id.cardview3);
         CardView cardview4 = findViewById(R.id.cardview4);
@@ -98,9 +95,9 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
         btnCheckout.setOnClickListener(this);
 
         Bundle params=getIntent().getExtras();
-        String InMode=params.getString("Mode");
+        viewMode=params.getString("Mode");
 
-        if(InMode.equalsIgnoreCase("CIN")) {
+        if(viewMode.equalsIgnoreCase("CIN")) {
             cardview3.setVisibility(View.VISIBLE);
             cardview4.setVisibility(View.VISIBLE);
             //cardView5.setVisibility(View.VISIBLE);
@@ -113,6 +110,7 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
             StActivity.setVisibility(View.GONE);
             btnCheckout.setVisibility(View.GONE);
         }
+        getNotify();
         getDyReports();
         getMnthReports(0);
         GetMissedPunch();
@@ -120,8 +118,49 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
 
         viewButton = findViewById(R.id.button3);
         viewButton.setOnClickListener(this);
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
     }
 
+    private void getNotify () {
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/notify",
+                UserDetails.getString("Divcode", ""),
+                UserDetails.getString("Sfcode", ""), "", "", null);
+        rptCall.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                JsonArray res = response.body();
+                Log.d("NotifyMsg",response.body().toString());
+                TextView txt = findViewById(R.id.MRQtxt);
+                txt.setText("");
+                txt.setVisibility(View.GONE);
+                String sMsg="";
+                txt.setSelected(true);
+                for(int il=0;il<res.size();il++){
+                    JsonObject Itm = res.get(il).getAsJsonObject();
+                    sMsg+=Itm.get("NtfyMsg").getAsString();
+                }
+                if(!sMsg.equalsIgnoreCase("")){
+                    txt.setText(Html.fromHtml(sMsg));
+                    txt.setVisibility(View.VISIBLE);
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                Log.d(Tag,String.valueOf(t));
+            }
+        });
+    }
     private void getMnthReports(int m) {
         if(cModMnth==m) return;
         String[] mns={"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
@@ -137,11 +176,11 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
             sDt=Dt.AddMonths(sDt,-1,"yyyy-MM-dd HH:mm:ss");
         }
         int fmn=Dt.getMonth(sDt);
-        sDt=Dt.AddMonths(Dt.getYear(sDt)+"-"+Dt.getMonth(sDt)+"-22",1,"yyyy-MM-dd HH:mm:ss");
+        sDt=Dt.AddMonths(Dt.getYear(sDt)+"-"+Dt.getMonth(sDt)+"-22 00:00:00",1,"yyyy-MM-dd HH:mm:ss");
         int tmn=Dt.getMonth(sDt);
         Log.d(Tag, sDt+"-"+String.valueOf(fmn)+"-"+String.valueOf(tmn));
         TextView txUserName = findViewById(R.id.txtMnth);
-        txUserName.setText("23,"+mns[fmn] +" - 22," +mns[tmn]);
+        txUserName.setText("23,"+mns[fmn-1] +" - 22," +mns[tmn-1]);
 
         // appendDS = appendDS + "&divisionCode=" + userData.divisionCode + "&sfCode=" + sSF + "&rSF=" + userData.sfCode + "&State_Code=" + userData.State_Code;
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -195,7 +234,7 @@ Log.d("Respose_data",String.valueOf(response.body()));
                 }
                 JsonObject fItm = res.get(0).getAsJsonObject();
                 TextView txDyDet = findViewById(R.id.lTDyTx);
-                txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br>" + fItm.get("AttDtNm").getAsString()));
+                txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br><small>" + fItm.get("AttDtNm").getAsString()+"</small>"));
                 JsonArray dyRpt = new JsonArray();
                 JsonObject newItem = new JsonObject();
                 newItem.addProperty("name", "Shift");
@@ -223,11 +262,14 @@ Log.d("Respose_data",String.valueOf(response.body()));
                 newItem.addProperty("name", "Geo In");
                 newItem.addProperty("value", fItm.get("GeoIn").getAsString());
                 newItem.addProperty("color", "#333333");
+                newItem.addProperty("type", "geo");
                 dyRpt.add(newItem);
                 newItem = new JsonObject();
                 newItem.addProperty("name", "Geo Out");
-                newItem.addProperty("value", fItm.get("GeoOut").getAsString());
+                newItem.addProperty("value", fItm.get("GeoOut").getAsString());//"<a href=\"https://www.google.com/maps?q="+fItm.get("GeoOut").getAsString()+"\">"+fItm.get("GeoOut").getAsString()+"</a>");
                 newItem.addProperty("color", "#333333");
+                newItem.addProperty("type", "geo");
+
                 dyRpt.add(newItem);
 
 
@@ -254,16 +296,23 @@ Log.d("Respose_data",String.valueOf(response.body()));
                 mOnBackPressedDispatcher.onBackPressed();
             }
         });
+    }
 
-
-
-
+    @Override
+    public void onBackPressed() {
+        Toast.makeText(Dashboard_Two.this, "There is no back action", Toast.LENGTH_LONG).show();
     }
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Dashboard_Two.super.onBackPressed();
+                    Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+
+                    Log.d(Tag, String.valueOf(CheckIn));
+                    if (CheckIn != true) {
+                        Dashboard_Two.super.onBackPressed();
+                    }
+                    //
                 }
             });
 
@@ -397,14 +446,37 @@ Log.d("Respose_data",String.valueOf(response.body()));
                 intent = new Intent(this, Leave_Dashboard.class);
                 break;
             case R.id.cardview4:
-                intent = new Intent(this, Travel_Allowance.class);
+                intent = new Intent(this, TAClaimActivity.class);
                 break;
             case R.id.cardview5:
                 intent = new Intent(this, Reports.class);
                 break;
             case R.id.StActivity:
-                //intent = new Intent(this, ProcurementDashboardActivity.class);
-                intent = new Intent(this, OrderDashBoard.class);
+                new AlertDialog.Builder(Dashboard_Two.this)
+                    .setTitle("HAP Check-In")
+                    .setMessage(Html.fromHtml("Are you sure to start your Today Activity Now ?"))
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent aIntent;
+                            String sDeptType=UserDetails.getString("DeptType","");Log.d("DeptType",sDeptType);
+
+                            if(sDeptType.equalsIgnoreCase("1")) {
+                                aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
+                            }else {
+                                aIntent = new Intent(getApplicationContext(), OrderDashBoard.class);
+                            }
+                           startActivity(aIntent);
+                            //((AppCompatActivity) Dashboard_Two.this).finish();
+                        }
+                    })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                            }
+                        })
+                    .show();
                 break;
             case R.id.button3:
                 intent = new Intent(this, View_All_Status_Activity.class);

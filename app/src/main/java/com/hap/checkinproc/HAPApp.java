@@ -48,5 +48,4 @@ public class HAPApp extends Application {
     public static Activity getActiveActivity(){
         return activeActivity;
     }
-
 }

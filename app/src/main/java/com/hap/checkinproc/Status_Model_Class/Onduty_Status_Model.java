@@ -56,6 +56,7 @@ public class Onduty_Status_Model {
     @Expose
     private Object rejectReason;
 
+
     public String getSfCode() {
         return sfCode;
     }

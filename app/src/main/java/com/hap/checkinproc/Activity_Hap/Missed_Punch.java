@@ -2,6 +2,7 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -19,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,8 +28,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
@@ -50,7 +54,7 @@ import retrofit2.Response;
 
 public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, View.OnClickListener, Master_Interface {
 
-String Tag="HAP_Missed_Punch";
+    String Tag = "HAP_Missed_Punch";
     EditText checkOutTime, checkIn, reasonMP;
 
     EditText shiftType;
@@ -67,6 +71,7 @@ String Tag="HAP_Missed_Punch";
     TextView misseddateselect;
     LinearLayout misseddatelayout;
     CustomListViewDialog customDialog;
+    Button mButtonSubmit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,15 +126,10 @@ String Tag="HAP_Missed_Punch";
         leaveTypeMethod();
 
         reasonMP = (EditText) findViewById(R.id.reason_missed);
-        missedSubmit = (Button) findViewById(R.id.submit_missed);
-        missedSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                missedPunchSubmit();
-            }
-        });
-        Bundle params=getIntent().getExtras();
-        if(params!=null) {
+
+        Bundle params = getIntent().getExtras();
+
+        if (!(params == null)) {
             missedDates = params.getString("EDt");
             missedShift = params.getString("Shift");
             missedCHeckin = params.getString("CInTm");
@@ -140,7 +140,25 @@ String Tag="HAP_Missed_Punch";
             misseddateselect.setText(missedDates);
             checkOutTime.setText(missedCheckOut);
         }
-        Log.d(Tag,String.valueOf(params));
+        Log.d(Tag, String.valueOf(params));
+
+
+        mButtonSubmit = (Button) findViewById(R.id.submit_missed);
+        mButtonSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (!misseddateselect.getText().toString().matches("") && !reasonMP.getText().toString().matches("")) {
+                    missedPunchSubmit();
+                } else if (misseddateselect.getText().toString().matches("")) {
+                    Toast.makeText(Missed_Punch.this, "Enter Shite time", Toast.LENGTH_SHORT).show();
+                } else if (reasonMP.getText().toString().matches("")) {
+                    Toast.makeText(Missed_Punch.this, "Enter Remarks", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
     }
 
 
@@ -272,7 +290,22 @@ String Tag="HAP_Missed_Punch";
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 JsonObject jsonObjecta = response.body();
                 Log.e("TOTAL_REPOSNEaaa", String.valueOf(jsonObjecta));
-                startActivity(new Intent(Missed_Punch.this, Dashboard.class));
+                String Msg = jsonObjecta.get("Msg").getAsString();
+                if(!Msg.equalsIgnoreCase("")){
+                    AlertDialogBox.showDialog(Missed_Punch.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
+                        @Override
+                        public void PositiveMethod(DialogInterface dialog, int id) {
+                            dialog.dismiss();
+                            if(jsonObjecta.get("success").getAsBoolean()==true)
+                                startActivity(new Intent(Missed_Punch.this, Leave_Dashboard.class));//openHome();
+                        }
+
+                        @Override
+                        public void NegativeMethod(DialogInterface dialog, int id) {
+
+                        }
+                    });
+                }
             }
 
             @Override

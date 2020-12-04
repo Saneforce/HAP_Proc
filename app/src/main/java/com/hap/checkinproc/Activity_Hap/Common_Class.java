@@ -35,7 +35,6 @@ public class Common_Class {
             //this.webView.sendJavascript("blockApp('date')");
         }
         Calendar c = Calendar.getInstance();
-        System.out.println("Current time => " + c.getTime());
 
         SimpleDateFormat df = new SimpleDateFormat(pattern);
         return df.format(c.getTime());
@@ -59,6 +58,8 @@ public class Common_Class {
 
     }
     public String AddMonths(String dateInString,int NoofDays, String pattern) {
+        Log.d("DateString",dateInString);
+        Log.d("DateString No.Dys",String.valueOf(NoofDays));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
         try {
@@ -88,6 +89,7 @@ public class Common_Class {
     }
 
     public int getMonth(String dateInString){
+        Log.d("DateString GMonth",dateInString);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
         try {
@@ -95,7 +97,8 @@ public class Common_Class {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return c.get(Calendar.MONTH);
+        Log.d("DateString GMonth",dateInString+"-"+String.valueOf(c.get(Calendar.MONTH)+1));
+        return c.get(Calendar.MONTH)+1;
     }
 
     public int getYear(String dateInString){
