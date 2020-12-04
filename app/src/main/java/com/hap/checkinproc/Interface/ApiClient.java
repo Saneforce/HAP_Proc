@@ -8,8 +8,6 @@ public class ApiClient {
     public static final String BASE_URL2 = "http://www.fmcg.sanfmcg.com/server/";
     private static Retrofit retrofit = null;
 
-
-
     private static Retrofit retrofit1 = null;
 
 

@@ -39,6 +39,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -68,7 +69,10 @@ public class ViewCartActivity extends AppCompatActivity {
     TextView toolHeader;
     ImageView imgBack;
     List<Product_Array> carsList;
-    String SF_CODE, DIVISION_CODE, CUTT_OFF_CODE, totalValueString;
+    String SF_CODE, DIVISION_CODE, CUTT_OFF_CODE, WORK_TYPE, Town_code,
+            reatilerID, retailerName,
+            distributorId, distributorName, totalValueString;
+    Integer orderType, totalOrderValue;
     CustomViewAdapter adapter;
 
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
@@ -90,17 +94,44 @@ public class ViewCartActivity extends AppCompatActivity {
 
     JSONObject person1;
     JSONArray sendArray;
-    JSONObject stockReportObjectArray, reportObjectArray, PersonObjectArray, sampleReportObjectArray, eventCapturesObjectArray, pendingBillObjectArray, ComProductObjectArray;
+    JSONObject stockReportObjectArray, reportObjectArray, PersonObjectArray, sampleReportObjectArray, eventCapturesObjectArray, pendingBillObjectArray, ComProductObjectArray, ActivityInputReport;
     ArrayList<String> listV = new ArrayList<>();
 
     EditText toolSearch;
     RecyclerView viewRecyclerview;
     Button mSubmit;
+    Shared_Common_Pref shared_common_pref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_cart);
+
+        shared_common_pref = new Shared_Common_Pref(this);
+
+        SF_CODE = shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code);
+        WORK_TYPE = shared_common_pref.getvalue("work_type_code");
+        WORK_TYPE = "'" + WORK_TYPE + "'";
+        Town_code = shared_common_pref.getvalue("town_code");
+        Town_code = "'" + Town_code + "'";
+
+        orderType = Integer.valueOf(shared_common_pref.getvalue("Phone_order_type"));
+
+        totalOrderValue = Integer.valueOf(shared_common_pref.getvalue("Total_amount"));
+
+        reatilerID = shared_common_pref.getvalue("Retailer_id");
+        reatilerID = "'" + reatilerID + "'";
+        retailerName = shared_common_pref.getvalue("Retailer_name");
+        retailerName = "'" + retailerName + "'";
+
+        distributorId = shared_common_pref.getvalue("distributor_id");
+        distributorName = shared_common_pref.getvalue("distributor_name");
+
+        Log.e("View_Cart_Activity", SF_CODE);
+        Log.e("View_Cart_Activity", "asd" + WORK_TYPE);
+
+
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -132,10 +163,8 @@ public class ViewCartActivity extends AppCompatActivity {
 
 
         @SuppressLint("WrongConstant")
-        SharedPreferences sh
-                = getSharedPreferences("MyPrefs",
-                MODE_APPEND);
-        SF_CODE = sh.getString("Sf_Code", "");
+        SharedPreferences sh = getSharedPreferences("MyPrefs", MODE_APPEND);
+        //  SF_CODE = sh.getString("Sf_Code", "");
         DIVISION_CODE = sh.getString("Division_Code", "");
         CUTT_OFF_CODE = sh.getString("Cut_Off_Time", "");
 
@@ -208,8 +237,9 @@ public class ViewCartActivity extends AppCompatActivity {
                 String sFCODE = "'" + SF_CODE + "'";
 
                 try {
-                    reportObject.put("Worktype_code", "'22'");
-                    reportObject.put("Town_code", "'CHENNAI'");
+                    reportObject.put("Worktype_code", WORK_TYPE);
+                    reportObject.put("Town_code", Town_code);
+                    reportObject.put("RateEditable", "''");
                     reportObject.put("dcr_activity_date", dateTime);
                     reportObject.put("Daywise_Remarks", "''");
                     reportObject.put("eKey", keyCodeValue);
@@ -218,9 +248,12 @@ public class ViewCartActivity extends AppCompatActivity {
                     reportObject.put("DataSF", sFCODE);
                     reportObjectArray.put("Activity_Report_APP", reportObject);
 
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+
 
 
                 /*StockListReport*/
@@ -229,23 +262,31 @@ public class ViewCartActivity extends AppCompatActivity {
                 JSONObject fkeyStock = new JSONObject();
 
                 try {
-                    stockReportObject.put("Stockist_POB", 0);
-                    stockReportObject.put("Super_Stck_code", "'SS96'");
-                    stockReportObject.put("Worked_With", "''");
-                    stockReportObject.put("location", locationValue);
-                    stockReportObject.put("geoaddress", "");
-                    stockReportObject.put("stockist_code", "'8595'");
-                    stockReportObject.put("superstockistid", "''");
-                    stockReportObject.put("Stk_Meet_Time", dateTime);
+                    stockReportObject.put("Doctor_POB", 0);
+                    stockReportObject.put("Worked_With", sFCODE);
+                    stockReportObject.put("Doc_Meet_Time", dateTime);
                     stockReportObject.put("modified_time", dateTime);
-                    stockReportObject.put("orderValue", 5370);
-                    stockReportObject.put("Aob", 69);
+                    stockReportObject.put("net_weight_value", 0);
+                    stockReportObject.put("stockist_code", distributorId);
+                    stockReportObject.put("stockist_name", distributorName);
+                    stockReportObject.put("superstockistid", "''");
+                    stockReportObject.put("Discountpercent", 0);
                     stockReportObject.put("CheckinTime", checkInTime);
-                    stockReportObject.put("CheckoutTime", checkInTime);
+                    stockReportObject.put("CheckoutTime", checkOutTime);
+                    stockReportObject.put("location", "''");
+                    stockReportObject.put("geoaddress", "''");
+                    stockReportObject.put("PhoneOrderTypes", orderType);
+                    stockReportObject.put("Order_Stk", distributorId);
+                    stockReportObject.put("Order_No", "''");
+                    stockReportObject.put("rootTarget", "0");
+                    stockReportObject.put("orderValue", totalOrderValue);
+                    stockReportObject.put("rateMode", "free");
+                    stockReportObject.put("discount_price", 0);
+                    stockReportObject.put("doctor_code", reatilerID);
+                    stockReportObject.put("doctor_name", retailerName);
                     stockReportObject.put("f_key", fkeyStock);
                     fkeyStock.put("Activity_Report_Code", "'Activity_Report_APP'");
-                    stockReportObject.put("PhoneOrderTypes", 1);
-                    stockReportObjectArray.put("Activity_Stockist_Report", stockReportObject);
+                    stockReportObjectArray.put("Activity_Doctor_Report", stockReportObject);
 
 
                 } catch (JSONException e) {
@@ -258,33 +299,48 @@ public class ViewCartActivity extends AppCompatActivity {
                 System.out.println(" Activity_Stockist_Report" + stockReport);
 
 
-                /*Activity_Stk_Sample_Report*/
+                /*Activity_Trans_Order_Details*/
                 JSONArray sampleReportArray = new JSONArray();
                 sampleReportObjectArray = new JSONObject();
 
                 try {
 
-                    sampleReportObjectArray.put("Activity_Stk_Sample_Report", sampleReportArray);
+                    sampleReportObjectArray.put("Trans_Order_Details", sampleReportArray);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 String sampleReport = sampleReportObjectArray.toString();
-                System.out.println(" Activity_Stk_Sample_Report" + sampleReport);
+                System.out.println(" Trans_Order_Details" + sampleReport);
 
-                /*Activity_Event_Captures*/
-                JSONObject eventCapturesObject = new JSONObject();
-                JSONArray eventCapturesArray = new JSONArray();
-                eventCapturesObjectArray = new JSONObject();
-                JSONObject fkeyEcap = new JSONObject();
+
+
+                /*Activity_Input_Report*/
+                JSONArray Activity_Input_Report = new JSONArray();
+                ActivityInputReport = new JSONObject();
 
                 try {
-                    eventCapturesObject.put("imgurl", "'1585714374958.jpg'");
-                    eventCapturesObject.put("title", "'Primary capture'");
-                    eventCapturesObject.put("remarks", "'Testing for native'");
-                    eventCapturesObject.put("f_key", fkeyEcap);
-                    fkeyEcap.put("Activity_Report_Code", "Activity_Report_APP");
-                    eventCapturesArray.put(eventCapturesObject);
+                    ActivityInputReport.put("Activity_Input_Report", Activity_Input_Report);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+                String inputReport = ActivityInputReport.toString();
+
+                System.out.println(" Activity_Input_Report" + inputReport);
+
+
+
+
+                /*Activity_Event_Captures*/
+
+                JSONArray eventCapturesArray = new JSONArray();
+                eventCapturesObjectArray = new JSONObject();
+
+
+                try {
+
                     eventCapturesObjectArray.put("Activity_Event_Captures", eventCapturesArray);
 
                 } catch (JSONException e) {
@@ -333,34 +389,34 @@ public class ViewCartActivity extends AppCompatActivity {
                 PersonObjectArray = new JSONObject();
                 JSONObject fkeyprodcut = new JSONObject();
 
+                Integer product_total;
                 for (int z = 0; z < carsList.size(); z++) {
                     person1 = new JSONObject();
 
 
                     try {
-
+                        product_total = carsList.get(z).getProductqty() * carsList.get(z).getProductRate();
                         //adding items to first json object
-                        person1.put("product_Name", carsList.get(z).getProductname());
                         person1.put("product_code", carsList.get(z).getProductcode());
-                        person1.put("Qty", carsList.get(z).getProductqty());
-                        person1.put("PQty", carsList.get(z).getProductqty());
-                        person1.put("cb_qty", 0);
-                        person1.put("free", 0);
+                        person1.put("product_Name", carsList.get(z).getProductname());
+                        person1.put("Product_Rx_Qty", carsList.get(z).getProductqty());
+                        person1.put("Rate", carsList.get(z).getProductRate());
+                        person1.put("Product_Sample_Qty", product_total);
                         person1.put("f_key", fkeyprodcut);
-                        fkeyprodcut.put("activity_stockist_code", "Activity_Stockist_Report");
+                        fkeyprodcut.put("Activity_MSL_Code", "Activity_Doctor_Report");
+
 
                         myJSONObjects.add(person1);
                         listV.add(String.valueOf((person1)));
                         personarray.put(person1);
-                        PersonObjectArray.put("Activity_Stk_POB_Report", personarray);
+                        PersonObjectArray.put("Activity_Sample_Report", personarray);
                         String JsonData = PersonObjectArray.toString();
 
-                        System.out.println("Activity_Stk_POB_Report: " + JsonData);
+                        System.out.println("Activity_Sample_Report: " + JsonData);
 
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                 }
 
 
@@ -369,6 +425,7 @@ public class ViewCartActivity extends AppCompatActivity {
                 sendArray.put(stockReportObjectArray);
                 sendArray.put(PersonObjectArray);
                 sendArray.put(sampleReportObjectArray);
+                sendArray.put(ActivityInputReport);
                 sendArray.put(eventCapturesObjectArray);
                 sendArray.put(pendingBillObjectArray);
                 sendArray.put(ComProductObjectArray);
@@ -399,7 +456,7 @@ public class ViewCartActivity extends AppCompatActivity {
 
     /*Date and Time Format*/
     public void DateTime() {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
         Calendar calobj = Calendar.getInstance();
         dateTime = "'" + df.format(calobj.getTime()) + "'";
         System.out.println("Date_and_Time" + dateTime);
@@ -504,7 +561,7 @@ public class ViewCartActivity extends AppCompatActivity {
         DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Calendar calobjw = Calendar.getInstance();
         KeyDate = SF_CODE;
-        keyCodeValue = keyEk + KeyDate + KeyHyp + dfw.format(calobjw.getTime()).hashCode();
+        keyCodeValue = keyEk + KeyDate + dfw.format(calobjw.getTime()).hashCode();
 
         Log.e("KEY_CODE_HASH", keyCodeValue);
 
@@ -514,9 +571,21 @@ public class ViewCartActivity extends AppCompatActivity {
 
         String sFCODE = "'" + SF_CODE + "'";
 
+
+
+
+
+        /*Check out timing*/
+        calander = Calendar.getInstance();
+        simpleDateFormat = new SimpleDateFormat("hh:mm:ss a");
+        time = simpleDateFormat.format(calander.getTime());
+        checkOutTime = new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date());
+
+
         try {
-            reportObject.put("Worktype_code", "'22'");
-            reportObject.put("Town_code", "'CHENNAI'");
+            reportObject.put("Worktype_code", WORK_TYPE);
+            reportObject.put("Town_code", Town_code);
+            reportObject.put("RateEditable", "''");
             reportObject.put("dcr_activity_date", dateTime);
             reportObject.put("Daywise_Remarks", "''");
             reportObject.put("eKey", keyCodeValue);
@@ -529,6 +598,10 @@ public class ViewCartActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        String Activity_Report_APP = reportObjectArray.toString();
+
+        System.out.println(" Activity_Report_APP" + Activity_Report_APP);
+
 
         /*StockListReport*/
         JSONObject stockReportObject = new JSONObject();
@@ -538,23 +611,31 @@ public class ViewCartActivity extends AppCompatActivity {
 
         try {
 
-            stockReportObject.put("Stockist_POB", 0);
-            stockReportObject.put("Super_Stck_code", "'SS96'");
-            stockReportObject.put("Worked_With", "''");
-            stockReportObject.put("location", locationValue);
-            stockReportObject.put("geoaddress", "");
-            stockReportObject.put("stockist_code", sFCODE);
-            stockReportObject.put("superstockistid", "''");
-            stockReportObject.put("Stk_Meet_Time", dateTime);
+            stockReportObject.put("Doctor_POB", 0);
+            stockReportObject.put("Worked_With", sFCODE);
+            stockReportObject.put("Doc_Meet_Time", dateTime);
             stockReportObject.put("modified_time", dateTime);
-            stockReportObject.put("orderValue", 5370);
-            stockReportObject.put("Aob", 69);
+            stockReportObject.put("net_weight_value", 0);
+            stockReportObject.put("stockist_code", distributorId);
+            stockReportObject.put("stockist_name", distributorName);
+            stockReportObject.put("superstockistid", "''");
+            stockReportObject.put("Discountpercent", 0);
             stockReportObject.put("CheckinTime", checkInTime);
-            stockReportObject.put("CheckoutTime", checkInTime);
+            stockReportObject.put("CheckoutTime", checkOutTime);
+            stockReportObject.put("location", "''");
+            stockReportObject.put("geoaddress", "''");
+            stockReportObject.put("PhoneOrderTypes", orderType);
+            stockReportObject.put("Order_Stk", distributorId);
+            stockReportObject.put("Order_No", "''");
+            stockReportObject.put("rootTarget", "0");
+            stockReportObject.put("orderValue", totalOrderValue);
+            stockReportObject.put("rateMode", "free");
+            stockReportObject.put("discount_price", 0);
+            stockReportObject.put("doctor_code", reatilerID);
+            stockReportObject.put("doctor_name", retailerName);
             stockReportObject.put("f_key", fkeyStock);
             fkeyStock.put("Activity_Report_Code", "'Activity_Report_APP'");
-            stockReportObject.put("PhoneOrderTypes", 1);
-            stockReportObjectArray.put("Activity_Stockist_Report", stockReportObject);
+            stockReportObjectArray.put("Activity_Doctor_Report", stockReportObject);
 
 
         } catch (JSONException e) {
@@ -567,33 +648,48 @@ public class ViewCartActivity extends AppCompatActivity {
         System.out.println(" Activity_Stockist_Report" + stockReport);
 
 
-        /*Activity_Stk_Sample_Report*/
+        /*Activity_Trans_Order_Details*/
         JSONArray sampleReportArray = new JSONArray();
         sampleReportObjectArray = new JSONObject();
 
         try {
 
-            sampleReportObjectArray.put("Activity_Stk_Sample_Report", sampleReportArray);
+            sampleReportObjectArray.put("Trans_Order_Details", sampleReportArray);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         String sampleReport = sampleReportObjectArray.toString();
-        System.out.println(" Activity_Stk_Sample_Report" + sampleReport);
+        System.out.println(" Trans_Order_Details" + sampleReport);
 
-        /*Activity_Event_Captures*/
-        JSONObject eventCapturesObject = new JSONObject();
-        JSONArray eventCapturesArray = new JSONArray();
-        eventCapturesObjectArray = new JSONObject();
-        JSONObject fkeyEcap = new JSONObject();
+
+
+        /*Activity_Input_Report*/
+        JSONArray Activity_Input_Report = new JSONArray();
+        ActivityInputReport = new JSONObject();
 
         try {
-            eventCapturesObject.put("imgurl", "'1585714374958.jpg'");
-            eventCapturesObject.put("title", "'Primary capture'");
-            eventCapturesObject.put("remarks", "'Testing for native'");
-            eventCapturesObject.put("f_key", fkeyEcap);
-            fkeyEcap.put("Activity_Report_Code", "Activity_Report_APP");
-            eventCapturesArray.put(eventCapturesObject);
+            ActivityInputReport.put("Activity_Input_Report", Activity_Input_Report);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        String inputReport = ActivityInputReport.toString();
+
+        System.out.println(" Activity_Input_Report" + inputReport);
+
+
+
+
+        /*Activity_Event_Captures*/
+
+        JSONArray eventCapturesArray = new JSONArray();
+        eventCapturesObjectArray = new JSONObject();
+
+
+        try {
+
             eventCapturesObjectArray.put("Activity_Event_Captures", eventCapturesArray);
 
         } catch (JSONException e) {
@@ -642,29 +738,31 @@ public class ViewCartActivity extends AppCompatActivity {
         PersonObjectArray = new JSONObject();
         JSONObject fkeyprodcut = new JSONObject();
 
+
+        Integer product_total;
         for (int z = 0; z < carsList.size(); z++) {
             person1 = new JSONObject();
 
 
             try {
-
+                product_total = carsList.get(z).getProductqty() * carsList.get(z).getProductRate();
                 //adding items to first json object
-                person1.put("product_Name", carsList.get(z).getProductname());
                 person1.put("product_code", carsList.get(z).getProductcode());
-                person1.put("Qty", carsList.get(z).getProductqty());
-                person1.put("PQty", carsList.get(z).getProductqty());
-                person1.put("cb_qty", 0);
-                person1.put("free", 0);
+                person1.put("product_Name", carsList.get(z).getProductname());
+                person1.put("Product_Rx_Qty", carsList.get(z).getProductqty());
+                person1.put("Rate", carsList.get(z).getProductRate());
+                person1.put("Product_Sample_Qty", product_total);
                 person1.put("f_key", fkeyprodcut);
-                fkeyprodcut.put("activity_stockist_code", "Activity_Stockist_Report");
+                fkeyprodcut.put("Activity_MSL_Code", "Activity_Doctor_Report");
+
 
                 myJSONObjects.add(person1);
                 listV.add(String.valueOf((person1)));
                 personarray.put(person1);
-                PersonObjectArray.put("Activity_Stk_POB_Report", personarray);
+                PersonObjectArray.put("Activity_Sample_Report", personarray);
                 String JsonData = PersonObjectArray.toString();
 
-                System.out.println("Activity_Stk_POB_Report: " + JsonData);
+                System.out.println("Activity_Sample_Report: " + JsonData);
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -679,6 +777,7 @@ public class ViewCartActivity extends AppCompatActivity {
         sendArray.put(stockReportObjectArray);
         sendArray.put(PersonObjectArray);
         sendArray.put(sampleReportObjectArray);
+        sendArray.put(ActivityInputReport);
         sendArray.put(eventCapturesObjectArray);
         sendArray.put(pendingBillObjectArray);
         sendArray.put(ComProductObjectArray);
@@ -689,8 +788,9 @@ public class ViewCartActivity extends AppCompatActivity {
 
         Log.e("SUBMIT_VALUE", totalValueString);
 
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> responseBodyCall = apiInterface.submitValue("3", "MGR4762", totalValueString);
+        ApiInterface apiInterface = ApiClient.getClient2().create(ApiInterface.class);
+
+        Call<JsonObject> responseBodyCall = apiInterface.submitValue("4", "MR2408", totalValueString);
 
         responseBodyCall.enqueue(new Callback<JsonObject>() {
             @Override

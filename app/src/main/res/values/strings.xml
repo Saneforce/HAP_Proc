@@ -1,64 +1,64 @@
 <resources>
-    <string name="app_name">HAP Check In</string>
-    <string name="AppVer">Ver 3.0.0</string>
-    <string name="loading_please_wait">Loading Please Wait......</string>
-    <string name="todo">TODO</string>
-    <string name="sign_in">Sign-In</string>
-    <string name="password">password</string>
-    <string name="username">username</string>
-    <string name="or">or</string>
-    <string name="base_url">http://hap.sanfmcg.com/server/Db_Hap.php?</string>
-    <string name="title_activity_checkin">checkin</string>
+    <string name="app_name" translatable="false">HAP Check In</string>
+    <string name="AppVer" translatable="false">Ver 3.0.0</string>
+    <string name="loading_please_wait" translatable="false">Loading Please Wait......</string>
+    <string name="todo" translatable="false">TODO</string>
+    <string name="sign_in" translatable="false">Sign-In</string>
+    <string name="password" translatable="false">password</string>
+    <string name="username" translatable="false">username</string>
+    <string name="or" translatable="false">or</string>
+    <string name="base_url" translatable="false">http://hap.sanfmcg.com/server/Db_Hap.php?</string>
+    <string name="title_activity_checkin" translatable="false">checkin</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
+    <string name="first_fragment_label" translatable="false">First Fragment</string>
+    <string name="second_fragment_label" translatable="false">Second Fragment</string>
+    <string name="next" translatable="false">Next</string>
+    <string name="previous" translatable="false">Previous</string>
     <string name="map_key" translatable="false">AIzaSyB_qsP8AOP_P0MdlPz-48TDaJYjTP3vbjo</string>
-    <string name="txt_haplocations">Select the HAP locations <font fgcolor='#E53935'> *</font></string>
-    <string name="txt_haplocationss">Select the HAP locations</string>
-    <string name="txt_purpose">Enter the Purpose of visit<font fgcolor='#E53935'> *</font></string>
-    <string name="txt_purposes">Enter the Purpose of visit</string>
-    <string name="txt_ondutylocations">Enter your ON-Duty Location<font fgcolor='#E53935'> *</font></string>
-    <string name="txt_ondutylocationss">Enter your ON-Duty Location</string>
+    <string name="txt_haplocations" translatable="false">Select the HAP locations <font fgcolor='#E53935'> *</font></string>
+    <string name="txt_haplocationss" translatable="false">Select the HAP locations</string>
+    <string name="txt_purpose" translatable="false">Enter the Purpose of visit<font fgcolor='#E53935'> *</font></string>
+    <string name="txt_purposes" translatable="false">Enter the Purpose of visit</string>
+    <string name="txt_ondutylocations" translatable="false">Enter your ON-Duty Location<font fgcolor='#E53935'> *</font></string>
+    <string name="txt_ondutylocationss" translatable="false">Enter your ON-Duty Location</string>
 
-    <string name="selectmissed_date">Select Missed Date</string>
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="on_duty_checkin">On-Duty CheckIn</string>
-    <string name="select_type">Select Type</string>
-    <string name="enter_location">Enter location</string>
-    <string name="select_the_type">SELECT THE TYPE</string>
-    <string name="leave_request">Leave Request</string>
+    <string name="selectmissed_date" translatable="false">Select Missed Date</string>
+    <string name="hello_first_fragment" translatable="false">Hello first fragment</string>
+    <string name="hello_second_fragment" translatable="false">Hello second fragment. Arg: %1$s</string>
+    <string name="on_duty_checkin" translatable="false">On-Duty CheckIn</string>
+    <string name="select_type" translatable="false">Select Type</string>
+    <string name="enter_location" translatable="false">Enter location</string>
+    <string name="select_the_type" translatable="false">SELECT THE TYPE</string>
+    <string name="leave_request" translatable="false">Leave Request</string>
 
-    <string name="weekly_off">Weekly Off</string>
-    <string name="missed_punch">Missed Punch</string>
-    <string name="permission">Permission</string>
-    <string name="web_client_id">92787437164-iv0q3cg155ve0a0pl21d4r6e6e295p09.apps.googleusercontent.com</string>
-    <string name="launch_activity">open</string>
-    <string name="remove_location_updates">Stop</string>
-    <string name="location_updated">Updating</string>
-    <string name="permission_rationale">Please Grant Location Permission</string>
-    <string name="ok">Ok</string>
-    <string name="permission_denied_explanation">Permission Denied</string>
-    <string name="settings">Settings</string>
-    <string name="reason">Reason</string>
-    <string name="txt_jointwork">Joint work</string>
-    <string name="txt_select_jointwork">Select the Joint work</string>
-    <string name="txt_remarks">Remarks</string>
-    <string name="txt_enter_remarks">Enter the Remarks</string>
-    <string name="txt_enter_reason">Enter the Reason</string>
-
-
-    <string name="Tourplan">Tour  Plan</string>
-    <string name="Calander">Calendar</string>
-    <string name="monthselection">Month Selection</string>
-    <string name="mydayplan">My day Plan</string>
+    <string name="weekly_off" translatable="false">Weekly Off</string>
+    <string name="missed_punch" translatable="false">Missed Punch</string>
+    <string name="permission" translatable="false">Permission</string>
+    <string name="web_client_id" translatable="false">92787437164-iv0q3cg155ve0a0pl21d4r6e6e295p09.apps.googleusercontent.com</string>
+    <string name="launch_activity" translatable="false">open</string>
+    <string name="remove_location_updates" translatable="false">Stop</string>
+    <string name="location_updated" translatable="false">Updating</string>
+    <string name="permission_rationale" translatable="false">Please Grant Location Permission</string>
+    <string name="ok" translatable="false">Ok</string>
+    <string name="permission_denied_explanation" translatable="false">Permission Denied</string>
+    <string name="settings" translatable="false">string</string>
+    <string name="reason" translatable="false">Reason</string>
+    <string name="txt_jointwork" translatable="false">Joint work</string>
+    <string name="txt_select_jointwork" translatable="false">Select the Joint work</string>
+    <string name="txt_remarks" translatable="false">Remarks</string>
+    <string name="txt_enter_remarks" translatable="false">Enter the Remarks</string>
+    <string name="txt_enter_reason" translatable="false">Enter the Reason</string>
 
 
-    <string name="txt_password">Password</string>
-    <string name="txt_signin">Sign-In</string>
-    <string name="txt_worktype">Work Type</string>
+    <string name="Tourplan" translatable="false">Tour  Plan</string>
+    <string name="Calander" translatable="false">Calendar</string>
+    <string name="monthselection" translatable="false">Month Selection</string>
+    <string name="mydayplan" translatable="false">My day Plan</string>
+
+
+    <string name="txt_password" translatable="false">Password</string>
+    <string name="txt_signin" translatable="false">Sign-In</string>
+    <string name="txt_worktype" translatable="false">Work Type</string>
     <string name="txt_select_worktype">Select the Work Type</string>
     <string name="txt_distributors">Distributors</string>
     <string name="txt_select_distributors">Select the  Distributors</string>
@@ -99,7 +99,7 @@
     <string name="material_calendar_negative_button">Cancel</string>
     <string name="btnsummit">Submit For Approval
 </string>
-    <string name="goback">Back
+    <string name="goback" translatable="false">Back
 </string>
 
     <!--Order Deatils-->

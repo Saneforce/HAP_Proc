@@ -1,14 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,22 +7,22 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -41,9 +32,7 @@ import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.MVP.Main_Model;
 import com.hap.checkinproc.MVP.MasterSync_Implementations;
 import com.hap.checkinproc.MVP.Master_Sync_View;
-import com.hap.checkinproc.Model_Class.Distributor_Master;
 import com.hap.checkinproc.Model_Class.Route_Master;
-import com.hap.checkinproc.Model_Class.Work_Type_Model;
 import com.hap.checkinproc.R;
 
 import org.json.JSONArray;
@@ -59,6 +48,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.hap.checkinproc.Common_Class.Common_Class.addquote;
 
@@ -226,6 +219,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 break;
             case R.id.route_layout:
                 Log.e("ROUTE_FILTER", String.valueOf(FRoute_Master.size()));
+                Log.e("ROUTE_FILTER", String.valueOf(FRoute_Master));
                 customDialog = new CustomListViewDialog(Mydayplan_Activity.this, FRoute_Master, 3);
                 Window windowww = customDialog.getWindow();
                 windowww.setGravity(Gravity.CENTER);
@@ -233,7 +227,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 customDialog.show();
 
                 break;
-
 
 
         }
@@ -263,11 +256,20 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             route_text.setText("");
             distributor_text.setText(myDataset.get(position).getName());
             distributorid = String.valueOf(myDataset.get(position).getId());
+            Log.e("My_day_plan_dis", myDataset.get(position).getName());
+            Log.e("My_day_plan_dis", distributorid);
+            shared_common_pref.save("distributor_id", distributorid);
+            shared_common_pref.save("distributor_name", myDataset.get(position).getName());
+
             loadroute(String.valueOf(myDataset.get(position).getId()));
         } else {
             route_text.setText(myDataset.get(position).getName());
             routename = myDataset.get(position).getName();
             routeid = myDataset.get(position).getId();
+
+            shared_common_pref.save("town_code", routeid);
+
+            Log.e("My_day_plan_route", routeid);
         }
     }
 
@@ -296,7 +298,22 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     Log.e("GettodayResult", "response Tp_View: " + jsonObject.getJSONArray("GettodayResult"));
+
+
                     JSONArray jsoncc = jsonObject.getJSONArray("GettodayResult");
+
+
+                    String Sf_code = String.valueOf(jsoncc.getJSONObject(0).get("SF_Code"));
+                    String work_type_code = String.valueOf(jsoncc.getJSONObject(0).get("worktype_code"));
+
+
+                    shared_common_pref.save(Shared_Common_Pref.Sf_Code, Sf_code);
+                    shared_common_pref.save("work_type_code", work_type_code);
+
+                    Log.e("My_day_plan", Sf_code);
+                    Log.e("My_day_plan", work_type_code);
+
+
                     Log.e("LENGTH", String.valueOf(jsoncc.length()));
                     if (jsoncc.length() > 0) {
                         if (String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag")).equals("Meeting")) {
@@ -400,7 +417,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     Log.e("RESPONSE_FROM_SERVER", response.body().toString());
                     progressbar.setVisibility(View.GONE);
                     if (response.code() == 200 || response.code() == 201) {
-                        common_class.CommonIntentwithFinish(Dashboard.class);
+                        // common_class.CommonIntentwithFinish(Dashboard.class);
+                        common_class.CommonIntentwithFinish(SecondaryOrderActivity.class);
                         Toast.makeText(Mydayplan_Activity.this, "Day Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
                     }
 

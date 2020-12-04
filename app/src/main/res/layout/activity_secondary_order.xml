@@ -55,7 +55,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
-                            android:text="@string/order_type" />
+                            android:hint="@string/order_type" />
                     </LinearLayout>
 
 
@@ -117,7 +117,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:padding="5dp"
-                            android:text="@string/retailer" />
+                            android:hint="@string/retailer" />
                     </LinearLayout>
 
                 </LinearLayout>

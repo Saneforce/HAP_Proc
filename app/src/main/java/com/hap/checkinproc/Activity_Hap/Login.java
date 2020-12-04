@@ -357,13 +357,14 @@ public class Login extends AppCompatActivity {
 
                 if (response.isSuccessful()) {
 
-                    //      Log.e("sfName",response.body().getData().get(0).getSfCode());
+                    //  Log.e("sfName",response.body().getData().get(0).getSfCode());
 
                     if (response.body().getSuccess() == true) {
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                         Intent intent;
                         if (requestCode == RC_SIGN_IN)
-                            intent = new Intent(Login.this, Dashboard.class);
+                      //     intent = new Intent(Login.this, Dashboard.class);
+                           intent = new Intent(Login.this, Mydayplan_Activity.class);
                         else
                             intent = new Intent(Login.this, Dashboard_Two.class);
                         intent.putExtra("photo", photo);

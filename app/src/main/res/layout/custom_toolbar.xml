@@ -133,6 +133,7 @@
                 android:layout_marginRight="@dimen/C10dp"
                 android:background="@drawable/text_bg"
                 android:hint="Search..."
+                android:enabled="false"
                 android:padding="10dp"></EditText>
 
 

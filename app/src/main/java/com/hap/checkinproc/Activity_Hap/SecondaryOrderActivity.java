@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,8 +21,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
-
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.RetailerDetailsModel;
@@ -39,7 +40,7 @@ import retrofit2.Response;
 
 public class SecondaryOrderActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface {
     LinearLayout OrderType, RetailerType, linearCategory;
-    String lastOrderAmount = "",  mobileNumber = "";
+    String lastOrderAmount = "", mobileNumber = "";
     TextView txtOrder, txtRetailer, txtAddRetailer, txtRetailerChannel, txtClass, txtLastOrderAmount, txtModelOrderValue, txtLastVisited, txtReamrks, txtMobile, txtMobileTwo, txtTempalate, txtDistributor;
     CustomListViewDialog customDialog;
     EditText edtRemarks;
@@ -50,20 +51,26 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
     Common_Model mCommon_model_spinner;
     private ArrayList<String> temaplateList;
     List<RetailerViewDetails> mRetailerViewDetails;
+    Shared_Common_Pref shared_common_pref;
 
     List<RetailerDetailsModel> mRetailerDetailsModels;
     Gson gson;
     LinearLayout mRetailerDetails;
     Type userType;
     String retailerId;
+    Integer count;
 
     RetailerViewAdapter mRetailerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        gson = new Gson();
+
+
         setContentView(R.layout.activity_secondary_order);
+        gson = new Gson();
+        shared_common_pref = new Shared_Common_Pref(this);
+
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +144,14 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         linearCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SecondaryOrderActivity.this, OrderCategoryActivity.class));
+
+                if (txtOrder.getText().toString().matches("")) {
+                    Toast.makeText(SecondaryOrderActivity.this, "Enter Text Order", Toast.LENGTH_SHORT).show();
+                } else if (txtRetailer.getText().toString().matches("")) {
+                    Toast.makeText(SecondaryOrderActivity.this, "Enter Text Retailer", Toast.LENGTH_SHORT).show();
+                } else {
+                    startActivity(new Intent(SecondaryOrderActivity.this, OrderCategoryActivity.class));
+                }
             }
         });
 
@@ -270,9 +284,21 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
             retailerId = myDataset.get(position).getId();
             retailerId = String.valueOf(retailerId.subSequence(1, retailerId.length() - 1));
             RetailerViewDetailsMethod();
-            Log.e("Retailer_ID", retailerId);
+
+            shared_common_pref.save("Retailer_id", retailerId);
+            shared_common_pref.save("Retailer_name", myDataset.get(position).getName());
+            Log.e("Retailer_ID", myDataset.get(position).getName());
         } else if (type == 9) {
             txtOrder.setText(myDataset.get(position).getName());
+            if (myDataset.get(position).getName().toString().matches("Phone Order")) {
+                count = 0;
+            } else {
+                count = 1;
+            }
+            shared_common_pref.save("Phone_order_type", String.valueOf(count));
+            Log.e("Phone_order_type", String.valueOf(count));
+
+
         } else if (type == 11) {
             edtRemarks.setText(myDataset.get(position).getName() + " ");
             edtRemarks.setSelection(edtRemarks.getText().length());

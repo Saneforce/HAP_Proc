@@ -13,7 +13,7 @@ public class MyFirebaseInstanceIdService extends FirebaseMessagingService {
     public void onNewToken(String token) {
         super.onNewToken(token);
         Log.e("newToken", token);
-        //Add your token in your sharepreferences.
+
         shared_common_pref = new Shared_Common_Pref(this);
         shared_common_pref.save(Shared_Common_Pref.Dv_ID, token);
         getSharedPreferences("_", MODE_PRIVATE).edit().putString("fcm_token", token).apply();

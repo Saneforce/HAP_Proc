@@ -90,6 +90,7 @@ public class OrderCategoryActivity extends AppCompatActivity {
     /*CHECKING*/
     ArrayList<String> mHeaderNameValue;
     LinearLayout bottomLinear;
+    Shared_Common_Pref shared_common_pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -104,6 +105,8 @@ public class OrderCategoryActivity extends AppCompatActivity {
         SF_CODE = Shared_Common_Pref.Sf_Code;
         DIVISION_CODE = Shared_Common_Pref.Div_Code;
         CUTT_OFF_CODE = Shared_Common_Pref.StateCode;
+
+        shared_common_pref = new Shared_Common_Pref(this);
 
         Log.e("CAT_Details", SF_CODE);
         Log.e("CAT_Details", DIVISION_CODE);
@@ -295,6 +298,8 @@ public class OrderCategoryActivity extends AppCompatActivity {
                     if (Product_Array_List.size() == 0) {
                         sum = sum + productQuantiy * Integer.parseInt(productCode);
                         grandTotal.setText("" + sum);
+
+                        shared_common_pref.save("Total_amount", String.valueOf(sum));
                         item_count.setText("Items:" + "1");
                         Product_Array_List.add(new Product_Array(itemID, productName, productQuantiy, productQuantiy * Integer.parseInt(productCode), Integer.parseInt(productCode), catImage, catName));
                         System.out.println("First_Product_Added" + Product_Array_List.size());
