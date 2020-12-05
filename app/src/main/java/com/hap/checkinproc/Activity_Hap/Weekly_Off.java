@@ -74,10 +74,10 @@ public class Weekly_Off extends AppCompatActivity {
         weeklySubmit = (Button) findViewById(R.id.weeky_submit);
         gson = new Gson();
 
-        Bundle params=getIntent().getExtras();
-        if(params!=null){
-            String[] stDt=params.getString("EDt").split("/");
-            eText.setText(stDt[2]+"-"+stDt[1]+"-"+stDt[0]);
+        Bundle params = getIntent().getExtras();
+        if (params != null) {
+            String[] stDt = params.getString("EDt").split("/");
+            eText.setText(stDt[2] + "-" + stDt[1] + "-" + stDt[0]);
             eText.setEnabled(false);
         }
 
@@ -149,13 +149,13 @@ public class Weekly_Off extends AppCompatActivity {
                 }.getType();
                 maxMinDates = gson.fromJson(new Gson().toJson(response.body()), userType1);
                 Log.e("REMAINING_LEAVES", String.valueOf(maxMinDates));
-
                 for (int i = 0; i < maxMinDates.size(); i++) {
                     maxDate = maxMinDates.get(i).getMaxDate();
                     minDate = maxMinDates.get(i).getMinDate();
                     Log.e("MaxName", maxMinDates.get(i).getMaxDate());
                     Log.e("MaxName", maxMinDates.get(i).getMinDate());
                 }
+
 
                 /*MAx Date*/
                 String[] separated = maxDate.split("-");
@@ -232,7 +232,7 @@ public class Weekly_Off extends AppCompatActivity {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
                         dialog.dismiss();
-                        if(jsonObjecta.get("success").getAsBoolean()==true)
+                        if (jsonObjecta.get("success").getAsBoolean() == true)
                             startActivity(new Intent(Weekly_Off.this, Dashboard.class));
                     }
 

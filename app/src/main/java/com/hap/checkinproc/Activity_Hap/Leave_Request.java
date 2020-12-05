@@ -12,8 +12,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -41,17 +39,17 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.Leave_Type;
+import com.hap.checkinproc.Model_Class.MaxMinDate;
 import com.hap.checkinproc.Model_Class.RemainingLeave;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.LeaveRemaining;
-import com.hap.checkinproc.common.SANGPSTracker;
-import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,11 +62,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Leave_Request extends AppCompatActivity implements View.OnClickListener, Master_Interface {
-    private static String Tag="HAP_Check-In";
+    private static String Tag = "HAP_Check-In";
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
-    public static final String CheckInfo = "CheckInDetail" ;
-    public static final String UserInfo = "MyPrefs" ;
+    public static final String CheckInfo = "CheckInDetail";
+    public static final String UserInfo = "MyPrefs";
     DatePickerDialog picker;
     EditText eText;
     EditText etext2;
@@ -91,13 +89,15 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     String shiftTypeVal = "", halfTypeVal = "", halfChecked, getReason;
     Boolean oneTwo = false;
 
-    TextView shitType,leaveType,halfType;
+    TextView shitType, leaveType, halfType;
     CustomListViewDialog customDialog;
     List<Common_Model> modelShiftType = new ArrayList<>();
     List<Common_Model> modelleaveType = new ArrayList<>();
     List<Common_Model> modelhalfdayType = new ArrayList<>();
     Common_Model Model_Pojo;
-
+    List<MaxMinDate> maxMinDates;
+    String maxDate, minDate;
+    String maxYear, maxMonth, maxDay, minYear, minMonth, minDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,22 +122,22 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             }
         });
         gson = new Gson();
-         eText = (EditText) findViewById(R.id.from_date);
+        eText = (EditText) findViewById(R.id.from_date);
         eText.setInputType(InputType.TYPE_NULL);
-
+        MaxMinDate();
         etext2 = (EditText) findViewById(R.id.to_date);
         etext2.setInputType(InputType.TYPE_NULL);
 
         Submit = (Button) findViewById(R.id.submitButton);
 
-        Bundle params=getIntent().getExtras();
-        if(params!=null){
+        Bundle params = getIntent().getExtras();
+        if (params != null) {
             eText.setText(params.getString("EDt"));
             etext2.setText(params.getString("EDt"));
 
-            String[] stDt=params.getString("EDt").split("/");
-            fromData= stDt[2]+"-"+stDt[1]+"-"+stDt[0];
-            toData= stDt[2]+"-"+stDt[1]+"-"+stDt[0];
+            String[] stDt = params.getString("EDt").split("/");
+            fromData = stDt[2] + "-" + stDt[1] + "-" + stDt[0];
+            toData = stDt[2] + "-" + stDt[1] + "-" + stDt[0];
             difference();
             //eText.setText(stDt[2]+"-"+stDt[1]+"-"+stDt[0]);
             eText.setEnabled(false);
@@ -179,9 +179,16 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                                 difference();
 
                                 fromData = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+
                             }
                         }, year, month, day);
+                Calendar calendarmin = Calendar.getInstance();
+                calendarmin.set(Integer.parseInt(minYear), Integer.parseInt(minMonth) - 1, Integer.parseInt(minDay));
+                picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
+
+
                 picker.show();
+
             }
         });
 
@@ -202,7 +209,13 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                                 toData = "'" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth + "'";
                             }
                         }, year, month, day);
+                Calendar calendarmin = Calendar.getInstance();
+                calendarmin.set(Integer.parseInt(minYear), Integer.parseInt(minMonth) - 1, Integer.parseInt(minDay));
+                picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
+
+
                 picker.show();
+
 
             }
         });
@@ -224,7 +237,8 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             }
         });
 
-    /*adding spinner to leave type*/
+
+        /*adding spinner to leave type*/
         leaveType = findViewById(R.id.leave_type);
         leaveType.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -262,8 +276,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         });
 
 
-
-
         Submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -272,30 +284,60 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                 Log.e("halfType", leavetype_id);
 
                 if (leaveType.getText().toString().matches("")) {
-                    Toast.makeText(Leave_Request.this, "Enter Leave Type", Toast.LENGTH_SHORT).show();return;
+                    Toast.makeText(Leave_Request.this, "Enter Leave Type", Toast.LENGTH_SHORT).show();
+                    return;
                 } else if (eText.getText().toString().matches("")) {
-                    Toast.makeText(Leave_Request.this, "Enter From date", Toast.LENGTH_SHORT).show();return;
+                    Toast.makeText(Leave_Request.this, "Enter From date", Toast.LENGTH_SHORT).show();
+                    return;
                 } else if (etext2.getText().toString().matches("")) {
-                    Toast.makeText(Leave_Request.this, "Enter To date", Toast.LENGTH_SHORT).show();return;
+                    Toast.makeText(Leave_Request.this, "Enter To date", Toast.LENGTH_SHORT).show();
+                    return;
                 } else if (reasonForLeave.getText().toString().matches((""))) {
-                    Toast.makeText(Leave_Request.this, "Enter Reason", Toast.LENGTH_SHORT).show();return;
+                    Toast.makeText(Leave_Request.this, "Enter Reason", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 if (oneTwo == true) {
                     if (shitType.getText().toString().matches("")) {
-                        Toast.makeText(Leave_Request.this, "Enter Shift Time", Toast.LENGTH_SHORT).show();return;
+                        Toast.makeText(Leave_Request.this, "Enter Shift Time", Toast.LENGTH_SHORT).show();
+                        return;
                     } else if (halfType.getText().toString().matches("")) {
-                        Toast.makeText(Leave_Request.this, "Enter HalfDay Type", Toast.LENGTH_SHORT).show();return;
+                        Toast.makeText(Leave_Request.this, "Enter HalfDay Type", Toast.LENGTH_SHORT).show();
+                        return;
                     }
                 }
                 if (reasonForLeave.getText().toString().matches((""))) {
-                    Toast.makeText(Leave_Request.this, "Enter Reason", Toast.LENGTH_SHORT).show();return;
+                    Toast.makeText(Leave_Request.this, "Enter Reason", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 LeaveSubmitOne();
 
             }
         });
     }
+    /*getMax and Min date*/
 
+    public void MaxMinDate() {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        System.out.println("Current_DATE_FORMAT" + formatter.format(date));
+
+        String strMinDate = formatter.format(date);
+        minDate = strMinDate;
+        /*Min Date*/
+        String[] separated1 = minDate.split("-");
+        separated1[0] = separated1[0].trim();
+        separated1[1] = separated1[1].trim();
+        separated1[2] = separated1[2].trim();
+
+        minYear = separated1[0];
+        minMonth = separated1[1];
+        minDay = separated1[2];
+        Log.e("Sresdfsd", minYear);
+        Log.e("Sresdfsd", minMonth);
+        Log.e("Sresdfsd", minDay);
+
+    }
 
 
     public void addingHalfToSpinner() {
@@ -315,7 +357,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             Intent Dashboard = new Intent(Leave_Request.this, Dashboard_Two.class);
             Dashboard.putExtra("Mode", "CIN");
             startActivity(Dashboard);
-        }else
+        } else
             startActivity(new Intent(getApplicationContext(), Dashboard.class));
     }
 
@@ -349,7 +391,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                             halfChecked = "1";
                             mShitTiming.setVisibility(View.VISIBLE);
                             mHalfDayType.setVisibility(View.VISIBLE);
-
                             oneTwo = true;
                             Log.e("BOOLEAN_CHECK", String.valueOf(oneTwo));
 
@@ -366,6 +407,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                 });
 
             } else {
+                mHalfCheck.setChecked(false);
                 mCheckHalf.setVisibility(View.GONE);
                 mShitTiming.setVisibility(View.GONE);
                 mHalfDayType.setVisibility(View.GONE);
@@ -377,6 +419,12 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             e.printStackTrace();
         }
     }
+
+
+
+
+
+
 
 
     /*Leave Type api call*/
@@ -502,9 +550,9 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         } else {
             halfTypeVal = "3";
         }
-        halfChecked="0";
+        halfChecked = "0";
         if (mHalfCheck.isChecked()) {
-            halfChecked="1";
+            halfChecked = "1";
         }
         JSONObject jsonleaveType = new JSONObject();
         JSONObject jsonleaveTypeS = new JSONObject();
@@ -540,12 +588,18 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                 JsonObject jsonObjecta = response.body();
                 Log.e("TOTAL_REPOSNEaaa", String.valueOf(jsonObjecta));
                 String Msg = jsonObjecta.get("Msg").getAsString();
-                if(!Msg.equalsIgnoreCase("")){
+                if (!Msg.equalsIgnoreCase("")) {
                     AlertDialogBox.showDialog(Leave_Request.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
                             dialog.dismiss();
-                            if(jsonObjecta.get("success").getAsBoolean()==true) openHome();
+
+
+                            if (jsonObjecta.get("success").getAsBoolean() == true) openHome();
+
+
+
+
                         }
 
                         @Override
@@ -657,13 +711,13 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
-        if(type == 4) {
+        if (type == 4) {
             shitType.setText(myDataset.get(position).getName());
-            shiftTypeVal=myDataset.get(position).getId();
-        }else if(type == 5 ){
+            shiftTypeVal = myDataset.get(position).getId();
+        } else if (type == 5) {
             leaveType.setText(myDataset.get(position).getName());
-            leavetype_id=myDataset.get(position).getId();
-        }else if(type == 6){
+            leavetype_id = myDataset.get(position).getId();
+        } else if (type == 6) {
             halfType.setText(myDataset.get(position).getName());
 
         }

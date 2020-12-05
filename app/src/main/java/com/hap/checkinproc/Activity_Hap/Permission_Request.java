@@ -13,8 +13,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -29,7 +27,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -40,7 +37,6 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.AvalaibilityHours;
 import com.hap.checkinproc.R;
-import com.toptoche.searchablespinnerlibrary.SearchableSpinner;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,12 +53,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Permission_Request extends AppCompatActivity implements View.OnClickListener, Master_Interface {
-    private static String Tag="HAP_Check-In";
+    private static String Tag = "HAP_Check-In";
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     SharedPreferences Setups;
-    public static final String CheckInfo = "CheckInDetail" ;
-    public static final String UserInfo = "MyPrefs" ;
+    public static final String CheckInfo = "CheckInDetail";
+    public static final String UserInfo = "MyPrefs";
     public static final String SetupsInfo = "MySettings";
 
     TimePickerDialog picker;
@@ -73,7 +69,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
     private ArrayList<String> shitList;
     Date d1 = null;
     Date d2 = null;
-    String clickedDate, fromTime = "", toTime = "", FTime, TTime, Clicked, TTTIme;
+    String clickedDate, fromTime = "", toTime = "", FTime = "", TTime, Clicked, TTTIme;
     Integer differnce;
     Button buttonSubmit;
     List<AvalaibilityHours> mAvalaibilityHours;
@@ -81,7 +77,11 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
     String takenLeave = "";
     String ShiftName;
     JsonObject aSetups;
-    int TotHrs,AvlHrs,tknHrs;
+    int TotHrs, AvlHrs, tknHrs;
+
+    String shiftFromDate, shiftToDate;
+    String btwnTime;
+    private static String HOUR_FORMAT = "HH:mm";
 
 
     TextView shitType;
@@ -96,10 +96,10 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
         Setups = getSharedPreferences(SetupsInfo, Context.MODE_PRIVATE);
-        JsonParser jsonParser = new JsonParser();
+      /*  JsonParser jsonParser = new JsonParser();
         JsonArray jArray = (JsonArray) jsonParser.parse(Setups.getString("Setups",""));
         aSetups=jArray.get(0).getAsJsonObject();
-
+*/
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -127,10 +127,10 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         hrsCurr = (EditText) findViewById(R.id.hrsCurr);
         hrsAvail = (EditText) findViewById(R.id.hrsAvail);
         gson = new Gson();
-        tknHrs=0;
-        TotHrs=aSetups.get("Permission_hours").getAsInt();
+        tknHrs = 0;
+    /*    TotHrs=aSetups.get("Permission_hours").getAsInt();
         AvlHrs=TotHrs-tknHrs;
-        hrsAvail.setText(String.valueOf(AvlHrs));
+        hrsAvail.setText(String.valueOf(AvlHrs));*/
         takenHrs.setText(String.valueOf(tknHrs));
         eText1 = (EditText) findViewById(R.id.permission_date);
         eText1.setInputType(InputType.TYPE_NULL);
@@ -141,7 +141,9 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                 int day = cldr.get(Calendar.DAY_OF_MONTH);
                 int month = cldr.get(Calendar.MONTH);
                 int year = cldr.get(Calendar.YEAR);
-                // date picker dialog
+                // date picker dialog.
+
+
                 picker1 = new DatePickerDialog(Permission_Request.this,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
@@ -156,6 +158,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                             }
                         }, year, month, day);
                 picker1.show();
+
             }
         });
 
@@ -169,19 +172,41 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                 int minutes = cldr.get(Calendar.MINUTE);
                 int aa = cldr.get(Calendar.AM_PM);
                 // time picker dialog
-                picker = new TimePickerDialog(Permission_Request.this,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                                eText.setText(sHour + ":" + sMinute);
-                                fromTime(sHour, sMinute);
-                                fromTime = String.valueOf(sHour);
-                                FTime = sHour + ":" + sMinute;
+
+                if (!shitType.getText().toString().matches("")) {
 
 
-                            }
-                        }, hour, minutes, true);
-                picker.show();
+                    picker = new TimePickerDialog(Permission_Request.this,
+                            new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
+
+                                    Log.e("From_Time_sMinute", String.format("%02d:%02d", sHour, sMinute));
+                                    btwnTime = String.format("%02d:%02d", sHour, sMinute);
+
+                                    fromTime(sHour, sMinute);
+                                    fromTime = String.valueOf(sHour);
+                                    FTime = btwnTime;
+
+                                    String now = btwnTime;
+                                    String start = shiftFromDate;
+                                    String end = shiftToDate;
+                                    System.out.println("CHECK_THE_CURRENT_TIME" + "" + now + " between " + start + "-" + end + "?");
+                                    System.out.println("CHECK_THE_CURRENT_TIME" + isHourInInterval(now, start, end));
+
+                                    if (isHourInInterval(now, start, end) == true) {
+                                        eText.setText(btwnTime);
+                                    } else {
+                                        eText.setText("");
+                                        Toast.makeText(Permission_Request.this, "Please Choose the time between the Shifttime", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            }, hour, minutes, true);
+                    picker.show();
+                } else {
+                    Toast.makeText(Permission_Request.this, "Please Choose the Shifttime", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -194,19 +219,43 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                 int hour = cldr.get(Calendar.HOUR);
                 int minutes = cldr.get(Calendar.MINUTE);
                 // time picker dialog
-                picker = new TimePickerDialog(Permission_Request.this,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                                eText2.setText(sHour + ":" + sMinute);
-                                toTime(sHour, sMinute);
-                                toTime = String.valueOf(sHour);
-                                TTime = "'" + sHour + ":" + sMinute + "'";
-                                TTTIme = sHour + ":" + sMinute;
-                                differ();
-                            }
-                        }, hour, minutes, true);
-                picker.show();
+                if (!eText.getText().toString().matches("")) {
+
+                    picker = new TimePickerDialog(Permission_Request.this,
+                            new TimePickerDialog.OnTimeSetListener() {
+                                @Override
+                                public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
+
+
+                                    Log.e("From_Time_sMinute", String.format("%02d:%02d", sHour, sMinute));
+                                    btwnTime = String.format("%02d:%02d", sHour, sMinute);
+
+                                    toTime(sHour, sMinute);
+                                    toTime = String.valueOf(sHour);
+                                    TTime = "'" + btwnTime + "'";
+                                    TTTIme = btwnTime;
+                                    differ();
+
+                                    String now = btwnTime;
+                                    String start = FTime;
+                                    String end = shiftToDate;
+                                    System.out.println("CHECK_THE_CURRENT_TIME" + "" + now + " between " + start + "-" + end + "?");
+                                    System.out.println("CHECK_THE_CURRENT_TIME" + isHourInInterval(now, start, end));
+
+                                    if (isHourInInterval(now, start, end) == true) {
+                                        eText2.setText(btwnTime);
+                                    } else {
+                                        eText2.setText("");
+                                        Toast.makeText(Permission_Request.this, "Please Choose the time Greater than From Time", Toast.LENGTH_SHORT).show();
+                                    }
+
+
+                                }
+                            }, hour, minutes, true);
+                    picker.show();
+                } else {
+                    Toast.makeText(Permission_Request.this, "Please Choose the From Time", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -226,8 +275,6 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
             }
         });
-
-
 
 
         reasonPermission = (EditText) findViewById(R.id.reason_permission);
@@ -268,9 +315,22 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
             Intent Dashboard = new Intent(this, Dashboard_Two.class);
             Dashboard.putExtra("Mode", "CIN");
             startActivity(Dashboard);
-        }else
+        } else
             startActivity(new Intent(getApplicationContext(), Dashboard.class));
     }
+
+
+    /**
+     * @param target hour to check
+     * @param start  interval start
+     * @param end    interval end
+     * @return true    true if the given hour is between
+     */
+    public static boolean isHourInInterval(String target, String start, String end) {
+        return ((target.compareTo(start) >= 0)
+                && (target.compareTo(end) <= 0));
+    }
+
 
     private void fromTime(int hours, int mins) {
 
@@ -326,6 +386,10 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                 .append(minutes).append(" ").append(timeSet).toString();
 
         Log.e("TIME_WITH_AM_PM", toTime);
+        Log.e("TIME_WITH_AM_PM", String.valueOf(hours));
+        Log.e("TIME_WITH_AM_PM", String.valueOf(minutes));
+
+
     }
 
 
@@ -334,19 +398,19 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
         Log.e("ClickedfromTime", fromTime);
         Log.e("ClickedtoTime", toTime);
-        AvlHrs=TotHrs-tknHrs;
+        AvlHrs = TotHrs - tknHrs;
         hrsAvail.setText(String.valueOf(AvlHrs));
         if (!fromTime.equals("") && !toTime.equals("")) {
             if (Integer.valueOf(fromTime) < Integer.valueOf(toTime)) {
 
                 differnce = Integer.valueOf(toTime) - Integer.valueOf(fromTime);
                 if (differnce > AvlHrs) {
-                    Toast.makeText(this, "Your Permission Limit Exceed. "+(AvlHrs)+" Hrs Only Available", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Your Permission Limit Exceed. " + (AvlHrs) + " Hrs Only Available", Toast.LENGTH_SHORT).show();
                     hrsCurr.setText("");
                     eText2.setText("");
                     return;
                 } else {
-                    AvlHrs=AvlHrs-differnce;
+                    AvlHrs = AvlHrs - differnce;
                     hrsCurr.setText(String.valueOf(differnce));
                 }
                 hrsAvail.setText(String.valueOf(AvlHrs));
@@ -390,11 +454,12 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                     Log.e("dsdsa", "" + takenLeave);
                     if (takenLeave != null) {
                         takenHrs.setText(takenLeave);
-                        tknHrs=Integer.parseInt(takenLeave);
+                        tknHrs = Integer.parseInt(takenLeave);
                     } else {
                         takenHrs.setText("0");
-                        tknHrs=0;
-                    }differ();
+                        tknHrs = 0;
+                    }
+                    differ();
                 }
 
 
@@ -531,12 +596,12 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                 String Msg = jsonObjecta.get("Msg").getAsString();
                 Log.e("SDFDFD", jsonObjecta.get("success").toString());
                 Log.e("SDFDFDDFF", String.valueOf(Msg.length()));
-                if(!Msg.equalsIgnoreCase("")){
+                if (!Msg.equalsIgnoreCase("")) {
                     AlertDialogBox.showDialog(Permission_Request.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
                             dialog.dismiss();
-                            if(jsonObjecta.get("success").getAsBoolean()==true) openHome();
+                            if (jsonObjecta.get("success").getAsBoolean() == true) openHome();
                         }
 
                         @Override
@@ -580,8 +645,6 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
                 String REPONSE = String.valueOf(response.body());
 
-
-                //Log.e("ShiftTime_Leave_Request", REPONSE);
                 try {
                     JSONArray jsonArray = new JSONArray(REPONSE);
 
@@ -631,6 +694,16 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         customDialog.dismiss();
         if (type == 7) {
             shitType.setText(myDataset.get(position).getName());
+
+            shiftFromDate = shitType.getText().toString();
+            shiftToDate = shitType.getText().toString();
+            shiftFromDate = shiftFromDate.substring(0, 5);
+            Log.e("STR_TIME_VLAUE", shiftFromDate);
+
+            shiftToDate = shiftToDate.substring(9, 14);
+            Log.e("STR_TIME_VLAUE", shiftToDate);
+
+
         }
     }
 

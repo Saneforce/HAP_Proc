@@ -417,8 +417,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     Log.e("RESPONSE_FROM_SERVER", response.body().toString());
                     progressbar.setVisibility(View.GONE);
                     if (response.code() == 200 || response.code() == 201) {
-                        // common_class.CommonIntentwithFinish(Dashboard.class);
-                        common_class.CommonIntentwithFinish(SecondaryOrderActivity.class);
+                        common_class.CommonIntentwithFinish(Dashboard.class);
                         Toast.makeText(Mydayplan_Activity.this, "Day Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
                     }
 
