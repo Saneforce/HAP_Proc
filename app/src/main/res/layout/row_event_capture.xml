@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/C5dp"
+    android:theme="@style/Theme.MaterialComponents.Light"
+    tools:ignore="MissingConstraints">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/image_captured"
+            android:layout_width="@dimen/C100dp"
+            android:layout_height="@dimen/C100dp"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/C10dp"
+            android:src="@drawable/ic_launch" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/C10dp"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/edt_title"
+                android:layout_width="@dimen/header_date_width"
+                android:layout_height="wrap_content"
+                android:hint="Enter the title" />
+
+            <EditText
+                android:id="@+id/edt_remarks"
+                android:layout_width="@dimen/header_date_width"
+                android:layout_height="wrap_content"
+                android:hint="Enter the remarks" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="right">
+
+            <ImageView
+                android:layout_width="@dimen/C70dp"
+                android:id="@+id/image_delete"
+                android:layout_height="@dimen/C90dp"
+                android:src="@drawable/delete_cart" />
+        </LinearLayout>
+
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>
+

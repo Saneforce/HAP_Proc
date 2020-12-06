@@ -325,24 +325,28 @@ public class ImageCapture extends AppCompatActivity implements
                     }
                 });
     }
-    private void ShowImgPreview(){
-        RelativeLayout vwPreview=findViewById(R.id.ImgPreview);
-        ImageView imgPreview=findViewById(R.id.imgPreviewImg);
+
+    private void ShowImgPreview() {
+        RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
+        ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.VISIBLE);
         imgPreview.setImageURI(Uri.fromFile(file));
     }
-    private void CloseImgPreview(){
-        RelativeLayout vwPreview=findViewById(R.id.ImgPreview);
-        ImageView imgPreview=findViewById(R.id.imgPreviewImg);
+
+    private void CloseImgPreview() {
+        RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
+        ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
     }
-    private void saveImgPreview(){
-        RelativeLayout vwPreview=findViewById(R.id.ImgPreview);
-        ImageView imgPreview=findViewById(R.id.imgPreviewImg);
+
+    private void saveImgPreview() {
+        RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
+        ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
         imgPreview.setImageURI(Uri.fromFile(file));
         saveCheckIn();
     }
+
     private void saveCheckIn() {
         try {
             // LocationFinder locationFinder=new LocationFinder(this);
@@ -353,10 +357,10 @@ public class ImageCapture extends AppCompatActivity implements
 
             CheckInInf.put("eDate", CDate + " " + CTime);
             CheckInInf.put("eTime", CTime);
-            double lat=0,lng=0;
-            if(location!=null){
-                lat=location.getLatitude();
-                lng=location.getLongitude();
+            double lat = 0, lng = 0;
+            if (location != null) {
+                lat = location.getLatitude();
+                lng = location.getLongitude();
             }
             CheckInInf.put("lat", lat);
             CheckInInf.put("long", lng);
@@ -383,7 +387,10 @@ public class ImageCapture extends AppCompatActivity implements
                 JSONObject paramObject = new JSONObject();
 
                 paramObject.put("TP_Attendance", CheckInInf);
+                Log.e("CHECK_IN_DETAILS", String.valueOf(paramObject));
                 jsonarray.put(paramObject);
+
+
                 ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                 Call<JsonObject> modelCall = apiInterface.JsonSave("dcr/save",
                         UserDetails.getString("Divcode", ""),

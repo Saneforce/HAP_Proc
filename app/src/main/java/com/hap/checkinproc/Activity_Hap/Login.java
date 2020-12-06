@@ -52,10 +52,6 @@ import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -367,8 +363,8 @@ public class Login extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                         Intent intent;
                         if (requestCode == RC_SIGN_IN)
-                            intent = new Intent(Login.this, Dashboard.class);
-                            // intent = new Intent(Login.this, Mydayplan_Activity.class);
+                           // intent = new Intent(Login.this, Dashboard.class);
+                            intent = new Intent(Login.this, SecondaryOrderActivity.class);
                         else
                             intent = new Intent(Login.this, Dashboard_Two.class);
                         intent.putExtra("photo", photo);
@@ -387,6 +383,8 @@ public class Login extends AppCompatActivity {
                         shared_common_pref.save(Shared_Common_Pref.StateCode, Sf_type);
                         Log.e("STATECODE", Sf_type);
                         Log.e("STATECODE", code);
+                        Log.e("STATECODE", div);
+
                         Log.e("STATECODE", Shared_Common_Pref.StateCode);
                         Log.e("LOGIN_RESPONSE", String.valueOf(response.body().getData().get(0).getSfCode()));
                         editor.putString("Sf_Type", Sf_type);

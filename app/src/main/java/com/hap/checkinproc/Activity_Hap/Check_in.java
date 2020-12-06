@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -319,9 +320,9 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
         }
     };
 
-
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private final CameraDevice.StateCallback stateCallback = new CameraDevice.StateCallback() {
-        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
         @Override
         public void onOpened(@NonNull CameraDevice camera) {
             cameraDevice = camera;
@@ -348,6 +349,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
         }
     };
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void createCameraPreview() throws CameraAccessException {
         SurfaceTexture texture = textureView.getSurfaceTexture();
         texture.setDefaultBufferSize(imageDimensions.getWidth(),imageDimensions.getHeight());
@@ -383,6 +385,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
 
     }
 
+    @SuppressLint("NewApi")
     private void updatePreview() throws CameraAccessException {
 
         if(cameraDevice == null){
@@ -395,6 +398,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void openCamera() throws CameraAccessException {
 
         CameraManager manager = (CameraManager)getSystemService(Context.CAMERA_SERVICE);
@@ -418,6 +422,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
         manager.openCamera(cameraId,stateCallback,null);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void takePicture() throws CameraAccessException {
 
         if(cameraDevice == null){
@@ -528,6 +533,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onResume() {
         super.onResume();

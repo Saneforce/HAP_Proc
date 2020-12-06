@@ -125,8 +125,8 @@ public class ViewCartActivity extends AppCompatActivity {
         retailerName = shared_common_pref.getvalue("Retailer_name");
         retailerName = "'" + retailerName + "'";
 
-        distributorId = shared_common_pref.getvalue("distributor_id");
-        distributorName = shared_common_pref.getvalue("distributor_name");
+        distributorId = "'" + shared_common_pref.getvalue("distributor_id") + "'";
+        distributorName = "'" + shared_common_pref.getvalue("distributor_name") + "'";
 
         Log.e("View_Cart_Activity", SF_CODE);
         Log.e("View_Cart_Activity", "asd" + WORK_TYPE);
@@ -274,7 +274,7 @@ public class ViewCartActivity extends AppCompatActivity {
                     stockReportObject.put("CheckinTime", checkInTime);
                     stockReportObject.put("CheckoutTime", checkOutTime);
                     stockReportObject.put("location", "''");
-                    stockReportObject.put("geoaddress", "''");
+                    stockReportObject.put("geoaddress", "");
                     stockReportObject.put("PhoneOrderTypes", orderType);
                     stockReportObject.put("Order_Stk", distributorId);
                     stockReportObject.put("Order_No", "''");
@@ -623,7 +623,7 @@ public class ViewCartActivity extends AppCompatActivity {
             stockReportObject.put("CheckinTime", checkInTime);
             stockReportObject.put("CheckoutTime", checkOutTime);
             stockReportObject.put("location", "''");
-            stockReportObject.put("geoaddress", "''");
+            stockReportObject.put("geoaddress", "");
             stockReportObject.put("PhoneOrderTypes", orderType);
             stockReportObject.put("Order_Stk", distributorId);
             stockReportObject.put("Order_No", "''");
@@ -788,15 +788,15 @@ public class ViewCartActivity extends AppCompatActivity {
 
         Log.e("SUBMIT_VALUE", totalValueString);
 
-        ApiInterface apiInterface = ApiClient.getClient2().create(ApiInterface.class);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-        Call<JsonObject> responseBodyCall = apiInterface.submitValue("4", "MR2408", totalValueString);
+        Call<JsonObject> responseBodyCall = apiInterface.submitValue(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), totalValueString);
 
         responseBodyCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 if (response.isSuccessful()) {
-                    Log.e("Success", "Success");
+                    Log.e("Success", response.body().toString());
                     Log.e("totalValueString", totalValueString);
                     try {
                         JSONObject jsonObjects = new JSONObject(response.body().toString());

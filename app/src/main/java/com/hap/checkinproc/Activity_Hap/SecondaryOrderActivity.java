@@ -1,7 +1,9 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -15,7 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -25,15 +29,19 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Model_Class.EventCapture;
 import com.hap.checkinproc.Model_Class.RetailerDetailsModel;
 import com.hap.checkinproc.Model_Class.RetailerViewDetails;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.adapters.RetailerViewAdapter;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,16 +66,28 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
     LinearLayout mRetailerDetails;
     Type userType;
     String retailerId;
-    Integer count;
-
-    RetailerViewAdapter mRetailerViewAdapter;
+    Integer count, count1 = 0;
+    LinearLayout linerEventCapture;
+    String EventcapOne = "";
+    Realm mRealm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_secondary_order);
+
+
+        Realm.init(getApplicationContext());
+
+
+        RealmConfiguration config =
+                new RealmConfiguration.Builder()
+                        .deleteRealmIfMigrationNeeded()
+                        .build();
+
+        Realm.setDefaultConfiguration(config);
+
+        mRealm = Realm.getDefaultInstance();
         gson = new Gson();
         shared_common_pref = new Shared_Common_Pref(this);
 
@@ -139,11 +159,41 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
             }
         });
 
+        linerEventCapture = findViewById(R.id.prm_linear_event_capture);
+        linerEventCapture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent m_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                String EventFileName = "EventCapture.jpeg";
+                File file = new File(getExternalCacheDir().getPath(), EventFileName);
+                Uri uri = FileProvider.getUriForFile(SecondaryOrderActivity.this, getApplicationContext().getPackageName() + ".provider", file);
+                m_intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(m_intent, 2);
+                /*  if (count1 == 1) {
+                 *//*      startActivity(new Intent(getApplicationContext(), EventCapute.class));*//*
+                    Intent intent = new Intent(getApplicationContext(), EventCapute.class);
+                    intent.putExtra("EventcapOne", EventcapOne);
+                    startActivity(intent);
+
+
+                } else {
+                    Intent m_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    String EventFileName = "EventCapture.jpeg";
+                    File file = new File(getExternalCacheDir().getPath(), EventFileName);
+                    Uri uri = FileProvider.getUriForFile(SecondaryOrderActivity.this, getApplicationContext().getPackageName() + ".provider", file);
+                    m_intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
+                    startActivityForResult(m_intent, 2);
+                }*/
+            }
+        });
+
 
         linearCategory = findViewById(R.id.prm_linear_orders);
         linearCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
 
                 if (txtOrder.getText().toString().matches("")) {
                     Toast.makeText(SecondaryOrderActivity.this, "Enter Text Order", Toast.LENGTH_SHORT).show();
@@ -166,6 +216,24 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         txtMobileTwo = findViewById(R.id.txt_mobile2);
         txtDistributor = findViewById(R.id.txt_distributor);
         mRetailerDetails = findViewById(R.id.linear_reatiler_details);
+
+        mSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mRealm.executeTransaction(new Realm.Transaction() {
+                    @Override
+                    public void execute(Realm realm) {
+
+                        RealmResults<EventCapture> results = realm.where(EventCapture.class).findAll();
+
+                        for (EventCapture employee : results) {
+                            Log.e("EVENT_CAPTURE", employee.imageUri +""+employee.Title);
+                        }
+                    }
+                });
+
+            }
+        });
 
 
     }
@@ -225,7 +293,43 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        switch (requestCode) {
+
+            //TODO... onCamera Picker Result
+            case 2:
+                if (resultCode == RESULT_OK) {
+                    count1++;
+                    String EventFileName = "EventCapture.jpeg";
+                    File file = new File(getExternalCacheDir().getPath(), EventFileName);
+                    Uri uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
+                    Log.e("IMAGE_URI", String.valueOf(uri));
+                    EventcapOne = String.valueOf(uri);
+
+
+                    mRealm.executeTransaction(new Realm.Transaction() {
+                        @Override
+                        public void execute(Realm realm) {
+
+                            try {
+                                EventCapture dbEventCapture = new EventCapture();
+                                dbEventCapture.imageUri = EventcapOne;
+                                dbEventCapture.Title = "Karthic";
+                                mRealm.copyFromRealm(dbEventCapture);
+
+                                Log.e("DATABase_capture", dbEventCapture.imageUri);
+                            } catch (Exception exception) {
+
+                            }
+                        }
+                    });
+                }
+                break;
+        }
+    }
 
     /*Retailer Details*/
 
@@ -254,12 +358,6 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
                 mobileNumber = String.valueOf(mRetailerViewDetail.getPOTENTIAL().get(0).getListedDrMobile());
                 txtMobileTwo.setText(mobileNumber);
 
-
-             /*   for (int a = 0; a < mRetailerViewDetail.getStockistDetails().size(); a++) {
-                    String sd = mRetailerViewDetail.getStockistDetails().get(a).getOrderDetails().get(a).getProductName();
-                    Log.e("PRODUCT_NAME", sd);
-
-                }*/
 
             }
 
