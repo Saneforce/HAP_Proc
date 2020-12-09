@@ -70,4 +70,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:21.0.0'
     implementation 'com.google.firebase:firebase-messaging-directboot:20.2.0'
 
+    /*Room Database*/
+    implementation 'androidx.room:room-runtime:2.0.0'
+    annotationProcessor 'androidx.room:room-compiler:2.0.0'
+    testImplementation 'androidx.room:room-testing:2.0.0'
 }

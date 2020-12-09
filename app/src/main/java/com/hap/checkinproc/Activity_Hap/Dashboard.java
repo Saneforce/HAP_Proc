@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -20,11 +21,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.Status_Activity.Extended_Shift_Activity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,9 +57,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         username = findViewById(R.id.username);
         lblUserName = (TextView) findViewById(R.id.lblUserName);
         lblEmail = (TextView) findViewById(R.id.lblEmail);
-
-        Get_MydayPlan();
-
+        Get_MydayPlan(1, "check/mydayplan");
         sharedPreferences = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
@@ -144,6 +146,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 finishAffinity();
                 //System.exit(0);
                 break;
+            case R.id.lin_extenden_shift:
+                Get_MydayPlan(2, "ValidateExtended");
+                break;
             default:
                 break;
         }
@@ -151,9 +156,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
     }
 
-    private void Get_MydayPlan() {
+    private void Get_MydayPlan(int flag, String Name) {
         Map<String, String> QueryString = new HashMap<>();
-        QueryString.put("axn", "check/mydayplan");
+        QueryString.put("axn", Name);
         QueryString.put("Sf_code", Shared_Common_Pref.Sf_Code);
         QueryString.put("Date", common_class.GetDate());
         QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
@@ -173,19 +178,59 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                    Log.e("GettodayResult", "response Tp_View: " + jsonObject.getJSONArray("Checkdayplan"));
-                    JSONArray jsoncc = jsonObject.getJSONArray("Checkdayplan");
-                    Log.e("LENGTH", String.valueOf(jsoncc.length()));
-                    //Log.e("TB_MyDAy_Plan",String.valueOf(jsoncc.getJSONObject(0).get("remarks")));
-                    Log.e("MyDAY_LENGTH", String.valueOf(jsoncc.length()));
-                    if (jsoncc.length() > 0) {
-                        linCheckin.setVisibility(View.VISIBLE);
-                        linMyday.setVisibility(View.GONE);
+                    Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
+                    if (flag == 1) {
+                        JSONArray jsoncc = jsonObject.getJSONArray("Checkdayplan");
+                        Log.e("LENGTH", String.valueOf(jsoncc.length()));
+                        //Log.e("TB_MyDAy_Plan",String.valueOf(jsoncc.getJSONObject(0).get("remarks")));
+                        Log.e("MyDAY_LENGTH", String.valueOf(jsoncc.length()));
+                        if (jsoncc.length() > 0) {
+                            linCheckin.setVisibility(View.VISIBLE);
+                            linMyday.setVisibility(View.GONE);
+                        } else {
+                            linCheckin.setVisibility(View.GONE);
+                            linMyday.setVisibility(View.VISIBLE);
+                        }
                     } else {
-                        linCheckin.setVisibility(View.GONE);
-                        linMyday.setVisibility(View.VISIBLE);
-                    }
+                        String success = jsonObject.getString("success");
+                        String Msg = jsonObject.getString("msg");
+                        if (!Msg.equals("")) {
+                            AlertDialogBox.showDialog(Dashboard.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
+                                @Override
+                                public void PositiveMethod(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
 
+                                    common_class.CommonIntentwithoutFinishputextra(Checkin.class, "Mode", "extended");
+
+
+                                }
+
+                                @Override
+                                public void NegativeMethod(DialogInterface dialog, int id) {
+
+                                }
+                            });
+                        } else {
+
+
+                            AlertDialogBox.showDialog(Dashboard.this, "HAP Check-In", Msg, "YES", "NO", false, new AlertBox() {
+                                @Override
+                                public void PositiveMethod(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                    Intent intent = new Intent(getApplicationContext(), Checkin.class);
+                                    Bundle extras = new Bundle();
+                                    extras.putString("Extended_Flag","extended");
+                                    startActivity(intent);
+                                }
+
+                                @Override
+                                public void NegativeMethod(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
+                            // Toast.makeText(Dashboard.this, "Send To Checkin", Toast.LENGTH_SHORT).show();
+                        }
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

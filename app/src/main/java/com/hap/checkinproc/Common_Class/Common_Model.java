@@ -5,14 +5,45 @@ public class Common_Model {
     private String id;
     private String flag;
     private String address;
-private String phone;
+    private String phone;
+     String checkouttime;
+     boolean isSelected;
 
-    public Common_Model(String name, String id, String flag, String address,String phone) {
+    public Common_Model(String name, String id, String flag, String address, String phone) {
         this.name = name;
         this.id = id;
         this.flag = flag;
         this.address = address;
         this.phone = phone;
+    }
+
+    public Common_Model(String id, String name, String flag, String checkouttime) {
+        this.id = id;
+        this.name = name;
+        this.flag = flag;
+        this.checkouttime = checkouttime;
+    }
+
+    public Common_Model(String name, String id, boolean isSelected) {
+        this.name = name;
+        this.id = id;
+        this.isSelected = isSelected;
+    }
+
+    public String getCheckouttime() {
+        return checkouttime;
+    }
+
+    public void setCheckouttime(String checkouttime) {
+        this.checkouttime = checkouttime;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 
     public Common_Model(String id, String name, String flag) {
@@ -46,6 +77,7 @@ private String phone;
     public String getFlag() {
         return flag;
     }
+
     public void setFlag(String flag) {
         this.flag = flag;
     }

@@ -32,8 +32,10 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -139,6 +141,21 @@ public class Common_Class {
 
 
     }
+
+    public List<Common_Model> getfilterList(java.util.List<Common_Model> Jointworklistview){
+        List<Common_Model> Jointworklistviewsave = new ArrayList<>();
+        for (int i = 0; i < Jointworklistview.size(); i++) {
+            if (Jointworklistview.get(i).isSelected()) {
+                Log.e("SELECTED", String.valueOf(Jointworklistview.get(i).isSelected()));
+                Jointworklistviewsave.add(new Common_Model(Jointworklistview.get(i).getName() , Jointworklistview.get(i).getId(), true));
+            }
+
+        }
+
+        return  Jointworklistviewsave;
+    };
+
+
 
 
     public JsonArray FilterGson(final Iterable<JsonObject> SrcArray, String colName, String searchVal) {

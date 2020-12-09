@@ -1,17 +1,22 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -19,6 +24,7 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Model_Class.Tp_Approval_Model;
 import com.hap.checkinproc.R;
 
 import org.json.JSONArray;
@@ -28,38 +34,20 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClickListener {
-    TextView name, empcode, hq, mobilenumber, designation, plandate, worktype, route, distributor, remarks, tpapprovebutton, tpreject, tp_rejectsave;
+    TextView name, empcode, hq, mobilenumber, designation, plandate, worktype, route, distributor, remarks, tpapprovebutton, tpreject, tp_rejectsave, edt_remarks, routecaption, distributorcaption, tphqcaption, ChillingCentercaption, shifttypecaption, fromdatecaption, todatecaption, tphq, ChillingCenter, shifttype, fromdate, todate, jointworkcaption, jointwork;
     String Sf_Code, Tour_plan_Date;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     LinearLayout Approvereject, rejectonly;
     EditText reason;
-    Intent i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tp__approval__reject);
-        TextView txtHelp = findViewById(R.id.toolbar_help);
-        ImageView imgHome = findViewById(R.id.toolbar_home);
-        txtHelp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
-            }
-        });
-        imgHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
-
-            }
-        });
+        shared_common_pref = new Shared_Common_Pref(this);
+        common_class = new Common_Class(this);
         name = findViewById(R.id.name);
         tpapprovebutton = findViewById(R.id.tpapprovebutton);
         empcode = findViewById(R.id.empcode);
@@ -70,23 +58,33 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
         Approvereject = findViewById(R.id.Approvereject);
         rejectonly = findViewById(R.id.rejectonly);
         tp_rejectsave = findViewById(R.id.tp_rejectsave);
-
-
         tpreject = findViewById(R.id.tpreject);
-        shared_common_pref = new Shared_Common_Pref(this);
-        common_class = new Common_Class(this);
+        jointworkcaption = findViewById(R.id.jointworkcaption);
+        jointwork = findViewById(R.id.jointwork);
+        edt_remarks = findViewById(R.id.edt_remarks);
         plandate = findViewById(R.id.plandate);
         worktype = findViewById(R.id.worktype);
         route = findViewById(R.id.route);
         distributor = findViewById(R.id.distributor);
         remarks = findViewById(R.id.remarks);
+        tphq = findViewById(R.id.tphq);
+        ChillingCenter = findViewById(R.id.ChillingCenter);
+        shifttype = findViewById(R.id.shifttype);
+        fromdate = findViewById(R.id.fromdate);
+        todate = findViewById(R.id.todate);
+        routecaption = findViewById(R.id.routecaption);
+        distributorcaption = findViewById(R.id.distributorcaption);
+        tphqcaption = findViewById(R.id.tphqcaption);
+        ChillingCentercaption = findViewById(R.id.ChillingCentercaption);
+        shifttypecaption = findViewById(R.id.shifttypecaption);
+        fromdatecaption = findViewById(R.id.fromdatecaption);
+        todatecaption = findViewById(R.id.todatecaption);
         tpapprovebutton.setOnClickListener(this);
         tpreject.setOnClickListener(this);
         tp_rejectsave.setOnClickListener(this);
-        i = getIntent();
+        Intent i = getIntent();
         name.setText(":" + i.getExtras().getString("Username"));
         empcode.setText(":" + i.getExtras().getString("Emp_Code"));
-        hq.setText(":" + i.getExtras().getString("HQ"));
         designation.setText(":" + i.getExtras().getString("Designation"));
         mobilenumber.setText(":" + i.getExtras().getString("MobileNumber"));
         plandate.setText(":" + i.getExtras().getString("Plan_Date"));
@@ -95,14 +93,64 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
         route.setText(":" + i.getExtras().getString("Route"));
         distributor.setText(":" + i.getExtras().getString("Distributor"));
         Sf_Code = i.getExtras().getString("Sf_Code");
-        remarks.setText(i.getExtras().getString("Remarks"));
+        remarks.setText(":" + i.getExtras().getString("Remarks"));
+        hq.setText(":" + i.getExtras().getString("HQ"));
+        jointwork.setText(":" + i.getExtras().getString("workedwithname"));
+        Log.e("DEP_TYPE", String.valueOf(i.getExtras().getString("DeptType")));
+        if (i.getExtras().getString("DeptType").equals("1")) {
+            tphq.setText(":" + i.getExtras().getString("TPHqname"));
+            shifttype.setText(":" + i.getExtras().getString("ShiftType"));
+            ChillingCenter.setText(":" + i.getExtras().getString("ChillCentreName"));
+            fromdate.setText(":" + i.getExtras().getString("FromDate"));
+            todate.setText(":" + i.getExtras().getString("ToDate"));
+            tphqcaption.setVisibility(View.VISIBLE);
+            ChillingCentercaption.setVisibility(View.VISIBLE);
+            shifttypecaption.setVisibility(View.VISIBLE);
+            fromdatecaption.setVisibility(View.VISIBLE);
+            todatecaption.setVisibility(View.VISIBLE);
+            fromdate.setVisibility(View.VISIBLE);
+            shifttype.setVisibility(View.VISIBLE);
+            todate.setVisibility(View.VISIBLE);
+            tphq.setVisibility(View.VISIBLE);
+            ChillingCenter.setVisibility(View.VISIBLE);
+            route.setVisibility(View.GONE);
+            jointworkcaption.setVisibility(View.GONE);
+            jointwork.setVisibility(View.GONE);
+            distributor.setVisibility(View.GONE);
+            routecaption.setVisibility(View.GONE);
+            distributorcaption.setVisibility(View.GONE);
+            edt_remarks.setText("Purpose of Visit");
 
-        mobilenumber.setOnClickListener(this);
+        } else {
+            distributor.setVisibility(View.VISIBLE);
+            route.setVisibility(View.VISIBLE);
+            jointworkcaption.setVisibility(View.VISIBLE);
+            jointwork.setVisibility(View.VISIBLE);
+
+            tphqcaption.setVisibility(View.GONE);
+            ChillingCentercaption.setVisibility(View.GONE);
+            shifttypecaption.setVisibility(View.GONE);
+            fromdatecaption.setVisibility(View.GONE);
+            todatecaption.setVisibility(View.GONE);
+            fromdate.setVisibility(View.GONE);
+            todate.setVisibility(View.GONE);
+            tphq.setVisibility(View.GONE);
+            ChillingCenter.setVisibility(View.GONE);
+            shifttype.setVisibility(View.GONE);
+            routecaption.setVisibility(View.VISIBLE);
+            distributorcaption.setVisibility(View.VISIBLE);
+            edt_remarks.setText("Remarks");
+            if (i.getExtras().getString("Worktype_Flag").equals("N")) {
+                distributor.setVisibility(View.GONE);
+                route.setVisibility(View.GONE);
+            }
+        }
+
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                common_class.CommonIntentwithFinish(Tp_Approval.class);
+                mOnBackPressedDispatcher.onBackPressed();
             }
         });
 
@@ -191,9 +239,6 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
                 } else {
                     SendtpApproval("NTPApprovalR", 2);
                 }
-                break;
-            case R.id.mobilenumber:
-                common_class.makeCall(Integer.parseInt(i.getExtras().getString("MobileNumber")));
                 break;
         }
     }

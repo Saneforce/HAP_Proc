@@ -1,0 +1,35 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    app:cardElevation="1dp"
+
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="left"
+            android:padding="10dp"
+            android:text="thirumalaivasan"
+            android:textSize="@dimen/C17dp" />
+
+        <CheckBox
+            android:id="@+id/checkBox_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/C10dp"
+            android:layout_weight="1.5"
+            android:text=""
+             />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

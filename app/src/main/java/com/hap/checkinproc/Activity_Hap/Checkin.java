@@ -13,7 +13,9 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
@@ -25,16 +27,15 @@ import retrofit2.Response;
 
 public class Checkin extends AppCompatActivity {
 
-    private static String Tag="HAP_Check-In";
+    private static String Tag = "HAP_Check-In";
     SharedPreferences sharedPreferences;
     SharedPreferences CheckInDetails;
-    public static final String spCheckIn = "CheckInDetail" ;
-    public static final String MyPREFERENCES = "MyPrefs" ;
-
+    public static final String spCheckIn = "CheckInDetail";
+    public static final String MyPREFERENCES = "MyPrefs";
     private JsonArray ShiftItems = new JsonArray();
     private RecyclerView recyclerView;
     private ShiftListItem mAdapter;
-    String ODFlag, onDutyPlcID, onDutyPlcNm, vstPurpose;
+    String ODFlag, onDutyPlcID, onDutyPlcNm, vstPurpose,Check_Flag;
     Intent intent;
 
     @Override
@@ -43,6 +44,7 @@ public class Checkin extends AppCompatActivity {
         setContentView(R.layout.activity_checkin);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
+        Check_Flag="CIN";
         txtHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -57,47 +59,50 @@ public class Checkin extends AppCompatActivity {
             }
         });
         SharedPreferences CheckInDetails = getSharedPreferences(spCheckIn, MODE_PRIVATE);
-        String SFTID=CheckInDetails.getString("Shift_Selected_Id","");
+        String SFTID = CheckInDetails.getString("Shift_Selected_Id", "");
         intent = getIntent();
-        Bundle extras = intent.getExtras();
-        if (extras != null) {
-            ODFlag = extras.getString("ODFlag");
-            onDutyPlcID = extras.getString("onDutyPlcID");
-            onDutyPlcNm = extras.getString("onDutyPlcNm");
-            vstPurpose = extras.getString("vstPurpose");
-            if (onDutyPlcID==null) {
-                SFTID="0";
-                onDutyPlcID="";
+
+
+        Bundle bundle = intent.getExtras();
+        if (bundle != null) {
+            ODFlag = bundle.getString("ODFlag");
+            onDutyPlcID = bundle.getString("onDutyPlcID");
+            onDutyPlcNm = bundle.getString("onDutyPlcNm");
+            vstPurpose = bundle.getString("vstPurpose");
+            Check_Flag = bundle.getString("Mode");
+            Log.e("CHECKIN_FLAG", Check_Flag);
+            if (onDutyPlcID == null) {
+                SFTID = "0";
+                onDutyPlcID = "";
             }
         }
-        if(SFTID!=""){
-            Intent takePhoto=new Intent(this, ImageCapture.class);
-            takePhoto.putExtra("Mode","CIn");
-            takePhoto.putExtra("ShiftId",SFTID);
-            takePhoto.putExtra("ShiftName",CheckInDetails.getString("Shift_Name",""));
-            takePhoto.putExtra("ShiftStart",CheckInDetails.getString("ShiftStart",""));
-            takePhoto.putExtra("ShiftEnd",CheckInDetails.getString("ShiftEnd",""));
-            takePhoto.putExtra("ShiftCutOff",CheckInDetails.getString("ShiftCutOff",""));
 
-            takePhoto.putExtra("ODFlag",ODFlag);
-            takePhoto.putExtra("onDutyPlcID",onDutyPlcID);
-            takePhoto.putExtra("onDutyPlcNm",onDutyPlcNm);
-            takePhoto.putExtra("vstPurpose",vstPurpose);
+
+        if (SFTID != "") {
+            Intent takePhoto = new Intent(this, ImageCapture.class);
+            takePhoto.putExtra("Mode", Check_Flag);
+            takePhoto.putExtra("ShiftId", SFTID);
+            takePhoto.putExtra("ShiftName", CheckInDetails.getString("Shift_Name", ""));
+            takePhoto.putExtra("ShiftStart", CheckInDetails.getString("ShiftStart", ""));
+            takePhoto.putExtra("ShiftEnd", CheckInDetails.getString("ShiftEnd", ""));
+            takePhoto.putExtra("ShiftCutOff", CheckInDetails.getString("ShiftCutOff", ""));
+            takePhoto.putExtra("ODFlag", ODFlag);
+            takePhoto.putExtra("onDutyPlcID", onDutyPlcID);
+            takePhoto.putExtra("onDutyPlcNm", onDutyPlcNm);
+            takePhoto.putExtra("vstPurpose", vstPurpose);
             startActivity(takePhoto);
             finish();
         }
         SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         String Scode = (shared.getString("Sfcode", "null"));
         String Dcode = (shared.getString("Divcode", "null"));
-
         spinnerValue("get/Shift_timing", Dcode, Scode);
 
     }
 
     public void SetShitItems() {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mAdapter = new ShiftListItem(ShiftItems, this);
-
+        mAdapter = new ShiftListItem(ShiftItems, this, Check_Flag);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

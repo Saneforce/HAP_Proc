@@ -25,7 +25,7 @@ public class Datum {
     private String deptCd;
     @SerializedName("DeptType")
     @Expose
-    private String deptType;
+    private String DeptType;
     @SerializedName("DisRad")
     @Expose
     private Double disRad;
@@ -154,11 +154,10 @@ public class Datum {
     }
 
     public String getDeptType() {
-        return deptType;
+        return DeptType;
     }
-
     public void setDeptType(String deptType) {
-        this.deptType = deptType;
+        DeptType = deptType;
     }
 
 }

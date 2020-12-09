@@ -97,7 +97,7 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
         Bundle params=getIntent().getExtras();
         viewMode=params.getString("Mode");
 
-        if(viewMode.equalsIgnoreCase("CIN")) {
+        if(viewMode.equalsIgnoreCase("CIN") || viewMode.equalsIgnoreCase("extended")) {
             cardview3.setVisibility(View.VISIBLE);
             cardview4.setVisibility(View.VISIBLE);
             //cardView5.setVisibility(View.VISIBLE);

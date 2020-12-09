@@ -6,6 +6,7 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Tp_Approval_Model implements Serializable {
+
     @SerializedName("date")
     @Expose
     private String date;
@@ -17,7 +18,7 @@ public class Tp_Approval_Model implements Serializable {
     private String sFCode;
     @SerializedName("worktype_code")
     @Expose
-    private Integer worktypeCode;
+    private Double worktypeCode;
     @SerializedName("worktype_name")
     @Expose
     private String worktypeName;
@@ -35,7 +36,7 @@ public class Tp_Approval_Model implements Serializable {
     private String workedWithName;
     @SerializedName("Confirmed")
     @Expose
-    private Integer confirmed;
+    private Double confirmed;
     @SerializedName("HQ_Code")
     @Expose
     private String hQCode;
@@ -50,19 +51,28 @@ public class Tp_Approval_Model implements Serializable {
     private String jointworkCode;
     @SerializedName("Tmonth")
     @Expose
-    private Integer tmonth;
+    private Double tmonth;
     @SerializedName("Tyear")
     @Expose
-    private Integer tyear;
+    private Double tyear;
     @SerializedName("submit_status")
     @Expose
-    private Integer submitStatus;
+    private Double submitStatus;
     @SerializedName("dayofplan")
     @Expose
-    private Integer dayofplan;
+    private Double dayofplan;
+    @SerializedName("Worktype_Flag")
+    @Expose
+    private String worktypeFlag;
+    @SerializedName("TourHQ_Name")
+    @Expose
+    private String tourHQName;
     @SerializedName("Start_date")
     @Expose
     private String startDate;
+    @SerializedName("DeptType")
+    @Expose
+    private String deptType;
     @SerializedName("FieldForceName")
     @Expose
     private String fieldForceName;
@@ -81,6 +91,27 @@ public class Tp_Approval_Model implements Serializable {
     @SerializedName("EmpCode")
     @Expose
     private String empCode;
+    @SerializedName("Hq_Id")
+    @Expose
+    private String hqId;
+    @SerializedName("Chilling_Id")
+    @Expose
+    private String chillingId;
+    @SerializedName("CCentre_Name")
+    @Expose
+    private String cCentreName;
+    @SerializedName("SHift_Type_Id")
+    @Expose
+    private String sHiftTypeId;
+    @SerializedName("Typename")
+    @Expose
+    private String typename;
+    @SerializedName("Fromdate")
+    @Expose
+    private String fromdate;
+    @SerializedName("Todate")
+    @Expose
+    private String todate;
 
     public String getDate() {
         return date;
@@ -106,11 +137,11 @@ public class Tp_Approval_Model implements Serializable {
         this.sFCode = sFCode;
     }
 
-    public Integer getWorktypeCode() {
+    public Double getWorktypeCode() {
         return worktypeCode;
     }
 
-    public void setWorktypeCode(Integer worktypeCode) {
+    public void setWorktypeCode(Double worktypeCode) {
         this.worktypeCode = worktypeCode;
     }
 
@@ -154,11 +185,11 @@ public class Tp_Approval_Model implements Serializable {
         this.workedWithName = workedWithName;
     }
 
-    public Integer getConfirmed() {
+    public Double getConfirmed() {
         return confirmed;
     }
 
-    public void setConfirmed(Integer confirmed) {
+    public void setConfirmed(Double confirmed) {
         this.confirmed = confirmed;
     }
 
@@ -194,36 +225,52 @@ public class Tp_Approval_Model implements Serializable {
         this.jointworkCode = jointworkCode;
     }
 
-    public Integer getTmonth() {
+    public Double getTmonth() {
         return tmonth;
     }
 
-    public void setTmonth(Integer tmonth) {
+    public void setTmonth(Double tmonth) {
         this.tmonth = tmonth;
     }
 
-    public Integer getTyear() {
+    public Double getTyear() {
         return tyear;
     }
 
-    public void setTyear(Integer tyear) {
+    public void setTyear(Double tyear) {
         this.tyear = tyear;
     }
 
-    public Integer getSubmitStatus() {
+    public Double getSubmitStatus() {
         return submitStatus;
     }
 
-    public void setSubmitStatus(Integer submitStatus) {
+    public void setSubmitStatus(Double submitStatus) {
         this.submitStatus = submitStatus;
     }
 
-    public Integer getDayofplan() {
+    public Double getDayofplan() {
         return dayofplan;
     }
 
-    public void setDayofplan(Integer dayofplan) {
+    public void setDayofplan(Double dayofplan) {
         this.dayofplan = dayofplan;
+    }
+
+    public String getWorktypeFlag() {
+        return worktypeFlag;
+    }
+
+    public void setWorktypeFlag(String worktypeFlag) {
+        this.worktypeFlag = worktypeFlag;
+    }
+
+    public String getTourHQName() {
+        return tourHQName;
+    }
+
+    public void setTourHQName(String tourHQName) {
+        this.tourHQName = tourHQName;
     }
 
     public String getStartDate() {
@@ -232,6 +279,14 @@ public class Tp_Approval_Model implements Serializable {
 
     public void setStartDate(String startDate) {
         this.startDate = startDate;
+    }
+
+    public String getDeptType() {
+        return deptType;
+    }
+
+    public void setDeptType(String deptType) {
+        this.deptType = deptType;
     }
 
     public String getFieldForceName() {
@@ -280,6 +335,62 @@ public class Tp_Approval_Model implements Serializable {
 
     public void setEmpCode(String empCode) {
         this.empCode = empCode;
+    }
+
+    public String getHqId() {
+        return hqId;
+    }
+
+    public void setHqId(String hqId) {
+        this.hqId = hqId;
+    }
+
+    public String getChillingId() {
+        return chillingId;
+    }
+
+    public void setChillingId(String chillingId) {
+        this.chillingId = chillingId;
+    }
+
+    public String getCCentreName() {
+        return cCentreName;
+    }
+
+    public void setCCentreName(String cCentreName) {
+        this.cCentreName = cCentreName;
+    }
+
+    public String getSHiftTypeId() {
+        return sHiftTypeId;
+    }
+
+    public void setSHiftTypeId(String sHiftTypeId) {
+        this.sHiftTypeId = sHiftTypeId;
+    }
+
+    public String getTypename() {
+        return typename;
+    }
+
+    public void setTypename(String typename) {
+        this.typename = typename;
+    }
+
+    public String getFromdate() {
+        return fromdate;
+    }
+
+    public void setFromdate(String fromdate) {
+        this.fromdate = fromdate;
+    }
+
+    public String getTodate() {
+        return todate;
+    }
+
+    public void setTodate(String todate) {
+        this.todate = todate;
     }
 
 }

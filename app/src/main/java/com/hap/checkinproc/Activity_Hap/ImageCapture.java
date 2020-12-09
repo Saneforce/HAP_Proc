@@ -50,6 +50,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -85,6 +88,7 @@ public class ImageCapture extends AppCompatActivity implements
     Common_Class DT = new Common_Class();
 
     String mMode;
+    com.hap.checkinproc.Common_Class.Common_Class common_class;
 
     public static final String sCheckInDetail = "CheckInDetail";
     public static final String sUserDetail = "MyPrefs";
@@ -97,6 +101,7 @@ public class ImageCapture extends AppCompatActivity implements
         CheckInInf = new JSONObject();
         CheckInDetails = getSharedPreferences(sCheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(sUserDetail, Context.MODE_PRIVATE);
+        common_class = new com.hap.checkinproc.Common_Class.Common_Class(this);
 
         Bundle params = getIntent().getExtras();
         try {
@@ -121,6 +126,26 @@ public class ImageCapture extends AppCompatActivity implements
                     CheckInInf.put("vstRmks", "");
                 }
             }
+
+            if (mMode.equalsIgnoreCase("extended")) {
+                if (!(SftId.isEmpty() || SftId.equalsIgnoreCase(""))) {
+
+
+                    DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    Calendar calobjw = Calendar.getInstance();
+                    CheckInInf.put("Shift_Selected_Id", SftId);
+                    CheckInInf.put("Shift_Name", params.getString("ShiftName"));
+                    CheckInInf.put("ShiftStart", params.getString("ShiftStart"));
+                    CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
+                    CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
+                    CheckInInf.put("App_Version", Common_Class.Version_Name);
+                    CheckInInf.put("Ekey", "'" + "EK" + UserDetails.getString("Sfcode", "") + dfw.format(calobjw.getTime()).hashCode() + "'");
+                    CheckInInf.put("update", "0");
+                    CheckInInf.put("WrkType", "0");
+                    CheckInInf.put("CheckDutyFlag", "0");
+                }
+            }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -217,7 +242,6 @@ public class ImageCapture extends AppCompatActivity implements
         setDefaultCameraId("front");
         mCamera = Camera.open(mCamId);*/
         if (mCamera != null) {
-
             preview = null;
             mHolder.removeCallback(ImageCapture.this);
             mCamera.setPreviewCallback(null);
@@ -241,8 +265,7 @@ public class ImageCapture extends AppCompatActivity implements
     }
 
     private boolean checkPermission() {
-        return (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        return (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
     }
 
     //Location service part
@@ -370,6 +393,7 @@ public class ImageCapture extends AppCompatActivity implements
             CheckInInf.put("iimgSrc", imagePath);
             CheckInInf.put("slfy", imageFileName);
             CheckInInf.put("Rmks", "");
+
             if (mMode.equalsIgnoreCase("CIN")) {
                 SharedPreferences.Editor editor = CheckInDetails.edit();
                 editor.putString("Shift_Selected_Id", CheckInInf.getString("Shift_Selected_Id"));
@@ -385,7 +409,6 @@ public class ImageCapture extends AppCompatActivity implements
 
                 JSONArray jsonarray = new JSONArray();
                 JSONObject paramObject = new JSONObject();
-
                 paramObject.put("TP_Attendance", CheckInInf);
                 Log.e("CHECK_IN_DETAILS", String.valueOf(paramObject));
                 jsonarray.put(paramObject);
@@ -417,6 +440,50 @@ public class ImageCapture extends AppCompatActivity implements
                                             Dashboard.putExtra("Mode", "CIN");
                                             ImageCapture.this.startActivity(Dashboard);
 
+                                            ((AppCompatActivity) ImageCapture.this).finish();
+                                        }
+                                    })
+                                    .show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        Log.d("HAP_receive", "");
+                    }
+                });
+            } else if (mMode.equalsIgnoreCase("extended")) {
+                JSONArray jsonarray = new JSONArray();
+                JSONObject paramObject = new JSONObject();
+                paramObject.put("extended_entry", CheckInInf);
+                jsonarray.put(paramObject);
+                Log.e("CHECK_IN_DETAILS", String.valueOf(jsonarray));
+
+                ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                Call<JsonObject> modelCall = apiInterface.JsonSave("dcr/save",
+                        UserDetails.getString("Divcode", ""),
+                        UserDetails.getString("Sfcode", ""), "", "", jsonarray.toString());
+                modelCall.enqueue(new Callback<JsonObject>() {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        Log.e("RESPONSE_FROM_SERVER", String.valueOf(response.body().getAsJsonObject()));
+                        if (response.isSuccessful()) {
+                            JsonObject itm = response.body().getAsJsonObject();
+                            String mMessage = "Your Extended Submitted Successfully";
+                            try {
+                                mMessage = itm.get("Msg").getAsString();
+                            } catch (Exception e) {
+                            }
+
+                            AlertDialog alertDialog = new AlertDialog.Builder(ImageCapture.this)
+                                    .setTitle("HAP Check-In")
+                                    .setMessage(Html.fromHtml(mMessage))
+                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            Intent Dashboard = new Intent(ImageCapture.this, Dashboard_Two.class);
+                                            Dashboard.putExtra("Mode", "extended");
+                                            ImageCapture.this.startActivity(Dashboard);
                                             ((AppCompatActivity) ImageCapture.this).finish();
                                         }
                                     })

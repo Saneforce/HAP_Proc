@@ -173,9 +173,8 @@ public interface ApiInterface {
                                        @Query("State_Code") String StateCode, @Query("desig") String desig, @Field("data") String data);
 
     @FormUrlEncoded
-    @POST("Db_v300.php?axn=table/list")
-    Call<Object> GetRouteObject(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
-                                @Query("rSF") String rSF, @Query("State_Code") String StateCode,
+    @POST("Db_v300.php?")
+    Call<Object> GetRouteObject(@QueryMap Map<String, String> params,
                                 @Field("data") String data);
 
     @FormUrlEncoded

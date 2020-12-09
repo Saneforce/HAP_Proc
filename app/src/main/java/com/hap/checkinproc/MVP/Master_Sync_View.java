@@ -1,15 +1,26 @@
 package com.hap.checkinproc.MVP;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Model_Class.Route_Master;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.http.Query;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class Master_Sync_View implements Main_Model.GetRoutemastersyncResult {
 
@@ -17,7 +28,7 @@ public class Master_Sync_View implements Main_Model.GetRoutemastersyncResult {
     Shared_Common_Pref shared_common_pref;
 
     @Override
-    public void GetRouteResult(OnFinishedListenerroute onFinishedListener) {
+    public void GetRouteResult(Main_Model.GetRoutemastersyncResult.OnFinishedListenerroute onFinishedListener) {
         /** Create handle for the RetrofitInstance interface*/
 
         ///SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
@@ -25,25 +36,39 @@ public class Master_Sync_View implements Main_Model.GetRoutemastersyncResult {
 
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
-        for (int i = 0; i < 3; i++) {
-
+        for (int i = 0; i < 7; i++) {
+            String axnname = "table/list";
             if (i == 0) {
                 commonworktype = "{\"tableName\":\"mas_worktype\",\"coloumns\":\"[\\\"type_code as id\\\", \\\"Wtype as name\\\"]\",\"where\":\"[\\\"isnull(Active_flag,0)=0\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                 //commonworktype = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-
             } else if (i == 1) {
                 commonworktype = "{\"tableName\":\"vwstockiest_Master_APP\",\"coloumns\":\"[\\\"distributor_code as id\\\", \\\"stockiest_name as name\\\",\\\"town_code\\\",\\\"town_name\\\",\\\"Addr1\\\",\\\"Addr2\\\",\\\"City\\\",\\\"Pincode\\\",\\\"GSTN\\\",\\\"lat\\\",\\\"long\\\",\\\"addrs\\\",\\\"Tcode\\\",\\\"Dis_Cat_Code\\\"]\",\"where\":\"[\\\"isnull(Stockist_Status,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-
-
-                /*Route*/
             } else if (i == 2) {
+                commonworktype = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+            } else if (i == 3) {
+                commonworktype = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+            } else if (i == 4) {
+                axnname="get/FieldForce_HQ";
+                commonworktype = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+            } else if (i == 5) {
+                axnname="get/Shift_type";
+                commonworktype = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+            }else if (i == 6) {
+                axnname="get/Chilling_Centre";
                 commonworktype = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
             }
 
             int ii = i;
             Log.e("Print_REquest", commonworktype);
             Log.e("SF_DETAILS", Shared_Common_Pref.Div_Code);
-            Call<Object> call = service.GetRouteObject(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, "24", commonworktype);
+            Map<String, String> QueryString = new HashMap<>();
+            QueryString.put("axn", axnname);
+            QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+            QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+            QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+            QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+
+            Call<Object> call = service.GetRouteObject(QueryString, commonworktype);
             call.enqueue(new Callback<Object>() {
                 @Override
                 public void onResponse(Call<Object> call, Response<Object> response) {

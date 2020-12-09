@@ -69,6 +69,15 @@
     <string name="DayPlan">Day  Plan</string>
     <string name="txt_submit">Submit</string>
 
+    <string name="txt_hq">Head Quarters</string>
+    <string name="txt_chillingtext">Visiting Chilling Center</string>
+    <string name="txt_shifttype">Shift M/E</string>
+
+    <string name="txt_enter_purpose">Enter The Visiting Purpose</string>
+    <string name="txt_enter_titlepurpose"> Visiting Purpose</string>
+
+
+
 
     <string name="leave_type">Leave Type</string>
     <string name="shit_type">Shift Timing</string>
@@ -118,4 +127,7 @@
     <string name="remarks">Enter the Remarks (or) Select from Templates</string>
     <string name="from_date">From :</string>
     <string name="to_date">To :</string>
+
+    <bool name="config_closeDialogWhenTouchOutside">true</bool>
+
 </resources>

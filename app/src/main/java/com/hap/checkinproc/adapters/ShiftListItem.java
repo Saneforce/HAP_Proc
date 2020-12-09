@@ -25,10 +25,11 @@ public class ShiftListItem  extends RecyclerView.Adapter<ShiftListItem.ViewHolde
     private static final String TAG = "ShiftList";
     private JsonArray mShift_time = new JsonArray();
     private Context mContext;
-
-    public ShiftListItem(JsonArray mShift_time, Context mContext) {
+    private  String checkflag;
+    public ShiftListItem(JsonArray mShift_time, Context mContext,String checkflag) {
         this.mShift_time = mShift_time;
         this.mContext = mContext;
+        this.checkflag=checkflag;
     }
 
     @NonNull
@@ -60,7 +61,8 @@ public class ShiftListItem  extends RecyclerView.Adapter<ShiftListItem.ViewHolde
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Intent takePhoto=new Intent(mContext, ImageCapture.class);
-                                takePhoto.putExtra("Mode","CIn");
+
+                                takePhoto.putExtra("Mode",checkflag);
                                 takePhoto.putExtra("ShiftId",itm.get("id").getAsString());
                                 takePhoto.putExtra("ShiftName",itm.get("name").getAsString());
                                 takePhoto.putExtra("ShiftStart",itm.getAsJsonObject("Sft_STime").get("date").getAsString());

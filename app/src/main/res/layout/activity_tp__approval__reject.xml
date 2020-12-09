@@ -13,17 +13,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".Activity_Hap.Leave_Approval">
-
-
-        <include layout="@layout/custom_toolbar_help" />
-
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_gravity="center"
             android:layout_margin="5dp"
             app:cardCornerRadius="10dp">
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -60,7 +55,6 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:orientation="horizontal"
-                android:padding="10dp"
                 android:weightSum="2">
 
                 <LinearLayout
@@ -75,7 +69,6 @@
                         android:layout_height="200dp"
                         android:layout_weight="1"
                         android:text="Name "
-
                         android:textColor="@color/txt_color_black"
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
@@ -95,7 +88,6 @@
                         android:layout_weight="1"
                         android:text="HQ"
                         android:textColor="@color/txt_color_black"
-
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
 
@@ -104,7 +96,6 @@
                         android:layout_height="200dp"
                         android:layout_weight="1"
                         android:text="Designation "
-
                         android:textColor="@color/txt_color_black"
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
@@ -113,8 +104,7 @@
                         android:layout_width="100dp"
                         android:layout_height="200dp"
                         android:layout_weight="1"
-                        android:text="Mobile  "
-
+                        android:text="Mobile"
                         android:textColor="@color/txt_color_black"
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
@@ -125,7 +115,6 @@
                         android:layout_weight="1"
                         android:text="Plan Date "
                         android:textColor="@color/txt_color_black"
-
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
 
@@ -134,32 +123,88 @@
                         android:layout_height="200dp"
                         android:layout_weight="1"
                         android:text="Work Type "
-
                         android:textColor="@color/txt_color_black"
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/routecaption"
                         android:layout_width="100dp"
-                        android:layout_height="220dp"
+                        android:layout_height="200dp"
                         android:layout_weight="1"
                         android:text="Route  "
-
                         android:textColor="@color/txt_color_black"
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/distributorcaption"
                         android:layout_width="100dp"
-                        android:layout_height="220dp"
+                        android:layout_height="200dp"
                         android:layout_weight="1"
                         android:text="Distributor "
                         android:textColor="@color/txt_color_black"
-
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/jointworkcaption"
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="Joint Work "
+                        android:textColor="@color/txt_color_black"
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tphqcaption"
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="TP HQ "
+                        android:textColor="@color/txt_color_black"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/ChillingCentercaption"
+                        android:layout_width="100dp"
+                        android:layout_height="220dp"
+                        android:layout_weight="1"
+                        android:text="Chilling Center "
+                        android:textColor="@color/txt_color_black"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/shifttypecaption"
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="Shift Type "
+                        android:textColor="@color/txt_color_black"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/fromdatecaption"
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="From Date "
+                        android:textColor="@color/txt_color_black"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/todatecaption"
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="To Date "
+                        android:textColor="@color/txt_color_black"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/edt_remarks"
                         android:layout_width="100dp"
                         android:layout_height="200dp"
                         android:layout_weight="1"
@@ -188,25 +233,21 @@
 
                     <TextView
                         android:id="@+id/empcode"
-
                         android:layout_width="100dp"
                         android:layout_height="200dp"
                         android:layout_weight="1"
                         android:text="Emp Code"
-
                         android:textColor="@color/green"
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/hq"
-
                         android:layout_width="100dp"
                         android:layout_height="200dp"
                         android:layout_weight="1"
                         android:text="HQ"
                         android:textColor="@color/green"
-
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
 
@@ -218,7 +259,6 @@
                         android:layout_weight="1"
                         android:text="Designation"
                         android:textColor="@color/green"
-
                         android:textSize="@dimen/C13dp"
                         android:textStyle="bold" />
 
@@ -231,7 +271,6 @@
                         android:text="Mobile Number"
                         android:textColor="@color/green"
                         android:textSize="@dimen/C16dp"
-
                         android:textStyle="bold" />
 
                     <TextView
@@ -242,45 +281,97 @@
                         android:layout_weight="1"
                         android:text="Plan Date"
                         android:textColor="@color/green"
-
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/worktype"
-
                         android:layout_width="100dp"
                         android:layout_height="200dp"
                         android:layout_weight="1"
                         android:text="Work Type"
                         android:textColor="@color/green"
-
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/route"
-
                         android:layout_width="100dp"
-                        android:layout_height="220dp"
+                        android:layout_height="200dp"
                         android:layout_weight="1"
                         android:text="Route"
                         android:textColor="@color/green"
                         android:textSize="@dimen/C16dp"
-
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/distributor"
-
                         android:layout_width="100dp"
-                        android:layout_height="220dp"
+                        android:layout_height="200dp"
                         android:layout_weight="1"
                         android:text="Distributor"
                         android:textColor="@color/green"
-
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/jointwork"
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="JointWork"
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/tphq"
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="TP HQ "
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/ChillingCenter"
+                        android:layout_width="100dp"
+                        android:layout_height="220dp"
+                        android:layout_weight="1"
+                        android:text="Chilling Center "
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/shifttype"
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="Shift Type"
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/fromdate"
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="From Date "
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/todate"
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="From Date "
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+
 
                     <TextView
                         android:id="@+id/remarks"

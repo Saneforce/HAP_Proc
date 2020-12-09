@@ -49,12 +49,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
@@ -431,10 +432,16 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
     public void leaveTypeMethod() {
 
+        Map<String, String> QueryString = new HashMap<>();
+        QueryString.put("axn", "table/list");
+        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
         String commonLeaveType = "{\"tableName\":\"vwLeaveType\",\"coloumns\":\"[\\\"id\\\",\\\"name\\\",\\\"Leave_Name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
 
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        Call<Object> call = service.GetRouteObject(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, commonLeaveType);
+        Call<Object> call = service.GetRouteObject(QueryString, commonLeaveType);
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
@@ -596,8 +603,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
 
                             if (jsonObjecta.get("success").getAsBoolean() == true) openHome();
-
-
 
 
                         }

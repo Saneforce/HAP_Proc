@@ -1,5 +1,15 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,11 +18,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -20,17 +25,18 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+
 import com.hap.checkinproc.Model_Class.Tp_Approval_Model;
+import com.hap.checkinproc.Model_Class.Tp_View_Master;
+import com.hap.checkinproc.Model_Class.Work_Type_Model;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.Tp_Approval_Adapter;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.Locale;
 
 public class Tp_Approval extends AppCompatActivity {
     Gson gson;
@@ -39,27 +45,12 @@ public class Tp_Approval extends AppCompatActivity {
     private RecyclerView recyclerView;
     TextView title;
     private Toolbar toolbar;
-    Common_Class common_class;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tp__approval);
-        TextView txtHelp = findViewById(R.id.toolbar_help);
-        ImageView imgHome = findViewById(R.id.toolbar_home);
-        txtHelp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
-            }
-        });
-        imgHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
-            }
-        });
-        common_class = new Common_Class(this);
 
         recyclerView = findViewById(R.id.tprecyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -70,7 +61,7 @@ public class Tp_Approval extends AppCompatActivity {
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                common_class.CommonIntentwithFinish(Approvals.class);
+                mOnBackPressedDispatcher.onBackPressed();
             }
         });
 
@@ -108,9 +99,15 @@ public class Tp_Approval extends AppCompatActivity {
                         intent.putExtra("Distributor", Tp_Approval_Model.get(Name).getWorkedWithName());
                         intent.putExtra("Sf_Code", Tp_Approval_Model.get(Name).getSFCode());
                         intent.putExtra("Remarks", Tp_Approval_Model.get(Name).getRemarks());
+                        intent.putExtra("workedwithname", Tp_Approval_Model.get(Name).getJointWorkName());
+                        intent.putExtra("TPHqname", Tp_Approval_Model.get(Name).getTourHQName());
+                        intent.putExtra("ShiftType", Tp_Approval_Model.get(Name).getTypename());
+                        intent.putExtra("ChillCentreName", Tp_Approval_Model.get(Name).getCCentreName());
+                        intent.putExtra("FromDate", Tp_Approval_Model.get(Name).getFromdate());
+                        intent.putExtra("Worktype_Flag", Tp_Approval_Model.get(Name).getWorktypeFlag());
+                        intent.putExtra("ToDate", Tp_Approval_Model.get(Name).getTodate());
+                        intent.putExtra("DeptType", Tp_Approval_Model.get(Name).getDeptType());
                         startActivity(intent);
-                        finish();
-
                     }
                 }));
             }

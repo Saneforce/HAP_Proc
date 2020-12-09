@@ -363,8 +363,8 @@ public class Login extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                         Intent intent;
                         if (requestCode == RC_SIGN_IN)
-                           // intent = new Intent(Login.this, Dashboard.class);
-                            intent = new Intent(Login.this, SecondaryOrderActivity.class);
+                         intent = new Intent(Login.this, Dashboard.class);
+                            //intent = new Intent(Login.this, SecondaryOrderActivity.class);
                         else
                             intent = new Intent(Login.this, Dashboard_Two.class);
                         intent.putExtra("photo", photo);
@@ -381,6 +381,12 @@ public class Login extends AppCompatActivity {
                         shared_common_pref.save(Shared_Common_Pref.Sf_Code, code);
                         shared_common_pref.save(Shared_Common_Pref.Div_Code, div);
                         shared_common_pref.save(Shared_Common_Pref.StateCode, Sf_type);
+                        String Dept_type = response.body().getData().get(0).getDeptType();
+
+                        Shared_Common_Pref.Dept_Type = Dept_type;
+                        Shared_Common_Pref.SF_Type = Sf_type;
+
+
                         Log.e("STATECODE", Sf_type);
                         Log.e("STATECODE", code);
                         Log.e("STATECODE", div);

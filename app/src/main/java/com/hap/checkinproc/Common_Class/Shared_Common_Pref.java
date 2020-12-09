@@ -17,6 +17,9 @@ public class Shared_Common_Pref {
     public static String StateCode = "StateCode";
     public static String Sf_Name = "Sf_Name";
     public static String Dv_ID = "DvID";
+    public static  String SF_Type = "SF_Type";
+
+    public static  String Dept_Type = "Dept_Type";
 
     public static final String spNamemas = "SP_MAS_DETAILS";
     public static final String loggedIn = "loggedIn";

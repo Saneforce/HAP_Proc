@@ -27,7 +27,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".Activity_Hap.EventCapute"></activity>
+        <activity android:name=".Activity_Hap.EventCaptureActivity"></activity>
         <activity android:name=".Activity_Hap.OrderCategoryActivity" />
         <activity
             android:name=".Activity_Hap.AddNewRetailer"
@@ -87,6 +87,8 @@
         <activity android:name=".Activity_Hap.TimeOut" />
         <activity android:name=".Activity_Hap.On_Duty_Activity" />
         <activity android:name=".Activity_Hap.Help_Activity" />
+        <activity android:name=".Activity_Hap.UpdateTaskActivity"
+            android:theme="@style/AppTheme.Dialog" />
         <activity
             android:name=".Activity_Hap.Check_in"
             android:noHistory="true" />

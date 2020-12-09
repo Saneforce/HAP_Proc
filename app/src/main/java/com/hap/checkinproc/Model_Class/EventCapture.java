@@ -1,28 +1,48 @@
 package com.hap.checkinproc.Model_Class;
 
-import android.net.Uri;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-import io.realm.RealmObject;
-import io.realm.annotations.PrimaryKey;
-import io.realm.annotations.Required;
+import java.io.Serializable;
 
-public class EventCapture extends RealmObject {
 
-    @PrimaryKey
-    @Required
-    public Integer id;
-    public String imageUri;
-    public String Title;
-    public String remarks;
-/*
-    public EventCapture(int id, Uri imageUri, String title, String remarks) {
-        this.id = id;
-        this.imageUri = imageUri;
-        Title = title;
-        this.remarks = remarks;
-    }*/
+@Entity
+public class EventCapture implements Serializable {
 
-  /*  public int getId() {
+
+    @PrimaryKey(autoGenerate = true)
+    public int id;
+
+    @ColumnInfo(name = "task")
+    public String task;
+
+    @ColumnInfo(name = "desc")
+    public String desc;
+
+    @ColumnInfo(name = "finish_by")
+    public String finishBy;
+
+    public int mQuantity;
+
+
+    public int getmQuantity() {
+        return mQuantity;
+    }
+
+    public void setmQuantity(int mQuantity) {
+        this.mQuantity = mQuantity;
+    }
+
+
+    public void addToQuantity() {
+        this.mQuantity += 1;
+    }
+
+    /*
+     * Getters and Setters
+     * */
+    public int getId() {
         return id;
     }
 
@@ -30,27 +50,27 @@ public class EventCapture extends RealmObject {
         this.id = id;
     }
 
-    public Uri getImageUri() {
-        return imageUri;
+    public String getTask() {
+        return task;
     }
 
-    public void setImageUri(Uri imageUri) {
-        this.imageUri = imageUri;
+    public void setTask(String task) {
+        this.task = task;
     }
 
-    public String getTitle() {
-        return Title;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setTitle(String title) {
-        Title = title;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
-    public String getRemarks() {
-        return remarks;
+    public String getFinishBy() {
+        return finishBy;
     }
 
-    public void setRemarks(String remarks) {
-        this.remarks = remarks;
-    }*/
+    public void setFinishBy(String finishBy) {
+        this.finishBy = finishBy;
+    }
 }

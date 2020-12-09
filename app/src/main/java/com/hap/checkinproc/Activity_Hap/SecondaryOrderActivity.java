@@ -3,7 +3,6 @@ package com.hap.checkinproc.Activity_Hap;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -29,7 +28,6 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
-import com.hap.checkinproc.Model_Class.EventCapture;
 import com.hap.checkinproc.Model_Class.RetailerDetailsModel;
 import com.hap.checkinproc.Model_Class.RetailerViewDetails;
 import com.hap.checkinproc.R;
@@ -41,7 +39,6 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmResults;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -66,10 +63,12 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
     LinearLayout mRetailerDetails;
     Type userType;
     String retailerId;
-    Integer count, count1 = 0;
+    int count = 0, count1 = 0;
     LinearLayout linerEventCapture;
     String EventcapOne = "";
     Realm mRealm;
+    Shared_Common_Pref mShaeShared_common_pref;
+    int countInt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +82,7 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         RealmConfiguration config =
                 new RealmConfiguration.Builder()
                         .deleteRealmIfMigrationNeeded()
+                        .allowWritesOnUiThread(true)
                         .build();
 
         Realm.setDefaultConfiguration(config);
@@ -90,6 +90,14 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         mRealm = Realm.getDefaultInstance();
         gson = new Gson();
         shared_common_pref = new Shared_Common_Pref(this);
+
+
+        if (countInt != 0) {
+            String cValue = mShaeShared_common_pref.getvalue("COUNT");
+            countInt = Integer.parseInt(cValue);
+            Log.e("NEW_COUNT_VALULE", String.valueOf(countInt));
+        }
+
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -114,7 +122,7 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
 
     public void initilaize() {
 
-
+        mShaeShared_common_pref = new Shared_Common_Pref(this);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,14 +172,11 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
             @Override
             public void onClick(View v) {
 
-                Intent m_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                String EventFileName = "EventCapture.jpeg";
-                File file = new File(getExternalCacheDir().getPath(), EventFileName);
-                Uri uri = FileProvider.getUriForFile(SecondaryOrderActivity.this, getApplicationContext().getPackageName() + ".provider", file);
-                m_intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
-                startActivityForResult(m_intent, 2);
+
+                Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
+                intent.putExtra("EventcapOne", EventcapOne);
+                startActivity(intent);
                 /*  if (count1 == 1) {
-                 *//*      startActivity(new Intent(getApplicationContext(), EventCapute.class));*//*
                     Intent intent = new Intent(getApplicationContext(), EventCapute.class);
                     intent.putExtra("EventcapOne", EventcapOne);
                     startActivity(intent);
@@ -220,18 +225,11 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRealm.executeTransaction(new Realm.Transaction() {
-                    @Override
-                    public void execute(Realm realm) {
 
-                        RealmResults<EventCapture> results = realm.where(EventCapture.class).findAll();
+                count++;
+                mShaeShared_common_pref.save("COUNT", String.valueOf(count));
 
-                        for (EventCapture employee : results) {
-                            Log.e("EVENT_CAPTURE", employee.imageUri +""+employee.Title);
-                        }
-                    }
-                });
-
+                Log.e("NEW_COUNT_VALULE", String.valueOf(count));
             }
         });
 
@@ -306,26 +304,12 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
                     String EventFileName = "EventCapture.jpeg";
                     File file = new File(getExternalCacheDir().getPath(), EventFileName);
                     Uri uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
-                    Log.e("IMAGE_URI", String.valueOf(uri));
+
                     EventcapOne = String.valueOf(uri);
 
 
-                    mRealm.executeTransaction(new Realm.Transaction() {
-                        @Override
-                        public void execute(Realm realm) {
+                    Log.e("IMAGE_URI", EventcapOne);
 
-                            try {
-                                EventCapture dbEventCapture = new EventCapture();
-                                dbEventCapture.imageUri = EventcapOne;
-                                dbEventCapture.Title = "Karthic";
-                                mRealm.copyFromRealm(dbEventCapture);
-
-                                Log.e("DATABase_capture", dbEventCapture.imageUri);
-                            } catch (Exception exception) {
-
-                            }
-                        }
-                    });
                 }
                 break;
         }
