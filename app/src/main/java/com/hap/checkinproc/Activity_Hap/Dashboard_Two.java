@@ -55,6 +55,7 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
     String viewMode="";
     int cModMnth=1;
     Button viewButton;
+    CardView StActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +87,7 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
         CardView cardview3 = findViewById(R.id.cardview3);
         CardView cardview4 = findViewById(R.id.cardview4);
         CardView cardView5 = findViewById(R.id.cardview5);
-        CardView StActivity = findViewById(R.id.StActivity);
+        StActivity = findViewById(R.id.StActivity);
         CardView btnCheckout = findViewById(R.id.btnCheckout);
         cardview3.setOnClickListener(this);
         cardview4.setOnClickListener(this);
@@ -125,6 +126,15 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
                 mOnBackPressedDispatcher.onBackPressed();
             }
         });
+
+
+        if (Shared_Common_Pref.Dept_Type.equals("0")) {
+            StActivity.setVisibility(View.VISIBLE);
+        }else{
+            StActivity.setVisibility(View.GONE);
+        }
+
+
     }
 
     private void getNotify () {

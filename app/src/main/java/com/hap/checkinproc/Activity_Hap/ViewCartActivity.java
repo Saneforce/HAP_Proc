@@ -790,7 +790,7 @@ public class ViewCartActivity extends AppCompatActivity {
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-        Call<JsonObject> responseBodyCall = apiInterface.submitValue(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), totalValueString);
+        Call<JsonObject> responseBodyCall = apiInterface.submitValue(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), SF_CODE, totalValueString);
 
         responseBodyCall.enqueue(new Callback<JsonObject>() {
             @Override

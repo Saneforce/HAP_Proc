@@ -3,6 +3,7 @@ package com.hap.checkinproc.Activity_Hap;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -66,7 +67,6 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
     int count = 0, count1 = 0;
     LinearLayout linerEventCapture;
     String EventcapOne = "";
-    Realm mRealm;
     Shared_Common_Pref mShaeShared_common_pref;
     int countInt;
 
@@ -75,19 +75,6 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_secondary_order);
 
-
-        Realm.init(getApplicationContext());
-
-
-        RealmConfiguration config =
-                new RealmConfiguration.Builder()
-                        .deleteRealmIfMigrationNeeded()
-                        .allowWritesOnUiThread(true)
-                        .build();
-
-        Realm.setDefaultConfiguration(config);
-
-        mRealm = Realm.getDefaultInstance();
         gson = new Gson();
         shared_common_pref = new Shared_Common_Pref(this);
 
@@ -173,12 +160,16 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
             public void onClick(View v) {
 
 
+
                 Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
                 intent.putExtra("EventcapOne", EventcapOne);
+                intent.putExtra("id", 1);
                 startActivity(intent);
-                /*  if (count1 == 1) {
-                    Intent intent = new Intent(getApplicationContext(), EventCapute.class);
+
+             /*   if (count1 == 1) {
+                    Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
                     intent.putExtra("EventcapOne", EventcapOne);
+                    intent.putExtra("id", 1);
                     startActivity(intent);
 
 
@@ -198,7 +189,6 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         linearCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 
                 if (txtOrder.getText().toString().matches("")) {
                     Toast.makeText(SecondaryOrderActivity.this, "Enter Text Order", Toast.LENGTH_SHORT).show();
@@ -331,7 +321,6 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
 
                 RetailerViewDetails mRetailerViewDetail = response.body();
 
-
                 txtRetailerChannel.setText(mRetailerViewDetail.getDrSpl());
                 txtClass.setText(mRetailerViewDetail.getDrCat());
                 lastOrderAmount = String.valueOf(mRetailerViewDetail.getLastorderAmount());
@@ -341,7 +330,6 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
                 txtMobile.setText(mRetailerViewDetail.getPOTENTIAL().get(0).getListedDrPhone());
                 mobileNumber = String.valueOf(mRetailerViewDetail.getPOTENTIAL().get(0).getListedDrMobile());
                 txtMobileTwo.setText(mobileNumber);
-
 
             }
 

@@ -1,19 +1,17 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
+import com.google.android.material.imageview.ShapeableImageView;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Model_Class.EventCapture;
@@ -21,7 +19,8 @@ import com.hap.checkinproc.R;
 
 public class UpdateTaskActivity extends Activity {
 
-    private EditText  editTextDesc, editTextFinishBy;
+    private EditText editTextDesc, editTextFinishBy;
+    ImageView imageViewSrc;
 
 
     @Override
@@ -31,8 +30,9 @@ public class UpdateTaskActivity extends Activity {
         setContentView(R.layout.activity_update_task);
         editTextDesc = findViewById(R.id.editTextDesc);
         editTextFinishBy = findViewById(R.id.editTextFinishBy);
+        imageViewSrc = findViewById(R.id.image_src);
 
-      final EventCapture task = (EventCapture) getIntent().getSerializableExtra("task");
+        final EventCapture task = (EventCapture) getIntent().getSerializableExtra("task");
 
 
         loadTask(task);
@@ -68,6 +68,8 @@ public class UpdateTaskActivity extends Activity {
     private void loadTask(EventCapture task) {
         editTextDesc.setText(task.getDesc());
         editTextFinishBy.setText(task.getFinishBy());
+        imageViewSrc.setImageURI(Uri.parse(task.getTask()));
+
 
     }
 
@@ -122,7 +124,6 @@ public class UpdateTaskActivity extends Activity {
         dt.execute();
 
     }
-
 
 
 }

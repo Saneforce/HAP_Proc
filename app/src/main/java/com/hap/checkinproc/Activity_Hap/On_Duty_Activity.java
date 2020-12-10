@@ -119,8 +119,14 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                     Intent intent = new Intent(this, Checkin.class);
                     Bundle extras = new Bundle();
                     extras.putString("ODFlag", String.valueOf(flag));
-                    extras.putString("onDutyPlcID", hapLocid);
-                    extras.putString("onDutyPlcNm", selecthaplocationss.getText().toString());
+                    extras.putString("Mode", "onduty");
+                    if (flag == 1) {
+                        extras.putString("onDutyPlcNm", ondutyedittext.getText().toString());
+                        extras.putString("onDutyPlcID", "0");
+                    } else {
+                        extras.putString("onDutyPlcNm", selecthaplocationss.getText().toString());
+                        extras.putString("onDutyPlcID", hapLocid);
+                    }
                     extras.putString("vstPurpose", purposeofvisitedittext.getText().toString());
                     intent.putExtras(extras);
                     startActivity(intent);

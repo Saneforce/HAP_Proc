@@ -14,7 +14,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-
 import com.hap.checkinproc.Interface.ChildListInterface;
 import com.hap.checkinproc.Model_Class.Product;
 import com.hap.checkinproc.Model_Class.Product_Array;
@@ -107,7 +106,6 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
 
                 if (!holder.productEdt.getText().toString().equals("")) {
                     editValue = Integer.valueOf(holder.productEdt.getText().toString());

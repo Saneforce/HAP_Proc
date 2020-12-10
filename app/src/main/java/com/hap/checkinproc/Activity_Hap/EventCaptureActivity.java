@@ -58,11 +58,16 @@ public class EventCaptureActivity extends AppCompatActivity {
     EventCapture taskOne = new EventCapture();
     Shared_Common_Pref mShaeShared_common_pref;
 
-    int countInt = 0;
+    int countInt = 0, idCount = 0;
     SharedPreferences sp;
     EditText editextTitle, editTextDescrption;
     String RetailerName, RouteName, DistributorName;
     SharedPreferences sharedPreferences;
+    String intenValue;
+    int dbCount = 0;
+    private AppDatabase mDB;
+
+    List<EventCapture> taskList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,8 +82,9 @@ public class EventCaptureActivity extends AppCompatActivity {
 
 
     private void initialize() {
-        sp = getSharedPreferences("USER_PREF", Context.MODE_PRIVATE);
 
+        getTasks();
+        sp = getSharedPreferences("USER_PREF", Context.MODE_PRIVATE);
 
         sharedPreferences = getSharedPreferences("MySharedPref",
                 MODE_PRIVATE);
@@ -108,20 +114,6 @@ public class EventCaptureActivity extends AppCompatActivity {
         Log.e("NEW_COUNT_VALULE", "Heeeee");
 
         mEventCapture = findViewById(R.id.event_capture_list);
-
-        txtRetailerName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.e("Event_capture_database", "Event_capture_database");
-
-                count++;
-                mShaeShared_common_pref.save("COUNT", String.valueOf(count));
-
-                Log.e("NEW_COUNT_VALULE", String.valueOf(count));
-            }
-        });
-
-
         mEventCapture.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mEventCapture.setLayoutManager(layoutManager);
@@ -161,17 +153,30 @@ public class EventCaptureActivity extends AppCompatActivity {
 
             @Override
             protected List<EventCapture> doInBackground(Void... voids) {
-                List<EventCapture> taskList = DatabaseClient
-                        .getInstance(getApplicationContext())
-                        .getAppDatabase()
-                        .taskDao()
-                        .getAll();
+                taskList = DatabaseClient.getInstance(getApplicationContext()).getAppDatabase().taskDao().getAll();
+/*
+                if (taskList.size() == 0) {
+
+                    Log.e("Count_Value", String.valueOf(dbCount));
+
+                }*/
+
+
                 return taskList;
             }
 
             @Override
             protected void onPostExecute(List<EventCapture> tasks) {
                 super.onPostExecute(tasks);
+               /* if (tasks.size() == 0) {
+                    Intent intent = getIntent();
+                    intenValue = intent.getStringExtra("EventcapOne");
+                    idCount = intent.getIntExtra("id", 0);
+                    Log.e("intenVAlue", intenValue);
+                    saveTask(intenValue);
+
+                }
+                Log.e("Count_Value", String.valueOf(tasks.size()));*/
                 mEventCaptureAdapter = new EventCaptureAdapter(tasks, EventCaptureActivity.this);
                 mEventCapture.setAdapter(mEventCaptureAdapter);
             }
@@ -202,7 +207,7 @@ public class EventCaptureActivity extends AppCompatActivity {
                     myEdit.putInt("age", count);
                     myEdit.commit();
 
-                    saveTask();
+                    saveTask(eventListStr);
                     getMulipart(eventListStr, 0);
                 }
                 break;
@@ -210,8 +215,8 @@ public class EventCaptureActivity extends AppCompatActivity {
     }
 
 
-    private void saveTask() {
-        final String sTask = eventListStr;
+    private void saveTask(String sTask) {
+
         class SaveTask extends AsyncTask<Void, Void, Void> {
 
             @Override
@@ -223,6 +228,7 @@ public class EventCaptureActivity extends AppCompatActivity {
                 taskOne.setFinishBy("");
 
                 //adding to database
+
                 DatabaseClient.getInstance(getApplicationContext()).getAppDatabase().taskDao().insert(taskOne);
                 return null;
             }
@@ -311,6 +317,7 @@ public class EventCaptureActivity extends AppCompatActivity {
                 } catch (Exception e) {
                 }
             }
+
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
                 Log.v("print_failure", "ggg" + t.getMessage());

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@android:color/white"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,47 +11,52 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <ImageView
+            android:id="@+id/image_src"
+            android:layout_width="@dimen/header_width2"
+            android:layout_height="@dimen/header_width2"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/C20dp"/>
+
         <EditText
             android:id="@+id/editTextDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/C13dp"
-            android:hint="title" />
+            android:hint="Title"
+            android:textSize="@dimen/C13dp" />
 
         <EditText
             android:id="@+id/editTextFinishBy"
             android:layout_width="match_parent"
-            android:textSize="@dimen/C13dp"
             android:layout_height="wrap_content"
-            android:hint="remarks" />
+            android:hint="Remarks"
+            android:textSize="@dimen/C13dp" />
 
 
         <Button
             android:id="@+id/button_update"
             android:layout_width="@dimen/header_date_width"
             android:layout_height="wrap_content"
-            android:padding="@dimen/C10dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:background="@drawable/button_blueg"
+            android:padding="@dimen/C10dp"
             android:text="Update"
-            android:textColor="@android:color/white"
             android:textAllCaps="false"
-            />
+            android:textColor="@android:color/white" />
 
 
         <Button
             android:id="@+id/button_delete"
             android:layout_width="@dimen/header_date_width"
             android:layout_height="wrap_content"
-            android:padding="@dimen/C10dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:background="@drawable/round_rect_red"
+            android:padding="@dimen/C10dp"
             android:text="Delete"
-            android:textColor="@android:color/white"
             android:textAllCaps="false"
-            />
+            android:textColor="@android:color/white" />
 
 
     </LinearLayout>

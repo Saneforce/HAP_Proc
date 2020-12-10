@@ -135,7 +135,6 @@ public class OrderCategoryActivity extends AppCompatActivity {
         proceedCart = (LinearLayout) findViewById(R.id.Linear_proceed_cart);
 
 
-
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,13 +243,14 @@ public class OrderCategoryActivity extends AppCompatActivity {
 
     /*subCategory header Listview*/
     public void SubCategoryHeader() {
-        Log.e("CAT_Details", SF_CODE);
-        Log.e("CAT_Details", DIVISION_CODE);
-        Log.e("CAT_Details", Shared_Common_Pref.StateCode);
+        Log.e("CAT_Details", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+        Log.e("CAT_Details", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
+        Log.e("CAT_Details", shared_common_pref.getvalue(Shared_Common_Pref.StateCode));
 
         String tempalteValue = "{\"tableName\":\"category_master\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<HeaderCat> ca = apiInterface.SubCategory("3", "MGR4762", "MGR4762", "24", tempalteValue);
+        //Call<HeaderCat> ca = apiInterface.SubCategory("3", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", tempalteValue);
         ca.enqueue(new Callback<HeaderCat>() {
             @Override
             public void onResponse(Call<HeaderCat> call, Response<HeaderCat> response) {

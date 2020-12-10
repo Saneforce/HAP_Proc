@@ -376,6 +376,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             worktype_text.setText(myDataset.get(position).getName());
             worktype_id = String.valueOf(myDataset.get(position).getId());
             Log.e("FIELD_WORK", myDataset.get(position).getFlag());
+            shared_common_pref.save("work_type_code", worktype_id);
             Fieldworkflag = myDataset.get(position).getFlag();
             if (myDataset.get(position).getFlag().equals("F") && Shared_Common_Pref.Dept_Type.equals("0")) {
                 distributors_layout.setVisibility(View.VISIBLE);
@@ -391,13 +392,15 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             distributor_text.setText(myDataset.get(position).getName());
             distributorid = String.valueOf(myDataset.get(position).getId());
             Log.e("StockistID", myDataset.get(position).getId());
-            shared_common_pref.save("distributor_name", String.valueOf(distributor_text));
+            shared_common_pref.save("distributor_name", distributor_text.getText().toString());
+            shared_common_pref.save("distributor_id", distributorid);
+            Log.e("ORDER_SAVE",distributor_text.getText().toString());
             loadroute(myDataset.get(position).getId());
         } else if (type == 3) {
             route_text.setText(myDataset.get(position).getName());
             routename = myDataset.get(position).getName();
             routeid = myDataset.get(position).getId();
-            shared_common_pref.save("route_name", String.valueOf(routename));
+            shared_common_pref.save("town_code", routeid);
         } else if (type == 4) {
             hq_text.setText(myDataset.get(position).getName());
             hqid = myDataset.get(position).getId();

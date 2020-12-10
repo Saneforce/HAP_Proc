@@ -241,7 +241,7 @@ public interface ApiInterface {
 
     /*submitValue*/
     @FormUrlEncoded
-    @POST("db_v14.php?axn=dcr/save")
+    @POST("Db_v300.php?axn=dcr/save")
     Call<JsonObject> submitValue(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                                  @Field("data") String data);
 

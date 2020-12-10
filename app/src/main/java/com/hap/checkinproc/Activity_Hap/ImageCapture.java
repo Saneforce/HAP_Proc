@@ -87,7 +87,7 @@ public class ImageCapture extends AppCompatActivity implements
     SharedPreferences UserDetails;
     Common_Class DT = new Common_Class();
 
-    String mMode;
+    String mMode, WrkType, onDutyPlcID, onDutyPlcNm, vstPurpose;
     com.hap.checkinproc.Common_Class.Common_Class common_class;
 
     public static final String sCheckInDetail = "CheckInDetail";
@@ -106,12 +106,19 @@ public class ImageCapture extends AppCompatActivity implements
         Bundle params = getIntent().getExtras();
         try {
             mMode = params.getString("Mode");
+
+
+
             CheckInInf.put("Mode", mMode);
             CheckInInf.put("Divcode", UserDetails.getString("Divcode", ""));
             CheckInInf.put("sfCode", UserDetails.getString("Sfcode", ""));
-
+            WrkType = "0";
+            if (mMode.equals("onduty")) {
+                WrkType = "1";
+            }
+            Log.e("Checkin_Mode", mMode);
             String SftId = params.getString("ShiftId");
-            if (mMode.equalsIgnoreCase("CIN")) {
+            if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty")) {
                 if (!(SftId.isEmpty() || SftId.equalsIgnoreCase(""))) {
                     CheckInInf.put("Shift_Selected_Id", SftId);
                     CheckInInf.put("Shift_Name", params.getString("ShiftName"));
@@ -119,18 +126,17 @@ public class ImageCapture extends AppCompatActivity implements
                     CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
                     CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
                     CheckInInf.put("App_Version", Common_Class.Version_Name);
-                    CheckInInf.put("WrkType", "0");
+                    CheckInInf.put("WrkType", WrkType);
                     CheckInInf.put("CheckDutyFlag", "0");
-                    CheckInInf.put("PlcID", "");
-                    CheckInInf.put("PlcNm", "");
-                    CheckInInf.put("vstRmks", "");
+                    CheckInInf.put("CheckDutyFlag", "0");
+                    CheckInInf.put("PlcID", onDutyPlcID);
+                    CheckInInf.put("PlcNm", onDutyPlcNm);
+                    CheckInInf.put("vstRmks", vstPurpose);
                 }
             }
 
             if (mMode.equalsIgnoreCase("extended")) {
                 if (!(SftId.isEmpty() || SftId.equalsIgnoreCase(""))) {
-
-
                     DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                     Calendar calobjw = Calendar.getInstance();
                     CheckInInf.put("Shift_Selected_Id", SftId);
@@ -139,7 +145,7 @@ public class ImageCapture extends AppCompatActivity implements
                     CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
                     CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
                     CheckInInf.put("App_Version", Common_Class.Version_Name);
-                    CheckInInf.put("Ekey", "'" + "EK" + UserDetails.getString("Sfcode", "") + dfw.format(calobjw.getTime()).hashCode() + "'");
+                    CheckInInf.put("Ekey", "EK" + UserDetails.getString("Sfcode", "") + dfw.format(calobjw.getTime()).hashCode());
                     CheckInInf.put("update", "0");
                     CheckInInf.put("WrkType", "0");
                     CheckInInf.put("CheckDutyFlag", "0");
@@ -242,6 +248,7 @@ public class ImageCapture extends AppCompatActivity implements
         setDefaultCameraId("front");
         mCamera = Camera.open(mCamId);*/
         if (mCamera != null) {
+
             preview = null;
             mHolder.removeCallback(ImageCapture.this);
             mCamera.setPreviewCallback(null);
@@ -265,7 +272,8 @@ public class ImageCapture extends AppCompatActivity implements
     }
 
     private boolean checkPermission() {
-        return (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+        return (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
     }
 
     //Location service part
@@ -394,15 +402,14 @@ public class ImageCapture extends AppCompatActivity implements
             CheckInInf.put("slfy", imageFileName);
             CheckInInf.put("Rmks", "");
 
-            if (mMode.equalsIgnoreCase("CIN")) {
+            if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty")) {
                 SharedPreferences.Editor editor = CheckInDetails.edit();
                 editor.putString("Shift_Selected_Id", CheckInInf.getString("Shift_Selected_Id"));
                 editor.putString("Shift_Name", CheckInInf.getString("Shift_Name"));
                 editor.putString("ShiftStart", CheckInInf.getString("ShiftStart"));
                 editor.putString("ShiftEnd", CheckInInf.getString("ShiftEnd"));
                 editor.putString("ShiftCutOff", CheckInInf.getString("ShiftCutOff"));
-                if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
-                    editor.putString("FTime", CTime);
+                if (CheckInDetails.getString("FTime", "").equalsIgnoreCase("")) editor.putString("FTime", CTime);
                 editor.putString("Logintime", CTime);
                 editor.putBoolean("CheckIn", true);
                 editor.apply();
