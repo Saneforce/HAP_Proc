@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
@@ -65,6 +66,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue;
     Integer routeId1, classId, channelID;
     String routeId;
+    Shared_Common_Pref shared_common_pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +76,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         gson = new Gson();
 
         service = ApiClient.getClient().create(ApiInterface.class);
-
+        shared_common_pref = new Shared_Common_Pref(this);
         getRouteDetails();
         getRetailerClass();
         getRetailerChannel();
@@ -131,7 +133,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     Toast.makeText(getApplicationContext(), "Enter Class", Toast.LENGTH_SHORT).show();
                 } else if (txtRetailerChannel.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Enter Channel", Toast.LENGTH_SHORT).show();
-                }  else if (!addRetailerEmail.getText().toString().trim().matches(emailPattern)) {
+                } else if (!addRetailerEmail.getText().toString().trim().matches(emailPattern)) {
                     Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
                 } else {
                     addNewRetailers();
@@ -141,7 +143,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             }
         });
 
-     //   addNewRetailers();
+        //   addNewRetailers();
     }
 
 
@@ -149,11 +151,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     public void getRouteDetails() {
 
         String routeMap = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-        ApiInterface apiInterface = ApiClient.getClient2().create(ApiInterface.class);
-        Call<JsonArray> call = apiInterface.retailerClass("4", "MR2408", "MR2408", "24", routeMap);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", routeMap);
         call.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+                Log.e("Route_response", response.body().toString());
 
                 JsonArray jsonArray = response.body();
                 for (int a = 0; a < jsonArray.size(); a++) {
@@ -171,7 +175,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
-
+                Log.e("Route_response", "ERROR");
             }
         });
     }
@@ -197,8 +201,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     /*Route Class*/
     public void getRetailerClass() {
         String routeMap = "{\"tableName\":\"Mas_Doc_Class\",\"coloumns\":\"[\\\"Doc_ClsCode as id\\\", \\\"Doc_ClsSName as name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-        ApiInterface apiInterface = ApiClient.getClient2().create(ApiInterface.class);
-        Call<JsonArray> call = apiInterface.retailerClass("4", "MR2408", "MR2408", "24", routeMap);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", routeMap);
         call.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -248,8 +252,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     /*Retailer Channel */
     public void getRetailerChannel() {
         String routeMap = "{\"tableName\":\"Doctor_Specialty\",\"coloumns\":\"[\\\"Specialty_Code as id\\\", \\\"Specialty_Name as name\\\"]\",\"where\":\"[\\\"isnull(Deactivate_flag,0)=0\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-        ApiInterface apiInterface = ApiClient.getClient2().create(ApiInterface.class);
-        Call<JsonArray> call = apiInterface.retailerClass("4", "MR2408", "MR2408", "24", routeMap);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", routeMap);
         call.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -302,7 +306,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
         DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Calendar calobjw = Calendar.getInstance();
-        KeyDate = "MR2408";
+        KeyDate = shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code);
         keyCodeValue = keyEk + KeyHyp + KeyDate + dfw.format(calobjw.getTime()).hashCode();
 
         Log.e("KEY_CODE_HASH", keyCodeValue);
@@ -350,20 +354,21 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         String totalValueString = mainArray.toString();
         Log.e("TOTAL_VALUE_STRING", totalValueString);
 
-        ApiInterface apiInterface = ApiClient.getClient2().create(ApiInterface.class);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         // addNewRetailer
-        Call<JsonObject> call = apiInterface.addNewRetailer("4,", "MR2408", "24", "MGR", totalValueString);
+        Call<JsonObject> call = apiInterface.addNewRetailer(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", "MGR", totalValueString);
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
                 JsonObject jsonObject = response.body();
+                Log.e("Add_Retailer_details", String.valueOf(jsonObject));
 
-                String success  = String.valueOf(jsonObject.get("success"));
+                String success = String.valueOf(jsonObject.get("success"));
                 Log.e("Add_Retailer_details", success);
                 if (success.equalsIgnoreCase("true")) {
                     startActivity(new Intent(getApplicationContext(), SecondaryOrderActivity.class));
-                }else{
+                } else {
                     Toast.makeText(AddNewRetailer.this, "Please type DATA", Toast.LENGTH_SHORT).show();
                 }
             }

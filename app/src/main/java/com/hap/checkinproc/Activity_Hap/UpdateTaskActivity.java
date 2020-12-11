@@ -20,7 +20,7 @@ import com.hap.checkinproc.R;
 public class UpdateTaskActivity extends Activity {
 
     private EditText editTextDesc, editTextFinishBy;
-    ImageView imageViewSrc;
+
 
 
     @Override
@@ -30,7 +30,6 @@ public class UpdateTaskActivity extends Activity {
         setContentView(R.layout.activity_update_task);
         editTextDesc = findViewById(R.id.editTextDesc);
         editTextFinishBy = findViewById(R.id.editTextFinishBy);
-        imageViewSrc = findViewById(R.id.image_src);
 
         final EventCapture task = (EventCapture) getIntent().getSerializableExtra("task");
 
@@ -68,7 +67,7 @@ public class UpdateTaskActivity extends Activity {
     private void loadTask(EventCapture task) {
         editTextDesc.setText(task.getDesc());
         editTextFinishBy.setText(task.getFinishBy());
-        imageViewSrc.setImageURI(Uri.parse(task.getTask()));
+
 
 
     }

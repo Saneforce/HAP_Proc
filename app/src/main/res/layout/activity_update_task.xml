@@ -11,13 +11,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/image_src"
-            android:layout_width="@dimen/header_width2"
-            android:layout_height="@dimen/header_width2"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginBottom="@dimen/C20dp"/>
-
         <EditText
             android:id="@+id/editTextDesc"
             android:layout_width="match_parent"

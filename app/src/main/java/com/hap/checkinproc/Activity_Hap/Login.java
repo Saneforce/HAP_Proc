@@ -363,8 +363,9 @@ public class Login extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                         Intent intent;
                         if (requestCode == RC_SIGN_IN)
-                         intent = new Intent(Login.this, Dashboard.class);
-                            //intent = new Intent(Login.this, SecondaryOrderActivity.class);
+
+                            intent = new Intent(Login.this, Dashboard.class);
+                           // intent = new Intent(Login.this, OrderCategoryActivity.class);
                         else
                             intent = new Intent(Login.this, Dashboard_Two.class);
                         intent.putExtra("photo", photo);

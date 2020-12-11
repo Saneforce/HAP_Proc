@@ -49,7 +49,7 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
     Integer productQuantityValue;
     ArrayList<String> mString;
     String catIma, catNam;
-
+    String productUnits;
 
     public ParentListAdapter(HeaderCat headercat, List<HeaderName> eventInfor, List<Product> eventsArrayList, Activity activity, ArrayList<String> mString, ParentListInterface itemClick) {
         this.eventInfor = eventInfor;
@@ -78,7 +78,7 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemClick.onClickParentInter(gTotal, 0, getIdFromChild, getPositionValue, productNameValue, productCodeValue, productQuantityValue, catIma, catNam);
+                itemClick.onClickParentInter(gTotal, 0, getIdFromChild, getPositionValue, productNameValue, productCodeValue, productQuantityValue, catIma, catNam,productUnits);
             }
         });
         itemView.setClickable(false);
@@ -105,7 +105,7 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
         ChildListAdapter eventListChildAdapter = new ChildListAdapter(this.activity, mProducts, new ChildListInterface() {
 
             @Override
-            public void onClickInterface(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy) {
+            public void onClickInterface(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy,String productUnit) {
                 /*PRODUCT_ITEM_ID_VALUE*/
                 getIdFromChild = itemID;
                 getPositionValue = positionValue;
@@ -115,8 +115,9 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
                 holder.subProdcutRate.setText(value);
                 catIma = evenParent.get(position).getCatImage();
                 catNam = evenParent.get(position).getName();
-
-                itemClick.onClickParentInter(value, 0, getIdFromChild, getPositionValue, productNameValue, productCodeValue, productQuantityValue, catIma, catNam);
+                productUnits = productUnit;
+                Log.e("productUnit",productUnit);
+                itemClick.onClickParentInter(value, 0, getIdFromChild, getPositionValue, productNameValue, productCodeValue, productQuantityValue, catIma, catNam,productUnits);
 
 
             }

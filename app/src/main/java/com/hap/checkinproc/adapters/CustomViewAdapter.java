@@ -43,6 +43,7 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
     Integer productRate;
     Product_Array newProductArray;
     ArrayList<Product_Array> Product_Array_List;
+    String productUnit;
 
     public CustomViewAdapter(Context context, List<Product_Array> mProduct_arrays, viewProduct viewProd) {
         this.context = context;
@@ -61,7 +62,7 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
         listItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewProd.onViewItemClick(productID, productname, catName, catImg, productqty, productRate);
+                viewProd.onViewItemClick(productID, productname, catName, catImg, productqty, productRate,productUnit);
             }
         });
 
@@ -110,8 +111,8 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
                         subTotalRate = editCountValue * price;
                         holder.totalAmount.setText("Total :" + subTotalRate);
 
-
-                        viewProd.onViewItemClick(productID, productname, catName, catImg, productqty, productRate);
+                        productUnit = mProductArray.getProductUnit();
+                        viewProd.onViewItemClick(productID, productname, catName, catImg, productqty, productRate,productUnit);
                         Log.e("PRODUCT_DETAILS_VALUE", "" + productID + " " + productname + "  " + productqty + " " + productRate);
 
                     } else {

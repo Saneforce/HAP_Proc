@@ -249,8 +249,8 @@ public class OrderCategoryActivity extends AppCompatActivity {
 
         String tempalteValue = "{\"tableName\":\"category_master\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<HeaderCat> ca = apiInterface.SubCategory("3", "MGR4762", "MGR4762", "24", tempalteValue);
-        //Call<HeaderCat> ca = apiInterface.SubCategory("3", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", tempalteValue);
+        Call<HeaderCat> ca = apiInterface.SubCategory(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code),  shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code),shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", tempalteValue);
+
         ca.enqueue(new Callback<HeaderCat>() {
             @Override
             public void onResponse(Call<HeaderCat> call, Response<HeaderCat> response) {
@@ -267,6 +267,7 @@ public class OrderCategoryActivity extends AppCompatActivity {
                         Log.e("HEADER_NAME", String.valueOf(mHeaderNameValue));
                         eventsArrayList = headerNameArrayList.get(i).getProduct();
                         childListData(eventsArrayList, headerCat, headerNameArrayList);
+
                     }
                 }
             }
@@ -291,9 +292,9 @@ public class OrderCategoryActivity extends AppCompatActivity {
             mHeaderNameValue.add(seachName);
             event_list_parent_adapter = new ParentListAdapter(headerCat, headerNameArrayLists, eventsArrayLists, OrderCategoryActivity.this, mHeaderNameValue, new ParentListInterface() {
                 @Override
-                public void onClickParentInter(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy, String catImage, String catName) {
+                public void onClickParentInter(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy, String catImage, String catName,String productUnit) {
 
-                    Log.e("Product_code", productCode);
+                    Log.e("Product_code", productUnit);
 
                     if (Product_Array_List.size() == 0) {
                         sum = sum + productQuantiy * Integer.parseInt(productCode);
@@ -301,7 +302,7 @@ public class OrderCategoryActivity extends AppCompatActivity {
 
                         shared_common_pref.save("Total_amount", String.valueOf(sum));
                         item_count.setText("Items:" + "1");
-                        Product_Array_List.add(new Product_Array(itemID, productName, productQuantiy, productQuantiy * Integer.parseInt(productCode), Integer.parseInt(productCode), catImage, catName));
+                        Product_Array_List.add(new Product_Array(itemID, productName, productQuantiy, productQuantiy * Integer.parseInt(productCode), Integer.parseInt(productCode), catImage, catName,productUnit));
                         System.out.println("First_Product_Added" + Product_Array_List.size());
 
 
@@ -322,7 +323,7 @@ public class OrderCategoryActivity extends AppCompatActivity {
 
                         }
 
-                        Product_Array_List.add(new Product_Array(itemID, productName, productQuantiy, productQuantiy * Integer.parseInt(productCode), Integer.parseInt(productCode), catImage, catName));
+                        Product_Array_List.add(new Product_Array(itemID, productName, productQuantiy, productQuantiy * Integer.parseInt(productCode), Integer.parseInt(productCode), catImage, catName,productUnit));
                         int sum = 0;
 
                         Log.e("PRODUCT_ARRAY_SIZE", String.valueOf(Product_Array_List));
@@ -364,6 +365,7 @@ public class OrderCategoryActivity extends AppCompatActivity {
                             person1.put("PQty", Product_Array_List.get(z).getProductRate());
                             person1.put("cb_qty", 0);
                             person1.put("free", 0);
+                            person1.put("Product_Sale_Unit", Product_Array_List.get(z).getProductUnit());
                             person1.put("f_key", fkeyprodcut);
                             fkeyprodcut.put("activity_stockist_code", "Activity_Stockist_Report");
 

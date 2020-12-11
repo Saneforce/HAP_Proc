@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
     Integer productQuantityValue;
     String listItemId;
     Integer getPositionValue = 0;
+    String productUnit;
     ArrayList<Product_Array> dataValue;
     Product_Array product_array;
     ArrayList<String> productNameList;
@@ -62,7 +64,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
             @Override
             public void onClick(View v) {
 
-                itemClick.onClickInterface(String.valueOf(intSum), 0, listItemId, getPositionValue, productNameValue, productCodeValue, productQuantityValue);
+                itemClick.onClickInterface(String.valueOf(intSum), 0, listItemId, getPositionValue, productNameValue, productCodeValue, productQuantityValue,productUnit);
 
             }
         });
@@ -83,6 +85,9 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
         /*   holder.productEdt.setText("" + events.getmQuantity());*/
 
 
+
+        Log.e("Product_sale_unit","  "+productUnit);
+        holder.unitBox.setText(eventsArrayList.get(position).getProductSaleUnit());
         holder.productEdt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean hasFocus) {
@@ -132,7 +137,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
                 productQuantityValue = eventsArrayList.get(position).getmQuantity();
 
                 itemClick.onClickInterface(String.valueOf(subTotalRate),
-                        0, getItemID, 0, productNameValue, productCodeValue, productQuantityValue);
+                        0, getItemID, 0, productNameValue, productCodeValue, productQuantityValue,productUnit);
                 Log.e("djfkgsd", "" + String.valueOf(subTotalRate));
 
             }
@@ -142,6 +147,8 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
         holder.productPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                productUnit =eventsArrayList.get(position).getProductSaleUnit();
                 holder.productEdt.clearFocus();
                 events.addToQuantity();
                 holder.productEdt.setText("" + events.getmQuantity());
@@ -193,7 +200,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
                 Log.e("PARENT_TOTAL_SUM", String.valueOf(sum));
 
 
-                itemClick.onClickInterface(String.valueOf(sum), 0, getItemID, getPositionValue, productNameValue, productCodeValue, productQuantityValue);
+                itemClick.onClickInterface(String.valueOf(sum), 0, getItemID, getPositionValue, productNameValue, productCodeValue, productQuantityValue,productUnit);
                 notifyDataSetChanged();
             }
         });
@@ -202,7 +209,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
         holder.proudctMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                productUnit =eventsArrayList.get(position).getProductSaleUnit();
                 holder.productEdt.clearFocus();
                 events.removeFromQuantity();
                 holder.productEdt.setText("" + events.getmQuantity());
@@ -262,7 +269,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
                     Log.e("PARENT_TOTAL_SUM", String.valueOf(sum));
 
 
-                    itemClick.onClickInterface(String.valueOf(sum), 0, getItemID, getPositionValue, productNameValue, productCodeValue, productQuantityValue);
+                    itemClick.onClickInterface(String.valueOf(sum), 0, getItemID, getPositionValue, productNameValue, productCodeValue, productQuantityValue,productUnit);
                     notifyDataSetChanged();
                 }
             }
@@ -289,7 +296,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView subProdcutChildName, subProdcutChildRate, productCount, productItem;
         LinearLayout proudctMinus, productPlus;
-
+        Button unitBox;
         EditText productEdt;
 
         public MyViewHolder(@NonNull View itemView) {
@@ -300,6 +307,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
             proudctMinus = (LinearLayout) itemView.findViewById(R.id.image_minus);
             productPlus = (LinearLayout) itemView.findViewById(R.id.image_plus);
             productEdt = (EditText) itemView.findViewById(R.id.edt_product_count_inc_dec);
+            unitBox = itemView.findViewById(R.id.edt_unit);
         }
     }
 }

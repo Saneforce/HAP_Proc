@@ -196,12 +196,13 @@ public class ViewCartActivity extends AppCompatActivity {
         adapter = new CustomViewAdapter(this, carsList, new viewProduct() {
 
             @Override
-            public void onViewItemClick(String itemID, String productName, String catName, String catImg, Integer productQty, Integer productRate) {
+            public void onViewItemClick(String itemID, String productName, String catName, String catImg, Integer productQty, Integer productRate, String productUnit) {
 
                 System.out.println("Ka_Product_Code" + itemID);
                 System.out.println("Ka_Product_Code" + productName);
                 System.out.println("Ka_Product_Code" + productQty);
                 System.out.println("Ka_Product_Code" + productRate);
+                System.out.println("Ka_Product_Code" + productUnit);
 
 
                 for (int i = 0; i < carsList.size(); i++) {
@@ -210,7 +211,7 @@ public class ViewCartActivity extends AppCompatActivity {
                         System.out.println("Ka_Product_Code" + carsList.get(i).getProductname());
                         carsList.remove(i);
 
-                        carsList.add(new Product_Array(itemID, productName, productQty, productQty, productRate, catImg, catName));
+                        carsList.add(new Product_Array(itemID, productName, productQty, productQty, productRate, catImg, catName, productUnit));
                         for (int j = 0; j < carsList.size(); j++) {
                             if (itemID == carsList.get(j).getProductcode()) {
                                 Log.e("New_Qty_Value", "" + String.valueOf(carsList.get(j).getProductqty()));
@@ -402,6 +403,7 @@ public class ViewCartActivity extends AppCompatActivity {
                         person1.put("Product_Rx_Qty", carsList.get(z).getProductqty());
                         person1.put("Rate", carsList.get(z).getProductRate());
                         person1.put("Product_Sample_Qty", product_total);
+                        person1.put("Product_Sale_Unit", carsList.get(z).getProductUnit());
                         person1.put("f_key", fkeyprodcut);
                         fkeyprodcut.put("Activity_MSL_Code", "Activity_Doctor_Report");
 
@@ -752,6 +754,7 @@ public class ViewCartActivity extends AppCompatActivity {
                 person1.put("Product_Rx_Qty", carsList.get(z).getProductqty());
                 person1.put("Rate", carsList.get(z).getProductRate());
                 person1.put("Product_Sample_Qty", product_total);
+                person1.put("Product_Sale_Unit", carsList.get(z).getProductUnit());
                 person1.put("f_key", fkeyprodcut);
                 fkeyprodcut.put("Activity_MSL_Code", "Activity_Doctor_Report");
 

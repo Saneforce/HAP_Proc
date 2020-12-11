@@ -8,8 +8,9 @@ public class Product_Array {
     Integer productRate;
     String catImage;
     String catName;
+    String ProductUnit;
 
-    public Product_Array(String productcode, String productname, Integer productqty, Integer sampleqty, Integer productRate, String catImage, String catName) {
+    public Product_Array(String productcode, String productname, Integer productqty, Integer sampleqty, Integer productRate, String catImage, String catName, String ProductUnit) {
         this.productcode = productcode;
         this.productname = productname;
         this.productqty = productqty;
@@ -17,9 +18,17 @@ public class Product_Array {
         this.productRate = productRate;
         this.catImage = catImage;
         this.catName = catName;
+        this.ProductUnit=ProductUnit;
 
     }
 
+    public String getProductUnit() {
+        return ProductUnit;
+    }
+
+    public void setProductUnit(String productUnit) {
+        ProductUnit = productUnit;
+    }
 
     public Product_Array(String productcode, String productname, Integer productqty, Integer sampleqty, Integer productRate) {
         this.productcode = productcode;

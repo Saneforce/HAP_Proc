@@ -8,6 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginBottom="@dimen/C10dp"
         android:tag="cards main container"
         tools:ignore="MissingConstraints">
 
@@ -24,25 +25,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:layout_marginBottom="@dimen/C10dp"
                 android:orientation="horizontal"
                 tools:ignore="MissingConstraints">
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:visibility="gone">
-
-                    <ImageView
-                        android:id="@+id/image_product"
-                        android:layout_width="75dp"
-                        android:layout_height="75dp"
-                        android:layout_gravity="center"
-                        android:gravity="center_vertical" />
-
-                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -60,16 +45,17 @@
                             android:id="@+id/child_product_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/C10dp"
                             android:text="SAN Honey-Almond Cold Cream 100gm"
                             android:textColor="@android:color/black"
-                            android:textSize="14dp"></TextView>
+                            android:textSize="13dp"></TextView>
 
 
                         <TextView
                             android:id="@+id/child_product_price"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="3dp"
                             android:text="$25.25"
                             android:textColor="@android:color/black"
                             android:textSize="10dp">
@@ -80,10 +66,13 @@
                     </LinearLayout>
 
 
+
                 </LinearLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
+                    android:layout_marginLeft="-50dp"
+
                     android:layout_height="match_parent">
 
 
@@ -91,14 +80,29 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
-                        android:layout_gravity="center"
-                        android:gravity="center_vertical">
+                        android:layout_marginTop="@dimen/C5dp"
+                  >
+
+
+                        <Button
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/button_blueg"
+                            android:padding="@dimen/C5dp"
+                            android:text="box"
+                            android:id="@+id/edt_unit"
+                            android:layout_marginTop="@dimen/C15dp"
+                            android:layout_marginRight="@dimen/C10dp"
+                            android:textColor="@android:color/white" />
+
+
 
 
                         <LinearLayout
                             android:id="@+id/linear_add"
                             android:layout_width="106dp"
                             android:layout_height="30dp"
+                            android:layout_marginTop="@dimen/C13dp"
                             android:background="@drawable/oval_background">
 
 

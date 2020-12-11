@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,9 +13,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -30,7 +33,10 @@ import com.hap.checkinproc.adapters.EventCaptureAdapter;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -42,7 +48,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class EventCaptureActivity extends AppCompatActivity {
+public class
+EventCaptureActivity extends AppCompatActivity {
 
 
     Button TakeEventPicture;
@@ -68,20 +75,24 @@ public class EventCaptureActivity extends AppCompatActivity {
     private AppDatabase mDB;
 
     List<EventCapture> taskList;
-
+    String locationValue, dateTime, checkInTime, keyEk = "EK", KeyDate, KeyHyp = "-", keyCodeValue, checkOutTime;
+    String EventFileName;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_capute);
-
-
         initialize();
-
-
     }
 
-
     private void initialize() {
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
 
         getTasks();
         sp = getSharedPreferences("USER_PREF", Context.MODE_PRIVATE);
@@ -123,6 +134,13 @@ public class EventCaptureActivity extends AppCompatActivity {
         TakeEventPicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Calendar calobjw = Calendar.getInstance();
+                KeyDate = mShaeShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code);
+                keyCodeValue = keyEk + KeyDate + dfw.format(calobjw.getTime()).hashCode();
+
+
                 countInt = sharedPreferences.getInt("age", 0);
                 if (countInt != 0) {
                     Log.e("Count_Value", String.valueOf(countInt));
@@ -132,15 +150,16 @@ public class EventCaptureActivity extends AppCompatActivity {
 
                 taskOne.addToQuantity();
                 count = taskOne.getmQuantity() + countInt;
-                String EventFileName = "EventCapture" + count + ".jpeg";
+                EventFileName = "EventCapture" + keyCodeValue + ".jpeg";
                 Intent m_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 File file = new File(getExternalCacheDir().getPath(), EventFileName);
                 Uri uri = FileProvider.getUriForFile(EventCaptureActivity.this, getApplicationContext().getPackageName() + ".provider", file);
                 m_intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(m_intent, 2);
 
-                Log.e("EVENT_LIST_STR", String.valueOf(count));
-                Log.e("EVENT_LIST_STR_SHared", String.valueOf(countInt));
+
+                Log.e("EVENT_LIST_STR", String.valueOf(EventFileName));
+                Log.e("EVENT_LIST_STR_SHared", String.valueOf(keyCodeValue));
 
             }
         });
@@ -154,12 +173,6 @@ public class EventCaptureActivity extends AppCompatActivity {
             @Override
             protected List<EventCapture> doInBackground(Void... voids) {
                 taskList = DatabaseClient.getInstance(getApplicationContext()).getAppDatabase().taskDao().getAll();
-/*
-                if (taskList.size() == 0) {
-
-                    Log.e("Count_Value", String.valueOf(dbCount));
-
-                }*/
 
 
                 return taskList;
@@ -168,15 +181,6 @@ public class EventCaptureActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(List<EventCapture> tasks) {
                 super.onPostExecute(tasks);
-               /* if (tasks.size() == 0) {
-                    Intent intent = getIntent();
-                    intenValue = intent.getStringExtra("EventcapOne");
-                    idCount = intent.getIntExtra("id", 0);
-                    Log.e("intenVAlue", intenValue);
-                    saveTask(intenValue);
-
-                }
-                Log.e("Count_Value", String.valueOf(tasks.size()));*/
                 mEventCaptureAdapter = new EventCaptureAdapter(tasks, EventCaptureActivity.this);
                 mEventCapture.setAdapter(mEventCaptureAdapter);
             }
@@ -186,6 +190,7 @@ public class EventCaptureActivity extends AppCompatActivity {
         gt.execute();
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -194,13 +199,12 @@ public class EventCaptureActivity extends AppCompatActivity {
             case 2:
                 if (resultCode == RESULT_OK) {
 
-                    String EventFileName = "EventCapture" + count + ".jpeg";
+                    EventFileName = "EventCapture" + keyCodeValue + ".jpeg";
                     File file = new File(getExternalCacheDir().getPath(), EventFileName);
                     Uri uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
                     eventListStr = String.valueOf(uri);
-                    Log.e("EVENT_LIST_STR", eventListStr);
-                    Log.e("EVENT_LIST_STR", String.valueOf(count));
-                    /* mShaeShared_common_pref.save("COUNT", String.valueOf(task.getmQuantity()));*/
+                    Log.e("EVENT_LIST_STR", String.valueOf(EventFileName));
+                    Log.e("EVENT_LIST_STR_SHared", String.valueOf(keyCodeValue));
 
                     SharedPreferences.Editor myEdit
                             = sharedPreferences.edit();
@@ -323,6 +327,29 @@ public class EventCaptureActivity extends AppCompatActivity {
                 Log.v("print_failure", "ggg" + t.getMessage());
             }
         });
+    }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    //onSuperBackPressed();
+
+                    Intent intent =  new Intent(EventCaptureActivity.this,SecondaryOrderActivity.class);
+                    intent.putExtra("Event_caputure",EventFileName);
+                    startActivity(intent);
+
+                }
+            });
+
+    public void onSuperBackPressed() {
+        super.onBackPressed();
+    }
+
+
+    @Override
+    public void onBackPressed() {
+
     }
 
 
