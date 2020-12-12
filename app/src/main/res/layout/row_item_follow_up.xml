@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.cardview.widget.CardView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp"
+        app:cardUseCompatPadding="true"
+        app:cardElevation="2dp"
+        android:layout_marginTop="6dp"
+        android:background="#B1AFAF"
+        app:cardCornerRadius="5dp"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/profile_list"
+                android:id="@+id/img_profile"/>
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/img_profile"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="6dp"
+                >
+                <TextView
+                    android:id="@+id/txt_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto_bold"
+                    android:text="Name"
+                    android:textAllCaps="false"
+                    android:textColor="#515151"
+                    android:textSize="18sp"
+                    />
+                <TextView
+                    android:id="@+id/txt_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:text="Date"
+                    android:textAllCaps="false"
+                    android:textColor="#515151"
+                    android:textSize="18sp"
+                    android:layout_below="@+id/txt_name"
+                    />
+            </RelativeLayout>
+           <ImageView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:src="@drawable/call_icon"
+               android:layout_centerVertical="true"
+               android:layout_alignParentEnd="true"
+               android:id="@+id/img_phone"
+
+               />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</RelativeLayout>

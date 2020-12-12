@@ -22,7 +22,6 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/nav_icon"
                 android:layout_centerVertical="true"
-
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -50,6 +49,15 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:id="@+id/txt_head_name"
+                />
+            <ImageView
+                android:id="@+id/iv_checkout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/check_out"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="5dp"
                 />
 
 
@@ -323,7 +331,24 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="8">
+                android:layout_weight="8"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Upcoming Follow-ups"
+                    app:fontFamily="@font/roboto_bold"
+                    android:textColor="#000"
+                    android:textSize="16sp"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center_horizontal"
+
+                    />
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/list_follow"
+                    android:layout_marginTop="8dp"/>
 
             </LinearLayout>
         </LinearLayout>

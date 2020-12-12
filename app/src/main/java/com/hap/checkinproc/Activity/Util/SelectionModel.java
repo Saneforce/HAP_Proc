@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class SelectionModel {
     String txt;
     boolean isClick;
-    String code,value,img_url,tmp_url;
+    String code,value,img_url,tmp_url,cardview_id,user_enter,attachment,max;
     ArrayList<SelectionModel> array=new ArrayList<>();
 
 
@@ -29,16 +29,51 @@ public class SelectionModel {
         this.img_url=img_url;
         this.tmp_url=tmp_url;
     }
-    public SelectionModel(String txt, String value, String code,String img_url,ArrayList<SelectionModel> array) {
+    public SelectionModel(String txt, String value, String code,String img_url,ArrayList<SelectionModel> array,String user_enter,String attachment,String max) {
         this.txt = txt;
         this.value = value;
         this.code=code;
         this.img_url=img_url;
         this.array=array;
+        this.user_enter=user_enter;
+        this.attachment=attachment;
+        this.max=max;
     }
     public SelectionModel(String txt, String code){
         this.txt=txt;
         this.code=code;
+    }
+
+    public String getCardview_id() {
+        return cardview_id;
+    }
+
+    public void setCardview_id(String cardview_id) {
+        this.cardview_id = cardview_id;
+    }
+
+    public String getMax() {
+        return max;
+    }
+
+    public void setMax(String max) {
+        this.max = max;
+    }
+
+    public String getUser_enter() {
+        return user_enter;
+    }
+
+    public void setUser_enter(String user_enter) {
+        this.user_enter = user_enter;
+    }
+
+    public String getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(String attachment) {
+        this.attachment = attachment;
     }
 
     public ArrayList<SelectionModel> getArray() {

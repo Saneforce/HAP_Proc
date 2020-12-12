@@ -237,7 +237,8 @@ public class FilterDemoAdapter extends BaseAdapter {
                         }
                     }
                 });
-            } else if (type.equalsIgnoreCase("Y") && !pic.equalsIgnoreCase("0")) {
+            }
+            else if (type.equalsIgnoreCase("Y") && !pic.equalsIgnoreCase("0")) {
                 CircleImageView img = new CircleImageView(context);
                 img.setImageResource(R.drawable.profile_list);
                 img.setId(89);
@@ -251,8 +252,6 @@ public class FilterDemoAdapter extends BaseAdapter {
                 params2.setMargins(25, 0, 0, 0);
                 rlay.setLayoutParams(params2);
             }
-
-
         }
         else{
             if(TextUtils.isEmpty(name))
