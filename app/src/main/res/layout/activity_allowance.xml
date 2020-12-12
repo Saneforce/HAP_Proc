@@ -111,6 +111,7 @@
                     android:background="@null"
                     android:textColor="#515151"
                     android:digits="1234567890."
+                    android:inputType="number"
                     android:textSize="18sp"
                     android:layout_below="@+id/toolbar3"
                     android:layout_toRightOf="@+id/txt"
@@ -191,7 +192,46 @@
                     android:background="#B1AFAF"
                     app:cardCornerRadius="5dp"
                     android:layout_below="@+id/txt_to"
-                    android:id="@+id/card_to">
+                    android:id="@+id/card_to_hq">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lay_hq"
+                        android:padding="10dp">
+                        <TextView
+                            android:id="@+id/txt_hq"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/basic"
+                            android:text="Enter To Place"
+                            android:textAllCaps="false"
+                            android:background="@null"
+                            android:textColor="#515151"
+                            android:textSize="18sp"
+                            />
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/spin_down_arrow"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            />
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="18dp"
+                    app:cardUseCompatPadding="true"
+                    app:cardElevation="2dp"
+                    android:layout_marginTop="6dp"
+                    android:background="#B1AFAF"
+                    app:cardCornerRadius="5dp"
+                    android:layout_below="@+id/card_to_hq"
+                    android:id="@+id/card_to"
+                    android:visibility="gone"
+                    >
                     <EditText
                         android:id="@+id/edt_to"
                         android:layout_width="match_parent"
@@ -207,6 +247,45 @@
                         />
 
                 </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="18dp"
+                    app:cardUseCompatPadding="true"
+                    app:cardElevation="2dp"
+                    android:layout_marginTop="6dp"
+                    android:background="#B1AFAF"
+                    app:cardCornerRadius="5dp"
+                    android:layout_below="@+id/card_to"
+                    android:id="@+id/card_typ"
+                    android:visibility="gone">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lay_typ"
+                        android:padding="10dp">
+                        <TextView
+                            android:id="@+id/txt_typ"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/basic"
+                            android:text="Enter Type"
+                            android:textAllCaps="false"
+                            android:background="@null"
+                            android:textColor="#515151"
+                            android:textSize="18sp"
+                            />
+                        <ImageView
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:src="@drawable/spin_down_arrow"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            />
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -249,6 +328,8 @@
                         android:textColor="#515151"
                         android:textSize="18sp"
                         android:padding="10dp"
+                        android:digits="1234567890."
+                        android:inputType="number"
                         />
 
                 </androidx.cardview.widget.CardView>

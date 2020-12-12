@@ -1,6 +1,5 @@
 package com.hap.checkinproc.Activity;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -16,6 +15,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -85,6 +87,7 @@ public class TAClaimActivity extends AppCompatActivity {
     String SF_code="",div="",State_Code="";
     LinearLayout lay_row;
     int cardViewCount=70,rlayCount=700;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,20 +153,38 @@ public class TAClaimActivity extends AppCompatActivity {
             //TODO: action
             ClipData mClipData = data.getClipData();
             int pickedImageCount;
+            String filepathing = "";
+            if(data.getData()==null) {
+                Log.v("onactivity_result",data.getData()+" ");
 
-            String filepathing="";
-            for (pickedImageCount = 0; pickedImageCount < mClipData.getItemCount();
-                 pickedImageCount++) {
-                Log.v("picked_image_value", mClipData.getItemAt(pickedImageCount).getUri() + "");
+                for (pickedImageCount = 0; pickedImageCount < mClipData.getItemCount();
+                     pickedImageCount++) {
+                    Log.v("picked_image_value", mClipData.getItemAt(pickedImageCount).getUri() + "");
+                    ImageFilePath filepath = new ImageFilePath();
+                    String fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(pickedImageCount).getUri());
+                    Log.v("picked_fullPath", fullPath + "");
+                    if (pos == -1)
+                        picPath.add(fullPath);
+                    else {
+                        SelectionModel m = array.get(pos);
+                        filepathing = m.getImg_url();
+                        filepathing = filepathing + fullPath + ",";
+                        m.setImg_url(filepathing);
+
+                    }
+                }
+            }
+            else{
+                Log.v("data_pic_multiple","is in empty");
                 ImageFilePath filepath = new ImageFilePath();
-                String fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(pickedImageCount).getUri());
-                Log.v("picked_fullPath", fullPath + "");
-                if(pos==-1)
+                String fullPath = filepath.getPath(TAClaimActivity.this,data.getData());
+                Log.v("data_pic_multiple11",fullPath);
+                if (pos == -1)
                     picPath.add(fullPath);
-                else{
-                    SelectionModel m=array.get(pos);
-                    filepathing=m.getImg_url();
-                    filepathing=filepathing+fullPath+",";
+                else {
+                    SelectionModel m = array.get(pos);
+                    filepathing = m.getImg_url();
+                    filepathing = filepathing + fullPath + ",";
                     m.setImg_url(filepathing);
 
                 }
@@ -449,8 +470,6 @@ public class TAClaimActivity extends AppCompatActivity {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         if (response.isSuccessful()) {
-
-
                             Log.v("print_upload_file_true", "ggg" + response);
                             JSONObject jb = null;
                             String jsonData = null;
@@ -471,7 +490,7 @@ public class TAClaimActivity extends AppCompatActivity {
                                     arr.add(new SelectionModel(json_in.getString("Ad_Fld_Name"),"",json_in.getString("Ad_Fld_ID"),"",""));
                                 }
                                 arr1.add(new SelectionModel("",arr));
-                                array.add(new SelectionModel(json_o.getString("Name"),"",json_o.getString("ID"),"",arr1));
+                                array.add(new SelectionModel(json_o.getString("Name"),"",json_o.getString("ID"),"",arr1,json_o.getString("user_enter"),json_o.getString("Attachemnt"),json_o.getString("Max_Allowance")));
                             }
                             JSONArray ja1=js.getJSONArray("TodayExpense");
                             if(ja1.length()!=0)
@@ -481,7 +500,7 @@ public class TAClaimActivity extends AppCompatActivity {
                             list.setAdapter(adpt);
 
                             for(int i=0;i<array.size();i++){
-                                createDynamicViewForSingleRow(array.get(i).getTxt(),array.get(i).getArray(),i);
+                                createDynamicViewForSingleRow(array.get(i).getTxt(),array.get(i).getArray(),i,array.get(i).getUser_enter(),array.get(i).getAttachment(),array.get(i).getMax());
                             }
 
                         }
@@ -498,8 +517,7 @@ public class TAClaimActivity extends AppCompatActivity {
         }catch (Exception e){}
     }
 
-    @SuppressLint("ResourceType")
-    public void createDynamicViewForSingleRow(String name, ArrayList<SelectionModel> array, int position){
+    public void createDynamicViewForSingleRow(String name,ArrayList<SelectionModel> array,int position,String userenter,String attachment,String max){
         RelativeLayout rl=new RelativeLayout(this);
         RelativeLayout.LayoutParams layoutparams_1 = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -528,6 +546,14 @@ public class TAClaimActivity extends AppCompatActivity {
         edt.setLayoutParams(layoutparams_3);
         edt.setBackgroundResource(R.drawable.round_rect_with_blue_stroke);
         edt.setEms(5);
+        edt.setInputType(InputType.TYPE_CLASS_NUMBER);
+        if(userenter.equalsIgnoreCase("0")) {
+            edt.setEnabled(false);
+            edt.setText(max);
+        }
+        else if(userenter.equalsIgnoreCase("1")){
+            edt.setFilters(new InputFilter[]{ new InputFilterMinMax("0", max)});
+        }
         edt.setPadding(9,9,9,9);
         rl.addView(edt);
         RelativeLayout.LayoutParams layoutparams_4 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -537,6 +563,11 @@ public class TAClaimActivity extends AppCompatActivity {
         ImageView img=new ImageView(this);
         img.setImageResource(R.drawable.attach_icon);
         img.setId(899);
+        if(attachment.equalsIgnoreCase("1")){
+            img.setVisibility(View.VISIBLE);
+        }
+        else
+            img.setVisibility(View.INVISIBLE);
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -552,30 +583,39 @@ public class TAClaimActivity extends AppCompatActivity {
         lay_row.addView(rl);
 
         if(array.get(0).getArray().size()!=0){
-            RelativeLayout r2=new RelativeLayout(this);
-            RelativeLayout.LayoutParams params_2 = new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,
-                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout r2=new LinearLayout(this);
+            LinearLayout.LayoutParams params_2 = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            r2.setOrientation(LinearLayout.VERTICAL);
             r2.setLayoutParams(params_2);
             r2.setId(rlayCount);
             array.get(0).getArray().get(0).setTmp_url(String.valueOf(rlayCount));
+            array.get(0).setTxt(String.valueOf(cardViewCount));
             rlayCount=rlayCount+1;
-
-            r2.addView(generateView(0,array.get(0).getArray(),array,0));
+            ArrayList<Integer> cardCountt=new ArrayList<>();
+            r2.addView(generateView(0,array.get(0).getArray(),array,0,cardCountt));
             lay_row.addView(r2);
+        }
+        else{
+            View vv=new View(this);
+            vv.setBackgroundColor(Color.BLACK);
+            vv.setLayoutParams(layoutparams_1);
+            lay_row.addView(vv);
         }
     }
 
-    public CardView generateView(int x,ArrayList<SelectionModel> arr,ArrayList<SelectionModel> arrayList,int pos){
+    public CardView generateView(int x,ArrayList<SelectionModel> arr,ArrayList<SelectionModel> arrayList,int pos,ArrayList<Integer> cardPos){
         CardView cardview = new CardView(this);
         cardview.setId(cardViewCount);
+        cardPos.add(cardViewCount);
         cardViewCount=cardViewCount+1;
-        RelativeLayout.LayoutParams layoutparams = new RelativeLayout.LayoutParams(
+        LinearLayout.LayoutParams layoutparams = new LinearLayout.LayoutParams(
                 RelativeLayout.LayoutParams.FILL_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
         if(x!=0){
-            CardView cc=lay_row.findViewById(x);
-            layoutparams.addRule(RelativeLayout.BELOW,cc.getId());
+           // CardView cc=lay_row.findViewById(x);
+            //layoutparams.addRule(RelativeLayout.BELOW,cc.getId());
         }
         cardview.setLayoutParams(layoutparams);
 
@@ -647,6 +687,7 @@ public class TAClaimActivity extends AppCompatActivity {
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         params_4.setMargins(0,5,0,0);
         RelativeLayout rlay_icon=new RelativeLayout(this);
+        rlay_icon.setId(657);
         RelativeLayout.LayoutParams params_5 = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -657,7 +698,6 @@ public class TAClaimActivity extends AppCompatActivity {
         img1.setImageResource(R.drawable.circle_plus_icon);
         img1.setId(899);
 
-        img1.setId(500);
         img1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -666,12 +706,13 @@ public class TAClaimActivity extends AppCompatActivity {
                 for(int l=0;l<arr.size();l++){
                     SelectionModel mm=arr.get(l);
                     arr_new.add(new SelectionModel(mm.getTxt(),"",mm.getCode(),"",mm.getTmp_url()));
-
                 }
-                arrayList.add(new SelectionModel("",arr_new));
+
+                arrayList.add(new SelectionModel(String.valueOf(cardViewCount),arr_new));
                 Log.v("arraylist_selection",arrayList.size()+"");
-                RelativeLayout rlays=lay_row.findViewById(countt);
-                rlays.addView(generateView(cardview.getId(),arr_new,arrayList,pos+1));
+                LinearLayout rlays=lay_row.findViewById(countt);
+                img1.setVisibility(View.INVISIBLE);
+                rlays.addView(generateView(cardview.getId(),arr_new,arrayList,pos+1,cardPos));
                 // lay_row.addView(rlays);
             }
         });
@@ -687,7 +728,7 @@ public class TAClaimActivity extends AppCompatActivity {
         params_6.setMargins(0,6,6,0);
         ImageView img2=new ImageView(this);
         img2.setImageResource(R.drawable.circle_minus_icon);
-        img2.setId(899);
+        img2.setId(500);
 
         //layoutparams_3.addRule(RelativeLayout.CENTER_VERTICAL);
         // layoutparams_3.setMargins(0,8,0,0);
@@ -696,18 +737,60 @@ public class TAClaimActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 int countt= Integer.parseInt(arr.get(0).getTmp_url());
-                RelativeLayout rlays=lay_row.findViewById(countt);
+                LinearLayout rlays=lay_row.findViewById(countt);
+                Log.v("printing_pos_are ",pos+" end ");
+                int pos=cardPos.indexOf(cardview.getId());
+                Log.v("positon_vard",pos+" mock ");
+                cardPos.remove(pos);
                 rlays.removeView(cardview);
-                Log.v("printing_pos_are ",pos+" end");
                 arrayList.remove(pos);
+
+                    int cardCount= Integer.parseInt(arrayList.get(arrayList.size()-1).getTxt());
+                    CardView card=rlays.findViewById(cardCount);
+                    RelativeLayout rlayay=card.findViewById(657);
+                    ImageView img=rlayay.findViewById(899);
+                    img.setVisibility(View.VISIBLE);
+
+
                 // lay_row.addView(rlays);
             }
         });
+        if(pos==0){
+            img2.setVisibility(View.INVISIBLE);
+        }
         rlay_icon.addView(img2);
         //lay.addView(edt1);
         lay.addView(rlay_icon);
 
         cardview.addView(lay);
         return cardview;
+    }
+    public class InputFilterMinMax implements InputFilter {
+
+        private int min, max;
+
+        public InputFilterMinMax(int min, int max) {
+            this.min = min;
+            this.max = max;
+        }
+
+        public InputFilterMinMax(String min, String max) {
+            this.min = Integer.parseInt(min);
+            this.max = Integer.parseInt(max);
+        }
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            try {
+                int input = Integer.parseInt(dest.toString() + source.toString());
+                if (isInRange(min, max, input))
+                    return null;
+            } catch (NumberFormatException nfe) { }
+            return "";
+        }
+
+        private boolean isInRange(int a, int b, int c) {
+            return b > a ? c >= a && c <= b : c >= b && c <= a;
+        }
     }
 }
