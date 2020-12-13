@@ -7,19 +7,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -28,7 +24,6 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.Status_Activity.Extended_Shift_Activity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,18 +32,25 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Dashboard extends AppCompatActivity implements View.OnClickListener {
-    private static String Tag="HAP_Check-In";
+    private static String Tag = "HAP_Check-In";
     SharedPreferences sharedPreferences;
     SharedPreferences UserDetails;
-    public static final String CheckInDetail = "CheckInDetail" ;
-    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String CheckInDetail = "CheckInDetail";
+    public static final String MyPREFERENCES = "MyPrefs";
 
     TextView username;
-    TextView lblUserName,lblEmail;
-    LinearLayout linMyday, linCheckin, linRequstStaus, linReport, linOnDuty, linApprovals, linTaClaim, linExtShift, linTourPlan, linExit, lin_check_in;
+    TextView lblUserName, lblEmail;
+    LinearLayout linMyday, linCheckin, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift, linTourPlan, linExit, lin_check_in;
     Integer type;
     Common_Class common_class;
+    TextView approvalcount;
+    RelativeLayout linApprovals;
+    Shared_Common_Pref shared_common_pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +67,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         common_class = new Common_Class(this);
 
         String eMail = UserDetails.getString("email", "");
-        String sSFName=UserDetails.getString("SfName", "");
+        String sSFName = UserDetails.getString("SfName", "");
         lblUserName.setText(sSFName);
         lblEmail.setText(eMail);
 
@@ -80,6 +82,14 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linExtShift = (findViewById(R.id.lin_extenden_shift));
         linTourPlan = (findViewById(R.id.lin_tour_plan));
         linExit = (findViewById(R.id.lin_exit));
+        approvalcount = findViewById(R.id.approvalcount);
+
+        shared_common_pref = new Shared_Common_Pref(this);
+        if (shared_common_pref.getvalue(Shared_Common_Pref.CHECK_COUNT).equals("0")) {
+            linApprovals.setVisibility(View.GONE);
+        } else {
+            linApprovals.setVisibility(View.VISIBLE);
+        }
 
 
         linMyday.setOnClickListener(this);
@@ -92,7 +102,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linExtShift.setOnClickListener(this);
         linTourPlan.setOnClickListener(this);
         linExit.setOnClickListener(this);
-
+        getcountdetails();
     }
 
     @Override
@@ -106,7 +116,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         switch (view.getId()) {
 
             case R.id.lin_check_in:
-                Intent  i = new Intent(this, Checkin.class);
+                Intent i = new Intent(this, Checkin.class);
                 startActivity(i);
                 break;
 
@@ -119,8 +129,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 break;
 
             case R.id.lin_report:
-                Intent Dashboard=new Intent(this, Dashboard_Two.class);
-                Dashboard.putExtra("Mode","RPT");
+                Intent Dashboard = new Intent(this, Dashboard_Two.class);
+                Dashboard.putExtra("Mode", "RPT");
                 startActivity(Dashboard);
                 break;
 
@@ -153,7 +163,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 break;
         }
 
-
     }
 
     private void Get_MydayPlan(int flag, String Name) {
@@ -170,7 +179,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, jsonArray.toString());
         Log.e("Log_TpQuerySTring", QueryString.toString());
+        Log.e("LOG_NAME",Name);
         Log.e("Log_Tp_SELECT", jsonArray.toString());
+        Log.e("Log_FLAG", String.valueOf(flag));
         mCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -178,15 +189,19 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                    Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
+                   // Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
                     if (flag == 1) {
                         JSONArray jsoncc = jsonObject.getJSONArray("Checkdayplan");
-                        Log.e("LENGTH", String.valueOf(jsoncc.length()));
+                        Log.e("LENGTH_Checkin", String.valueOf(jsoncc));
+                        Log.e("LENGTH_Checkin", String.valueOf(jsoncc.length()));
+
                         //Log.e("TB_MyDAy_Plan",String.valueOf(jsoncc.getJSONObject(0).get("remarks")));
                         Log.e("MyDAY_LENGTH", String.valueOf(jsoncc.length()));
                         if (jsoncc.length() > 0) {
-                            linCheckin.setVisibility(View.VISIBLE);
+                            Log.e("LENGTH_FOR_LOOP", String.valueOf(jsoncc.length()));
+
                             linMyday.setVisibility(View.GONE);
+                            linCheckin.setVisibility(View.VISIBLE);
                         } else {
                             linCheckin.setVisibility(View.GONE);
                             linMyday.setVisibility(View.VISIBLE);
@@ -200,7 +215,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                                 public void PositiveMethod(DialogInterface dialog, int id) {
                                     dialog.dismiss();
 
-                                    common_class.CommonIntentwithoutFinishputextra(Checkin.class, "Mode", "extended");
 
 
                                 }
@@ -217,10 +231,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                                 @Override
                                 public void PositiveMethod(DialogInterface dialog, int id) {
                                     dialog.dismiss();
-                                    Intent intent = new Intent(getApplicationContext(), Checkin.class);
+                                    common_class.CommonIntentwithoutFinishputextra(Checkin.class, "Mode", "extended");
+
+                                    /*Intent intent = new Intent(getApplicationContext(), Checkin.class);
                                     Bundle extras = new Bundle();
-                                    extras.putString("Extended_Flag","extended");
-                                    startActivity(intent);
+                                    extras.putString("Extended_Flag", "extended");
+                                    startActivity(intent);*/
                                 }
 
                                 @Override
@@ -243,4 +259,59 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         });
     }
 
+
+    public void getcountdetails() {
+
+        Map<String, String> QueryString = new HashMap<>();
+        QueryString.put("axn", "ViewAllCount");
+        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+        QueryString.put("desig", "MGR");
+        String commonworktype = "{\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, commonworktype);
+
+        mCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                // locationList=response.body();
+                Log.e("TAG_TP_RESPONSEcount", "response Tp_View: " + new Gson().toJson(response.body()));
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    // int TC=Integer.parseInt(jsonObject.getString("leave")) + Integer.parseInt(jsonObject.getString("Permission")) + Integer.parseInt(jsonObject.getString("vwOnduty")) + Integer.parseInt(jsonObject.getString("vwmissedpunch")) + Integer.parseInt(jsonObject.getString("TountPlanCount")) + Integer.parseInt(jsonObject.getString("vwExtended"));
+                    //jsonObject.getString("leave"))
+                    Log.e("TOTAl_COUNT", String.valueOf(Integer.parseInt(jsonObject.getString("leave")) + Integer.parseInt(jsonObject.getString("Permission")) + Integer.parseInt(jsonObject.getString("vwOnduty")) + Integer.parseInt(jsonObject.getString("vwmissedpunch")) + Integer.parseInt(jsonObject.getString("TountPlanCount")) + Integer.parseInt(jsonObject.getString("vwExtended"))));
+                    //count = count +
+
+                    Shared_Common_Pref.TotalCountApproval = Integer.parseInt(jsonObject.getString("leave")) + Integer.parseInt(jsonObject.getString("Permission")) + Integer.parseInt(jsonObject.getString("vwOnduty")) + Integer.parseInt(jsonObject.getString("vwmissedpunch")) + Integer.parseInt(jsonObject.getString("TountPlanCount")) + Integer.parseInt(jsonObject.getString("vwExtended"));
+                    approvalcount.setText(String.valueOf(Shared_Common_Pref.TotalCountApproval));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                common_class.ProgressdialogShow(2, "");
+            }
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Get_MydayPlan(1, "check/mydayplan");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Get_MydayPlan(1, "check/mydayplan");
+    }
 }

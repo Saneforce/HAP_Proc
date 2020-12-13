@@ -9,7 +9,10 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -22,15 +25,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.ParentListInterface;
 import com.hap.checkinproc.Model_Class.HeaderCat;
 import com.hap.checkinproc.Model_Class.HeaderName;
 import com.hap.checkinproc.Model_Class.Product;
+import com.hap.checkinproc.Model_Class.ProductUnitBox;
+import com.hap.checkinproc.Model_Class.ProductUnitModel;
 import com.hap.checkinproc.Model_Class.Product_Array;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.ParentListAdapter;
@@ -39,19 +47,22 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OrderCategoryActivity extends AppCompatActivity {
+public class OrderCategoryActivity extends AppCompatActivity implements Master_Interface {
     TextView toolHeader, toolTime, toolSlash, toolCutOFF, grandTotal, item_count, txtClosing;
     ImageView imgBack;
 
@@ -92,12 +103,24 @@ public class OrderCategoryActivity extends AppCompatActivity {
     LinearLayout bottomLinear;
     Shared_Common_Pref shared_common_pref;
 
+
+    /*for product unit*/
+    CustomListViewDialog customDialog;
+    Common_Model mCommon_model_spinner;
+    List<Common_Model> modelRetailDetails = new ArrayList<>();
+    Type userType;
+    Gson gson;
+    List<ProductUnitModel> mProductUnitModel;
+    String productUnitId, productUnitType = "";
+    String ProductModelId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_category);
 
         getToolbar();
+
         @SuppressLint("WrongConstant")
         SharedPreferences sh
                 = getSharedPreferences("MyPrefs",
@@ -107,7 +130,7 @@ public class OrderCategoryActivity extends AppCompatActivity {
         CUTT_OFF_CODE = Shared_Common_Pref.StateCode;
 
         shared_common_pref = new Shared_Common_Pref(this);
-
+        gson = new Gson();
         Log.e("CAT_Details", SF_CODE);
         Log.e("CAT_Details", DIVISION_CODE);
         Log.e("CAT_Details", CUTT_OFF_CODE);
@@ -249,7 +272,7 @@ public class OrderCategoryActivity extends AppCompatActivity {
 
         String tempalteValue = "{\"tableName\":\"category_master\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<HeaderCat> ca = apiInterface.SubCategory(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code),  shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code),shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", tempalteValue);
+        Call<HeaderCat> ca = apiInterface.SubCategory(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", tempalteValue);
 
         ca.enqueue(new Callback<HeaderCat>() {
             @Override
@@ -266,6 +289,11 @@ public class OrderCategoryActivity extends AppCompatActivity {
                         mHeaderNameValue.add(str);
                         Log.e("HEADER_NAME", String.valueOf(mHeaderNameValue));
                         eventsArrayList = headerNameArrayList.get(i).getProduct();
+                        for (int j = 0; j < eventsArrayList.size(); j++) {
+                            productUnitId = String.valueOf(eventsArrayList.get(j).getId());
+                            Log.e("Product_code_value", productUnitId);
+
+                        }
                         childListData(eventsArrayList, headerCat, headerNameArrayList);
 
                     }
@@ -290,21 +318,21 @@ public class OrderCategoryActivity extends AppCompatActivity {
             mResponseProductID.add(String.valueOf(productID));
             seachName = eventsArrayLists.get(j).getName();
             mHeaderNameValue.add(seachName);
-            event_list_parent_adapter = new ParentListAdapter(headerCat, headerNameArrayLists, eventsArrayLists, OrderCategoryActivity.this, mHeaderNameValue, new ParentListInterface() {
-                @Override
-                public void onClickParentInter(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy, String catImage, String catName,String productUnit) {
 
-                    Log.e("Product_code", productUnit);
+            Log.e("PRODUCT_TYPE_VALUE", "PRODUCT_TYPE" + productUnitType);
+            event_list_parent_adapter = new ParentListAdapter(headerCat, headerNameArrayLists, eventsArrayLists, OrderCategoryActivity.this, mHeaderNameValue, modelRetailDetails, new ParentListInterface() {
+                @Override
+                public void onClickParentInter(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy, String catImage, String catName, String productUnit) {
+
+                    Log.e("Product_sale_unit", productUnit);
 
                     if (Product_Array_List.size() == 0) {
                         sum = sum + productQuantiy * Integer.parseInt(productCode);
                         grandTotal.setText("" + sum);
-
                         shared_common_pref.save("Total_amount", String.valueOf(sum));
                         item_count.setText("Items:" + "1");
-                        Product_Array_List.add(new Product_Array(itemID, productName, productQuantiy, productQuantiy * Integer.parseInt(productCode), Integer.parseInt(productCode), catImage, catName,productUnit));
+                        Product_Array_List.add(new Product_Array(itemID, productName, productQuantiy, productQuantiy * Integer.parseInt(productCode), Integer.parseInt(productCode), catImage, catName, productUnit));
                         System.out.println("First_Product_Added" + Product_Array_List.size());
-
 
                     } else {
                         System.out.println("PRODUCT_Array_SIzeElse" + Product_Array_List.size());
@@ -323,7 +351,7 @@ public class OrderCategoryActivity extends AppCompatActivity {
 
                         }
 
-                        Product_Array_List.add(new Product_Array(itemID, productName, productQuantiy, productQuantiy * Integer.parseInt(productCode), Integer.parseInt(productCode), catImage, catName,productUnit));
+                        Product_Array_List.add(new Product_Array(itemID, productName, productQuantiy, productQuantiy * Integer.parseInt(productCode), Integer.parseInt(productCode), catImage, catName, productUnit));
                         int sum = 0;
 
                         Log.e("PRODUCT_ARRAY_SIZE", String.valueOf(Product_Array_List));
@@ -416,6 +444,14 @@ public class OrderCategoryActivity extends AppCompatActivity {
 
                 }
 
+                @Override
+                public void onProductUnit(String productSaleUnit, String productItemId) {
+                 /*   modelRetailDetails.clear();
+                    RetailerType(productItemId);*/
+
+                }
+
+
             });
 
             mRecyclerView.setAdapter(event_list_parent_adapter);
@@ -468,4 +504,79 @@ public class OrderCategoryActivity extends AppCompatActivity {
 
     }
 
+
+
+
+    /*Product Unit peice */
+
+
+    public void RetailerType(String productItemId) {
+        String commonworktype = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+        Map<String, String> QueryString = new HashMap<>();
+        QueryString.put("axn", "get/UnitConversion");
+        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<Object> call = apiInterface.GetRouteObject(QueryString, commonworktype);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                Log.e("MAsterSyncView_Result", response.body() + "");
+                System.out.println("Route_Matser" + response.body().toString());
+                Log.e("TAG", "response 33: " + new Gson().toJson(response.body()));
+
+
+                userType = new TypeToken<ArrayList<ProductUnitModel>>() {
+                }.getType();
+                mProductUnitModel = gson.fromJson(new Gson().toJson(response.body()), userType);
+                for (int i = 0; i < mProductUnitModel.size(); i++) {
+
+                    ProductModelId = String.valueOf(mProductUnitModel.get(i).getProductCode());
+
+                    Log.e("Inner_id_123456", productItemId);
+                    Log.e("Inner_id", ProductModelId);
+                    if (productItemId.equals(ProductModelId)) {
+                        String name = mProductUnitModel.get(i).getName();
+                        mCommon_model_spinner = new Common_Model(ProductModelId, name, "flag");
+                        Log.e("LeaveType_Request", ProductModelId);
+                        Log.e("LeaveType_Request", name);
+                        modelRetailDetails.add(mCommon_model_spinner);
+                    }
+
+
+                }
+
+                customDialog = new CustomListViewDialog(OrderCategoryActivity.this, modelRetailDetails, 8);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+
+            }
+        });
+    }
+
+    @Override
+    public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
+        customDialog.dismiss();
+        if (type == 8) {
+
+            productUnitType = myDataset.get(position).getName();
+            Log.e("PRODUCT_TYPE_VALUE_A", productUnitType);
+            Log.e("PRODUCT_TYPE_VALUE_A", String.valueOf(myDataset.size()));
+            ProductUnitBox productUnitBox = new ProductUnitBox(productUnitType, myDataset.get(position).getId(), 0);
+
+
+
+            //  modelRetailDetails.clear();
+        }
+    }
 }

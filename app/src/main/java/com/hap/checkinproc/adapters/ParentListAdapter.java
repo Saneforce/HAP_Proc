@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Interface.ChildListInterface;
 import com.hap.checkinproc.Interface.ParentListInterface;
 import com.hap.checkinproc.Model_Class.HeaderCat;
@@ -49,9 +50,10 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
     Integer productQuantityValue;
     ArrayList<String> mString;
     String catIma, catNam;
-    String productUnits;
+    String productUnits, productItemId, ProductunitType;
+    List<Common_Model> myDataset;
 
-    public ParentListAdapter(HeaderCat headercat, List<HeaderName> eventInfor, List<Product> eventsArrayList, Activity activity, ArrayList<String> mString, ParentListInterface itemClick) {
+    public ParentListAdapter(HeaderCat headercat, List<HeaderName> eventInfor, List<Product> eventsArrayList, Activity activity, ArrayList<String> mString, List<Common_Model> myDataset, ParentListInterface itemClick) {
         this.eventInfor = eventInfor;
         this.headercat = headercat;
         this.activity = activity;
@@ -61,11 +63,15 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
         this.mString = mString;
         this.evenParent = eventInfor;
         this.itemClick = itemClick;
+        this.ProductunitType = ProductunitType;
         dataValue = new ArrayList<>();
         productTotalDetails = new ArrayList<>();
         productCode = new ArrayList<>();
         productName = new ArrayList<>();
         productQuantity = new ArrayList<>();
+        this.myDataset = myDataset;
+
+
     }
 
     @Override
@@ -78,7 +84,9 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemClick.onClickParentInter(gTotal, 0, getIdFromChild, getPositionValue, productNameValue, productCodeValue, productQuantityValue, catIma, catNam,productUnits);
+                itemClick.onClickParentInter(gTotal, 0, getIdFromChild, getPositionValue, productNameValue, productCodeValue, productQuantityValue, catIma, catNam, productUnits);
+                itemClick.onProductUnit(productUnits, productItemId);
+
             }
         });
         itemView.setClickable(false);
@@ -95,17 +103,26 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
                 .error(R.drawable.no_prod)
                 .into(holder.subProdcutImage);
 
-        holder.subProdcutName.setText(evenParent.get(position).getName());
 
+        Log.e("PRODUCT_TYPE_VALUE_P", "PRODUCT_TYPE" + myDataset.size());
+
+
+        holder.subProdcutName.setText(evenParent.get(position).getName());
+        if (myDataset.size() != 0) {
+            Log.e("PRODUCT_TYPE_VALUE_P", "PRODUCT_TYPE_GSFDG" +
+
+                    myDataset.get(0).getName());
+            Log.e("Product_type_id", myDataset.get(0).getId());
+        }
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false);
         holder.subProductChild.setLayoutManager(layoutManager);
         holder.subProductChild.setHasFixedSize(true);
         holder.subProductChild.setNestedScrollingEnabled(false);
         holder.subProductChild.setItemAnimator(new DefaultItemAnimator());
-        ChildListAdapter eventListChildAdapter = new ChildListAdapter(this.activity, mProducts, new ChildListInterface() {
+        ChildListAdapter eventListChildAdapter = new ChildListAdapter(this.activity, mProducts, myDataset, new ChildListInterface() {
 
             @Override
-            public void onClickInterface(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy,String productUnit) {
+            public void onClickInterface(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy, String productUnit) {
                 /*PRODUCT_ITEM_ID_VALUE*/
                 getIdFromChild = itemID;
                 getPositionValue = positionValue;
@@ -116,10 +133,15 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
                 catIma = evenParent.get(position).getCatImage();
                 catNam = evenParent.get(position).getName();
                 productUnits = productUnit;
-                Log.e("productUnit",productUnit);
-                itemClick.onClickParentInter(value, 0, getIdFromChild, getPositionValue, productNameValue, productCodeValue, productQuantityValue, catIma, catNam,productUnits);
+                Log.e("productUnit", productUnit);
+                itemClick.onClickParentInter(value, 0, getIdFromChild, getPositionValue, productNameValue, productCodeValue, productQuantityValue, catIma, catNam, productUnits);
 
 
+            }
+
+            @Override
+            public void onProductUnit(String productSaleUnit, String productItemId) {
+                itemClick.onProductUnit(productSaleUnit, productItemId);
             }
 
 

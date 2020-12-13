@@ -251,9 +251,7 @@
                     android:layout_width="100dp"
                     android:layout_height="200dp"
                     android:layout_weight="1"
-                    android:text="leave type"
                     android:textColor="@color/green"
-
                     android:textSize="@dimen/C16dp"
                     android:textStyle="bold" />
 

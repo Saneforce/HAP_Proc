@@ -234,7 +234,7 @@ public interface ApiInterface {
 
     /*category*/
     @FormUrlEncoded
-    @POST("Db_v300.php?axn=table/list")
+    @POST("Db_v301.php?axn=table/list")
     Call<HeaderCat> SubCategory(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                                 @Query("rSF") String rSF, @Query("State_Code") String StateCode,
                                 @Field("data") String data);

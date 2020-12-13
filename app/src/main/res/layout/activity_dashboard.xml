@@ -29,19 +29,20 @@
             android:id="@+id/lblUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/C14dp"
-            android:textStyle="bold"
+            android:text="TextView"
             android:textAlignment="center"
-            android:text="TextView" />
+            android:textSize="@dimen/C14dp"
+            android:textStyle="bold" />
+
         <TextView
             android:id="@+id/lblEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/C10dp"
-            android:textStyle="normal"
-            android:textAlignment="center"
             android:layout_marginTop="-6dp"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textSize="@dimen/C10dp"
+            android:textStyle="normal" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -73,6 +74,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/C5dp"
+                android:visibility="gone"
                 android:background="@drawable/button_green"
                 android:padding="@dimen/C16dp">
 
@@ -102,8 +104,7 @@
                     android:layout_marginRight="@dimen/C5dp"
                     android:layout_weight="1"
                     android:background="@drawable/button_amber"
-                    android:padding="@dimen/C16dp"
-                    >
+                    android:padding="@dimen/C16dp">
 
                     <TextView
                         android:id="@+id/textView4"
@@ -164,22 +165,39 @@
                 </LinearLayout>
 
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/lin_approvals"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:visibility="gone"
+                    android:gravity="center"
                     android:background="@drawable/button_dgreen"
-                    android:padding="@dimen/C16dp">
+                    android:padding="@dimen/C13dp"
+                    android:weightSum="2">
 
                     <TextView
                         android:id="@+id/textView11"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:gravity="center"
                         android:text="Approvals"
-                        android:textColor="#FFFCFC"/>
-                </LinearLayout>
+                        android:textColor="#FFFCFC" />
+                    <TextView
+                        android:id="@+id/approvalcount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignRight="@id/textView11"
+                        android:paddingTop="1dp"
+                        android:textAlignment="center"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:background="@drawable/newcircle"
+                        android:textSize="14sp"
+                        />
+
+                </RelativeLayout>
 
 
             </LinearLayout>
@@ -207,7 +225,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="TA &amp; claim"
-                        android:textColor="#FFFFFF"/>
+                        android:textColor="#FFFFFF" />
                 </LinearLayout>
 
 
@@ -218,6 +236,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/button_orange"
                     android:padding="@dimen/C16dp">
+
                     <TextView
                         android:id="@+id/textView9"
                         android:layout_width="match_parent"
@@ -267,7 +286,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Exit"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#FFFFFF" />
 
             </LinearLayout>
 

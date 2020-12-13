@@ -18,6 +18,7 @@ public class Shared_Common_Pref {
     public static String Sf_Name = "Sf_Name";
     public static String Dv_ID = "DvID";
     public static  String SF_Type = "SF_Type";
+    public static String CHECK_COUNT = "0";
 
     public static  String Dept_Type = "Dept_Type";
 
@@ -36,6 +37,8 @@ public class Shared_Common_Pref {
     public static final String Cluster = "cluster";
     public static final String Work_date = "workdate";
     public static final String Status = "status";
+    public static int TotalCountApproval = 0;
+
 
     public Shared_Common_Pref(Activity Ac) {
         activity = Ac;

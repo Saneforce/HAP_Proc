@@ -43,6 +43,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -93,6 +94,24 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            return;
+                        }
+
+                        String token = task.getResult();
+
+                        Log.d("DEVICE_TOKEN", token);
+                        Toast.makeText(Login.this, "msg", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
         name = (TextInputEditText) findViewById(R.id.username);
         password = (TextInputEditText) findViewById(R.id.password);
         shared_common_pref = new Shared_Common_Pref(this);
@@ -168,6 +187,7 @@ public class Login extends AppCompatActivity {
                mProgress.show();*/
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
+
             }
         });
 
@@ -226,6 +246,7 @@ public class Login extends AppCompatActivity {
                 startActivity(Dashboard);
             }
         }
+
 
     }
 
@@ -365,7 +386,7 @@ public class Login extends AppCompatActivity {
                         if (requestCode == RC_SIGN_IN)
 
                             intent = new Intent(Login.this, Dashboard.class);
-                           // intent = new Intent(Login.this, OrderCategoryActivity.class);
+                            //intent = new Intent(Login.this, OrderCategoryActivity.class);
                         else
                             intent = new Intent(Login.this, Dashboard_Two.class);
                         intent.putExtra("photo", photo);
@@ -384,11 +405,13 @@ public class Login extends AppCompatActivity {
                         shared_common_pref.save(Shared_Common_Pref.StateCode, Sf_type);
                         String Dept_type = response.body().getData().get(0).getDeptType();
 
+                        shared_common_pref.save(Shared_Common_Pref.CHECK_COUNT, String.valueOf(type));
+
                         Shared_Common_Pref.Dept_Type = Dept_type;
                         Shared_Common_Pref.SF_Type = Sf_type;
 
 
-                        Log.e("STATECODE", Sf_type);
+                        Log.e("SF_TYPE", Sf_type);
                         Log.e("STATECODE", code);
                         Log.e("STATECODE", div);
 
@@ -517,4 +540,6 @@ public class Login extends AppCompatActivity {
             mBound = false;
         }
     };
+
+
 }

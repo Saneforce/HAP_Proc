@@ -27,18 +27,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".Activity_Hap.EventCaptureActivity"></activity>
-        <activity android:name=".Activity_Hap.OrderCategoryActivity" />
+   <!--     <service
+            android:name=".FCMservices"
+            android:enabled="true"
+            android:exported="true"></service>-->
+
+        <activity android:name=".Activity_Hap.EventCaptureActivity" />
+        <activity
+            android:name=".Activity_Hap.OrderCategoryActivity"
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".Activity_Hap.AddNewRetailer"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".Activity_Hap.SecondaryOrderActivity"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
         <activity android:name=".Activity_Hap.OrderDashBoard" />
         <activity android:name=".Activity.ApprovalViewActivity" />
         <activity android:name=".Activity.ViewTASummary" />
-        <activity android:name=".Activity.TAClaimActivity"></activity>
+        <activity android:name=".Activity.TAClaimActivity" />
         <activity android:name=".Activity.TAApprovalActivity" />
         <activity android:name=".Activity.AllowanceActivity" />
         <activity android:name=".Activity_Hap.Block_Information" />
@@ -87,7 +94,8 @@
         <activity android:name=".Activity_Hap.TimeOut" />
         <activity android:name=".Activity_Hap.On_Duty_Activity" />
         <activity android:name=".Activity_Hap.Help_Activity" />
-        <activity android:name=".Activity_Hap.UpdateTaskActivity"
+        <activity
+            android:name=".Activity_Hap.UpdateTaskActivity"
             android:theme="@style/AppTheme.Dialog" />
         <activity
             android:name=".Activity_Hap.Check_in"
@@ -104,12 +112,12 @@
         </activity>
 
         <service
-            android:name=".MyFirebaseInstanceIdService"
-            android:stopWithTask="false">
+            android:name=".MyFirebaseInstanceIdService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
+
         <service
             android:name=".common.SANGPSTracker"
             android:enabled="true"
@@ -119,7 +127,7 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".Activity_Hap.MainActivity"></activity>
+        <activity android:name=".Activity_Hap.MainActivity" />
         <activity android:name=".Activity.DesignActivity" />
         <activity
             android:name=".Activity.FilterActivity"
@@ -144,6 +152,28 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+
+
+        <service
+            android:name=".FCMservices"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_launcher_background" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/black" />
+
     </application>
 
 </manifest>

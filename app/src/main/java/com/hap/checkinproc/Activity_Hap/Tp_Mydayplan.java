@@ -1,14 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.text.InputType;
@@ -28,6 +19,11 @@ import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -35,7 +31,6 @@ import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-
 import com.hap.checkinproc.Interface.Joint_Work_Listner;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.MVP.Main_Model;
@@ -58,6 +53,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.hap.checkinproc.Common_Class.Common_Class.addquote;
 
@@ -358,7 +357,13 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                         QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
                         QueryString.put("State_Code", Shared_Common_Pref.StateCode);
                         QueryString.put("desig", "MGR");
+
                         Log.e("QueryString", String.valueOf(QueryString));
+                        Log.e("QueryString_SF", Shared_Common_Pref.Sf_Code);
+                        Log.e("QueryString_DV", Shared_Common_Pref.Div_Code);
+                        Log.e("QueryString_Sc", Shared_Common_Pref.StateCode);
+
+
                         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                         Call<Object> Callto = apiInterface.Tb_Mydayplan(QueryString, jsonarr.toString());
                         Callto.enqueue(new Callback<Object>() {
@@ -368,7 +373,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                                 common_class.ProgressdialogShow(2, "Tour  plan");
                                 if (response.code() == 200 || response.code() == 201) {
                                     //common_class.CommonIntentwithFinish(Dashboard.class);
-                                    // common_class.CommonIntentwithoutFinishputextra(Tp_Calander.class, "Monthselection", String.valueOf(common_class.getintentValues("TourMonth")));
+                                     common_class.CommonIntentwithoutFinishputextra(Tp_Calander.class, "Monthselection", String.valueOf(common_class.getintentValues("TourMonth")));
                                     Toast.makeText(Tp_Mydayplan.this, "Tour Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
                                 }
 
@@ -407,6 +412,8 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 window.setGravity(Gravity.CENTER);
                 window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 customDialog.show();
+
+                Log.e("Work_Type_List", String.valueOf(worktypelist));
 
                 break;
             case R.id.distributors_layout:
@@ -556,6 +563,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 Model_Pojo = new Common_Model(id, name, flag);
                 if (type.equals("0")) {
                     worktypelist.add(Model_Pojo);
+                    Log.e("WORK_TYPE", String.valueOf(worktypelist));
                 } else if (type.equals("1")) {
                     distributor_master.add(Model_Pojo);
                 } else if (type.equals("2")) {

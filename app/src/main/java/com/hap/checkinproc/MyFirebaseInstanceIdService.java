@@ -3,29 +3,29 @@ package com.hap.checkinproc;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.FirebaseInstanceIdService;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 
-public class MyFirebaseInstanceIdService extends FirebaseMessagingService {
-    Shared_Common_Pref shared_common_pref;
+import static android.content.ContentValues.TAG;
+
+public class MyFirebaseInstanceIdService extends FirebaseInstanceIdService  {
+
+    //this method will be called
+    //when the token is generated
     @Override
-    public void onNewToken(String token) {
-        super.onNewToken(token);
-        Log.e("newToken", token);
+    public void onTokenRefresh() {
+        super.onTokenRefresh();
 
-        shared_common_pref = new Shared_Common_Pref(this);
-        shared_common_pref.save(Shared_Common_Pref.Dv_ID, token);
-        getSharedPreferences("_", MODE_PRIVATE).edit().putString("fcm_token", token).apply();
-    }
+        //now we will have the token
+        String token = FirebaseInstanceId.getInstance().getToken();
 
-    @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
-        super.onMessageReceived(remoteMessage);
-    }
-
-    //Whenewer you need FCM token, just call this static method to get it.
-    public static String getToken(Context context) {
-        return context.getSharedPreferences("_", MODE_PRIVATE).getString("fcm_token", "empty");
+        //for now we are displaying the token in the log
+        //copy it as this method is called only when the new token is generated
+        //and usually new token is only generated when the app is reinstalled or the data is cleared
+        Log.d("MyRefreshedToken", token);
     }
 }

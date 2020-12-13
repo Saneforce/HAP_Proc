@@ -40,6 +40,7 @@ public class Leave_Approval extends AppCompatActivity {
     private RecyclerView recyclerView;
     Type userType;
     Common_Class common_class;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,13 +105,14 @@ public class Leave_Approval extends AppCompatActivity {
                         intent.putExtra("Designation", approvalList.get(Name).getDesignation());
                         intent.putExtra("MobileNumber", approvalList.get(Name).getSFMobile());
                         intent.putExtra("Reason", approvalList.get(Name).getReason());
-                        intent.putExtra("Leavetype", approvalList.get(Name).getLeaveType());
+                        intent.putExtra("Leavetype", approvalList.get(Name).getLeaveName());
                         intent.putExtra("fromdate", approvalList.get(Name).getFromDate());
                         intent.putExtra("todate", approvalList.get(Name).getToDate());
                         intent.putExtra("leavedays", String.valueOf(approvalList.get(Name).getLeaveDays()));
                         Log.e("LEAVE_APPROVAL_REJECT", String.valueOf(approvalList.get(Name).getLeaveDays()));
                         intent.putExtra("Sf_Code", approvalList.get(Name).getSfCode());
                         startActivity(intent);
+                        Log.e("Leave_Type", approvalList.get(Name).getLeaveType().toString());
 
                     }
                 }));

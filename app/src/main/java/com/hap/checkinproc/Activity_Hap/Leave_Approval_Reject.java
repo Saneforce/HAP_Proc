@@ -43,6 +43,7 @@ public class Leave_Approval_Reject extends AppCompatActivity implements View.OnC
     EditText reason;
     private WebView wv1;
     Intent i;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,7 +92,7 @@ public class Leave_Approval_Reject extends AppCompatActivity implements View.OnC
         designation.setText(":" + i.getExtras().getString("Designation"));
         mobilenumber.setText(":" + i.getExtras().getString("MobileNumber"));
         leavereason.setText(":" + i.getExtras().getString("Reason"));
-        Tour_plan_Date = i.getExtras().getString("Leavetype");
+        leavetype.setText(":"+i.getExtras().getString("Leavetype"));
         fromdate.setText(":" + i.getExtras().getString("fromdate"));
         todate.setText(":" + i.getExtras().getString("todate"));
         leavedays.setText(":" + i.getExtras().getString("leavedays"));
@@ -214,8 +215,6 @@ public class Leave_Approval_Reject extends AppCompatActivity implements View.OnC
     public void onBackPressed() {
 
     }
-
-
 
 
 }

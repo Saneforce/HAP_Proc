@@ -666,14 +666,25 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             QueryString.put("State_Code", Shared_Common_Pref.StateCode);
             QueryString.put("desig", "MGR");
 
-            Log.d("QueryString", String.valueOf(QueryString));
+
+            Log.e("QueryString_1", String.valueOf(QueryString));
+            Log.e("QueryString_SF_1", Shared_Common_Pref.Sf_Code);
+            Log.e("QueryString_DV_1", Shared_Common_Pref.Div_Code);
+            Log.e("QueryString_Sc_1", Shared_Common_Pref.StateCode);
+
+
+
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
             Call<Object> Callto = apiInterface.Tb_Mydayplan(QueryString, jsonarr.toString());
+
+
             Callto.enqueue(new Callback<Object>() {
 
                 @Override
                 public void onResponse(Call<Object> call, Response<Object> response) {
                     Log.e("RESPONSE_FROM_SERVER", response.body().toString());
+
+                    Log.d("QueryString", String.valueOf(QueryString));
                     progressbar.setVisibility(View.GONE);
                     if (response.code() == 200 || response.code() == 201) {
                         common_class.CommonIntentwithFinish(Dashboard.class);

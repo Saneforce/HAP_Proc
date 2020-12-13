@@ -146,22 +146,22 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 // locationList=response.body();
-                Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
+           /*     Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
                 Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
-
+*/
 
                 userType = new TypeToken<ArrayList<Tp_View_Master>>() {
                 }.getType();
                 Tp_View_Master = gson.fromJson(new Gson().toJson(response.body()), userType);
 
-               month=SelectedMonth+1;
-                Log.e("TP_VIEW_LENGTH", String.valueOf(Tp_View_Master.size()));
-
+                month=SelectedMonth+1;
+           /*     Log.e("TP_VIEW_LENGTH", String.valueOf(Tp_View_Master.size()));
+*/
 
                 adapter = new Tp_Calander.GridCellAdapter(getApplicationContext(), R.id.date, month, year, (ArrayList<com.hap.checkinproc.Model_Class.Tp_View_Master>) Tp_View_Master);
                 adapter.notifyDataSetChanged();
                 calendarView.setAdapter(adapter);
-                Log.e("Work_Type_Model", String.valueOf(response.body().toString()));
+              /*  Log.e("Work_Type_Model", String.valueOf(response.body().toString()));*/
                 //Log.e("Tp_View_Master", String.valueOf(Tp_View_Master.size()));
                 nDialog.dismiss();
             }
@@ -259,7 +259,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
             this._context = context;
             this.Tp_View_Master = new ArrayList<Tp_View_Master>();
             this.Tp_View_Master = Tp_View_Master;
-            Log.e("ARRAY_LIST_SIZE", String.valueOf(Tp_View_Master.size()));
+
             this.list = new ArrayList<String>();
             Calendar calendar = Calendar.getInstance();
             setCurrentDayOfMonth(calendar.get(Calendar.DAY_OF_MONTH));
