@@ -324,7 +324,7 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
                 @Override
                 public void onClickParentInter(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy, String catImage, String catName, String productUnit) {
 
-                    Log.e("Product_sale_unit", productUnit);
+                    Log.e("Product_sale_unit",""+ productUnit);
 
                     if (Product_Array_List.size() == 0) {
                         sum = sum + productQuantiy * Integer.parseInt(productCode);

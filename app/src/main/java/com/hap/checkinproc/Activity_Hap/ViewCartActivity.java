@@ -69,10 +69,10 @@ public class ViewCartActivity extends AppCompatActivity {
     TextView toolHeader;
     ImageView imgBack;
     List<Product_Array> carsList;
-    String SF_CODE, DIVISION_CODE, CUTT_OFF_CODE, WORK_TYPE, Town_code,
-            reatilerID, retailerName,
-            distributorId, distributorName, totalValueString;
-    Integer orderType, totalOrderValue;
+    String SF_CODE = "", DIVISION_CODE = "", CUTT_OFF_CODE = "", WORK_TYPE = "", Town_code = "",
+            reatilerID = "", retailerName = "",
+            distributorId = "", distributorName = "", totalValueString = "";
+    Integer orderType = 0, totalOrderValue = 0;
     CustomViewAdapter adapter;
 
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
@@ -178,9 +178,10 @@ public class ViewCartActivity extends AppCompatActivity {
         Type type = new TypeToken<List<Product_Array>>() {
         }.getType();
         carsList = gson.fromJson(carListAsString, type);
-    /*for (Product_Array cars : carsList){
-            Log.i("Car__Data", cars.getProductname()+"-"+cars.getProductqty()+"__"+cars.getCatName()+"-"+cars.getProductcode());
-        }*/
+        Log.e("PRODuCT_DETAILS", String.valueOf(carsList));
+        for (Product_Array cars : carsList) {
+            Log.i("Car__Data", cars.getProductname() + "-" + cars.getProductqty() + "__" + cars.getCatName() + "-" + cars.getProductcode());
+        }
         viewRecyclerview = (RecyclerView) findViewById(R.id.report_list);
         viewRecyclerview.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);

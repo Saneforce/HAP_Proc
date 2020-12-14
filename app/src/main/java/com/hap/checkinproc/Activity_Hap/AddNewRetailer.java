@@ -1,6 +1,8 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -20,8 +22,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
@@ -118,7 +122,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             public void onClick(View v) {
 
                 if (txtRetailerRoute.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Enter route", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Select route", Toast.LENGTH_SHORT).show();
                 } else if (addRetailerName.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Enter Name", Toast.LENGTH_SHORT).show();
                 } else if (addRetailerAddress.getText().toString().matches("")) {
@@ -130,21 +134,23 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 } else if (addRetailerEmail.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Enter Email", Toast.LENGTH_SHORT).show();
                 } else if (txtRetailerClass.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Enter Class", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Select Class", Toast.LENGTH_SHORT).show();
                 } else if (txtRetailerChannel.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Enter Channel", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Select Channel", Toast.LENGTH_SHORT).show();
                 } else if (!addRetailerEmail.getText().toString().trim().matches(emailPattern)) {
                     Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
                 } else {
                     addNewRetailers();
-                    Toast.makeText(AddNewRetailer.this, "All set", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddNewRetailer.this, "New Retailer Added successfully", Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
 
-        //   addNewRetailers();
+
     }
+
+
 
 
     /*Route Details*/
@@ -394,13 +400,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         } else if (type == 9) {
             txtRetailerClass.setText(myDataset.get(position).getName());
             classId = Integer.valueOf(myDataset.get(position).getId());
-            // classId = String.valueOf(classId.subSequence(1, classId.length() - 1));
-            Log.e("ASDFGHJ", "" + classId);
+
         } else if (type == 10) {
             txtRetailerChannel.setText(myDataset.get(position).getName());
             channelID = Integer.valueOf(myDataset.get(position).getId());
-            // channelID = String.valueOf(channelID.subSequence(1, channelID.length() - 1));
-            Log.e("ASDFGHJ", "" + channelID);
+
         }
     }
 
@@ -409,6 +413,17 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 @Override
                 public void run() {
                     AddNewRetailer.super.onBackPressed();
+
+                    AlertDialogBox.showDialog(AddNewRetailer.this, "", "Do you want to Exit?", "Yes", "NO", false, new AlertBox() {
+                        @Override
+                        public void PositiveMethod(DialogInterface dialog, int id) {
+                            AddNewRetailer.super.onBackPressed();
+                        }
+
+                        @Override
+                        public void NegativeMethod(DialogInterface dialog, int id) {
+                        }
+                    });
                 }
             });
 
@@ -416,5 +431,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     public void onBackPressed() {
 
     }
+
+
+
 
 }

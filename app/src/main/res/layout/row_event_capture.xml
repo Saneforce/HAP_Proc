@@ -1,71 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/card_event_capture"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/C5dp"
+    android:background="#00ECEAEA"
+    android:orientation="horizontal"
     android:theme="@style/Theme.MaterialComponents.Light"
     tools:ignore="MissingConstraints">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
+        android:layout_margin="@dimen/C5dp"
+        android:layout_height="wrap_content">
 
         <LinearLayout
-            android:id="@+id/linear_edt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+         >
 
             <ImageView
                 android:id="@+id/image_captured"
                 android:layout_width="@dimen/C70dp"
-                android:layout_height= "@dimen/C50dp"
-                android:layout_gravity="center"
-                android:layout_margin="@dimen/C10dp"
+                android:layout_height="@dimen/C50dp"
+                android:padding="@dimen/C5dp"
                 android:src="@drawable/ic_launch" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/C10dp"
-                android:orientation="vertical">
-
-                <EditText
-                    android:id="@+id/edt_title"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:enabled="false"
-                    android:hint="Enter the title"
-                    android:textSize="@dimen/C13dp" />
-
-                <EditText
-                    android:id="@+id/edt_remarks"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C10dp"
-                    android:enabled="false"
-                    android:hint="Enter the remarks"
-                    android:textSize="@dimen/C13dp" />
-
-            </LinearLayout>
-
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/linear_delete"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="right"
-            android:visibility="gone">
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/image_delete"
-                android:layout_width="@dimen/C70dp"
-                android:layout_height="@dimen/C90dp"
-                android:src="@drawable/delete_cart" />
+
+            <TextView
+                android:id="@+id/edt_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter the title"
+                android:padding="@dimen/C5dp"
+                android:textSize="@dimen/C13dp" />
+
+
+            <TextView
+                android:id="@+id/edt_remarks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter the remarks"
+                android:padding="@dimen/C5dp"
+                android:textSize="@dimen/C13dp" />
+
+
         </LinearLayout>
 
     </LinearLayout>

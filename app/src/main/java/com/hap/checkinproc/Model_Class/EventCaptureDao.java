@@ -20,6 +20,7 @@ public interface EventCaptureDao {
     @Delete
     void delete(EventCapture task);
 
+
     @Update
     void update(EventCapture task);
 

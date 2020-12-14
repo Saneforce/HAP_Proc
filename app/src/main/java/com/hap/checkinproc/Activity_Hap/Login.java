@@ -385,8 +385,8 @@ public class Login extends AppCompatActivity {
                         Intent intent;
                         if (requestCode == RC_SIGN_IN)
 
-                            intent = new Intent(Login.this, Dashboard.class);
-                            //intent = new Intent(Login.this, OrderCategoryActivity.class);
+                           //intent = new Intent(Login.this, Dashboard.class);
+                          intent = new Intent(Login.this, EventCaptureActivity.class);
                         else
                             intent = new Intent(Login.this, Dashboard_Two.class);
                         intent.putExtra("photo", photo);
