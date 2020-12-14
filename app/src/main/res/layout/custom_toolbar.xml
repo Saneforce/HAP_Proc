@@ -122,16 +122,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:visibility="gone"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <EditText
                 android:id="@+id/toolbar_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/C10dp"
-                android:layout_marginBottom="@dimen/C10dp"
                 android:layout_marginRight="@dimen/C10dp"
+                android:layout_marginBottom="@dimen/C10dp"
                 android:background="@drawable/text_bg"
                 android:hint="Search..."
                 android:padding="10dp"></EditText>

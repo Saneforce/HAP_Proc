@@ -71,12 +71,13 @@ EventCaptureActivity extends AppCompatActivity {
     String RetailerName, RouteName, DistributorName;
     SharedPreferences sharedPreferences;
     String intenValue;
-    int dbCount = 0;
+    String RoomDataBase = "";
     private AppDatabase mDB;
 
     List<EventCapture> taskList;
     String locationValue, dateTime, checkInTime, keyEk = "EK", KeyDate, KeyHyp = "-", keyCodeValue, checkOutTime;
     String EventFileName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,12 +98,17 @@ EventCaptureActivity extends AppCompatActivity {
         getTasks();
         sp = getSharedPreferences("USER_PREF", Context.MODE_PRIVATE);
 
-        sharedPreferences = getSharedPreferences("MySharedPref",
-                MODE_PRIVATE);
+        sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
 
 
+        /*  shared_common_pref.save("Event_Capture","Remove");*/
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         mShaeShared_common_pref = new Shared_Common_Pref(this);
+
+
+        /*        mShaeShared_common_pref.save("Event_Capture","Remove");*/
+
+
 
 
         DistributorName = mShaeShared_common_pref.getvalue("distributor_name");
@@ -116,6 +122,7 @@ EventCaptureActivity extends AppCompatActivity {
         txtDistributorName = findViewById(R.id.txt_distributor_name);
 
         txtRetailerName.setText(RetailerName);
+
         txtRoute.setText(RouteName);
         txtDistributorName.setText(DistributorName);
 
@@ -129,6 +136,13 @@ EventCaptureActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mEventCapture.setLayoutManager(layoutManager);
         mEventCapture.setNestedScrollingEnabled(false);
+
+
+        RoomDataBase = mShaeShared_common_pref.getvalue("Event_Capture");
+
+        if (RoomDataBase.equalsIgnoreCase("Remove")) {
+            delete();
+        }
 
 
         TakeEventPicture.setOnClickListener(new View.OnClickListener() {
@@ -335,8 +349,8 @@ EventCaptureActivity extends AppCompatActivity {
                 public void run() {
                     //onSuperBackPressed();
 
-                    Intent intent =  new Intent(EventCaptureActivity.this,SecondaryOrderActivity.class);
-                    intent.putExtra("Event_caputure",EventFileName);
+                    Intent intent = new Intent(EventCaptureActivity.this, SecondaryOrderActivity.class);
+                    intent.putExtra("Event_caputure", EventFileName);
                     startActivity(intent);
 
                 }
@@ -352,5 +366,26 @@ EventCaptureActivity extends AppCompatActivity {
 
     }
 
+
+    private void delete() {
+
+        class DeleteTask extends AsyncTask<Void, Void, Void> {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                DatabaseClient.getInstance(getApplicationContext()).getAppDatabase().clearAllTables();
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+               // Toast.makeText(getApplicationContext(), "Delete", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        DeleteTask st = new DeleteTask();
+        st.execute();
+    }
 
 }

@@ -7,8 +7,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_marginBottom="@dimen/C10dp"
+        android:orientation="vertical"
         android:tag="cards main container"
         tools:ignore="MissingConstraints">
 
@@ -66,36 +66,32 @@
                     </LinearLayout>
 
 
-
                 </LinearLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
-                    android:layout_marginLeft="-50dp"
+                    android:layout_height="match_parent"
 
-                    android:layout_height="match_parent">
+                    android:layout_marginLeft="-50dp">
 
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginTop="@dimen/C5dp"
-                  >
+                        android:layout_marginTop="@dimen/C5dp">
 
 
                         <Button
+                            android:id="@+id/edt_unit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C15dp"
+                            android:layout_marginRight="@dimen/C10dp"
                             android:background="@drawable/button_blueg"
                             android:padding="@dimen/C5dp"
                             android:text="box"
-                            android:id="@+id/edt_unit"
-                            android:layout_marginTop="@dimen/C15dp"
-                            android:layout_marginRight="@dimen/C10dp"
                             android:textColor="@android:color/white" />
-
-
 
 
                         <LinearLayout
@@ -141,6 +137,7 @@
                                 android:layout_gravity="center"
                                 android:background="@android:color/transparent"
                                 android:gravity="center"
+                                android:imeOptions="actionDone"
                                 android:inputType="number"
                                 android:maxLength="3"
                                 android:padding="5dp"

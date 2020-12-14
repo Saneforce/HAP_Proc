@@ -58,8 +58,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ImageCapture extends AppCompatActivity implements
-        SurfaceHolder.Callback {
+public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Callback {
     Button button;
     TextureView textureView;
     ImageView btnFlash;

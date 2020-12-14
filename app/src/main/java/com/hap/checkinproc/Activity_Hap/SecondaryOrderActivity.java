@@ -238,11 +238,17 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
             @Override
             public void onClick(View v) {
 
+                if (txtOrder.getText().toString().matches("")) {
+                    Toast.makeText(SecondaryOrderActivity.this, "Select Order", Toast.LENGTH_SHORT).show();
+                } else if (txtRetailer.getText().toString().matches("")) {
+                    Toast.makeText(SecondaryOrderActivity.this, "Select Retailer", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
+                    intent.putExtra("EventcapOne", EventcapOne);
+                    intent.putExtra("id", 1);
+                    startActivity(intent);
+                }
 
-                Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
-                intent.putExtra("EventcapOne", EventcapOne);
-                intent.putExtra("id", 1);
-                startActivity(intent);
 
              /*   if (count1 == 1) {
                     Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
@@ -269,9 +275,9 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
             public void onClick(View v) {
 
                 if (txtOrder.getText().toString().matches("")) {
-                    Toast.makeText(SecondaryOrderActivity.this, "Enter Text Order", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SecondaryOrderActivity.this, "Select Order", Toast.LENGTH_SHORT).show();
                 } else if (txtRetailer.getText().toString().matches("")) {
-                    Toast.makeText(SecondaryOrderActivity.this, "Enter Text Retailer", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SecondaryOrderActivity.this, "Select Retailer", Toast.LENGTH_SHORT).show();
                 } else {
                     startActivity(new Intent(SecondaryOrderActivity.this, OrderCategoryActivity.class));
                 }
@@ -432,6 +438,7 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
             reatilerID = "'" + retailerId + "'";
             shared_common_pref.save("Retailer_id", retailerId);
             shared_common_pref.save("Retailer_name", myDataset.get(position).getName());
+            shared_common_pref.save("Event_Capture","Remove");
             Log.e("Retailer_ID", myDataset.get(position).getName());
         } else if (type == 9) {
             txtOrder.setText(myDataset.get(position).getName());
