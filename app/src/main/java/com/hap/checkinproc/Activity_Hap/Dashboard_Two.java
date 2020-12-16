@@ -127,12 +127,12 @@ public class  Dashboard_Two extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-
-        if (Shared_Common_Pref.Dept_Type.equals("0")) {
-            StActivity.setVisibility(View.VISIBLE);
-        }else{
-            StActivity.setVisibility(View.GONE);
-        }
+        String typev= Shared_Common_Pref.Dept_Type.toString();
+       // if (typev.equals("0") || typev.equals("1")) {
+       //     StActivity.setVisibility(View.VISIBLE);
+      //  }else{
+      //      StActivity.setVisibility(View.GONE);
+      //  }
 
 
     }
@@ -464,12 +464,13 @@ Log.d("Respose_data",String.valueOf(response.body()));
             case R.id.StActivity:
                 new AlertDialog.Builder(Dashboard_Two.this)
                     .setTitle("HAP Check-In")
-                    .setMessage(Html.fromHtml("Are you sure to start your Today Activity Now ?"))
+                    .setMessage(Html.fromHtml("Are you sure to start your Today Activity Now ?"+UserDetails.getString("DeptType","")))
                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Intent aIntent;
-                            String sDeptType=UserDetails.getString("DeptType","");Log.d("DeptType",sDeptType);
+                            String sDeptType=UserDetails.getString("DeptType","");
+                            Log.d("DeptType",sDeptType);
 
                             if(sDeptType.equalsIgnoreCase("1")) {
                                 aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
