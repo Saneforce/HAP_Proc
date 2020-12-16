@@ -202,6 +202,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
                             linMyday.setVisibility(View.GONE);
                             linCheckin.setVisibility(View.VISIBLE);
+
+
                         } else {
                             linCheckin.setVisibility(View.GONE);
                             linMyday.setVisibility(View.VISIBLE);

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -45,6 +46,8 @@ import java.util.Locale;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 
 public class Tp_Calander extends AppCompatActivity implements View.OnClickListener, UpdateUi {
@@ -89,7 +92,14 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                if (CheckIn == true) {
+                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                } else
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
             }
         });

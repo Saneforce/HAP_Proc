@@ -3,13 +3,10 @@ package com.hap.checkinproc.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,10 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Interface.AlertBox;
+import com.hap.checkinproc.Interface.ProducrtDelete;
 import com.hap.checkinproc.Interface.viewProduct;
 import com.hap.checkinproc.Model_Class.Product_Array;
 import com.hap.checkinproc.R;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,11 +45,15 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
     Product_Array newProductArray;
     ArrayList<Product_Array> Product_Array_List;
     String productUnit;
+    JSONArray jsonValue;
 
-    public CustomViewAdapter(Context context, List<Product_Array> mProduct_arrays, viewProduct viewProd) {
+    viewProduct mProducrtDelete;
+    public CustomViewAdapter(Context context, JSONArray jsonValue, List<Product_Array> mProduct_arrays, viewProduct viewProd) {
         this.context = context;
         this.viewProd = viewProd;
         this.mProduct_arrays = mProduct_arrays;
+        this.jsonValue = jsonValue;
+        this.mProducrtDelete = mProducrtDelete;
         Product_Array_List = new ArrayList<Product_Array>();
     }
 
@@ -62,7 +67,7 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
         listItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                viewProd.onViewItemClick(productID, productname, catName, catImg, productqty, productRate,productUnit);
+                viewProd.onViewItemClick(productID, productname, catName, catImg, productqty, productRate, productUnit);
             }
         });
 
@@ -72,14 +77,15 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
     @Override
     public void onBindViewHolder(CustomViewAdapter.MyViewHolder holder, int position) {
 
+
         Product_Array mProductArray = mProduct_arrays.get(position);
-        int positions = holder.getAdapterPosition();
+        final int positions = holder.getAdapterPosition();
         if (!mProductArray.getProductqty().toString().equals("0")) {
 
-            quntaity = Integer.valueOf(mProduct_arrays.get(position).getProductqty());
-            price = Integer.valueOf(mProduct_arrays.get(position).getProductRate());
+            quntaity = Integer.valueOf(mProductArray.getProductqty());
+            price = Integer.valueOf(mProductArray.getProductRate());
 
-            productqty = Integer.valueOf(mProduct_arrays.get(position).getProductqty());
+            productqty = Integer.valueOf(mProductArray.getProductqty());
             holder.txtName.setText(mProductArray.getProductname());
             holder.txtCatName.setText(mProductArray.getCatName());
             holder.txtPrice.setText("Total :" + mProductArray.getProductRate());
@@ -87,7 +93,9 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
             holder.totalAmount.setText("Total :" + mProduct_arrays.get(position).getProductqty() * mProduct_arrays.get(position).getProductRate());
             Picasso.with(context).load(mProductArray.getCatImage()).error(R.drawable.no_prod).into(holder.productImage);
             holder.editCount.setText("" + quntaity);
-            holder.editCount.setSelection(holder.editCount.getText().length());
+/*            holder.editCount.setSelection(holder.editCount.getText().length());
+
+
             holder.editCount.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -97,23 +105,13 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     if (!holder.editCount.getText().toString().equals("")) {
+                        price = Integer.valueOf(mProduct_arrays.get(position).getProductRate());
 
-                        /*Inteface Sending Value*/
-                        productID = mProductArray.getProductcode();
-                        productname = mProductArray.getProductname();
-                        productcode = mProductArray.getProductcode();
-                        productRate = mProductArray.getProductRate();
-                        catName = mProductArray.getCatName();
-                        catImg = mProductArray.getCatImage();
                         editCountValue = Integer.valueOf(holder.editCount.getText().toString());
                         productqty = editCountValue;
                         holder.txtQty.setText("Qty :" + editCountValue);
                         subTotalRate = editCountValue * price;
                         holder.totalAmount.setText("Total :" + subTotalRate);
-
-                        productUnit = mProductArray.getProductUnit();
-                        viewProd.onViewItemClick(productID, productname, catName, catImg, productqty, productRate,productUnit);
-                        Log.e("PRODUCT_DETAILS_VALUE", "" + productID + " " + productname + "  " + productqty + " " + productRate);
 
                     } else {
                         holder.totalAmount.setText("Total :" + 0);
@@ -125,8 +123,7 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
                 @Override
                 public void afterTextChanged(Editable s) {
                 }
-            });
-
+            });*/
 
             holder.deleteProduct.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -135,24 +132,19 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
 
-
-                            // viewProd.onViewItemClick(productID, productname, catName, catImg, productqty, productRate);
-                            mProduct_arrays.remove(position);
+                            mProduct_arrays.remove(positions);
                             notifyItemRemoved(positions);
                             notifyItemRangeChanged(positions, mProduct_arrays.size());
-
-                           // Product_Array newProduct = mProduct_arrays.get(position);
-
                             for (int l = 0; l < mProduct_arrays.size(); l++) {
-                                Log.e("PRODUCT_NAME", ""+ mProduct_arrays.get(l).getCatName());
-                                Log.e("PRODUCT_NAME",""+ mProduct_arrays.get(l).getProductname());
-                                Log.e("PRODUCT_NAME",""+ mProduct_arrays.get(l).getCatImage());
-                                Log.e("PRODUCT_NAME", ""+ String.valueOf(mProduct_arrays.get(l).getProductqty()));
-                                Log.e("PRODUCT_NAME",""+ String.valueOf(mProduct_arrays.get(l).getProductRate()));
+                                Log.e("PRODUCT_NAME", "" + mProduct_arrays.get(l).getCatName());
+                                Log.e("PRODUCT_NAME", "" + mProduct_arrays.get(l).getProductname());
+                                Log.e("PRODUCT_NAME", "" + mProduct_arrays.get(l).getCatImage());
+                                Log.e("PRODUCT_NAME", "" + String.valueOf(mProduct_arrays.get(l).getProductqty()));
+                                Log.e("PRODUCT_NAME", "" + String.valueOf(mProduct_arrays.get(l).getProductRate()));
                             }
 
-
-                        }
+                            viewProd.onViewItemClick(String.valueOf(position), mProductArray.getProductname(), mProductArray.getCatName(), mProductArray.getCatImage(), mProductArray.getProductqty(), mProductArray.getProductRate(), productUnit);
+                      }
 
                         @Override
                         public void NegativeMethod(DialogInterface dialog, int id) {
@@ -162,9 +154,23 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
                 }
             });
         }
-
     }
 
+    private JSONArray removeFromJsonArray(JSONArray array, int position) {
+        if (array == null) return null;
+        JSONArray newArray = new JSONArray();
+        for (int i = 0; i < array.length(); i++) {
+            //Excluding the item at position
+            if (i != position) {
+                try {
+                    newArray.put(jsonValue.get(i));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return newArray;
+    }
 
     @Override
     public long getItemId(int position) {
@@ -189,9 +195,8 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
         TextView totalAmount;
         TextView txtCatName;
         ImageView productImage;
-        EditText editCount;
+        TextView editCount;
         ImageView deleteProduct;
-
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -201,7 +206,7 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
             txtCatName = (TextView) itemView.findViewById(R.id.item_product_name);
             totalAmount = (TextView) itemView.findViewById(R.id.total_amount);
             productImage = (ImageView) itemView.findViewById(R.id.image_product);
-            editCount = (EditText) itemView.findViewById(R.id.edit_qty);
+            editCount = (TextView) itemView.findViewById(R.id.edit_qty);
             deleteProduct = (ImageView) itemView.findViewById(R.id.delete_product);
 
         }

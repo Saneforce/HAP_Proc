@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Activity_Hap.OrderDashBoard">
 
     <LinearLayout
@@ -15,7 +17,7 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="60dp">
+            android:layout_marginBottom="95dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -627,6 +629,7 @@
                                 <TextView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
                                     android:layout_marginTop="15dp"
                                     android:gravity="center"
                                     android:text="@string/event_capture"
@@ -669,33 +672,34 @@
                     </LinearLayout>
 
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="20dp">
-
-                        <Button
-                            android:id="@+id/submit_button"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"
-                            android:background="@drawable/button_dgreen"
-                            android:padding="@dimen/C10dp"
-                            android:text="Submit"
-                            android:textColor="@android:color/white"
-                            android:textSize="13sp"></Button>
-
-
-                    </LinearLayout>
-
                 </LinearLayout>
 
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
 
-    <include layout="@layout/back_arrow"></include>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints">
 
+
+
+            <Button
+                android:id="@+id/submit_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/button_dgreen"
+                android:padding="@dimen/C10dp"
+                android:text="Submit"
+                android:textColor="@android:color/white"
+                android:textSize="13sp"></Button>
+
+
+        <include layout="@layout/back_arrow"></include>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

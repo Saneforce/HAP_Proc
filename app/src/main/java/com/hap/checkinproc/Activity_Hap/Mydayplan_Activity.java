@@ -112,7 +112,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         shiftypelayout = findViewById(R.id.shiftypelayout);
         hq_text = findViewById(R.id.hq_text);
         shift_type = findViewById(R.id.shift_type);
-        common_class = new Common_Class(this);
+
         jointwork_recycler.setLayoutManager(new LinearLayoutManager(this));
         worktypelayout = findViewById(R.id.worktypelayout);
         joint_work_layout = findViewById(R.id.joint_work_lt);

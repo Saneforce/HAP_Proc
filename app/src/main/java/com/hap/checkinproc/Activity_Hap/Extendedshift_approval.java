@@ -9,7 +9,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,6 +33,8 @@ import com.hap.checkinproc.adapters.Onduty_Approval_Adapter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class Extendedshift_approval extends AppCompatActivity {
     String Scode;
@@ -58,7 +62,15 @@ public class Extendedshift_approval extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                if (CheckIn == true) {
+                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                } else
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
 
             }
         });

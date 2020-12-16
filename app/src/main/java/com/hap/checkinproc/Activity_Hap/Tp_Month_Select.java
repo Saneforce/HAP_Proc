@@ -3,7 +3,9 @@ package com.hap.checkinproc.Activity_Hap;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,6 +15,9 @@ import android.widget.TextView;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.R;
 import java.util.Calendar;
+
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+
 public class Tp_Month_Select extends AppCompatActivity implements View.OnClickListener {
     TextView CurrentMoth, NextMonth;
     int CM;
@@ -34,7 +39,16 @@ public class Tp_Month_Select extends AppCompatActivity implements View.OnClickLi
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                if (CheckIn == true) {
+                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                } else
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+
 
             }
         });

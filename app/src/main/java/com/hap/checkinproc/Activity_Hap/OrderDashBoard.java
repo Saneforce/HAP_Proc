@@ -1,7 +1,9 @@
 
 package com.hap.checkinproc.Activity_Hap;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -12,13 +14,17 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
+
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class OrderDashBoard extends AppCompatActivity {
     LinearLayout primaryLayout, reportLayout;
     TextView toolHeader;
     ImageView imgBack;
     EditText toolSearch;
+    Shared_Common_Pref shared_common_pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +32,7 @@ public class OrderDashBoard extends AppCompatActivity {
         setContentView(R.layout.activity_order_dash_board);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
+        shared_common_pref = new Shared_Common_Pref(this);
         txtHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,7 +42,16 @@ public class OrderDashBoard extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                if (CheckIn == true) {
+                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                } else
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
 
             }
         });
@@ -63,6 +79,7 @@ public class OrderDashBoard extends AppCompatActivity {
             }
         });
 
+
     }
 
 
@@ -70,7 +87,7 @@ public class OrderDashBoard extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    onSuperBackPressed();
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
                 }
             });
 

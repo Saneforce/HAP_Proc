@@ -8,7 +8,9 @@
     tools:context=".Activity_Hap.Checkin"
     android:layout_weight="3">
 
-    <include layout="@layout/custom_toolbar_help"></include>
+    <include layout="@layout/custom_toolbar_help">
+
+    </include>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"

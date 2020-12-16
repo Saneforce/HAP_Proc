@@ -68,14 +68,28 @@
                                 android:text="@string/head_quater" />
                         </LinearLayout>
 
-                        <TextView
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:text="@string/route"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="@string/route"
+                                android:textColor="@android:color/black"
+                                android:textSize="13dp"></TextView>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:src="@drawable/mandatory" />
+
+                        </LinearLayout>
+
 
                         <LinearLayout
                             android:id="@+id/linear_Retailer"
@@ -90,8 +104,8 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/route"
-                                android:textSize="13dp"
-                                android:padding="5dp" />
+                                android:padding="5dp"
+                                android:textSize="13dp" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -102,15 +116,27 @@
                         android:layout_marginTop="10dp"
                         android:orientation="vertical">
 
-
-                        <TextView
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:text="New Retailer"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="New Retailer "
+                                android:textColor="@android:color/black"
+                                android:textSize="13dp"></TextView>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:src="@drawable/mandatory" />
+
+                        </LinearLayout>
 
 
                         <EditText
@@ -120,8 +146,8 @@
                             android:background="@drawable/text_bg"
                             android:gravity="start"
                             android:hint="Enter the Name"
-                            android:textSize="13dp"
-                            android:padding="10dp" />
+                            android:padding="10dp"
+                            android:textSize="13dp" />
 
                     </LinearLayout>
 
@@ -132,14 +158,27 @@
                         android:orientation="vertical">
 
 
-                        <TextView
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:text="Address"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="Address"
+                                android:textColor="@android:color/black"
+                                android:textSize="13dp"></TextView>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:src="@drawable/mandatory" />
+
+                        </LinearLayout>
 
 
                         <EditText
@@ -148,9 +187,9 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg"
                             android:gravity="start"
-                            android:textSize="13dp"
                             android:hint="Enter the Address"
-                            android:padding="10dp" />
+                            android:padding="10dp"
+                            android:textSize="13dp" />
 
                     </LinearLayout>
 
@@ -161,14 +200,26 @@
                         android:orientation="vertical">
 
 
-                        <TextView
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:text="City"
-                            android:textColor="@android:color/black"
-                    ></TextView>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="City"
+                                android:textColor="@android:color/black"></TextView>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:src="@drawable/mandatory" />
+
+                        </LinearLayout>
 
 
                         <EditText
@@ -177,9 +228,9 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg"
                             android:gravity="start"
-                            android:textSize="13dp"
                             android:hint="Enter the City"
-                            android:padding="10dp" />
+                            android:padding="10dp"
+                            android:textSize="13dp" />
 
                     </LinearLayout>
 
@@ -190,14 +241,27 @@
                         android:orientation="vertical">
 
 
-                        <TextView
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:text="Phone"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="Phone"
+                                android:textColor="@android:color/black"
+                                android:textSize="13dp"></TextView>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:src="@drawable/mandatory" />
+
+                        </LinearLayout>
 
 
                         <EditText
@@ -209,8 +273,8 @@
                             android:hint="Enter the Phone No"
                             android:inputType="phone"
                             android:maxLength="10"
-                            android:textSize="13dp"
-                            android:padding="10dp" />
+                            android:padding="10dp"
+                            android:textSize="13dp" />
 
                     </LinearLayout>
 
@@ -221,14 +285,27 @@
                         android:orientation="vertical">
 
 
-                        <TextView
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:text="Email"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="Email"
+                                android:textColor="@android:color/black"
+                                android:textSize="13dp"></TextView>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:src="@drawable/mandatory" />
+
+                        </LinearLayout>
 
 
                         <EditText
@@ -237,10 +314,10 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/text_bg"
                             android:gravity="start"
-                            android:textSize="13dp"
                             android:hint="Enter the Email"
                             android:inputType="textEmailAddress"
-                            android:padding="10dp" />
+                            android:padding="10dp"
+                            android:textSize="13dp" />
 
                     </LinearLayout>
 
@@ -249,14 +326,30 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="match_parent"
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:text="@string/retailer_class"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="@string/retailer_class"
+                                android:textColor="@android:color/black"
+                                android:textSize="13dp"></TextView>
+
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:src="@drawable/mandatory" />
+
+                        </LinearLayout>
+
 
                         <LinearLayout
 
@@ -272,18 +365,33 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/retailer_class"
-                                android:textSize="13dp"
-                                android:padding="5dp" />
+                                android:padding="5dp"
+                                android:textSize="13dp" />
                         </LinearLayout>
 
-                        <TextView
-                            android:layout_width="match_parent"
+                        <LinearLayout
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
-                            android:text="@string/retailer_channel"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="@string/retailer_channel"
+                                android:textColor="@android:color/black"
+                                android:textSize="13dp"></TextView>
+
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:src="@drawable/mandatory" />
+
+                        </LinearLayout>
+
 
                         <LinearLayout
                             android:id="@+id/linear_retailer_channel"
@@ -298,13 +406,11 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/retailer_channel"
-                                android:textSize="13dp"
-                                android:padding="5dp" />
+                                android:padding="5dp"
+                                android:textSize="13dp" />
                         </LinearLayout>
 
                     </LinearLayout>
-
-
 
 
                 </LinearLayout>
@@ -320,8 +426,8 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints">
 
 
@@ -339,10 +445,11 @@
                 android:background="@drawable/button_dgreen"
                 android:padding="@dimen/C10dp"
                 android:text="Save"
-                android:textSize="13dp"
-                android:textColor="@android:color/white"></Button>
+                android:textColor="@android:color/white"
+                android:textSize="13dp"></Button>
 
         </LinearLayout>
+
         <include layout="@layout/back_arrow"></include>
     </LinearLayout>
 

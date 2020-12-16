@@ -1,8 +1,11 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,8 +44,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
@@ -68,6 +73,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+
 public class SecondaryOrderActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface {
     LinearLayout OrderType, RetailerType, linearCategory;
     String lastOrderAmount = "", mobileNumber = "";
@@ -89,12 +96,14 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
     Type userType;
     String retailerId;
     int count = 0, count1 = 0;
+
+    String orderTypestr="";
     LinearLayout linerEventCapture;
     String EventcapOne = "";
     Shared_Common_Pref mShaeShared_common_pref;
     int countInt;
 
-    String SF_CODE, Image_uri="", CUTT_OFF_CODE, WORK_TYPE, Town_code,
+    String SF_CODE, Image_uri = "", CUTT_OFF_CODE, WORK_TYPE, Town_code,
             reatilerID, retailerName,
             distributorId, distributorName, totalValueString;
     Integer orderType, totalOrderValue;
@@ -153,7 +162,7 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
 
 
         Intent intent = getIntent();
-        if(Image_uri!="") {
+        if (Image_uri != "") {
             Image_uri = intent.getStringExtra("Event_caputure");
             Log.e("IMAGER_URI", "" + Image_uri);
         }
@@ -170,7 +179,16 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                if (CheckIn == true) {
+                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                } else
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+
             }
         });
         initilaize();
@@ -204,8 +222,7 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         txtAddRetailer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(SecondaryOrderActivity.this, AddNewRetailer.class
-                ));
+                startActivity(new Intent(SecondaryOrderActivity.this, AddNewRetailer.class));
             }
         });
 
@@ -438,16 +455,18 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
             reatilerID = "'" + retailerId + "'";
             shared_common_pref.save("Retailer_id", retailerId);
             shared_common_pref.save("Retailer_name", myDataset.get(position).getName());
-            shared_common_pref.save("Event_Capture","Remove");
+            shared_common_pref.save("Event_Capture", "Remove");
             Log.e("Retailer_ID", myDataset.get(position).getName());
         } else if (type == 9) {
             txtOrder.setText(myDataset.get(position).getName());
             if (myDataset.get(position).getName().toString().matches("Phone Order")) {
                 count = 0;
+                orderTypestr  = "Zero";
             } else {
                 count = 1;
+                orderTypestr  = "One";
             }
-            shared_common_pref.save("Phone_order_type", String.valueOf(count));
+            shared_common_pref.save("Phone_order_type", orderTypestr);
 
             Log.e("Phone_order_type", String.valueOf(count));
 
@@ -511,7 +530,16 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    onSuperBackPressed();
+                    AlertDialogBox.showDialog(SecondaryOrderActivity.this, "", "Do you want to exit?", "Yes", "NO", false, new AlertBox() {
+                        @Override
+                        public void PositiveMethod(DialogInterface dialog, int id) {
+                            startActivity(new Intent(SecondaryOrderActivity.this, OrderDashBoard.class));
+                        }
+
+                        @Override
+                        public void NegativeMethod(DialogInterface dialog, int id) {
+                        }
+                    });
                 }
             });
 

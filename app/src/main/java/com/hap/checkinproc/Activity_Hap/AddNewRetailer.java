@@ -1,7 +1,9 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -47,6 +49,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+
 public class AddNewRetailer extends AppCompatActivity implements Master_Interface {
     TextView toolHeader;
     CustomListViewDialog customDialog;
@@ -71,6 +75,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     Integer routeId1, classId, channelID;
     String routeId;
     Shared_Common_Pref shared_common_pref;
+    SharedPreferences CheckInDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +100,15 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
+                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                if (CheckIn == true) {
+                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                } else
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
             }
         });
         ImageView backView = findViewById(R.id.imag_back);

@@ -117,10 +117,10 @@
     <string name="pri_orders">Orders</string>
     <string name="order_type">Order Type</string>
     <string name="head_quater">Headquaters</string>
-    <string name="route">Route</string>
-    <string name="retailer">Retailer</string>
-    <string name="retailer_class">Retailer Class</string>
-    <string name="retailer_channel">Retailer Channel</string>
+    <string name="route">Route  </string>
+    <string name="retailer">Retailer  </string>
+    <string name="retailer_class">Retailer Class  </string>
+    <string name="retailer_channel">Retailer Channel </string>
     <string name="event_capture">Event Capture</string>
     <string name="order">Orders</string>
     <string name="add_retailer">Add New Retailer</string>

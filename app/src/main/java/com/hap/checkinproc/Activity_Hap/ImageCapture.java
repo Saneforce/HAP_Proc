@@ -107,7 +107,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             mMode = params.getString("Mode");
 
 
-
             CheckInInf.put("Mode", mMode);
             CheckInInf.put("Divcode", UserDetails.getString("Divcode", ""));
             CheckInInf.put("sfCode", UserDetails.getString("Sfcode", ""));
@@ -246,7 +245,11 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         mHolder.addCallback(this);
         setDefaultCameraId("front");
         mCamera = Camera.open(mCamId);*/
+
+
+
         if (mCamera != null) {
+
 
             preview = null;
             mHolder.removeCallback(ImageCapture.this);
@@ -361,6 +364,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.VISIBLE);
         imgPreview.setImageURI(Uri.fromFile(file));
+        imgPreview.setRotation((float) -90.0);
+
     }
 
     private void CloseImgPreview() {
@@ -374,6 +379,11 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
         imgPreview.setImageURI(Uri.fromFile(file));
+        imgPreview.setRotation((float) -90.0);
+
+
+        Log.e("Image_Capture", Uri.fromFile(file).toString());
+
         saveCheckIn();
     }
 
@@ -401,6 +411,10 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             CheckInInf.put("slfy", imageFileName);
             CheckInInf.put("Rmks", "");
 
+            Log.e("Image_Capture", imagePath);
+            Log.e("Image_Capture", imageFileName);
+
+
             if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty")) {
                 SharedPreferences.Editor editor = CheckInDetails.edit();
                 editor.putString("Shift_Selected_Id", CheckInInf.getString("Shift_Selected_Id"));
@@ -408,7 +422,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 editor.putString("ShiftStart", CheckInInf.getString("ShiftStart"));
                 editor.putString("ShiftEnd", CheckInInf.getString("ShiftEnd"));
                 editor.putString("ShiftCutOff", CheckInInf.getString("ShiftCutOff"));
-                if (CheckInDetails.getString("FTime", "").equalsIgnoreCase("")) editor.putString("FTime", CTime);
+                if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
+                    editor.putString("FTime", CTime);
                 editor.putString("Logintime", CTime);
                 editor.putBoolean("CheckIn", true);
                 editor.apply();
@@ -634,4 +649,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         mCamera.stopPreview();
         mCamera.release();
     }
+
+
 }

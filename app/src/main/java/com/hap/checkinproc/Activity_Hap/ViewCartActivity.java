@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
@@ -39,11 +40,13 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.viewProduct;
+import com.hap.checkinproc.Model_Class.ProceedCartModel;
 import com.hap.checkinproc.Model_Class.Product_Array;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.CustomViewAdapter;
@@ -58,12 +61,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class ViewCartActivity extends AppCompatActivity {
     TextView toolHeader;
@@ -72,7 +79,9 @@ public class ViewCartActivity extends AppCompatActivity {
     String SF_CODE = "", DIVISION_CODE = "", CUTT_OFF_CODE = "", WORK_TYPE = "", Town_code = "",
             reatilerID = "", retailerName = "",
             distributorId = "", distributorName = "", totalValueString = "";
-    Integer orderType = 0, totalOrderValue = 0;
+    Integer totalOrderValue = 0;
+    String orderType = "";
+    int orderCount = 0;
     CustomViewAdapter adapter;
 
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
@@ -84,7 +93,7 @@ public class ViewCartActivity extends AppCompatActivity {
     private LocationSettingsRequest mLocationSettingsRequest;
     private LocationCallback mLocationCallback;
     private Location mCurrentLocation;
-
+    Common_Class common_class;
     /* Submit button */
     String locationValue, dateTime, checkInTime, keyEk = "EK", KeyDate, KeyHyp = "-", keyCodeValue, checkOutTime;
 
@@ -101,27 +110,37 @@ public class ViewCartActivity extends AppCompatActivity {
     RecyclerView viewRecyclerview;
     Button mSubmit;
     Shared_Common_Pref shared_common_pref;
-
+    JSONArray jsonArray;
+    ProceedCartModel mProceedCartModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_cart);
-
+        Get_MydayPlan();
         shared_common_pref = new Shared_Common_Pref(this);
-
+        common_class = new Common_Class(this);
         SF_CODE = shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code);
         WORK_TYPE = shared_common_pref.getvalue("work_type_code");
-        WORK_TYPE = "'" + WORK_TYPE + "'";
-        Town_code = shared_common_pref.getvalue("town_code");
-        Town_code = "'" + Town_code + "'";
 
-        orderType = Integer.valueOf(shared_common_pref.getvalue("Phone_order_type"));
+        Town_code = shared_common_pref.getvalue("town_code");
+
+        orderType = shared_common_pref.getvalue("Phone_order_type");
+
+        Log.e("OrderType", orderType);
+        if (orderType.equals("Zero")) {
+            orderCount = 0;
+            Log.e("OrderType", String.valueOf(orderCount));
+        } else {
+            orderCount = 1;
+            Log.e("OrderType", String.valueOf(orderCount));
+
+        }
 
         totalOrderValue = Integer.valueOf(shared_common_pref.getvalue("Total_amount"));
 
         reatilerID = shared_common_pref.getvalue("Retailer_id");
-        reatilerID = "'" + reatilerID + "'";
+
         retailerName = shared_common_pref.getvalue("Retailer_name");
         retailerName = "'" + retailerName + "'";
 
@@ -143,13 +162,22 @@ public class ViewCartActivity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                if (CheckIn == true) {
+                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                } else
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
 
             }
         });
 
 
         getToolbar();
+
 
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
@@ -174,14 +202,26 @@ public class ViewCartActivity extends AppCompatActivity {
 
 
         String carListAsString = getIntent().getStringExtra("list_as_string");
+
+        Log.e("ListValue", carListAsString);
+
+
+        try {
+            jsonArray = new JSONArray(carListAsString);
+            Log.e("JSON_ARRAY", String.valueOf(jsonArray));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
         Gson gson = new Gson();
         Type type = new TypeToken<List<Product_Array>>() {
         }.getType();
         carsList = gson.fromJson(carListAsString, type);
-        Log.e("PRODuCT_DETAILS", String.valueOf(carsList));
-        for (Product_Array cars : carsList) {
+        Log.e("PRODuCT_DETAILS", carsList.toString());
+       /* for (Product_Array cars : carsList) {
             Log.i("Car__Data", cars.getProductname() + "-" + cars.getProductqty() + "__" + cars.getCatName() + "-" + cars.getProductcode());
-        }
+        }*/
         viewRecyclerview = (RecyclerView) findViewById(R.id.report_list);
         viewRecyclerview.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -194,10 +234,17 @@ public class ViewCartActivity extends AppCompatActivity {
         startLocationUpdates();
 
 
-        adapter = new CustomViewAdapter(this, carsList, new viewProduct() {
+        adapter = new CustomViewAdapter(this, jsonArray, carsList, new viewProduct() {
+
 
             @Override
             public void onViewItemClick(String itemID, String productName, String catName, String catImg, Integer productQty, Integer productRate, String productUnit) {
+
+
+                int postionValue = Integer.parseInt(itemID);
+                carsList.remove(postionValue);
+                adapter.notifyDataSetChanged();
+
 
                 System.out.println("Ka_Product_Code" + itemID);
                 System.out.println("Ka_Product_Code" + productName);
@@ -225,7 +272,7 @@ public class ViewCartActivity extends AppCompatActivity {
                 /*ActivityReport*/
                 DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                 Calendar calobjw = Calendar.getInstance();
-                Log.e("DATEFORMAT", String.valueOf(dfw.format(calobjw.getTime())));
+                Log.e("DATE_FORMAT", String.valueOf(dfw.format(calobjw.getTime())));
 
                 KeyDate = SF_CODE;
                 keyCodeValue = keyEk + KeyDate + dfw.format(calobjw.getTime()).hashCode();
@@ -277,7 +324,7 @@ public class ViewCartActivity extends AppCompatActivity {
                     stockReportObject.put("CheckoutTime", checkOutTime);
                     stockReportObject.put("location", "''");
                     stockReportObject.put("geoaddress", "");
-                    stockReportObject.put("PhoneOrderTypes", orderType);
+                    stockReportObject.put("PhoneOrderTypes", orderCount);
                     stockReportObject.put("Order_Stk", distributorId);
                     stockReportObject.put("Order_No", "''");
                     stockReportObject.put("rootTarget", "0");
@@ -627,7 +674,7 @@ public class ViewCartActivity extends AppCompatActivity {
             stockReportObject.put("CheckoutTime", checkOutTime);
             stockReportObject.put("location", "''");
             stockReportObject.put("geoaddress", "");
-            stockReportObject.put("PhoneOrderTypes", orderType);
+            stockReportObject.put("PhoneOrderTypes", orderCount);
             stockReportObject.put("Order_Stk", distributorId);
             stockReportObject.put("Order_No", "''");
             stockReportObject.put("rootTarget", "0");
@@ -758,13 +805,12 @@ public class ViewCartActivity extends AppCompatActivity {
                 person1.put("Product_Sale_Unit", carsList.get(z).getProductUnit());
                 person1.put("f_key", fkeyprodcut);
                 fkeyprodcut.put("Activity_MSL_Code", "Activity_Doctor_Report");
-
-
                 myJSONObjects.add(person1);
                 listV.add(String.valueOf((person1)));
                 personarray.put(person1);
                 PersonObjectArray.put("Activity_Sample_Report", personarray);
                 String JsonData = PersonObjectArray.toString();
+
 
                 System.out.println("Activity_Sample_Report: " + JsonData);
 
@@ -809,6 +855,7 @@ public class ViewCartActivity extends AppCompatActivity {
                         startActivity(new Intent(ViewCartActivity.this, OrderDashBoard.class));
                         Toast.makeText(ViewCartActivity.this, "Your order submitted successfully", Toast.LENGTH_SHORT).show();
 
+
                     } catch (Exception e) {
 
                     }
@@ -851,4 +898,63 @@ public class ViewCartActivity extends AppCompatActivity {
     public void onBackPressed() {
 
     }
+
+
+    private void Get_MydayPlan() {
+        Map<String, String> QueryString = new HashMap<>();
+        QueryString.put("axn", "Get/Tp_dayplan");
+        QueryString.put("Sf_code", Shared_Common_Pref.Sf_Code);
+        QueryString.put("Date", common_class.GetDate());
+        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+        QueryString.put("desig", "MGR");
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        JSONObject sp = new JSONObject();
+        jsonArray.put(jsonObject);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, jsonArray.toString());
+        Log.e("Log_TpQuerySTring", QueryString.toString());
+        Log.e("Log_Tp_SELECT", jsonArray.toString());
+
+        mCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                // locationList=response.body();
+
+                try {
+                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    Log.e("GettodayResult", "response Tp_View: " + jsonObject.getJSONArray("GettodayResult"));
+                    JSONArray jsoncc = jsonObject.getJSONArray("GettodayResult");
+                    Log.e("LENGTH", String.valueOf(jsoncc.length()));
+
+                    if (jsoncc.length() > 0) {
+
+                        WORK_TYPE = String.valueOf(jsoncc.getJSONObject(0).get("worktype_code"));
+                        WORK_TYPE = "'" + WORK_TYPE + "'";
+                        Town_code = String.valueOf(jsoncc.getJSONObject(0).get("RouteCode"));
+                        Town_code = "'" + Town_code + "'";
+
+                        distributorId = "'" + jsoncc.getJSONObject(0).get("Worked_with_Code") + "'";
+                        distributorName = "'" + jsoncc.getJSONObject(0).get("Worked_with_Name") + "'";
+
+                        Log.e("Logsdas_WT", WORK_TYPE);
+                        Log.e("Logsdas_TC", Town_code);
+                        Log.e("Logsdas_DI", distributorId);
+                        Log.e("Logsdas_DN", distributorName);
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+                common_class.ProgressdialogShow(2, "Day plan");
+            }
+        });
+    }
+
+
 }

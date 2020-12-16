@@ -36,6 +36,7 @@ import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.ParentListInterface;
 import com.hap.checkinproc.Model_Class.HeaderCat;
 import com.hap.checkinproc.Model_Class.HeaderName;
+import com.hap.checkinproc.Model_Class.ProceedCartModel;
 import com.hap.checkinproc.Model_Class.Product;
 import com.hap.checkinproc.Model_Class.ProductUnitBox;
 import com.hap.checkinproc.Model_Class.ProductUnitModel;
@@ -113,6 +114,8 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
     List<ProductUnitModel> mProductUnitModel;
     String productUnitId, productUnitType = "";
     String ProductModelId;
+
+    ProceedCartModel mProceedCartModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -324,7 +327,7 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
                 @Override
                 public void onClickParentInter(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy, String catImage, String catName, String productUnit) {
 
-                    Log.e("Product_sale_unit",""+ productUnit);
+                    Log.e("Product_sale_unit", "" + productUnit);
 
                     if (Product_Array_List.size() == 0) {
                         sum = sum + productQuantiy * Integer.parseInt(productCode);
@@ -435,6 +438,7 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
                                 JsonDatas = ReportObjectArray.toString();
                                 System.out.println("Activity_Stk_POB_Report:sssssssssss " + JsonDatas);
 
+
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
@@ -469,6 +473,9 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
         Gson gson = new Gson();
 
         String jsonCars = gson.toJson(Product_Array_List);
+
+        Log.e("PRODUCCT_LIST", String.valueOf(Product_Array_List));
+        Log.e("PRODUCCT_LIST", "fg");
 
         Intent mIntent = new Intent(OrderCategoryActivity.this, ViewCartActivity.class);
         mIntent.putExtra("list_as_string", jsonCars);
@@ -573,7 +580,6 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
             Log.e("PRODUCT_TYPE_VALUE_A", productUnitType);
             Log.e("PRODUCT_TYPE_VALUE_A", String.valueOf(myDataset.size()));
             ProductUnitBox productUnitBox = new ProductUnitBox(productUnitType, myDataset.get(position).getId(), 0);
-
 
 
             //  modelRetailDetails.clear();

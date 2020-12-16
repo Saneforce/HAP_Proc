@@ -9,62 +9,48 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="70dp"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
 
 
         <include layout="@layout/custom_toolbar_help" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_marginBottom="@dimen/C50dp"
-            android:layout_height="match_parent">
 
-            <androidx.core.widget.NestedScrollView
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/report_list"
+                android:layout_marginBottom="95dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp">
+                android:layout_height="match_parent">
+            </androidx.recyclerview.widget.RecyclerView>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/report_list"
-                    android:layout_width="match_parent"
 
-                    android:layout_height="match_parent">
 
-                </androidx.recyclerview.widget.RecyclerView>
-
-            </androidx.core.widget.NestedScrollView>
-        </LinearLayout>
 
     </LinearLayout>
 
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/C10dp"
-        android:layout_marginRight="@dimen/C10dp"
+        android:layout_height="@dimen/C90dp"
         android:orientation="vertical"
-        android:background="#FFF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintVertical_chainStyle="spread">
+        tools:ignore="MissingConstraints">
 
 
         <Button
             android:id="@+id/submit_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
             android:background="@drawable/button_dgreen"
             android:padding="@dimen/C10dp"
             android:text="Submit"
-            android:layout_marginBottom="@dimen/C10dp"
-            android:textColor="@android:color/white"></Button>
+            android:textColor="@android:color/white"
+            android:textSize="13sp"></Button>
 
 
         <include layout="@layout/back_arrow"></include>
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

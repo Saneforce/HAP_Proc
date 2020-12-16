@@ -77,7 +77,13 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                String dash = "";
+                dash = shared_common_pref.getvalue("Dashboard");
+                if (dash.equalsIgnoreCase("one")) {
+                    startActivity(new Intent(getApplicationContext(), Dashboard_Two.class));
+                } else {
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                }
 
             }
         });
