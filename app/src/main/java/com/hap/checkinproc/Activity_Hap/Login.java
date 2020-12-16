@@ -383,18 +383,39 @@ public class Login extends AppCompatActivity {
                     if (response.body().getSuccess() == true) {
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                         Intent intent;
-                        if (requestCode == RC_SIGN_IN)
+                        Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
 
-                           // intent = new Intent(Login.this, Dashboard.class);
-                            intent = new Intent(Login.this, SecondaryOrderActivity.class);
+                        if (requestCode == RC_SIGN_IN) {
+                            if(CheckIn == true){
+                                intent = new Intent(Login.this, Dashboard_Two.class);
+                                intent.putExtra("Mode", "CIN");
+                            }else {
+                                intent = new Intent(Login.this, Dashboard.class);
+                            }
+                            //  intent = new Intent(Login.this, OrderDashBoard.class);
+                        }else{
+                            intent = new Intent(Login.this, Dashboard_Two.class);
+                            intent.putExtra("Mode", "RPT");
+                        }/*
+                        Log.d("Sales",String.valueOf(response.body()));
+                        intent.putExtra("photo", photo);
+                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
+                        Intent intent;
+                        if (requestCode == RC_SIGN_IN)
+                           intent = new Intent(Login.this, Dashboard.class);
+                          //intent = new Intent(Login.this, EventCaptureActivity.class);
                         else
                             intent = new Intent(Login.this, Dashboard_Two.class);
                         intent.putExtra("photo", photo);
+
+                        intent.putExtra("Mode", "CIN");*/
                         String code = response.body().getData().get(0).getSfCode();
                         String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
                         String sName = response.body().getData().get(0).getSfName();
                         String div = response.body().getData().get(0).getDivisionCode();
                         Integer type = response.body().getData().get(0).getCheckCount();
+                        String DeptCd = response.body().getData().get(0).getDeptCd();
+                        String DeptType = response.body().getData().get(0).getDeptType();
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         Shared_Common_Pref.Sf_Code = code;
                         Shared_Common_Pref.Sf_Name = response.body().getData().get(0).getSfName();
@@ -403,11 +424,10 @@ public class Login extends AppCompatActivity {
                         shared_common_pref.save(Shared_Common_Pref.Sf_Code, code);
                         shared_common_pref.save(Shared_Common_Pref.Div_Code, div);
                         shared_common_pref.save(Shared_Common_Pref.StateCode, Sf_type);
-                        String Dept_type = response.body().getData().get(0).getDeptType();
 
                         shared_common_pref.save(Shared_Common_Pref.CHECK_COUNT, String.valueOf(type));
 
-                        Shared_Common_Pref.Dept_Type = Dept_type;
+                        Shared_Common_Pref.Dept_Type = DeptType;
                         Shared_Common_Pref.SF_Type = Sf_type;
 
 
@@ -422,6 +442,9 @@ public class Login extends AppCompatActivity {
                         editor.putString("SfName", sName);
                         editor.putString("Divcode", div);
                         editor.putInt("CheckCount", type);
+                        editor.putString("DeptCd", DeptCd);
+                        editor.putString("DeptType", DeptType);
+                        Log.d("DeptType",String.valueOf(DeptType));
                         editor.putString("State_Code", Sf_type);
                         editor.putString("email", eMail);
                         editor.apply();

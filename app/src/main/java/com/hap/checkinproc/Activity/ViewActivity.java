@@ -14,6 +14,7 @@ import com.hap.checkinproc.Activity.Util.ImageFilePath;
 import com.hap.checkinproc.Activity.Util.ModelDynamicView;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Activity.Util.UpdateUi;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
@@ -249,6 +250,8 @@ public class ViewActivity extends AppCompatActivity {
                         JSONObject js = new JSONObject();
                         js.put("PK_ID", ViewActivity.key);
                         js.put("FK_ID", "");
+                        js.put("SF", SF_code);
+                        js.put("date", Common_Class.GetDate());
                         JSONArray jAA = new JSONArray();
                         for (int i = 0; i < array_view.size(); i++) {
                             JSONObject jk = new JSONObject();
@@ -268,7 +271,15 @@ public class ViewActivity extends AppCompatActivity {
                                         pic = pic + picVal[k].substring(picVal[k].lastIndexOf("/"));
                                     }
                                     jk.put("value", pic);
-                                } else
+                                }
+                                else if(array_view.get(i).getViewid().equalsIgnoreCase("3") || array_view.get(i).getViewid().equalsIgnoreCase("18"))
+                                {
+                                    if(TextUtils.isEmpty(array_view.get(i).getValue()))
+                                    jk.put("value","0");
+                                    else
+                                        jk.put("value", array_view.get(i).getValue());
+                                }
+                                    else
                                     jk.put("value", array_view.get(i).getValue());
                                 jk.put("col", col);
                                 jAA.put(jk);
@@ -286,6 +297,8 @@ public class ViewActivity extends AppCompatActivity {
                         JSONObject js = new JSONObject();
                         js.put("PK_ID", ViewActivity.key);
                         js.put("FK_ID", shareKey.getString("pk", ""));
+                        js.put("SF", SF_code);
+                        js.put("date", Common_Class.GetDate());
                         JSONArray jAA = new JSONArray();
                         for (int i = 0; i < array_view.size(); i++) {
                             JSONObject jk = new JSONObject();
@@ -305,9 +318,19 @@ public class ViewActivity extends AppCompatActivity {
                                         pic = pic + picVal[k].substring(picVal[k].lastIndexOf("/") + 1) + ",";
                                     }
                                     jk.put("value", pic);
-                                } else
+                                }
+                                else if(array_view.get(i).getViewid().equalsIgnoreCase("3") || array_view.get(i).getViewid().equalsIgnoreCase("18"))
+                                {
+                                    if(TextUtils.isEmpty(array_view.get(i).getValue()))
+                                        jk.put("value","0");
+                                    else
+                                        jk.put("value", array_view.get(i).getValue());
+                                }
+                                else
                                     jk.put("value", array_view.get(i).getValue());
                                 jk.put("col", col);
+                                jk.put("SF", SF_code);
+                                jk.put("date", Common_Class.GetDate());
                                 jAA.put(jk);
                             }
                         }
@@ -633,7 +656,6 @@ public class ViewActivity extends AppCompatActivity {
                                 Toast.makeText(ViewActivity.this,"From date should be lesser",Toast.LENGTH_SHORT).show();
                             else
                                 mm.setValue(dayOfMonth + "-" + mnth+ "-" +year);
-
                         }
                     }
                     else{
@@ -1072,8 +1094,8 @@ public class ViewActivity extends AppCompatActivity {
                                 fab_value=json.getString("type");
                                 btnShow=json.getString("target");
                                 tool_header.setText(json.getString("header"));
-                            header=json.getString("header");
-                            key=SF_code+"_"+frm_id+"_"+System.currentTimeMillis();
+                                header=json.getString("header");
+                                key=SF_code+"_"+frm_id+"_"+System.currentTimeMillis();
                                 if(Integer.parseInt(fab_value)>0) {
                                     fab.setVisibility(View.VISIBLE);
                                     value=Integer.parseInt(fab_value);

@@ -42,6 +42,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -53,19 +54,21 @@ import retrofit2.Response;
 public class AllowanceActivity extends AppCompatActivity {
 RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
     Uri outputFileUri;
-    ImageView capture_img;
-    CardView card_travel;
+    CircleImageView capture_img;
+    CardView card_travel,card_to,card_typ;
     ApiInterface apiInterface;
     Button btn_submit,btn_ta;
     String filepath_final="";
-    String mode,url;
+    String mode,url,hq_code,typ_code;
     EditText edt_km,edt_rmk,edt_frm,edt_to,edt_fare;
-    TextView txt_mode;
+    TextView txt_mode,txt_hq,txt_typ;
     Common_Class common_class;
     boolean updateMode=false;
     SharedPreferences UserDetails;
     public static final String MyPREFERENCES = "MyPrefs";
     String SF_code="",div="";
+    ArrayList<SelectionModel> array_hq=new ArrayList<>();
+    RelativeLayout lay_hq,lay_typ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +83,8 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
         lay_fare=findViewById(R.id.lay_fare);
         capture_img=findViewById(R.id.capture_img);
         card_travel=findViewById(R.id.card_travel);
+        card_to=findViewById(R.id.card_to);
+        card_typ=findViewById(R.id.card_typ);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         btn_submit=findViewById(R.id.btn_submit);
         btn_ta=findViewById(R.id.btn_ta);
@@ -89,6 +94,10 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
         edt_to=findViewById(R.id.edt_to);
         edt_fare=findViewById(R.id.edt_fare);
         txt_mode=findViewById(R.id.txt_mode);
+        lay_hq=findViewById(R.id.lay_hq);
+        txt_hq=findViewById(R.id.txt_hq);
+        lay_typ=findViewById(R.id.lay_typ);
+        txt_typ=findViewById(R.id.txt_typ);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SF_code=UserDetails.getString("Sfcode","");
         div=UserDetails.getString("Divcode","");
@@ -115,6 +124,18 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
             public void onClick(View view) {
                 Intent i=new Intent(AllowanceActivity.this,TAClaimActivity.class);
                 startActivity(i);
+            }
+        });
+        lay_hq.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupSpinnerHq();
+            }
+        });
+        lay_typ.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupSpinnerType();
             }
         });
         btn_submit.setOnClickListener(new View.OnClickListener() {
@@ -209,6 +230,158 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
 
 
     }
+    public void popupSpinnerType() {
+        final Dialog dialog = new Dialog(AllowanceActivity.this, R.style.AlertDialogCustom);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.popup_dynamic_view);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        ListView popup_list=(ListView)dialog.findViewById(R.id.popup_list);
+        ImageView iv_close_popup=(ImageView)dialog.findViewById(R.id.iv_close_popup);
+        Button   ok=(Button)dialog.findViewById(R.id.ok);
+        ArrayList<SelectionModel> array=new ArrayList<>();
+        array.add(new SelectionModel("Metro",false,"MT"));
+        array.add(new SelectionModel("Major",false,"MJ"));
+        array.add(new SelectionModel("Others",false,"OT"));
+        TextView tv_todayplan_popup_head=(TextView)dialog.findViewById(R.id.tv_todayplan_popup_head);
+        tv_todayplan_popup_head.setText("Travel Type");
+        AdapterForSelectionList adapt=new AdapterForSelectionList(AllowanceActivity.this,array,0);
+        popup_list.setAdapter(adapt);
+        final SearchView search_view=(SearchView)dialog.findViewById(R.id.search_view);
+        search_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search_view.setIconified(false);
+                InputMethodManager im = ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE));
+                im.showSoftInput(search_view, 0);
+            }
+        });
+        search_view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                Log.v("search_view_str",s);
+                adapt.getFilter().filter(s);
+                return false;
+            }
+        });
+        iv_close_popup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+/*
+                if(isEmpty) {
+                    if (array_selection.contains(new SelectionModel(true))) {
+                        for (int i = 0; i < array_selection.size(); i++) {
+                            SelectionModel m = array_selection.get(i);
+                            m.setClick(false);
+                        }
+                    }
+                }
+*/
+                dialog.dismiss();
+                //commonFun();
+            }
+        });
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (array.contains(new SelectionModel(true))) {
+                    for (int i = 0; i < array.size(); i++) {
+                        SelectionModel m = array.get(i);
+                        if(m.isClick()){
+                            typ_code=m.getCode();
+                            txt_typ.setText(m.getTxt());
+
+                        }
+                    }
+                }
+                dialog.dismiss();
+
+            }
+        });
+
+
+    }
+    public void popupSpinnerHq() {
+        final Dialog dialog = new Dialog(AllowanceActivity.this, R.style.AlertDialogCustom);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.popup_dynamic_view);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
+        ListView popup_list=(ListView)dialog.findViewById(R.id.popup_list);
+        ImageView iv_close_popup=(ImageView)dialog.findViewById(R.id.iv_close_popup);
+        Button   ok=(Button)dialog.findViewById(R.id.ok);
+
+        TextView tv_todayplan_popup_head=(TextView)dialog.findViewById(R.id.tv_todayplan_popup_head);
+        tv_todayplan_popup_head.setText("Select Headquater");
+        AdapterForSelectionList adapt=new AdapterForSelectionList(AllowanceActivity.this,array_hq,0);
+        popup_list.setAdapter(adapt);
+        final SearchView search_view=(SearchView)dialog.findViewById(R.id.search_view);
+        search_view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                search_view.setIconified(false);
+                InputMethodManager im = ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE));
+                im.showSoftInput(search_view, 0);
+            }
+        });
+        search_view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                Log.v("search_view_str",s);
+                adapt.getFilter().filter(s);
+                return false;
+            }
+        });
+        iv_close_popup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+/*
+                if(isEmpty) {
+                    if (array_selection.contains(new SelectionModel(true))) {
+                        for (int i = 0; i < array_selection.size(); i++) {
+                            SelectionModel m = array_selection.get(i);
+                            m.setClick(false);
+                        }
+                    }
+                }
+*/
+                dialog.dismiss();
+                //commonFun();
+            }
+        });
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (array_hq.contains(new SelectionModel(true))) {
+                    for (int i = 0; i < array_hq.size(); i++) {
+                        SelectionModel m = array_hq.get(i);
+                        if(m.isClick()){
+                            hq_code=m.getCode();
+                            txt_hq.setText(m.getTxt());
+                            if(hq_code.equalsIgnoreCase("-1")){
+                                card_to.setVisibility(View.VISIBLE);
+                                card_typ.setVisibility(View.VISIBLE);
+                            }
+                        }
+                    }
+                }
+                dialog.dismiss();
+
+            }
+        });
+
+
+    }
 
     public void enableFields(){
         if(mode.equalsIgnoreCase("11")){
@@ -216,6 +389,8 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
             lay_det.setVisibility(View.GONE);
             lay_From.setVisibility(View.VISIBLE);
             lay_to.setVisibility(View.VISIBLE);
+            card_to.setVisibility(View.GONE);
+            card_typ.setVisibility(View.GONE);
             lay_fare.setVisibility(View.VISIBLE);
             txt_mode.setText("Bus");
         }
@@ -225,6 +400,8 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
             lay_det.setVisibility(View.VISIBLE);
             lay_From.setVisibility(View.GONE);
             lay_to.setVisibility(View.GONE);
+            card_to.setVisibility(View.GONE);
+            card_typ.setVisibility(View.GONE);
             lay_fare.setVisibility(View.GONE);
             txt_mode.setText("Bike");
         }
@@ -407,6 +584,59 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
                                 enableFields();
                                 updateMode=true;
                             }
+                            getHeadQuaters();
+                           /* JSONObject js=new JSONObject(jsonData);
+                            if(js.getString("success").equalsIgnoreCase("true")){
+                                Toast.makeText(AllowanceActivity.this," Submitted successfully ",Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                                Toast.makeText(AllowanceActivity.this," Cannot submitted the data ",Toast.LENGTH_SHORT).show();*/
+                        }
+                    }catch (Exception e){}
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+        }catch(Exception e){}
+    }
+    public void getHeadQuaters(){
+        try{
+            JSONObject jj=new JSONObject();
+
+            jj.put("sfCode",SF_code);
+            jj.put("divisionCode",div);
+            //jj.put("url",url);
+            //saveAllowance
+            Log.v("printing_allow",jj.toString());
+            Call<ResponseBody>  Callto = apiInterface.gethq(jj.toString());
+            Callto.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+                        if (response.isSuccessful()) {
+
+
+                            Log.v("print_upload_file_true", "ggg" + response);
+                            JSONObject jb = null;
+                            String jsonData = null;
+                            jsonData = response.body().string();
+                            Log.v("get_mode_Res",jsonData);
+                            JSONArray ja=new JSONArray(jsonData);
+                            for(int i=0;i<ja.length();i++){
+                                JSONObject jjson=ja.getJSONObject(i);
+                                array_hq.add(new SelectionModel(jjson.getString("name"),false,jjson.getString("id")));
+                            }
+                            array_hq.add(new SelectionModel("Others",false,"-1"));
+                           /* if(ja.length()!=0){
+                                card_travel.setEnabled(false);
+                                JSONObject js=ja.getJSONObject(0);
+                                mode=js.getString("MOT");
+                                enableFields();
+                                updateMode=true;
+                            }*/
                            /* JSONObject js=new JSONObject(jsonData);
                             if(js.getString("success").equalsIgnoreCase("true")){
                                 Toast.makeText(AllowanceActivity.this," Submitted successfully ",Toast.LENGTH_SHORT).show();

@@ -134,8 +134,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         if (Shared_Common_Pref.Dept_Type.equals("0")) {
             StActivity.setVisibility(View.VISIBLE);
         } else {
-            StActivity.setVisibility(View.GONE);
         }
+        String typev= Shared_Common_Pref.Dept_Type.toString();
+       // if (typev.equals("0") || typev.equals("1")) {
+       //     StActivity.setVisibility(View.VISIBLE);
+      //  }else{
+      //      StActivity.setVisibility(View.GONE);
+      //  }
 
 
     }
@@ -241,13 +246,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 JsonArray res = response.body();
-                if (res.size() < 1) {
-                    Toast.makeText(getApplicationContext(), "No Records Today", Toast.LENGTH_LONG).show();
+                if(res.size()<1){
+                    Toast.makeText(getApplicationContext(),"No Records Today", Toast.LENGTH_LONG).show();
                     return;
                 }
                 JsonObject fItm = res.get(0).getAsJsonObject();
                 TextView txDyDet = findViewById(R.id.lTDyTx);
-                txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br><small>" + fItm.get("AttDtNm").getAsString() + "</small>"));
+                txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br><small>" + fItm.get("AttDtNm").getAsString()+"</small>"));
                 JsonArray dyRpt = new JsonArray();
                 JsonObject newItem = new JsonObject();
                 newItem.addProperty("name", "Shift");
@@ -299,7 +304,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
 
-                Log.d(Tag, String.valueOf(t));
+                Log.d(Tag,String.valueOf(t));
             }
         });
         ImageView backView = findViewById(R.id.imag_back);
@@ -451,6 +456,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     }
 
 
+
     @Override
     public void onClick(View v) {
         Intent intent = null;
@@ -474,6 +480,14 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 Intent aIntent;
                                 String sDeptType = UserDetails.getString("DeptType", "");
                                 Log.d("DeptType", sDeptType);
+                    .setTitle("HAP Check-In")
+                    .setMessage(Html.fromHtml("Are you sure to start your Today Activity Now ?"+UserDetails.getString("DeptType","")))
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Intent aIntent;
+                            String sDeptType=UserDetails.getString("DeptType","");
+                            Log.d("DeptType",sDeptType);
 
                                 if (sDeptType.equalsIgnoreCase("1")) {
                                     aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
