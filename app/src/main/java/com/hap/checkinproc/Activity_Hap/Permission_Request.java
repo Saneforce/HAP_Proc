@@ -43,6 +43,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -65,7 +66,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
     EditText eText, eText2;
     String DateSelection;
     DatePickerDialog picker1;
-    EditText eText1, takenHrs, hrsCurr, hrsAvail, reasonPermission;
+    EditText permsissionDate, takenHrs, hrsCurr, hrsAvail, reasonPermission;
     private ArrayList<String> shitList;
     Date d1 = null;
     Date d2 = null;
@@ -89,6 +90,9 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
     List<Common_Model> modelShiftType = new ArrayList<>();
     Common_Model Model_Pojo;
 
+    String maxDate, minDate;
+    String maxYear, maxMonth, maxDay, minYear, minMonth, minDay;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +104,8 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         JsonArray jArray = (JsonArray) jsonParser.parse(Setups.getString("Setups",""));
         aSetups=jArray.get(0).getAsJsonObject();
 */
+        MaxMinDate();
+
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -132,9 +138,9 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         AvlHrs=TotHrs-tknHrs;
         hrsAvail.setText(String.valueOf(AvlHrs));*/
         takenHrs.setText(String.valueOf(tknHrs));
-        eText1 = (EditText) findViewById(R.id.permission_date);
-        eText1.setInputType(InputType.TYPE_NULL);
-        eText1.setOnClickListener(new View.OnClickListener() {
+        permsissionDate = (EditText) findViewById(R.id.permission_date);
+        permsissionDate.setInputType(InputType.TYPE_NULL);
+        permsissionDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Calendar cldr = Calendar.getInstance();
@@ -148,7 +154,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                eText1.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                                permsissionDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                                 DateSelection = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
 
                                 /*07/15/2016*/
@@ -157,6 +163,9 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                                 AvalaibilityHours();
                             }
                         }, year, month, day);
+                Calendar calendarmin = Calendar.getInstance();
+                calendarmin.set(Integer.parseInt(minYear), Integer.parseInt(minMonth) - 1, Integer.parseInt(minDay));
+                picker1.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
                 picker1.show();
 
             }
@@ -284,9 +293,9 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         buttonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!eText.getText().toString().matches("") && !eText1.getText().toString().matches("") && !eText2.getText().toString().matches("") && !reasonPermission.getText().toString().matches("") && !shitType.getText().toString().matches("")) {
+                if (!eText.getText().toString().matches("") && !permsissionDate.getText().toString().matches("") && !eText2.getText().toString().matches("") && !reasonPermission.getText().toString().matches("") && !shitType.getText().toString().matches("")) {
                     PermissionRequestOne();
-                } else if (eText1.getText().toString().matches("")) {
+                } else if (permsissionDate.getText().toString().matches("")) {
                     Toast.makeText(Permission_Request.this, "Enter Date", Toast.LENGTH_SHORT).show();
                 } else if (shitType.getText().toString().matches("")) {
                     Toast.makeText(Permission_Request.this, "Enter Shite time", Toast.LENGTH_SHORT).show();
@@ -329,6 +338,30 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
     public static boolean isHourInInterval(String target, String start, String end) {
         return ((target.compareTo(start) >= 0)
                 && (target.compareTo(end) <= 0));
+    }
+
+
+    public void MaxMinDate() {
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = new Date();
+        System.out.println("Current_DATE_FORMAT" + formatter.format(date));
+
+        String strMinDate = formatter.format(date);
+        minDate = strMinDate;
+        /*Min Date*/
+        String[] separated1 = minDate.split("-");
+        separated1[0] = separated1[0].trim();
+        separated1[1] = separated1[1].trim();
+        separated1[2] = separated1[2].trim();
+
+        minYear = separated1[0];
+        minMonth = separated1[1];
+        minDay = separated1[2];
+        Log.e("Sresdfsd", minYear);
+        Log.e("Sresdfsd", minMonth);
+        Log.e("Sresdfsd", minDay);
+
     }
 
 

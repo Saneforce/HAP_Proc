@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -62,6 +63,8 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class OrderCategoryActivity extends AppCompatActivity implements Master_Interface {
     TextView toolHeader, toolTime, toolSlash, toolCutOFF, grandTotal, item_count, txtClosing;
@@ -360,7 +363,7 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
                         Log.e("PRODUCT_ARRAY_SIZE", String.valueOf(Product_Array_List));
                         for (int i = 0; i < Product_Array_List.size(); i++) {
                             sum = sum + Product_Array_List.get(i).getSampleqty();
-                            System.out.println("Final_Name" + "  " + Product_Array_List.get(i).getProductname() + "Qty" + "  " + Product_Array_List.get(i).getProductqty() + "SampleQty" + "  " + Product_Array_List.get(i).getSampleqty());
+                            System.out.println(" " + "  " + Product_Array_List.get(i).getProductname() + "Qty" + "  " + Product_Array_List.get(i).getProductqty() + "SampleQty" + "  " + Product_Array_List.get(i).getSampleqty());
                             if (Product_Array_List.get(i).getProductqty() == 0) {
 
                                 Product_Array_List.remove(i);
@@ -491,7 +494,15 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
                     AlertDialogBox.showDialog(OrderCategoryActivity.this, "", "Do you want to exit?", "Yes", "NO", false, new AlertBox() {
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
-                            onSuperBackPressed();
+                            SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                            Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                            if (CheckIn == true) {
+                                Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                                Dashboard.putExtra("Mode", "CIN");
+                                startActivity(Dashboard);
+                            } else
+                                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
                         }
 
                         @Override

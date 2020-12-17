@@ -130,6 +130,7 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
                 productCodeValue = productCode;
                 productQuantityValue = productQuantiy;
                 holder.subProdcutRate.setText(value);
+                Log.e("PRODUCT",value);
                 catIma = evenParent.get(position).getCatImage();
                 catNam = evenParent.get(position).getName();
                 productUnits = productUnit;

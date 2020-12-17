@@ -140,7 +140,6 @@
                                 android:imeOptions="actionDone"
                                 android:inputType="number"
                                 android:maxLength="3"
-                                android:cursorVisible="false"
                                 android:padding="5dp"
                                 android:text="0"></EditText>
 

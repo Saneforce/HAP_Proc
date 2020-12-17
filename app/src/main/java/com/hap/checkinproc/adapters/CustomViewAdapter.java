@@ -3,10 +3,12 @@ package com.hap.checkinproc.adapters;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Interface.AlertBox;
-import com.hap.checkinproc.Interface.ProducrtDelete;
 import com.hap.checkinproc.Interface.viewProduct;
 import com.hap.checkinproc.Model_Class.Product_Array;
 import com.hap.checkinproc.R;
@@ -48,6 +49,7 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
     JSONArray jsonValue;
 
     viewProduct mProducrtDelete;
+
     public CustomViewAdapter(Context context, JSONArray jsonValue, List<Product_Array> mProduct_arrays, viewProduct viewProd) {
         this.context = context;
         this.viewProd = viewProd;
@@ -93,9 +95,10 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
             holder.totalAmount.setText("Total :" + mProduct_arrays.get(position).getProductqty() * mProduct_arrays.get(position).getProductRate());
             Picasso.with(context).load(mProductArray.getCatImage()).error(R.drawable.no_prod).into(holder.productImage);
             holder.editCount.setText("" + quntaity);
-/*            holder.editCount.setSelection(holder.editCount.getText().length());
 
 
+/*
+            holder.editCount.setSelection(holder.editCount.getText().length());
             holder.editCount.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -112,6 +115,7 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
                         holder.txtQty.setText("Qty :" + editCountValue);
                         subTotalRate = editCountValue * price;
                         holder.totalAmount.setText("Total :" + subTotalRate);
+
 
                     } else {
                         holder.totalAmount.setText("Total :" + 0);
@@ -132,19 +136,11 @@ public class CustomViewAdapter extends RecyclerView.Adapter<CustomViewAdapter.My
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
 
-                            mProduct_arrays.remove(positions);
+                            mProduct_arrays.remove(position);
                             notifyItemRemoved(positions);
                             notifyItemRangeChanged(positions, mProduct_arrays.size());
-                            for (int l = 0; l < mProduct_arrays.size(); l++) {
-                                Log.e("PRODUCT_NAME", "" + mProduct_arrays.get(l).getCatName());
-                                Log.e("PRODUCT_NAME", "" + mProduct_arrays.get(l).getProductname());
-                                Log.e("PRODUCT_NAME", "" + mProduct_arrays.get(l).getCatImage());
-                                Log.e("PRODUCT_NAME", "" + String.valueOf(mProduct_arrays.get(l).getProductqty()));
-                                Log.e("PRODUCT_NAME", "" + String.valueOf(mProduct_arrays.get(l).getProductRate()));
-                            }
 
-                            viewProd.onViewItemClick(String.valueOf(position), mProductArray.getProductname(), mProductArray.getCatName(), mProductArray.getCatImage(), mProductArray.getProductqty(), mProductArray.getProductRate(), productUnit);
-                      }
+                        }
 
                         @Override
                         public void NegativeMethod(DialogInterface dialog, int id) {

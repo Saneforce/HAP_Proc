@@ -65,7 +65,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_approvals);
-
+        shared_common_pref = new Shared_Common_Pref(this);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +88,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
             }
         });
 
-        shared_common_pref = new Shared_Common_Pref(this);
+
         common_class = new Common_Class(this);
 
         ImageView backView = findViewById(R.id.imag_back);
@@ -253,7 +253,8 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    common_class.CommonIntentwithFinish(Dashboard.class);
+                    /*common_class.CommonIntentwithFinish(Dashboard.class);*/
+                    Approvals.super.onBackPressed();
                 }
             });
 

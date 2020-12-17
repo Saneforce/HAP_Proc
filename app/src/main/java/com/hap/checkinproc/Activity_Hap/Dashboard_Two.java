@@ -1,6 +1,15 @@
 
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -131,17 +140,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         });
 
 
-        if (Shared_Common_Pref.Dept_Type.equals("0")) {
+ /*       if (Shared_Common_Pref.Dept_Type.equals("0")) {
             StActivity.setVisibility(View.VISIBLE);
         } else {
         }
-        String typev= Shared_Common_Pref.Dept_Type.toString();
-       // if (typev.equals("0") || typev.equals("1")) {
-       //     StActivity.setVisibility(View.VISIBLE);
-      //  }else{
-      //      StActivity.setVisibility(View.GONE);
-      //  }
-
+*/
 
     }
 
@@ -478,20 +481,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Intent aIntent;
-                                String sDeptType = UserDetails.getString("DeptType", "");
-                                Log.d("DeptType", sDeptType);
-                    .setTitle("HAP Check-In")
-                    .setMessage(Html.fromHtml("Are you sure to start your Today Activity Now ?"+UserDetails.getString("DeptType","")))
-                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Intent aIntent;
-                            String sDeptType=UserDetails.getString("DeptType","");
-                            Log.d("DeptType",sDeptType);
+                                String sDeptType=UserDetails.getString("DeptType","");Log.d("DeptType",sDeptType);
 
-                                if (sDeptType.equalsIgnoreCase("1")) {
+                                if(sDeptType.equalsIgnoreCase("1")) {
                                     aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
-                                } else {
+                                }else {
                                     aIntent = new Intent(getApplicationContext(), OrderDashBoard.class);
                                 }
                                 startActivity(aIntent);
@@ -510,15 +504,15 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 intent = new Intent(this, View_All_Status_Activity.class);
                 break;
             case R.id.btnCheckout:
-                String mMessage = "Do you want to Checkout?";
+                String mMessage="Do you want to Checkout?";
                 AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
                         .setTitle("HAP Check-In")
                         .setMessage(Html.fromHtml(mMessage))
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
-                                takePhoto.putExtra("Mode", "COUT");
+                                Intent takePhoto=new Intent(Dashboard_Two.this, ImageCapture.class);
+                                takePhoto.putExtra("Mode","COUT");
                                 startActivity(takePhoto);
                             }
                         })
@@ -528,10 +522,9 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             default:
                 break;
         }
-        if (intent != null) {
+        if(intent!=null){
             startActivity(intent);
         }
     }
 
 }
-

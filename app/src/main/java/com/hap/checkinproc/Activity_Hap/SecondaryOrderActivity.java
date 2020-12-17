@@ -150,8 +150,6 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         distributorId = "'" + shared_common_pref.getvalue("distributor_id") + "'";
         distributorName = "'" + shared_common_pref.getvalue("distributor_name") + "'";
 
-        Log.e("View_Cart_Activity", SF_CODE);
-        Log.e("View_Cart_Activity", "asd" + WORK_TYPE);
 
 
         if (countInt != 0) {

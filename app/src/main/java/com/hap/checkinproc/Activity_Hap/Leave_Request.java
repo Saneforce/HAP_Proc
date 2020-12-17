@@ -187,7 +187,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                 calendarmin.set(Integer.parseInt(minYear), Integer.parseInt(minMonth) - 1, Integer.parseInt(minDay));
                 picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
 
-
                 picker.show();
 
             }
@@ -380,6 +379,17 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             daysBetween = (int) TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
             System.out.println("Number of Days between dates: " + (daysBetween + 1));
             etext3.setText("" + (daysBetween + 1));
+            if (daysBetween >= 0) {
+
+
+            } else {
+                etext2.setText("");
+                etext3.setText("");
+                Toast.makeText(this, "Please choose greater than from date" +
+                        "", Toast.LENGTH_SHORT).show();
+
+            }
+
             daysDifferce = String.valueOf((daysBetween + 1));
             Log.e("DIFFERNCE_DATE", daysDifferce);
             if (daysDifferce.equals("1")) {

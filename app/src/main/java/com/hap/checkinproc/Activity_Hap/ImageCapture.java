@@ -363,8 +363,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.VISIBLE);
+        imgPreview.setRotation(45);
         imgPreview.setImageURI(Uri.fromFile(file));
-        imgPreview.setRotation((float) -90.0);
 
     }
 
@@ -379,7 +379,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
         imgPreview.setImageURI(Uri.fromFile(file));
-        imgPreview.setRotation((float) -90.0);
+
 
 
         Log.e("Image_Capture", Uri.fromFile(file).toString());

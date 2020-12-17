@@ -240,12 +240,6 @@ public class ViewCartActivity extends AppCompatActivity {
             @Override
             public void onViewItemClick(String itemID, String productName, String catName, String catImg, Integer productQty, Integer productRate, String productUnit) {
 
-
-                int postionValue = Integer.parseInt(itemID);
-                carsList.remove(postionValue);
-                adapter.notifyDataSetChanged();
-
-
                 System.out.println("Ka_Product_Code" + itemID);
                 System.out.println("Ka_Product_Code" + productName);
                 System.out.println("Ka_Product_Code" + productQty);

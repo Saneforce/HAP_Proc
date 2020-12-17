@@ -1,10 +1,9 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -41,8 +40,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
-
 public class On_Duty_Activity extends AppCompatActivity implements View.OnClickListener, Master_Interface {
     LinearLayout haplocationtext, purposeofvisittext, haplocationbutton, otherlocationbutton, submitbutton, closebutton, exitclose, ondutylocations;
     EditText purposeofvisitedittext, ondutyedittext;
@@ -69,17 +66,17 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
-                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-                if (CheckIn == true) {
-                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
-                    Dashboard.putExtra("Mode", "CIN");
-                    startActivity(Dashboard);
-                } else
-                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+            }
+        });
 
 
-
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
             }
         });
         gson = new Gson();
@@ -115,9 +112,15 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 submitbutton.setVisibility(View.VISIBLE);
                 otherlocationbutton.setVisibility(View.GONE);
                 haplocationbutton.setVisibility(View.GONE);
+                purposeofvisitedittext.setText("");
+                selecthaplocationss.setText("");
+                ondutyedittext.setText("");
                 break;
             case R.id.haplocationbutton:
                 flag = 0;
+                ondutyedittext.setText("");
+                selecthaplocationss.setText("");
+                purposeofvisitedittext.setText("");
                 haplocationtext.setVisibility(View.VISIBLE);
                 purposeofvisittext.setVisibility(View.VISIBLE);
                 submitbutton.setVisibility(View.VISIBLE);
@@ -126,6 +129,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 ondutylocations.setVisibility(View.GONE);
                 haplocationbutton.setVisibility(View.GONE);
                 otherlocationbutton.setVisibility(View.GONE);
+
                 break;
             case R.id.submitbutton:
                 if (vali()) {
@@ -160,6 +164,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 startActivity(new Intent(this, Dashboard.class));
                 break;
             case R.id.selecthaplocationss:
+
                 customDialog = new CustomListViewDialog(On_Duty_Activity.this, getfieldforcehqlist, 1);
                 Window window = customDialog.getWindow();
                 window.setGravity(Gravity.CENTER);
@@ -236,6 +241,22 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
 
 
         return true;
+    }
+
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    /*common_class.CommonIntentwithFinish(Dashboard.class);*/
+                    On_Duty_Activity.super.onBackPressed();
+                }
+            });
+
+
+    @Override
+    public void onBackPressed() {
+
     }
 
 }

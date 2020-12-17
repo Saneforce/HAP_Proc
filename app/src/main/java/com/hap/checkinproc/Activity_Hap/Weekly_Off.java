@@ -53,12 +53,15 @@ public class Weekly_Off extends AppCompatActivity {
     List<MaxMinDate> maxMinDates;
     String maxDate, minDate;
     String maxYear, maxMonth, maxDay, minYear, minMonth, minDay;
+    Boolean CheckIn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weekly__off);
         TextView txtHelp = findViewById(R.id.toolbar_help);
+        SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+        CheckIn = CheckInDetails.getBoolean("CheckIn", false);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,7 +73,7 @@ public class Weekly_Off extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
-                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                 if (CheckIn == true) {
                     Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
                     Dashboard.putExtra("Mode", "CIN");
@@ -245,7 +248,14 @@ public class Weekly_Off extends AppCompatActivity {
                     public void PositiveMethod(DialogInterface dialog, int id) {
                         dialog.dismiss();
                         if (jsonObjecta.get("success").getAsBoolean() == true)
-                            startActivity(new Intent(Weekly_Off.this, Dashboard.class));
+
+                            if (CheckIn == true) {
+                                Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                                Dashboard.putExtra("Mode", "CIN");
+                                startActivity(Dashboard);
+                            } else
+                                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
                     }
 
                     @Override

@@ -70,14 +70,14 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     List<Common_Model> Savejointwork = new ArrayList<>();
     List<Common_Model> getfieldforcehqlist = new ArrayList<>();
     List<Common_Model> Shift_Typelist = new ArrayList<>();
-    LinearLayout worktypelayout, distributors_layout, route_layout, joint_work_layout;
+    LinearLayout worktypelayout, distributors_layout, route_layout, joint_work_Caption;
     List<Common_Model> distributor_master = new ArrayList<>();
     private Main_Model.presenter presenter;
     Common_Model Model_Pojo;
     Gson gson;
     int joint_flag = 0;
     Type userType;
-    EditText edt_remarks,eText, etext2;
+    EditText edt_remarks, eText, etext2;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     String worktype_id, worktypeflag, distributorname, distributorid, routename, routeid, Fieldworkflag = "", hqid, shifttypeid, Chilling_Id;
@@ -90,8 +90,9 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     RecyclerView jointwork_recycler;
     Joint_Work_Adapter da;
     ImageView image;
-    LinearLayout jointwork_layout, joint_work_listlt, hqlayout, shiftypelayout, Procrumentlayout, chillinglayout;
+    LinearLayout jointwork_layout, joint_work_Recyclerview, hqlayout, shiftypelayout, Procrumentlayout, chillinglayout;
     DatePickerDialog picker;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,11 +113,11 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         shiftypelayout = findViewById(R.id.shiftypelayout);
         hq_text = findViewById(R.id.hq_text);
         shift_type = findViewById(R.id.shift_type);
-
+        common_class = new Common_Class(this);
         jointwork_recycler.setLayoutManager(new LinearLayoutManager(this));
         worktypelayout = findViewById(R.id.worktypelayout);
-        joint_work_layout = findViewById(R.id.joint_work_lt);
-        joint_work_listlt = findViewById(R.id.joint_work_listlt);
+        joint_work_Caption = findViewById(R.id.joint_work_lt);
+        joint_work_Recyclerview = findViewById(R.id.joint_work_listlt);
         distributors_layout = findViewById(R.id.distributors_layout);
         route_layout = findViewById(R.id.route_layout);
         submitbutton = findViewById(R.id.mydaysubmitbutton);
@@ -125,7 +126,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         distributor_text = findViewById(R.id.distributor_text);
         presenter = new MasterSync_Implementations(this, new Master_Sync_View());
         presenter.requestDataFromServer();
-        joint_work_listlt.setVisibility(View.GONE);
+        joint_work_Recyclerview.setVisibility(View.GONE);
         //backarow.setOnClickListener(this);
         eText = (EditText) findViewById(R.id.from_date);
         eText.setInputType(InputType.TYPE_NULL);
@@ -148,7 +149,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         distributors_layout.setOnClickListener(this);
         route_layout.setOnClickListener(this);
         submitbutton.setOnClickListener(this);
-        joint_work_layout.setOnClickListener(this);
+        joint_work_Caption.setOnClickListener(this);
         common_class.ProgressdialogShow(1, "Day plan");
 
         //helptext = findViewById(R.id.helptext);
@@ -164,8 +165,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             distributors_layout.setVisibility(View.GONE);
             route_layout.setVisibility(View.GONE);
             Procrumentlayout.setVisibility(View.VISIBLE);
-            joint_work_listlt.setVisibility(View.GONE);
-            joint_work_layout.setVisibility(View.GONE);
+            joint_work_Recyclerview.setVisibility(View.GONE);
+            joint_work_Caption.setVisibility(View.GONE);
             edt_remarks.setHint("Enter the Purpose of Visit");
             Remarkscaption.setText("Visiting Purpose");
         } else {
@@ -173,7 +174,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             distributors_layout.setVisibility(View.VISIBLE);
             route_layout.setVisibility(View.VISIBLE);
             Procrumentlayout.setVisibility(View.GONE);
-            joint_work_listlt.setVisibility(View.GONE);
+            joint_work_Recyclerview.setVisibility(View.GONE);
             Remarkscaption.setText("Remarks");
             edt_remarks.setHint("Enter The Remarks");
         }
@@ -269,13 +270,13 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 if (joint_flag == 0) {
                     joint_flag = 1;
                     image.setImageResource(R.drawable.arrow_up);
-                    joint_work_listlt.setVisibility(View.VISIBLE);
+                    joint_work_Recyclerview.setVisibility(View.VISIBLE);
                     Log.e("JOINTWORK_UP", "1");
                 } else {
                     Log.e("JOINTWORK_DOWN", "2");
                     image.setImageResource(R.drawable.arrow_down);
                     joint_flag = 0;
-                    joint_work_listlt.setVisibility(View.GONE);
+                    joint_work_Recyclerview.setVisibility(View.GONE);
                 }
                 break;
 
@@ -373,6 +374,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
         if (type == 1) {
+            route_text.setText("");
+            distributor_text.setText("");
             worktype_text.setText(myDataset.get(position).getName());
             worktype_id = String.valueOf(myDataset.get(position).getId());
             Log.e("FIELD_WORK", myDataset.get(position).getFlag());
@@ -381,10 +384,28 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             if (myDataset.get(position).getFlag().equals("F") && Shared_Common_Pref.Dept_Type.equals("0")) {
                 distributors_layout.setVisibility(View.VISIBLE);
                 route_layout.setVisibility(View.VISIBLE);
+                //joint_work_Recyclerview.setVisibility(View.VISIBLE);
+                joint_work_Caption.setVisibility(View.VISIBLE);
+                jointwork_layout.setVisibility(View.VISIBLE);
+            } else if (myDataset.get(position).getFlag().equals("H") || myDataset.get(position).getFlag().equals("W") ) {
+                joint_work_Recyclerview.setVisibility(View.GONE);
+                joint_work_Caption.setVisibility(View.GONE);
+                jointwork_layout.setVisibility(View.GONE);
+                distributors_layout.setVisibility(View.GONE);
+                route_layout.setVisibility(View.GONE);
+            } else if (myDataset.get(position).getFlag().equals("N") && Shared_Common_Pref.Dept_Type.equals("0")) {
+                //joint_work_Recyclerview.setVisibility(View.VISIBLE);
+                joint_work_Caption.setVisibility(View.VISIBLE);
+                jointwork_layout.setVisibility(View.VISIBLE);
+                distributors_layout.setVisibility(View.GONE);
+                route_layout.setVisibility(View.GONE);
             } else {
                 distributors_layout.setVisibility(View.GONE);
                 route_layout.setVisibility(View.GONE);
+                jointwork_layout.setVisibility(View.VISIBLE);
             }
+
+
         } else if (type == 2) {
             routeid = null;
             routename = null;
@@ -394,7 +415,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             Log.e("StockistID", myDataset.get(position).getId());
             shared_common_pref.save("distributor_name", distributor_text.getText().toString());
             shared_common_pref.save("distributor_id", distributorid);
-            Log.e("ORDER_SAVE",distributor_text.getText().toString());
+            Log.e("ORDER_SAVE", distributor_text.getText().toString());
             loadroute(myDataset.get(position).getId());
         } else if (type == 3) {
             route_text.setText(myDataset.get(position).getName());
@@ -442,7 +463,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     JSONArray jsoncc = jsonObject.getJSONArray("GettodayResult");
                     Log.e("LENGTH", String.valueOf(jsoncc.length()));
                     if (jsoncc.length() > 0) {
-                        joint_work_listlt.setVisibility(View.GONE);
+                        joint_work_Recyclerview.setVisibility(View.GONE);
                         worktype_id = String.valueOf(jsoncc.getJSONObject(0).get("worktype_code"));
                         edt_remarks.setText(String.valueOf(jsoncc.getJSONObject(0).get("remarks")));
                         Fieldworkflag = String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag"));
@@ -463,6 +484,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
 
 
                         if (String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag")).equals("F")) {
+                            jointwork_layout.setVisibility(View.VISIBLE);
                             routename = String.valueOf(jsoncc.getJSONObject(0).get("RouteName"));
                             route_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("RouteName")));
                             routeid = String.valueOf(jsoncc.getJSONObject(0).get("RouteCode"));
@@ -511,9 +533,11 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
 
 
                         } else if (String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag")).equals("N")) {
-
+                            jointwork_layout.setVisibility(View.VISIBLE);
                             distributors_layout.setVisibility(View.GONE);
                             route_layout.setVisibility(View.GONE);
+
+
                             String myStr = String.valueOf(jsoncc.getJSONObject(0).get("JointworkCode"));
                             Log.e("WORKTYPE_JointworkCode", myStr);
 
@@ -551,9 +575,15 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                             }));
 
 
+                        } else if (String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag")).equals("H") ||String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag")).equals("W")) {
+                            joint_work_Recyclerview.setVisibility(View.GONE);
+                            joint_work_Caption.setVisibility(View.GONE);
+                            jointwork_layout.setVisibility(View.GONE);
+                            distributors_layout.setVisibility(View.GONE);
+                            route_layout.setVisibility(View.GONE);
                         } else {
-                            joint_work_layout.setVisibility(View.GONE);
-                            joint_work_listlt.setVisibility(View.GONE);
+                            joint_work_Caption.setVisibility(View.GONE);
+                            joint_work_Recyclerview.setVisibility(View.GONE);
                             distributors_layout.setVisibility(View.GONE);
                             route_layout.setVisibility(View.GONE);
                         }
@@ -671,7 +701,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             Log.e("QueryString_SF_1", Shared_Common_Pref.Sf_Code);
             Log.e("QueryString_DV_1", Shared_Common_Pref.Div_Code);
             Log.e("QueryString_Sc_1", Shared_Common_Pref.StateCode);
-
 
 
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
