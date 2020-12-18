@@ -83,6 +83,8 @@ public class ViewCartActivity extends AppCompatActivity {
     String orderType = "";
     int orderCount = 0;
     CustomViewAdapter adapter;
+    int brightness;
+
 
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = 5000;

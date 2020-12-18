@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.Manifest;
+import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -38,6 +39,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -431,7 +433,7 @@ public class Login extends AppCompatActivity {
                         Shared_Common_Pref.SF_Type = Sf_type;
 
 
-                        Log.e("SF_TYPE", Sf_type);
+                        Log.e("STATECODE", Sf_type);
                         Log.e("STATECODE", code);
                         Log.e("STATECODE", div);
 

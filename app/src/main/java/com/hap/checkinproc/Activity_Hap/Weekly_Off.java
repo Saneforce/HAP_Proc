@@ -242,7 +242,7 @@ public class Weekly_Off extends AppCompatActivity {
 
                 Log.e("TOTAL_REPOSNE", String.valueOf(jsonObjecta));
                 String Msg = jsonObjecta.get("Msg").getAsString();
-
+if(Msg.equals(""))
                 AlertDialogBox.showDialog(Weekly_Off.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {

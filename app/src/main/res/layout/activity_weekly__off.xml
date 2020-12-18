@@ -93,27 +93,37 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp" />
 
-                <Button
-                    android:id="@+id/weeky_submit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:background="@color/colorPrimary"
-                    android:gravity="center_vertical"
-                    android:text="SUBMIT"
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/C13dp"
-                    tools:ignore="RtlCompat" />
+
             </LinearLayout>
         </ScrollView>
 
     </LinearLayout>
 
-    <include layout="@layout/back_arrow"></include>
+    <LinearLayout
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/weeky_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center_vertical"
+            android:text="SUBMIT"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="@dimen/C13dp"
+            tools:ignore="RtlCompat" />
+
+        <include layout="@layout/back_arrow"></include>
+
+    </LinearLayout>
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

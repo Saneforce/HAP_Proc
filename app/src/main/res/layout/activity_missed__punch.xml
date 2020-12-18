@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
                 android:orientation="vertical"
-                android:padding="18dp">
+                android:padding="10dp">
 
                         <TextView
                             android:id="@+id/textView9"
@@ -181,20 +181,7 @@
                     android:textSize="@dimen/C13dp" />
 
 
-                <Button
-                    android:id="@+id/submit_missed"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/sign_bg"
-                    android:gravity="center_vertical"
-                    android:text="SUBMIT"
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    tools:ignore="RtlCompat" />
+
             </LinearLayout>
 
         </ScrollView>
@@ -202,7 +189,31 @@
 
     </LinearLayout>
 
-    <include layout="@layout/back_arrow"></include>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content">
+
+
+        <Button
+            android:id="@+id/submit_missed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/sign_bg"
+            android:gravity="center_vertical"
+            android:text="SUBMIT"
+            android:textAlignment="center"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            tools:ignore="RtlCompat" />
+
+
+
+        <include layout="@layout/back_arrow"></include>
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

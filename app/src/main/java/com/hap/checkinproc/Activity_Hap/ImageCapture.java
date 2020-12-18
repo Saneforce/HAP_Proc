@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
@@ -27,10 +28,10 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -92,6 +93,10 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     public static final String sCheckInDetail = "CheckInDetail";
     public static final String sUserDetail = "MyPrefs";
 
+    Button btnRtPrv, btnOkPrv;
+    int brightness;
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -163,8 +168,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
         textureView = (TextureView) findViewById(R.id.ImagePreview);
         button = (Button) findViewById(R.id.button_capture);
-        Button btnRtPrv = (Button) findViewById(R.id.btnRtPrv);
-        Button btnOkPrv = (Button) findViewById(R.id.btnOkPrv);
+
+        btnRtPrv = (Button) findViewById(R.id.btnRtPrv);
+        btnOkPrv = (Button) findViewById(R.id.btnOkPrv);
         btnFlash = (ImageView) findViewById(R.id.button_flash);
         btnSwchCam = (ImageView) findViewById(R.id.button_switchCam);
         lstModalFlash = (LinearLayout) findViewById(R.id.lstMFlash);
@@ -221,10 +227,59 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             }
         });
         skBarBright = (SeekBar) findViewById(R.id.skBarBright);
+
+        int brightness = Settings.System.getInt(
+                getApplicationContext().getContentResolver(),
+                Settings.System.SCREEN_BRIGHTNESS,
+                0
+        );
+        skBarBright.setProgress(brightness);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            boolean settingsCanWrite = Settings.System.canWrite(getApplicationContext());
+
+            if (!settingsCanWrite) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                startActivity(intent);
+            } else {
+                skBarBright.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                        Settings.System.putInt(getApplicationContext().getContentResolver(),
+                                Settings.System.SCREEN_BRIGHTNESS, progress);
+
+
+/*
+                        Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
+                        // Apply the screen brightness value to the system, this will change the value in Settings ---> Display ---> Brightness level.
+                        // It will also change the screen brightness for the device.
+                        Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, i);
+*/
+
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+
+                    }
+                });
+            }
+        }
+/*
+        brightness =
+                Settings.System.getInt(getApplicationContext().getContentResolver(),
+                        Settings.System.SCREEN_BRIGHTNESS, 0);
+        skBarBright.setProgress(brightness);
         skBarBright.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress,
                                           boolean fromUser) {
+                Settings.System.putInt(getApplicationContext().getContentResolver(),
+                        Settings.System.SCREEN_BRIGHTNESS, progress);
                 Toast.makeText(getApplicationContext(), "seekbar progress: " + progress, Toast.LENGTH_SHORT).show();
             }
 
@@ -237,7 +292,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             public void onStopTrackingTouch(SeekBar seekBar) {
                 Toast.makeText(getApplicationContext(), "seekbar touch stopped!", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
     }
 
     private void StartSelfiCamera() {
@@ -247,13 +302,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         mCamera = Camera.open(mCamId);*/
 
 
-
         if (mCamera != null) {
-
-
-            preview = null;
-            mHolder.removeCallback(ImageCapture.this);
-            mCamera.setPreviewCallback(null);
+           /* mHolder.removeCallback(ImageCapture.this);
+            mCamera.setPreviewCallback(null);*/
             mCamera.stopPreview();
             mCamera.release();
             mCamera = null;
@@ -271,6 +322,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         }
         setCameraDisplayOrientation();
         mCamera.startPreview();
+
+
+        Log.e("mCAmer_id", String.valueOf(mCamId));
     }
 
     private boolean checkPermission() {
@@ -363,8 +417,13 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.VISIBLE);
-        imgPreview.setRotation(45);
         imgPreview.setImageURI(Uri.fromFile(file));
+
+        if (mCamId == 1) {
+            imgPreview.setRotation((float) -90.0);
+        } else {
+            imgPreview.setRotation((float) 90.0);
+        }
 
     }
 
@@ -372,6 +431,41 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
+
+        if (!checkPermission()) {
+            requestPermissions();
+
+        } else {
+
+            if (preview != null) {
+
+
+                preview = null;
+                mHolder.removeCallback(ImageCapture.this);
+                mCamera.setPreviewCallback(null);
+                mCamera.stopPreview();
+                mCamera.release();
+                mCamera = null;
+            }
+
+            preview = (SurfaceView) findViewById(R.id.PREVIEW);
+            mHolder = preview.getHolder();
+            mHolder.addCallback(ImageCapture.this);
+            setDefaultCameraId((mCamId == 1) ? "front" : "back");
+            mCamera = Camera.open(mCamId);
+            try {
+                mCamera.setPreviewDisplay(mHolder);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            setCameraDisplayOrientation();
+            mCamera.startPreview();
+
+
+            Log.e("mCAmer_id", String.valueOf(mCamId));
+        }
+
+
     }
 
     private void saveImgPreview() {
@@ -379,7 +473,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
         imgPreview.setImageURI(Uri.fromFile(file));
-
 
 
         Log.e("Image_Capture", Uri.fromFile(file).toString());
@@ -593,23 +686,26 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(mCamId, info);
         int rotation = getWindowManager().getDefaultDisplay().getRotation();
+
+        mCamera.setDisplayOrientation(90);
+        mCamera.startPreview();
         int degrees = 0;
         switch (rotation) {
             case Surface.ROTATION_0:
                 degrees = 0;
                 break;
-            case Surface.ROTATION_90:
+       /*     case Surface.ROTATION_0:
                 degrees = 90;
                 break;
-            case Surface.ROTATION_180:
+            case Surface.ROTATION_0:
                 degrees = 180;
                 break;
-            case Surface.ROTATION_270:
+            case Surface.ROTATION_0:
                 degrees = 270;
-                break;
+                break;*/
         }
 
-        int result;
+/*        int result;
         //int currentapiVersion = android.os.Build.VERSION.SDK_INT;
         // do something for phones running an SDK before lollipop
         if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
@@ -619,35 +715,73 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             result = (info.orientation - degrees + 360) % 360;
         }
 
-        mCamera.setDisplayOrientation(result);
+   ;*/
     }
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-        try {
+      /*  try {
             mCamera.setPreviewDisplay(surfaceHolder);
             mCamera.startPreview();
             setCameraDisplayOrientation();
         } catch (IOException e) {
             // left blank for now
+        }*/
+
+
+        mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+        mCamera.setDisplayOrientation(90);
+        try {
+            mCamera.setPreviewDisplay(surfaceHolder);
+            mCamera.startPreview();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-        try {
+     /*   try {
             mCamera.setPreviewDisplay(surfaceHolder);
             mCamera.startPreview();
             setCameraDisplayOrientation();
         } catch (Exception e) {
             // intentionally left blank for a test
+        }*/
+
+
+        if (surfaceHolder.getSurface() == null) {
+            // Return if preview surface does not exist
+            return;
         }
+
+        if (mCamera != null) {
+            // Stop if preview surface is already running.
+            mCamera.stopPreview();
+            try {
+                // Set preview display
+                mCamera.setPreviewDisplay(surfaceHolder);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            // Start the camera preview...
+            mCamera.startPreview();
+        }
+
+
     }
 
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
-        mCamera.stopPreview();
-        mCamera.release();
+       /* mCamera.stopPreview();
+        mCamera.release();*/
+
+
+        if (mCamera != null) {
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
+        }
     }
 
 
