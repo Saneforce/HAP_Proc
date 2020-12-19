@@ -348,18 +348,7 @@ public class AdapterForDynamicView extends BaseAdapter {
                 rg.addView(rb1);
 
         }
-       /* rb1 = new RadioButton(context);
-        rb2 = new RadioButton(context);
-        rb3 = new RadioButton(context);
-        rb4 = new RadioButton(context);
-        rb1.setText("Malekkkkkkkkkkkkkkkkkkkkkk");
-        rb2.setText("Femalekkkkkkkkkkkkkkkkkkkkkkkk");
-        rb3.setText("Otherskkkkkkkkkkkkkkkkkkkkkkk");
-        rb4.setText("Nonekkkkkkkkkkkkkkkkkkkkkkkkkkk");
-        rg.addView(rb1);
-        rg.addView(rb2);
-        rg.addView(rb3);
-        rg.addView(rb4);*/
+
         rg.setOrientation(RadioGroup.VERTICAL);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) RelativeLayout.LayoutParams.WRAP_CONTENT,(int) RelativeLayout.LayoutParams.WRAP_CONTENT);
         params.leftMargin =5;//150
@@ -378,8 +367,6 @@ public class AdapterForDynamicView extends BaseAdapter {
                         arr.get(i).setClick(false);
                 }
 
-               /* RadioButton radioButton = (RadioButton) findViewById(checkedId);
-                Toast.makeText(getApplicationContext(),radioButton.getText(),Toast.LENGTH_LONG).show();*/
             }
         });
     }
@@ -406,9 +393,7 @@ public class AdapterForDynamicView extends BaseAdapter {
         params.addRule(RelativeLayout.CENTER_VERTICAL);
         params.setMargins(0,0,10,0);
         img.setLayoutParams(params);
-       /* RelativeLayout.LayoutParams params2 = new RelativeLayout.LayoutParams((int) RelativeLayout.LayoutParams.WRAP_CONTENT,(int) RelativeLayout.LayoutParams.WRAP_CONTENT);
-        params2.setMargins(0,10,0,0);
-        ll.setLayoutParams(params2);*/
+
         ll.addView(img);
         ll.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -488,18 +473,6 @@ public class AdapterForDynamicView extends BaseAdapter {
             });
         }
         dyn_lay.addView(ll);
-       /* rb1 = new RadioButton(context);
-        rb2 = new RadioButton(context);
-        rb3 = new RadioButton(context);
-        rb4 = new RadioButton(context);
-        rb1.setText("Malekkkkkkkkkkkkkkkkkkkkkk");
-        rb2.setText("Femalekkkkkkkkkkkkkkkkkkkkkkkk");
-        rb3.setText("Otherskkkkkkkkkkkkkkkkkkkkkkk");
-        rb4.setText("Nonekkkkkkkkkkkkkkkkkkkkkkkkkkk");
-        rg.addView(rb1);
-        rg.addView(rb2);
-        rg.addView(rb3);
-        rg.addView(rb4);*/
 
     }
 

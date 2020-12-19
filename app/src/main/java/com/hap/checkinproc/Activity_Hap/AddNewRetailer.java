@@ -387,7 +387,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 if (success.equalsIgnoreCase("true")) {
                     startActivity(new Intent(getApplicationContext(), SecondaryOrderActivity.class));
                 } else {
-                    Toast.makeText(AddNewRetailer.this, "Please type DATA", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddNewRetailer.this, "Please type data", Toast.LENGTH_SHORT).show();
                 }
             }
 

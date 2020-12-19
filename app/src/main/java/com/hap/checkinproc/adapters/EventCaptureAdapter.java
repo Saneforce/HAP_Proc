@@ -80,13 +80,6 @@ public class EventCaptureAdapter extends RecyclerView.Adapter<EventCaptureAdapte
             materialCardView = itemView.findViewById(R.id.card_event_capture);
         }
 
-      /*  @Override
-        public void onClick(View v) {
-            EventCapture task = eventCapture.get(getAdapterPosition());
-            Intent intent = new Intent(mContext, UpdateTaskActivity.class);
-            intent.putExtra("task", task);
-            mContext.startActivity(intent);
 
-        }*/
     }
 }

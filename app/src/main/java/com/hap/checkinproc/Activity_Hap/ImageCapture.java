@@ -1,12 +1,17 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Camera;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
@@ -20,6 +25,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -39,6 +47,8 @@ import androidx.core.app.ActivityCompat;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.BuildConfig;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
@@ -94,7 +104,15 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     public static final String sUserDetail = "MyPrefs";
 
     Button btnRtPrv, btnOkPrv;
-    int brightness;
+
+
+    //Variable to store brightness value
+    private int brightness;
+    //Content resolver used as a handle to the system's settings
+    private ContentResolver cResolver;
+    //Window object, that will store a reference to the current window
+    private Window window;
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -181,19 +199,49 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         lstFlashMode.setAdapter(simpleAdapter);//sets the adapter for listView
 
         //perform listView item click event
-        lstFlashMode.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                lstModalFlash.setVisibility(View.GONE);
-                try {
-                    Camera.Parameters params = mCamera.getParameters();
-                    //params.setFlashMode(Parameters.FLASH_MODE_TORCH);
-                    params.set("flash-mode", flashModes[i].toLowerCase());
-                    mCamera.setParameters(params);
-                } catch (Exception e) {
+
+        if (mCamId == 1) {
+            lstFlashMode.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    lstModalFlash.setVisibility(View.GONE);
+                    try {
+                        Camera.Parameters params = mCamera.getParameters();
+                        //params.setFlashMode(Parameters.FLASH_MODE_TORCH);
+                        params.set("flash-mode", flashModes[i].toLowerCase());
+                        mCamera.setParameters(params);
+
+
+                        Log.e("POSITION", String.valueOf(i));
+                        Log.e("POSITION", String.valueOf(l));
+                        if (i == 0) {
+                            CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+                            try {
+                                String cameraId = cameraManager.getCameraIdList()[0];
+                                cameraManager.setTorchMode(cameraId, false);
+                                Log.e("ON_ITEM_CLICK", "False");
+                            } catch (CameraAccessException e) {
+                            }
+                        } else if (i == 1) {
+
+                        } else if (i == 2) {
+                            CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+                            try {
+                                String cameraId = cameraManager.getCameraIdList()[0];
+                                cameraManager.setTorchMode(cameraId, true);
+                                Log.e("ON_ITEM_CLICK", "TRUE");
+                            } catch (CameraAccessException e) {
+                            }
+                        } else if (i == 4) {
+
+                        }
+
+                    } catch (Exception e) {
+                    }
                 }
-            }
-        });
+            });
+
+        }
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,11 +276,28 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         });
         skBarBright = (SeekBar) findViewById(R.id.skBarBright);
 
-        int brightness = Settings.System.getInt(
-                getApplicationContext().getContentResolver(),
-                Settings.System.SCREEN_BRIGHTNESS,
-                0
-        );
+        cResolver = getContentResolver();
+
+        //Get the current window
+        window = getWindow();
+
+        //Set the seekbar range between 0 and 255
+        //seek bar settings//
+        //sets the range between 0 and 255
+        skBarBright.setMax(255);
+        //set the seek bar progress to 1
+        skBarBright.setKeyProgressIncrement(1);
+
+        try {
+            //Get the current system brightness
+            brightness = Settings.System.getInt(cResolver, Settings.System.SCREEN_BRIGHTNESS);
+        } catch (Settings.SettingNotFoundException e) {
+            //Throw an error case it couldn't be retrieved
+            Log.e("Error", "Cannot access system brightness");
+            e.printStackTrace();
+        }
+
+        //Set the progress of the seek bar based on the system's brightness
         skBarBright.setProgress(brightness);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             boolean settingsCanWrite = Settings.System.canWrite(getApplicationContext());
@@ -244,16 +309,15 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 skBarBright.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                     @Override
                     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                        Settings.System.putInt(getApplicationContext().getContentResolver(),
-                                Settings.System.SCREEN_BRIGHTNESS, progress);
 
-
-/*
-                        Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
-                        // Apply the screen brightness value to the system, this will change the value in Settings ---> Display ---> Brightness level.
-                        // It will also change the screen brightness for the device.
-                        Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, i);
-*/
+                        if (progress <= 20) {
+                            //Set the brightness to 20
+                            brightness = 20;
+                        } else //brightness is greater than 20
+                        {
+                            //Set brightness variable based on the progress bar
+                            brightness = progress;
+                        }
 
                     }
 
@@ -264,47 +328,23 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
                     @Override
                     public void onStopTrackingTouch(SeekBar seekBar) {
-
+                        //Set the system brightness using the brightness variable value
+                        Settings.System.putInt(cResolver, Settings.System.SCREEN_BRIGHTNESS, brightness);
+                        //Get the current window attributes
+                        ViewGroup.LayoutParams layoutpars = window.getAttributes();
+                        //Set the brightness of this window
+                        ((WindowManager.LayoutParams) layoutpars).screenBrightness = brightness / (float) 255;
+                        //Apply attribute changes to this window
+                        window.setAttributes((WindowManager.LayoutParams) layoutpars);
                     }
                 });
             }
         }
-/*
-        brightness =
-                Settings.System.getInt(getApplicationContext().getContentResolver(),
-                        Settings.System.SCREEN_BRIGHTNESS, 0);
-        skBarBright.setProgress(brightness);
-        skBarBright.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress,
-                                          boolean fromUser) {
-                Settings.System.putInt(getApplicationContext().getContentResolver(),
-                        Settings.System.SCREEN_BRIGHTNESS, progress);
-                Toast.makeText(getApplicationContext(), "seekbar progress: " + progress, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(getApplicationContext(), "seekbar touch started!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                Toast.makeText(getApplicationContext(), "seekbar touch stopped!", Toast.LENGTH_SHORT).show();
-            }
-        });*/
     }
 
     private void StartSelfiCamera() {
-        /*mHolder = preview.getHolder();
-        mHolder.addCallback(this);
-        setDefaultCameraId("front");
-        mCamera = Camera.open(mCamId);*/
-
 
         if (mCamera != null) {
-           /* mHolder.removeCallback(ImageCapture.this);
-            mCamera.setPreviewCallback(null);*/
             mCamera.stopPreview();
             mCamera.release();
             mCamera = null;
@@ -315,6 +355,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         mHolder.addCallback(ImageCapture.this);
         setDefaultCameraId((mCamId == 0) ? "front" : "back");
         mCamera = Camera.open(mCamId);
+
         try {
             mCamera.setPreviewDisplay(mHolder);
         } catch (IOException e) {
@@ -472,10 +513,13 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
-        imgPreview.setImageURI(Uri.fromFile(file));
-
+        // imgPreview.setImageURI(Uri.fromFile(file));
+        String filePath = String.valueOf(file);
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+        imgPreview.setImageBitmap(bitmap);
 
         Log.e("Image_Capture", Uri.fromFile(file).toString());
+        Log.e("Image_Capture", "IAMGE     " + bitmap);
 
         saveCheckIn();
     }
@@ -544,20 +588,22 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                             } catch (Exception e) {
                             }
 
-                            AlertDialog alertDialog = new AlertDialog.Builder(ImageCapture.this)
-                                    .setTitle("HAP Check-In")
-                                    .setMessage(Html.fromHtml(mMessage))
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            Intent Dashboard = new Intent(ImageCapture.this, Dashboard_Two.class);
-                                            Dashboard.putExtra("Mode", "CIN");
-                                            ImageCapture.this.startActivity(Dashboard);
+                            AlertDialogBox.showDialog(ImageCapture.this, "HAP Check-In", String.valueOf(Html.fromHtml(mMessage)), "Ok", "", false, new AlertBox() {
+                                @Override
+                                public void PositiveMethod(DialogInterface dialog, int id) {
+                                    Intent Dashboard = new Intent(ImageCapture.this, Dashboard_Two.class);
+                                    Dashboard.putExtra("Mode", "CIN");
+                                    ImageCapture.this.startActivity(Dashboard);
 
-                                            ((AppCompatActivity) ImageCapture.this).finish();
-                                        }
-                                    })
-                                    .show();
+                                    ((AppCompatActivity) ImageCapture.this).finish();
+                                }
+
+                                @Override
+                                public void NegativeMethod(DialogInterface dialog, int id) {
+
+                                }
+                            });
+
                         }
                     }
 
@@ -636,19 +682,24 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                             } catch (Exception e) {
                             }
 
-                            AlertDialog alertDialog = new AlertDialog.Builder(ImageCapture.this)
-                                    .setTitle("HAP Check-In")
-                                    .setMessage(Html.fromHtml(mMessage))
-                                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialogInterface, int i) {
-                                            Intent Dashboard = new Intent(ImageCapture.this, Login.class);
-                                            startActivity(Dashboard);
 
-                                            ((AppCompatActivity) ImageCapture.this).finish();
-                                        }
-                                    })
-                                    .show();
+                            AlertDialogBox.showDialog(ImageCapture.this, "HAP Check-In", String.valueOf(Html.fromHtml(mMessage)), "Ok", "", false, new AlertBox() {
+                                @Override
+                                public void PositiveMethod(DialogInterface dialog, int id) {
+                                    Intent Dashboard = new Intent(ImageCapture.this, Login.class);
+                                    startActivity(Dashboard);
+
+                                    ((AppCompatActivity) ImageCapture.this).finish();
+                                }
+
+                                @Override
+                                public void NegativeMethod(DialogInterface dialog, int id) {
+
+
+                                }
+                            });
+
+
                         }
                     }
 
@@ -694,41 +745,13 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             case Surface.ROTATION_0:
                 degrees = 0;
                 break;
-       /*     case Surface.ROTATION_0:
-                degrees = 90;
-                break;
-            case Surface.ROTATION_0:
-                degrees = 180;
-                break;
-            case Surface.ROTATION_0:
-                degrees = 270;
-                break;*/
+
         }
 
-/*        int result;
-        //int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-        // do something for phones running an SDK before lollipop
-        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
-            result = (info.orientation + degrees) % 360;
-            result = (360 - result) % 360; // compensate the mirror
-        } else { // back-facing
-            result = (info.orientation - degrees + 360) % 360;
-        }
-
-   ;*/
     }
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-      /*  try {
-            mCamera.setPreviewDisplay(surfaceHolder);
-            mCamera.startPreview();
-            setCameraDisplayOrientation();
-        } catch (IOException e) {
-            // left blank for now
-        }*/
-
-
         mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
         mCamera.setDisplayOrientation(90);
         try {
@@ -741,14 +764,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-     /*   try {
-            mCamera.setPreviewDisplay(surfaceHolder);
-            mCamera.startPreview();
-            setCameraDisplayOrientation();
-        } catch (Exception e) {
-            // intentionally left blank for a test
-        }*/
-
 
         if (surfaceHolder.getSurface() == null) {
             // Return if preview surface does not exist
@@ -766,17 +781,24 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             }
             // Start the camera preview...
             mCamera.startPreview();
+
         }
 
 
     }
 
+
+    Camera.AutoFocusCallback myAutoFocusCallback = new Camera.AutoFocusCallback() {
+
+        @Override
+        public void onAutoFocus(boolean arg0, Camera arg1) {
+            // TODO Auto-generated method stub
+            Log.e("Auto_Focus", "Auto_FOcus");
+        }
+    };
+
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
-       /* mCamera.stopPreview();
-        mCamera.release();*/
-
-
         if (mCamera != null) {
             mCamera.stopPreview();
             mCamera.release();

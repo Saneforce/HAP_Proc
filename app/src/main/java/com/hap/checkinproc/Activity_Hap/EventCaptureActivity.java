@@ -380,7 +380,6 @@ EventCaptureActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-               // Toast.makeText(getApplicationContext(), "Delete", Toast.LENGTH_LONG).show();
             }
         }
 

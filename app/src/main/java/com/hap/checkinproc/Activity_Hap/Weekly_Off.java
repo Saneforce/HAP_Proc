@@ -132,7 +132,7 @@ public class Weekly_Off extends AppCompatActivity {
                 } else if (eText.getText().toString().matches("")) {
                     Toast.makeText(Weekly_Off.this, "Enter Date", Toast.LENGTH_SHORT).show();
                 } else if (remark.getText().toString().matches("")) {
-                    Toast.makeText(Weekly_Off.this, "Enter Remarks  ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Weekly_Off.this, "Enter Remarks", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -242,7 +242,7 @@ public class Weekly_Off extends AppCompatActivity {
 
                 Log.e("TOTAL_REPOSNE", String.valueOf(jsonObjecta));
                 String Msg = jsonObjecta.get("Msg").getAsString();
-if(Msg.equals(""))
+
                 AlertDialogBox.showDialog(Weekly_Off.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {

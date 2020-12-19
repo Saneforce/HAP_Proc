@@ -460,8 +460,6 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
                     int month = SelectedMonth + 1;
                     String TourMonth = theyear + "-" + month + "-" + theday;
                     Log.e("Grid_Selected_Date", theday + "-" + themonth + "-" + theyear + day_color[1]);
-                    //Toast.makeText(_context, "SElected Date" + theday, Toast.LENGTH_SHORT).show();
-                    // common_class.CommonIntentwithFinish(Tp_Mydayplan.class);
                     common_class.CommonIntentwithoutFinishputextratwo(Tp_Mydayplan.class, "TourDate", TourMonth,"TourMonth", String.valueOf(month-1));
 
                 }

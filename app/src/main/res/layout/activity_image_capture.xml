@@ -130,9 +130,9 @@
 
     <RelativeLayout
         android:id="@+id/ImgPreview"
-        android:layout_width="500dp"
+        android:layout_width="match_parent"
         android:visibility="gone"
-        android:layout_height="800dp"
+        android:layout_height="match_parent"
         android:background="#FFFFFF"
 
 >

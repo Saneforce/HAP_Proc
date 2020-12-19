@@ -104,12 +104,6 @@ public class Help_Activity extends AppCompatActivity implements View.OnClickList
                 recyclerView.setAdapter(new Help_Adapter(approvalList, R.layout.add_helplistitem, getApplicationContext(), 1, new On_ItemCLick_Listner() {
                     @Override
                     public void onIntentClick(int Name) {
-                       /* Intent intent = new Intent(Help_Activity.this, Open_Help_Activity.class);
-                        Log.e("SELECTES_NAME", String.valueOf(Name));
-                        Log.e("SELECTES_ID", approvalList.get(Name).getId());
-                        intent.putExtra("LeaveId", String.valueOf(approvalList.get(Name).getId()));
-                        intent.putExtra("Title", String.valueOf(approvalList.get(Name).getName()));
-                        startActivity(intent);*/
                         qanda.setVisibility(View.VISIBLE);
                         onlyquestion.setVisibility(View.GONE);
                         getHelpqA(approvalList.get(Name).getId());

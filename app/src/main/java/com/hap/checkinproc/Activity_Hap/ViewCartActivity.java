@@ -381,7 +381,7 @@ public class ViewCartActivity extends AppCompatActivity {
                 /*Activity_Event_Captures*/
 
                 JSONArray eventCapturesArray = new JSONArray();
-                eventCapturesObjectArray = new JSONObject();
+                    eventCapturesObjectArray = new JSONObject();
 
 
                 try {

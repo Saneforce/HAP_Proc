@@ -10,16 +10,15 @@ import com.hap.checkinproc.Interface.AlertBox;
 public class AlertDialogBox {
     public static void showDialog(Context context, String title, String message, String positiveBtnCaption, String negativeBtnCaption, boolean isCancelable, final AlertBox target) {
         {
-       /*     AlertDialog.Builder builder = new AlertDialog.Builder(context);
+       /*  AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle(title);
             builder.setMessage(message);
             builder.setPositiveButton(android.R.string.ok, null);
             builder.show();*/
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-        /*    int imageResource = android.R.drawable.ic_dialog_alert;
-            Drawable image = context.getResources().getDrawable(imageResource);*/
-
+        /* int imageResource = android.R.drawable.ic_dialog_alert;
+            Drawable image = context.getResources().getDrawable(imageResource);
+            */
             builder.setTitle(title).setMessage(message).setCancelable(false).setPositiveButton(positiveBtnCaption, new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
                     target.PositiveMethod(dialog, id);

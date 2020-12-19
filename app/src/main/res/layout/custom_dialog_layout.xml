@@ -14,7 +14,7 @@
         android:hint="Select the Item"
         android:id="@+id/txt"
         android:text="Select Item"
-        android:textColor="@color/dark_blue" />
+        android:textColor="@color/colorPrimaryDark" />
 
     <EditText
         android:id="@+id/searchView"
@@ -26,7 +26,7 @@
         android:drawableLeft="@drawable/ic_search_icon"
         android:paddingLeft="5dp"
         android:textAlignment="textStart"
-        android:textColor="@color/dark_blue"
+        android:textColor="@color/colorPrimaryDark"
         android:textSize="15sp"
         android:singleLine="true"
         android:textStyle="normal"
@@ -55,7 +55,7 @@
             android:layout_width="@dimen/C100dp"
             android:layout_height="wrap_content"
             android:padding="@dimen/C8dp"
-            android:background="@drawable/button_blue"
+            android:background="@drawable/button_blueg"
             android:text="Close"
             android:textColor="@color/color_white" />
     </LinearLayout>

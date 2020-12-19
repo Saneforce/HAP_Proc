@@ -557,7 +557,6 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
 
                 if (Msg.equalsIgnoreCase("")) {
-                    // Toast.makeText(Leave_Request.this, "NULL VALUE", Toast.LENGTH_SHORT).show();
 
                     PermissionRequestTwo();
                 } else {

@@ -385,8 +385,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             } else {
                 etext2.setText("");
                 etext3.setText("");
-                Toast.makeText(this, "Please choose greater than from date" +
-                        "", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Please choose greater than from date" + "", Toast.LENGTH_SHORT).show();
 
             }
 
@@ -527,8 +526,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
 
                 if (Msg.equalsIgnoreCase("")) {
-                    // Toast.makeText(Leave_Request.this, "NULL VALUE", Toast.LENGTH_SHORT).show();
-
                     LeaveSubmitTwo();
                 } else {
                     AlertDialogBox.showDialog(Leave_Request.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {

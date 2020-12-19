@@ -53,6 +53,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/leavestatus"
                     android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/C5dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="@dimen/C60dp" />
             </LinearLayout>

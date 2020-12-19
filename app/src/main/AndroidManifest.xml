@@ -18,6 +18,7 @@
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions"></uses-permission>
 
+
     <application
         android:name=".HAPApp"
         android:allowBackup="true"
