@@ -2,6 +2,7 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -24,9 +25,12 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.On_ItemCLick_Listner;
 import com.hap.checkinproc.Model_Class.EventCapture;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.EventCaptureAdapter;
@@ -77,6 +81,8 @@ EventCaptureActivity extends AppCompatActivity {
     List<EventCapture> taskList;
     String locationValue, dateTime, checkInTime, keyEk = "EK", KeyDate, KeyHyp = "-", keyCodeValue, checkOutTime;
     String EventFileName;
+    int eventDbCount = 0;
+    EventCapture task;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +92,7 @@ EventCaptureActivity extends AppCompatActivity {
     }
 
     private void initialize() {
+
 
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
@@ -109,8 +116,6 @@ EventCaptureActivity extends AppCompatActivity {
         /*        mShaeShared_common_pref.save("Event_Capture","Remove");*/
 
 
-
-
         DistributorName = mShaeShared_common_pref.getvalue("distributor_name");
         RouteName = mShaeShared_common_pref.getvalue("route_name");
         RetailerName = mShaeShared_common_pref.getvalue("Retailer_name");
@@ -122,6 +127,7 @@ EventCaptureActivity extends AppCompatActivity {
         txtDistributorName = findViewById(R.id.txt_distributor_name);
 
         txtRetailerName.setText(RetailerName);
+
 
         txtRoute.setText(RouteName);
         txtDistributorName.setText(DistributorName);
@@ -139,10 +145,17 @@ EventCaptureActivity extends AppCompatActivity {
 
 
         RoomDataBase = mShaeShared_common_pref.getvalue("Event_Capture");
+        // intent.putExtra("count",eventDb);
+  /*      Intent intnet = getIntent();
+
+
+        eventDbCount = intnet.getIntExtra("count", 0);
+
+        Log.e("EventCount", String.valueOf(eventDbCount));
 
         if (RoomDataBase.equalsIgnoreCase("Remove")) {
             delete();
-        }
+        }*/
 
 
         TakeEventPicture.setOnClickListener(new View.OnClickListener() {
@@ -178,8 +191,17 @@ EventCaptureActivity extends AppCompatActivity {
             }
         });
 
+        task = (EventCapture) getIntent().getSerializableExtra("task");
+
+
+        loadTask(task);
+
     }
 
+    private void loadTask(EventCapture task) {
+        editextTitle.setText("task.getDesc()");
+        editTextDescrption.setText("task.getFinishBy()");
+    }
 
     private void getTasks() {
         class GetTasks extends AsyncTask<Void, Void, List<EventCapture>> {
@@ -195,7 +217,25 @@ EventCaptureActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(List<EventCapture> tasks) {
                 super.onPostExecute(tasks);
-                mEventCaptureAdapter = new EventCaptureAdapter(tasks, EventCaptureActivity.this);
+                mEventCaptureAdapter = new EventCaptureAdapter(tasks, EventCaptureActivity.this, new On_ItemCLick_Listner() {
+                    @Override
+                    public void onIntentClick(int Name) {
+                        Log.e("Delete_Position", String.valueOf(tasks.get(Name)));
+
+
+                        AlertDialogBox.showDialog(EventCaptureActivity.this, "", "Are you surely want to delete?", "Yes", "No", false, new AlertBox() {
+                            @Override
+                            public void PositiveMethod(DialogInterface dialog, int id) {
+                                deleteTask(tasks.get(Name));
+                            }
+
+                            @Override
+                            public void NegativeMethod(DialogInterface dialog, int id) {
+                            }
+                        });
+                    }
+
+                });
                 mEventCapture.setAdapter(mEventCaptureAdapter);
             }
         }
@@ -347,11 +387,11 @@ EventCaptureActivity extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    //onSuperBackPressed();
+                    onSuperBackPressed();
 
-                    Intent intent = new Intent(EventCaptureActivity.this, SecondaryOrderActivity.class);
+         /*           Intent intent = new Intent(EventCaptureActivity.this, SecondaryOrderActivity.class);
                     intent.putExtra("Event_caputure", EventFileName);
-                    startActivity(intent);
+                    startActivity(intent);*/
 
                 }
             });
@@ -387,4 +427,31 @@ EventCaptureActivity extends AppCompatActivity {
         st.execute();
     }
 
+
+    private void deleteTask(EventCapture task) {
+        class DeleteTask extends AsyncTask<Void, Void, Void> {
+
+            @Override
+            protected Void doInBackground(Void... voids) {
+                DatabaseClient.getInstance(getApplicationContext()).getAppDatabase()
+                        .taskDao()
+                        .delete(task);
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void aVoid) {
+                super.onPostExecute(aVoid);
+             recreate();
+                Toast.makeText(EventCaptureActivity.this, "Deleted Successfully", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        DeleteTask dt = new DeleteTask();
+        dt.execute();
+
+    }
+
+
 }
+

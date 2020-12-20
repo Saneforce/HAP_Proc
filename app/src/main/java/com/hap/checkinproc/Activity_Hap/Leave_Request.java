@@ -78,7 +78,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     Type userType;
     Button Submit;
     String leavetype_id = "";
-    String fromData, toData;
+    String fromData, toData,maxTWoDate="";
     String daysDifferce;
     CheckBox mHalfCheck;
     private ArrayList<String> shitList, halfTypeList;
@@ -99,6 +99,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     List<MaxMinDate> maxMinDates;
     String maxDate, minDate;
     String maxYear, maxMonth, maxDay, minYear, minMonth, minDay;
+    String tominDate, tomaxYear, tomaxMonth, tomaxDay, tominYear, tominMonth, tominDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,6 +127,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         eText = (EditText) findViewById(R.id.from_date);
         eText.setInputType(InputType.TYPE_NULL);
         MaxMinDate();
+
         etext2 = (EditText) findViewById(R.id.to_date);
         etext2.setInputType(InputType.TYPE_NULL);
 
@@ -180,6 +182,9 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                                 difference();
 
                                 fromData = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                                maxTWoDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                                MaxMinDateTo(maxTWoDate);
+
 
                             }
                         }, year, month, day);
@@ -210,7 +215,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                             }
                         }, year, month, day);
                 Calendar calendarmin = Calendar.getInstance();
-                calendarmin.set(Integer.parseInt(minYear), Integer.parseInt(minMonth) - 1, Integer.parseInt(minDay));
+                calendarmin.set(Integer.parseInt(tominYear), Integer.parseInt(tominMonth) - 1, Integer.parseInt(tominDay));
                 picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
 
 
@@ -336,6 +341,24 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         Log.e("Sresdfsd", minYear);
         Log.e("Sresdfsd", minMonth);
         Log.e("Sresdfsd", minDay);
+
+    }
+
+
+    public void MaxMinDateTo(  String strMinDate ) {
+        Log.e("MAX_DATE_TWO"," "+strMinDate);
+
+        String[] separated1 = strMinDate.split("-");
+        separated1[0] = separated1[0].trim();
+        separated1[1] = separated1[1].trim();
+        separated1[2] = separated1[2].trim();
+
+        tominYear = separated1[0];
+        tominMonth = separated1[1];
+        tominDay = separated1[2];
+        Log.e("Sresdfsd", tominYear);
+        Log.e("Sresdfsd", tominMonth);
+        Log.e("Sresdfsd", tominDay);
 
     }
 

@@ -6,9 +6,7 @@ import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.card.MaterialCardView;
 import com.hap.checkinproc.Activity_Hap.UpdateTaskActivity;
 import com.hap.checkinproc.Interface.EventCaptureInterface;
+import com.hap.checkinproc.Interface.On_ItemCLick_Listner;
 import com.hap.checkinproc.Model_Class.EventCapture;
 import com.hap.checkinproc.R;
 
@@ -30,11 +29,13 @@ public class EventCaptureAdapter extends RecyclerView.Adapter<EventCaptureAdapte
     ArrayList<Uri> uriArrayList;
     EventCaptureInterface eventCaptureInterface;
     int post;
+    On_ItemCLick_Listner on_itemCLick_listner;
 
 
-    public EventCaptureAdapter(List<EventCapture> eventCapture, Context mContext) {
+    public EventCaptureAdapter(List<EventCapture> eventCapture, Context mContext, On_ItemCLick_Listner on_itemCLick_listner) {
         this.eventCapture = eventCapture;
         this.mContext = mContext;
+        this.on_itemCLick_listner = on_itemCLick_listner;
     }
 
     @NonNull
@@ -42,6 +43,13 @@ public class EventCaptureAdapter extends RecyclerView.Adapter<EventCaptureAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View listItem = layoutInflater.inflate(R.layout.row_event_capture, parent, false);
+        listItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                on_itemCLick_listner.onIntentClick(post);
+            }
+        });
+
         return new ViewHolder(listItem);
     }
 
@@ -59,6 +67,14 @@ public class EventCaptureAdapter extends RecyclerView.Adapter<EventCaptureAdapte
                 mContext.startActivity(intent);
             }
         });
+
+        holder.deleteProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                on_itemCLick_listner.onIntentClick(position);
+            }
+        });
+
     }
 
     @Override
@@ -68,9 +84,9 @@ public class EventCaptureAdapter extends RecyclerView.Adapter<EventCaptureAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageSet;
-        TextView txtTitle,txtRemarks;
+        TextView txtTitle, txtRemarks;
         MaterialCardView materialCardView;
-
+        ImageView deleteProduct;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,6 +94,8 @@ public class EventCaptureAdapter extends RecyclerView.Adapter<EventCaptureAdapte
             txtTitle = itemView.findViewById(R.id.edt_title);
             txtRemarks = itemView.findViewById(R.id.edt_remarks);
             materialCardView = itemView.findViewById(R.id.card_event_capture);
+            deleteProduct = itemView.findViewById(R.id.delete_product);
+
         }
 
 

@@ -569,13 +569,11 @@
                             android:layout_alignParentLeft="true"
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentRight="true"
-                            android:padding="5dp"
                             android:text="Templates"
                             android:textColor="#E65100"
                             android:textSize="13dp"></TextView>
 
                     </RelativeLayout>
-
 
                     <EditText
                         android:id="@+id/remarks_week"
@@ -589,7 +587,7 @@
                         android:gravity="start"
                         android:hint="Reason"
                         android:inputType="textCapCharacters"
-                        android:padding="10dp"
+                        android:padding="5dp"
                         android:textSize="13dp" />
 
                     <LinearLayout

@@ -494,14 +494,15 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
                     AlertDialogBox.showDialog(OrderCategoryActivity.this, "", "Do you want to exit?", "Yes", "NO", false, new AlertBox() {
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
-                            SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                           /* SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
                             Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                             if (CheckIn == true) {
                                 Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
                                 Dashboard.putExtra("Mode", "CIN");
                                 startActivity(Dashboard);
                             } else
-                                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                                startActivity(new Intent(getApplicationContext(), Dashboard.class));*/
+                            onSuperBackPressed();
 
                         }
 
@@ -596,4 +597,11 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
             //  modelRetailDetails.clear();
         }
     }
+
+
+
+
+
+
+
 }

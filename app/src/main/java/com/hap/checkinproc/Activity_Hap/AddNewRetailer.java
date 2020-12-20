@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -161,8 +160,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
     }
-
-
 
 
     /*Route Details*/
@@ -424,14 +421,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    AddNewRetailer.super.onBackPressed();
 
                     AlertDialogBox.showDialog(AddNewRetailer.this, "", "Do you want to Exit?", "Yes", "NO", false, new AlertBox() {
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
                             AddNewRetailer.super.onBackPressed();
                         }
-
                         @Override
                         public void NegativeMethod(DialogInterface dialog, int id) {
                         }
@@ -444,7 +439,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     }
 
-
+    public void onSuperBackPressed() {
+        super.onBackPressed();
+    }
 
 
 }

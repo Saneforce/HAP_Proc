@@ -97,7 +97,7 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
     String retailerId;
     int count = 0, count1 = 0;
 
-    String orderTypestr="";
+    String orderTypestr = "";
     LinearLayout linerEventCapture;
     String EventcapOne = "";
     Shared_Common_Pref mShaeShared_common_pref;
@@ -129,6 +129,9 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
     JSONArray sendArray;
     JSONObject stockReportObjectArray, reportObjectArray, PersonObjectArray, sampleReportObjectArray, eventCapturesObjectArray, pendingBillObjectArray, ComProductObjectArray, ActivityInputReport;
 
+    int eventDb = 0;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -149,7 +152,6 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
 
         distributorId = "'" + shared_common_pref.getvalue("distributor_id") + "'";
         distributorName = "'" + shared_common_pref.getvalue("distributor_name") + "'";
-
 
 
         if (countInt != 0) {
@@ -245,41 +247,37 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
                 window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 customDialog.show();
 
+                eventDb = 1;
             }
         });
 
+
+        Log.e("COUNT", String.valueOf(eventDb));
         linerEventCapture = findViewById(R.id.prm_linear_event_capture);
         linerEventCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (txtOrder.getText().toString().matches("")) {
-                    Toast.makeText(SecondaryOrderActivity.this, "Select Order", Toast.LENGTH_SHORT).show();
+                Log.e("COUNT", String.valueOf(eventDb));
+
+              /* if (txtOrder.getText().toString().matches("")) {
+                    Toast.makeText(SecondaryOrderActivity.this, "Select Order Type", Toast.LENGTH_SHORT).show();
                 } else if (txtRetailer.getText().toString().matches("")) {
-                    Toast.makeText(SecondaryOrderActivity.this, "Select Retailer", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SecondaryOrderActivity.this, "Select Retailer Name", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
                     intent.putExtra("EventcapOne", EventcapOne);
                     intent.putExtra("id", 1);
+                    intent.putExtra("count",eventDb);
                     startActivity(intent);
-                }
-
-
-             /*   if (count1 == 1) {
-                    Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
-                    intent.putExtra("EventcapOne", EventcapOne);
-                    intent.putExtra("id", 1);
-                    startActivity(intent);
-
-
-                } else {
-                    Intent m_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    String EventFileName = "EventCapture.jpeg";
-                    File file = new File(getExternalCacheDir().getPath(), EventFileName);
-                    Uri uri = FileProvider.getUriForFile(SecondaryOrderActivity.this, getApplicationContext().getPackageName() + ".provider", file);
-                    m_intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
-                    startActivityForResult(m_intent, 2);
                 }*/
+
+
+                Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
+                intent.putExtra("EventcapOne", EventcapOne);
+                intent.putExtra("id", 1);
+                intent.putExtra("count",eventDb);
+                startActivity(intent);
             }
         });
 
@@ -290,9 +288,9 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
             public void onClick(View v) {
 
                 if (txtOrder.getText().toString().matches("")) {
-                    Toast.makeText(SecondaryOrderActivity.this, "Select Order", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SecondaryOrderActivity.this, "Select Order Type", Toast.LENGTH_SHORT).show();
                 } else if (txtRetailer.getText().toString().matches("")) {
-                    Toast.makeText(SecondaryOrderActivity.this, "Select Retailer", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SecondaryOrderActivity.this, "Select Retailer Name", Toast.LENGTH_SHORT).show();
                 } else {
                     startActivity(new Intent(SecondaryOrderActivity.this, OrderCategoryActivity.class));
                 }
@@ -377,30 +375,6 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-
-            //TODO... onCamera Picker Result
-            case 2:
-                if (resultCode == RESULT_OK) {
-                    count1++;
-                    String EventFileName = "EventCapture.jpeg";
-                    File file = new File(getExternalCacheDir().getPath(), EventFileName);
-                    Uri uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
-
-                    EventcapOne = String.valueOf(uri);
-
-
-                    Log.e("IMAGE_URI", EventcapOne);
-
-                }
-                break;
-        }
-    }
-
     /*Retailer Details*/
 
     public void RetailerViewDetailsMethod() {
@@ -454,15 +428,16 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
             shared_common_pref.save("Retailer_id", retailerId);
             shared_common_pref.save("Retailer_name", myDataset.get(position).getName());
             shared_common_pref.save("Event_Capture", "Remove");
+
             Log.e("Retailer_ID", myDataset.get(position).getName());
         } else if (type == 9) {
             txtOrder.setText(myDataset.get(position).getName());
             if (myDataset.get(position).getName().toString().matches("Phone Order")) {
                 count = 0;
-                orderTypestr  = "Zero";
+                orderTypestr = "Zero";
             } else {
                 count = 1;
-                orderTypestr  = "One";
+                orderTypestr = "One";
             }
             shared_common_pref.save("Phone_order_type", orderTypestr);
 

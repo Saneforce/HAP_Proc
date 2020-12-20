@@ -36,7 +36,9 @@
                  android:enabled="true"
                  android:exported="true"></service>-->
 
-        <activity android:name=".Activity_Hap.EventCaptureActivity" />
+        <activity android:name=".Activity_Hap.EventCaptureActivity" >
+
+        </activity>
         <activity
             android:name=".Activity_Hap.OrderCategoryActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
@@ -130,7 +132,11 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".Activity_Hap.MainActivity" />
+        <activity android:name=".Activity_Hap.MainActivity">
+
+
+
+        </activity>
         <activity android:name=".Activity.DesignActivity" />
         <activity
             android:name=".Activity.FilterActivity"
