@@ -27,6 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 
+import com.google.android.material.imageview.ShapeableImageView;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -52,9 +53,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AllowanceActivity extends AppCompatActivity {
-RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
+    RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
     Uri outputFileUri;
-    CircleImageView capture_img;
+    ShapeableImageView capture_img;
     CardView card_travel,card_to,card_typ;
     ApiInterface apiInterface;
     Button btn_submit,btn_ta;
@@ -116,6 +117,7 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
         card_travel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 popupSpinner();
             }
         });
@@ -206,6 +208,7 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
                     }
                 }
 */
+
                 dialog.dismiss();
                 //commonFun();
             }
@@ -223,7 +226,10 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
                         }
                     }
                 }
+
+
                 dialog.dismiss();
+                capture_img.setImageURI(null);
 
             }
         });
@@ -520,7 +526,7 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
             Log.v("printing_allow",jj.toString());
             Call<ResponseBody>  Callto;
             if(updateMode)
-              Callto = apiInterface.updateAllowance(jj.toString());
+                Callto = apiInterface.updateAllowance(jj.toString());
             else
                 Callto = apiInterface.saveAllowance(jj.toString());
 
@@ -578,7 +584,6 @@ RelativeLayout pic,rlay_pic,lay_km,lay_to,lay_From,lay_det,lay_fare;
                             Log.v("get_mode_Res",jsonData);
                             JSONArray ja=new JSONArray(jsonData);
                             if(ja.length()!=0){
-                                card_travel.setEnabled(false);
                                 JSONObject js=ja.getJSONObject(0);
                                 mode=js.getString("MOT");
                                 enableFields();

@@ -1,13 +1,16 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.util.Log;
@@ -20,13 +23,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
@@ -59,7 +59,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -131,6 +130,7 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
 
     int eventDb = 0;
 
+    String selectOrder = "", RetailerName = "", RetailerChannel = "", Retailerclass = "", OrderAmount = "", LastVisited = "", Remarks = "", textMobile = "", PhoneNumber = "", EventCapCount = "0", OrderTypeText = "", RetailerTypeText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +161,33 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         }
 
 
+        Intent intnets = getIntent();
+
+
+        RetailerChannel = intnets.getStringExtra("RetailerChannel");
+        Retailerclass = intnets.getStringExtra("Retailerclass");
+        OrderAmount = intnets.getStringExtra("OrderAmount");
+        LastVisited = intnets.getStringExtra("LastVisited");
+        Remarks = intnets.getStringExtra("Remarks");
+        textMobile = intnets.getStringExtra("textMobile");
+        PhoneNumber = intnets.getStringExtra("PhoneNumber");
+        EventCapCount = intnets.getStringExtra("EventCapCount");
+        OrderTypeText = intnets.getStringExtra("selectOrder");
+        RetailerTypeText = intnets.getStringExtra("RetailerName");
+
+
+        Log.e("EventCount", String.valueOf(RetailerChannel));
+        Log.e("EventCount", String.valueOf(Retailerclass));
+        Log.e("EventCount", String.valueOf(OrderAmount));
+        Log.e("EventCount", String.valueOf(LastVisited));
+        Log.e("EventCount", String.valueOf(Remarks));
+        Log.e("EventCount", String.valueOf(textMobile));
+        Log.e("EventCount", String.valueOf(PhoneNumber));
+        Log.e("EventCount", String.valueOf(EventCapCount));
+        Log.e("EventCount", String.valueOf(OrderTypeText));
+        Log.e("EventCount", String.valueOf(RetailerTypeText));
+
+
         Intent intent = getIntent();
         if (Image_uri != "") {
             Image_uri = intent.getStringExtra("Event_caputure");
@@ -176,6 +203,31 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
                 startActivity(new Intent(getApplicationContext(), Help_Activity.class));
             }
         });
+        TextView txtErt = findViewById(R.id.toolbar_ert);
+        TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
+
+        txtErt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        txtPlaySlip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+        ObjectAnimator textColorAnim;
+        textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
+        textColorAnim.setDuration(500);
+        textColorAnim.setEvaluator(new ArgbEvaluator());
+        textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
+        textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
+        textColorAnim.start();
+
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,6 +253,8 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         currentTime();
         locationInitialize();
         startLocationUpdates();
+
+
 
     }
 
@@ -276,8 +330,18 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
                 Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
                 intent.putExtra("EventcapOne", EventcapOne);
                 intent.putExtra("id", 1);
-                intent.putExtra("count",eventDb);
+                intent.putExtra("count", eventDb);
+                intent.putExtra("RetailerChannel", RetailerChannel);
+                intent.putExtra("Retailerclass", Retailerclass);
+                intent.putExtra("OrderAmount", OrderAmount);
+                intent.putExtra("LastVisited", LastVisited);
+                intent.putExtra("Remarks", Remarks);
+                intent.putExtra("textMobile", textMobile);
+                intent.putExtra("PhoneNumber", PhoneNumber);
+                intent.putExtra("RetailerName", RetailerName);
+                intent.putExtra("selectOrder", selectOrder);
                 startActivity(intent);
+                finish();
             }
         });
 
@@ -286,14 +350,17 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         linearCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+/*
                 if (txtOrder.getText().toString().matches("")) {
                     Toast.makeText(SecondaryOrderActivity.this, "Select Order Type", Toast.LENGTH_SHORT).show();
                 } else if (txtRetailer.getText().toString().matches("")) {
                     Toast.makeText(SecondaryOrderActivity.this, "Select Retailer Name", Toast.LENGTH_SHORT).show();
                 } else {
                     startActivity(new Intent(SecondaryOrderActivity.this, OrderCategoryActivity.class));
-                }
+                }*/
+
+
+                startActivity(new Intent(SecondaryOrderActivity.this, OrderCategoryActivity.class));
             }
         });
 
@@ -308,6 +375,24 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         txtMobileTwo = findViewById(R.id.txt_mobile2);
         txtDistributor = findViewById(R.id.txt_distributor);
         mRetailerDetails = findViewById(R.id.linear_reatiler_details);
+
+
+
+        if (EventCapCount != "0") {
+            mRetailerDetails.setVisibility(View.VISIBLE);
+            txtRetailerChannel.setText(RetailerChannel);
+            txtClass.setText(Retailerclass);
+            txtLastOrderAmount.setText(OrderAmount);
+            txtLastVisited.setText(LastVisited);
+            txtReamrks.setText(Remarks);
+            txtMobile.setText(textMobile);
+            txtMobileTwo.setText(PhoneNumber);
+            txtRetailer.setText(RetailerTypeText);
+            txtOrder.setText(OrderTypeText);
+        }else{
+            mRetailerDetails.setVisibility(View.GONE);
+        }
+
 
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -356,6 +441,8 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
                 JsonArray jsonArray = response.body();
                 for (int a = 0; a < jsonArray.size(); a++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(a);
+
+
                     String id = String.valueOf(jsonObject.get("id"));
                     String name = String.valueOf(jsonObject.get("name"));
                     String townName = String.valueOf(jsonObject.get("ListedDr_Address1"));
@@ -378,7 +465,7 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
     /*Retailer Details*/
 
     public void RetailerViewDetailsMethod() {
-        mRetailerDetails.setVisibility(View.VISIBLE);
+
         ApiInterface apiInterface2 = ApiClient.getClient().create(ApiInterface.class);
 
         Log.e("API_INTERFACE", apiInterface2.toString());
@@ -390,6 +477,15 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
             public void onResponse(Call<RetailerViewDetails> call, Response<RetailerViewDetails> response) {
 
                 RetailerViewDetails mRetailerViewDetail = response.body();
+                mRetailerDetails.setVisibility(View.VISIBLE);
+                RetailerChannel = mRetailerViewDetail.getDrSpl();
+                Retailerclass = mRetailerViewDetail.getDrCat();
+                OrderAmount = String.valueOf(mRetailerViewDetail.getLastorderAmount());
+                LastVisited = mRetailerViewDetail.getLVDt();
+                Remarks = mRetailerViewDetail.getRmks();
+                textMobile = mRetailerViewDetail.getPOTENTIAL().get(0).getListedDrPhone();
+                PhoneNumber = String.valueOf(mRetailerViewDetail.getPOTENTIAL().get(0).getListedDrMobile());
+
 
                 txtRetailerChannel.setText(mRetailerViewDetail.getDrSpl());
                 txtClass.setText(mRetailerViewDetail.getDrCat());
@@ -428,7 +524,7 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
             shared_common_pref.save("Retailer_id", retailerId);
             shared_common_pref.save("Retailer_name", myDataset.get(position).getName());
             shared_common_pref.save("Event_Capture", "Remove");
-
+            RetailerName = myDataset.get(position).getName();
             Log.e("Retailer_ID", myDataset.get(position).getName());
         } else if (type == 9) {
             txtOrder.setText(myDataset.get(position).getName());
@@ -439,9 +535,11 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
                 count = 1;
                 orderTypestr = "One";
             }
-            shared_common_pref.save("Phone_order_type", orderTypestr);
+            shared_common_pref.save("Phone_order_type", myDataset.get(position).getName());
 
             Log.e("Phone_order_type", String.valueOf(count));
+            Log.e("Phone_order_type", myDataset.get(position).getName());
+            selectOrder = myDataset.get(position).getName();
 
 
         } else if (type == 11) {

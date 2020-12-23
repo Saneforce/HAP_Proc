@@ -39,14 +39,38 @@
         android:layout_weight="1" />
 
     <TextView
+        android:id="@+id/toolbar_ert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="@dimen/C3dp"
+        android:layout_marginRight="@dimen/C5dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="ERT"
+        android:textColor="@color/white"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/toolbar_play_slip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="@dimen/C3dp"
+        android:layout_marginRight="@dimen/C5dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Play Slip"
+        android:textColor="@color/white"
+        android:textSize="13sp" />
+
+    <TextView
         android:id="@+id/toolbar_help"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:gravity="center_horizontal|center_vertical"
-        android:text="Help"
         android:layout_marginTop="@dimen/C3dp"
         android:layout_marginRight="@dimen/C5dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="Help"
         android:textColor="@color/white"
         android:textSize="13sp" />
 
@@ -55,9 +79,9 @@
         android:layout_width="@dimen/C30dp"
         android:layout_height="@dimen/C30dp"
         android:layout_gravity="center_vertical|center_horizontal"
-        android:padding="5dp"
-        android:gravity="center_horizontal|center_vertical"
         android:layout_marginTop="@dimen/C3dp"
         android:layout_marginRight="@dimen/C8dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:padding="5dp"
         android:src="@drawable/ic_home" />
 </LinearLayout>

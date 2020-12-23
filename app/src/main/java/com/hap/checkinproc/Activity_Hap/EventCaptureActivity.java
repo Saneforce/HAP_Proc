@@ -84,6 +84,10 @@ EventCaptureActivity extends AppCompatActivity {
     int eventDbCount = 0;
     EventCapture task;
 
+
+    String RetailerChannel = "", Retailerclass = "", OrderAmount = "", LastVisited = "",
+            Remarks = "", textMobile = "", PhoneNumber = "", selectOrder = "", RetailerNames = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,18 +111,19 @@ EventCaptureActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
 
-
         /*  shared_common_pref.save("Event_Capture","Remove");*/
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         mShaeShared_common_pref = new Shared_Common_Pref(this);
 
-
-        /*        mShaeShared_common_pref.save("Event_Capture","Remove");*/
+        /* mShaeShared_common_pref.save("Event_Capture","Remove");*/
 
 
         DistributorName = mShaeShared_common_pref.getvalue("distributor_name");
         RouteName = mShaeShared_common_pref.getvalue("route_name");
         RetailerName = mShaeShared_common_pref.getvalue("Retailer_name");
+
+        selectOrder = mShaeShared_common_pref.getvalue("Phone_order_type");
+        Log.e("STRING_VALUE", selectOrder);
 
         eventCapture = new ArrayList<>();
         TakeEventPicture = findViewById(R.id.btn_take_photo);
@@ -146,16 +151,38 @@ EventCaptureActivity extends AppCompatActivity {
 
         RoomDataBase = mShaeShared_common_pref.getvalue("Event_Capture");
         // intent.putExtra("count",eventDb);
-  /*      Intent intnet = getIntent();
+        Intent intnet = getIntent();
 
 
         eventDbCount = intnet.getIntExtra("count", 0);
 
-        Log.e("EventCount", String.valueOf(eventDbCount));
 
-        if (RoomDataBase.equalsIgnoreCase("Remove")) {
+        RetailerChannel = intnet.getStringExtra("RetailerChannel");
+        Retailerclass = intnet.getStringExtra("Retailerclass");
+        OrderAmount = intnet.getStringExtra("OrderAmount");
+        LastVisited = intnet.getStringExtra("LastVisited");
+        Remarks = intnet.getStringExtra("Remarks");
+        textMobile = intnet.getStringExtra("textMobile");
+        PhoneNumber = intnet.getStringExtra("PhoneNumber");
+        RetailerNames = intnet.getStringExtra("RetailerName");
+       // selectOrder = intnet.getStringExtra("selectOrder");
+
+
+        Log.e("EventCount", String.valueOf(eventDbCount));
+        Log.e("EventCount", String.valueOf(RetailerChannel));
+        Log.e("EventCount", String.valueOf(Retailerclass));
+        Log.e("EventCount", String.valueOf(OrderAmount));
+        Log.e("EventCount", String.valueOf(LastVisited));
+        Log.e("EventCount", String.valueOf(Remarks));
+        Log.e("EventCount", String.valueOf(textMobile));
+        Log.e("EventCount", String.valueOf(PhoneNumber));
+        Log.e("EventCount", String.valueOf(RetailerName));
+        Log.e("EventCount", String.valueOf(selectOrder));
+
+
+        if (eventDbCount == 1) {
             delete();
-        }*/
+        }
 
 
         TakeEventPicture.setOnClickListener(new View.OnClickListener() {
@@ -166,7 +193,6 @@ EventCaptureActivity extends AppCompatActivity {
                 Calendar calobjw = Calendar.getInstance();
                 KeyDate = mShaeShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code);
                 keyCodeValue = keyEk + KeyDate + dfw.format(calobjw.getTime()).hashCode();
-
 
                 countInt = sharedPreferences.getInt("age", 0);
                 if (countInt != 0) {
@@ -184,7 +210,6 @@ EventCaptureActivity extends AppCompatActivity {
                 m_intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(m_intent, 2);
 
-
                 Log.e("EVENT_LIST_STR", String.valueOf(EventFileName));
                 Log.e("EVENT_LIST_STR_SHared", String.valueOf(keyCodeValue));
 
@@ -192,7 +217,6 @@ EventCaptureActivity extends AppCompatActivity {
         });
 
         task = (EventCapture) getIntent().getSerializableExtra("task");
-
 
         loadTask(task);
 
@@ -387,12 +411,18 @@ EventCaptureActivity extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    onSuperBackPressed();
-
-         /*           Intent intent = new Intent(EventCaptureActivity.this, SecondaryOrderActivity.class);
-                    intent.putExtra("Event_caputure", EventFileName);
-                    startActivity(intent);*/
-
+                    Intent intent = new Intent(EventCaptureActivity.this, SecondaryOrderActivity.class);
+                    intent.putExtra("RetailerChannel", RetailerChannel);
+                    intent.putExtra("Retailerclass", Retailerclass);
+                    intent.putExtra("OrderAmount", OrderAmount);
+                    intent.putExtra("LastVisited", LastVisited);
+                    intent.putExtra("Remarks", Remarks);
+                    intent.putExtra("textMobile", textMobile);
+                    intent.putExtra("PhoneNumber", PhoneNumber);
+                    intent.putExtra("RetailerName", RetailerName);
+                    intent.putExtra("selectOrder", selectOrder);
+                    intent.putExtra("EventCapCount", "123");
+                    startActivity(intent);
                 }
             });
 
@@ -442,7 +472,7 @@ EventCaptureActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-             recreate();
+                recreate();
                 Toast.makeText(EventCaptureActivity.this, "Deleted Successfully", Toast.LENGTH_SHORT).show();
             }
         }

@@ -20,11 +20,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/image_captured"
-                android:layout_width="@dimen/C70dp"
-                android:layout_height="@dimen/C50dp"
-                android:padding="@dimen/C5dp"
-                android:src="@drawable/ic_launch" />
+            android:id="@+id/image_captured"
+            android:layout_width="@dimen/C70dp"
+            android:layout_height="@dimen/C50dp"
+            android:padding="@dimen/C5dp"
+            android:src="@drawable/ic_launch" />
         </LinearLayout>
 
         <LinearLayout
