@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity.AllowanceActivityTwo;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -532,7 +533,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
+                             /*   Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
+                                takePhoto.putExtra("Mode", "COUT");
+                                startActivity(takePhoto);*/
+
+                                Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
                                 takePhoto.putExtra("Mode", "COUT");
                                 startActivity(takePhoto);
                             }

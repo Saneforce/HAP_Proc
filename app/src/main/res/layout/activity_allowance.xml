@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:focusableInTouchMode="true"
     android:orientation="vertical"
     tools:context=".Activity.AllowanceActivity">
 
@@ -142,6 +143,19 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/txt_frm"
+                    android:fontFamily="@font/basic"
+                    android:text=" *"
+                    android:textAllCaps="false"
+                    android:textColor="#D50909"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/card_from"
                     android:layout_width="fill_parent"
@@ -186,6 +200,19 @@
                     android:text="To"
                     android:textAllCaps="false"
                     android:textColor="#000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/txt_to"
+                    android:fontFamily="@font/basic"
+                    android:text=" *"
+                    android:textAllCaps="false"
+                    android:textColor="#D50909"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -317,6 +344,21 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
+                <TextView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_toRightOf="@+id/txt_fare"
+                    android:fontFamily="@font/basic"
+                    android:text=" *"
+                    android:textAllCaps="false"
+                    android:textColor="#D50909"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/card_fare"
                     android:layout_width="fill_parent"
@@ -359,52 +401,42 @@
 
             <RelativeLayout
                 android:id="@+id/pic"
-                android:layout_width="75dp"
-                android:layout_height="45dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:background="@drawable/button_blueg">
+                android:background="@drawable/button_blueg"
+                android:padding="@dimen/C10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/basic"
                     android:text="Photo"
                     android:textAllCaps="false"
                     android:textColor="#fff"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textSize="18sp" />
 
             </RelativeLayout>
-            <!--
-                        <de.hdodenhof.circleimageview.CircleImageView
-                            android:id="@+id/capture_img"
-                            android:layout_width="70dp"
-                            android:layout_height="70dp"
-                            android:layout_toRightOf="@+id/pic"
-                            android:layout_marginLeft="10dp"
-                            android:src="@drawable/profile_img"
-                            />
-            -->
 
 
-            <com.google.android.material.imageview.ShapeableImageView
+            <ImageView
                 android:id="@+id/capture_img"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_marginLeft="10dp"
+                android:layout_width="@dimen/C80dp"
+                android:layout_height="@dimen/C80dp"
+                android:layout_marginLeft="@dimen/C20dp"
                 android:layout_toRightOf="@+id/pic"
-                android:src="@drawable/profile_img"
-                android:visibility="gone"
                 app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
         </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:id="@+id/relative_remarks"
+            android:layout_below="@+id/rlay_pic"
+            android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/txt_km1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rlay_pic"
             android:layout_marginLeft="5dp"
             android:layout_marginTop="8dp"
             android:fontFamily="@font/basic"
@@ -414,11 +446,13 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+        </RelativeLayout>
+
         <androidx.cardview.widget.CardView
             android:id="@+id/card_rmk"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/txt_km1"
+            android:layout_below="@+id/relative_remarks"
             android:layout_marginTop="6dp"
             android:background="#B1AFAF"
             android:padding="18dp"

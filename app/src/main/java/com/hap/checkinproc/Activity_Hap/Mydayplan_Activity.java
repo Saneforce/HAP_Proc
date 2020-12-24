@@ -1,16 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.app.DatePickerDialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -28,8 +18,14 @@ import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -57,6 +53,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.hap.checkinproc.Common_Class.Common_Class.addquote;
 
@@ -387,7 +387,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 //joint_work_Recyclerview.setVisibility(View.VISIBLE);
                 joint_work_Caption.setVisibility(View.VISIBLE);
                 jointwork_layout.setVisibility(View.VISIBLE);
-            } else if (myDataset.get(position).getFlag().equals("H") || myDataset.get(position).getFlag().equals("W") ) {
+            } else if (myDataset.get(position).getFlag().equals("H") || myDataset.get(position).getFlag().equals("W")) {
                 joint_work_Recyclerview.setVisibility(View.GONE);
                 joint_work_Caption.setVisibility(View.GONE);
                 jointwork_layout.setVisibility(View.GONE);
@@ -575,7 +575,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                             }));
 
 
-                        } else if (String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag")).equals("H") ||String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag")).equals("W")) {
+                        } else if (String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag")).equals("H") || String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag")).equals("W")) {
                             joint_work_Recyclerview.setVisibility(View.GONE);
                             joint_work_Caption.setVisibility(View.GONE);
                             jointwork_layout.setVisibility(View.GONE);
@@ -716,7 +716,9 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     Log.d("QueryString", String.valueOf(QueryString));
                     progressbar.setVisibility(View.GONE);
                     if (response.code() == 200 || response.code() == 201) {
-                        common_class.CommonIntentwithFinish(Dashboard.class);
+                        /*common_class.CommonIntentwithFinish(Dashboard.class);*/
+
+                        common_class.CommonIntentwithFinish(AllowanceActivity.class);
                         Toast.makeText(Mydayplan_Activity.this, "Day Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
                     }
 

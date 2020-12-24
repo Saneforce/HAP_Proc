@@ -632,6 +632,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                             String mMessage = "Your Extended Submitted Successfully";
                             try {
                                 mMessage = itm.get("Msg").getAsString();
+
+
                             } catch (Exception e) {
                             }
 
