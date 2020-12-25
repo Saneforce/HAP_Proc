@@ -101,6 +101,14 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
 
         Log.e("Product_sale_unit", "  " + productUnit);
 
+
+        if(holder.productEdt.getText().toString().equals("0")){
+            holder.proudctMinus.setVisibility(View.INVISIBLE);
+        }else{
+            holder.proudctMinus.setVisibility(View.VISIBLE);
+        }
+
+
         holder.unitBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,7 +167,52 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
                 getItemID = eventsArrayList.get(position).getId();
                 productCodeValue = String.valueOf(eventsArrayList.get(position).getProductCatCode());
                 productQuantityValue = eventsArrayList.get(position).getmQuantity();
-                itemClick.onClickInterface(String.valueOf(subTotalRate), 0, getItemID, 0, productNameValue, productCodeValue, productQuantityValue, productUnit);
+
+
+
+
+                if (dataValue.size() == 0) {
+
+                    subTotalRate = productQuantityValue * Integer.parseInt(productCodeValue);
+                    dataValue.add(new Product_Array(getItemID, productNameValue, productQuantityValue, productQuantityValue * Integer.parseInt(productCodeValue), Integer.parseInt(productCodeValue)));
+
+                } else {
+                    System.out.println("PRODUCT_Array_SIzeElse" + dataValue.size());
+                    int Total_Size = dataValue.size();
+                    for (int i = 0; i < Total_Size; i++) {
+                        product_array = dataValue.get(i);
+                        if (getItemID == product_array.getProductcode()) {
+                            System.out.println("Product_Code" + getItemID);
+                            System.out.println("Existing_Code" + product_array.getProductcode());
+                            System.out.println("Position_Count" + i);
+                            dataValue.remove(i);
+                            System.out.println("PRODUCT_Array_SIZE_REMOVE" + dataValue.size());
+                            Total_Size = Total_Size - 1;
+                            System.out.println("AlreadyExist" + product_array.getProductcode());
+                        }
+
+                    }
+                    dataValue.add(new Product_Array(getItemID, productNameValue, productQuantityValue, productQuantityValue * Integer.parseInt(productCodeValue), Integer.parseInt(productCodeValue)));
+
+                }
+
+
+                float sum = 0;
+
+                Log.e("PRODUCT_ARRAY_SIZE", String.valueOf(dataValue));
+                for (int i = 0; i < dataValue.size(); i++) {
+                    sum = sum + dataValue.get(i).getSampleqty();
+                    System.out.println("Final_Name" + dataValue.get(i).getProductname() + "Qty" + dataValue.get(i).getSampleqty() + "SampleQty" + dataValue.get(i).getSampleqty());
+                    Log.e("PARENT_SUM", String.valueOf(sum));
+
+                }
+                Log.e("PARENT_TOTAL_SUM", String.valueOf(sum));
+
+
+
+
+
+                itemClick.onClickInterface(String.valueOf(sum), 0, getItemID, 0, productNameValue, productCodeValue, productQuantityValue, productUnit);
                 Log.e("djfkgsd", "" + String.valueOf(subTotalRate));
 
             }

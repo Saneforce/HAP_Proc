@@ -73,7 +73,6 @@
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
-
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -81,7 +80,6 @@
                                 android:text="@string/retailer"
                                 android:textColor="@android:color/black"
                                 android:textSize="13dp"></TextView>
-
 
                         </LinearLayout>
 
@@ -160,7 +158,6 @@
                             android:text="-"
                             android:textColor="@android:color/black"
                             android:textSize="13dp"></TextView>
-
 
                     </RelativeLayout>
 

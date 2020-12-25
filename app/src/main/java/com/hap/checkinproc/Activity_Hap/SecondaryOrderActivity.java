@@ -255,7 +255,6 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         startLocationUpdates();
 
 
-
     }
 
     public void initilaize() {
@@ -377,9 +376,16 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         mRetailerDetails = findViewById(R.id.linear_reatiler_details);
 
 
+        if (txtRetailer.getText().toString().equals("")) {
+
+            mRetailerDetails.setVisibility(View.GONE);
+        } else {
+            mRetailerDetails.setVisibility(View.VISIBLE);
+        }
+
 
         if (EventCapCount != "0") {
-            mRetailerDetails.setVisibility(View.VISIBLE);
+            mRetailerDetails.setVisibility(View.GONE);
             txtRetailerChannel.setText(RetailerChannel);
             txtClass.setText(Retailerclass);
             txtLastOrderAmount.setText(OrderAmount);
@@ -389,8 +395,8 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
             txtMobileTwo.setText(PhoneNumber);
             txtRetailer.setText(RetailerTypeText);
             txtOrder.setText(OrderTypeText);
-        }else{
-            mRetailerDetails.setVisibility(View.GONE);
+        } else {
+            mRetailerDetails.setVisibility(View.VISIBLE);
         }
 
 
@@ -441,7 +447,6 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
                 JsonArray jsonArray = response.body();
                 for (int a = 0; a < jsonArray.size(); a++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(a);
-
 
                     String id = String.valueOf(jsonObject.get("id"));
                     String name = String.valueOf(jsonObject.get("name"));
@@ -624,6 +629,16 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (txtRetailer.getText().toString().equals("")) {
+
+            mRetailerDetails.setVisibility(View.GONE);
+        } else {
+            mRetailerDetails.setVisibility(View.VISIBLE);
+        }
+    }
 
     /*Date and Time Format*/
     public void DateTime() {

@@ -446,6 +446,19 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@+id/txt_km1"
+                android:fontFamily="@font/basic"
+                android:text=" *"
+                android:textAllCaps="false"
+                android:textColor="#D50909"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+
         </RelativeLayout>
 
         <androidx.cardview.widget.CardView

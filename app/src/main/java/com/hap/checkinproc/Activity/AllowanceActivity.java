@@ -1,14 +1,18 @@
 package com.hap.checkinproc.Activity;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -22,13 +26,18 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
+import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -69,9 +78,10 @@ public class AllowanceActivity extends AppCompatActivity {
     String SF_code = "", div = "";
     ArrayList<SelectionModel> array_hq = new ArrayList<>();
     RelativeLayout lay_hq, lay_typ;
-
+    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
     Shared_Common_Pref mShared_common_pref;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,17 +115,23 @@ public class AllowanceActivity extends AppCompatActivity {
         SF_code = UserDetails.getString("Sfcode", "");
         div = UserDetails.getString("Divcode", "");
 
+        if (!checkPermission()) {
+            requestPermissions();
+
+        } else {
+
+        }
+
+
         mShared_common_pref = new Shared_Common_Pref(this);
         getTravelMode();
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                outputFileUri = FileProvider.getUriForFile(AllowanceActivity.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), "pickImageResult" + System.currentTimeMillis() + ".jpeg"));
-                Log.v("priniting_uri", outputFileUri.toString() + " output " + outputFileUri.getPath() + " raw_msg " + getExternalCacheDir().getPath());
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivityForResult(intent, 12);
+
+
+                imageTake();
+
             }
         });
         card_travel.setOnClickListener(new View.OnClickListener() {
@@ -240,6 +256,16 @@ public class AllowanceActivity extends AppCompatActivity {
         });
 
 
+    }
+
+
+    public void imageTake() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        outputFileUri = FileProvider.getUriForFile(AllowanceActivity.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), "pickImageResult" + System.currentTimeMillis() + ".jpeg"));
+        Log.v("priniting_uri", outputFileUri.toString() + " output " + outputFileUri.getPath() + " raw_msg " + getExternalCacheDir().getPath());
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivityForResult(intent, 12);
     }
 
     public void popupSpinnerType() {
@@ -563,8 +589,8 @@ public class AllowanceActivity extends AppCompatActivity {
                             JSONObject js = new JSONObject(jsonData);
                             if (js.getString("success").equalsIgnoreCase("true")) {
                                 Toast.makeText(AllowanceActivity.this, " Submitted successfully ", Toast.LENGTH_SHORT).show();
-                              common_class.CommonIntentwithFinish(Dashboard.class);
-                               //common_class.CommonIntentwithFinish(AllowanceActivityTwo.class);
+                                common_class.CommonIntentwithFinish(Dashboard.class);
+                                //common_class.CommonIntentwithFinish(AllowanceActivityTwo.class);
                             } else
                                 Toast.makeText(AllowanceActivity.this, " Cannot submitted the data ", Toast.LENGTH_SHORT).show();
                         }
@@ -683,6 +709,71 @@ public class AllowanceActivity extends AppCompatActivity {
                 }
             });
         } catch (Exception e) {
+        }
+    }
+
+
+    private boolean checkPermission() {
+        return (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+    }
+
+    //Location service part
+    private void requestPermissions() {
+        boolean shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
+                Manifest.permission.CAMERA);
+        if (shouldProvideRationale) {
+            Snackbar.make(
+                    findViewById(R.id.activity_main),
+                    R.string.permission_rationale,
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // Request permission
+                            ActivityCompat.requestPermissions(AllowanceActivity.this,
+                                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                                    REQUEST_PERMISSIONS_REQUEST_CODE);
+                        }
+                    })
+                    .show();
+        } else
+            ActivityCompat.requestPermissions(AllowanceActivity.this,
+                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSIONS_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS_REQUEST_CODE:
+                if (grantResults.length <= 0) {
+                    // Permission was not granted.
+                } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission was granted.
+                    //mLUService.requestLocationUpdates();
+                } else {
+                    // Permission denied.
+                    Snackbar.make(
+                            findViewById(R.id.activity_main),
+                            R.string.permission_denied_explanation,
+                            Snackbar.LENGTH_INDEFINITE)
+                            .setAction(R.string.settings, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    // Build intent that displays the App settings screen.
+                                    Intent intent = new Intent();
+                                    intent.setAction(
+                                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                    Uri uri = Uri.fromParts("package",
+                                            BuildConfig.APPLICATION_ID, null);
+                                    intent.setData(uri);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(intent);
+                                }
+                            })
+                            .show();
+                }
         }
     }
 
