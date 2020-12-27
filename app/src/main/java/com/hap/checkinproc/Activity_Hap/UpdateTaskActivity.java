@@ -21,8 +21,6 @@ public class UpdateTaskActivity extends Activity {
 
     private EditText editTextDesc, editTextFinishBy;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

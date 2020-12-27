@@ -116,6 +116,20 @@
                                     android:gravity="center"></Button>
                             </LinearLayout>
 
+                            <LinearLayout
+                                android:id="@+id/disable_minus"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent">
+
+                                <Button
+                                    android:layout_width="13dp"
+                                    android:layout_height="10dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginLeft="15dp"
+                                    android:background="@drawable/disable_minus"
+                                    android:gravity="center"></Button>
+                            </LinearLayout>
+
                             <TextView
                                 android:id="@+id/product_count_increment"
                                 android:layout_width="50dp"

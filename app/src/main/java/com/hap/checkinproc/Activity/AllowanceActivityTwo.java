@@ -22,7 +22,7 @@ import com.hap.checkinproc.R;
 import java.io.File;
 
 public class AllowanceActivityTwo extends AppCompatActivity {
-    String ModeOfTravel="", StartedKm="", StartedImage="", EndedImageName="";
+    String ModeOfTravel = "", StartedKm = "", StartedImage = "", EndedImageName = "";
     Shared_Common_Pref mShared_common_pref;
     TextView TextModeTravel, TextStartedKm;
     ImageView StartedKmImage, EndedKmImage;
@@ -47,8 +47,10 @@ public class AllowanceActivityTwo extends AppCompatActivity {
 
         TextModeTravel.setText(ModeOfTravel);
         TextStartedKm.setText(StartedKm);
-        StartedKmImage.setImageURI(Uri.parse(StartedImage));
-        StartedKmImage.setRotation((float) 90);
+        if (!StartedImage.equals("")) {
+            StartedKmImage.setImageURI(Uri.parse(StartedImage));
+            StartedKmImage.setRotation((float) 90);
+        }
         takeEndedPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,8 +75,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                 startActivity(takePhoto);
             }
         });
-
-
 
 
     }

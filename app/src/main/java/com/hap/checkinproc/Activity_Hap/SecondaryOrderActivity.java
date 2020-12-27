@@ -23,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
@@ -313,34 +314,28 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
 
                 Log.e("COUNT", String.valueOf(eventDb));
 
-              /* if (txtOrder.getText().toString().matches("")) {
+               if (txtOrder.getText().toString().matches("")) {
                     Toast.makeText(SecondaryOrderActivity.this, "Select Order Type", Toast.LENGTH_SHORT).show();
                 } else if (txtRetailer.getText().toString().matches("")) {
                     Toast.makeText(SecondaryOrderActivity.this, "Select Retailer Name", Toast.LENGTH_SHORT).show();
                 } else {
-                    Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
-                    intent.putExtra("EventcapOne", EventcapOne);
-                    intent.putExtra("id", 1);
-                    intent.putExtra("count",eventDb);
-                    startActivity(intent);
-                }*/
+                   Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
+                   intent.putExtra("EventcapOne", EventcapOne);
+                   intent.putExtra("id", 1);
+                   intent.putExtra("count", eventDb);
+                   intent.putExtra("RetailerChannel", RetailerChannel);
+                   intent.putExtra("Retailerclass", Retailerclass);
+                   intent.putExtra("OrderAmount", OrderAmount);
+                   intent.putExtra("LastVisited", LastVisited);
+                   intent.putExtra("Remarks", Remarks);
+                   intent.putExtra("textMobile", textMobile);
+                   intent.putExtra("PhoneNumber", PhoneNumber);
+                   intent.putExtra("RetailerName", RetailerName);
+                   intent.putExtra("selectOrder", selectOrder);
+                   startActivity(intent);
+                   finish();
+                }
 
-
-                Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
-                intent.putExtra("EventcapOne", EventcapOne);
-                intent.putExtra("id", 1);
-                intent.putExtra("count", eventDb);
-                intent.putExtra("RetailerChannel", RetailerChannel);
-                intent.putExtra("Retailerclass", Retailerclass);
-                intent.putExtra("OrderAmount", OrderAmount);
-                intent.putExtra("LastVisited", LastVisited);
-                intent.putExtra("Remarks", Remarks);
-                intent.putExtra("textMobile", textMobile);
-                intent.putExtra("PhoneNumber", PhoneNumber);
-                intent.putExtra("RetailerName", RetailerName);
-                intent.putExtra("selectOrder", selectOrder);
-                startActivity(intent);
-                finish();
             }
         });
 
@@ -349,17 +344,14 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         linearCategory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-/*
                 if (txtOrder.getText().toString().matches("")) {
                     Toast.makeText(SecondaryOrderActivity.this, "Select Order Type", Toast.LENGTH_SHORT).show();
                 } else if (txtRetailer.getText().toString().matches("")) {
                     Toast.makeText(SecondaryOrderActivity.this, "Select Retailer Name", Toast.LENGTH_SHORT).show();
                 } else {
                     startActivity(new Intent(SecondaryOrderActivity.this, OrderCategoryActivity.class));
-                }*/
+                }
 
-
-                startActivity(new Intent(SecondaryOrderActivity.this, OrderCategoryActivity.class));
             }
         });
 

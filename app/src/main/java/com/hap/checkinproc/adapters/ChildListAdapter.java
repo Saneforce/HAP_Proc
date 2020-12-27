@@ -102,10 +102,15 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
         Log.e("Product_sale_unit", "  " + productUnit);
 
 
-        if(holder.productEdt.getText().toString().equals("0")){
-            holder.proudctMinus.setVisibility(View.INVISIBLE);
-        }else{
+        if (holder.productEdt.getText().toString().equals("0")) {
+            holder.DisableMinus.setVisibility(View.VISIBLE);
+            holder.proudctMinus.setVisibility(View.GONE);
+
+
+        } else {
             holder.proudctMinus.setVisibility(View.VISIBLE);
+            holder.DisableMinus.setVisibility(View.GONE);
+
         }
 
 
@@ -143,7 +148,10 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+
                 if (!holder.productEdt.getText().toString().equals("")) {
+                    holder.proudctMinus.setVisibility(View.VISIBLE);
+                    holder.DisableMinus.setVisibility(View.GONE);
                     editValue = Integer.valueOf(holder.productEdt.getText().toString());
                     Log.e("EDIT_VALUE", String.valueOf(editValue));
                     events.setmQuantity(editValue);
@@ -152,8 +160,17 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
 
 
                 } else {
+
+                    holder.DisableMinus.setVisibility(View.VISIBLE);
+                    holder.proudctMinus.setVisibility(View.GONE);
                     if (holder.productEdt.getText().toString().equals("0")) {
                         holder.productEdt.setText("");
+                        holder.DisableMinus.setVisibility(View.VISIBLE);
+                        holder.proudctMinus.setVisibility(View.GONE);
+                    }else{
+                        holder.proudctMinus.setVisibility(View.VISIBLE);
+                        holder.DisableMinus.setVisibility(View.GONE);
+
                     }
 
                 }
@@ -167,8 +184,6 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
                 getItemID = eventsArrayList.get(position).getId();
                 productCodeValue = String.valueOf(eventsArrayList.get(position).getProductCatCode());
                 productQuantityValue = eventsArrayList.get(position).getmQuantity();
-
-
 
 
                 if (dataValue.size() == 0) {
@@ -207,9 +222,6 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
 
                 }
                 Log.e("PARENT_TOTAL_SUM", String.valueOf(sum));
-
-
-
 
 
                 itemClick.onClickInterface(String.valueOf(sum), 0, getItemID, 0, productNameValue, productCodeValue, productQuantityValue, productUnit);
@@ -294,6 +306,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
             @Override
             public void onClick(View v) {
 
+                Log.e("OnClick", "Click is wroking");
 
                 //  productUnit = eventsArrayList.get(position).getProductSaleUnit();
                 holder.productEdt.clearFocus();
@@ -392,6 +405,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView subProdcutChildName, subProdcutChildRate, productCount, productItem;
         LinearLayout proudctMinus, productPlus;
+        LinearLayout DisableMinus;
         Button unitBox;
         EditText productEdt;
 
@@ -401,6 +415,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
             subProdcutChildRate = (TextView) itemView.findViewById(R.id.child_product_price);
             productCount = (TextView) itemView.findViewById(R.id.product_count_increment);
             proudctMinus = (LinearLayout) itemView.findViewById(R.id.image_minus);
+            DisableMinus = (LinearLayout) itemView.findViewById(R.id.disable_minus);
             productPlus = (LinearLayout) itemView.findViewById(R.id.image_plus);
             productEdt = (EditText) itemView.findViewById(R.id.edt_product_count_inc_dec);
             unitBox = itemView.findViewById(R.id.edt_unit);

@@ -1,7 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -63,8 +62,6 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class OrderCategoryActivity extends AppCompatActivity implements Master_Interface {
     TextView toolHeader, toolTime, toolSlash, toolCutOFF, grandTotal, item_count, txtClosing;
@@ -458,6 +455,14 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
 
                 }
 
+                @Override
+                public void ProductImage(String ImageUrl) {
+                    Log.e("Image_URl", ImageUrl);
+                    Intent intent = new Intent(OrderCategoryActivity.this, ProductImageView.class);
+                    intent.putExtra("ImageUrl", ImageUrl);
+                    startActivity(intent);
+                }
+
 
             });
 
@@ -597,11 +602,6 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
             //  modelRetailDetails.clear();
         }
     }
-
-
-
-
-
 
 
 }

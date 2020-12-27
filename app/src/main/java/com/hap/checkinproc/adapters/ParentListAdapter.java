@@ -52,6 +52,7 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
     String catIma, catNam;
     String productUnits, productItemId, ProductunitType;
     List<Common_Model> myDataset;
+    String ImageViewUrl = "";
 
     public ParentListAdapter(HeaderCat headercat, List<HeaderName> eventInfor, List<Product> eventsArrayList, Activity activity, ArrayList<String> mString, List<Common_Model> myDataset, ParentListInterface itemClick) {
         this.eventInfor = eventInfor;
@@ -86,6 +87,7 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
             public void onClick(View v) {
                 itemClick.onClickParentInter(gTotal, 0, getIdFromChild, getPositionValue, productNameValue, productCodeValue, productQuantityValue, catIma, catNam, productUnits);
                 itemClick.onProductUnit(productUnits, productItemId);
+                itemClick.ProductImage(ImageViewUrl);
 
             }
         });
@@ -102,6 +104,13 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
                 .load(evenParent.get(position).getCatImage())
                 .error(R.drawable.no_prod)
                 .into(holder.subProdcutImage);
+
+        holder.subProdcutImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                itemClick.ProductImage(evenParent.get(position).getCatImage());
+            }
+        });
 
 
         Log.e("PRODUCT_TYPE_VALUE_P", "PRODUCT_TYPE" + myDataset.size());
@@ -130,11 +139,11 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
                 productCodeValue = productCode;
                 productQuantityValue = productQuantiy;
                 holder.subProdcutRate.setText(value);
-                Log.e("PRODUCT",value);
+                Log.e("PRODUCT", value);
                 catIma = evenParent.get(position).getCatImage();
                 catNam = evenParent.get(position).getName();
                 productUnits = productUnit;
-                Log.e("productUnit",""+ productUnit);
+                Log.e("productUnit", "" + productUnit);
                 itemClick.onClickParentInter(value, 0, getIdFromChild, getPositionValue, productNameValue, productCodeValue, productQuantityValue, catIma, catNam, productUnits);
 
 

@@ -13,6 +13,13 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -28,7 +35,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ViewTASummary extends AppCompatActivity {
+public class ViewTASummary extends AppCompatActivity  implements
+        OnMapReadyCallback {
     ListView list_exp;
     ApiInterface apiInterface;
     ArrayList<SelectionModel> array=new ArrayList<>();
@@ -36,10 +44,15 @@ public class ViewTASummary extends AppCompatActivity {
     SharedPreferences UserDetails;
     public static final String MyPREFERENCES = "MyPrefs";
     String SF_code="",div="",State_Code="";
+    private static final int COLOR_ORANGE_ARGB = 0xffF57F17;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_t_a_summary);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
         list_exp=findViewById(R.id.list_exp);
         txt_start=findViewById(R.id.txt_start);
         txt_end=findViewById(R.id.txt_end);
@@ -104,6 +117,35 @@ public class ViewTASummary extends AppCompatActivity {
             });
 
         }catch (Exception e){}
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng sydney = new LatLng(13.1148, 80.2872);
+        LatLng sydney2 = new LatLng(13.0300, 80.2421);
+
+  /*      BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.marker_icon);
+        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Old washermenpet"));
+        googleMap.addMarker(new MarkerOptions().position(sydney2).title("Marker in Nandanam"));
+       *//* googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*//*
+         */
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney2,15));
+        // Zoom in, animating the camera.
+        googleMap.animateCamera(CameraUpdateFactory.zoomIn());
+        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(9), 2000, null);
+
+
+
+
+        Polyline polyline1 = googleMap.addPolyline(new PolylineOptions()
+                .clickable(true)
+                .add(
+                        new LatLng(13.1148, 80.2872),
+                        new LatLng(13.0300, 80.2421)));
+
+        polyline1.setTag("A");
+        polyline1.setColor(COLOR_ORANGE_ARGB);
     }
 
     public class AdapterForViewTA extends BaseAdapter{

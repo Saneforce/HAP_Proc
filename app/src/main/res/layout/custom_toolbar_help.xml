@@ -17,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="10dp"
+            android:layout_marginLeft="@dimen/C3dp"
             android:text="HAP Check-In"
             android:textColor="@color/white"
             android:textSize="11sp" />
@@ -26,9 +27,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/AppTitle"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="-14dp"
             android:text="Ver 3.0.0"
+
             android:textColor="@color/white"
             android:textSize="8sp" />
     </LinearLayout>
@@ -44,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_marginTop="@dimen/C3dp"
-        android:layout_marginRight="@dimen/C5dp"
+        android:layout_marginRight="@dimen/C10dp"
         android:gravity="center_horizontal|center_vertical"
         android:text="ERT"
         android:textColor="@color/white"
@@ -56,9 +58,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
         android:layout_marginTop="@dimen/C3dp"
-        android:layout_marginRight="@dimen/C5dp"
+        android:layout_marginRight="@dimen/C10dp"
         android:gravity="center_horizontal|center_vertical"
-        android:text="Play Slip"
+        android:text="Payslip"
         android:textColor="@color/white"
         android:textSize="13sp" />
 
