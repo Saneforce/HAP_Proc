@@ -118,6 +118,7 @@ public class ViewCartActivity extends AppCompatActivity {
     Shared_Common_Pref shared_common_pref;
     JSONArray jsonArray;
     ProceedCartModel mProceedCartModel;
+    int product_count = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -410,7 +411,7 @@ public class ViewCartActivity extends AppCompatActivity {
                 /*Activity_Event_Captures*/
 
                 JSONArray eventCapturesArray = new JSONArray();
-                    eventCapturesObjectArray = new JSONObject();
+                eventCapturesObjectArray = new JSONObject();
 
 
                 try {
@@ -483,6 +484,7 @@ public class ViewCartActivity extends AppCompatActivity {
 
                         myJSONObjects.add(person1);
                         listV.add(String.valueOf((person1)));
+                        product_count = myJSONObjects.size();
                         personarray.put(person1);
                         PersonObjectArray.put("Activity_Sample_Report", personarray);
                         String JsonData = PersonObjectArray.toString();
@@ -878,6 +880,15 @@ public class ViewCartActivity extends AppCompatActivity {
                         String san = jsonObjects.getString("success");
                         Log.e("StateCodeSet", san);
                         startActivity(new Intent(ViewCartActivity.this, OrderDashBoard.class));
+
+
+                   /*     if (product_count != 0) {
+                            startActivity(new Intent(ViewCartActivity.this, OrderDashBoard.class));
+                            Toast.makeText(ViewCartActivity.this, "Your order submitted successfully", Toast.LENGTH_SHORT).show();
+                        } else {
+                            startActivity(new Intent(ViewCartActivity.this, OrderCategoryActivity.class));
+                        }
+*/
                         Toast.makeText(ViewCartActivity.this, "Your order submitted successfully", Toast.LENGTH_SHORT).show();
 
 

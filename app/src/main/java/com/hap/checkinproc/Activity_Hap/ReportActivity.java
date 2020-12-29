@@ -51,7 +51,7 @@ public class ReportActivity extends AppCompatActivity {
     private int mYear, mMonth, mDay, mHour, mMinute;
     ReportViewAdapter mReportViewAdapter;
     RecyclerView mReportList;
-    ArrayList<Integer> mArrayList;
+    ArrayList<Float> mArrayList;
 
 
     @Override
@@ -224,16 +224,16 @@ public class ReportActivity extends AppCompatActivity {
                 List<ReportModel> mDReportModels = mReportActivities.getData();
                 for (int i = 0; i < mDReportModels.size(); i++) {
                     Log.e("data", mDReportModels.get(i).getOrderDate());
-                    mArrayList.add(Integer.valueOf(mDReportModels.get(i).getOrderValue()));
+                    mArrayList.add(Float.valueOf((mDReportModels.get(i).getOrderValue())));
                 }
-                long intSum = 0;
+                Float intSum = null;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    intSum = mArrayList.stream()
-                            .mapToLong(Integer::longValue)
-                            .sum();
+                    intSum = Float.valueOf(mArrayList.stream()
+                            .mapToLong(Float::longValue)
+                            .sum());
                 }
 
-                txtTotalValue.setText("" + Integer.valueOf(String.valueOf(intSum)));
+                txtTotalValue.setText("" + intSum);
 
                 mReportViewAdapter = new ReportViewAdapter(ReportActivity.this, mDReportModels, new ViewReport() {
                     @Override

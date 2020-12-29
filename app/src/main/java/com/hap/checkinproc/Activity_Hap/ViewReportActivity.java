@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedDispatcher;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +30,7 @@ import com.hap.checkinproc.Model_Class.DateResult;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.DateReportAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,12 +47,14 @@ public class ViewReportActivity extends AppCompatActivity {
     RecyclerView DateRecyclerView;
     String productId, orderDate;
     DateReportAdapter mDateReportAdapter;
-
+    ArrayList<Integer> mArrayList;
+    TextView TotalValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_report);
-
+        mArrayList = new ArrayList<Integer>();
+        TotalValue = findViewById(R.id.total_value);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -130,12 +135,30 @@ public class ViewReportActivity extends AppCompatActivity {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<DateReport> responseBodyCall = apiInterface.dateReport(productId, "27");
         responseBodyCall.enqueue(new Callback<DateReport>() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onResponse(Call<DateReport> call, Response<DateReport> response) {
 
                 DateReport mReportActivities = response.body();
 
                 List<DateResult> mDReportModels = mReportActivities.getData();
+
+                Log.e("MdReportModels", String.valueOf(mDReportModels.size()));
+
+                for (int i = 0; i < mDReportModels.size(); i++) {
+                    mArrayList.add(((mDReportModels.get(i).getValue())));
+
+                }
+                long intSum = (mArrayList.stream()
+                        .mapToLong(Integer::longValue)
+                        .sum());
+
+
+                Log.e("TOTAL_SUM", String.valueOf(intSum));
+
+
+                TotalValue.setText(String.valueOf(intSum));
+
 
                 mDateReportAdapter = new DateReportAdapter(ViewReportActivity.this, mDReportModels);
 

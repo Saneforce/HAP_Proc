@@ -38,10 +38,10 @@ public class DateReportAdapter extends RecyclerView.Adapter<DateReportAdapter.My
 
     @Override
     public void onBindViewHolder(DateReportAdapter.MyViewHolder holder, int position) {
-        holder.txtName.setText(mDate.get(position).getProductName());
-        holder.txtQty.setText(mDate.get(position).getCQty());
-        holder.txtRate.setText(mDate.get(position).getRate());
-        holder.txtTotal.setText(mDate.get(position).getValue());
+        holder.txtName.setText(" " + mDate.get(position).getProductName());
+        holder.txtQty.setText(" " + mDate.get(position).getCQty());
+        holder.txtRate.setText(" " + mDate.get(position).getRate());
+        holder.txtTotal.setText(" " + mDate.get(position).getValue());
 
     }
 

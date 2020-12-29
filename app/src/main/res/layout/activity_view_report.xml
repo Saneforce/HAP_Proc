@@ -217,8 +217,7 @@
                     android:layout_marginRight="10dp"
                     android:gravity="center_vertical"
                     android:padding="5dp"
-                    android:text="Proceed to cart"
-                    android:visibility="invisible"></TextView>
+             ></TextView>
 
             </LinearLayout>
 

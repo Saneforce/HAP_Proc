@@ -50,7 +50,7 @@ public class ReportViewAdapter extends RecyclerView.Adapter<ReportViewAdapter.My
         holder.txtsNo.setText(mDate.get(position).getSlno());
         holder.txtOrderDate.setText(mDate.get(position).getOrderDate());
         holder.txtOrderID.setText(mDate.get(position).getOrderNo());
-        holder.txtValue.setText(mDate.get(position).getOrderValue());
+        holder.txtValue.setText(""+mDate.get(position).getOrderValue());
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +58,6 @@ public class ReportViewAdapter extends RecyclerView.Adapter<ReportViewAdapter.My
                 mViewReport.reportCliick(mDate.get(position).getOrderNo(), mDate.get(position).getOrderDate());
             }
         });
-
     }
 
     @Override

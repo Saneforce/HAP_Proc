@@ -22,7 +22,7 @@ public class DateResult {
     private String cQty;
     @SerializedName("value")
     @Expose
-    private String value;
+    private Integer value;
     @SerializedName("Rate")
     @Expose
     private String rate;
@@ -100,11 +100,11 @@ public class DateResult {
         this.cQty = cQty;
     }
 
-    public String getValue() {
+    public Integer getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(Integer value) {
         this.value = value;
     }
 

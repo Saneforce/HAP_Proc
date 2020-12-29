@@ -272,6 +272,7 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
         Log.e("CAT_Details", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
         Log.e("CAT_Details", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
         Log.e("CAT_Details", shared_common_pref.getvalue(Shared_Common_Pref.StateCode));
+        long startTime = System.currentTimeMillis();
 
         String tempalteValue = "{\"tableName\":\"category_master\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -281,6 +282,9 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
             @Override
             public void onResponse(Call<HeaderCat> call, Response<HeaderCat> response) {
                 if (response.isSuccessful()) {
+
+                    long elapsedTime = System.currentTimeMillis() - startTime;
+                    System.out.println("Total elapsed http request/response time in milliseconds: " + elapsedTime);
 
                     HeaderCat headerCat = response.body();
                     Log.e("RESPOSNE", headerCat.toString());

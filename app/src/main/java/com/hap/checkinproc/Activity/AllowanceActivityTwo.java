@@ -37,7 +37,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         StartedKm = mShared_common_pref.getvalue("Started_km");
         StartedImage = mShared_common_pref.getvalue("Started_Image");
 
-
         TextModeTravel = findViewById(R.id.txt_mode_travel);
         TextStartedKm = findViewById(R.id.txt_started_km);
         StartedKmImage = findViewById(R.id.img_started_km);
@@ -45,12 +44,16 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         takeEndedPhoto = findViewById(R.id.btn_take_photo);
         submitAllowance = findViewById(R.id.submit_allowance);
 
-        TextModeTravel.setText(ModeOfTravel);
-        TextStartedKm.setText(StartedKm);
-        if (!StartedImage.equals("")) {
+
+
+        if (!StartedImage.equals("")&& StartedKmImage != null) {
             StartedKmImage.setImageURI(Uri.parse(StartedImage));
             StartedKmImage.setRotation((float) 90);
+
         }
+        TextModeTravel.setText(""+ModeOfTravel);
+        TextStartedKm.setText(""+StartedKm);
+
         takeEndedPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

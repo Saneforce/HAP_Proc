@@ -21,7 +21,7 @@ public class ReportModel {
     private String orderDate;
     @SerializedName("Order_Value")
     @Expose
-    private String orderValue;
+    private Float orderValue;
 
     public String getSlno() {
         return slno;
@@ -63,11 +63,11 @@ public class ReportModel {
         this.orderDate = orderDate;
     }
 
-    public String getOrderValue() {
+    public Float getOrderValue() {
         return orderValue;
     }
 
-    public void setOrderValue(String orderValue) {
+    public void setOrderValue(Float orderValue) {
         this.orderValue = orderValue;
     }
 
