@@ -221,8 +221,8 @@ public class TAClaimActivity extends AppCompatActivity {
 
     public void submitData() {
 
-        Intent intent = new Intent(TAClaimActivity.this, ViewTASummary.class);
-        startActivity(intent);
+/*        Intent intent = new Intent(TAClaimActivity.this, ViewTASummary.class);
+        startActivity(intent);*/
         try {
             JSONArray ja = new JSONArray();
             JSONArray ja1 = new JSONArray();

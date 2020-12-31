@@ -1,19 +1,24 @@
 package com.hap.checkinproc.adapters;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Rect;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -46,6 +51,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
     ArrayList<String> productQuantityList;
     String ProductunitType;
     List<Common_Model> myDataset;
+    Integer Value = 0;
 
     public ChildListAdapter(Activity activity, List<Product> eventsArrayList, List<Common_Model> myDataset, ChildListInterface itemClick) {
         this.eventsArrayList = eventsArrayList;
@@ -70,7 +76,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
             @Override
             public void onClick(View v) {
 
-                itemClick.onClickInterface(String.valueOf(intSum), 0, listItemId, getPositionValue, productNameValue, productCodeValue, productQuantityValue, productUnit);
+                itemClick.onClickInterface(String.valueOf(intSum), 0, listItemId, getPositionValue, productNameValue, productCodeValue, productQuantityValue, productUnit,Value);
                 // itemClick.onProductUnit(productUnit, getItemID);
             }
         });
@@ -98,6 +104,10 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
             }
 
         }
+
+
+
+
 
         Log.e("Product_sale_unit", "  " + productUnit);
 
@@ -224,7 +234,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
                 Log.e("PARENT_TOTAL_SUM", String.valueOf(sum));
 
 
-                itemClick.onClickInterface(String.valueOf(sum), 0, getItemID, 0, productNameValue, productCodeValue, productQuantityValue, productUnit);
+                itemClick.onClickInterface(String.valueOf(sum), 0, getItemID, 0, productNameValue, productCodeValue, productQuantityValue, productUnit,Value);
                 Log.e("djfkgsd", "" + String.valueOf(subTotalRate));
 
             }
@@ -244,8 +254,8 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
             @Override
             public void onClick(View v) {
 
-                //   productUnit = eventsArrayList.get(position).getProductSaleUnit();
                 holder.productEdt.clearFocus();
+                Value = 1;
                 events.addToQuantity();
                 holder.productEdt.setText("" + events.getmQuantity());
                 getItemID = eventsArrayList.get(position).getId();
@@ -296,7 +306,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
                 Log.e("PARENT_TOTAL_SUM", String.valueOf(sum));
 
 
-                itemClick.onClickInterface(String.valueOf(sum), 0, getItemID, getPositionValue, productNameValue, productCodeValue, productQuantityValue, productUnit);
+                itemClick.onClickInterface(String.valueOf(sum), 0, getItemID, getPositionValue, productNameValue, productCodeValue, productQuantityValue, productUnit,Value);
                 notifyDataSetChanged();
             }
         });
@@ -308,8 +318,12 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
 
                 Log.e("OnClick", "Click is wroking");
 
-                //  productUnit = eventsArrayList.get(position).getProductSaleUnit();
+                Value = 1;
+
                 holder.productEdt.clearFocus();
+                InputMethodManager imm = (InputMethodManager) v.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
 
                 events.removeFromQuantity();
                 holder.productEdt.setText("" + events.getmQuantity());
@@ -374,7 +388,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
                     Log.e("PARENT_TOTAL_SUM", String.valueOf(sum));
 
 
-                    itemClick.onClickInterface(String.valueOf(sum), 0, getItemID, getPositionValue, productNameValue, productCodeValue, productQuantityValue, productUnit);
+                    itemClick.onClickInterface(String.valueOf(sum), 0, getItemID, getPositionValue, productNameValue, productCodeValue, productQuantityValue, productUnit,Value);
                     notifyDataSetChanged();
                 }
 
@@ -408,6 +422,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
         LinearLayout DisableMinus;
         Button unitBox;
         EditText productEdt;
+        CardView cardView;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -419,6 +434,7 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
             productPlus = (LinearLayout) itemView.findViewById(R.id.image_plus);
             productEdt = (EditText) itemView.findViewById(R.id.edt_product_count_inc_dec);
             unitBox = itemView.findViewById(R.id.edt_unit);
+            cardView = itemView.findViewById(R.id.card_view);
         }
     }
 

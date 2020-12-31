@@ -53,6 +53,7 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
     String productUnits, productItemId, ProductunitType;
     List<Common_Model> myDataset;
     String ImageViewUrl = "";
+    Integer Value = 0;
 
     public ParentListAdapter(HeaderCat headercat, List<HeaderName> eventInfor, List<Product> eventsArrayList, Activity activity, ArrayList<String> mString, List<Common_Model> myDataset, ParentListInterface itemClick) {
         this.eventInfor = eventInfor;
@@ -85,7 +86,7 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                itemClick.onClickParentInter(gTotal, 0, getIdFromChild, getPositionValue, productNameValue, productCodeValue, productQuantityValue, catIma, catNam, productUnits);
+                itemClick.onClickParentInter(gTotal, 0, getIdFromChild, getPositionValue, productNameValue, productCodeValue, productQuantityValue, catIma, catNam, productUnits,Value);
                 itemClick.onProductUnit(productUnits, productItemId);
                 itemClick.ProductImage(ImageViewUrl);
 
@@ -131,7 +132,7 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
         ChildListAdapter eventListChildAdapter = new ChildListAdapter(this.activity, mProducts, myDataset, new ChildListInterface() {
 
             @Override
-            public void onClickInterface(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy, String productUnit) {
+            public void onClickInterface(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy, String productUnit,Integer Value) {
                 /*PRODUCT_ITEM_ID_VALUE*/
                 getIdFromChild = itemID;
                 getPositionValue = positionValue;
@@ -139,12 +140,12 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
                 productCodeValue = productCode;
                 productQuantityValue = productQuantiy;
                 holder.subProdcutRate.setText(value);
-                Log.e("PRODUCT", value);
+                Log.e("PRODUCT", String.valueOf(Value));
                 catIma = evenParent.get(position).getCatImage();
                 catNam = evenParent.get(position).getName();
                 productUnits = productUnit;
                 Log.e("productUnit", "" + productUnit);
-                itemClick.onClickParentInter(value, 0, getIdFromChild, getPositionValue, productNameValue, productCodeValue, productQuantityValue, catIma, catNam, productUnits);
+                itemClick.onClickParentInter(value, 0, getIdFromChild, getPositionValue, productNameValue, productCodeValue, productQuantityValue, catIma, catNam, productUnits,Value);
 
 
             }

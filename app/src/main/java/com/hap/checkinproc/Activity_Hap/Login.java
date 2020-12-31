@@ -1,7 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.Manifest;
-import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -39,15 +38,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.hap.checkinproc.Activity.AllowanceActivity;
-import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -390,18 +386,18 @@ public class Login extends AppCompatActivity {
                         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
 
                         if (requestCode == RC_SIGN_IN) {
-                            if(CheckIn == true){
+                            if (CheckIn == true) {
                                 intent = new Intent(Login.this, Dashboard_Two.class);
-                              // intent = new Intent(Login.this, AllowanceActivity.class);
+                                //intent = new Intent(Login.this, AllowanceActivity.class);
                                 intent.putExtra("Mode", "CIN");
-                            }else {
+                            } else {
                                 intent = new Intent(Login.this, Dashboard.class);
-                            //  intent = new Intent(Login.this, AllowanceActivity.class);
+                                // intent = new Intent(Login.this, AllowanceActivity.class);
                             }
                             //  intent = new Intent(Login.this, OrderDashBoard.class);
-                        }else{
-                            //intent = new Intent(Login.this, AllowanceActivity.class);
-                           intent = new Intent(Login.this, Dashboard_Two.class);
+                        } else {
+                            // intent = new Intent(Login.this, AllowanceActivity.class);
+                            intent = new Intent(Login.this, Dashboard_Two.class);
                             intent.putExtra("Mode", "RPT");
                         }/*
                         Log.d("Sales",String.valueOf(response.body()));
@@ -451,7 +447,7 @@ public class Login extends AppCompatActivity {
                         editor.putInt("CheckCount", type);
                         editor.putString("DeptCd", DeptCd);
                         editor.putString("DeptType", DeptType);
-                        Log.d("DeptType",String.valueOf(DeptType));
+                        Log.d("DeptType", String.valueOf(DeptType));
                         editor.putString("State_Code", Sf_type);
                         editor.putString("email", eMail);
                         editor.apply();
@@ -517,7 +513,7 @@ public class Login extends AppCompatActivity {
                     .show();
         } else
             ActivityCompat.requestPermissions(Login.this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION, Manifest.permission.FOREGROUND_SERVICE},
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_BACKGROUND_LOCATION, Manifest.permission.FOREGROUND_SERVICE, Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
                     REQUEST_PERMISSIONS_REQUEST_CODE);
     }
 

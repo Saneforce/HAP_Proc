@@ -37,7 +37,6 @@ public class UpdateTaskActivity extends Activity {
         findViewById(R.id.button_update).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_LONG).show();
                 updateTask(task);
             }
         });

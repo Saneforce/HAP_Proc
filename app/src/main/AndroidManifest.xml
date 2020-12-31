@@ -30,14 +30,22 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".Activity.AllowanceActivityTwo"></activity>
+        <activity android:name=".Activity_Hap.PrivacyPolicy">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Activity.AllowanceActivityTwo" />
         <!--
              <service
                  android:name=".FCMservices"
                  android:enabled="true"
                  android:exported="true"></service>
         -->
-        <activity android:name=".Activity_Hap.EventCaptureActivity"></activity>
+        <activity android:name=".Activity_Hap.EventCaptureActivity" />
         <activity
             android:name=".Activity_Hap.OrderCategoryActivity"
             android:windowSoftInputMode="stateAlwaysHidden" />
@@ -108,16 +116,11 @@
         <activity
             android:name=".Activity_Hap.Login"
             android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
-
         <activity
             android:name=".Activity_Hap.ProductImageView"
-            android:theme="@style/AppTheme.Dialog"></activity>
+            android:theme="@style/AppTheme.Dialog" />
 
         <service android:name=".MyFirebaseInstanceIdService">
             <intent-filter>
@@ -133,7 +136,7 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".Activity_Hap.MainActivity"></activity>
+        <activity android:name=".Activity_Hap.MainActivity" />
         <activity android:name=".Activity.DesignActivity" />
         <activity
             android:name=".Activity.FilterActivity"
@@ -148,12 +151,9 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
-
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
 
         <provider
             android:name="androidx.core.content.FileProvider"

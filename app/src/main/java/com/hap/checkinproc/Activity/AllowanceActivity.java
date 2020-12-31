@@ -81,6 +81,15 @@ public class AllowanceActivity extends AppCompatActivity {
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
     Shared_Common_Pref mShared_common_pref;
 
+
+    public static final String mypreference = "mypref";
+    public static final String Name = "Allowance";
+    public static final String MOT = "ModeOfTravel";
+
+    String PrivacyScreen = "";
+    SharedPreferences sharedpreferences;
+
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +132,8 @@ public class AllowanceActivity extends AppCompatActivity {
         }
 
 
+        sharedpreferences = getSharedPreferences(mypreference,
+                Context.MODE_PRIVATE);
         mShared_common_pref = new Shared_Common_Pref(this);
         getTravelMode();
         pic.setOnClickListener(new View.OnClickListener() {
@@ -163,20 +174,28 @@ public class AllowanceActivity extends AppCompatActivity {
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (TextUtils.isEmpty(txt_mode.getText().toString())) {
-                    Toast.makeText(AllowanceActivity.this, "Select the mode of travels ", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (rlay_pic.getVisibility() == View.VISIBLE) {
-                        getMulipart(filepath_final, 0);
-                    } else {
+                if (txt_mode.getText().toString().equals("Bike")) {
+                    if (!filepath_final.equals("") && !edt_km.getText().toString().equals("")) {
                         submitData();
+                    } else {
+                        Toast.makeText(AllowanceActivity.this, "Please enter all the details", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    if (!filepath_final.equals("") && !edt_frm.getText().toString().equals("") && !txt_hq.getText().toString().equals("") && !edt_fare.getText().toString().equals("")) {
+                        submitData();
+                    } else {
+                        Toast.makeText(AllowanceActivity.this, "Please enter all the details", Toast.LENGTH_SHORT).show();
                     }
                 }
+
+
             }
         });
     }
 
     public void popupSpinner() {
+
+
         final Dialog dialog = new Dialog(AllowanceActivity.this, R.style.AlertDialogCustom);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.popup_dynamic_view);
@@ -242,8 +261,11 @@ public class AllowanceActivity extends AppCompatActivity {
                             mode = m.getCode();
 
                             Log.e("Allowance_Activity", m.getTxt());
-
-
+                            edt_frm.getText().clear();
+                            txt_hq.setText("");
+                            edt_fare.setText("");
+                            edt_km.setText("");
+                            edt_rmk.setText("");
                             txt_mode.setText(m.getTxt());
                             enableFields();
                         }
@@ -533,7 +555,9 @@ public class AllowanceActivity extends AppCompatActivity {
                         if (js.getString("success").equalsIgnoreCase("true")) {
                             Log.v("printing_dynamic_cou", js.getString("url"));
                             url = js.getString("url");
-                            submitData();
+
+
+                            //  submitData();
                         }
 
                     }
@@ -553,6 +577,14 @@ public class AllowanceActivity extends AppCompatActivity {
 
         mShared_common_pref.save("Started_km", edt_km.getText().toString());
         mShared_common_pref.save("mode_of_travel", txt_mode.getText().toString());
+
+
+        String n = "True";
+        String Mode = txt_mode.getText().toString();
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(Name, n);
+        editor.putString(MOT, Mode);
+        editor.commit();
 
         Log.e("MODE_OF_Travel", txt_mode.getText().toString());
         try {
@@ -590,7 +622,7 @@ public class AllowanceActivity extends AppCompatActivity {
                             if (js.getString("success").equalsIgnoreCase("true")) {
                                 Toast.makeText(AllowanceActivity.this, " Submitted successfully ", Toast.LENGTH_SHORT).show();
                                 common_class.CommonIntentwithFinish(Dashboard.class);
-                                //common_class.CommonIntentwithFinish(AllowanceActivityTwo.class);
+                                //  common_class.CommonIntentwithFinish(AllowanceActivityTwo.class);
                             } else
                                 Toast.makeText(AllowanceActivity.this, " Cannot submitted the data ", Toast.LENGTH_SHORT).show();
                         }

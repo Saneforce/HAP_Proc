@@ -1,9 +1,11 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -13,6 +15,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -328,10 +332,15 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
 
             Log.e("PRODUCT_TYPE_VALUE", "PRODUCT_TYPE" + productUnitType);
             event_list_parent_adapter = new ParentListAdapter(headerCat, headerNameArrayLists, eventsArrayLists, OrderCategoryActivity.this, mHeaderNameValue, modelRetailDetails, new ParentListInterface() {
+                @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
-                public void onClickParentInter(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy, String catImage, String catName, String productUnit) {
+                public void onClickParentInter(String value, int totalValue, String itemID, Integer positionValue, String productName, String productCode, Integer productQuantiy, String catImage, String catName, String productUnit, Integer Value) {
 
-                    Log.e("Product_sale_unit", "" + productUnit);
+                    if (Value == 1) {
+                        getWindow().getDecorView().clearFocus();
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(mRecyclerView.getWindowToken(), 0);
+                    }
 
                     if (Product_Array_List.size() == 0) {
                         sum = sum + productQuantiy * Integer.parseInt(productCode);
@@ -476,6 +485,8 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
 
 
     }
+
+
 
 
     /*SAVE DATA FROM */

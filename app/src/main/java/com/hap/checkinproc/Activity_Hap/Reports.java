@@ -1,9 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -16,21 +12,32 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.RecyclerViewAdapter;
 
 import java.util.ArrayList;
 
-import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
-
 public class Reports extends AppCompatActivity {
 
     private ArrayList<String> mNames = new ArrayList<>();
+
+    SharedPreferences CheckInDetails;
+    SharedPreferences UserDetails;
+    public static final String CheckInfo = "CheckInDetail";
+    public static final String UserInfo = "MyPrefs";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reports);
+
+        CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -66,17 +73,7 @@ public class Reports extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
-                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-                if (CheckIn == true) {
-                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
-                    Dashboard.putExtra("Mode", "CIN");
-                    startActivity(Dashboard);
-                } else
-                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
-
-
-
+                startActivity(new Intent(Reports.this, Dashboard_Two.class));
             }
         });
 
@@ -84,7 +81,7 @@ public class Reports extends AppCompatActivity {
 
     }
 
-    private void initShift_Time(){
+    private void initShift_Time() {
 
 
         mNames.add("10.00 am - 12.00 pm");
@@ -94,7 +91,8 @@ public class Reports extends AppCompatActivity {
 
         initRecyclerView();
     }
-    private void initRecyclerView(){
+
+    private void initRecyclerView() {
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(mNames, this);
@@ -102,4 +100,5 @@ public class Reports extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
+
 }

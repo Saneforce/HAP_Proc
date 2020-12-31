@@ -12,7 +12,9 @@ import retrofit2.Response;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +27,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.Approvals;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
+import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
+import com.hap.checkinproc.Activity_Hap.Leave_Request;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -52,10 +56,20 @@ public class View_All_Status_Activity extends AppCompatActivity {
     Common_Class common_class;
     Intent i;
     String AMOD = "0";
+
+    SharedPreferences CheckInDetails;
+    SharedPreferences UserDetails;
+    public static final String CheckInfo = "CheckInDetail";
+    public static final String UserInfo = "MyPrefs";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view__all__status_);
+        CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +105,19 @@ public class View_All_Status_Activity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
+                Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
+                Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
+                Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
+
+                if (CheckIn == true) {
+                    Intent Dashboard = new Intent(View_All_Status_Activity.this, Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                } else
+                    startActivity(new Intent(getApplicationContext(), Dashboard_Two.class));
+
 
             }
         });

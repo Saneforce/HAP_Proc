@@ -29,7 +29,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivityTwo;
-import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -58,6 +57,16 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     int cModMnth = 1;
     Button viewButton;
     CardView StActivity;
+    String AllowancePrefernce = "";
+
+    public static final String mypreference = "mypref";
+    public static final String Name = "Allowance";
+    public static final String MOT = "ModeOfTravel";
+
+    String PrivacyScreen = "", ModeOfTravel = "";
+    SharedPreferences sharedpreferences;
+
+    /*String Mode = "Bus";*/
 
 
     @Override
@@ -68,6 +77,9 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         mShared_common_pref = new Shared_Common_Pref(this);
 
         mShared_common_pref.save("Dashboard", "one");
+
+        sharedpreferences = getSharedPreferences(mypreference,
+                Context.MODE_PRIVATE);
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -459,24 +471,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             public void onFailure(Call<JsonObject> call, Throwable t) {
 
             }
-           /* fmcgAPIservice.getDataList('POST', 'CheckWeekofandmis', [])
-        .success(function(response) {
-                $scope.CheckyW=response;//[0]['Ycount'];
-                //$scope.CheckWk=response.GetWK.length;
-                if(response.GetMissed.length>0){
-                    navigator.notification.alert(
-                            response.Msg,
-                            onConfirmM,
-                            'HAP Check-In',
-                            ''
-                    );
-                }
-                else{$scope.AletWeekoff();}
 
-                $ionicLoading.hide();
-            }).error(function() {
-                $ionicLoading.hide();
-                Toast('No Internet Connection.');*/
         });
     }
 
@@ -533,13 +528,29 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                             /*   Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
-                                takePhoto.putExtra("Mode", "COUT");
-                                startActivity(takePhoto);*/
 
-                                Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
-                                takePhoto.putExtra("Mode", "COUT");
-                                startActivity(takePhoto);
+                                if (sharedpreferences.contains(Name) && sharedpreferences.contains(MOT)) {
+                                    PrivacyScreen = sharedpreferences.getString(Name, "");
+                                    ModeOfTravel = sharedpreferences.getString(MOT, "");
+                                    Log.e("Privacypolicy", "Checking" + ModeOfTravel);
+                                    Log.e("Privacypolicy", "Checking" + PrivacyScreen);
+                                    if (PrivacyScreen.equals("True") && ModeOfTravel.equals("Bike")) {
+                                        Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
+                                        takePhoto.putExtra("Mode", "COUT");
+                                        startActivity(takePhoto);
+                                    } else {
+                                        Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
+                                        takePhoto.putExtra("Mode", "COUT");
+                                        startActivity(takePhoto);
+                                    }
+
+                                } else {
+                                    Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
+                                    takePhoto.putExtra("Mode", "COUT");
+                                    startActivity(takePhoto);
+                                }
+
+
                             }
                         })
                         .show();

@@ -74,6 +74,7 @@
                         android:id="@+id/delete_product"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
+                        android:visibility="gone"
                         android:layout_gravity="center"
                         android:layout_marginRight="10dp"
                         android:src="@drawable/delete_cart" />

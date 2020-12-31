@@ -246,7 +246,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 takePicture();
+
             }
         });
         btnSwchCam.setOnClickListener(new View.OnClickListener() {
@@ -440,18 +442,23 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         //file  = new File(Environment.getExternalStorageDirectory() + "/"+ts+".jpg");
         imagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + imageFileName;
         file = new File(imagePath);
-        mCamera.takePicture(null, null,
-                new Camera.PictureCallback() {
-                    @Override
-                    public void onPictureTaken(byte[] bytes, Camera camera) {
-                        try {
-                            save(bytes);
-                            ShowImgPreview();
-                        } catch (IOException e) {
-                            e.printStackTrace();
+        try {
+            mCamera.takePicture(null, null,
+                    new Camera.PictureCallback() {
+                        @Override
+                        public void onPictureTaken(byte[] bytes, Camera camera) {
+                            try {
+                                save(bytes);
+                                ShowImgPreview();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }
-                });
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onResume();
     }
 
     private void ShowImgPreview() {
