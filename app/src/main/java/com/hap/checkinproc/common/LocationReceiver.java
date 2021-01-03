@@ -11,7 +11,7 @@ import android.widget.Toast;
 import com.hap.checkinproc.Activity_Hap.Block_Information;
 import com.hap.checkinproc.Activity_Hap.Common_Class;
 
-public class LocationReceiver extends BroadcastReceiver {
+public class  LocationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Location location = intent.getParcelableExtra(SANGPSTracker.EXTRA_LOCATION);

@@ -39,12 +39,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.AllowanceActivityTwo" />
-        <!--
-             <service
-                 android:name=".FCMservices"
-                 android:enabled="true"
-                 android:exported="true"></service>
-        -->
         <activity android:name=".Activity_Hap.EventCaptureActivity" />
         <activity
             android:name=".Activity_Hap.OrderCategoryActivity"
@@ -122,11 +116,6 @@
             android:name=".Activity_Hap.ProductImageView"
             android:theme="@style/AppTheme.Dialog" />
 
-        <service android:name=".MyFirebaseInstanceIdService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
         <service
             android:name=".common.SANGPSTracker"
             android:enabled="true"
@@ -165,14 +154,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <service
-            android:name=".FCMservices"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_launcher_background" />
@@ -183,6 +164,13 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/black" />
+
+        <service android:name=".common.PushNotification">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>

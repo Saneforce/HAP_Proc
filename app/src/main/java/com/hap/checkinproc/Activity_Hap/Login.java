@@ -1,7 +1,10 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,7 +53,9 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.Config;
 import com.hap.checkinproc.common.LocationReceiver;
+import com.hap.checkinproc.common.MyNotificationManager;
 import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
 
@@ -79,7 +85,7 @@ public class Login extends AppCompatActivity {
     public static final String MyPREFERENCES = "MyPrefs";
     private ProgressDialog mProgress;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
-
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
 
     private LocationReceiver rcvMReceiver;
     private SANGPSTracker mLUService;
@@ -90,6 +96,7 @@ public class Login extends AppCompatActivity {
     // Tracks the bound state of the service.
     private boolean mBound = false;
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,16 +108,47 @@ public class Login extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<String> task) {
                         if (!task.isSuccessful()) {
-                            Log.w("TAG", "Fetching FCM registration token failed", task.getException());
+                            Log.w(TAG, "Fetching FCM registration token failed", task.getException());
                             return;
                         }
 
-                        String token = task.getResult();
+                        // Get new FCM registration token
+                        deviceToken = task.getResult();
 
-                        Log.d("DEVICE_TOKEN", token);
-                        Toast.makeText(Login.this, "msg", Toast.LENGTH_SHORT).show();
+
+                        // Log and toast
+
+                        Log.d(TAG, deviceToken);
+                        Toast.makeText(Login.this, deviceToken, Toast.LENGTH_SHORT).show();
                     }
                 });
+
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // checking for type intent filter
+                if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
+                    // gcm successfully registered
+                    // now subscribe to `global` topic to receive app wide notifications
+                    FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
+
+                    displayFirebaseRegId();
+
+                } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+                    // new push notification is received
+
+                    String message = intent.getStringExtra("message");
+
+                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+
+                   // txtMessage.setText(message);
+                }
+            }
+        };
+
+        displayFirebaseRegId();
 
         name = (TextInputEditText) findViewById(R.id.username);
         password = (TextInputEditText) findViewById(R.id.password);
@@ -250,6 +288,19 @@ public class Login extends AppCompatActivity {
 
     }
 
+
+    private void displayFirebaseRegId() {
+        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+        String regId = pref.getString("regId", null);
+
+        Log.e(TAG, "Firebase reg id: " + regId);
+
+/*        if (!TextUtils.isEmpty(regId))
+            txtRegId.setText("Firebase Reg Id: " + regId);
+        else
+            txtRegId.setText("Firebase Reg Id is not received yet!");*/
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -332,14 +383,32 @@ public class Login extends AppCompatActivity {
             LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver,
                     new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
 
+
+            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                    new IntentFilter(Config.REGISTRATION_COMPLETE));
+
+            // register new push message receiver
+            // by doing this, the activity will be notified each time a new message arrives
+            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                    new IntentFilter(Config.PUSH_NOTIFICATION));
+
+            // clear the notification area when the app is opened
+            MyNotificationManager.clearNotifications(getApplicationContext());
+
+
         }
     }
 
     @Override
     protected void onPause() {
-        // LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         super.onPause();
     }
+
+
+/*// LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver);
+        super.onPause();
+    }*/
 
     @Override
     protected void onStart() {
@@ -370,6 +439,8 @@ public class Login extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Invalid Email ID", Toast.LENGTH_LONG).show();
             return;
         }
+
+        Log.d(TAG,"TWO                    "+ deviceToken);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
@@ -377,6 +448,8 @@ public class Login extends AppCompatActivity {
             public void onResponse(Call<Model> call, Response<Model> response) {
 
                 if (response.isSuccessful()) {
+                    Log.d(TAG,"Three                       "+ deviceToken);
+
 
                     //      Log.e("sfName",response.body().getData().get(0).getSfCode());
 

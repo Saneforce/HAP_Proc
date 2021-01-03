@@ -270,7 +270,6 @@ public class SANGPSTracker extends Service {
     public void requestLocationUpdates() {
         Log.i(TAG, "Requesting location updates");
         // Utils.setRequestingLocationUpdates(this, true);
-
         Intent playIntent = new Intent(this, SANGPSTracker.class);
        // Log.d("playIntent", String.valueOf(playIntent));
         //startService(playIntent);
@@ -366,7 +365,7 @@ public class SANGPSTracker extends Service {
             if(HAPApp.activeActivity.getClass()!=Block_Information.class) {
                 Intent nwScr = new Intent(mContext, Block_Information.class);
                 nwScr.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-// intent.putExtra("Msg","")
+                // intent.putExtra("Msg","")
                 startActivity(nwScr);
             }
         }

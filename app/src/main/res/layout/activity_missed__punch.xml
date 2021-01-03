@@ -14,47 +14,51 @@
 
         <include layout="@layout/custom_toolbar_help"></include>
 
-        <ScrollView
-            android:id="@+id/svw"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar2"
-            android:layout_marginBottom="60dp"
-            android:scrollbars="none">
+            android:layout_marginBottom="@dimen/C90dp"
+            android:orientation="vertical">
 
-            <LinearLayout
+            <ScrollView
+                android:id="@+id/svw"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clipToPadding="false"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                        <TextView
-                            android:id="@+id/textView9"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_gravity="center"
-                            android:background="@drawable/button_yellow"
-                            android:gravity="center"
-                            android:text="Missed Date"
-                            android:textAllCaps="false"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                            android:textColor="#FFFFFF"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
+                android:layout_height="match_parent"
+                android:scrollbars="none">
 
                 <LinearLayout
-                    android:id="@+id/misseddatelayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_gravity="center"
+                        android:background="@drawable/button_yellow"
+                        android:gravity="center"
+                        android:text="Missed Date"
+                        android:textAllCaps="false"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/misseddatelayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
                             android:layout_marginLeft="10dp"
+                            android:layout_marginTop="5dp"
                             android:layout_marginRight="10dp"
                             android:text="Missed date" />
 
@@ -67,9 +71,9 @@
                             android:layout_marginBottom="5dp"
                             android:background="@drawable/textbox_bg"
                             android:elevation="10dp"
-                            android:padding="@dimen/C10dp"
                             android:gravity="start"
-                            android:hint="@string/selectmissed_date" />
+                            android:hint="@string/selectmissed_date"
+                            android:padding="@dimen/C10dp" />
 
                     </LinearLayout>
 
@@ -89,111 +93,109 @@
                     </RelativeLayout>
 
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="Shift time" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Shift time" />
-
-                <EditText
-                    android:id="@+id/missed_shift"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/textbox_bg"
-                    android:textSize="@dimen/C13dp"
-                    android:clickable="false"
-                    android:elevation="10dp"
-                    android:padding="@dimen/C10dp"
-                    android:focusable="false" />
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Check-in time" />
+                    <EditText
+                        android:id="@+id/missed_shift"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/textbox_bg"
+                        android:clickable="false"
+                        android:elevation="10dp"
+                        android:focusable="false"
+                        android:padding="@dimen/C10dp"
+                        android:textSize="@dimen/C13dp" />
 
 
-                <EditText
-                    android:id="@+id/missed_checkin"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/textbox_bg"
-                    android:clickable="false"
-                    android:elevation="10dp"
-                    android:padding="@dimen/C10dp"
-                    android:focusable="false"
-                    android:textSize="@dimen/C13dp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Check-out time  and  Date" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="Check-in time" />
 
 
-                <EditText
-                    android:id="@+id/missed_checkout"
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/textbox_bg"
-                    android:clickable="false"
-                    android:elevation="10dp"
-                    android:focusable="false"
-                    android:hint="Select Time and Date"
-                    android:padding="@dimen/C10dp"
-                    android:textSize="@dimen/C13dp" />
+                    <EditText
+                        android:id="@+id/missed_checkin"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/textbox_bg"
+                        android:clickable="false"
+                        android:elevation="10dp"
+                        android:focusable="false"
+                        android:padding="@dimen/C10dp"
+                        android:textSize="@dimen/C13dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="Check-out time  and  Date" />
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:text="Reason " />
-
-                <EditText
-                    android:id="@+id/reason_missed"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/C100dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/textbox_bg"
-                    android:elevation="@dimen/C5dp"
-                    android:gravity="start"
-                    android:hint="Reason"
-                    android:padding="@dimen/C10dp"
-                    android:textColor="@color/grey_500"
-                    android:textSize="@dimen/C13dp" />
+                    <EditText
+                        android:id="@+id/missed_checkout"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/textbox_bg"
+                        android:clickable="false"
+                        android:elevation="10dp"
+                        android:focusable="false"
+                        android:hint="Select Time and Date"
+                        android:padding="@dimen/C10dp"
+                        android:textSize="@dimen/C13dp" />
 
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="Reason " />
 
-            </LinearLayout>
+                    <EditText
+                        android:id="@+id/reason_missed"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/C100dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/textbox_bg"
+                        android:elevation="@dimen/C5dp"
+                        android:gravity="start"
+                        android:hint="Reason"
+                        android:padding="@dimen/C10dp"
+                        android:textColor="@color/grey_500"
+                        android:textSize="@dimen/C13dp" />
 
-        </ScrollView>
 
+                </LinearLayout>
+
+            </ScrollView>
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_height="wrap_content">
+        app:layout_constraintBottom_toBottomOf="parent">
 
 
         <Button
@@ -209,7 +211,6 @@
             android:textColor="#FFFFFF"
             android:textStyle="bold"
             tools:ignore="RtlCompat" />
-
 
 
         <include layout="@layout/back_arrow"></include>

@@ -38,18 +38,19 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.2'
     implementation 'androidx.navigation:navigation-ui:2.3.2'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    implementation 'androidx.work:work-runtime:2.3.4'
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     /*Firebase*/
-    implementation 'com.google.firebase:firebase-functions:19.1.0'
+    implementation 'com.google.firebase:firebase-functions:19.2.0'
     implementation 'com.google.firebase:firebase-auth:20.0.1'
     implementation 'com.google.firebase:firebase-core:18.0.0'
     implementation 'com.google.firebase:firebase-analytics'
-    implementation 'com.google.firebase:firebase-messaging:21.0.0'
-    implementation 'com.google.firebase:firebase-messaging-directboot:21.0.0'
-    implementation platform('com.google.firebase:firebase-bom:26.1.1')
+    implementation 'com.google.firebase:firebase-messaging:21.0.1'
+    implementation 'com.google.firebase:firebase-messaging-directboot:21.0.1'
+
 
     //circle image dependency
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
@@ -59,7 +60,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.6.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    implementation 'id.zelory:compressor:2.1.0'
+    implementation 'id.zelory:co' +
+            'mpressor:2.1.0'
     // implementation  'com.google.android.gms:play-services:12.0.1'
     //map implementation
     implementation 'com.google.android.gms:play-services-maps:17.0.0'
@@ -75,5 +77,10 @@ dependencies {
     implementation 'androidx.room:room-runtime:2.2.6'
     annotationProcessor 'androidx.room:room-compiler:2.2.6'
     testImplementation 'androidx.room:room-testing:2.2.6'
+
+
+
+    implementation platform('com.google.firebase:firebase-bom:26.2.0')
+
 
 }
