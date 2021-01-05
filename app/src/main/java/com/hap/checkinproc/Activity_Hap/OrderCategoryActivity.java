@@ -338,7 +338,7 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
 
                     if (Value == 1) {
                         getWindow().getDecorView().clearFocus();
-                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(mRecyclerView.getWindowToken(), 0);
                     }
 
@@ -465,6 +465,8 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
                 public void onProductUnit(String productSaleUnit, String productItemId) {
                  /*   modelRetailDetails.clear();
                     RetailerType(productItemId);*/
+
+                    Log.e("OrderCategoryActivity", productSaleUnit + " " + productItemId);
 
                 }
 

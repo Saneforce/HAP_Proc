@@ -5,26 +5,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".Activity_Hap.Missed_Punch">
+        android:orientation="vertical">
 
-        <include layout="@layout/custom_toolbar_help"></include>
+        <include layout="@layout/custom_toolbar_help" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/C90dp"
-            android:orientation="vertical">
+            android:layout_marginBottom="@dimen/C100dp">
 
             <ScrollView
-                android:id="@+id/svw"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none">
+                android:layout_height="wrap_content">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -45,7 +40,7 @@
                         android:textAllCaps="false"
                         android:textAppearance="@style/TextAppearance.AppCompat.Large"
                         android:textColor="#FFFFFF"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
@@ -57,16 +52,15 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="@dimen/C5dp"
                             android:layout_marginTop="5dp"
-                            android:layout_marginRight="10dp"
                             android:text="Missed date" />
 
                         <TextView
                             android:id="@+id/misseddateselect"
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="@dimen/C5dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginBottom="5dp"
                             android:background="@drawable/textbox_bg"
@@ -96,16 +90,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
+
                         android:text="Shift time" />
 
                     <EditText
                         android:id="@+id/missed_shift"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginRight="10dp"
                         android:background="@drawable/textbox_bg"
                         android:clickable="false"
@@ -118,7 +112,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"
                         android:text="Check-in time" />
@@ -128,7 +122,7 @@
                         android:id="@+id/missed_checkin"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginRight="10dp"
                         android:background="@drawable/textbox_bg"
                         android:clickable="false"
@@ -140,7 +134,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"
                         android:text="Check-out time  and  Date" />
@@ -150,7 +144,7 @@
                         android:id="@+id/missed_checkout"
                         android:layout_width="match_parent"
                         android:layout_height="45dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginRight="10dp"
                         android:background="@drawable/textbox_bg"
                         android:clickable="false"
@@ -164,7 +158,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginRight="10dp"
                         android:text="Reason " />
@@ -173,7 +167,7 @@
                         android:id="@+id/reason_missed"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/C100dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginRight="10dp"
                         android:background="@drawable/textbox_bg"
                         android:elevation="@dimen/C5dp"
@@ -186,8 +180,12 @@
 
                 </LinearLayout>
 
+
             </ScrollView>
+
+
         </LinearLayout>
+
 
     </LinearLayout>
 
@@ -202,7 +200,7 @@
             android:id="@+id/submit_missed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="@dimen/C5dp"
             android:layout_marginRight="10dp"
             android:background="@drawable/sign_bg"
             android:gravity="center_vertical"

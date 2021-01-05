@@ -107,8 +107,6 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
 
 
 
-
-
         Log.e("Product_sale_unit", "  " + productUnit);
 
 
@@ -195,9 +193,16 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
                 productCodeValue = String.valueOf(eventsArrayList.get(position).getProductCatCode());
                 productQuantityValue = eventsArrayList.get(position).getmQuantity();
 
+                if (holder.productEdt.getText().toString().equals("0")) {
+                    holder.DisableMinus.setVisibility(View.VISIBLE);
+                    holder.proudctMinus.setVisibility(View.GONE);
+                }else{
+                    holder.proudctMinus.setVisibility(View.VISIBLE);
+                    holder.DisableMinus.setVisibility(View.GONE);
+                }
+
 
                 if (dataValue.size() == 0) {
-
                     subTotalRate = productQuantityValue * Integer.parseInt(productCodeValue);
                     dataValue.add(new Product_Array(getItemID, productNameValue, productQuantityValue, productQuantityValue * Integer.parseInt(productCodeValue), Integer.parseInt(productCodeValue)));
 
@@ -238,6 +243,9 @@ public class ChildListAdapter extends RecyclerView.Adapter<ChildListAdapter.MyVi
                 Log.e("djfkgsd", "" + String.valueOf(subTotalRate));
 
             }
+
+
+
         });
 
 

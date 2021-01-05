@@ -18,8 +18,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_marginBottom="@dimen/C100dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/C100dp">
 
 
             <ScrollView
@@ -111,8 +111,8 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_weight="1"
                             android:layout_marginRight="@dimen/C10dp"
+                            android:layout_weight="1"
                             android:orientation="vertical">
 
                             <TextView
@@ -138,14 +138,15 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
                             android:layout_marginRight="@dimen/C10dp"
+                            android:layout_weight="1"
                             android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="5dp"                                android:text="To Time" />
+                                android:layout_marginBottom="5dp"
+                                android:text="To Time" />
 
                             <EditText
                                 android:id="@+id/to_time"

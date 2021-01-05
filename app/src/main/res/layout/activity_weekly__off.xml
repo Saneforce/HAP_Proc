@@ -4,126 +4,138 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/constrain_dashboard"
     android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".Activity_Hap.Weekly_Off">
-
+        android:orientation="vertical">
 
         <include layout="@layout/custom_toolbar_help" />
 
-        <ScrollView
-            android:id="@+id/svw"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar2"
-            android:layout_marginBottom="60dp"
-            android:scrollbars="none">
+            android:layout_marginBottom="@dimen/C100dp">
 
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:orientation="vertical"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:paddingTop="18dp"
-                android:paddingBottom="18dp">
-                <TextView
-                    android:id="@+id/textView9"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
-                    android:background="@drawable/button_yellow"
-                    android:padding="5dp"
-                    android:text="Weekof Entry"
-                    android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:text="Date"
-                    android:textSize="@dimen/C13dp" />
-                <EditText
-                    android:id="@+id/week_off_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/C10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp"
-                    android:textSize="@dimen/C13dp"
-                    android:background="@drawable/textbox_bg"
-                    android:clickable="false"
-                    android:elevation="5dp"
-                    android:focusable="false"
-                    android:hint="Select the Date" />
+                    android:clipToPadding="false"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/button_yellow"
+                        android:padding="5dp"
+                        android:text="Weekof Entry"
+                        android:textAlignment="center"
+                        android:textAllCaps="false"
+                        android:textColor="#FFFFFF"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:id="@+id/misseddatelayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/C5dp"
+                            android:paddingTop="@dimen/C5dp"
+                            android:text="Date"
+                            android:textSize="@dimen/C13dp" />
+
+                        <EditText
+                            android:id="@+id/week_off_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/C5dp"
+                            android:layout_marginRight="@dimen/C5dp"
+                            android:background="@drawable/textbox_bg"
+                            android:clickable="false"
+                            android:elevation="5dp"
+                            android:focusable="false"
+                            android:hint="Select the Date"
+                            android:padding="@dimen/C10dp"
+                            android:textSize="@dimen/C13dp" />
+
+                    </LinearLayout>
 
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="10dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:textSize="@dimen/C13dp"
-                    android:text="Remarks"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/remarks_week"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/C100dp"
-                    android:background="@drawable/textbox_bg"
-                    android:elevation="@dimen/C5dp"
-                    android:gravity="start"
-                    android:hint="Reason"
-                    android:textSize="@dimen/C13dp"
-                    android:padding="@dimen/C10dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginRight="8dp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/C5dp"
+                            android:paddingTop="@dimen/C10dp"
+                            android:text="Remarks"
+                            android:textSize="@dimen/C13dp" />
+
+                        <EditText
+                            android:id="@+id/remarks_week"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/C100dp"
+                            android:layout_marginLeft="@dimen/C5dp"
+                            android:layout_marginRight="@dimen/C5dp"
+                            android:background="@drawable/textbox_bg"
+                            android:elevation="@dimen/C5dp"
+                            android:gravity="start"
+                            android:hint="Reason"
+                            android:padding="@dimen/C10dp"
+                            android:textSize="@dimen/C13dp" />
+                    </LinearLayout>
 
 
-            </LinearLayout>
-        </ScrollView>
+                </LinearLayout>
+
+            </ScrollView>
+
+
+        </LinearLayout>
+
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
         <Button
             android:id="@+id/weeky_submit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
-            android:background="@color/colorPrimary"
+            android:layout_marginLeft="@dimen/C5dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/sign_bg"
             android:gravity="center_vertical"
             android:text="SUBMIT"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textStyle="bold"
-            android:textSize="@dimen/C13dp"
             tools:ignore="RtlCompat" />
 
+
         <include layout="@layout/back_arrow"></include>
-
     </LinearLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

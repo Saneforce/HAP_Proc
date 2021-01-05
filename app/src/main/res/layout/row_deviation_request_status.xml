@@ -5,25 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:ignore="MissingConstraints,UselessLeaf">
 
-
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/C5dp"
+            android:layout_margin="@dimen/C7dp"
             android:elevation="@dimen/C5dp"
             app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/C5dp"
+                android:layout_marginLeft="@dimen/C8dp"
+                android:layout_marginRight="@dimen/C8dp"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -32,7 +31,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/C5dp"
                     android:visibility="gone">
-
 
                     <TextView
                         android:id="@+id/SfName"
@@ -55,29 +53,30 @@
                     android:layout_margin="@dimen/C5dp">
 
                     <TextView
-                        android:id="@+id/fromdatetodate"
+                        android:id="@+id/weekofdate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
-                        android:layout_marginBottom="10dp"
                         android:fontFamily="@font/poppins_semibold"
                         android:text="2020-09-06"
                         android:textColor="@android:color/black"
-                        android:textSize="14dp"></TextView>
+                        android:textSize="14dp"
+                        android:textStyle="bold"></TextView>
 
 
                     <TextView
-                        android:id="@+id/LStatus"
+                        android:id="@+id/wkstatus"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
+                        android:background="@drawable/bt_radious"
                         android:fontFamily="@font/poppins_semibold"
                         android:padding="@dimen/C3dp"
                         android:text="Pending"
-                        android:textColor="@android:color/white"
+                        android:textColor="@color/color_white"
                         android:textSize="12dp"></TextView>
 
                 </RelativeLayout>
@@ -91,62 +90,36 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C10dp"
-                    android:layout_marginRight="@dimen/C10dp"
-                    android:layout_marginBottom="@dimen/C10dp">
+                    android:layout_marginTop="@dimen/C10dp">
 
                     <TextView
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Type"
+                        android:text="TYPE"
                         android:textColor="@android:color/black"
-                        android:textSize="14dp"></TextView>
+                        android:textSize="11dp"></TextView>
 
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Days"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"></TextView>
 
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/C10dp">
+                    android:layout_marginTop="@dimen/C5dp">
 
                     <TextView
-                        android:id="@+id/leavetype"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="CasualLeave"
+                        android:text="Holiday Entry"
                         android:textColor="@android:color/black"
-                        android:textSize="16dp"></TextView>
+                        android:textSize="11dp"
+                        android:textStyle="bold"></TextView>
 
-
-                    <TextView
-                        android:id="@+id/leavedays"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="0.5"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"></TextView>
 
                 </RelativeLayout>
 
@@ -156,15 +129,15 @@
                     android:layout_marginTop="@dimen/C10dp">
 
                     <TextView
-
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Reason"
+                        android:text="REASON"
                         android:textColor="@android:color/black"
-                        android:textSize="14dp"></TextView>
+                        android:textSize="11dp"></TextView>
+
+
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -173,14 +146,17 @@
                     android:layout_marginTop="@dimen/C5dp">
 
                     <TextView
-                        android:id="@+id/leavereason"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
-                        android:text="Test Entry"
-                        android:textSize="14dp"></TextView>
+                        android:text="14:00 To 15:00"
+                        android:textColor="@android:color/black"
+                        android:textSize="11dp"
+                        android:textStyle="bold"></TextView>
+
                 </RelativeLayout>
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -189,80 +165,26 @@
                     android:layout_marginBottom="@dimen/C10dp">
 
                     <TextView
-                        android:id="@+id/applieddate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
-                        android:text="Applied: 09-11-2020"
-                        android:textSize="14dp"></TextView>
+                        android:text="Applied :"
+                        android:textColor="@android:color/black"
+                        android:textSize="11dp"></TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_weight="1"
+                        android:text="04-01-2021"
+                        android:textColor="@android:color/black"
+                        android:textSize="11dp"></TextView>
+
                 </RelativeLayout>
 
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C5dp"
-                    android:orientation="vertical">
-
-
-                    <LinearLayout
-                        android:id="@+id/linear_cancel"
-                        android:gravity="center"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/C30dp"
-                            android:background="@drawable/button_red"
-                            android:gravity="center"
-                            android:padding="@dimen/C8dp"
-                            android:text="CANCEL"
-                            android:textColor="@android:color/white">
-
-                        </Button>
-                    </LinearLayout>
-
-
-                    <LinearLayout
-                        android:id="@+id/linear_reason"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <EditText
-                            android:id="@+id/reason_permission"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/C40dp"
-                            android:layout_marginTop="@dimen/C5dp"
-                            android:background="@drawable/textbox_bg"
-                            android:elevation="@dimen/C5dp"
-                            android:gravity="start"
-                            android:hint="Reason"
-                            android:layout_margin="@dimen/C5dp"
-                            android:padding="@dimen/C5dp"
-                            android:textSize="@dimen/C13dp" />
-
-
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/C30dp"
-                            android:background="@drawable/button_blueg"
-                            android:gravity="center"
-                            android:layout_margin="@dimen/C5dp"
-                            android:layout_gravity="center"
-                            android:padding="@dimen/C5dp"
-                            android:text="SEND"
-                            android:textColor="@android:color/white">
-
-                        </Button>
-                    </LinearLayout>
-
-                </LinearLayout>
-
             </LinearLayout>
-
 
         </androidx.cardview.widget.CardView>
     </LinearLayout>

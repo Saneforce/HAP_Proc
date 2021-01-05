@@ -30,8 +30,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
+        <activity android:name=".Activity_Hap.LeaveCancelRequestStatus"></activity>
+        <activity android:name=".Activity_Hap.DeviationEntryStatus" />
+        <activity android:name=".Activity_Hap.HolidayEntryStatus" />
+        <activity android:name=".Activity_Hap.DeviationEntry" />
         <activity android:name=".Activity_Hap.PrivacyPolicy">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -109,9 +112,7 @@
         <activity android:name=".Activity_Hap.Dashboard" />
         <activity
             android:name=".Activity_Hap.Login"
-            android:noHistory="true">
-
-        </activity>
+            android:noHistory="true" />
         <activity
             android:name=".Activity_Hap.ProductImageView"
             android:theme="@style/AppTheme.Dialog" />
@@ -170,7 +171,6 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
     </application>
 
 </manifest>

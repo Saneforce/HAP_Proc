@@ -30,8 +30,8 @@ import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 public class Leave_Dashboard extends AppCompatActivity implements View.OnClickListener {
 
     Common_Class common_class;
-    LinearLayout LeaveRequest, PermissionRequest, MissedPunch, WeeklyOff;
-    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, ExtdShift;
+    LinearLayout LeaveRequest, PermissionRequest, MissedPunch, WeeklyOff, DeveiationEntry;
+    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus;
     TextView countLeaveRequest, countPermissionRequest, countMissedPunch, countWeeklyOff;
     TextView countLeaveStatus, countPermissionStatus, countOnDutyStatus, countMissedStatus, countWeeklyOffStatus, countExtdShift;
 
@@ -93,6 +93,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         PermissionRequest = findViewById(R.id.lin_per_req);
         MissedPunch = findViewById(R.id.lin_miss_punch);
         WeeklyOff = findViewById(R.id.lin_week_off);
+        DeveiationEntry = findViewById(R.id.lin_deviation_entry);
 
         /*Status Linear*/
         LeaveStatus = findViewById(R.id.lin_leav_sta);
@@ -101,6 +102,10 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         MissedStatus = findViewById(R.id.lin_miss_sta);
         WeeklyOffStatus = findViewById(R.id.lin_week_off_sta);
         ExtdShift = findViewById(R.id.lin_ext_shift);
+        HolidayEntryStatus = findViewById(R.id.lin_holiday_status);
+        DeviationEntryStatus = findViewById(R.id.lin_deviation_status);
+        LeaveCancelStatus = findViewById(R.id.lin_leave_cancel_status);
+
 
         /*Request text*/
         countLeaveRequest = findViewById(R.id.txt_leave_req_count);
@@ -112,6 +117,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         PermissionRequest.setOnClickListener(this);
         MissedPunch.setOnClickListener(this);
         WeeklyOff.setOnClickListener(this);
+        DeveiationEntry.setOnClickListener(this);
         /*Status Linear*/
         LeaveStatus.setOnClickListener(this);
         PermissionStatus.setOnClickListener(this);
@@ -119,6 +125,10 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         MissedStatus.setOnClickListener(this);
         WeeklyOffStatus.setOnClickListener(this);
         ExtdShift.setOnClickListener(this);
+        HolidayEntryStatus.setOnClickListener(this);
+        DeviationEntryStatus.setOnClickListener(this);
+        LeaveCancelStatus.setOnClickListener(this);
+
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,13 +154,14 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
             case R.id.lin_week_off:
                 startActivity(new Intent(Leave_Dashboard.this, Weekly_Off.class));
                 break;
+            case R.id.lin_deviation_entry:
+                startActivity(new Intent(Leave_Dashboard.this, DeviationEntry.class));
+                break;
             case R.id.lin_leav_sta:
                 common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "0");
-
-                //startActivity(new Intent(Leave_Dashboard.this, Leave_Status_Activity.class));
                 break;
             case R.id.lin_per_sta:
-               // startActivity(new Intent(Leave_Dashboard.this, Permission_Status_Activity.class));
+                // startActivity(new Intent(Leave_Dashboard.this, Permission_Status_Activity.class));
                 common_class.CommonIntentwithoutFinishputextra(Permission_Status_Activity.class, "AMod", "0");
                 break;
             case R.id.lin_duty_sta:
@@ -168,6 +179,19 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
             case R.id.lin_ext_shift:
                 //startActivity(new Intent(Leave_Dashboard.this, Extended_Shift_Activity.class));
                 common_class.CommonIntentwithoutFinishputextra(Extended_Shift_Activity.class, "AMod", "0");
+                break;
+
+            case R.id.lin_holiday_status:
+                //startActivity(new Intent(Leave_Dashboard.this, Extended_Shift_Activity.class));
+                common_class.CommonIntentwithoutFinishputextra(HolidayEntryStatus.class, "AMod", "0");
+                break;
+            case R.id.lin_deviation_status:
+                //startActivity(new Intent(Leave_Dashboard.this, Extended_Shift_Activity.class));
+                common_class.CommonIntentwithoutFinishputextra(DeviationEntryStatus.class, "AMod", "0");
+                break;
+            case R.id.lin_leave_cancel_status:
+                //startActivity(new Intent(Leave_Dashboard.this, Extended_Shift_Activity.class));
+                common_class.CommonIntentwithoutFinishputextra(LeaveCancelRequestStatus.class, "AMod", "0");
                 break;
         }
     }

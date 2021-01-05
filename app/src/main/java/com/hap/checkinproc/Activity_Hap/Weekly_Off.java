@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -58,6 +60,7 @@ public class Weekly_Off extends AppCompatActivity {
     String maxDate, minDate;
     String maxYear, maxMonth, maxDay, minYear, minMonth, minDay;
     Boolean CheckIn;
+    ConstraintLayout ConstraintLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,9 +128,15 @@ public class Weekly_Off extends AppCompatActivity {
         }
 
         MaxMinDate();
+
+        ConstraintLayout = findViewById(R.id.constrain_dashboard);
         eText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                getWindow().getDecorView().clearFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(ConstraintLayout.getWindowToken(), 0);
                 final Calendar cldr = Calendar.getInstance();
                 int day = cldr.get(Calendar.DAY_OF_MONTH);
                 int month = cldr.get(Calendar.MONTH);

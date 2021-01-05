@@ -152,11 +152,7 @@ EventCaptureActivity extends AppCompatActivity {
         RoomDataBase = mShaeShared_common_pref.getvalue("Event_Capture");
         // intent.putExtra("count",eventDb);
         Intent intnet = getIntent();
-
-
         eventDbCount = intnet.getIntExtra("count", 0);
-
-
         RetailerChannel = intnet.getStringExtra("RetailerChannel");
         Retailerclass = intnet.getStringExtra("Retailerclass");
         OrderAmount = intnet.getStringExtra("OrderAmount");
@@ -166,7 +162,6 @@ EventCaptureActivity extends AppCompatActivity {
         PhoneNumber = intnet.getStringExtra("PhoneNumber");
         RetailerNames = intnet.getStringExtra("RetailerName");
        // selectOrder = intnet.getStringExtra("selectOrder");
-
 
         Log.e("EventCount", String.valueOf(eventDbCount));
         Log.e("EventCount", String.valueOf(RetailerChannel));
