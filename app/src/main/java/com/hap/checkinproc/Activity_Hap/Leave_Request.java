@@ -82,7 +82,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     Type userType;
     Button Submit;
     String leavetype_id = "";
-    String fromData, toData,maxTWoDate="";
+    String fromData, toData, maxTWoDate = "";
     String daysDifferce;
     CheckBox mHalfCheck;
     private ArrayList<String> shitList, halfTypeList;
@@ -128,7 +128,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         txtErt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), ERT.class));
             }
         });
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
@@ -374,8 +374,8 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     }
 
 
-    public void MaxMinDateTo(  String strMinDate ) {
-        Log.e("MAX_DATE_TWO"," "+strMinDate);
+    public void MaxMinDateTo(String strMinDate) {
+        Log.e("MAX_DATE_TWO", " " + strMinDate);
 
         String[] separated1 = strMinDate.split("-");
         separated1[0] = separated1[0].trim();

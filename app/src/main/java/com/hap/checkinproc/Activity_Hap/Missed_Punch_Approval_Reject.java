@@ -66,7 +66,7 @@ public class Missed_Punch_Approval_Reject extends AppCompatActivity implements V
         txtErt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), ERT.class));
             }
         });
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {

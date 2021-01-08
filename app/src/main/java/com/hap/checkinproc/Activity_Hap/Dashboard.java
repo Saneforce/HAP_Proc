@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -150,10 +151,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 startActivity(new Intent(this, On_Duty_Activity.class));
                 break;
             case R.id.lin_exit:
-                SharedPreferences.Editor editor = UserDetails.edit();
+             /*   SharedPreferences.Editor editor = UserDetails.edit();
                 editor.putBoolean("Login", false);
                 editor.apply();
-                finishAffinity();
+                finishAffinity();*/
+
+
+                startActivity(new Intent(this, AllowanceActivity.class));
                 //System.exit(0);
                 break;
             case R.id.lin_extenden_shift:

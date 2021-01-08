@@ -1,8 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.Manifest;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -12,7 +10,6 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -53,9 +50,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.common.Config;
 import com.hap.checkinproc.common.LocationReceiver;
-import com.hap.checkinproc.common.MyNotificationManager;
 import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
 
@@ -118,13 +113,13 @@ public class Login extends AppCompatActivity {
 
                         // Log and toast
 
-                        Log.d(TAG, deviceToken);
+                        Log.e("LoginActivity", deviceToken);
                         Toast.makeText(Login.this, deviceToken, Toast.LENGTH_SHORT).show();
                     }
                 });
 
 
-        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+/*        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 
@@ -146,9 +141,9 @@ public class Login extends AppCompatActivity {
                    // txtMessage.setText(message);
                 }
             }
-        };
+        };*/
 
-        displayFirebaseRegId();
+        //displayFirebaseRegId();
 
         name = (TextInputEditText) findViewById(R.id.username);
         password = (TextInputEditText) findViewById(R.id.password);
@@ -289,17 +284,17 @@ public class Login extends AppCompatActivity {
     }
 
 
-    private void displayFirebaseRegId() {
+   /* private void displayFirebaseRegId() {
         SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
         String regId = pref.getString("regId", null);
 
         Log.e(TAG, "Firebase reg id: " + regId);
 
-/*        if (!TextUtils.isEmpty(regId))
+*//*        if (!TextUtils.isEmpty(regId))
             txtRegId.setText("Firebase Reg Id: " + regId);
         else
-            txtRegId.setText("Firebase Reg Id is not received yet!");*/
-    }
+            txtRegId.setText("Firebase Reg Id is not received yet!");*//*
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -384,7 +379,7 @@ public class Login extends AppCompatActivity {
                     new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
 
 
-            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+           /* LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                     new IntentFilter(Config.REGISTRATION_COMPLETE));
 
             // register new push message receiver
@@ -393,7 +388,7 @@ public class Login extends AppCompatActivity {
                     new IntentFilter(Config.PUSH_NOTIFICATION));
 
             // clear the notification area when the app is opened
-            MyNotificationManager.clearNotifications(getApplicationContext());
+            MyNotificationManager.clearNotifications(getApplicationContext());*/
 
 
         }
@@ -442,17 +437,16 @@ public class Login extends AppCompatActivity {
 
         Log.d(TAG,"TWO                    "+ deviceToken);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "thirumalaivasan786@gmail.com", deviceToken);
-      //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
+      Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
 
                 if (response.isSuccessful()) {
-                    Log.d(TAG,"Three                       "+ deviceToken);
+                    Log.d(TAG,"Three "+ deviceToken);
 
 
-                    //      Log.e("sfName",response.body().getData().get(0).getSfCode());
+                    // Log.e("sfName",response.body().getData().get(0).getSfCode());
 
                     if (response.body().getSuccess() == true) {
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();

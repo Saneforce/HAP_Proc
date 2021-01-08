@@ -68,7 +68,7 @@ public class Onduty_approval extends AppCompatActivity {
         txtErt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), ERT.class));
             }
         });
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {

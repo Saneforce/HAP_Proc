@@ -606,6 +606,7 @@ public class AllowanceActivity extends AppCompatActivity {
             else
                 Callto = apiInterface.saveAllowance(jj.toString());
 
+
             Callto.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -621,6 +622,8 @@ public class AllowanceActivity extends AppCompatActivity {
                             JSONObject js = new JSONObject(jsonData);
                             if (js.getString("success").equalsIgnoreCase("true")) {
                                 Toast.makeText(AllowanceActivity.this, " Submitted successfully ", Toast.LENGTH_SHORT).show();
+
+
                                 common_class.CommonIntentwithFinish(Dashboard.class);
                                 //  common_class.CommonIntentwithFinish(AllowanceActivityTwo.class);
                             } else

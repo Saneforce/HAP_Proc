@@ -107,7 +107,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         txtErt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), ERT.class));
             }
         });
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {

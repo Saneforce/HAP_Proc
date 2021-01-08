@@ -32,7 +32,7 @@
 
         <TextView
             android:id="@+id/txt_mand"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_toRightOf="@+id/txt"
@@ -145,7 +145,7 @@
 
                 <TextView
 
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@+id/txt_frm"
@@ -205,7 +205,7 @@
 
                 <TextView
 
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@+id/txt_to"
@@ -240,9 +240,8 @@
                             android:layout_height="wrap_content"
                             android:background="@null"
                             android:fontFamily="@font/basic"
-                            android:text="Enter To Place"
+                            android:hint="Enter To Place"
                             android:textAllCaps="false"
-                            android:textColor="#515151"
                             android:textSize="18sp" />
 
                         <ImageView
@@ -346,7 +345,7 @@
 
                 <TextView
 
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@+id/txt_fare"
@@ -453,6 +452,7 @@
                 android:layout_toRightOf="@+id/txt_km1"
                 android:fontFamily="@font/basic"
                 android:text=" *"
+                android:visibility="gone"
                 android:textAllCaps="false"
                 android:textColor="#D50909"
                 android:textSize="18sp"

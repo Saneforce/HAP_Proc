@@ -20,6 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.Approvals;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
+import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -64,7 +65,7 @@ public class MissedPunch_Status_Activity extends AppCompatActivity {
         txtErt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), ERT.class));
             }
         });
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {

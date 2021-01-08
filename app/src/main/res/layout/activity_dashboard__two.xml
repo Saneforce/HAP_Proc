@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,6 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/C80dp"
         android:orientation="vertical"
         tools:context=".Activity_Hap.Dashboard_Two">
 
@@ -55,8 +55,8 @@
         <ScrollView
             android:id="@+id/sv"
             android:layout_width="match_parent"
+
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/C60dp"
             android:scrollbarAlwaysDrawHorizontalTrack="false"
             android:scrollbars="none">
 
@@ -222,8 +222,7 @@
                             android:layout_marginTop="5dp"
                             android:padding="5dp" />
 
-                        <include layout="@layout/back_arrow"></include>
-                    </LinearLayout>
+                              </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
 
@@ -414,6 +413,14 @@
             </LinearLayout>
         </ScrollView>
 
+
+    </LinearLayout>
+    <LinearLayout
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <include layout="@layout/back_arrow"></include>
 
     </LinearLayout>
 

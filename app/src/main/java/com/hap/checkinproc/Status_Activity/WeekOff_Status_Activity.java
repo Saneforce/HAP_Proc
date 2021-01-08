@@ -18,17 +18,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.Approvals;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
+import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.Status_Adapter.Onduty_Status_Adapter;
 import com.hap.checkinproc.Status_Adapter.WeekOff_Status_Adapter;
-import com.hap.checkinproc.Status_Model_Class.Onduty_Status_Model;
 import com.hap.checkinproc.Status_Model_Class.WeekOff_Status_Model;
 
 import java.lang.reflect.Type;
@@ -47,6 +45,7 @@ public class WeekOff_Status_Activity extends AppCompatActivity {
     Common_Class common_class;
     Intent i;
     String AMOD = "0";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +64,7 @@ public class WeekOff_Status_Activity extends AppCompatActivity {
         txtErt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), ERT.class));
             }
         });
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +120,7 @@ public class WeekOff_Status_Activity extends AppCompatActivity {
                 userType = new TypeToken<ArrayList<WeekOff_Status_Model>>() {
                 }.getType();
                 approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
-                recyclerView.setAdapter(new WeekOff_Status_Adapter(approvalList, R.layout.weeklyoff_status_listitem, getApplicationContext(),AMOD));
+                recyclerView.setAdapter(new WeekOff_Status_Adapter(approvalList, R.layout.weeklyoff_status_listitem, getApplicationContext(), AMOD));
             }
 
             @Override
@@ -145,4 +144,5 @@ public class WeekOff_Status_Activity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-    }}
+    }
+}

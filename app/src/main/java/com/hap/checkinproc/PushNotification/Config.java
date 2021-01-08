@@ -1,4 +1,4 @@
-package com.hap.checkinproc.common;
+package com.hap.checkinproc.PushNotification;
 
 public class Config {
     // global topic to receive app wide push notifications

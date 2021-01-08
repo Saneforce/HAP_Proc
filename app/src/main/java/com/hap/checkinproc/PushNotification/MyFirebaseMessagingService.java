@@ -1,32 +1,24 @@
-package com.hap.checkinproc.common;
+package com.hap.checkinproc.PushNotification;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.RemoteViews;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.hap.checkinproc.Activity_Hap.Login;
-import com.hap.checkinproc.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PushNotification extends FirebaseMessagingService {
+public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
-    private static final String TAG = PushNotification.class.getSimpleName();
+    private static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
 
-    private MyNotificationManager notificationUtils;
+    private NotificationUtils notificationUtils;
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -55,16 +47,18 @@ public class PushNotification extends FirebaseMessagingService {
     }
 
     private void handleNotification(String message) {
-        if (!MyNotificationManager.isAppIsInBackground(getApplicationContext())) {
+        if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
             // app is in foreground, broadcast the push message
+
+            Log.e("PUSH_NOtificaiton", message);
             Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
             pushNotification.putExtra("message", message);
             LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
             // play notification sound
-            MyNotificationManager notificationUtils = new MyNotificationManager(getApplicationContext());
+            NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
             notificationUtils.playNotificationSound();
-        }else{
+        } else {
             // If the app is in background, firebase itself handles the notification
         }
     }
@@ -90,14 +84,14 @@ public class PushNotification extends FirebaseMessagingService {
             Log.e(TAG, "timestamp: " + timestamp);
 
 
-            if (!MyNotificationManager.isAppIsInBackground(getApplicationContext())) {
+            if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
                 // app is in foreground, broadcast the push message
                 Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
                 pushNotification.putExtra("message", message);
                 LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
 
                 // play notification sound
-                MyNotificationManager notificationUtils = new MyNotificationManager(getApplicationContext());
+                NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
                 notificationUtils.playNotificationSound();
             } else {
                 // app is in background, show the notification in notification tray
@@ -123,7 +117,7 @@ public class PushNotification extends FirebaseMessagingService {
      * Showing notification with text only
      */
     private void showNotificationMessage(Context context, String title, String message, String timeStamp, Intent intent) {
-        notificationUtils = new MyNotificationManager(context);
+        notificationUtils = new NotificationUtils(context);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
     }
@@ -132,9 +126,8 @@ public class PushNotification extends FirebaseMessagingService {
      * Showing notification with text and image
      */
     private void showNotificationMessageWithBigImage(Context context, String title, String message, String timeStamp, Intent intent, String imageUrl) {
-        notificationUtils = new MyNotificationManager(context);
+        notificationUtils = new NotificationUtils(context);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl);
     }
 }
-

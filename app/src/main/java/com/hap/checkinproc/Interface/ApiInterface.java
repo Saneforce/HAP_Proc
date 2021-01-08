@@ -284,6 +284,11 @@ public interface ApiInterface {
     @POST("Db_v300.php?axn=table/list")
     Call<JsonArray> retailerClass(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Field("data") String data);
 
+
     @POST("Db_V13.php?axn=get/precall")
     Call<RetailerViewDetails> retailerViewDetails(@Query("Msl_No") String retailerID, @Query("divisionCode") String divisionCode, @Query("sfCode") String sfCode);
+
+
+    @POST("Db_V13.php?axn=GetERTList")
+    Call<JsonObject> ERTDetails(@Query("sfCode") String sFCode);
 }

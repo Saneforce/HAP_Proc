@@ -46,7 +46,7 @@ public class Tp_Month_Select extends AppCompatActivity implements View.OnClickLi
         txtErt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), ERT.class));
             }
         });
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {

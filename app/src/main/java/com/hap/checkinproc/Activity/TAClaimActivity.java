@@ -378,7 +378,6 @@ public class TAClaimActivity extends AppCompatActivity {
                 try {
                     if (response.isSuccessful()) {
 
-
                         Log.v("print_upload_file_true", "ggg" + response);
                         JSONObject jb = null;
                         String jsonData = null;
@@ -394,13 +393,9 @@ public class TAClaimActivity extends AppCompatActivity {
                                 filepathing = filepathing + js.getString("url") + ",";
                                 array.get(x).setImg_url(filepathing);
                             }
-
-                            //submitData();
-
+                            submitData();
                         }
-
                     }
-
                 } catch (Exception e) {
                 }
             }
@@ -538,6 +533,7 @@ public class TAClaimActivity extends AppCompatActivity {
 
     @SuppressLint("ResourceType")
     public void createDynamicViewForSingleRow(String name, ArrayList<SelectionModel> array, int position, String userenter, String attachment, String max) {
+
         RelativeLayout rl = new RelativeLayout(this);
         RelativeLayout.LayoutParams layoutparams_1 = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -551,6 +547,7 @@ public class TAClaimActivity extends AppCompatActivity {
         TextView txt = new TextView(this);
         txt.setLayoutParams(layoutparams_2);
         txt.setText(name);
+        Log.e("NAME", name);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.basic);
         //txt.setTypeface(typeface,Typeface.BOLD);
         txt.setTypeface(typeface);

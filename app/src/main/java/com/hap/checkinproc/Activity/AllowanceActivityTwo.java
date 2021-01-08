@@ -81,8 +81,10 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (EndedEditText.getText().toString() != null && !EndedEditText.getText().toString().isEmpty() && !EndedEditText.getText().toString().equals("null")) {
                     stKM = Integer.valueOf(StartedKm);
+
+
                     if (!EndedEditText.getText().toString().equals("")) {
-                        endKm = Integer.valueOf(EndedEditText.getText().toString());
+                        endKm = Integer.valueOf(String.valueOf(EndedEditText.getText()));
                     }
                     Log.e("STARTED_KM", String.valueOf(endKm));
                     if (stKM < endKm) {

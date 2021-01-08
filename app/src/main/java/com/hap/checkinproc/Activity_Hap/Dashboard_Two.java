@@ -174,12 +174,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         });
 
 
- /*       if (Shared_Common_Pref.Dept_Type.equals("0")) {
-            StActivity.setVisibility(View.VISIBLE);
-        } else {
-        }
-*/
-
     }
 
     private void getNotify() {
@@ -205,7 +199,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     txt.setText(Html.fromHtml(sMsg));
                     txt.setVisibility(View.VISIBLE);
                 }
-
 
             }
 

@@ -14,7 +14,9 @@ import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -62,7 +64,12 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     DatePickerDialog dialog;
     LinearLayout LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan;
     LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff;
-
+    SharedPreferences CheckInDetails;
+    SharedPreferences UserDetails;
+    SharedPreferences Setups;
+    public static final String CheckInfo = "CheckInDetail";
+    public static final String UserInfo = "MyPrefs";
+    public static final String SetupsInfo = "MySettings";
     TextView countLeaveRequest, extendedcount, countPermissionRequest, countOnDuty, countMissedPunch, countExtendedShift, countTravelAllowance, countTourPlan;
 
     @Override
@@ -70,6 +77,10 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_approvals);
         shared_common_pref = new Shared_Common_Pref(this);
+
+        CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+        Setups = getSharedPreferences(SetupsInfo, Context.MODE_PRIVATE);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -85,7 +96,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         txtErt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), ERT.class));
             }
         });
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
@@ -106,14 +117,17 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String dash = "";
-                dash = shared_common_pref.getvalue("Dashboard");
-                if (dash.equalsIgnoreCase("one")) {
-                    startActivity(new Intent(getApplicationContext(), Dashboard_Two.class));
-                } else {
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
+                Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
+                Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
+                Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
+                if (CheckIn == true) {
+                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                } else
                     startActivity(new Intent(getApplicationContext(), Dashboard.class));
-                }
-
             }
         });
 

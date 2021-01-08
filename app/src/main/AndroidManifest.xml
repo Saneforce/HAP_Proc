@@ -30,7 +30,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".Activity_Hap.LeaveCancelRequestStatus"></activity>
+        <activity android:name=".Activity_Hap.ERT"></activity>
+        <activity android:name=".Activity_Hap.LeaveCancelRequestStatus" />
         <activity android:name=".Activity_Hap.DeviationEntryStatus" />
         <activity android:name=".Activity_Hap.HolidayEntryStatus" />
         <activity android:name=".Activity_Hap.DeviationEntry" />
@@ -164,9 +165,8 @@
         -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/black" />
-
-        <service android:name=".common.PushNotification">
+            android:resource="@color/black" /> <!-- Notification -->
+        <service android:name=".PushNotification.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

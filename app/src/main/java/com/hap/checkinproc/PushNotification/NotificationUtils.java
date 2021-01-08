@@ -1,4 +1,4 @@
-package com.hap.checkinproc.common;
+package com.hap.checkinproc.PushNotification;
 
 import android.app.ActivityManager;
 import android.app.Notification;
@@ -18,10 +18,8 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.util.Patterns;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-import com.hap.checkinproc.Activity_Hap.Login;
 import com.hap.checkinproc.R;
 
 import java.io.IOException;
@@ -33,14 +31,12 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
-
-public class MyNotificationManager {
-    private static String TAG = MyNotificationManager.class.getSimpleName();
+public class NotificationUtils {
+    private static String TAG = NotificationUtils.class.getSimpleName();
 
     private Context mContext;
 
-    public MyNotificationManager(Context mContext) {
+    public NotificationUtils(Context mContext) {
         this.mContext = mContext;
     }
 
@@ -212,3 +208,4 @@ public class MyNotificationManager {
         return 0;
     }
 }
+
