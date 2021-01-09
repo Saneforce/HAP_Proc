@@ -133,7 +133,6 @@ public class Leave_Status_Activity extends AppCompatActivity {
                 userType = new TypeToken<ArrayList<Leave_Status_Model>>() {
                 }.getType();
                 approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
-
                 recyclerView.setAdapter(new Leave_Status_Adapter(approvalList, R.layout.leave_status_listitem, getApplicationContext(), AMOD));
             }
 

@@ -44,6 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/C5dp"
+                    android:textColor="@android:color/holo_blue_dark"
                     android:text="fdsfdsfsdfsdfsdfds"></TextView>
 
             </LinearLayout>
@@ -58,11 +59,11 @@
 
                 <ImageView
                     android:id="@+id/profile_image"
-                    android:layout_width="@dimen/C100dp"
+                    android:layout_width="@dimen/C80dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_height="@dimen/C100dp"
+                    android:layout_height="@dimen/C80dp"
                     android:layout_margin="@dimen/C10dp"></ImageView>
 
             </LinearLayout>

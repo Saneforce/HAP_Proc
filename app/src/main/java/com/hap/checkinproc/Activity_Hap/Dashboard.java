@@ -46,7 +46,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
     TextView username;
     TextView lblUserName, lblEmail;
-    LinearLayout linMyday, linCheckin, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift, linTourPlan, linExit, lin_check_in;
+    LinearLayout linMyday, linCheckin, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift, linTourPlan, linExit, lin_check_in, linHolidayWorking;
     Integer type;
     Common_Class common_class;
     TextView approvalcount;
@@ -82,6 +82,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linTaClaim = (findViewById(R.id.lin_ta_claim));
         linExtShift = (findViewById(R.id.lin_extenden_shift));
         linTourPlan = (findViewById(R.id.lin_tour_plan));
+        linHolidayWorking = findViewById(R.id.lin_holiday_working);
         linExit = (findViewById(R.id.lin_exit));
         approvalcount = findViewById(R.id.approvalcount);
 
@@ -102,6 +103,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linTaClaim.setOnClickListener(this);
         linExtShift.setOnClickListener(this);
         linTourPlan.setOnClickListener(this);
+        linHolidayWorking.setOnClickListener(this);
         linExit.setOnClickListener(this);
         getcountdetails();
     }
@@ -147,18 +149,30 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             case R.id.lin_tour_plan:
                 startActivity(new Intent(this, Tp_Month_Select.class));
                 break;
+
+            case R.id.lin_holiday_working:
+                AlertDialogBox.showDialog(Dashboard.this, "HAP Check-In", "Are you sure want to Check-in with Hoilday Entry", "YES", "NO", false, new AlertBox() {
+                    @Override
+                    public void PositiveMethod(DialogInterface dialog, int id) {
+
+                        common_class.CommonIntentwithoutFinishputextra(Checkin.class, "Mode", "holidayentry");
+                    }
+
+                    @Override
+                    public void NegativeMethod(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+                break;
             case R.id.lin_onduty:
                 startActivity(new Intent(this, On_Duty_Activity.class));
                 break;
             case R.id.lin_exit:
-             /*   SharedPreferences.Editor editor = UserDetails.edit();
+                SharedPreferences.Editor editor = UserDetails.edit();
                 editor.putBoolean("Login", false);
                 editor.apply();
-                finishAffinity();*/
+                finishAffinity();
 
-
-                startActivity(new Intent(this, AllowanceActivity.class));
-                //System.exit(0);
                 break;
             case R.id.lin_extenden_shift:
                 Get_MydayPlan(2, "ValidateExtended");
@@ -183,7 +197,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, jsonArray.toString());
         Log.e("Log_TpQuerySTring", QueryString.toString());
-        Log.e("LOG_NAME",Name);
+        Log.e("LOG_NAME", Name);
         Log.e("Log_Tp_SELECT", jsonArray.toString());
         Log.e("Log_FLAG", String.valueOf(flag));
         mCall.enqueue(new Callback<JsonObject>() {
@@ -193,7 +207,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                   // Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
+                    // Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
                     if (flag == 1) {
                         JSONArray jsoncc = jsonObject.getJSONArray("Checkdayplan");
                         Log.e("LENGTH_Checkin", String.valueOf(jsoncc));
@@ -220,7 +234,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                                 @Override
                                 public void PositiveMethod(DialogInterface dialog, int id) {
                                     dialog.dismiss();
-
 
 
                                 }

@@ -1,24 +1,22 @@
 package com.hap.checkinproc.Status_Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.hap.checkinproc.Activity_Hap.Leave_Approval_Reject;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Model_Class.Leave_Status_Model;
 
-
 import java.util.List;
-
-import androidx.recyclerview.widget.RecyclerView;
 
 public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adapter.MyViewHolder> {
 
@@ -30,6 +28,8 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView fromdatetodate, leavetype, leavedays, leavereason, applieddate, LStatus, SfName;
         RelativeLayout sf_namelayout;
+        LinearLayout linearCancel, linearReason;
+        Button ButtonCancel;
 
         public MyViewHolder(View view) {
             super(view);
@@ -41,6 +41,9 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
             LStatus = view.findViewById(R.id.LStatus);
             SfName = view.findViewById(R.id.SfName);
             sf_namelayout = view.findViewById(R.id.sf_namelayout);
+            linearCancel = view.findViewById(R.id.linear_cancel);
+            linearReason = view.findViewById(R.id.linear_reason);
+            ButtonCancel = view.findViewById(R.id.button_cancel);
 
 
         }
@@ -70,6 +73,26 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
         holder.leavereason.setText(Leave_Status_Model.getReason());
         holder.applieddate.setText("Applied: " + Leave_Status_Model.getCreatedDate());
         holder.LStatus.setText(Leave_Status_Model.getLStatus());
+
+        Log.e("showflag", String.valueOf(Leave_Status_Model.getShowFlag()));
+
+        if (Leave_Status_Model.getShowFlag() == 1 && Leave_Status_Model.getLeaveActiveFlag() != 3) {
+            holder.linearCancel.setVisibility(View.VISIBLE);
+
+        } else {
+            holder.linearCancel.setVisibility(View.GONE);
+            holder.ButtonCancel.setVisibility(View.GONE);
+        }
+
+        holder.ButtonCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("LEAVE_STATUS", "LEAVE_STATUS");
+                holder.linearReason.setVisibility(View.VISIBLE);
+                holder.linearCancel.setVisibility(View.GONE);
+            }
+        });
+
         if (Leave_Status_Model.getLeaveActiveFlag() == 0) {
             holder.LStatus.setBackgroundResource(R.drawable.button_green);
             if (AMod.equals("1")) {

@@ -18,9 +18,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
@@ -42,7 +40,7 @@ public class Checkin extends AppCompatActivity {
     private JsonArray ShiftItems = new JsonArray();
     private RecyclerView recyclerView;
     private ShiftListItem mAdapter;
-    String ODFlag, onDutyPlcID, onDutyPlcNm, vstPurpose,Check_Flag;
+    String ODFlag, onDutyPlcID, onDutyPlcNm, vstPurpose, Check_Flag,onDutyFlag;
     Intent intent;
 
     @Override
@@ -51,7 +49,7 @@ public class Checkin extends AppCompatActivity {
         setContentView(R.layout.activity_checkin);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
-        Check_Flag="CIN";
+        Check_Flag = "CIN";
         txtHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -114,6 +112,12 @@ public class Checkin extends AppCompatActivity {
                 SFTID = "0";
                 onDutyPlcID = "";
             }
+
+            if(Check_Flag.equals("holidayentry")){
+                onDutyFlag = "1";
+            }else{
+                onDutyFlag = "0";
+            }
         }
 
 
@@ -121,6 +125,7 @@ public class Checkin extends AppCompatActivity {
             Intent takePhoto = new Intent(this, ImageCapture.class);
             takePhoto.putExtra("Mode", Check_Flag);
             takePhoto.putExtra("ShiftId", SFTID);
+            takePhoto.putExtra("On_Duty_Flag", onDutyFlag);
             takePhoto.putExtra("ShiftName", CheckInDetails.getString("Shift_Name", ""));
             takePhoto.putExtra("ShiftStart", CheckInDetails.getString("ShiftStart", ""));
             takePhoto.putExtra("ShiftEnd", CheckInDetails.getString("ShiftEnd", ""));
@@ -141,7 +146,7 @@ public class Checkin extends AppCompatActivity {
 
     public void SetShitItems() {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mAdapter = new ShiftListItem(ShiftItems, this, Check_Flag);
+        mAdapter = new ShiftListItem(ShiftItems, this, Check_Flag,onDutyFlag);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

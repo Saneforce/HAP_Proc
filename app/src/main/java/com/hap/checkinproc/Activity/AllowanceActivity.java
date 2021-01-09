@@ -623,7 +623,6 @@ public class AllowanceActivity extends AppCompatActivity {
                             if (js.getString("success").equalsIgnoreCase("true")) {
                                 Toast.makeText(AllowanceActivity.this, " Submitted successfully ", Toast.LENGTH_SHORT).show();
 
-
                                 common_class.CommonIntentwithFinish(Dashboard.class);
                                 //  common_class.CommonIntentwithFinish(AllowanceActivityTwo.class);
                             } else

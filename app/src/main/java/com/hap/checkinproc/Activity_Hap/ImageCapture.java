@@ -106,14 +106,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     Button btnRtPrv, btnOkPrv;
 
 
-    //Variable to store brightness value
-    private int brightness;
-    //Content resolver used as a handle to the system's settings
-    private ContentResolver cResolver;
-    //Window object, that will store a reference to the current window
-    private Window window;
-
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -128,8 +120,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Bundle params = getIntent().getExtras();
         try {
             mMode = params.getString("Mode");
-
-
             CheckInInf.put("Mode", mMode);
             CheckInInf.put("Divcode", UserDetails.getString("Divcode", ""));
             CheckInInf.put("sfCode", UserDetails.getString("Sfcode", ""));
@@ -139,7 +129,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             }
             Log.e("Checkin_Mode", mMode);
             String SftId = params.getString("ShiftId");
-            if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty")) {
+            if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty")||mMode.equalsIgnoreCase("holidayentry")) {
                 if (!(SftId.isEmpty() || SftId.equalsIgnoreCase(""))) {
                     CheckInInf.put("Shift_Selected_Id", SftId);
                     CheckInInf.put("Shift_Name", params.getString("ShiftName"));
@@ -149,7 +139,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     CheckInInf.put("App_Version", Common_Class.Version_Name);
                     CheckInInf.put("WrkType", WrkType);
                     CheckInInf.put("CheckDutyFlag", "0");
-                    CheckInInf.put("CheckDutyFlag", "0");
+                    CheckInInf.put("On_Duty_Flag",  params.getString("On_Duty_Flag"));
                     CheckInInf.put("PlcID", onDutyPlcID);
                     CheckInInf.put("PlcNm", onDutyPlcNm);
                     CheckInInf.put("vstRmks", vstPurpose);
@@ -176,12 +166,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if (!checkPermission()) {
-            requestPermissions();
 
-        } else {
             StartSelfiCamera();
-        }
+
 
 
         textureView = (TextureView) findViewById(R.id.ImagePreview);
@@ -278,70 +265,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         });
         skBarBright = (SeekBar) findViewById(R.id.skBarBright);
 
-        cResolver = getContentResolver();
-
-        //Get the current window
-        window = getWindow();
-
-        //Set the seekbar range between 0 and 255
-        //seek bar settings//
-        //sets the range between 0 and 255
-        skBarBright.setMax(255);
-        //set the seek bar progress to 1
-        skBarBright.setKeyProgressIncrement(1);
-
-        try {
-            //Get the current system brightness
-            brightness = Settings.System.getInt(cResolver, Settings.System.SCREEN_BRIGHTNESS);
-        } catch (Settings.SettingNotFoundException e) {
-            //Throw an error case it couldn't be retrieved
-            Log.e("Error", "Cannot access system brightness");
-            e.printStackTrace();
-        }
-
-        //Set the progress of the seek bar based on the system's brightness
-        skBarBright.setProgress(brightness);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            boolean settingsCanWrite = Settings.System.canWrite(getApplicationContext());
-
-            if (!settingsCanWrite) {
-                Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
-                startActivity(intent);
-            } else {
-                skBarBright.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                        if (progress <= 20) {
-                            //Set the brightness to 20
-                            brightness = 20;
-                        } else //brightness is greater than 20
-                        {
-                            //Set brightness variable based on the progress bar
-                            brightness = progress;
-                        }
-
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                        //Set the system brightness using the brightness variable value
-                        Settings.System.putInt(cResolver, Settings.System.SCREEN_BRIGHTNESS, brightness);
-                        //Get the current window attributes
-                        ViewGroup.LayoutParams layoutpars = window.getAttributes();
-                        //Set the brightness of this window
-                        ((WindowManager.LayoutParams) layoutpars).screenBrightness = brightness / (float) 255;
-                        //Apply attribute changes to this window
-                        window.setAttributes((WindowManager.LayoutParams) layoutpars);
-                    }
-                });
-            }
-        }
     }
 
     private void StartSelfiCamera() {
@@ -370,70 +293,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Log.e("mCAmer_id", String.valueOf(mCamId));
     }
 
-    private boolean checkPermission() {
-        return (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
-    }
-
-    //Location service part
-    private void requestPermissions() {
-        boolean shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.CAMERA);
-        if (shouldProvideRationale) {
-            Snackbar.make(
-                    findViewById(R.id.activity_main),
-                    R.string.permission_rationale,
-                    Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.ok, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // Request permission
-                            ActivityCompat.requestPermissions(ImageCapture.this,
-                                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-                                    REQUEST_PERMISSIONS_REQUEST_CODE);
-                        }
-                    })
-                    .show();
-        } else
-            ActivityCompat.requestPermissions(ImageCapture.this,
-                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_PERMISSIONS_REQUEST_CODE:
-                if (grantResults.length <= 0) {
-                    // Permission was not granted.
-                } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission was granted.
-                    //mLUService.requestLocationUpdates();
-                    StartSelfiCamera();
-                } else {
-                    // Permission denied.
-                    Snackbar.make(
-                            findViewById(R.id.activity_main),
-                            R.string.permission_denied_explanation,
-                            Snackbar.LENGTH_INDEFINITE)
-                            .setAction(R.string.settings, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    // Build intent that displays the App settings screen.
-                                    Intent intent = new Intent();
-                                    intent.setAction(
-                                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                    Uri uri = Uri.fromParts("package",
-                                            BuildConfig.APPLICATION_ID, null);
-                                    intent.setData(uri);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                }
-                            })
-                            .show();
-                }
-        }
-    }
 
     public void takePicture() {
         long tsLong = System.currentTimeMillis() / 1000;
@@ -480,10 +339,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
 
-        if (!checkPermission()) {
-            requestPermissions();
-
-        } else {
 
             if (preview != null) {
 
@@ -513,8 +368,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             Log.e("mCAmer_id", String.valueOf(mCamId));
         }
 
-
-    }
 
     private void saveImgPreview() {
         RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
@@ -559,7 +412,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             Log.e("Image_Capture", imageFileName);
 
 
-            if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty")) {
+            if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty")||mMode.equalsIgnoreCase("holidayentry")) {
                 SharedPreferences.Editor editor = CheckInDetails.edit();
                 editor.putString("Shift_Selected_Id", CheckInInf.getString("Shift_Selected_Id"));
                 editor.putString("Shift_Name", CheckInInf.getString("Shift_Name"));
@@ -703,12 +556,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
                                 @Override
                                 public void NegativeMethod(DialogInterface dialog, int id) {
-
-
                                 }
                             });
-
-
                         }
                     }
 
@@ -746,7 +595,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(mCamId, info);
         int rotation = getWindowManager().getDefaultDisplay().getRotation();
-
         mCamera.setDisplayOrientation(90);
         mCamera.startPreview();
         int degrees = 0;
@@ -754,9 +602,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             case Surface.ROTATION_0:
                 degrees = 0;
                 break;
-
         }
-
     }
 
     @Override
@@ -790,12 +636,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             }
             // Start the camera preview...
             mCamera.startPreview();
-
         }
 
-
     }
-
 
     Camera.AutoFocusCallback myAutoFocusCallback = new Camera.AutoFocusCallback() {
 
@@ -814,6 +657,5 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             mCamera = null;
         }
     }
-
 
 }

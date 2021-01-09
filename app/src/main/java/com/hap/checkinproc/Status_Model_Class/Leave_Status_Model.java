@@ -39,6 +39,14 @@ public class Leave_Status_Model {
     @Expose
     private Integer leaveActiveFlag;
 
+    @SerializedName("StusClr")
+    @Expose
+    private String stusClr;
+
+    @SerializedName("showflag")
+    @Expose
+    private Integer showFlag;
+
     public void setSFNm(String SFNm) {
         this.SFNm = SFNm;
     }
@@ -127,4 +135,30 @@ public class Leave_Status_Model {
         this.leaveActiveFlag = leaveActiveFlag;
     }
 
+    public String getlStatus() {
+        return lStatus;
+    }
+
+    public void setlStatus(String lStatus) {
+        this.lStatus = lStatus;
+    }
+
+    public String getStusClr() {
+        return stusClr;
+    }
+
+    public void setStusClr(String stusClr) {
+        this.stusClr = stusClr;
+    }
+
+
+    public Integer getShowFlag() {
+        return showFlag;
+    }
+
+    public void setShowFlag(Integer showFlag) {
+        this.showFlag = showFlag;
+    }
 }
+
+

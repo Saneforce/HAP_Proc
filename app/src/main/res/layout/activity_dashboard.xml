@@ -74,9 +74,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="@dimen/C5dp"
-                android:visibility="gone"
                 android:background="@drawable/button_green"
-                android:padding="@dimen/C16dp">
+                android:padding="@dimen/C16dp"
+                android:visibility="gone">
 
 
                 <TextView
@@ -170,10 +170,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:visibility="gone"
-                    android:gravity="center"
                     android:background="@drawable/button_dgreen"
+                    android:gravity="center"
                     android:padding="@dimen/C13dp"
+                    android:visibility="gone"
                     android:weightSum="2">
 
                     <TextView
@@ -184,18 +184,18 @@
                         android:gravity="center"
                         android:text="Approvals"
                         android:textColor="#FFFCFC" />
+
                     <TextView
                         android:id="@+id/approvalcount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignRight="@id/textView11"
+                        android:background="@drawable/newcircle"
+                        android:gravity="center"
                         android:paddingTop="1dp"
                         android:textAlignment="center"
-                        android:gravity="center"
                         android:textColor="@color/white"
-                        android:background="@drawable/newcircle"
-                        android:textSize="14sp"
-                        />
+                        android:textSize="14sp" />
 
                 </RelativeLayout>
 
@@ -266,6 +266,28 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Tour Plan"
+                    android:textColor="#FFFFFF" />
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/lin_holiday_working"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/C5dp"
+                android:background="@drawable/button_green"
+                android:padding="@dimen/C16dp">
+
+
+                <TextView
+                    android:id="@+id/holiday_working"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Holiday Working"
                     android:textColor="#FFFFFF" />
 
 

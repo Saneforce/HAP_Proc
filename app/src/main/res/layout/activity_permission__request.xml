@@ -81,6 +81,36 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:paddingTop="10dp"
+                            android:text="Select the Hours"
+                            android:textSize="@dimen/C13dp" />
+
+                        <TextView
+                            android:id="@+id/select_hours"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginRight="8dp"
+                            android:background="@drawable/textbox_bg"
+                            android:clickable="false"
+                            android:elevation="5dp"
+                            android:focusable="false"
+                            android:hint="Select Hours"
+                            android:padding="@dimen/C8dp"
+                            android:textSize="@dimen/C13dp" />
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingTop="10dp"
                             android:text="Shift Time"
                             android:textSize="@dimen/C13dp" />
 
@@ -148,11 +178,13 @@
                                 android:layout_marginBottom="5dp"
                                 android:text="To Time" />
 
+
+
                             <EditText
                                 android:id="@+id/to_time"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@drawable/textbox_bg"
+                                android:background="@drawable/disable_text_box"
                                 android:clickable="false"
                                 android:elevation="@dimen/C5dp"
                                 android:focusable="false"

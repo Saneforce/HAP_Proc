@@ -54,7 +54,7 @@ public interface ApiInterface {
 
     /*sending data*/
     @FormUrlEncoded
-    @POST("Db_v300.php?")
+    @POST("Db_v13.php?")
     Call<JsonObject> JsonSave(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code, @Query("State_Code") String State_code, @Query("desig") String desig, @Field("data") String body);
 
     /*sending data*/
@@ -129,7 +129,7 @@ public interface ApiInterface {
                               @Field("data") String data);
 
     @FormUrlEncoded
-    @POST("Db_v300.php")
+    @POST("Db_V13.php")
     Call<Object> GetTPObject1(@Query("AMod") String Amod, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                               @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn,
                               @Field("data") String data);
@@ -291,4 +291,24 @@ public interface ApiInterface {
 
     @POST("Db_V13.php?axn=GetERTList")
     Call<JsonObject> ERTDetails(@Query("sfCode") String sFCode);
+
+
+    /*Devaition Entry*/
+    @FormUrlEncoded
+    @POST("Db_V13.php?")
+    Call<Object> GetRouteObjects(@QueryMap Map<String, String> params,
+                                 @Field("data") String data);
+
+    /*Save Devaition Entry*/
+    @FormUrlEncoded
+    @POST("Db_V13.php?axn=dcr/save")
+    Call<JsonObject> deviationSave(@Query("sf_name") String SfName, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
+                                   @Query("State_Code") String StateCode, @Query("desig") String desig, @Field("data") String data);
+
+
+    /*Permission Select Hours*/
+    @GET("Db_V13.php?")
+    Call<JsonObject> permissionHours(@Query("axn") String axn, @Query("start_at") String start_at, @Query("Shift_TimeFlag") String Shift_TimeFlag);
+
+
 }

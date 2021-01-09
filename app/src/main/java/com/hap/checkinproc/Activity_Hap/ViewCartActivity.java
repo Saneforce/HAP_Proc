@@ -649,15 +649,11 @@ public class ViewCartActivity extends AppCompatActivity {
         String sFCODE = "'" + SF_CODE + "'";
 
 
-
-
-
         /*Check out timing*/
         calander = Calendar.getInstance();
         simpleDateFormat = new SimpleDateFormat("hh:mm:ss a");
         time = simpleDateFormat.format(calander.getTime());
         checkOutTime = new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date());
-
 
         try {
             reportObject.put("Worktype_code", WORK_TYPE);

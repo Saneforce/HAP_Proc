@@ -1,6 +1,10 @@
 package com.hap.checkinproc.adapters;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Activity_Hap.ERT;
@@ -73,6 +78,21 @@ public class ERTSubAdapter extends RecyclerView.Adapter<ERTSubAdapter.SubMenuVie
         holder.name.setText(menu.getName());
         holder.price.setText(menu.getDesig());
         holder.count.setText(menu.getSFMobile());
+
+        holder.count.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_CALL);
+                callIntent.setData(Uri.parse(menu.getSFMobile()));
+
+                if (ActivityCompat.checkSelfPermission(context,
+                        Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    return;
+                }
+                context.startActivity(callIntent);
+            }
+
+        });
 
         Log.e("ERT_DETAILS_SUB", menu.getDesig());
         Log.e("ERT_DETAILS_SUB", menu.getName());

@@ -74,7 +74,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
     private ArrayList<String> shitList;
     Date d1 = null;
     Date d2 = null;
-    String clickedDate, fromTime = "", toTime = "", FTime = "", TTime, Clicked, TTTIme;
+    String clickedDate, fromTime = "", toTime = "", FTime = "", TTime, Clicked, shiftTypeId = "";
     Integer differnce;
     Button buttonSubmit;
     List<AvalaibilityHours> mAvalaibilityHours;
@@ -92,10 +92,12 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
     TextView shitType;
     CustomListViewDialog customDialog;
     List<Common_Model> modelShiftType = new ArrayList<>();
+    List<Common_Model> permissionSelectHours = new ArrayList<>();
     Common_Model Model_Pojo;
 
     String maxDate, minDate;
-    String maxYear, maxMonth, maxDay, minYear, minMonth, minDay;
+    String maxYear, maxMonth, maxDay, minYear, minMonth, minDay, StringFromTinme = "", StringPremissonEntry = "", TOTime = "";
+    TextView PermissionHours;
 
 
     @Override
@@ -218,7 +220,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                             new TimePickerDialog.OnTimeSetListener() {
                                 @Override
                                 public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-
+                                    StringFromTinme = String.format("%02d:%02d", sHour, sMinute);
                                     Log.e("From_Time_sMinute", String.format("%02d:%02d", sHour, sMinute));
                                     btwnTime = String.format("%02d:%02d", sHour, sMinute);
 
@@ -238,7 +240,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                                         eText.setText("");
                                         Toast.makeText(Permission_Request.this, "Please Choose the time between the Shifttime", Toast.LENGTH_SHORT).show();
                                     }
-
+                                    ToTimeData();
                                 }
                             }, hour, minutes, true);
                     picker.show();
@@ -249,8 +251,9 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         });
 
         eText2 = (EditText) findViewById(R.id.to_time);
+
         eText2.setInputType(InputType.TYPE_NULL);
-        eText2.setOnClickListener(new View.OnClickListener() {
+      /*  eText2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final Calendar cldr = Calendar.getInstance();
@@ -279,7 +282,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                                     String end = shiftToDate;
                                     System.out.println("CHECK_THE_CURRENT_TIME" + "" + now + " between " + start + "-" + end + "?");
                                     System.out.println("CHECK_THE_CURRENT_TIME" + isHourInInterval(now, start, end));
-
+                                    Log.e("End_TIME",TTTIme);
                                     if (isHourInInterval(now, start, end) == true) {
                                         eText2.setText(btwnTime);
                                     } else {
@@ -295,7 +298,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                     Toast.makeText(Permission_Request.this, "Please Choose the From Time", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        });*/
 
 
         // addingShiftToSpinner();
@@ -309,8 +312,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                 String Scode = (shared.getString("Sfcode", "null"));
                 String Dcode = (shared.getString("Divcode", "null"));
                 spinnerValue("get/Shift_timing", Dcode, Scode);
-
-
+                /*selectedHours("", "", "");*/
             }
         });
 
@@ -339,6 +341,14 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
             }
         });
 
+        PermissionHours = findViewById(R.id.select_hours);
+        PermissionHours.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                permissionSelectHours.clear();
+                selectedHours();
+            }
+        });
 
     }
 
@@ -543,7 +553,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
         Log.e("ClieckedData", clickedDate);
         Log.e("ClieckedData", FTime);
-        Log.e("ClieckedData", TTime);
+        Log.e("ClieckedData", TOTime);
         Log.e("ClieckedData", hoursCount);
 
 
@@ -554,9 +564,10 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
             jsonleaveType.put("pdate", clickedDate);
             jsonleaveType.put("start_at", FTime);
-            jsonleaveType.put("end_at", TTime);
-            jsonleaveType.put("Noof_Count", hoursCount);
-            jsonleaveType.put("Shift", "20");
+            jsonleaveType.put("end_at", TOTime);
+            jsonleaveType.put("Reason", reasonPermission.getText().toString());
+            jsonleaveType.put("Noof_Count", StringPremissonEntry);
+            jsonleaveType.put("Shift", shiftTypeId);
             jsonleaveTypeS.put("PermissionFormValidate", jsonleaveType);
             jsonArray1.put(jsonleaveTypeS);
 
@@ -581,14 +592,9 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
                 Log.e("TOTAL_REPOSNE_PER", String.valueOf(jsonObjecta));
                 String Msg = jsonObjecta.get("Msg").getAsString();
-                Log.e("SDFDFD", jsonObjecta.get("success").toString());
-                Log.e("SDFDFDDFF", String.valueOf(Msg.length()));
 
+                if (Msg != null && !Msg.isEmpty() && !Msg.equals("")) {
 
-                if (Msg.equalsIgnoreCase("")) {
-
-                    PermissionRequestTwo();
-                } else {
                     AlertDialogBox.showDialog(Permission_Request.this, "Confrimation", Msg, "OK", "", false, new AlertBox() {
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
@@ -600,6 +606,8 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
                         }
                     });
+                } else {
+                    PermissionRequestTwo();
                 }
             }
 
@@ -617,8 +625,8 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
         Log.e("ClieckedData", Clicked);
         Log.e("ClieckedData", FTime);
-        Log.e("ClieckedData", TTTIme);
-        Log.e("ClieckedData", hoursCount);
+        Log.e("ClieckedData", TOTime);
+        Log.e("ClieckedData", StringPremissonEntry);
 
 
         JSONObject jsonleaveType = new JSONObject();
@@ -628,9 +636,9 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
             jsonleaveType.put("pdate", Clicked);
             jsonleaveType.put("start_at", FTime);
-            jsonleaveType.put("end_at", TTTIme);
+            jsonleaveType.put("end_at", TOTime);
             jsonleaveType.put("Reason", reasonPermission.getText().toString());
-            jsonleaveType.put("No_of_Hrs", differnce);
+            jsonleaveType.put("No_of_Hrs", StringPremissonEntry);
             jsonleaveTypeS.put("PermissionEntry", jsonleaveType);
             jsonArray1.put(jsonleaveTypeS);
 
@@ -657,7 +665,8 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                 String Msg = jsonObjecta.get("Msg").getAsString();
                 Log.e("SDFDFD", jsonObjecta.get("success").toString());
                 Log.e("SDFDFDDFF", String.valueOf(Msg.length()));
-                if (!Msg.equalsIgnoreCase("")) {
+
+                if (Msg != null && !Msg.isEmpty()) {
                     AlertDialogBox.showDialog(Permission_Request.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
@@ -744,6 +753,25 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
     }
 
+    /*Permission Select Hours*/
+    private void selectedHours() {
+
+        Common_Model Model_Pojo1, Model_Pojo2;
+        Model_Pojo1 = new Common_Model("1", "1", "FWFlg");
+        Model_Pojo2 = new Common_Model("2", "2", "FWFlg");
+        permissionSelectHours.add(Model_Pojo1);
+        permissionSelectHours.add(Model_Pojo2);
+
+
+        customDialog = new CustomListViewDialog(Permission_Request.this, permissionSelectHours, 10);
+        Window window = customDialog.getWindow();
+        window.setGravity(Gravity.CENTER);
+        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        customDialog.show();
+
+
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -759,13 +787,51 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
             shiftFromDate = shitType.getText().toString();
             shiftToDate = shitType.getText().toString();
             shiftFromDate = shiftFromDate.substring(0, 5);
-            Log.e("STR_TIME_VLAUE", shiftFromDate);
-
+            Log.e("STR_ID", myDataset.get(position).getId());
+            shiftTypeId = myDataset.get(position).getId();
             shiftToDate = shiftToDate.substring(9, 14);
             Log.e("STR_TIME_VLAUE", shiftToDate);
 
 
+        } else if (type == 10) {
+            PermissionHours.setText(myDataset.get(position).getName());
+            StringPremissonEntry = myDataset.get(position).getName();
+            ToTimeData();
+            Log.e("STR_TIME_VLAUE", myDataset.get(position).getName().toString());
+
+
         }
+    }
+
+
+    public void ToTimeData() {
+
+        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> call = service.permissionHours("CalTotime", StringFromTinme, StringPremissonEntry);
+
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                Log.e("StringFromTinme", StringFromTinme);
+                Log.e("StringFromTinme", StringPremissonEntry);
+
+
+                JsonObject jsonObjecta = response.body();
+
+                Log.e("TOTAL_REPOSNE_PER", String.valueOf(jsonObjecta));
+                TOTime = jsonObjecta.get("Totime").getAsString();
+                if (!StringFromTinme.equals("")) {
+                    eText2.setText(TOTime);
+                }
+                Log.e("SDFDFD", TOTime);
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+            }
+        });
     }
 
 
