@@ -7,12 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Interface.LeaveCancelReason;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Model_Class.Leave_Status_Model;
 
@@ -24,12 +26,16 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
     private int rowLayout;
     private Context context;
     String AMod;
+    LeaveCancelReason mLeaveCancelRea;
+    String EditextReason = "";
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView fromdatetodate, leavetype, leavedays, leavereason, applieddate, LStatus, SfName;
         RelativeLayout sf_namelayout;
         LinearLayout linearCancel, linearReason;
-        Button ButtonCancel;
+        Button ButtonCancel, ReasonSend;
+        EditText ReasonEntry;
 
         public MyViewHolder(View view) {
             super(view);
@@ -44,22 +50,30 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
             linearCancel = view.findViewById(R.id.linear_cancel);
             linearReason = view.findViewById(R.id.linear_reason);
             ButtonCancel = view.findViewById(R.id.button_cancel);
-
+            ReasonSend = view.findViewById(R.id.reason_send);
+            ReasonEntry = view.findViewById(R.id.reason_permission);
 
         }
     }
 
 
-    public Leave_Status_Adapter(List<Leave_Status_Model> Leave_Status_ModelsList, int rowLayout, Context context, String AMod) {
+    public Leave_Status_Adapter(List<Leave_Status_Model> Leave_Status_ModelsList, int rowLayout, Context context, String AMod, LeaveCancelReason mLeaveCancelRea) {
         this.Leave_Status_ModelsList = Leave_Status_ModelsList;
         this.rowLayout = rowLayout;
         this.context = context;
         this.AMod = AMod;
+        this.mLeaveCancelRea = mLeaveCancelRea;
     }
 
     @Override
     public Leave_Status_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLeaveCancelRea.onCancelReason(EditextReason);
+            }
+        });
         return new Leave_Status_Adapter.MyViewHolder(view);
     }
 
@@ -74,15 +88,18 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
         holder.applieddate.setText("Applied: " + Leave_Status_Model.getCreatedDate());
         holder.LStatus.setText(Leave_Status_Model.getLStatus());
 
+
         Log.e("showflag", String.valueOf(Leave_Status_Model.getShowFlag()));
 
-        if (Leave_Status_Model.getShowFlag() == 1 && Leave_Status_Model.getLeaveActiveFlag() != 3) {
+        if (Leave_Status_Model.getShowFlag() == 1) {
             holder.linearCancel.setVisibility(View.VISIBLE);
 
         } else {
             holder.linearCancel.setVisibility(View.GONE);
             holder.ButtonCancel.setVisibility(View.GONE);
         }
+
+
 
         holder.ButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +109,17 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
                 holder.linearCancel.setVisibility(View.GONE);
             }
         });
+
+        EditextReason = holder.ReasonEntry.getText().toString();
+        Log.e("EDITEXTREASON", EditextReason);
+
+        holder.ReasonSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mLeaveCancelRea.onCancelReason(EditextReason);
+            }
+        });
+
 
         if (Leave_Status_Model.getLeaveActiveFlag() == 0) {
             holder.LStatus.setBackgroundResource(R.drawable.button_green);
@@ -122,6 +150,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
             }
             holder.LStatus.setBackgroundResource(R.drawable.button_red);
         }
+        notifyDataSetChanged();
     }
 
     @Override

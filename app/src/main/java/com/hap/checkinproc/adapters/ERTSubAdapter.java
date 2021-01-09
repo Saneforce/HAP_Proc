@@ -67,9 +67,7 @@ public class ERTSubAdapter extends RecyclerView.Adapter<ERTSubAdapter.SubMenuVie
     @Override
     public void onBindViewHolder(@NonNull ERTSubAdapter.SubMenuViewHolder holder, int position) {
 
-
         ERTChild menu = menus.get(position);
-
 
         Picasso.with(context)
                 .load(menus.get(position).getProfilePic())

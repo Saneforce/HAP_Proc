@@ -1,30 +1,23 @@
 package com.hap.checkinproc.Status_Activity;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.Approvals;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
@@ -32,18 +25,18 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-
+import com.hap.checkinproc.Interface.LeaveCancelReason;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Adapter.Leave_Status_Adapter;
 import com.hap.checkinproc.Status_Model_Class.Leave_Status_Model;
-import com.hap.checkinproc.adapters.Leave_Approval_Adapter;
 
 import java.lang.reflect.Type;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Leave_Status_Activity extends AppCompatActivity {
 
@@ -114,7 +107,6 @@ public class Leave_Status_Activity extends AppCompatActivity {
                 mOnBackPressedDispatcher.onBackPressed();
             }
         });
-
     }
 
     public void getleavestatus() {
@@ -133,7 +125,12 @@ public class Leave_Status_Activity extends AppCompatActivity {
                 userType = new TypeToken<ArrayList<Leave_Status_Model>>() {
                 }.getType();
                 approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
-                recyclerView.setAdapter(new Leave_Status_Adapter(approvalList, R.layout.leave_status_listitem, getApplicationContext(), AMOD));
+                recyclerView.setAdapter(new Leave_Status_Adapter(approvalList, R.layout.leave_status_listitem, getApplicationContext(), AMOD, new LeaveCancelReason() {
+                    @Override
+                    public void onCancelReason(String reason) {
+                        Log.e("Reason Entry", reason);
+                    }
+                }));
             }
 
             @Override
