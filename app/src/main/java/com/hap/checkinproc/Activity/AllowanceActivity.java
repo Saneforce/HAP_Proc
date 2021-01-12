@@ -20,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
@@ -36,6 +37,7 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
+import com.hap.checkinproc.Activity_Hap.AllowancCapture;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -86,15 +88,19 @@ public class AllowanceActivity extends AppCompatActivity {
     public static final String Name = "Allowance";
     public static final String MOT = "ModeOfTravel";
 
+    LinearLayout BusT;
     String PrivacyScreen = "";
     SharedPreferences sharedpreferences;
-
+    String modeVal = "", StartedKM = "", FromKm = "", ToKm = "", Fare = "";
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allowance);
+
+        sharedpreferences = getSharedPreferences(mypreference,
+                Context.MODE_PRIVATE);
         pic = findViewById(R.id.pic);
         common_class = new Common_Class(this);
         rlay_pic = findViewById(R.id.rlay_pic);
@@ -123,7 +129,7 @@ public class AllowanceActivity extends AppCompatActivity {
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SF_code = UserDetails.getString("Sfcode", "");
         div = UserDetails.getString("Divcode", "");
-
+        BusT = findViewById(R.id.bus_travel);
         if (!checkPermission()) {
             requestPermissions();
 
@@ -131,17 +137,23 @@ public class AllowanceActivity extends AppCompatActivity {
 
         }
 
-
-        sharedpreferences = getSharedPreferences(mypreference,
-                Context.MODE_PRIVATE);
         mShared_common_pref = new Shared_Common_Pref(this);
         getTravelMode();
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                Intent intent = new Intent(AllowanceActivity.this, AllowancCapture.class);
+                intent.putExtra("allowance", "One");
+                intent.putExtra("Mode", txt_mode.getText().toString());
+                intent.putExtra("Started", edt_km.getText().toString());
+                intent.putExtra("FromKm", edt_frm.getText().toString());
+                intent.putExtra("ToKm", txt_hq.getText().toString());
+                intent.putExtra("Fare", edt_fare.getText().toString());
+                startActivity(intent);
+                finish();
 
-                imageTake();
+                //imageTake();
 
             }
         });
@@ -191,11 +203,66 @@ public class AllowanceActivity extends AppCompatActivity {
 
             }
         });
+
+        if (sharedpreferences.contains("ALLOWANCE")) {
+            PrivacyScreen = sharedpreferences.getString("ALLOWANCE", "");
+            Log.e("Privacypolicy", "Checking" + PrivacyScreen);
+            capture_img.setImageURI(Uri.parse(PrivacyScreen));
+        }
+        if (sharedpreferences.contains("SharedFromKm")) {
+            FromKm = sharedpreferences.getString("SharedFromKm", "");
+            Log.e("Privacypolicy", "Checking" + FromKm);
+        }
+        if (sharedpreferences.contains("SharedToKm")) {
+            ToKm = sharedpreferences.getString("SharedToKm", "");
+            Log.e("Privacypolicy", "Checking" + ToKm);
+        }
+        if (sharedpreferences.contains("SharedFare")) {
+            Fare = sharedpreferences.getString("SharedFare", "");
+            Log.e("Privacypolicy", "Checking" + Fare);
+        }
+        if (sharedpreferences.contains("StartedKM")) {
+            StartedKM = sharedpreferences.getString("StartedKM", "");
+            Log.e("Privacypolicy", "Checking" + StartedKM);
+        }
+
+        if (sharedpreferences.contains("SharedMode")) {
+
+            modeVal = sharedpreferences.getString("SharedMode", "");
+            Log.e("Privacypolicy", "Checking" + modeVal);
+            txt_mode.setText(modeVal);
+            if (modeVal.equals("Bus")) {
+                rlay_pic.setVisibility(View.VISIBLE);
+                lay_det.setVisibility(View.GONE);
+                lay_From.setVisibility(View.VISIBLE);
+                lay_to.setVisibility(View.VISIBLE);
+                card_to.setVisibility(View.GONE);
+                card_typ.setVisibility(View.GONE);
+                lay_fare.setVisibility(View.VISIBLE);
+          //      txt_mode.setText("Bus");
+                edt_fare.setText(Fare);
+                txt_hq.setText(ToKm);
+                edt_frm.setText(FromKm);
+            } else {
+                rlay_pic.setVisibility(View.VISIBLE);
+                lay_km.setVisibility(View.VISIBLE);
+                lay_det.setVisibility(View.VISIBLE);
+                lay_From.setVisibility(View.GONE);
+                lay_to.setVisibility(View.GONE);
+                card_to.setVisibility(View.GONE);
+                card_typ.setVisibility(View.GONE);
+                lay_fare.setVisibility(View.GONE);
+              //  txt_mode.setText("Bike");
+                edt_km.setText(StartedKM);
+            }
+
+        }
+
+
     }
 
     public void popupSpinner() {
-
-
+        sharedpreferences.edit().remove("StartedKM");
         final Dialog dialog = new Dialog(AllowanceActivity.this, R.style.AlertDialogCustom);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.popup_dynamic_view);
@@ -445,6 +512,8 @@ public class AllowanceActivity extends AppCompatActivity {
     }
 
     public void enableFields() {
+
+        Log.e("modemode",mode);
         if (mode.equalsIgnoreCase("11")) {
             rlay_pic.setVisibility(View.VISIBLE);
             lay_det.setVisibility(View.GONE);
@@ -453,7 +522,7 @@ public class AllowanceActivity extends AppCompatActivity {
             card_to.setVisibility(View.GONE);
             card_typ.setVisibility(View.GONE);
             lay_fare.setVisibility(View.VISIBLE);
-            txt_mode.setText("Bus");
+
         } else {
             rlay_pic.setVisibility(View.VISIBLE);
             lay_km.setVisibility(View.VISIBLE);
@@ -463,7 +532,7 @@ public class AllowanceActivity extends AppCompatActivity {
             card_to.setVisibility(View.GONE);
             card_typ.setVisibility(View.GONE);
             lay_fare.setVisibility(View.GONE);
-            txt_mode.setText("Bike");
+
         }
     }
 
@@ -483,8 +552,8 @@ public class AllowanceActivity extends AppCompatActivity {
                 Toast.makeText(AllowanceActivity.this, "This file format not supported", Toast.LENGTH_LONG).show();
             else {
                 capture_img.setVisibility(View.VISIBLE);
-                capture_img.setImageURI(outputFileUri);
-                capture_img.setRotation((float) 90);
+                //     capture_img.setImageURI(outputFileUri);
+                //    capture_img.setRotation((float) 90);
                 filepath_final = filePath;
                 mShared_common_pref.save("Started_Image", String.valueOf(outputFileUri));
             }

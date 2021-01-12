@@ -1,12 +1,9 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import android.Manifest;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.hardware.Camera;
@@ -17,7 +14,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.Settings;
 import android.text.Html;
 import android.util.Log;
 import android.view.Surface;
@@ -25,9 +21,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.TextureView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -42,11 +35,8 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -117,6 +107,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         UserDetails = getSharedPreferences(sUserDetail, Context.MODE_PRIVATE);
         common_class = new com.hap.checkinproc.Common_Class.Common_Class(this);
 
+
+
+
         Bundle params = getIntent().getExtras();
         try {
             mMode = params.getString("Mode");
@@ -129,7 +122,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             }
             Log.e("Checkin_Mode", mMode);
             String SftId = params.getString("ShiftId");
-            if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty")||mMode.equalsIgnoreCase("holidayentry")) {
+            if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty") || mMode.equalsIgnoreCase("holidayentry")) {
                 if (!(SftId.isEmpty() || SftId.equalsIgnoreCase(""))) {
                     CheckInInf.put("Shift_Selected_Id", SftId);
                     CheckInInf.put("Shift_Name", params.getString("ShiftName"));
@@ -139,7 +132,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     CheckInInf.put("App_Version", Common_Class.Version_Name);
                     CheckInInf.put("WrkType", WrkType);
                     CheckInInf.put("CheckDutyFlag", "0");
-                    CheckInInf.put("On_Duty_Flag",  params.getString("On_Duty_Flag"));
+                    CheckInInf.put("On_Duty_Flag", params.getString("On_Duty_Flag"));
                     CheckInInf.put("PlcID", onDutyPlcID);
                     CheckInInf.put("PlcNm", onDutyPlcNm);
                     CheckInInf.put("vstRmks", vstPurpose);
@@ -167,8 +160,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             e.printStackTrace();
         }
 
-            StartSelfiCamera();
-
+        StartSelfiCamera();
 
 
         textureView = (TextureView) findViewById(R.id.ImagePreview);
@@ -340,33 +332,33 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         vwPreview.setVisibility(View.GONE);
 
 
-            if (preview != null) {
+        if (preview != null) {
 
 
-                preview = null;
-                mHolder.removeCallback(ImageCapture.this);
-                mCamera.setPreviewCallback(null);
-                mCamera.stopPreview();
-                mCamera.release();
-                mCamera = null;
-            }
-
-            preview = (SurfaceView) findViewById(R.id.PREVIEW);
-            mHolder = preview.getHolder();
-            mHolder.addCallback(ImageCapture.this);
-            setDefaultCameraId((mCamId == 1) ? "front" : "back");
-            mCamera = Camera.open(mCamId);
-            try {
-                mCamera.setPreviewDisplay(mHolder);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            setCameraDisplayOrientation();
-            mCamera.startPreview();
-
-
-            Log.e("mCAmer_id", String.valueOf(mCamId));
+            preview = null;
+            mHolder.removeCallback(ImageCapture.this);
+            mCamera.setPreviewCallback(null);
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
         }
+
+        preview = (SurfaceView) findViewById(R.id.PREVIEW);
+        mHolder = preview.getHolder();
+        mHolder.addCallback(ImageCapture.this);
+        setDefaultCameraId((mCamId == 1) ? "front" : "back");
+        mCamera = Camera.open(mCamId);
+        try {
+            mCamera.setPreviewDisplay(mHolder);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        setCameraDisplayOrientation();
+        mCamera.startPreview();
+
+
+        Log.e("mCAmer_id", String.valueOf(mCamId));
+    }
 
 
     private void saveImgPreview() {
@@ -412,7 +404,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             Log.e("Image_Capture", imageFileName);
 
 
-            if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty")||mMode.equalsIgnoreCase("holidayentry")) {
+            if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty") || mMode.equalsIgnoreCase("holidayentry")) {
                 SharedPreferences.Editor editor = CheckInDetails.edit();
                 editor.putString("Shift_Selected_Id", CheckInInf.getString("Shift_Selected_Id"));
                 editor.putString("Shift_Name", CheckInInf.getString("Shift_Name"));
@@ -448,7 +440,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                             } catch (Exception e) {
                             }
 
-                            AlertDialogBox.showDialog(ImageCapture.this, "HAP Check-In", String.valueOf(Html.fromHtml(mMessage)), "Ok", "", false, new AlertBox() {
+                            AlertDialogBox.showDialog(ImageCapture.this, "HAP Check-In", String.valueOf(Html.fromHtml(mMessage)), "Yes", "", false, new AlertBox() {
                                 @Override
                                 public void PositiveMethod(DialogInterface dialog, int id) {
                                     Intent Dashboard = new Intent(ImageCapture.this, Dashboard_Two.class);

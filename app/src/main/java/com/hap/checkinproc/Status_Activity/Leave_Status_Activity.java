@@ -21,6 +21,8 @@ import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
+import com.hap.checkinproc.Activity_Hap.LeaveReasonStatus;
+import com.hap.checkinproc.Activity_Hap.Leave_Dashboard;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -45,8 +47,8 @@ public class Leave_Status_Activity extends AppCompatActivity {
     private RecyclerView recyclerView;
     Type userType;
     Common_Class common_class;
-    Intent i;
-    String AMOD = "0";
+    String AMOD = " ";
+    Shared_Common_Pref mShared_common_pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +77,7 @@ public class Leave_Status_Activity extends AppCompatActivity {
 
             }
         });
-
+        mShared_common_pref = new Shared_Common_Pref(this);
 
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
@@ -91,20 +93,21 @@ public class Leave_Status_Activity extends AppCompatActivity {
 
             }
         });
-        i = getIntent();
+
         recyclerView = findViewById(R.id.leavestatus);
         common_class = new Common_Class(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
-        AMOD = i.getExtras().getString("AMod");
+        AMOD = mShared_common_pref.getvalue("AMod");
         getleavestatus();
 
-        Log.e("AMODE_LEAVE", i.getExtras().getString("AMod"));
+        Log.e("AMODE_LEAVE", AMOD);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
+            startActivity(new Intent(Leave_Status_Activity.this, Leave_Dashboard.class));
+            finish();
             }
         });
     }
@@ -113,7 +116,7 @@ public class Leave_Status_Activity extends AppCompatActivity {
         String routemaster = " {\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         common_class.ProgressdialogShow(1, "Leave Status");
-        Call<Object> mCall = apiInterface.GetTPObject1(i.getExtras().getString("AMod"), Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "GetLeave_Status", routemaster);
+        Call<Object> mCall = apiInterface.GetTPObject1(AMOD, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "GetLeave_Status", routemaster);
 
         mCall.enqueue(new Callback<Object>() {
             @Override
@@ -128,7 +131,11 @@ public class Leave_Status_Activity extends AppCompatActivity {
                 recyclerView.setAdapter(new Leave_Status_Adapter(approvalList, R.layout.leave_status_listitem, getApplicationContext(), AMOD, new LeaveCancelReason() {
                     @Override
                     public void onCancelReason(String reason) {
-                        Log.e("Reason Entry", reason);
+
+                        Intent intent = new Intent(Leave_Status_Activity.this, LeaveReasonStatus.class);
+                        intent.putExtra("LeaveId", reason);
+                        startActivity(intent);
+
                     }
                 }));
             }

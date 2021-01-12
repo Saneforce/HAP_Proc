@@ -1,8 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -13,11 +10,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.R;
+
 import java.util.Calendar;
 
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
@@ -28,6 +29,7 @@ public class Tp_Month_Select extends AppCompatActivity implements View.OnClickLi
     int NM;
     public ImageView backarow;
     Common_Class common_class;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,7 +79,6 @@ public class Tp_Month_Select extends AppCompatActivity implements View.OnClickLi
                     startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
 
-
             }
         });
         CurrentMoth = findViewById(R.id.CurrentMoth);
@@ -87,8 +88,8 @@ public class Tp_Month_Select extends AppCompatActivity implements View.OnClickLi
 
         CM = cal.get(Calendar.MONTH);
         NM = cal.get(Calendar.MONTH) + 1;
-        String currrentmonth = common_class.GetMonthname(CM);
-        String nextmonth = common_class.GetMonthname(NM);
+        String currrentmonth = common_class.GetMonthname(CM) + "   " + 2021;
+        String nextmonth = common_class.GetMonthname(NM) + "   " + 2021;
         Log.e("CURRENT_MONTH", common_class.GetMonthname(cal.get(Calendar.MONTH)));
         Log.e("CURRENT_Example", String.valueOf(cal.get(Calendar.MONTH)));
         CurrentMoth.setText(currrentmonth);

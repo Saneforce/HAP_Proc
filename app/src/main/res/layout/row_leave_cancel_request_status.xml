@@ -13,265 +13,50 @@
 
         <include layout="@layout/custom_toolbar_help" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/C60dp">
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="5dp"
-                app:cardCornerRadius="10dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/button_yellow"
-                        android:gravity="center">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="10dp"
-                            android:fontFamily="@font/alegreya_sans_sc"
-                            android:text="LEAVE CANCEL STATUS"
-                            android:textAlignment="center"
-                            android:textColor="@color/color_white"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/C5dp">
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/leavestatus"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-                    </LinearLayout>
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-
-        </LinearLayout>
-
-        <include layout="@layout/back_arrow"></include>
-
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        tools:ignore="MissingConstraints,UselessLeaf">
-
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/C7dp"
-            android:elevation="@dimen/C5dp"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
             app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/C8dp"
-                android:layout_marginRight="@dimen/C8dp"
                 android:orientation="vertical">
 
-                <RelativeLayout
-                    android:id="@+id/sf_namelayout"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/C5dp"
-                    android:visibility="gone">
+                    android:background="@drawable/button_yellow"
+                    android:gravity="center">
 
                     <TextView
-                        android:id="@+id/SfName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:fontFamily="@font/alegreya_sans_sc"
+                        android:text="LEAVE CANCEL STATUS"
+                        android:textAlignment="center"
+                        android:textColor="@color/color_white"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
-                        android:layout_marginEnd="-1dp"
-                        android:layout_marginRight="-1dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:padding="@dimen/C3dp"
-                        android:text="thirumalai"
-
-                        android:textSize="12dp"></TextView>
-
-                </RelativeLayout>
-
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_margin="@dimen/C5dp">
 
-                    <TextView
-                        android:id="@+id/weekofdate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="2020-09-06"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"
-                        android:textStyle="bold"></TextView>
-
-
-                    <TextView
-                        android:id="@+id/wkstatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/bt_radious"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:padding="@dimen/C3dp"
-                        android:text="Pending"
-                        android:textColor="@color/color_white"
-                        android:textSize="12dp"></TextView>
-
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_margin="@dimen/C5dp"
-                    android:background="@android:color/black" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="TYPE"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:text="DAYS"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="Holiday Entry"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"
-                        android:textStyle="bold"></TextView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:text="2"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"
-                        android:textStyle="bold"></TextView>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="REASON"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
-
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C5dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="14:00 To 15:00"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"
-                        android:textStyle="bold"></TextView>
-
-
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C10dp"
-                    android:layout_marginBottom="@dimen/C10dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="Applied :"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:text="04-01-2021"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
-
-                </RelativeLayout>
-
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/leave_cancel_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="@dimen/C60dp" />
+                </LinearLayout>
             </LinearLayout>
-
-
         </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 
+    <include layout="@layout/back_arrow"></include>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

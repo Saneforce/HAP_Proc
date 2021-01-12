@@ -134,7 +134,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Ended Km "
+                        android:text="Closing Km "
                         android:textAllCaps="false"
                         android:textColor="#000"
                         android:textSize="13sp" />

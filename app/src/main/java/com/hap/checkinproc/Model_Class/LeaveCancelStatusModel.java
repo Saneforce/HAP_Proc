@@ -1,15 +1,24 @@
-package com.hap.checkinproc.Status_Model_Class;
+package com.hap.checkinproc.Model_Class;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Leave_Status_Model {
-    @SerializedName("SFNm")
+public class LeaveCancelStatusModel {
+    @SerializedName("sf_code")
     @Expose
-    private String SFNm;
+    private String sfCode;
+    @SerializedName("Leave_Id")
+    @Expose
+    private Integer leaveId;
+    @SerializedName("showflag")
+    @Expose
+    private Integer showflag;
     @SerializedName("Created_Date")
     @Expose
     private String createdDate;
+    @SerializedName("cancelreason")
+    @Expose
+    private String cancelreason;
     @SerializedName("Reason")
     @Expose
     private String reason;
@@ -27,40 +36,42 @@ public class Leave_Status_Model {
     private String toDate;
     @SerializedName("No_of_Days")
     @Expose
-    private Double noOfDays;
+    private Integer noOfDays;
     @SerializedName("LStatus")
     @Expose
     private String lStatus;
-
-    @SerializedName("Rejected_Reason")
-    @Expose
-    private String rejectedReason;
-    @SerializedName("Leave_Active_Flag")
-    @Expose
-    private Integer leaveActiveFlag;
-
     @SerializedName("StusClr")
     @Expose
     private String stusClr;
-
-    @SerializedName("showflag")
+    @SerializedName("Rejected_Reason")
     @Expose
-    private Integer showFlag;
-
-    @SerializedName("Leave_Id")
+    private Object rejectedReason;
+    @SerializedName("Leavecancel_Id")
     @Expose
-    private String LeaveId;
+    private Integer leavecancelId;
 
-    public String getLeaveId() {
-        return LeaveId;
+    public String getSfCode() {
+        return sfCode;
     }
 
-    public void setLeaveId(String leaveId) {
-        LeaveId = leaveId;
+    public void setSfCode(String sfCode) {
+        this.sfCode = sfCode;
     }
 
-    public void setSFNm(String SFNm) {
-        this.SFNm = SFNm;
+    public Integer getLeaveId() {
+        return leaveId;
+    }
+
+    public void setLeaveId(Integer leaveId) {
+        this.leaveId = leaveId;
+    }
+
+    public Integer getShowflag() {
+        return showflag;
+    }
+
+    public void setShowflag(Integer showflag) {
+        this.showflag = showflag;
     }
 
     public String getCreatedDate() {
@@ -69,6 +80,14 @@ public class Leave_Status_Model {
 
     public void setCreatedDate(String createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public String getCancelreason() {
+        return cancelreason;
+    }
+
+    public void setCancelreason(String cancelreason) {
+        this.cancelreason = cancelreason;
     }
 
     public String getReason() {
@@ -111,11 +130,11 @@ public class Leave_Status_Model {
         this.toDate = toDate;
     }
 
-    public Double getNoOfDays() {
+    public Integer getNoOfDays() {
         return noOfDays;
     }
 
-    public void setNoOfDays(Double noOfDays) {
+    public void setNoOfDays(Integer noOfDays) {
         this.noOfDays = noOfDays;
     }
 
@@ -127,34 +146,6 @@ public class Leave_Status_Model {
         this.lStatus = lStatus;
     }
 
-    public String getSFNm() {
-        return SFNm;
-    }
-
-    public String getRejectedReason() {
-        return rejectedReason;
-    }
-
-    public void setRejectedReason(String rejectedReason) {
-        this.rejectedReason = rejectedReason;
-    }
-
-    public Integer getLeaveActiveFlag() {
-        return leaveActiveFlag;
-    }
-
-    public void setLeaveActiveFlag(Integer leaveActiveFlag) {
-        this.leaveActiveFlag = leaveActiveFlag;
-    }
-
-    public String getlStatus() {
-        return lStatus;
-    }
-
-    public void setlStatus(String lStatus) {
-        this.lStatus = lStatus;
-    }
-
     public String getStusClr() {
         return stusClr;
     }
@@ -163,14 +154,20 @@ public class Leave_Status_Model {
         this.stusClr = stusClr;
     }
 
-
-    public Integer getShowFlag() {
-        return showFlag;
+    public Object getRejectedReason() {
+        return rejectedReason;
     }
 
-    public void setShowFlag(Integer showFlag) {
-        this.showFlag = showFlag;
+    public void setRejectedReason(Object rejectedReason) {
+        this.rejectedReason = rejectedReason;
     }
+
+    public Integer getLeavecancelId() {
+        return leavecancelId;
+    }
+
+    public void setLeavecancelId(Integer leavecancelId) {
+        this.leavecancelId = leavecancelId;
+    }
+
 }
-
-

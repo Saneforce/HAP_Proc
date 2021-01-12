@@ -28,6 +28,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
     String AMod;
     LeaveCancelReason mLeaveCancelRea;
     String EditextReason = "";
+    Integer count = 0;
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -81,47 +82,33 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
     public void onBindViewHolder(Leave_Status_Adapter.MyViewHolder holder, int position) {
         Leave_Status_Model Leave_Status_Model = Leave_Status_ModelsList.get(position);
         Log.e("SF_MODE", AMod);
-        holder.fromdatetodate.setText(Leave_Status_Model.getFromDate() + " TO " + Leave_Status_Model.getToDate());
-        holder.leavetype.setText("" + Leave_Status_Model.getLeaveType());
-        holder.leavedays.setText("" + Leave_Status_Model.getNoOfDays());
-        holder.leavereason.setText(Leave_Status_Model.getReason());
-        holder.applieddate.setText("Applied: " + Leave_Status_Model.getCreatedDate());
-        holder.LStatus.setText(Leave_Status_Model.getLStatus());
+        holder.fromdatetodate.setText(Leave_Status_ModelsList.get(position).getFromDate() + " TO " + Leave_Status_ModelsList.get(position).getToDate());
+        holder.leavetype.setText("" + Leave_Status_ModelsList.get(position).getLeaveType());
+        holder.leavedays.setText("" + Leave_Status_ModelsList.get(position).getNoOfDays());
+        holder.leavereason.setText("" + Leave_Status_ModelsList.get(position).getReason());
+        holder.applieddate.setText("Applied: " + Leave_Status_ModelsList.get(position).getCreatedDate());
+        holder.LStatus.setText(Leave_Status_ModelsList.get(position).getLStatus());
 
-
-        Log.e("showflag", String.valueOf(Leave_Status_Model.getShowFlag()));
-
-        if (Leave_Status_Model.getShowFlag() == 1) {
+        if (Leave_Status_ModelsList.get(position).getShowFlag() == 1 && Leave_Status_ModelsList.get(position).getLeaveActiveFlag() != 3) {
             holder.linearCancel.setVisibility(View.VISIBLE);
 
         } else {
             holder.linearCancel.setVisibility(View.GONE);
-            holder.ButtonCancel.setVisibility(View.GONE);
         }
-
 
 
         holder.ButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("LEAVE_STATUS", "LEAVE_STATUS");
-                holder.linearReason.setVisibility(View.VISIBLE);
-                holder.linearCancel.setVisibility(View.GONE);
+              /*  holder.linearReason.setVisibility(View.VISIBLE);
+                holder.linearCancel.setVisibility(View.GONE);*/
+
+                mLeaveCancelRea.onCancelReason(Leave_Status_ModelsList.get(position).getLeaveId());
+
             }
         });
 
-        EditextReason = holder.ReasonEntry.getText().toString();
-        Log.e("EDITEXTREASON", EditextReason);
-
-        holder.ReasonSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mLeaveCancelRea.onCancelReason(EditextReason);
-            }
-        });
-
-
-        if (Leave_Status_Model.getLeaveActiveFlag() == 0) {
+        if (Leave_Status_ModelsList.get(position).getLeaveActiveFlag() == 0) {
             holder.LStatus.setBackgroundResource(R.drawable.button_green);
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);
@@ -131,7 +118,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
 
-        } else if (Leave_Status_Model.getLeaveActiveFlag() == 2) {
+        } else if (Leave_Status_ModelsList.get(position).getLeaveActiveFlag() == 2) {
             holder.LStatus.setBackgroundResource(R.drawable.button_yellows);
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);
@@ -150,7 +137,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
             }
             holder.LStatus.setBackgroundResource(R.drawable.button_red);
         }
-        notifyDataSetChanged();
+
     }
 
     @Override

@@ -30,7 +30,9 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivityTwo;
 import com.hap.checkinproc.Activity.TAClaimActivity;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
@@ -514,39 +516,37 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 intent = new Intent(this, View_All_Status_Activity.class);
                 break;
             case R.id.btnCheckout:
-                String mMessage = "Do you want to Checkout?";
-                AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
-                        .setTitle("HAP Check-In")
-                        .setMessage(Html.fromHtml(mMessage))
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                                if (sharedpreferences.contains(Name) && sharedpreferences.contains(MOT)) {
-                                    PrivacyScreen = sharedpreferences.getString(Name, "");
-                                    ModeOfTravel = sharedpreferences.getString(MOT, "");
-                                    Log.e("Privacypolicy", "Checking" + ModeOfTravel);
-                                    Log.e("Privacypolicy", "Checking" + PrivacyScreen);
-                                    if (PrivacyScreen.equals("True") && ModeOfTravel.equals("Bike")) {
-                                        Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
-                                        takePhoto.putExtra("Mode", "COUT");
-                                        startActivity(takePhoto);
-                                    } else {
-                                        Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
-                                        takePhoto.putExtra("Mode", "COUT");
-                                        startActivity(takePhoto);
-                                    }
-
-                                } else {
-                                    Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
-                                    takePhoto.putExtra("Mode", "COUT");
-                                    startActivity(takePhoto);
-                                }
-
-
+                AlertDialogBox.showDialog(Dashboard_Two.this, "HAP Check-In","Do you want to Checkout?", "Yes", "No", false, new AlertBox() {
+                    @Override
+                    public void PositiveMethod(DialogInterface dialog, int id) {
+                        if (sharedpreferences.contains(Name) && sharedpreferences.contains(MOT)) {
+                            PrivacyScreen = sharedpreferences.getString(Name, "");
+                            ModeOfTravel = sharedpreferences.getString(MOT, "");
+                            Log.e("Privacypolicy", "Checking" + ModeOfTravel);
+                            Log.e("Privacypolicy", "Checking" + PrivacyScreen);
+                            if (PrivacyScreen.equals("True") && ModeOfTravel.equals("Bike")) {
+                                Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
+                                takePhoto.putExtra("Mode", "COUT");
+                                startActivity(takePhoto);
+                            } else {
+                                Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
+                                takePhoto.putExtra("Mode", "COUT");
+                                startActivity(takePhoto);
                             }
-                        })
-                        .show();
+
+                        } else {
+                            Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
+                            takePhoto.putExtra("Mode", "COUT");
+                            startActivity(takePhoto);
+                        }
+
+                    }
+
+                    @Override
+                    public void NegativeMethod(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
                 break;
 
             default:

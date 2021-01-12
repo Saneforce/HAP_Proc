@@ -30,7 +30,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".Activity_Hap.ERT"></activity>
+        <activity android:name=".Activity_Hap.AllowancCapture"></activity>
+        <activity
+            android:name=".Activity_Hap.LeaveReasonStatus"
+            android:theme="@style/AppTheme.Dialog" />
+        <activity android:name=".Activity_Hap.ERT" />
         <activity android:name=".Activity_Hap.LeaveCancelRequestStatus" />
         <activity android:name=".Activity_Hap.DeviationEntryStatus" />
         <activity android:name=".Activity_Hap.HolidayEntryStatus" />

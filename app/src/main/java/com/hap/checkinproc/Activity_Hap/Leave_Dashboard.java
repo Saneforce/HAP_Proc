@@ -17,6 +17,7 @@ import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Activity.Extended_Shift_Activity;
 import com.hap.checkinproc.Status_Activity.Leave_Status_Activity;
@@ -34,7 +35,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
     LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus;
     TextView countLeaveRequest, countPermissionRequest, countMissedPunch, countWeeklyOff;
     TextView countLeaveStatus, countPermissionStatus, countOnDutyStatus, countMissedStatus, countWeeklyOffStatus, countExtdShift;
-
+    Shared_Common_Pref mShared_common_pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +82,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
                     Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
                     Dashboard.putExtra("Mode", "CIN");
                     startActivity(Dashboard);
+
                 } else
                     startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
@@ -136,7 +138,10 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
                 mOnBackPressedDispatcher.onBackPressed();
             }
         });
+
+        mShared_common_pref = new Shared_Common_Pref(this);
     }
+
 
     @Override
     public void onClick(View v) {
@@ -158,7 +163,10 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
                 startActivity(new Intent(Leave_Dashboard.this, DeviationEntry.class));
                 break;
             case R.id.lin_leav_sta:
-                common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "0");
+                //   common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "0");
+
+                common_class.CommonIntentwithFinish(Leave_Status_Activity.class);
+                mShared_common_pref.save("AMod", "0");
                 break;
             case R.id.lin_per_sta:
                 // startActivity(new Intent(Leave_Dashboard.this, Permission_Status_Activity.class));

@@ -141,13 +141,13 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
         common_class.getintentValues("Monthselection");
         calendarView = this.findViewById(R.id.gridcalander);
         SelectedMonth = Integer.parseInt(common_class.getintentValues("Monthselection"));
-        currentMonth.setText(common_class.GetMonthname(Integer.parseInt(common_class.getintentValues("Monthselection"))));
+        currentMonth.setText(common_class.GetMonthname(Integer.parseInt(common_class.getintentValues("Monthselection"))) + "   "+ 2021);
         Log.e("MONTH_SELECTion", common_class.getintentValues("Monthselection"));
         _calendar = Calendar.getInstance(Locale.getDefault());
         if(SelectedMonth==12 || SelectedMonth==0){
             SelectedMonth=0;
 
-            year = _calendar.get(Calendar.YEAR)+1;
+            year = _calendar.get(Calendar.YEAR);
         }else {
             year = _calendar.get(Calendar.YEAR);
         }

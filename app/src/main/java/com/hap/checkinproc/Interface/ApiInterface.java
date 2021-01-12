@@ -311,4 +311,12 @@ public interface ApiInterface {
     Call<JsonObject> permissionHours(@Query("axn") String axn, @Query("start_at") String start_at, @Query("Shift_TimeFlag") String Shift_TimeFlag);
 
 
+
+
+    @FormUrlEncoded
+    @POST("Db_V244.php")
+    Call<Object> getHolidayStatus(@Query("AMod") String Amod, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
+                              @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn,
+                              @Field("data") String data);
+
 }
