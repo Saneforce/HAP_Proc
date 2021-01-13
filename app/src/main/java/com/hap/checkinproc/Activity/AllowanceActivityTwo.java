@@ -1,12 +1,14 @@
 package com.hap.checkinproc.Activity;
 
-import android.annotation.SuppressLint;
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,18 +19,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
+import com.hap.checkinproc.Activity_Hap.AllowancCapture;
+import com.hap.checkinproc.Activity_Hap.Dashboard;
+import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
+import com.hap.checkinproc.Activity_Hap.ERT;
+import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Activity_Hap.ImageCapture;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 
-import java.io.File;
+import org.json.JSONObject;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AllowanceActivityTwo extends AppCompatActivity {
-    String ModeOfTravel = "", StartedKm = "", StartedImage = "", EndedImageName = "", AllowancePrefernce = "";
+    String ModeOfTravel = "", StartedKm = "", StartedImage = "", CLOSINGKM = "", EndedImage = "";
     Shared_Common_Pref mShared_common_pref;
     TextView TextModeTravel, TextStartedKm;
     ImageView StartedKmImage, EndedKmImage;
@@ -36,25 +48,23 @@ public class AllowanceActivityTwo extends AppCompatActivity {
     EditText EndedEditText;
     Integer stKM = 0, endKm = 0;
     String EndImageURi = " ";
-
-
     public static final String mypreference = "mypref";
     public static final String Name = "Allowance";
     public static final String MOT = "ModeOfTravel";
-
-    String PrivacyScreen = "";
     SharedPreferences sharedpreferences;
+    SharedPreferences CheckInDetails;
+    SharedPreferences UserDetails;
+    public static final String CheckInfo = "CheckInDetail";
+    public static final String UserInfo = "MyPrefs";
+    Shared_Common_Pref shared_common_pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allowance_two);
-        mShared_common_pref = new Shared_Common_Pref(this);
-        ModeOfTravel = mShared_common_pref.getvalue("mode_of_travel");
-        StartedKm = mShared_common_pref.getvalue("Started_km");
-        StartedImage = mShared_common_pref.getvalue("Started_Image");
-        AllowancePrefernce = mShared_common_pref.getvalue("Allowance");
-
+        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+        CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
         TextModeTravel = findViewById(R.id.txt_mode_travel);
         TextStartedKm = findViewById(R.id.txt_started_km);
         StartedKmImage = findViewById(R.id.img_started_km);
@@ -62,14 +72,43 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         EndedKmImage = findViewById(R.id.img_ended_km);
         takeEndedPhoto = findViewById(R.id.btn_take_photo);
         submitAllowance = findViewById(R.id.submit_allowance);
+        shared_common_pref = new Shared_Common_Pref(this);
+        getToolbar();
+
+        if (sharedpreferences.contains("SharedMode")) {
+            ModeOfTravel = sharedpreferences.getString("SharedMode", "");
+            Log.e("Privacypolicy", "Checking" + ModeOfTravel);
+            TextModeTravel.setText(ModeOfTravel);
+        }
+
+        if (sharedpreferences.contains("SharedImage")) {
+            StartedImage = sharedpreferences.getString("SharedImage", "");
+            Log.e("Privacypolicy", "Checking" + StartedImage);
+            if (StartedImage != null && !StartedImage.isEmpty() && !StartedImage.equals("null")) {
+                StartedKmImage.setImageURI(Uri.parse(StartedImage));
+                StartedKmImage.setRotation((float) 90);
+            }
+
+        }
+        if (sharedpreferences.contains("SharedImages")) {
+            EndedImage = sharedpreferences.getString("SharedImages", "");
+            Log.e("Privacypolicy", "Checking" + EndedImage);
+            EndedKmImage.setImageURI(Uri.parse(EndedImage));
+        }
+        if (sharedpreferences.contains("StartedKM")) {
+            StartedKm = sharedpreferences.getString("StartedKM", "");
+            Log.e("Privacypolicy", "STARTRD      " + StartedKm);
+            TextStartedKm.setText(StartedKm);
+        }
 
 
-        sharedpreferences = getSharedPreferences(mypreference,
-                Context.MODE_PRIVATE);
-
-
-        Log.e("STARTED_KM", StartedKm);
-
+        if (sharedpreferences.contains("Closing")) {
+            CLOSINGKM = sharedpreferences.getString("Closing", "");
+            Log.e("Privacypolicy", "Checking" + CLOSINGKM);
+            if (!CLOSINGKM.equals("")) {
+                EndedEditText.setText(CLOSINGKM);
+            }
+        }
 
         EndedEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -81,8 +120,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (EndedEditText.getText().toString() != null && !EndedEditText.getText().toString().isEmpty() && !EndedEditText.getText().toString().equals("null")) {
                     stKM = Integer.valueOf(StartedKm);
-
-
                     if (!EndedEditText.getText().toString().equals("")) {
                         endKm = Integer.valueOf(String.valueOf(EndedEditText.getText()));
                     }
@@ -101,46 +138,45 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             }
         });
 
-        if (StartedImage != null && !StartedImage.isEmpty() && !StartedImage.equals("null")) {
-            StartedKmImage.setImageURI(Uri.parse(StartedImage));
-            StartedKmImage.setRotation((float) 90);
-        }
-
-        TextModeTravel.setText("" + ModeOfTravel);
-        TextStartedKm.setText("" + StartedKm);
 
         takeEndedPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                EndedImageName = "EndedImageName.jpeg";
-                Intent m_intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                File file = new File(getExternalCacheDir().getPath(), EndedImageName);
-                Uri uri = FileProvider.getUriForFile(AllowanceActivityTwo.this, getApplicationContext().getPackageName() + ".provider", file);
-                m_intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
-                startActivityForResult(m_intent, 2);
-
-                Log.e("Started_km", "Click is working");
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString("Closing", EndedEditText.getText().toString());
+                editor.commit();
+                Intent intent = new Intent(AllowanceActivityTwo.this, AllowancCapture.class);
+                intent.putExtra("allowance", "Two");
+                startActivity(intent);
+                finish();
 
             }
         });
+
+
+      /*  editor.putString("SharedImage", Uri.fromFile(file).toString());
+        editor.putString("Sharedallowance", "One");
+        editor.putString("SharedMode", mode);
+        editor.putString("StartedKM", StartedKM);
+        editor.putString("SharedFromKm", FromKm);
+        editor.putString("SharedToKm", ToKm);
+        editor.putString("SharedFare", Fare);
+        editor.putString("SharedImages", Uri.fromFile(file).toString());*/
 
         submitAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!EndImageURi.equals("") && !EndedEditText.getText().toString().equals("")) {
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                  /*  SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.remove(Name);
                     editor.remove(MOT);
-                    editor.commit();
+                    editor.commit();*/
                     stKM = Integer.valueOf(StartedKm);
                     endKm = Integer.valueOf(String.valueOf(EndedEditText.getText().toString()));
                     Log.e("STARTED_KM", String.valueOf(endKm));
                     if (stKM < endKm) {
-                        Intent takePhoto = new Intent(AllowanceActivityTwo.this, ImageCapture.class);
-                        takePhoto.putExtra("Mode", "COUT");
-                        startActivity(takePhoto);
-
+                        submitData();
                     } else {
                         Toast.makeText(AllowanceActivityTwo.this, "Should be greater then Started Km", Toast.LENGTH_SHORT).show();
                     }
@@ -155,27 +191,129 @@ public class AllowanceActivityTwo extends AppCompatActivity {
 
     }
 
+    /*Submit*/
+    public void submitData() {
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            JSONObject jj = new JSONObject();
+            jj.put("km", EndedEditText.getText().toString());
+            jj.put("rmk", EndedEditText.getText().toString());
+            jj.put("mod", "11");
+            jj.put("sf", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+            jj.put("div", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
+            jj.put("url", "url");
+            jj.put("from", "");
+            jj.put("to", "");
+            jj.put("fare", "");
+            //saveAllowance
+            Log.v("printing_allow", jj.toString());
+            Call<ResponseBody> Callto;
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-        switch (requestCode) {
-            case 2:
-                if (resultCode == RESULT_OK) {
+            Callto = apiInterface.updateAllowance(jj.toString());
 
-                    EndedImageName = "EndedImageName.jpeg";
-                    File file = new File(getExternalCacheDir().getPath(), EndedImageName);
-                    Uri uri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", file);
-                    EndedKmImage.setImageURI(uri);
-                    EndedKmImage.setRotation((float) 90);
-                    Log.e("Started_km", String.valueOf(uri));
-                    EndImageURi = String.valueOf(uri);
+            Callto.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+                        if (response.isSuccessful()) {
+
+                            Log.v("print_upload_file_true", "ggg" + response);
+                            JSONObject jb = null;
+                            String jsonData = null;
+                            jsonData = response.body().string();
+                            Log.v("response_data", jsonData);
+                            JSONObject js = new JSONObject(jsonData);
+                            if (js.getString("success").equalsIgnoreCase("true")) {
+                                Toast.makeText(AllowanceActivityTwo.this, " Submitted successfully ", Toast.LENGTH_SHORT).show();
+
+                                SharedPreferences.Editor editor = sharedpreferences.edit();
+                                editor.remove(Name);
+                                editor.remove(MOT);
+                                editor.remove("SharedImage");
+                                editor.remove("Sharedallowance");
+                                editor.remove("SharedMode");
+                                editor.remove("StartedKM");
+                                editor.remove("SharedFromKm");
+                                editor.remove("SharedToKm");
+                                editor.remove("SharedFare");
+                                editor.remove("SharedImages");
+                                editor.commit();
+                                Intent takePhoto = new Intent(AllowanceActivityTwo.this, ImageCapture.class);
+                                takePhoto.putExtra("Mode", "COUT");
+                                startActivity(takePhoto);
+
+                            } else
+                                Toast.makeText(AllowanceActivityTwo.this, " Cannot submitted the data ", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                 }
-                break;
+            });
+        } catch (Exception e) {
         }
+    }
+
+
+    public void getToolbar() {
+        TextView txtHelp = findViewById(R.id.toolbar_help);
+        ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+
+        TextView txtErt = findViewById(R.id.toolbar_ert);
+        TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
+
+        txtErt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ERT.class));
+            }
+        });
+        txtPlaySlip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+        ObjectAnimator textColorAnim;
+        textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
+        textColorAnim.setDuration(500);
+        textColorAnim.setEvaluator(new ArgbEvaluator());
+        textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
+        textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
+        textColorAnim.start();
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openHome();
+            }
+        });
+    }
+
+    public void openHome() {
+        Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+        Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
+        Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
+        Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
+        Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
+        if (CheckIn == true) {
+            Intent Dashboard = new Intent(AllowanceActivityTwo.this, Dashboard_Two.class);
+            Dashboard.putExtra("Mode", "CIN");
+            startActivity(Dashboard);
+        } else
+            startActivity(new Intent(getApplicationContext(), Dashboard.class));
     }
 
 }

@@ -25,6 +25,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.Activity.AllowanceActivity;
+import com.hap.checkinproc.Activity.AllowanceActivityTwo;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 
@@ -46,8 +47,8 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     private int noOfCameras;
     Button btnRtPrv, btnOkPrv;
 
-    Intent intents;
-    String mode = "", allowance = "", StartedKM = "", FromKm = "", ToKm = "", Fare = "";
+    Intent intents,intev;
+    String mode = "", allowance = "", StartedKM = "", FromKm = "", ToKm = "", Fare = "", Closing = "";
 
     Shared_Common_Pref mShared_common_pref;
     SharedPreferences sharedpreferences;
@@ -61,20 +62,14 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         StartSelfiCamera();
 
         intents = getIntent();
-        allowance = intents.getStringExtra("allowance");
-        mode = intents.getStringExtra("Mode");
-        StartedKM = intents.getStringExtra("Started");
-        FromKm = intents.getStringExtra("FromKm");
-        ToKm = intents.getStringExtra("ToKm");
-        Fare = intents.getStringExtra("Fare");
-
-
-        Log.e("ALLOWANCE", StartedKM);
-        Log.e("ALLOWANCE", FromKm);
-        Log.e("ALLOWANCE", ToKm);
-        Log.e("ALLOWANCE", Fare);
-        /* intent.putExtra("allowance", "One");*/
-
+        if(getIntent().getExtras()!=null) {
+            allowance = intents.getStringExtra("allowance");
+            mode = intents.getStringExtra("Mode");
+            StartedKM = intents.getStringExtra("Started");
+            FromKm = intents.getStringExtra("FromKm");
+            ToKm = intents.getStringExtra("ToKm");
+            Fare = intents.getStringExtra("Fare");
+        }
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
         mShared_common_pref = new Shared_Common_Pref(this);
@@ -197,15 +192,24 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         if (allowance.equals("One")) {
 
             SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString("ALLOWANCE", Uri.fromFile(file).toString());
+            editor.putString("SharedImage", Uri.fromFile(file).toString());
+            editor.putString("Sharedallowance", "One");
             editor.putString("SharedMode", mode);
             editor.putString("StartedKM", StartedKM);
             editor.putString("SharedFromKm", FromKm);
             editor.putString("SharedToKm", ToKm);
             editor.putString("SharedFare", Fare);
-
             editor.commit();
+
+            Log.e("SHARE_MODE", mode);
             startActivity(new Intent(AllowancCapture.this, AllowanceActivity.class));
+        } else if (allowance.equals("Two")) {
+
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString("SharedImages", Uri.fromFile(file).toString());
+            editor.commit();
+            startActivity(new Intent(AllowancCapture.this, AllowanceActivityTwo.class));
+
         }
 
 
@@ -248,8 +252,6 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
 
     private void setDefaultCameraId(String cam) {
         noOfCameras = Camera.getNumberOfCameras();
-        //int facing = cam.equalsIgnoreCase("back") ? Camera.CameraInfo.CAMERA_FACING_BACK : Camera.CameraInfo.CAMERA_FACING_BACK;
-
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         for (int i = 0; i < noOfCameras; i++) {
             Camera.getCameraInfo(i, cameraInfo);
@@ -307,15 +309,6 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         }
 
     }
-
-    Camera.AutoFocusCallback myAutoFocusCallback = new Camera.AutoFocusCallback() {
-
-        @Override
-        public void onAutoFocus(boolean arg0, Camera arg1) {
-            // TODO Auto-generated method stub
-            Log.e("Auto_Focus", "Auto_FOcus");
-        }
-    };
 
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {

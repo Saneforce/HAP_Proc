@@ -32,22 +32,24 @@ import retrofit2.Response;
 public class TAApprovalActivity extends AppCompatActivity {
     ListView list;
     ApiInterface apiInterface;
-    ArrayList<ApprovalModel> array=new ArrayList<>();
+    ArrayList<ApprovalModel> array = new ArrayList<>();
     SharedPreferences UserDetails;
     public static final String MyPREFERENCES = "MyPrefs";
-    String SF_code="",div="";
+    String SF_code = "", div = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_t_a_approval);
-        list=findViewById(R.id.list);
+        list = findViewById(R.id.list);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        SF_code=UserDetails.getString("Sfcode","");
-        div=UserDetails.getString("Divcode","");
+        SF_code = UserDetails.getString("Sfcode", "");
+        div = UserDetails.getString("Divcode", "");
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         callApi("");
     }
-    public void callApi(String date){
+
+    public void callApi(String date) {
         try {
             JSONObject jj = new JSONObject();
             //jj.put("Ta_Date", "2020-11-13");
@@ -65,11 +67,11 @@ public class TAApprovalActivity extends AppCompatActivity {
                             JSONObject jb = null;
                             String jsonData = null;
                             jsonData = response.body().string();
-                            Log.v("response_data",jsonData);
-                            JSONArray ja=new JSONArray(jsonData);
-                            for(int i=0;i<ja.length();i++){
-                                JSONObject jj=ja.getJSONObject(i);
-                                array.add(new ApprovalModel(jj.getString("name"),jj.getString("Start_date"),jj.toString(),jj.getJSONArray("value").toString()));
+                            Log.v("response_data", jsonData);
+                            JSONArray ja = new JSONArray(jsonData);
+                            for (int i = 0; i < ja.length(); i++) {
+                                JSONObject jj = ja.getJSONObject(i);
+                                array.add(new ApprovalModel(jj.getString("name"), jj.getString("Start_date"), jj.toString(), jj.getJSONArray("value").toString()));
                             }
                           /*  JSONObject json=new JSONObject(jsonData);
                             JSONArray ja=json.getJSONArray("TAStartandEnd");
@@ -82,10 +84,11 @@ public class TAApprovalActivity extends AppCompatActivity {
                                 array.add(new ApprovalModel(name,date,jjson.toString(),ja1.toString()));
                             }*/
 
-                            AdapterForTAApproval adpt=new AdapterForTAApproval(TAApprovalActivity.this);
+                            AdapterForTAApproval adpt = new AdapterForTAApproval(TAApprovalActivity.this);
                             list.setAdapter(adpt);
                         }
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
 
                 @Override
@@ -94,10 +97,11 @@ public class TAApprovalActivity extends AppCompatActivity {
                 }
             });
 
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
-    public class AdapterForTAApproval extends BaseAdapter{
+    public class AdapterForTAApproval extends BaseAdapter {
         Context context;
 
         public AdapterForTAApproval(Context context) {
@@ -121,10 +125,10 @@ public class TAApprovalActivity extends AppCompatActivity {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            view= LayoutInflater.from(context).inflate(R.layout.row_item_approval,viewGroup,false);
-            TextView txt_name=view.findViewById(R.id.txt_name);
-            TextView txt_dt=view.findViewById(R.id.txt_dt);
-            TextView txt_open=view.findViewById(R.id.txt_open);
+            view = LayoutInflater.from(context).inflate(R.layout.row_item_approval, viewGroup, false);
+            TextView txt_name = view.findViewById(R.id.txt_name);
+            TextView txt_dt = view.findViewById(R.id.txt_dt);
+            TextView txt_open = view.findViewById(R.id.txt_open);
             txt_name.setText(array.get(i).getName());
             txt_dt.setText(array.get(i).getDates());
             txt_open.setOnClickListener(new View.OnClickListener() {
@@ -132,14 +136,13 @@ public class TAApprovalActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     try {
 
-                                Intent ii=new Intent(TAApprovalActivity.this,ApprovalViewActivity.class);
-                                ii.putExtra("head_val",array.get(i).getFirstdata());
-                                startActivity(ii);
+                        Intent ii = new Intent(TAApprovalActivity.this, ApprovalViewActivity.class);
+                        ii.putExtra("head_val", array.get(i).getFirstdata());
+                        startActivity(ii);
 
 
-
-
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
             });
 

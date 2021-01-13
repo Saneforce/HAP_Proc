@@ -22,7 +22,10 @@ import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -39,17 +42,23 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.Util.ImageFilePath;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Activity.Util.UpdateUi;
+import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.DailyExpenseAdapter;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -58,6 +67,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import id.zelory.compressor.Compressor;
 import okhttp3.MultipartBody;
@@ -67,7 +77,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TAClaimActivity extends AppCompatActivity {
+public class TAClaimActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface {
 
     CardView card_date;
     TextView txt_date;
@@ -91,6 +101,13 @@ public class TAClaimActivity extends AppCompatActivity {
 
     String StartedKm = "", EndedKm = "", ModeOfTravel = "", FromPlace = "", ToPlace = "", Bus = "", StratedKmImage = "", EndedKmImage = "", BusFareImage = "";
 
+    /*12/1/2021*/
+    Common_Model mCommon_model_spinner;
+    List<Common_Model> listOrderType = new ArrayList<>();
+    List<Common_Model> modelRetailDetails = new ArrayList<>();
+    CustomListViewDialog customDialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +130,7 @@ public class TAClaimActivity extends AppCompatActivity {
         mShared_common_pref = new Shared_Common_Pref(this);
         StartedKm = mShared_common_pref.getvalue("Started_km");
         ModeOfTravel = mShared_common_pref.getvalue("mode_of_travel");
-
+        dynamicDate();
 
         btn_sub.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,11 +165,52 @@ public class TAClaimActivity extends AppCompatActivity {
         card_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                datePick();
+
+                customDialog = new CustomListViewDialog(TAClaimActivity.this, modelRetailDetails, 10);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
             }
         });
 
     }
+
+
+    public void dynamicDate() {
+
+        JSONObject jj = new JSONObject();
+        try {
+            jj.put("sfCode", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+            jj.put("divisionCode", mShared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> call = apiInterface.getBusTo(jj.toString());
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                JsonArray jsonArray = response.body();
+                for (int a = 0; a < jsonArray.size(); a++) {
+                    JsonObject jsonObject = (JsonObject) jsonArray.get(a);
+                    String id = String.valueOf(jsonObject.get("id"));
+                    String name = String.valueOf(jsonObject.get("name"));
+                    String townName = String.valueOf(jsonObject.get("ODFlag"));
+                    name = name.replaceAll("^[\"']+|[\"']+$", "");
+                    mCommon_model_spinner = new Common_Model(id, name, "");
+                    modelRetailDetails.add(mCommon_model_spinner);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                Log.d("LeaveTypeList", "Error");
+            }
+        });
+    }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -779,6 +837,20 @@ public class TAClaimActivity extends AppCompatActivity {
 
         cardview.addView(lay);
         return cardview;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    @Override
+    public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
+        customDialog.dismiss();
+
+      if (type == 10) {
+          txt_date.setText(myDataset.get(position).getName());
+        }
     }
 
     public class InputFilterMinMax implements InputFilter {

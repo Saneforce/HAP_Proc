@@ -1,6 +1,9 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -92,6 +95,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     ImageView image;
     LinearLayout jointwork_layout, joint_work_Recyclerview, hqlayout, shiftypelayout, Procrumentlayout, chillinglayout;
     DatePickerDialog picker;
+    SharedPreferences sharedpreferences;
+    public static final String mypreference = "mypref";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +156,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         submitbutton.setOnClickListener(this);
         joint_work_Caption.setOnClickListener(this);
         common_class.ProgressdialogShow(1, "Day plan");
+        sharedpreferences = getSharedPreferences(mypreference,
+                Context.MODE_PRIVATE);
 
         //helptext = findViewById(R.id.helptext);
         ImageView backView = findViewById(R.id.imag_back);
@@ -716,9 +723,15 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     Log.d("QueryString", String.valueOf(QueryString));
                     progressbar.setVisibility(View.GONE);
                     if (response.code() == 200 || response.code() == 201) {
-                        /*common_class.CommonIntentwithFinish(Dashboard.class);*/
 
-                        common_class.CommonIntentwithFinish(AllowanceActivity.class);
+
+
+                        Intent intent = new Intent(Mydayplan_Activity.this, AllowanceActivity.class);
+                        intent.putExtra("My_Day_Plan", "One");
+                        startActivity(intent);
+                        finish();
+
+
                         Toast.makeText(Mydayplan_Activity.this, "Day Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
                     }
 
