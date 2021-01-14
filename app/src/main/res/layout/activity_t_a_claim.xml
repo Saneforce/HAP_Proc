@@ -19,29 +19,28 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/C5dp"
             android:padding="8dp">
 
             <TextView
                 android:id="@+id/txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="5dp"
                 android:layout_marginTop="5dp"
                 android:fontFamily="@font/basic"
                 android:text="Date "
                 android:textAllCaps="false"
                 android:textColor="#000"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="13sp" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_date"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txt"
-                android:layout_marginTop="6dp"
+                android:layout_marginTop="@dimen/C5dp"
                 android:background="#B1AFAF"
-                android:padding="18dp"
+                android:padding="@dimen/C10dp"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="2dp"
                 app:cardUseCompatPadding="true">
@@ -52,10 +51,10 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/basic"
                     android:hint="Choose Date"
-                    android:padding="10dp"
+                    android:padding="@dimen/C10dp"
                     android:textAllCaps="false"
                     android:textColor="#515151"
-                    android:textSize="18sp" />
+                    android:textSize="14sp" />
 
             </androidx.cardview.widget.CardView>
 
@@ -69,55 +68,58 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    tools:ignore="MissingConstraints">
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
+                                android:gravity="center">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
-                                    android:layout_marginTop="5dp"
-                                    android:text="Mode of Travel"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/basic"
+                                    android:text="Travel Allowance"
                                     android:textAllCaps="false"
                                     android:textColor="#000"
-                                    android:textSize="18sp"
+                                    android:textSize="16sp"
                                     android:textStyle="bold" />
+
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/lin_add_allowance"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentLeft="true"
                                 android:layout_alignParentEnd="true"
-                                android:layout_alignParentRight="true"
-                                android:layout_marginTop="2dp"
-                                android:layout_marginRight="15dp">
+                                android:layout_alignParentRight="true">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
-                                    android:layout_marginTop="5dp"
+                                    android:layout_gravity="center"
+                                    android:drawableLeft="@drawable/add"
                                     android:text="Add Allowance"
                                     android:textAllCaps="false"
-                                    android:textSize="14sp" />
+                                    android:textColor="#3700B3"
+                                    android:textSize="12sp" />
                             </LinearLayout>
 
                         </RelativeLayout>
+
+
                     </LinearLayout>
 
 
@@ -125,268 +127,163 @@
                         android:id="@+id/linear_bike"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
+                        android:layout_marginTop="@dimen/C8dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
                             android:orientation="horizontal">
 
-
-                            <LinearLayout
+                            <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
-                                    android:layout_marginTop="10dp"
-                                    android:text="Started km"
-                                    android:textAllCaps="false"
-                                    android:textColor="#000"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-
-                                <androidx.cardview.widget.CardView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@+id/txt"
-                                    android:layout_marginTop="6dp"
-                                    android:padding="18dp"
-                                    app:cardCornerRadius="5dp"
-                                    app:cardElevation="2dp"
-                                    app:cardUseCompatPadding="true">
-
-                                    <TextView
-                                        android:id="@+id/txt_started_km"
-                                        android:layout_width="100dp"
-                                        android:layout_height="wrap_content"
-                                        android:padding="10dp"
-                                        android:textAllCaps="false"
-                                        android:textColor="#515151"
-                                        android:textSize="18sp" />
-
-                                </androidx.cardview.widget.CardView>
-
-
-                            </LinearLayout>
-
-                            <ImageView
-                                android:layout_width="@dimen/C70dp"
-                                android:layout_height="@dimen/C70dp"
                                 android:layout_gravity="center"
-                                android:layout_marginLeft="10dp"></ImageView>
+                                android:text="Mode of Travel"
+                                android:textAllCaps="false"
+                                android:textColor="#000"
+                                android:textSize="12sp" />
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/C10dp"
+                                android:text="Bike"
+                                android:textColor="#000"
+                                android:textSize="12sp" />
 
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
                             android:orientation="horizontal">
 
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
+                            <RelativeLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:layout_marginTop="@dimen/C5dp">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
-                                    android:layout_marginTop="10dp"
-                                    android:text="Ended km"
-                                    android:textAllCaps="false"
-                                    android:textColor="#000"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
+                                    android:orientation="horizontal">
 
-                                <androidx.cardview.widget.CardView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@+id/txt"
-                                    android:layout_marginTop="6dp"
-                                    android:padding="18dp"
-                                    app:cardCornerRadius="5dp"
-                                    app:cardElevation="2dp"
-                                    app:cardUseCompatPadding="true">
-
-                                    <TextView
-                                        android:id="@+id/txt_ended_km"
-                                        android:layout_width="100dp"
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:padding="10dp"
-                                        android:textAllCaps="false"
-                                        android:textColor="#515151"
-                                        android:textSize="18sp" />
+                                        android:orientation="vertical">
 
-                                </androidx.cardview.widget.CardView>
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Started km"
+                                            android:textAllCaps="false"
+                                            android:textColor="#000"
+                                            android:textSize="13sp" />
 
 
-                            </LinearLayout>
+                                        <TextView
+                                            android:id="@+id/txt_started_km"
+                                            android:layout_width="@dimen/C80dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/C5dp"
+                                            android:background="#F2EDEDED"
+                                            android:padding="@dimen/C5dp"
+                                            android:text="54446454"
+                                            android:textAllCaps="false"
+                                            android:textSize="13sp" />
 
-                            <ImageView
-                                android:layout_width="@dimen/C70dp"
-                                android:layout_height="@dimen/C70dp"
-                                android:layout_gravity="center"
-                                android:layout_marginLeft="10dp"></ImageView>
+
+                                    </LinearLayout>
+
+                                    <ImageView
+                                        android:layout_width="@dimen/C60dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:layout_marginLeft="@dimen/C20dp"
+                                    ></ImageView>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentRight="true"
+                                    android:orientation="horizontal">
+
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Closing km"
+                                            android:textAllCaps="false"
+                                            android:textColor="#000"
+                                            android:textSize="13sp" />
+
+
+                                        <TextView
+                                            android:id="@+id/txt_ended_km"
+                                            android:layout_width="@dimen/C80dp"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/C5dp"
+                                            android:background="#F2EDEDED"
+                                            android:padding="@dimen/C5dp"
+                                            android:text="54446454"
+                                            android:textAllCaps="false"
+                                            android:textSize="13sp" />
+
+                                    </LinearLayout>
+
+                                    <ImageView
+                                        android:layout_width="@dimen/C60dp"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:layout_marginLeft="@dimen/C20dp"
+                                     ></ImageView>
+
+                                </LinearLayout>
+
+                            </RelativeLayout>
 
                         </LinearLayout>
 
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/linear_bus"
+                        android:id="@+id/lin_travel_bus"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/linear_da_allowance"
+                        android:layout_marginTop="@dimen/C10dp"
                         android:orientation="vertical"
-                        android:visibility="gone">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
-                                    android:layout_marginTop="10dp"
-                                    android:text="From"
-                                    android:textAllCaps="false"
-                                    android:textColor="#000"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-
-                                <androidx.cardview.widget.CardView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@+id/txt"
-                                    android:layout_marginTop="6dp"
-                                    android:padding="18dp"
-                                    app:cardCornerRadius="5dp"
-                                    app:cardElevation="2dp"
-                                    app:cardUseCompatPadding="true">
-
-                                    <TextView
-                                        android:id="@+id/txt_from_palce"
-                                        android:layout_width="100dp"
-                                        android:layout_height="wrap_content"
-                                        android:padding="10dp"
-                                        android:textAllCaps="false"
-                                        android:textColor="#515151"
-                                        android:textSize="18sp" />
-
-                                </androidx.cardview.widget.CardView>
-
-
-                            </LinearLayout>
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginLeft="10dp"
-                                android:src="@mipmap/ic_launcher_round"></ImageView>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginTop="10dp"
-                                android:text="To"
-                                android:textAllCaps="false"
-                                android:textColor="#000"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@+id/txt"
-                                android:layout_marginTop="6dp"
-                                android:padding="18dp"
-                                app:cardCornerRadius="5dp"
-                                app:cardElevation="2dp"
-                                app:cardUseCompatPadding="true">
-
-                                <TextView
-                                    android:id="@+id/txt_to_place"
-                                    android:layout_width="100dp"
-                                    android:layout_height="wrap_content"
-                                    android:padding="10dp"
-                                    android:textAllCaps="false"
-                                    android:textColor="#515151"
-                                    android:textSize="18sp" />
-
-                            </androidx.cardview.widget.CardView>
-
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:layout_marginTop="10dp"
-                                android:text="Fare"
-                                android:textAllCaps="false"
-                                android:textColor="#000"
-                                android:textSize="18sp"
-                                android:textStyle="bold" />
-
-                            <androidx.cardview.widget.CardView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@+id/txt"
-                                android:layout_marginTop="6dp"
-                                android:padding="18dp"
-                                app:cardCornerRadius="5dp"
-                                app:cardElevation="2dp"
-                                app:cardUseCompatPadding="true">
-
-                                <TextView
-                                    android:id="@+id/txt_bus_fare"
-                                    android:layout_width="100dp"
-                                    android:layout_height="wrap_content"
-                                    android:padding="10dp"
-                                    android:textAllCaps="false"
-                                    android:textColor="#515151"
-                                    android:textSize="18sp" />
-
-                            </androidx.cardview.widget.CardView>
-
-
-                        </LinearLayout>
-
-
+                        android:padding="5dp">
                     </LinearLayout>
+
+                    <ListView
+                        android:id="@+id/list_allowance_type"
+                        android:layout_width="match_parent"
+                        android:layout_height="280dp"
+                        android:layout_below="@+id/lay_row"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="6dp"
+                        android:divider="#fff"
+                        android:visibility="gone" />
 
 
                 </LinearLayout>
-
             </RelativeLayout>
 
 
@@ -395,20 +292,54 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/expense"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="@dimen/C12dp"
                 android:fontFamily="@font/basic"
-                android:text="Other Expenses "
+                android:text="Daily Allowance"
                 android:textAllCaps="false"
                 android:textColor="#000"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:id="@+id/linear_da_allowance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_exp"
+                android:layout_marginTop="@dimen/C5dp"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/C5dp">
+
+                    <CheckBox
+                        android:id="@+id/out_station"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Out Station"></CheckBox>
+
+                    <CheckBox
+                        android:id="@+id/diver_allowance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Diver Allowance"></CheckBox>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
 
             <LinearLayout
                 android:id="@+id/lay_row"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txt_exp"
+                android:layout_below="@+id/linear_da_allowance"
                 android:orientation="vertical"
                 android:padding="5dp">
 
@@ -435,8 +366,8 @@
                 android:text="Enter the Fare "
                 android:textAllCaps="false"
                 android:textColor="#000"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="13sp"
+                android:visibility="gone" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_fare"
@@ -452,7 +383,8 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
 
                     <EditText
                         android:id="@+id/edt_fare"
@@ -486,14 +418,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/card_fare"
-                android:layout_marginLeft="5dp"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/basic"
                 android:text="Remarks "
                 android:textAllCaps="false"
                 android:textColor="#000"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textSize="13sp" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_rmk"
@@ -516,8 +444,7 @@
                     android:padding="10dp"
                     android:text=""
                     android:textAllCaps="false"
-                    android:textColor="#515151"
-                    android:textSize="18sp" />
+                    android:textSize="13sp" />
 
             </androidx.cardview.widget.CardView>
 

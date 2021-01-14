@@ -209,6 +209,14 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=get/fieldforce_hq")
     Call<JsonArray> getBusTo(@Field("data") String userData);
 
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=get/Expensedate")
+    Call<JsonArray> getTADate(@Field("data") String userData);
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=get/expensedatedetails")
+    Call<JsonArray> getTAdateDetails(@Field("data") String userData);
+
     @Multipart
     @POST("db_new_activity.php?axn=upload/img")
     Call<ResponseBody> uploadimg(@PartMap() HashMap<String, RequestBody> values, @Part MultipartBody.Part file);

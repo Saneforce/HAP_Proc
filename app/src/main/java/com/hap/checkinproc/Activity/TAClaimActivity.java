@@ -27,7 +27,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -62,10 +61,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -99,14 +95,23 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     int cardViewCount = 70, rlayCount = 700;
     Shared_Common_Pref mShared_common_pref;
 
-    String StartedKm = "", EndedKm = "", ModeOfTravel = "", FromPlace = "", ToPlace = "", Bus = "", StratedKmImage = "", EndedKmImage = "", BusFareImage = "";
 
-    /*12/1/2021*/
+    String StartedKm = "", ClosingKm = "", ModeOfTravel = "", FromPlace = "", ToPlace = "", Bus = "", StratedKmImage = "", EndedKmImage = "", BusFareImage = "";
+
+    /*12/1/13*/
     Common_Model mCommon_model_spinner;
     List<Common_Model> listOrderType = new ArrayList<>();
     List<Common_Model> modelRetailDetails = new ArrayList<>();
     CustomListViewDialog customDialog;
-
+    LinearLayout linAddAllowance;
+    LinearLayout TravelBike;
+    TextView TxtStartedKm, TxtClosingKm;
+    LinearLayout LinearTravelBus;
+    ListView ListAllowanceMode;
+    ArrayList<SelectionModel> arrayAllowance = new ArrayList<>();
+    ArrayList<SelectionModel> arrayListAllowance = new ArrayList<>();
+    ArrayList<Integer> cardPosition;
+    TextView modeTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,20 +123,28 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         btn_sub = findViewById(R.id.btn_sub);
         list = findViewById(R.id.list);
         lay_row = findViewById(R.id.lay_row);
+        linAddAllowance = findViewById(R.id.lin_add_allowance);
+        TravelBike = findViewById(R.id.linear_bike);
+        TxtStartedKm = findViewById(R.id.txt_started_km);
+        TxtClosingKm = findViewById(R.id.txt_ended_km);
+
+        LinearTravelBus = findViewById(R.id.lin_travel_bus);
+        ListAllowanceMode = findViewById(R.id.list_allowance_type);
+
+
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SF_code = UserDetails.getString("Sfcode", "");
         div = UserDetails.getString("Divcode", "");
         State_Code = UserDetails.getString("State_Code", "");
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        txt_date.setText(Common_Class.GetDateOnly() + "-" + Common_Class.GetDay());
         String date = Common_Class.GetDate();
         callApi(date.substring(0, date.indexOf(" ")));
 
         mShared_common_pref = new Shared_Common_Pref(this);
         StartedKm = mShared_common_pref.getvalue("Started_km");
         ModeOfTravel = mShared_common_pref.getvalue("mode_of_travel");
-        dynamicDate();
 
+        dynamicDate();
         btn_sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,7 +178,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         card_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 customDialog = new CustomListViewDialog(TAClaimActivity.this, modelRetailDetails, 10);
                 Window window = customDialog.getWindow();
                 window.setGravity(Gravity.CENTER);
@@ -174,9 +186,30 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
+        linAddAllowance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LinearLayout r2 = new LinearLayout(getApplicationContext());
+                LinearLayout.LayoutParams params_2 = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                r2.setOrientation(LinearLayout.VERTICAL);
+                r2.setLayoutParams(params_2);
+                r2.setId(rlayCount);
+                array.get(0).getArray().get(0).setTmp_url(String.valueOf(rlayCount));
+                array.get(0).setTxt(String.valueOf(cardViewCount));
+                rlayCount = rlayCount + 1;
+                ArrayList<Integer> cardCountt = new ArrayList<>();
+                r2.addView(generateTravelView(0, array.get(0).getArray(), array, 0, cardCountt));
+                LinearTravelBus.addView(r2);
+
+            }
+        });
+
     }
 
 
+    /*Choosing Dynamic date*/
     public void dynamicDate() {
 
         JSONObject jj = new JSONObject();
@@ -187,7 +220,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             e.printStackTrace();
         }
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> call = apiInterface.getBusTo(jj.toString());
+        Call<JsonArray> call = apiInterface.getTADate(jj.toString());
         call.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -195,8 +228,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 for (int a = 0; a < jsonArray.size(); a++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(a);
                     String id = String.valueOf(jsonObject.get("id"));
-                    String name = String.valueOf(jsonObject.get("name"));
-                    String townName = String.valueOf(jsonObject.get("ODFlag"));
+                    String name = String.valueOf(jsonObject.get("Datewithname"));
+                    Log.e("getTADate", name);
                     name = name.replaceAll("^[\"']+|[\"']+$", "");
                     mCommon_model_spinner = new Common_Model(id, name, "");
                     modelRetailDetails.add(mCommon_model_spinner);
@@ -211,6 +244,48 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
+    /*Display Mode of travel View based on the choosed Date*/
+    public void displayTravelMode(String ChoosedDate) {
+        Log.d("JSON_VALUE_O", ChoosedDate);
+
+        ChoosedDate = ChoosedDate.replaceAll("^[\"']+|[\"']+$", "");
+
+        Log.d("JSON_VALUE_N", ChoosedDate);
+        JSONObject jj = new JSONObject();
+        try {
+            jj.put("sfCode", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+            jj.put("divisionCode", mShared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
+            jj.put("Selectdate", ChoosedDate);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> call = apiInterface.getTAdateDetails(jj.toString());
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                JsonArray jsonArray = response.body();
+
+                Log.d("JSON_VALUE", jsonArray.toString());
+                Log.d("JSON_VALUE", "CHECKING");
+                TravelBike.setVisibility(View.VISIBLE);
+                for (int a = 0; a < jsonArray.size(); a++) {
+                    JsonObject jsonObject = (JsonObject) jsonArray.get(a);
+                    StartedKm = String.valueOf(jsonObject.get("Start_Km"));
+                    ClosingKm = String.valueOf(jsonObject.get("End_Km"));
+                    StartedKm = StartedKm.replaceAll("^[\"']+|[\"']+$", "");
+                    ClosingKm = ClosingKm.replaceAll("^[\"']+|[\"']+$", "");
+                    TxtStartedKm.setText(StartedKm);
+                    TxtClosingKm.setText(ClosingKm);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                Log.d("LeaveTypeList", "Error");
+            }
+        });
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -436,6 +511,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 try {
                     if (response.isSuccessful()) {
 
+
                         Log.v("print_upload_file_true", "ggg" + response);
                         JSONObject jb = null;
                         String jsonData = null;
@@ -451,9 +527,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 filepathing = filepathing + js.getString("url") + ",";
                                 array.get(x).setImg_url(filepathing);
                             }
-                            submitData();
+
+                            //submitData();
+
                         }
+
                     }
+
                 } catch (Exception e) {
                 }
             }
@@ -465,24 +545,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-    public void datePick() {
-        Calendar newCalendar = Calendar.getInstance();
-        fromDatePickerDialog = new DatePickerDialog(TAClaimActivity.this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                int mnth = monthOfYear + 1;
-                Log.v("printing_date_format", dayOfMonth + "-" + mnth + "-" + year);
-
-                SimpleDateFormat simpledateformat = new SimpleDateFormat("EEEE");
-                Date date = new Date(year, monthOfYear, dayOfMonth - 1);
-                String dayOfWeek = simpledateformat.format(date);
-                Log.v("printing_date_fo_day", dayOfWeek);
-                txt_date.setText(dayOfMonth + "-" + mnth + "-" + year + "-" + dayOfWeek);
-                callApi(year + "-" + mnth + "-" + dayOfMonth);
-            }
-        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-        fromDatePickerDialog.show();
-    }
 
     public void popupCapture() {
         final Dialog dialog = new Dialog(TAClaimActivity.this, R.style.AlertDialogCustom);
@@ -591,7 +653,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     @SuppressLint("ResourceType")
     public void createDynamicViewForSingleRow(String name, ArrayList<SelectionModel> array, int position, String userenter, String attachment, String max) {
-
         RelativeLayout rl = new RelativeLayout(this);
         RelativeLayout.LayoutParams layoutparams_1 = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -605,7 +666,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         TextView txt = new TextView(this);
         txt.setLayoutParams(layoutparams_2);
         txt.setText(name);
-        Log.e("NAME", name);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.basic);
         //txt.setTypeface(typeface,Typeface.BOLD);
         txt.setTypeface(typeface);
@@ -619,7 +679,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         layoutparams_3.setMargins(0, 10, 0, 0);
         EditText edt = new EditText(this);
         edt.setLayoutParams(layoutparams_3);
-        edt.setBackgroundResource(R.drawable.round_rect_with_blue_stroke);
+        edt.setBackgroundResource(R.drawable.hash_border);
         edt.setEms(5);
         edt.setInputType(InputType.TYPE_CLASS_NUMBER);
         if (userenter.equalsIgnoreCase("0")) {
@@ -721,7 +781,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 edt1.setLayoutParams(params_3);
                 edt1.setHint(arr.get(i).getTxt());
                 edt1.setHintTextColor(Color.parseColor("#C0C0C0"));
-                edt1.setBackgroundResource(R.drawable.round_rect_with_blue_stroke);
+                edt1.setBackgroundResource(R.drawable.hash_border);
                 edt1.setText("");
                 edt1.setPadding(9, 9, 9, 9);
                 lay.addView(edt1);
@@ -780,7 +840,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     SelectionModel mm = arr.get(l);
                     arr_new.add(new SelectionModel(mm.getTxt(), "", mm.getCode(), "", mm.getTmp_url()));
                 }
-
                 arrayList.add(new SelectionModel(String.valueOf(cardViewCount), arr_new));
                 Log.v("arraylist_selection", arrayList.size() + "");
                 LinearLayout rlays = lay_row.findViewById(countt);
@@ -848,8 +907,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
 
-      if (type == 10) {
-          txt_date.setText(myDataset.get(position).getName());
+        if (type == 10) {
+            txt_date.setText(myDataset.get(position).getName());
+            Log.d("JSON_VALUE", myDataset.get(position).getName());
+            displayTravelMode(myDataset.get(position).getId());
+        } else if (type == 11) {
+            modeTextView.setText(myDataset.get(position).getName());
+            Log.d("JSON_VALUE", myDataset.get(position).getName());
         }
     }
 
@@ -881,5 +945,144 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         private boolean isInRange(int a, int b, int c) {
             return b > a ? c >= a && c <= b : c >= b && c <= a;
         }
+    }
+
+
+    @SuppressLint("ResourceType")
+    public CardView generateTravelView(int x, ArrayList<SelectionModel> arr, ArrayList<SelectionModel> arrayList, int pos, ArrayList<Integer> cardPos) {
+        CardView cardview = new CardView(this);
+        cardview.setId(cardViewCount);
+        cardPos.add(cardViewCount);
+        cardViewCount = cardViewCount + 1;
+        LinearLayout.LayoutParams layoutparams = new LinearLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        if (x != 0) {
+            // CardView cc=lay_row.findViewById(x);
+            //layoutparams.addRule(RelativeLayout.BELOW,cc.getId());
+        }
+        cardview.setLayoutParams(layoutparams);
+        cardview.setRadius(5);
+        cardview.setPadding(18, 18, 18, 18);
+        cardview.setCardBackgroundColor(Color.GRAY);
+        cardview.setUseCompatPadding(true);
+        cardview.setCardElevation(5);
+        cardview.setRadius(8);
+
+        LinearLayout lay = new LinearLayout(this);
+        LinearLayout.LayoutParams taAllowance = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        lay.setBackgroundColor(Color.parseColor("#ffffff"));
+        lay.setPadding(5, 5, 5, 5);
+        taAllowance.setMargins(5, 6, 5, 3);
+        lay.setOrientation(LinearLayout.VERTICAL);
+
+        try {
+            for (int i = 0; i < arr.size(); i++) {
+
+                modeTextView = new TextView(this);
+                modeTextView.setLayoutParams(taAllowance);
+                modeTextView.setBackgroundResource(R.drawable.hash_border);
+                modeTextView.setHint("Enter mode");
+                modeTextView.setTextSize(13);
+                modeTextView.setPadding(12, 12, 12, 12);
+                taAllowance.setMargins(5, 6, 5, 3);
+                lay.addView(modeTextView);
+                modeTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        customDialog = new CustomListViewDialog(TAClaimActivity.this, modelRetailDetails, 11);
+                        Window window = customDialog.getWindow();
+                        window.setGravity(Gravity.CENTER);
+                        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                        customDialog.show();
+                    }
+                });
+
+
+                EditText fromEditext = new EditText(this);
+                fromEditext.setLayoutParams(taAllowance);
+                fromEditext.setHint("Enter from address");
+                fromEditext.setBackgroundResource(R.drawable.hash_border);
+                fromEditext.setText("");
+                fromEditext.setTextSize(16);
+                fromEditext.setPadding(12, 12, 12, 12);
+                taAllowance.setMargins(5, 6, 5, 3);
+                lay.addView(fromEditext);
+
+            }
+        } catch (Exception e) {
+
+        }
+
+        EditText toEditext = new EditText(this);
+        toEditext.setLayoutParams(taAllowance);
+        toEditext.setBackgroundResource(R.drawable.hash_border);
+        toEditext.setText("");
+        toEditext.setHint("Enter to address");
+        toEditext.setTextSize(16);
+        toEditext.setPadding(12, 12, 12, 12);
+        taAllowance.setMargins(5, 6, 5, 3);
+        lay.addView(toEditext);
+
+
+        RelativeLayout rl = new RelativeLayout(this);
+        RelativeLayout.LayoutParams layoutparams_1 = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        rl.setLayoutParams(layoutparams_1);
+        RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_END);
+        layoutparams_3.setMargins(0, 10, 0, 0);
+        EditText fareEditext = new EditText(this);
+        fareEditext.setLayoutParams(taAllowance);
+        fareEditext.setBackgroundResource(R.drawable.hash_border);
+        fareEditext.setText("");
+        fareEditext.setInputType(InputType.TYPE_CLASS_NUMBER);
+        fareEditext.setHint("Enter fare amount");
+        fareEditext.setTextSize(16);
+        fareEditext.setPadding(12, 12, 12, 12);
+        taAllowance.setMargins(5, 6, 5, 3);
+        rl.addView(fareEditext);
+        RelativeLayout.LayoutParams layoutparams_4 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        layoutparams_4.addRule(RelativeLayout.ALIGN_PARENT_END);
+        layoutparams_4.addRule(RelativeLayout.CENTER_VERTICAL);
+        ImageView img = new ImageView(this);
+        img.setImageResource(R.drawable.attach_files);
+        img.setVisibility(View.VISIBLE);
+        layoutparams_4.setMargins(0,1,7,0);
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popupCapture();
+            }
+        });
+        img.setLayoutParams(layoutparams_4);
+
+        rl.addView(img);
+        lay.addView(rl);
+
+
+
+        LinearLayout.LayoutParams params_4 = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        params_4.setMargins(0, 5, 0, 0);
+        RelativeLayout rlay_icon = new RelativeLayout(this);
+        rlay_icon.setId(657);
+        RelativeLayout.LayoutParams params_5 = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+        //rlay_icon.setLayoutParams(params_5);
+        params_5.addRule(RelativeLayout.ALIGN_PARENT_END);
+        params_5.setMargins(0, 6, 0, 6);
+
+        lay.addView(rlay_icon);
+
+        cardview.addView(lay);
+        return cardview;
     }
 }

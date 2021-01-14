@@ -256,7 +256,7 @@ public class AllowanceActivity extends AppCompatActivity implements View.OnClick
         temaplateList = new ArrayList<>();
         temaplateList.add("Bike");
         temaplateList.add("Bus");
-        updateMode = true;
+
         for (int i = 0; i < temaplateList.size(); i++) {
             String id = String.valueOf(temaplateList.get(i));
             String name = temaplateList.get(i);
@@ -334,9 +334,9 @@ public class AllowanceActivity extends AppCompatActivity implements View.OnClick
             Log.v("printing_allow", jj.toString());
             Call<ResponseBody> Callto;
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-            if (updateMode)
+      /*      if (updateMode)
                 Callto = apiInterface.updateAllowance(jj.toString());
-            else
+            else*/
                 Callto = apiInterface.saveAllowance(jj.toString());
 
             Callto.enqueue(new Callback<ResponseBody>() {
@@ -350,6 +350,7 @@ public class AllowanceActivity extends AppCompatActivity implements View.OnClick
                             String jsonData = null;
                             jsonData = response.body().string();
                             Log.v("response_data", jsonData);
+                            Log.v("response_data", String.valueOf(updateMode));
                             JSONObject js = new JSONObject(jsonData);
                             if (js.getString("success").equalsIgnoreCase("true")) {
                                 Toast.makeText(AllowanceActivity.this, " Submitted successfully ", Toast.LENGTH_SHORT).show();
