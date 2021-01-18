@@ -424,7 +424,6 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         customDialog.show();
 
-
     }
 
 

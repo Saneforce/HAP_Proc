@@ -59,11 +59,49 @@
             </androidx.cardview.widget.CardView>
 
 
+            <TextView
+                android:id="@+id/type_allowance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/card_date"
+                android:layout_marginTop="5dp"
+                android:fontFamily="@font/basic"
+                android:text="Travel Type "
+                android:textAllCaps="false"
+                android:textColor="#000"
+                android:textSize="13sp" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/card_type_travel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/type_allowance"
+                android:layout_marginTop="@dimen/C5dp"
+                android:background="#B1AFAF"
+                android:padding="@dimen/C10dp"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true">
+
+                <TextView
+                    android:id="@+id/txt_type_travel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/basic"
+                    android:hint="Choose Travel Type"
+                    android:padding="@dimen/C10dp"
+                    android:textAllCaps="false"
+                    android:textColor="#515151"
+                    android:textSize="14sp" />
+
+            </androidx.cardview.widget.CardView>
+
+
             <RelativeLayout
                 android:id="@+id/expense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/card_date">
+                android:layout_below="@+id/card_type_travel">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -130,6 +168,7 @@
                         android:layout_marginTop="@dimen/C8dp"
                         android:orientation="vertical"
                         android:visibility="gone">
+
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -206,8 +245,7 @@
                                         android:layout_width="@dimen/C60dp"
                                         android:layout_height="match_parent"
                                         android:layout_gravity="center"
-                                        android:layout_marginLeft="@dimen/C20dp"
-                                    ></ImageView>
+                                        android:layout_marginLeft="@dimen/C20dp"></ImageView>
 
                                 </LinearLayout>
 
@@ -251,8 +289,7 @@
                                         android:layout_width="@dimen/C60dp"
                                         android:layout_height="match_parent"
                                         android:layout_gravity="center"
-                                        android:layout_marginLeft="@dimen/C20dp"
-                                     ></ImageView>
+                                        android:layout_marginLeft="@dimen/C20dp"></ImageView>
 
                                 </LinearLayout>
 
@@ -269,14 +306,13 @@
                         android:layout_below="@+id/linear_da_allowance"
                         android:layout_marginTop="@dimen/C10dp"
                         android:orientation="vertical"
-                        android:padding="5dp">
-                    </LinearLayout>
+                        android:padding="5dp"></LinearLayout>
 
                     <ListView
                         android:id="@+id/list_allowance_type"
                         android:layout_width="match_parent"
                         android:layout_height="280dp"
-                        android:layout_below="@+id/lay_row"
+                        android:layout_below="@+id/lin_travel_bus"
                         android:layout_marginLeft="5dp"
                         android:layout_marginTop="6dp"
                         android:divider="#fff"
@@ -309,27 +345,13 @@
                 android:layout_marginTop="@dimen/C5dp"
                 android:orientation="vertical">
 
-                <LinearLayout
+
+                <CheckBox
+                    android:id="@+id/diver_allowance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="@dimen/C5dp">
-
-                    <CheckBox
-                        android:id="@+id/out_station"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Out Station"></CheckBox>
-
-                    <CheckBox
-                        android:id="@+id/diver_allowance"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Diver Allowance"></CheckBox>
-
-                </LinearLayout>
+                    android:layout_weight="1"
+                    android:text="Driver Allowance"></CheckBox>
 
 
             </LinearLayout>
