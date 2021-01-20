@@ -27,7 +27,7 @@ import java.util.ArrayList;
 public class DailyExpenseAdapter extends BaseAdapter implements View.OnCreateContextMenuListener {
     Context context;
     ArrayList<SelectionModel> array=new ArrayList<>();
-    TextView txt_exp;
+    TextView txt_exp,tx_MxExp;
     static UpdateUi updateUi;
     LinearLayout lay_multi;
 
@@ -55,11 +55,13 @@ public class DailyExpenseAdapter extends BaseAdapter implements View.OnCreateCon
     public View getView(int i, View view, ViewGroup viewGroup) {
         view= LayoutInflater.from(context).inflate(R.layout.row_item_daily_exp,viewGroup,false);
         txt_exp=view.findViewById(R.id.txt_exp);
+        tx_MxExp=view.findViewById(R.id.txt_mxexp);
         EditText edt_exp=view.findViewById(R.id.edt_exp);
         ImageView img_attach=view.findViewById(R.id.img_attach);
         lay_multi=view.findViewById(R.id.lay_multi);
         SelectionModel m=array.get(i);
-        txt_exp.setText(m.getTxt());
+        txt_exp.setText(m.getTxt()+"s");
+        tx_MxExp.setText(m.getMax());
         Log.v("toxt_exp_val",m.getTxt());
         createDynamicRowITem("hello",11,0);
         img_attach.setOnClickListener(new View.OnClickListener() {

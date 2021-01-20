@@ -23,10 +23,12 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -41,6 +43,13 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 import androidx.core.content.res.ResourcesCompat;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.Util.ImageFilePath;
@@ -73,7 +82,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TAClaimActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface {
+public class TAClaimActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface,
+        OnMapReadyCallback {
 
     CardView card_date, card_type_travel;
     TextView txt_date;
@@ -95,10 +105,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     String SF_code = "", div = "", State_Code = "";
     LinearLayout lay_row;
     int cardViewCount = 70, rlayCount = 700;
+    int ccount = 1;
     Shared_Common_Pref mShared_common_pref;
-
+    ArrayList<Integer> checking = new ArrayList<Integer>();
     private ArrayList<String> travelTypeList;
-    String StartedKm = "", ClosingKm = "", ModeOfTravel = "", FromPlace = "", ToPlace = "", Bus = "", StratedKmImage = "", EndedKmImage = "", BusFareImage = "";
+    String StartedKm = "", ClosingKm = "",
+            ModeOfTravel = "",
+            FromPlace = "", ToPlace = "", Bus = "", StratedKmImage = "",
+            EndedKmImage = "", BusFareImage = "";
 
     /*12/1/13*/
     Common_Model mCommon_model_spinner;
@@ -114,13 +128,29 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     ArrayList<SelectionModel> arrayListAllowance = new ArrayList<>();
     ArrayList<Integer> cardPosition;
     TextView modeTextView;
-    ArrayList<Integer> cardCountt;
+    ArrayList<Integer> cardCountt = new ArrayList<>();
     TextView travelTypeMode;
+    CheckBox chkDriverAllow;
+    CardView cardvi;
+    LinearLayout diverAllowanceLinear;
+    private static final int COLOR_ORANGE_ARGB = 0xffF57F17;
+    TextView TotalTravelledKm;
+
+    Integer totalkm = 0;
+    String exp_for = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_t_a_claim);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.route_map);
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(this);
+        }
+
+
         txt_date = findViewById(R.id.txt_date);
         card_date = findViewById(R.id.card_date);
         card_type_travel = findViewById(R.id.card_type_travel);
@@ -133,10 +163,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         TxtStartedKm = findViewById(R.id.txt_started_km);
         TxtClosingKm = findViewById(R.id.txt_ended_km);
         travelTypeMode = findViewById(R.id.txt_type_travel);
+        chkDriverAllow = findViewById(R.id.diver_allowance);
 
         LinearTravelBus = findViewById(R.id.lin_travel_bus);
         ListAllowanceMode = findViewById(R.id.list_allowance_type);
-
+        diverAllowanceLinear = findViewById(R.id.linear_da_allowance);
+        TotalTravelledKm = findViewById(R.id.total_km);
 
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SF_code = UserDetails.getString("Sfcode", "");
@@ -149,6 +181,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         mShared_common_pref = new Shared_Common_Pref(this);
         StartedKm = mShared_common_pref.getvalue("Started_km");
         ModeOfTravel = mShared_common_pref.getvalue("mode_of_travel");
+
 
         dynamicDate();
         btn_sub.setOnClickListener(new View.OnClickListener() {
@@ -205,23 +238,26 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View v) {
 
-                LinearLayout r2 = new LinearLayout(getApplicationContext());
-                LinearLayout.LayoutParams params_2 = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT);
-                r2.setOrientation(LinearLayout.VERTICAL);
-                r2.setLayoutParams(params_2);
-                r2.setId(rlayCount);
-                array.get(0).getArray().get(0).setTmp_url(String.valueOf(rlayCount));
-                array.get(0).setTxt(String.valueOf(cardViewCount));
-                rlayCount = rlayCount + 1;
-                cardCountt = new ArrayList<>();
-                r2.addView(generateTravelView(0, array.get(0).getArray(), array, 0, cardCountt));
-                LinearTravelBus.addView(r2);
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                final View rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
+                // Add the new row before the add field button.
 
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
+                layoutParams.setMargins(0, 10, 0, 0);
+                LinearTravelBus.addView(rowView, layoutParams);
+
+                int size = LinearTravelBus.getChildCount();
+                Log.d("PARENT_COUNT", String.valueOf(size));
             }
         });
 
+    }
+
+    public void onDelete(View v) {
+        LinearTravelBus.removeView((View) v.getParent());
     }
 
 
@@ -262,7 +298,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     /*Travel Type*/
 
-    /*   Order Types*/
+    /* Order Types*/
     public void OrderType() {
         travelTypeList = new ArrayList<>();
         travelTypeList.add("HQ");
@@ -317,6 +353,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     ClosingKm = ClosingKm.replaceAll("^[\"']+|[\"']+$", "");
                     TxtStartedKm.setText(StartedKm);
                     TxtClosingKm.setText(ClosingKm);
+
+                    Integer S = Integer.valueOf(String.valueOf(TxtStartedKm.getText()));
+                    Integer C = Integer.valueOf(String.valueOf(TxtClosingKm.getText()));
+                    Log.e("TOTAL_KM", String.valueOf(S));
+                    Log.e("TOTAL_KM", String.valueOf(C));
+                    totalkm = C - S;
+
+                    Log.e("TOTAL_KM", String.valueOf(totalkm));
+                    TotalTravelledKm.setText(String.valueOf(totalkm));
                 }
             }
 
@@ -371,9 +416,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
 
         } else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
-           /* ModelDynamicView mm = array.get(pos_upload_file);
-            if (!TextUtils.isEmpty(mm.getValue()))
-                filePathing = mm.getValue();*/
+ /* ModelDynamicView mm = array.get(pos_upload_file);
+ if (!TextUtils.isEmpty(mm.getValue()))
+ filePathing = mm.getValue();*/
             String finalPath = "/storage/emulated/0";
             String filePath = outputFileUri.getPath();
             filePath = filePath.substring(1);
@@ -394,8 +439,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     public void submitData() {
 
-/*        Intent intent = new Intent(TAClaimActivity.this, ViewTASummary.class);
-        startActivity(intent);*/
+/* Intent intent = new Intent(TAClaimActivity.this, ViewTASummary.class);
+ startActivity(intent);*/
         try {
             JSONArray ja = new JSONArray();
             JSONArray ja1 = new JSONArray();
@@ -587,10 +632,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
 
     public void popupCapture(String attachName) {
-
         Log.d("AttachName", attachName);
-
-
         final Dialog dialog = new Dialog(TAClaimActivity.this, R.style.AlertDialogCustom);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.popup_capture);
@@ -659,9 +701,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             for (int i = 0; i < ja.length(); i++) {
                                 JSONObject json_oo = ja.getJSONObject(i);
                                 JSONObject json_o = json_oo.getJSONObject("value1");
+                                exp_for = json_o.getString("Exp_For");
+                                Log.e("EXP", exp_for);
                                 ArrayList<SelectionModel> arr = new ArrayList<>();
                                 ArrayList<SelectionModel> arr1 = new ArrayList<>();
                                 JSONArray jjja = json_oo.getJSONArray("value");
+
+
                                 for (int j = 0; j < jjja.length(); j++) {
                                     JSONObject json_in = jjja.getJSONObject(j);
                                     arr.add(new SelectionModel(json_in.getString("Ad_Fld_Name"), "", json_in.getString("Ad_Fld_ID"), "", ""));
@@ -678,7 +724,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                             for (int i = 0; i < array.size(); i++) {
                                 createDynamicViewForSingleRow(array.get(i).getTxt(), array.get(i).getArray(), i, array.get(i).getUser_enter(), array.get(i).getAttachment(), array.get(i).getMax());
+                                Log.e("String_Name", array.get(i).getTxt());
+                                Log.e("String_Name", String.valueOf(array.get(i).getArray()));
                             }
+
 
                         }
                     } catch (Exception e) {
@@ -705,26 +754,21 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         RelativeLayout.LayoutParams layoutparams_2 = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
-        layoutparams_2.addRule(RelativeLayout.CENTER_VERTICAL);
+
         layoutparams_2.setMargins(5, 0, 0, 0);
         TextView txt = new TextView(this);
-        txt.setLayoutParams(layoutparams_2);
+
+
         txt.setText(name);
         Log.e("CREATE_DYNAMIC_VIEW", name);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.basic);
-        //txt.setTypeface(typeface,Typeface.BOLD);
+        txt.setLayoutParams(layoutparams_2);
         txt.setTypeface(typeface);
         txt.setTextSize(16f);
+        txt.setId(54321);
+
         txt.setTextColor(Color.BLACK);
         rl.addView(txt);
-
-    /*    LinearLayout.LayoutParams layoutCount = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutCount.setMargins(0, 15, 3, 0);
-        TextView mtxtTextView = new TextView(this);
-        mtxtTextView.setText("sadsa");
-        mtxtTextView.setLayoutParams(layoutCount);
-        rl.addView(mtxtTextView);
-*/
 
 
         RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(
@@ -736,6 +780,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         edt.setLayoutParams(layoutparams_3);
         edt.setBackgroundResource(R.drawable.hash_border);
         edt.setEms(5);
+        edt.setId(12345);
         edt.setInputType(InputType.TYPE_CLASS_NUMBER);
         if (userenter.equalsIgnoreCase("0")) {
             edt.setEnabled(false);
@@ -745,6 +790,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         }
         edt.setPadding(9, 9, 9, 9);
         rl.addView(edt);
+
         RelativeLayout.LayoutParams layoutparams_4 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         layoutparams_4.addRule(RelativeLayout.ALIGN_PARENT_END);
         layoutparams_4.addRule(RelativeLayout.CENTER_VERTICAL);
@@ -768,10 +814,16 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         img.setLayoutParams(layoutparams_4);
         rl.addView(img);
 
+        RelativeLayout.LayoutParams ParamMaxLimit = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        ParamMaxLimit.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 12345);
+        ParamMaxLimit.addRule(RelativeLayout.ALIGN_LEFT, 12345);
+        ParamMaxLimit.setMarginStart(-60);
+        TextView mtxtTextView = new TextView(this);
+        mtxtTextView.setText((max == "0") ? "" : max);
+        mtxtTextView.setLayoutParams(ParamMaxLimit);
+        Log.e("Create_View_Dynamic", max);
+        rl.addView(mtxtTextView);
 
-        /*
-        */
-        //layoutparams_3.addRule(RelativeLayout.CENTER_VERTICAL);
         lay_row.addView(rl);
 
         if (array.get(0).getArray().size() != 0) {
@@ -823,7 +875,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         //cardview.setMaxCardElevation(2);
         cardview.setCardElevation(5);
 
-        /*  cardview.setMaxCardElevation(6);*/
+        /* cardview.setMaxCardElevation(6);*/
         cardview.setRadius(8);
         LinearLayout lay = new LinearLayout(this);
         LinearLayout.LayoutParams params_3 = new LinearLayout.LayoutParams(
@@ -967,9 +1019,44 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             modeTextView.setText(myDataset.get(position).getName());
             Log.d("JSON_VALUE", myDataset.get(position).getName());
         } else if (type == 100) {
-            travelTypeMode.setText(myDataset.get(position).getName());
+            String TrTyp = myDataset.get(position).getName();
+            travelTypeMode.setText(TrTyp);
+
+            if (TrTyp.equalsIgnoreCase("OS") == true) {
+                diverAllowanceLinear.setVisibility(View.VISIBLE);
+            } else {
+                diverAllowanceLinear.setVisibility(View.GONE);
+            }
+
             Log.d("JSON_VALUE", myDataset.get(position).getName());
         }
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        LatLng locationOne = new LatLng(13.1148, 80.2872);
+        LatLng locationTwo = new LatLng(13.0300, 80.2421);
+
+  /*      BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.marker_icon);
+        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Old washermenpet"));
+        googleMap.addMarker(new MarkerOptions().position(sydney2).title("Marker in Nandanam"));
+       *//* googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*//*
+         */
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationTwo, 15));
+        // Zoom in, animating the camera.
+        googleMap.animateCamera(CameraUpdateFactory.zoomIn());
+        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
+        googleMap.animateCamera(CameraUpdateFactory.zoomTo(9), 2000, null);
+
+
+        Polyline polyline1 = googleMap.addPolyline(new PolylineOptions()
+                .clickable(true)
+                .add(
+                        new LatLng(13.1148, 80.2872),
+                        new LatLng(13.0300, 80.2421)));
+
+        polyline1.setTag("A");
+        polyline1.setColor(COLOR_ORANGE_ARGB);
     }
 
     public class InputFilterMinMax implements InputFilter {
@@ -1000,170 +1087,5 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         private boolean isInRange(int a, int b, int c) {
             return b > a ? c >= a && c <= b : c >= b && c <= a;
         }
-    }
-
-
-    @SuppressLint("ResourceType")
-    public CardView generateTravelView(int x, ArrayList<SelectionModel> arr, ArrayList<SelectionModel> arrayList, int pos, ArrayList<Integer> cardPos) {
-
-        Log.d("Array_List_ARR", String.valueOf(arr.size()));
-        Log.d("Array_List_ARR_List", String.valueOf(arrayList.size()));
-        Log.d("Array_List_INT", String.valueOf(cardPos.size()));
-
-        CardView cardview = new CardView(this);
-        cardview.setId(cardViewCount);
-        cardPos.add(cardViewCount);
-        cardViewCount = cardViewCount + 1;
-        pos = pos + 1;
-        Log.d("Array_List_INT", String.valueOf(cardViewCount));
-        Log.d("Array_List_POS", String.valueOf(pos));
-        LinearLayout.LayoutParams layoutparams = new LinearLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        if (x != 0) {
-            // CardView cc=lay_row.findViewById(x);
-            //layoutparams.addRule(RelativeLayout.BELOW,cc.getId());
-        }
-        cardview.setLayoutParams(layoutparams);
-        cardview.setRadius(5);
-        cardview.setPadding(18, 18, 18, 18);
-        cardview.setCardBackgroundColor(Color.GRAY);
-        cardview.setUseCompatPadding(true);
-        cardview.setCardElevation(5);
-        cardview.setRadius(8);
-
-        LinearLayout lay = new LinearLayout(this);
-        LinearLayout.LayoutParams taAllowance = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        lay.setBackgroundColor(Color.parseColor("#ffffff"));
-        lay.setPadding(5, 5, 5, 5);
-        taAllowance.setMargins(5, 6, 5, 3);
-        lay.setOrientation(LinearLayout.VERTICAL);
-
-        modeTextView = new TextView(this);
-        modeTextView.setLayoutParams(taAllowance);
-        modeTextView.setBackgroundResource(R.drawable.hash_border);
-        modeTextView.setHint("Enter mode");
-        modeTextView.setTextSize(13);
-        modeTextView.setPadding(12, 12, 12, 12);
-        taAllowance.setMargins(5, 6, 5, 3);
-        lay.addView(modeTextView);
-        modeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                customDialog = new CustomListViewDialog(TAClaimActivity.this, modelRetailDetails, 11);
-                Window window = customDialog.getWindow();
-                window.setGravity(Gravity.CENTER);
-                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
-            }
-        });
-
-
-        EditText fromEditext = new EditText(this);
-        fromEditext.setLayoutParams(taAllowance);
-        fromEditext.setHint("Enter from address");
-        fromEditext.setBackgroundResource(R.drawable.hash_border);
-        fromEditext.setText("");
-        fromEditext.setTextSize(16);
-        fromEditext.setPadding(12, 12, 12, 12);
-        taAllowance.setMargins(5, 6, 5, 3);
-        lay.addView(fromEditext);
-
-        EditText toEditext = new EditText(this);
-        toEditext.setLayoutParams(taAllowance);
-        toEditext.setBackgroundResource(R.drawable.hash_border);
-        toEditext.setText("");
-        toEditext.setHint("Enter to address");
-        toEditext.setTextSize(16);
-        toEditext.setPadding(12, 12, 12, 12);
-        taAllowance.setMargins(5, 6, 5, 3);
-        lay.addView(toEditext);
-
-
-        RelativeLayout rl = new RelativeLayout(this);
-        RelativeLayout.LayoutParams layoutparams_1 = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        rl.setLayoutParams(layoutparams_1);
-        RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_END);
-        layoutparams_3.setMargins(0, 10, 0, 0);
-        EditText fareEditext = new EditText(this);
-        fareEditext.setLayoutParams(taAllowance);
-        fareEditext.setBackgroundResource(R.drawable.hash_border);
-        fareEditext.setText("");
-        fareEditext.setInputType(InputType.TYPE_CLASS_NUMBER);
-        fareEditext.setHint("Enter fare amount");
-        fareEditext.setTextSize(16);
-        fareEditext.setPadding(12, 12, 12, 12);
-        taAllowance.setMargins(5, 6, 5, 3);
-        rl.addView(fareEditext);
-        RelativeLayout.LayoutParams layoutparams_4 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.MATCH_PARENT);
-        layoutparams_4.addRule(RelativeLayout.ALIGN_PARENT_END);
-        layoutparams_4.addRule(RelativeLayout.CENTER_VERTICAL);
-        ImageView img = new ImageView(this);
-        img.setMaxHeight(RelativeLayout.LayoutParams.MATCH_PARENT);
-        img.setImageResource(R.drawable.attach_files);
-        img.setVisibility(View.VISIBLE);
-        layoutparams_4.setMargins(0, 1, 7, 0);
-        img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupCapture("attachName");
-            }
-        });
-        img.setLayoutParams(layoutparams_4);
-
-        rl.addView(img);
-        lay.addView(rl);
-
-
-        RelativeLayout r2 = new RelativeLayout(this);
-        RelativeLayout.LayoutParams layoutparams_2 = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        r2.setLayoutParams(layoutparams_2);
-        RelativeLayout.LayoutParams layoutparams_three = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        layoutparams_three.addRule(RelativeLayout.ALIGN_PARENT_END);
-        layoutparams_three.setMargins(0, 10, 0, 0);
-        RelativeLayout.LayoutParams layoutparams_four = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        layoutparams_four.addRule(RelativeLayout.ALIGN_PARENT_END);
-        layoutparams_four.addRule(RelativeLayout.CENTER_VERTICAL);
-        ImageView imgs = new ImageView(this);
-        imgs.setImageResource(R.drawable.circle_minus_icon);
-        imgs.setVisibility(View.VISIBLE);
-        layoutparams_four.setMargins(0, 1, 7, 0);
-        imgs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        imgs.setLayoutParams(layoutparams_four);
-        r2.addView(imgs);
-        lay.addView(r2);
-
-
-        LinearLayout.LayoutParams params_4 = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        params_4.setMargins(0, 5, 0, 0);
-        RelativeLayout rlay_icon = new RelativeLayout(this);
-        rlay_icon.setId(657);
-        RelativeLayout.LayoutParams params_5 = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        //rlay_icon.setLayoutParams(params_5);
-        params_5.addRule(RelativeLayout.ALIGN_PARENT_END);
-        params_5.setMargins(0, 6, 0, 6);
-        lay.addView(rlay_icon);
-        cardview.addView(lay);
-        return cardview;
     }
 }
