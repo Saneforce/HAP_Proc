@@ -29,6 +29,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -109,8 +110,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     Shared_Common_Pref mShared_common_pref;
     ArrayList<Integer> checking = new ArrayList<Integer>();
     private ArrayList<String> travelTypeList;
+    private ArrayList<String> ModeList;
     String StartedKm = "", ClosingKm = "",
-            ModeOfTravel = "",
+            ModeOfTravel = "", PersonalKm = "",
             FromPlace = "", ToPlace = "", Bus = "", StratedKmImage = "",
             EndedKmImage = "", BusFareImage = "";
 
@@ -118,6 +120,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     Common_Model mCommon_model_spinner;
     List<Common_Model> listOrderType = new ArrayList<>();
     List<Common_Model> modelRetailDetails = new ArrayList<>();
+    List<Common_Model> modelTypeList = new ArrayList<>();
     CustomListViewDialog customDialog;
     LinearLayout linAddAllowance;
     LinearLayout TravelBike;
@@ -136,8 +139,16 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     private static final int COLOR_ORANGE_ARGB = 0xffF57F17;
     TextView TotalTravelledKm;
 
-    Integer totalkm = 0;
+    Integer totalkm = 0, totalPersonalKm = 0;
     String exp_for = "";
+    JSONObject json_o;
+    String DateForAPi = "";
+    GoogleMap mGoogleMap;
+    EditText enterMode,enterFrom,enterTo,enterFare;
+    TextView PersonalTextKM;
+    Integer Pva, C = 0;
+    TextView PersonalKiloMeter;
+    ArrayList<SelectionModel> travelAllowanceList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,11 +175,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         TxtClosingKm = findViewById(R.id.txt_ended_km);
         travelTypeMode = findViewById(R.id.txt_type_travel);
         chkDriverAllow = findViewById(R.id.diver_allowance);
+        PersonalTextKM = findViewById(R.id.personal_km_text);
 
         LinearTravelBus = findViewById(R.id.lin_travel_bus);
         ListAllowanceMode = findViewById(R.id.list_allowance_type);
         diverAllowanceLinear = findViewById(R.id.linear_da_allowance);
         TotalTravelledKm = findViewById(R.id.total_km);
+        PersonalKiloMeter = findViewById(R.id.pers_kilo_meter);
 
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SF_code = UserDetails.getString("Sfcode", "");
@@ -176,7 +189,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         State_Code = UserDetails.getString("State_Code", "");
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         String date = Common_Class.GetDate();
-        callApi(date.substring(0, date.indexOf(" ")));
+
+        DateForAPi = date.substring(0, date.indexOf(" "));
+        callApi(DateForAPi, "");
 
         mShared_common_pref = new Shared_Common_Pref(this);
         StartedKm = mShared_common_pref.getvalue("Started_km");
@@ -249,12 +264,50 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 layoutParams.setMargins(0, 10, 0, 0);
                 LinearTravelBus.addView(rowView, layoutParams);
 
+
+                /*seperate layout for Mode Allowance*/
+
+                ArrayList<String> list = new ArrayList<String>();
+
                 int size = LinearTravelBus.getChildCount();
                 Log.d("PARENT_COUNT", String.valueOf(size));
+
+                for (int i = 0; i < size; i++) {
+                    View view = LinearTravelBus.getChildAt(i);
+                    enterMode = view.findViewById(R.id.enter_mode);
+             /*       enterMode.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            modelTypeList.clear();
+                            ModeType();
+
+                        }
+                    });
+             */       /*  EditText text = view.findViewById(R.id.yourEditTextName);*/
+                    list.add(enterMode.getText().toString());
+                    travelAllowanceList.add(new SelectionModel(enterMode.getText().toString(), "From", "TO", "FARE"));
+                    Log.e("TRAVEL_MODE", String.valueOf(travelAllowanceList.size()));
+                }
+
+
+
             }
         });
 
+        chkDriverAllow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Log.e("LOGGGGGG", "LOGGGGGGGGGGGGGGGG");
+                    callApi(DateForAPi, "DIVER");
+                } else {
+                    callApi(DateForAPi, "asd");
+                    Log.e("LOGGGGGG", "L");
+                }
+            }
+        });
     }
+
 
     public void onDelete(View v) {
         LinearTravelBus.removeView((View) v.getParent());
@@ -320,6 +373,27 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
+    /*Mode Type*/
+    public void ModeType() {
+        ModeList = new ArrayList<>();
+        ModeList.add("Bus");
+        ModeList.add("Car");
+        ModeList.add("Taxi");
+
+        for (int i = 0; i < ModeList.size(); i++) {
+            String id = String.valueOf(ModeList.get(i));
+            String name = ModeList.get(i);
+            mCommon_model_spinner = new Common_Model(id, name, "flag");
+            modelTypeList.add(mCommon_model_spinner);
+        }
+        customDialog = new CustomListViewDialog(TAClaimActivity.this, modelTypeList, 1);
+        Window window = customDialog.getWindow();
+        window.setGravity(Gravity.CENTER);
+        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        customDialog.show();
+
+    }
+
     /*Display Mode of travel View based on the choosed Date*/
     public void displayTravelMode(String ChoosedDate) {
         Log.d("JSON_VALUE_O", ChoosedDate);
@@ -349,19 +423,36 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     JsonObject jsonObject = (JsonObject) jsonArray.get(a);
                     StartedKm = String.valueOf(jsonObject.get("Start_Km"));
                     ClosingKm = String.valueOf(jsonObject.get("End_Km"));
+                    PersonalKm = String.valueOf(jsonObject.get("Personal_Km"));
                     StartedKm = StartedKm.replaceAll("^[\"']+|[\"']+$", "");
-                    ClosingKm = ClosingKm.replaceAll("^[\"']+|[\"']+$", "");
+                    PersonalKm = PersonalKm.replaceAll("^[\"']+|[\"']+$", "");
+                    if (PersonalKm.equals("null")) {
+                        PersonalKiloMeter.setText(PersonalKm);
+                    }
+                    PersonalKiloMeter.setText(PersonalKm);
                     TxtStartedKm.setText(StartedKm);
-                    TxtClosingKm.setText(ClosingKm);
 
                     Integer S = Integer.valueOf(String.valueOf(TxtStartedKm.getText()));
-                    Integer C = Integer.valueOf(String.valueOf(TxtClosingKm.getText()));
-                    Log.e("TOTAL_KM", String.valueOf(S));
-                    Log.e("TOTAL_KM", String.valueOf(C));
-                    totalkm = C - S;
 
-                    Log.e("TOTAL_KM", String.valueOf(totalkm));
-                    TotalTravelledKm.setText(String.valueOf(totalkm));
+
+                    if (ClosingKm != null && !ClosingKm.isEmpty() && !ClosingKm.equals("null") && !ClosingKm.equals("")) {
+                        ClosingKm = ClosingKm.replaceAll("^[\"']+|[\"']+$", "");
+                        TxtClosingKm.setText(ClosingKm);
+                        C = Integer.valueOf(ClosingKm);
+                        Log.e("TOTAL_KM", String.valueOf(C));
+                        totalkm = C - S;
+                        Log.e("TOTAL_Claim_KM", String.valueOf(totalPersonalKm));
+                        TotalTravelledKm.setText(String.valueOf(totalkm));
+                    }
+
+                    if (PersonalKm != null && !PersonalKm.isEmpty() && !PersonalKm.equals("null") && !PersonalKm.equals("")) {
+                        PersonalKm = PersonalKm.replaceAll("^[\"']+|[\"']+$", "");
+                        Pva = Integer.valueOf(PersonalKm);
+                        totalPersonalKm = totalkm - Pva;
+                        PersonalTextKM.setText(String.valueOf(totalPersonalKm));
+                        Log.e("TOTAL_Claim_KM", (PersonalTextKM.getText().toString()));
+                    }
+
                 }
             }
 
@@ -370,6 +461,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 Log.d("LeaveTypeList", "Error");
             }
         });
+    }
+
+    public static boolean isNullOrEmpty(String str) {
+        if (str != null && !str.isEmpty())
+            return false;
+        return true;
     }
 
     @Override
@@ -441,23 +538,48 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
 /* Intent intent = new Intent(TAClaimActivity.this, ViewTASummary.class);
  startActivity(intent);*/
+
+
         try {
             JSONArray ja = new JSONArray();
-            JSONArray ja1 = new JSONArray();
+            JSONArray AditionalAlowanceArray = new JSONArray();
+
+            Log.e("travelAllowancesize()", String.valueOf(travelAllowanceList.size()));
+
+            int size = LinearTravelBus.getChildCount();
+            Log.d("PARENT_COUNT", String.valueOf(size));
+            for (int i = 0; i < size; i++) {
+                JSONObject AditionalTravelallowance = new JSONObject();
+                View view = LinearTravelBus.getChildAt(i);
+                enterMode = view.findViewById(R.id.enter_mode);
+                enterFrom = view.findViewById(R.id.enter_from);
+                enterTo = view.findViewById(R.id.enter_to);
+                enterFare = view.findViewById(R.id.enter_fare);
+                AditionalTravelallowance.put("MODE", enterMode.getText().toString());
+                AditionalTravelallowance.put("FROM",enterFrom.getText().toString());
+                AditionalTravelallowance.put("TO",enterTo.getText().toString());
+                AditionalTravelallowance.put("FARE", enterFare.getText().toString());
+                Log.e("Inside_mode", String.valueOf(enterFare.getText().toString()));
+                AditionalAlowanceArray.put(AditionalTravelallowance);
+            }
+
+            Log.e("Karthick_ARRAY", AditionalAlowanceArray.toString());
+
+
             JSONObject jjMain = new JSONObject();
-            JSONObject jjMain1 = new JSONObject();
+            JSONObject thi=null;
             for (int i = 0; i < array.size(); i++) {
                 SelectionModel m = array.get(i);
-                JSONObject jj = new JSONObject();
-                jj.put("ID", m.getCode());
-                jj.put("Name", m.getTxt());
-                jj.put("amt", m.getValue());
+                thi = new JSONObject();
+                thi.put("ID", m.getCode());
+                thi.put("Name", m.getTxt());
+                thi.put("amt", m.getValue());
                 String[] imgUrl = m.getImg_url().split(",");
                 String url_img = "";
                 for (int j = 0; j < imgUrl.length; j++) {
                     url_img = url_img + imgUrl[j].substring(imgUrl[j].lastIndexOf("/") + 1) + ",";
                 }
-                jj.put("imgData", url_img);
+                thi.put("imgData", url_img);
 
                 Log.v("total_size__log", m.getArray().size() + "");
                 JSONArray jjarray = new JSONArray();
@@ -473,9 +595,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 }
                 Log.v("printing_final_totl", jjarray.toString());
-                jj.put("value", jjarray);
-                ja.put(jj);
+                thi.put("value", jjarray);
+                ja.put(thi);
             }
+
+            thi.put("Aditional_Allowance", AditionalAlowanceArray);
             Log.v("printing_final", ja.toString());
             jjMain.put("sf", SF_code);
             jjMain.put("div", div);
@@ -501,6 +625,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             jj.put("EventcaptureUrl", "");
             ja.put(jj);
             jjMain.put("EA", ja);
+
+            jjMain.put("Aditional_Allowance", AditionalAlowanceArray);
             ja = new JSONArray();
             for (int i = 0; i < picPath.size(); i++) {
                 JSONObject jjjj = new JSONObject();
@@ -511,7 +637,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
             jjMain.put("ActivityCaptures", ja);
             //ja1.put(jjMain);
-            Log.v("printing_final", jjMain.toString());
+            Log.v("thirumalaifinal", jjMain.toString());
             Call<ResponseBody> submit = apiInterface.saveDailyAllowance(jjMain.toString());
             submit.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -674,7 +800,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         startActivityForResult(intent, 2);
     }
 
-    public void callApi(String date) {
+    public void callApi(String date, String OS) {
+
+        Log.e("OS_VALLUE", "   " + OS);
         try {
             JSONObject jj = new JSONObject();
             jj.put("Ta_Date", date);
@@ -712,8 +840,23 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                     JSONObject json_in = jjja.getJSONObject(j);
                                     arr.add(new SelectionModel(json_in.getString("Ad_Fld_Name"), "", json_in.getString("Ad_Fld_ID"), "", ""));
                                 }
+
+                                if (OS.equals("")) {
+                                    if (exp_for.equals("0")) {
+                                        array.add(new SelectionModel(json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
+                                    }
+                                } else if (OS.equals("DIVER")) {
+                                    if (exp_for.equals("0") || exp_for.equals("1") || exp_for.equals("2")) {
+                                        array.add(new SelectionModel(json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
+                                    }
+                                } else {
+                                    if (exp_for.equals("0") || exp_for.equals("1")) {
+                                        array.add(new SelectionModel(json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
+                                    }
+                                }
+
                                 arr1.add(new SelectionModel("", arr));
-                                array.add(new SelectionModel(json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
+
                             }
                             JSONArray ja1 = js.getJSONArray("TodayExpense");
                             if (ja1.length() != 0)
@@ -721,14 +864,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             Log.v("todayExp_val", todayExp);
                             DailyExpenseAdapter adpt = new DailyExpenseAdapter(TAClaimActivity.this, array);
                             list.setAdapter(adpt);
-
                             for (int i = 0; i < array.size(); i++) {
                                 createDynamicViewForSingleRow(array.get(i).getTxt(), array.get(i).getArray(), i, array.get(i).getUser_enter(), array.get(i).getAttachment(), array.get(i).getMax());
                                 Log.e("String_Name", array.get(i).getTxt());
                                 Log.e("String_Name", String.valueOf(array.get(i).getArray()));
                             }
-
-
                         }
                     } catch (Exception e) {
                     }
@@ -1010,10 +1150,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
-
         if (type == 10) {
             txt_date.setText(myDataset.get(position).getName());
             Log.d("JSON_VALUE", myDataset.get(position).getName());
+            onMapReady(mGoogleMap);
             displayTravelMode(myDataset.get(position).getId());
         } else if (type == 11) {
             modeTextView.setText(myDataset.get(position).getName());
@@ -1023,40 +1163,50 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             travelTypeMode.setText(TrTyp);
 
             if (TrTyp.equalsIgnoreCase("OS") == true) {
+                callApi(DateForAPi, "OS");
                 diverAllowanceLinear.setVisibility(View.VISIBLE);
             } else {
+                callApi(DateForAPi, "");
                 diverAllowanceLinear.setVisibility(View.GONE);
             }
 
+            Log.d("JSON_VALUE", myDataset.get(position).getName());
+
+
+        } else if (type == 1) {
+            enterMode.setText(myDataset.get(position).getName());
             Log.d("JSON_VALUE", myDataset.get(position).getName());
         }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng locationOne = new LatLng(13.1148, 80.2872);
-        LatLng locationTwo = new LatLng(13.0300, 80.2421);
+        mGoogleMap = googleMap;
+        if (!txt_date.getText().toString().equals("")) {
+            LatLng locationOne = new LatLng(13.1148, 80.2872);
+            LatLng locationTwo = new LatLng(13.0300, 80.2421);
 
   /*      BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.marker_icon);
         googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Old washermenpet"));
         googleMap.addMarker(new MarkerOptions().position(sydney2).title("Marker in Nandanam"));
        *//* googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*//*
-         */
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationTwo, 15));
-        // Zoom in, animating the camera.
-        googleMap.animateCamera(CameraUpdateFactory.zoomIn());
-        // Zoom out to zoom level 10, animating with a duration of 2 seconds.
-        googleMap.animateCamera(CameraUpdateFactory.zoomTo(9), 2000, null);
+             */
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationTwo, 15));
+            // Zoom in, animating the camera.
+            googleMap.animateCamera(CameraUpdateFactory.zoomIn());
+            // Zoom out to zoom level 10, animating with a duration of 2 seconds.
+            googleMap.animateCamera(CameraUpdateFactory.zoomTo(9), 2000, null);
 
 
-        Polyline polyline1 = googleMap.addPolyline(new PolylineOptions()
-                .clickable(true)
-                .add(
-                        new LatLng(13.1148, 80.2872),
-                        new LatLng(13.0300, 80.2421)));
+            Polyline polyline1 = googleMap.addPolyline(new PolylineOptions()
+                    .clickable(true)
+                    .add(
+                            new LatLng(13.1148, 80.2872),
+                            new LatLng(13.0300, 80.2421)));
 
-        polyline1.setTag("A");
-        polyline1.setColor(COLOR_ORANGE_ARGB);
+            polyline1.setTag("A");
+            polyline1.setColor(COLOR_ORANGE_ARGB);
+        }
     }
 
     public class InputFilterMinMax implements InputFilter {

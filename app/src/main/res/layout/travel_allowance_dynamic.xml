@@ -51,13 +51,15 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:hint="Enter Mode"
-            android:padding="@dimen/C5dp"
             android:background="@android:color/transparent"
+            android:hint="Enter Fare"
+            android:padding="@dimen/C5dp"
+            android:id="@+id/enter_fare"
             android:textColorHint="#C0C0C0"
             android:textSize="@dimen/C14dp" />
 
         <ImageView
+            android:id="@+id/image_attach"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:src="@drawable/attach_files" />

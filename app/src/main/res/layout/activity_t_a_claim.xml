@@ -121,8 +121,7 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
-                        android:layout_marginLeft="@dimen/C5dp"
-                        >
+                        android:layout_marginLeft="@dimen/C5dp">
 
 
                         <fragment
@@ -206,8 +205,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/C8dp"
-                            android:orientation="vertical"
-                            android:visibility="gone">
+                            android:visibility="gone"
+                            android:orientation="vertical">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -231,9 +230,9 @@
                                     android:layout_gravity="center"
                                     android:layout_marginLeft="@dimen/C10dp"
                                     android:text="Bike"
-                                    android:textStyle="bold"
                                     android:textColor="#000"
-                                    android:textSize="12sp" />
+                                    android:textSize="12sp"
+                                    android:textStyle="bold" />
 
                             </LinearLayout>
 
@@ -275,7 +274,7 @@
                                                 android:layout_marginTop="@dimen/C5dp"
                                                 android:background="#F2EDEDED"
                                                 android:padding="@dimen/C5dp"
-                                                android:text="54446454"
+                                                android:text=" "
                                                 android:textAllCaps="false"
                                                 android:textSize="13sp" />
 
@@ -320,7 +319,7 @@
                                                 android:layout_marginTop="@dimen/C5dp"
                                                 android:background="#F2EDEDED"
                                                 android:padding="@dimen/C5dp"
-                                                android:text="54446454"
+                                                android:text=" "
                                                 android:textAllCaps="false"
                                                 android:textSize="13sp" />
 
@@ -338,32 +337,65 @@
 
                             </LinearLayout>
 
+
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/C10dp"
                                 android:orientation="horizontal">
 
-                                <TextView
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:text="Travelled  Km : "
-                                    android:textAllCaps="false"
-                                    android:textColor="#000"
-                                    android:textSize="12sp" />
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:text="Travelled  Km : "
+                                        android:textAllCaps="false"
+                                        android:textColor="#000"
+                                        android:textSize="12sp" />
 
 
-                                <TextView
-                                    android:id="@+id/total_km"
+                                    <TextView
+                                        android:id="@+id/total_km"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_marginLeft="@dimen/C10dp"
+                                        android:text=""
+                                        android:textColor="#000"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
+
+                                <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="@dimen/C10dp"
-                                    android:text=""
-                                    android:textColor="#000"
-                                    android:textSize="12sp" />
+                                    android:layout_marginLeft="@dimen/C20dp"
+                                    android:orientation="horizontal">
 
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:text="Personal  Km : "
+                                        android:textAllCaps="false"
+                                        android:textColor="#000"
+                                        android:textSize="12sp" />
+
+
+                                    <TextView
+                                        android:id="@+id/pers_kilo_meter"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_marginLeft="@dimen/C10dp"
+                                        android:text=""
+                                        android:textColor="#000"
+                                        android:textSize="12sp" />
+                                </LinearLayout>
                             </LinearLayout>
 
                             <LinearLayout
@@ -376,19 +408,19 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="Total caliming Km : "
+                                    android:text="Total Claiming Km : "
                                     android:textAllCaps="false"
                                     android:textColor="#000"
                                     android:textSize="12sp" />
 
 
                                 <TextView
-                                    android:id="@+id/personal_km"
+                                    android:id="@+id/personal_km_text"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:layout_marginLeft="@dimen/C10dp"
-                                    android:text=""
+                                    android:text=" "
                                     android:textColor="#000"
                                     android:textSize="12sp" />
 
@@ -442,14 +474,11 @@
                     android:orientation="vertical"
                     android:visibility="gone">
 
-
                     <CheckBox
                         android:id="@+id/diver_allowance"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:text="Driver Allowance"></CheckBox>
-
 
                 </LinearLayout>
 
@@ -544,7 +573,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/card_rmk"
-                    android:layout_width="fill_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txt_rmk"
                     android:layout_marginTop="6dp"
@@ -557,7 +586,7 @@
                     <EditText
                         android:id="@+id/edt_rmk"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/C60dp"
                         android:background="@null"
                         android:fontFamily="@font/basic"
                         android:padding="10dp"

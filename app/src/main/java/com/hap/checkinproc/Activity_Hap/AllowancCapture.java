@@ -47,7 +47,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     private int noOfCameras;
     Button btnRtPrv, btnOkPrv;
 
-    Intent intents,intev;
+    Intent intents, intev;
     String mode = "", allowance = "", StartedKM = "", FromKm = "", ToKm = "", Fare = "", Closing = "";
 
     Shared_Common_Pref mShared_common_pref;
@@ -62,7 +62,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         StartSelfiCamera();
 
         intents = getIntent();
-        if(getIntent().getExtras()!=null) {
+        if (getIntent().getExtras() != null) {
             allowance = intents.getStringExtra("allowance");
             mode = intents.getStringExtra("Mode");
             StartedKM = intents.getStringExtra("Started");
@@ -317,5 +317,10 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             mCamera.release();
             mCamera = null;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 }

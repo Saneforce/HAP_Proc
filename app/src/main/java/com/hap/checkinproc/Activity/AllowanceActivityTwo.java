@@ -45,7 +45,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
     TextView TextModeTravel, TextStartedKm;
     ImageView StartedKmImage, EndedKmImage;
     Button takeEndedPhoto, submitAllowance;
-    EditText EndedEditText;
+    EditText EndedEditText, PersonalKmEdit;
     Integer stKM = 0, endKm = 0;
     String EndImageURi = " ";
     public static final String mypreference = "mypref";
@@ -57,6 +57,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
     public static final String CheckInfo = "CheckInDetail";
     public static final String UserInfo = "MyPrefs";
     Shared_Common_Pref shared_common_pref;
+    Integer personalKM = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +73,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         EndedKmImage = findViewById(R.id.img_ended_km);
         takeEndedPhoto = findViewById(R.id.btn_take_photo);
         submitAllowance = findViewById(R.id.submit_allowance);
+        PersonalKmEdit = findViewById(R.id.personal_ended_km);
         shared_common_pref = new Shared_Common_Pref(this);
         getToolbar();
 
@@ -155,15 +157,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         });
 
 
-      /*  editor.putString("SharedImage", Uri.fromFile(file).toString());
-        editor.putString("Sharedallowance", "One");
-        editor.putString("SharedMode", mode);
-        editor.putString("StartedKM", StartedKM);
-        editor.putString("SharedFromKm", FromKm);
-        editor.putString("SharedToKm", ToKm);
-        editor.putString("SharedFare", Fare);
-        editor.putString("SharedImages", Uri.fromFile(file).toString());*/
-
         submitAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -194,10 +187,19 @@ public class AllowanceActivityTwo extends AppCompatActivity {
     /*Submit*/
     public void submitData() {
 
+        Log.e("PERSONAL_KM", PersonalKmEdit.getText().toString());
+
+        if(PersonalKmEdit.getText().toString().equals("")){
+
+        }else{
+            personalKM = Integer.valueOf(PersonalKmEdit.getText().toString());
+        }
+
         try {
             JSONObject jj = new JSONObject();
             jj.put("km", EndedEditText.getText().toString());
             jj.put("rmk", EndedEditText.getText().toString());
+            jj.put("pkm", personalKM);
             jj.put("mod", "11");
             jj.put("sf", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
             jj.put("div", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
@@ -238,6 +240,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                                 editor.remove("SharedToKm");
                                 editor.remove("SharedFare");
                                 editor.remove("SharedImages");
+                                editor.remove("Closing");
                                 editor.commit();
                                 Intent takePhoto = new Intent(AllowanceActivityTwo.this, ImageCapture.class);
                                 takePhoto.putExtra("Mode", "COUT");

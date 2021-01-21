@@ -5,43 +5,92 @@ import java.util.ArrayList;
 public class SelectionModel {
     String txt;
     boolean isClick;
-    String code,value,img_url,tmp_url,cardview_id,user_enter,attachment,max;
-    ArrayList<SelectionModel> array=new ArrayList<>();
+    String code, value, img_url, tmp_url, cardview_id, user_enter, attachment, max;
+    ArrayList<SelectionModel> array = new ArrayList<>();
+
+    String modeTravel, from, to, Fare;
 
 
     public SelectionModel(String txt, boolean isClick) {
         this.txt = txt;
         this.isClick = isClick;
     }
+
     public SelectionModel(String txt, boolean isClick, String code) {
         this.txt = txt;
         this.isClick = isClick;
-        this.code=code;
+        this.code = code;
     }
-    public SelectionModel(String txt,ArrayList<SelectionModel> array){
+
+    public SelectionModel(String txt, ArrayList<SelectionModel> array) {
         this.txt = txt;
-        this.array=array;
+        this.array = array;
     }
-    public SelectionModel(String txt, String value, String code,String img_url,String tmp_url) {
-        this.txt = txt;
-        this.value = value;
-        this.code=code;
-        this.img_url=img_url;
-        this.tmp_url=tmp_url;
-    }
-    public SelectionModel(String txt, String value, String code,String img_url,ArrayList<SelectionModel> array,String user_enter,String attachment,String max) {
+
+    public SelectionModel(String txt, String value, String code, String img_url, String tmp_url) {
         this.txt = txt;
         this.value = value;
-        this.code=code;
-        this.img_url=img_url;
-        this.array=array;
-        this.user_enter=user_enter;
-        this.attachment=attachment;
-        this.max=max;
+        this.code = code;
+        this.img_url = img_url;
+        this.tmp_url = tmp_url;
     }
-    public SelectionModel(String txt, String code){
-        this.txt=txt;
-        this.code=code;
+
+    public SelectionModel(String txt, String value, String code, String img_url, ArrayList<SelectionModel> array, String user_enter, String attachment, String max) {
+        this.txt = txt;
+        this.value = value;
+        this.code = code;
+        this.img_url = img_url;
+        this.array = array;
+        this.user_enter = user_enter;
+        this.attachment = attachment;
+        this.max = max;
+    }
+
+    public SelectionModel(String txt, String code) {
+        this.txt = txt;
+        this.code = code;
+    }
+
+
+    public SelectionModel(String modeTravel, String from, String to, String Fare) {
+        this.modeTravel = modeTravel;
+        this.from = from;
+        this.to = to;
+        this.Fare = Fare;
+
+    }
+
+
+    public String getModeTravel() {
+        return modeTravel;
+    }
+
+    public void setModeTravel(String modeTravel) {
+        this.modeTravel = modeTravel;
+    }
+
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
+
+    public String getTo() {
+        return to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
+    }
+
+    public String getFare() {
+        return Fare;
+    }
+
+    public void setFare(String fare) {
+        Fare = fare;
     }
 
     public String getCardview_id() {
@@ -132,15 +181,15 @@ public class SelectionModel {
         this.code = code;
     }
 
-    public SelectionModel(boolean isClick){
-        this.isClick=isClick;
+    public SelectionModel(boolean isClick) {
+        this.isClick = isClick;
     }
 
     @Override
     public boolean equals(Object obj) {
-        SelectionModel dt = (SelectionModel)obj;
+        SelectionModel dt = (SelectionModel) obj;
 
-        if(String.valueOf(dt.isClick).equals(String.valueOf(isClick))) return true;
+        if (String.valueOf(dt.isClick).equals(String.valueOf(isClick))) return true;
 
         return false;
     }

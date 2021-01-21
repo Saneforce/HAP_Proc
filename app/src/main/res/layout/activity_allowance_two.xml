@@ -213,6 +213,7 @@
 
                     <ImageView
                         android:layout_width="@dimen/C8dp"
+                        android:visibility="gone"
                         android:layout_height="@dimen/C8dp"
                         android:src="@drawable/mandatory" />
 
@@ -240,15 +241,7 @@
                             android:padding="10dp"
                             android:textSize="13dp" />
 
-                        <Button
-                            android:id="@+id/btn_personal_photo"
-                            android:layout_width="@dimen/C100dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/C10dp"
-                            android:background="@drawable/button_blueg"
-                            android:text="Take Photo"
-                            android:textColor="@android:color/white"></Button>
-                    </LinearLayout>
+                          </LinearLayout>
 
                 </LinearLayout>
 

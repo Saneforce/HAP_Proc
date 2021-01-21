@@ -69,7 +69,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     SharedPreferences sharedpreferences;
 
     /*String Mode = "Bus";*/
-
+    CardView gateIn_gateOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,6 +135,9 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         CardView cardview3 = findViewById(R.id.cardview3);
         CardView cardview4 = findViewById(R.id.cardview4);
         CardView cardView5 = findViewById(R.id.cardview5);
+        gateIn_gateOut = findViewById(R.id.btn_gate_in);
+
+
         StActivity = findViewById(R.id.StActivity);
         CardView btnCheckout = findViewById(R.id.btnCheckout);
         cardview3.setOnClickListener(this);
@@ -142,6 +145,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         cardView5.setOnClickListener(this);
         StActivity.setOnClickListener(this);
         btnCheckout.setOnClickListener(this);
+        gateIn_gateOut.setOnClickListener(this);
 
         Bundle params = getIntent().getExtras();
         viewMode = params.getString("Mode");
@@ -484,6 +488,9 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             case R.id.cardview5:
                 intent = new Intent(this, Reports.class);
                 break;
+            case R.id.btn_gate_in:
+                startActivity(new Intent(this, QRCodeScanner.class));
+                break;
             case R.id.StActivity:
                 new AlertDialog.Builder(Dashboard_Two.this)
                         .setTitle("HAP Check-In")
@@ -516,7 +523,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 intent = new Intent(this, View_All_Status_Activity.class);
                 break;
             case R.id.btnCheckout:
-                AlertDialogBox.showDialog(Dashboard_Two.this, "HAP Check-In","Do you want to Checkout?", "Yes", "No", false, new AlertBox() {
+                AlertDialogBox.showDialog(Dashboard_Two.this, "HAP Check-In", "Do you want to Checkout?", "Yes", "No", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
                         if (sharedpreferences.contains(Name) && sharedpreferences.contains(MOT)) {
