@@ -213,6 +213,7 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=get/Expensedate")
     Call<JsonArray> getTADate(@Field("data") String userData);
 
+
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/expensedatedetails")
     Call<JsonArray> getTAdateDetails(@Field("data") String userData);
@@ -310,6 +311,13 @@ public interface ApiInterface {
     @POST("Db_V13.php?")
     Call<Object> GetRouteObjects(@QueryMap Map<String, String> params,
                                  @Field("data") String data);
+
+/*
+
+    @FormUrlEncoded
+    @POST("Db_V13.php?")
+    Call<Object> getModeOfTravel(@QueryMap Map<String, String> params,
+                                 @Field("data") String data);*/
 
     /*Save Devaition Entry*/
     @FormUrlEncoded

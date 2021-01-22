@@ -1,5 +1,8 @@
 package com.hap.checkinproc.Activity;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -57,6 +60,8 @@ import com.hap.checkinproc.Activity.Util.ImageFilePath;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Activity.Util.UpdateUi;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
+import com.hap.checkinproc.Activity_Hap.ERT;
+import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -71,7 +76,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -144,11 +152,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     JSONObject json_o;
     String DateForAPi = "";
     GoogleMap mGoogleMap;
-    EditText enterMode,enterFrom,enterTo,enterFare;
+    EditText enterMode, enterFrom, enterTo, enterFare;
     TextView PersonalTextKM;
     Integer Pva, C = 0;
     TextView PersonalKiloMeter;
     ArrayList<SelectionModel> travelAllowanceList = new ArrayList<>();
+    EditText editTextRemarks;
+    String driverAllowance = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +171,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             mapFragment.getMapAsync(this);
         }
 
-
+        getToolbar();
         txt_date = findViewById(R.id.txt_date);
         card_date = findViewById(R.id.card_date);
         card_type_travel = findViewById(R.id.card_type_travel);
@@ -182,6 +192,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         diverAllowanceLinear = findViewById(R.id.linear_da_allowance);
         TotalTravelledKm = findViewById(R.id.total_km);
         PersonalKiloMeter = findViewById(R.id.pers_kilo_meter);
+        editTextRemarks = findViewById(R.id.edt_rmk);
+
 
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SF_code = UserDetails.getString("Sfcode", "");
@@ -263,32 +275,17 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 layoutParams.setMargins(0, 10, 0, 0);
                 LinearTravelBus.addView(rowView, layoutParams);
+                ImageView imageAttach = findViewById(R.id.image_attach);
+                imageAttach.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e("ImageCapture", "ImageCapture");
 
-
-                /*seperate layout for Mode Allowance*/
-
-                ArrayList<String> list = new ArrayList<String>();
+                    }
+                });
 
                 int size = LinearTravelBus.getChildCount();
                 Log.d("PARENT_COUNT", String.valueOf(size));
-
-                for (int i = 0; i < size; i++) {
-                    View view = LinearTravelBus.getChildAt(i);
-                    enterMode = view.findViewById(R.id.enter_mode);
-             /*       enterMode.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            modelTypeList.clear();
-                            ModeType();
-
-                        }
-                    });
-             */       /*  EditText text = view.findViewById(R.id.yourEditTextName);*/
-                    list.add(enterMode.getText().toString());
-                    travelAllowanceList.add(new SelectionModel(enterMode.getText().toString(), "From", "TO", "FARE"));
-                    Log.e("TRAVEL_MODE", String.valueOf(travelAllowanceList.size()));
-                }
-
 
 
             }
@@ -300,6 +297,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 if (isChecked) {
                     Log.e("LOGGGGGG", "LOGGGGGGGGGGGGGGGG");
                     callApi(DateForAPi, "DIVER");
+                    driverAllowance = "1";
                 } else {
                     callApi(DateForAPi, "asd");
                     Log.e("LOGGGGGG", "L");
@@ -311,6 +309,53 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     public void onDelete(View v) {
         LinearTravelBus.removeView((View) v.getParent());
+    }
+
+
+
+    /*Toolbar*/
+
+    public void getToolbar() {
+
+        TextView txtHelp = findViewById(R.id.toolbar_help);
+        ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+
+        TextView txtErt = findViewById(R.id.toolbar_ert);
+        TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
+
+        txtErt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ERT.class));
+            }
+        });
+        txtPlaySlip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+        ObjectAnimator textColorAnim;
+        textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
+        textColorAnim.setDuration(500);
+        textColorAnim.setEvaluator(new ArgbEvaluator());
+        textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
+        textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
+        textColorAnim.start();
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), TAClaimActivity.class));
+            }
+        });
     }
 
 
@@ -463,11 +508,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-    public static boolean isNullOrEmpty(String str) {
-        if (str != null && !str.isEmpty())
-            return false;
-        return true;
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -536,12 +576,24 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     public void submitData() {
 
-/* Intent intent = new Intent(TAClaimActivity.this, ViewTASummary.class);
- startActivity(intent);*/
+
+        String uniqueKey = SF_code + System.currentTimeMillis();
+        Log.e("UNIQUE_KEY", uniqueKey);
+
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+        Calendar calobj = Calendar.getInstance();
+        String dateTime = df.format(calobj.getTime());
+        Log.e("DATe_TIME", dateTime);
+
 
 
         try {
+
             JSONArray ja = new JSONArray();
+
+            /*Addtion Allowance Object*/
+            JSONObject additionalAllowanceObject = new JSONObject();
             JSONArray AditionalAlowanceArray = new JSONArray();
 
             Log.e("travelAllowancesize()", String.valueOf(travelAllowanceList.size()));
@@ -556,18 +608,19 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 enterTo = view.findViewById(R.id.enter_to);
                 enterFare = view.findViewById(R.id.enter_fare);
                 AditionalTravelallowance.put("MODE", enterMode.getText().toString());
-                AditionalTravelallowance.put("FROM",enterFrom.getText().toString());
-                AditionalTravelallowance.put("TO",enterTo.getText().toString());
+                AditionalTravelallowance.put("FROM", enterFrom.getText().toString());
+                AditionalTravelallowance.put("TO", enterTo.getText().toString());
                 AditionalTravelallowance.put("FARE", enterFare.getText().toString());
                 Log.e("Inside_mode", String.valueOf(enterFare.getText().toString()));
                 AditionalAlowanceArray.put(AditionalTravelallowance);
+               // additionalAllowanceObject.put("Aditional_Allowance", AditionalAlowanceArray);
             }
 
             Log.e("Karthick_ARRAY", AditionalAlowanceArray.toString());
 
 
             JSONObject jjMain = new JSONObject();
-            JSONObject thi=null;
+            JSONObject thi = null;
             for (int i = 0; i < array.size(); i++) {
                 SelectionModel m = array.get(i);
                 thi = new JSONObject();
@@ -599,13 +652,19 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 ja.put(thi);
             }
 
-            thi.put("Aditional_Allowance", AditionalAlowanceArray);
+            /* thi.put("Aditional_Allowance", AditionalAlowanceArray);*/
+
+        //    ja.put(additionalAllowanceObject);
+
+            // ja.put(addtionDataObject);
+            // ja.put(addtionDataObject);
             Log.v("printing_final", ja.toString());
             jjMain.put("sf", SF_code);
             jjMain.put("div", div);
-            String dates = txt_date.getText().toString();
-            jjMain.put("date", dates.substring(0, dates.lastIndexOf("-")) + " 00:00:00");
+            jjMain.put("date", dateTime);
             jjMain.put("dailyExpense", ja);
+            jjMain.put("AditionalAlowanceArray", AditionalAlowanceArray);
+
             ja = new JSONArray();
             JSONObject jj = new JSONObject();
             JSONObject jjj = new JSONObject(todayExp);
@@ -613,20 +672,27 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             jj.put("MOT", jjj.getString("MOT"));
             jj.put("BusFare", "");
             jj.put("DateOfExp", txt_date.getText().toString());
+            jj.put("travel_type", travelTypeMode.getText().toString());
+            jj.put("driver_allowance", driverAllowance);
+            jj.put("remarks", editTextRemarks.getText().toString());
             jj.put("Start_image", jjj.getString("Image_Url"));
-            jj.put("Start_Km", jjj.getString("Start_Km"));
+            jj.put("Start_Km", TxtStartedKm.getText().toString());
             jj.put("TodayworkRoute", "");
             jj.put("TodayworkName", "");
             jj.put("Workplace", "");
             jj.put("Workplace_Name", "");
             jj.put("Stop_image", jjj.getString("End_Image_Url"));
-            jj.put("Stop_km", jjj.getString("End_Km"));
-            jj.put("Ukey", "MGR4762" + System.currentTimeMillis());
+            jj.put("Stop_km", TxtClosingKm.getText().toString());
+            jj.put("Ukey", uniqueKey);
+            jj.put("travelled_km", TotalTravelledKm.getText().toString());
+            jj.put("personal_km", PersonalKiloMeter.getText().toString());
+            jj.put("total_claiming_km", PersonalTextKM.getText().toString());
             jj.put("EventcaptureUrl", "");
             ja.put(jj);
             jjMain.put("EA", ja);
 
-            jjMain.put("Aditional_Allowance", AditionalAlowanceArray);
+            Log.e("JSONOBJECT", jjMain.toString());
+          /*  Log.v("thirumalaifinal", jjMain.toString());
             ja = new JSONArray();
             for (int i = 0; i < picPath.size(); i++) {
                 JSONObject jjjj = new JSONObject();
@@ -636,8 +702,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 ja.put(jjjj);
             }
             jjMain.put("ActivityCaptures", ja);
-            //ja1.put(jjMain);
-            Log.v("thirumalaifinal", jjMain.toString());
+            //ja1.put(jjMain);*/
+
+
             Call<ResponseBody> submit = apiInterface.saveDailyAllowance(jjMain.toString());
             submit.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -802,7 +869,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     public void callApi(String date, String OS) {
 
-        Log.e("OS_VALLUE", "   " + OS);
+        Log.e("OS_VALLUE", " " + OS);
         try {
             JSONObject jj = new JSONObject();
             jj.put("Ta_Date", date);
@@ -843,15 +910,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                                 if (OS.equals("")) {
                                     if (exp_for.equals("0")) {
-                                        array.add(new SelectionModel(json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
+                                        array.add(new SelectionModel(json_o.getString("Short_Name"),json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
                                     }
                                 } else if (OS.equals("DIVER")) {
                                     if (exp_for.equals("0") || exp_for.equals("1") || exp_for.equals("2")) {
-                                        array.add(new SelectionModel(json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
+                                        array.add(new SelectionModel(json_o.getString("Short_Name"),json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
                                     }
                                 } else {
                                     if (exp_for.equals("0") || exp_for.equals("1")) {
-                                        array.add(new SelectionModel(json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
+                                        array.add(new SelectionModel(json_o.getString("Short_Name"),json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
                                     }
                                 }
 
@@ -865,7 +932,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             DailyExpenseAdapter adpt = new DailyExpenseAdapter(TAClaimActivity.this, array);
                             list.setAdapter(adpt);
                             for (int i = 0; i < array.size(); i++) {
-                                createDynamicViewForSingleRow(array.get(i).getTxt(), array.get(i).getArray(), i, array.get(i).getUser_enter(), array.get(i).getAttachment(), array.get(i).getMax());
+                                createDynamicViewForSingleRow(array.get(i).getHeader(), array.get(i).getTxt(), array.get(i).getArray(), i, array.get(i).getUser_enter(), array.get(i).getAttachment(), array.get(i).getMax());
                                 Log.e("String_Name", array.get(i).getTxt());
                                 Log.e("String_Name", String.valueOf(array.get(i).getArray()));
                             }
@@ -885,20 +952,35 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @SuppressLint("ResourceType")
-    public void createDynamicViewForSingleRow(String name, ArrayList<SelectionModel> array, int position, String userenter, String attachment, String max) {
+    public void createDynamicViewForSingleRow(String headerValue,String name, ArrayList<SelectionModel> array, int position, String userenter, String attachment, String max) {
         RelativeLayout rl = new RelativeLayout(this);
         RelativeLayout.LayoutParams layoutparams_1 = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
         rl.setLayoutParams(layoutparams_1);
+
+
+
+ /* RelativeLayout.LayoutParams header = new RelativeLayout.LayoutParams(
+ RelativeLayout.LayoutParams.WRAP_CONTENT,
+ RelativeLayout.LayoutParams.WRAP_CONTENT);
+ TextView header_Txt = new TextView(this);
+ header_Txt.setText(headerValue);
+ Log.e("CREATE_DYNAMIC_VIEW", name);
+ header_Txt.setLayoutParams(header);
+ header_Txt.setTextSize(16f);
+ header_Txt.setId(54321);
+ header_Txt.setTextColor(Color.BLACK);
+ rl.addView(header_Txt);
+ */
+
+
         RelativeLayout.LayoutParams layoutparams_2 = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
 
         layoutparams_2.setMargins(5, 0, 0, 0);
         TextView txt = new TextView(this);
-
-
         txt.setText(name);
         Log.e("CREATE_DYNAMIC_VIEW", name);
         Typeface typeface = ResourcesCompat.getFont(this, R.font.basic);
@@ -922,15 +1004,18 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         edt.setEms(5);
         edt.setId(12345);
         edt.setInputType(InputType.TYPE_CLASS_NUMBER);
-        if (userenter.equalsIgnoreCase("0")) {
-            edt.setEnabled(false);
-            edt.setText(max);
-        } else if (userenter.equalsIgnoreCase("1")) {
+        /* if (userenter.equalsIgnoreCase("0")) {
+         *//* edt.setEnabled(false);
+ edt.setText(max);*//*
+ } else if (userenter.equalsIgnoreCase("1")) {
+ edt.setFilters(new InputFilter[]{new InputFilterMinMax("0", max)});
+ }*/
+
+        if (userenter.equalsIgnoreCase("1")) {
             edt.setFilters(new InputFilter[]{new InputFilterMinMax("0", max)});
         }
         edt.setPadding(9, 9, 9, 9);
         rl.addView(edt);
-
         RelativeLayout.LayoutParams layoutparams_4 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         layoutparams_4.addRule(RelativeLayout.ALIGN_PARENT_END);
         layoutparams_4.addRule(RelativeLayout.CENTER_VERTICAL);
@@ -1186,10 +1271,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             LatLng locationOne = new LatLng(13.1148, 80.2872);
             LatLng locationTwo = new LatLng(13.0300, 80.2421);
 
-  /*      BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.marker_icon);
-        googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Old washermenpet"));
-        googleMap.addMarker(new MarkerOptions().position(sydney2).title("Marker in Nandanam"));
-       *//* googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*//*
+ /* BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.marker_icon);
+ googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Old washermenpet"));
+ googleMap.addMarker(new MarkerOptions().position(sydney2).title("Marker in Nandanam"));
+ *//* googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*//*
              */
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationTwo, 15));
             // Zoom in, animating the camera.

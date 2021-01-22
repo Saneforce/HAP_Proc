@@ -123,8 +123,10 @@
     <string name="order">Orders</string>
     <string name="add_retailer">Add New Retailer</string>
     <string name="remarks">Enter the Remarks (or) Select from Templates</string>
+    <string name="remark">Enter the Remarks </string>
     <string name="from_date">From :</string>
     <string name="to_date">To :</string>
+    <string name="allowance">Do you want to submit Allowance?</string>
 
     <bool name="config_closeDialogWhenTouchOutside">true</bool>
 

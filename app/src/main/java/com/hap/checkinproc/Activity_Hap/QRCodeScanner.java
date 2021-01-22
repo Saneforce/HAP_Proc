@@ -117,11 +117,11 @@ public class QRCodeScanner extends AppCompatActivity {
                                String intentData = barcodes.valueAt(0).displayValue.replace("|",",");
                                Log.e("INTENT_DATA", intentData);
 
-                                String[] arrSplit_3 = intentData.split(",");
+                                /*String[] arrSplit_3 = intentData.split(",");
 
 
 
-                           //     txtBarcodeValue.setText(intentData.split("|")[0]);
+                           //     txtBarcodeValue.setText(intentData.split("|")[0]);*/
                             }
                         }
                     });

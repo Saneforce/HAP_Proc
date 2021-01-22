@@ -26,6 +26,7 @@
     <dimen name="C20dp">20dp</dimen>
     <dimen name="C30dp">30dp</dimen>
     <dimen name="C40dp">40dp</dimen>
+    <dimen name="C45dp">45dp</dimen>
     <dimen name="C50dp">50dp</dimen>
     <dimen name="C60dp">60dp</dimen>
     <dimen name="C70dp">70dp</dimen>

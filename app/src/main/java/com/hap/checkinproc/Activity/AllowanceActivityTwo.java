@@ -88,7 +88,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             Log.e("Privacypolicy", "Checking" + StartedImage);
             if (StartedImage != null && !StartedImage.isEmpty() && !StartedImage.equals("null")) {
                 StartedKmImage.setImageURI(Uri.parse(StartedImage));
-                StartedKmImage.setRotation((float) 90);
+
             }
 
         }
@@ -160,16 +160,22 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         submitAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!EndImageURi.equals("") && !EndedEditText.getText().toString().equals("")) {
-                  /*  SharedPreferences.Editor editor = sharedpreferences.edit();
+                /* if (!EndImageURi.equals("") || EndImageURi != null || !EndedEditText.getText().toString().equals("")) {
+                 *//*  SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.remove(Name);
                     editor.remove(MOT);
-                    editor.commit();*/
+                    editor.commit();*//*
                     stKM = Integer.valueOf(StartedKm);
                     endKm = Integer.valueOf(String.valueOf(EndedEditText.getText().toString()));
                     Log.e("STARTED_KM", String.valueOf(endKm));
                     if (stKM < endKm) {
-                        submitData();
+                       *//* if (EndedEditText.getText().toString().matches("") || EndedImage.matches("")) {
+                            Toast.makeText(AllowanceActivityTwo.this, "Enter details", Toast.LENGTH_SHORT).show();
+                            return;
+                        } else {
+                            submitData();
+                        }*//*
+
                     } else {
                         Toast.makeText(AllowanceActivityTwo.this, "Should be greater then Started Km", Toast.LENGTH_SHORT).show();
                     }
@@ -177,7 +183,22 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                 } else {
                     Toast.makeText(AllowanceActivityTwo.this, "Please enter all the details", Toast.LENGTH_SHORT).show();
                 }
+*/
 
+
+                if (EndedEditText.getText().toString().matches("") || EndedImage.matches("")) {
+                    Toast.makeText(AllowanceActivityTwo.this, "Enter details", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    stKM = Integer.valueOf(StartedKm);
+                    endKm = Integer.valueOf(String.valueOf(EndedEditText.getText().toString()));
+                    if (stKM < endKm) {
+                        submitData();
+                    } else {
+                        Toast.makeText(AllowanceActivityTwo.this, "Should be greater then Started Km", Toast.LENGTH_SHORT).show();
+
+                    }
+                }
 
             }
         });
@@ -189,9 +210,9 @@ public class AllowanceActivityTwo extends AppCompatActivity {
 
         Log.e("PERSONAL_KM", PersonalKmEdit.getText().toString());
 
-        if(PersonalKmEdit.getText().toString().equals("")){
+        if (PersonalKmEdit.getText().toString().equals("")) {
 
-        }else{
+        } else {
             personalKM = Integer.valueOf(PersonalKmEdit.getText().toString());
         }
 

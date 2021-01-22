@@ -48,13 +48,14 @@
         android:orientation="horizontal">
 
         <EditText
+            android:id="@+id/enter_fare"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:hint="Enter Fare"
+            android:inputType="number"
             android:padding="@dimen/C5dp"
-            android:id="@+id/enter_fare"
             android:textColorHint="#C0C0C0"
             android:textSize="@dimen/C14dp" />
 

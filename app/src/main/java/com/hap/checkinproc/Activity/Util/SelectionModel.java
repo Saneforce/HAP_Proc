@@ -8,7 +8,7 @@ public class SelectionModel {
     String code, value, img_url, tmp_url, cardview_id, user_enter, attachment, max;
     ArrayList<SelectionModel> array = new ArrayList<>();
 
-    String modeTravel, from, to, Fare;
+    String modeTravel, from, to, Fare, header;
 
 
     public SelectionModel(String txt, boolean isClick) {
@@ -35,7 +35,7 @@ public class SelectionModel {
         this.tmp_url = tmp_url;
     }
 
-    public SelectionModel(String txt, String value, String code, String img_url, ArrayList<SelectionModel> array, String user_enter, String attachment, String max) {
+    public SelectionModel(String header, String txt, String value, String code, String img_url, ArrayList<SelectionModel> array, String user_enter, String attachment, String max) {
         this.txt = txt;
         this.value = value;
         this.code = code;
@@ -44,6 +44,18 @@ public class SelectionModel {
         this.user_enter = user_enter;
         this.attachment = attachment;
         this.max = max;
+        this.header = header;
+    }
+    public SelectionModel( String txt, String value, String code, String img_url, ArrayList<SelectionModel> array, String user_enter, String attachment, String max) {
+        this.txt = txt;
+        this.value = value;
+        this.code = code;
+        this.img_url = img_url;
+        this.array = array;
+        this.user_enter = user_enter;
+        this.attachment = attachment;
+        this.max = max;
+
     }
 
     public SelectionModel(String txt, String code) {
@@ -60,6 +72,13 @@ public class SelectionModel {
 
     }
 
+    public String getHeader() {
+        return header;
+    }
+
+    public void setHeader(String header) {
+        this.header = header;
+    }
 
     public String getModeTravel() {
         return modeTravel;

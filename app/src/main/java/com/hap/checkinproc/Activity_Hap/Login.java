@@ -458,6 +458,7 @@ public class Login extends AppCompatActivity {
                         if (requestCode == RC_SIGN_IN) {
                             if (CheckIn == true) {
                                 intent = new Intent(Login.this, Dashboard_Two.class);
+                                intent = new Intent(Login.this, Dashboard_Two.class);
                               //  intent = new Intent(Login.this, TAClaimActivity.class);
                                 intent.putExtra("Mode", "CIN");
                             } else {

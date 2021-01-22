@@ -190,9 +190,31 @@ public class AllowanceActivity extends AppCompatActivity implements View.OnClick
         SubmitValue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                submitData();
+
+                if (mode.equals("11")) {
+                    /*BUS*/
+                    if (BusFrom.getText().toString().matches("") || TextMode.getText().toString().matches("") || EditFare.getText().toString().matches("") || imageURI.matches("")) {
+                        Toast.makeText(AllowanceActivity.this, "Enter details", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else {
+                        submitData();
+                    }
+
+                } else {
+                    /*BIKE*/
+
+                    if (StartKm.getText().toString().matches("") || imageURI.matches("")) {
+                        Toast.makeText(AllowanceActivity.this, "Enter details", Toast.LENGTH_SHORT).show();
+                        return;
+                    } else {
+                        submitData();
+                    }
+                }
+
             }
         });
+
+       // dynamicMode();
     }
 
 
@@ -271,6 +293,41 @@ public class AllowanceActivity extends AppCompatActivity implements View.OnClick
     }
 
 
+    /*Choosing Dynamic date*/
+    public void dynamicMode() {
+
+        JSONObject jj = new JSONObject();
+        try {
+            jj.put("sfCode", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+            jj.put("divisionCode", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> call = apiInterface.getTADate(jj.toString());
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                JsonArray jsonArray = response.body();
+                for (int a = 0; a < jsonArray.size(); a++) {
+                    JsonObject jsonObject = (JsonObject) jsonArray.get(a);
+                    String id = String.valueOf(jsonObject.get("id"));
+                    String name = String.valueOf(jsonObject.get("Datewithname"));
+                    Log.e("getTADate", name);
+                    name = name.replaceAll("^[\"']+|[\"']+$", "");
+                    mCommon_model_spinner = new Common_Model(id, name, "");
+                    modelRetailDetails.add(mCommon_model_spinner);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                Log.d("LeaveTypeList", "Error");
+            }
+        });
+    }
+
+
     public void BusToValue() {
 
         JSONObject jj = new JSONObject();
@@ -337,7 +394,7 @@ public class AllowanceActivity extends AppCompatActivity implements View.OnClick
       /*      if (updateMode)
                 Callto = apiInterface.updateAllowance(jj.toString());
             else*/
-                Callto = apiInterface.saveAllowance(jj.toString());
+            Callto = apiInterface.saveAllowance(jj.toString());
 
             Callto.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -393,6 +450,7 @@ public class AllowanceActivity extends AppCompatActivity implements View.OnClick
                 TextToAddress.setText("");
                 EditFare.setText("");
                 attachedImage.setImageURI(null);
+                sharedpreferences.edit().remove("SharedImage");
 
             } else {
                 mode = "12";
