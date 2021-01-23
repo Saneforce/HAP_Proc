@@ -159,6 +159,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     ArrayList<SelectionModel> travelAllowanceList = new ArrayList<>();
     EditText editTextRemarks;
     String driverAllowance = "0";
+    String DateTime = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -401,7 +402,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         travelTypeList = new ArrayList<>();
         travelTypeList.add("HQ");
         travelTypeList.add("EXQ");
-        travelTypeList.add("OS");
+        travelTypeList.add("Out Station");
 
         for (int i = 0; i < travelTypeList.size(); i++) {
             String id = String.valueOf(travelTypeList.get(i));
@@ -587,7 +588,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         Log.e("DATe_TIME", dateTime);
 
 
-
         try {
 
             JSONArray ja = new JSONArray();
@@ -613,7 +613,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 AditionalTravelallowance.put("FARE", enterFare.getText().toString());
                 Log.e("Inside_mode", String.valueOf(enterFare.getText().toString()));
                 AditionalAlowanceArray.put(AditionalTravelallowance);
-               // additionalAllowanceObject.put("Aditional_Allowance", AditionalAlowanceArray);
+                // additionalAllowanceObject.put("Aditional_Allowance", AditionalAlowanceArray);
             }
 
             Log.e("Karthick_ARRAY", AditionalAlowanceArray.toString());
@@ -654,7 +654,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
             /* thi.put("Aditional_Allowance", AditionalAlowanceArray);*/
 
-        //    ja.put(additionalAllowanceObject);
+            //    ja.put(additionalAllowanceObject);
 
             // ja.put(addtionDataObject);
             // ja.put(addtionDataObject);
@@ -671,7 +671,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             jj.put("LEOS", "");
             jj.put("MOT", jjj.getString("MOT"));
             jj.put("BusFare", "");
-            jj.put("DateOfExp", txt_date.getText().toString());
+            jj.put("DateOfExp", DateTime);
             jj.put("travel_type", travelTypeMode.getText().toString());
             jj.put("driver_allowance", driverAllowance);
             jj.put("remarks", editTextRemarks.getText().toString());
@@ -716,8 +716,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         JSONObject json = new JSONObject(jsonData);
                         if (json.getString("success").equalsIgnoreCase("true")) {
                             Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(TAClaimActivity.this, ViewTASummary.class);
-                            startActivity(i);
+                            Intent intent = new Intent(TAClaimActivity.this, ViewTASummary.class);
+                            intent.putExtra("DateofExpense",DateTime);
+                            intent.putExtra("travelMode",travelTypeMode.getText().toString());
+                            startActivity(intent);
                         }
                     } catch (Exception e) {
                         Log.v("printing_excep_va", e.getMessage());
@@ -910,15 +912,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                                 if (OS.equals("")) {
                                     if (exp_for.equals("0")) {
-                                        array.add(new SelectionModel(json_o.getString("Short_Name"),json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
+                                        array.add(new SelectionModel(json_o.getString("Short_Name"), json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
                                     }
                                 } else if (OS.equals("DIVER")) {
                                     if (exp_for.equals("0") || exp_for.equals("1") || exp_for.equals("2")) {
-                                        array.add(new SelectionModel(json_o.getString("Short_Name"),json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
+                                        array.add(new SelectionModel(json_o.getString("Short_Name"), json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
                                     }
                                 } else {
                                     if (exp_for.equals("0") || exp_for.equals("1")) {
-                                        array.add(new SelectionModel(json_o.getString("Short_Name"),json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
+                                        array.add(new SelectionModel(json_o.getString("Short_Name"), json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
                                     }
                                 }
 
@@ -952,7 +954,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     @SuppressLint("ResourceType")
-    public void createDynamicViewForSingleRow(String headerValue,String name, ArrayList<SelectionModel> array, int position, String userenter, String attachment, String max) {
+    public void createDynamicViewForSingleRow(String headerValue, String name, ArrayList<SelectionModel> array, int position, String userenter, String attachment, String max) {
         RelativeLayout rl = new RelativeLayout(this);
         RelativeLayout.LayoutParams layoutparams_1 = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
@@ -1237,7 +1239,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         customDialog.dismiss();
         if (type == 10) {
             txt_date.setText(myDataset.get(position).getName());
-            Log.d("JSON_VALUE", myDataset.get(position).getName());
+            Log.d("JSON_VALUE", myDataset.get(position).getId());
+            DateTime = myDataset.get(position).getId();
             onMapReady(mGoogleMap);
             displayTravelMode(myDataset.get(position).getId());
         } else if (type == 11) {

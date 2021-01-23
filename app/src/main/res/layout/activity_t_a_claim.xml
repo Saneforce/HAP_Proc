@@ -83,7 +83,7 @@
                             android:layout_below="@+id/card_date"
                             android:layout_marginTop="5dp"
                             android:fontFamily="@font/basic"
-                            android:text="Travel Type "
+                            android:text="Location Type "
                             android:textAllCaps="false"
                             android:textColor="#000"
                             android:textSize="13sp" />
@@ -105,7 +105,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/basic"
-                                android:hint="Choose Travel Type"
+                                android:hint="Choose Location Type"
                                 android:padding="@dimen/C10dp"
                                 android:textAllCaps="false"
                                 android:textColor="#515151"

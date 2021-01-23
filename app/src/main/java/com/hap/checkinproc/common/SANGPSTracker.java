@@ -485,12 +485,12 @@ public class SANGPSTracker extends Service {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 // Get result Repo from response.body()
-                Log.d(TAG, "onResponse" + String.valueOf(response.body()));
+                Log.d(TAG, "onResponse Location" + String.valueOf(response.body()));
             }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-                Log.d(TAG, "onFailure");
+                Log.d(TAG, "onFailure Location");
             }
         });
     }

@@ -71,6 +71,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     /*String Mode = "Bus";*/
     CardView gateIn_gateOut;
 
+    String dashMdeCnt = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +81,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         mShared_common_pref = new Shared_Common_Pref(this);
 
         mShared_common_pref.save("Dashboard", "one");
+
+        /* shared_common_pref.save("MC", startEnd);*/
+
+        dashMdeCnt = mShared_common_pref.getvalue("MC");
+        Log.e("Dash_Mode_Count", dashMdeCnt);
 
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
@@ -531,7 +538,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                             ModeOfTravel = sharedpreferences.getString(MOT, "");
                             Log.e("Privacypolicy", "Checking" + ModeOfTravel);
                             Log.e("Privacypolicy", "Checking" + PrivacyScreen);
-                            if (PrivacyScreen.equals("True") && ModeOfTravel.equals("Bike")) {
+                            if (PrivacyScreen.equals("True") && dashMdeCnt.equals("1")) {
                                 Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
                                 takePhoto.putExtra("Mode", "COUT");
                                 startActivity(takePhoto);

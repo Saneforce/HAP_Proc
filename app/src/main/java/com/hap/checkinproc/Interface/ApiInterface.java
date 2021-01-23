@@ -54,7 +54,7 @@ public interface ApiInterface {
 
     /*sending data*/
     @FormUrlEncoded
-    @POST("Db_v13.php?")
+    @POST("Db_v300.php?")
     Call<JsonObject> JsonSave(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code, @Query("State_Code") String State_code, @Query("desig") String desig, @Field("data") String body);
 
     /*sending data*/

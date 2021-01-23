@@ -160,30 +160,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         submitAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /* if (!EndImageURi.equals("") || EndImageURi != null || !EndedEditText.getText().toString().equals("")) {
-                 *//*  SharedPreferences.Editor editor = sharedpreferences.edit();
-                    editor.remove(Name);
-                    editor.remove(MOT);
-                    editor.commit();*//*
-                    stKM = Integer.valueOf(StartedKm);
-                    endKm = Integer.valueOf(String.valueOf(EndedEditText.getText().toString()));
-                    Log.e("STARTED_KM", String.valueOf(endKm));
-                    if (stKM < endKm) {
-                       *//* if (EndedEditText.getText().toString().matches("") || EndedImage.matches("")) {
-                            Toast.makeText(AllowanceActivityTwo.this, "Enter details", Toast.LENGTH_SHORT).show();
-                            return;
-                        } else {
-                            submitData();
-                        }*//*
-
-                    } else {
-                        Toast.makeText(AllowanceActivityTwo.this, "Should be greater then Started Km", Toast.LENGTH_SHORT).show();
-                    }
-
-                } else {
-                    Toast.makeText(AllowanceActivityTwo.this, "Please enter all the details", Toast.LENGTH_SHORT).show();
-                }
-*/
 
 
                 if (EndedEditText.getText().toString().matches("") || EndedImage.matches("")) {

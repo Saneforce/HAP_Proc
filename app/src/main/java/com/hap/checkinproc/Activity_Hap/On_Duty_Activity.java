@@ -5,17 +5,14 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
@@ -23,14 +20,11 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,11 +35,12 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
-import com.hap.checkinproc.Activity.TAClaimActivity;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -54,17 +49,19 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.adapters.AdapterForSelectionList;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import id.zelory.compressor.Compressor;
 import okhttp3.MultipartBody;
@@ -106,6 +103,38 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     RelativeLayout lay_hq, lay_typ;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
     Shared_Common_Pref mShared_common_pref;
+
+
+
+
+
+    /*OnDUTY ALlowance*/
+
+    CardView ModeTravel, BusCardTo, cardHapLoaction;
+    LinearLayout BikeMode, BusMode, ReasonPhoto, ProofImage;
+    EditText StartKm, BusFrom, EditFare, EditRemarks;
+    ImageView attachedImage;
+    Button SubmitValue;
+    TextView TextMode, TextToAddress;
+    private ArrayList<String> temaplateList;
+    Common_Model mCommon_model_spinner;
+    List<Common_Model> listOrderType = new ArrayList<>();
+    List<Common_Model> modelRetailDetails = new ArrayList<>();
+    Shared_Common_Pref shared_common_pref;
+    SharedPreferences sharedpreferences;
+    public static final String mypreference = "mypref";
+    public static final String Name = "Allowance";
+    public static final String MOT = "ModeOfTravel";
+    public static final String MOC = "ModeOfCount";
+    String imageURI = "", modeVal = "", StartedKM = "", FromKm = "", ToKm = "", Fare = "";
+    public static final String CheckInfo = "CheckInDetail";
+    public static final String UserInfo = "MyPrefs";
+    List<com.hap.checkinproc.Model_Class.ModeOfTravel> modelOfTravel;
+    Type userType;
+    List<Common_Model> modelTravelType = new ArrayList<>();
+    String startEnd = "";
+    SharedPreferences CheckInDetails;
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -182,100 +211,231 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         closebutton = findViewById(R.id.closebutton);
         exitclose = findViewById(R.id.exitclose);
         ModeOfTravel = findViewById(R.id.mode_of_travel);
+        cardHapLoaction = findViewById(R.id.card_hap_loaction);
+        cardHapLoaction.setOnClickListener(this);
         otherlocationbutton.setOnClickListener(this);
         haplocationbutton.setOnClickListener(this);
         submitbutton.setOnClickListener(this);
         closebutton.setOnClickListener(this);
         exitclose.setOnClickListener(this);
-        selecthaplocationss.setOnClickListener(this);
         GetfieldforceHq();
-
+        onDutycreate();
 
         /*Allowance Activity*/
-        pic = findViewById(R.id.pic);
+
         common_class = new Common_Class(this);
-        rlay_pic = findViewById(R.id.rlay_pic);
-        lay_From = findViewById(R.id.lay_From);
-        lay_to = findViewById(R.id.lay_to);
-        lay_km = findViewById(R.id.lay_km);
-        lay_det = findViewById(R.id.lay_det);
-        lay_fare = findViewById(R.id.lay_fare);
         capture_img = findViewById(R.id.capture_img);
-        card_travel = findViewById(R.id.card_travel);
-        card_to = findViewById(R.id.card_to);
-        card_typ = findViewById(R.id.card_typ);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         btn_submit = findViewById(R.id.btn_submit);
-        btn_ta = findViewById(R.id.btn_ta);
         edt_km = findViewById(R.id.edt_km);
         edt_rmk = findViewById(R.id.edt_rmk);
         edt_frm = findViewById(R.id.edt_frm);
-        edt_to = findViewById(R.id.edt_to);
+
         edt_fare = findViewById(R.id.edt_fare);
         txt_mode = findViewById(R.id.txt_mode);
-        lay_hq = findViewById(R.id.lay_hq);
         txt_hq = findViewById(R.id.txt_hq);
-        lay_typ = findViewById(R.id.lay_typ);
-        txt_typ = findViewById(R.id.txt_typ);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SF_code = UserDetails.getString("Sfcode", "");
         div = UserDetails.getString("Divcode", "");
 
 
         mShared_common_pref = new Shared_Common_Pref(this);
-        getTravelMode();
-        pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-
-                imageTake();
-
-            }
-        });
-        card_travel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                popupSpinner();
-            }
-        });
-        btn_ta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(On_Duty_Activity.this, TAClaimActivity.class);
-                startActivity(i);
-            }
-        });
-        lay_hq.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupSpinnerHq();
-            }
-        });
-        lay_typ.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popupSpinnerType();
-            }
-        });
-        btn_submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (TextUtils.isEmpty(txt_mode.getText().toString())) {
-                    Toast.makeText(On_Duty_Activity.this, "Select the mode of travels ", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (rlay_pic.getVisibility() == View.VISIBLE) {
-                        getMulipart(filepath_final, 0);
-                    } else {
-
-                    }
-                }
-            }
-        });
 
 
     }
+
+
+    public void onDutycreate() {
+        shared_common_pref = new Shared_Common_Pref(this);
+        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+
+        gson = new Gson();
+        CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+
+        common_class = new Common_Class(this);
+        ModeTravel = findViewById(R.id.card_travel_mode);
+        BikeMode = findViewById(R.id.bike_mode);
+        BusMode = findViewById(R.id.bus_mode);
+        ReasonPhoto = findViewById(R.id.reason_photo);
+        StartKm = findViewById(R.id.edt_km);
+        BusFrom = findViewById(R.id.edt_frm);
+        BusCardTo = findViewById(R.id.card_bus_mode);
+        EditFare = findViewById(R.id.edt_fare);
+        ProofImage = findViewById(R.id.proof_pic);
+        attachedImage = findViewById(R.id.capture_img);
+        EditRemarks = findViewById(R.id.edt_rmk);
+        SubmitValue = findViewById(R.id.btn_submit);
+        TextMode = findViewById(R.id.txt_mode);
+        TextToAddress = findViewById(R.id.edt_to);
+
+
+        BusToValue();
+
+        ModeTravel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.e("MODE_Travel", "MODEL_Travel");
+                modelTravelType.clear();
+                dynamicMode();
+            }
+        });
+        BusCardTo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog = new CustomListViewDialog(On_Duty_Activity.this, modelRetailDetails, 10);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+            }
+        });
+
+        ProofImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(On_Duty_Activity.this, AllowancCapture.class);
+             /*   intent.putExtra("allowance", "One");
+                intent.putExtra("Mode", TextMode.getText().toString());
+                intent.putExtra("Started", StartKm.getText().toString());
+                intent.putExtra("FromKm", BusFrom.getText().toString());
+                intent.putExtra("ToKm", TextToAddress.getText().toString());
+                intent.putExtra("Fare", EditFare.getText().toString());*/
+                startActivity(intent);
+                finish();
+
+            }
+        });
+
+
+
+/*
+        if (sharedpreferences.contains("SharedImage")) {
+            imageURI = sharedpreferences.getString("SharedImage", "");
+            Log.e("Privacypolicy", "Checking" + imageURI);
+        }
+        if (sharedpreferences.contains("SharedFromKm")) {
+            FromKm = sharedpreferences.getString("SharedFromKm", "");
+            Log.e("Privacypolicy", "Checking" + FromKm);
+        }
+        if (sharedpreferences.contains("SharedToKm")) {
+            ToKm = sharedpreferences.getString("SharedToKm", "");
+            Log.e("Privacypolicy", "Checking" + ToKm);
+        }
+        if (sharedpreferences.contains("SharedFare")) {
+            Fare = sharedpreferences.getString("SharedFare", "");
+            Log.e("Privacypolicy", "Checking" + Fare);
+        }
+        if (sharedpreferences.contains("StartedKM")) {
+            StartedKM = sharedpreferences.getString("StartedKM", "");
+            Log.e("Privacypolicy", "Checking" + StartedKM);
+        }
+
+        if (sharedpreferences.contains("SharedMode")) {
+            modeVal = sharedpreferences.getString("SharedMode", "");
+            Log.e("Privacypolicy", "Checking" + modeVal);
+
+            if (modeVal.equals("Bus")) {
+                TextMode.setText(modeVal);
+                BusMode.setVisibility(View.VISIBLE);
+                BikeMode.setVisibility(View.GONE);
+                ReasonPhoto.setVisibility(View.VISIBLE);
+                BusFrom.setText(FromKm);
+                TextToAddress.setText(ToKm);
+                EditFare.setText(Fare);
+                attachedImage.setImageURI(Uri.parse(imageURI));
+
+            } else {
+                TextMode.setText(modeVal);
+                BusMode.setVisibility(View.GONE);
+                BikeMode.setVisibility(View.VISIBLE);
+                ReasonPhoto.setVisibility(View.VISIBLE);
+                StartKm.setText(StartedKM);
+                attachedImage.setImageURI(Uri.parse(imageURI));
+
+            }
+        }*/
+    }
+
+
+    public void BusToValue() {
+
+        JSONObject jj = new JSONObject();
+        try {
+            jj.put("sfCode", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+            jj.put("divisionCode", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> call = apiInterface.getBusTo(jj.toString());
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                JsonArray jsonArray = response.body();
+                for (int a = 0; a < jsonArray.size(); a++) {
+                    JsonObject jsonObject = (JsonObject) jsonArray.get(a);
+                    updateMode = true;
+                    String id = String.valueOf(jsonObject.get("id"));
+                    String name = String.valueOf(jsonObject.get("name"));
+                    String townName = String.valueOf(jsonObject.get("ODFlag"));
+                    name = name.replaceAll("^[\"']+|[\"']+$", "");
+                    mCommon_model_spinner = new Common_Model(id, name, "");
+                    modelRetailDetails.add(mCommon_model_spinner);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                Log.d("LeaveTypeList", "Error");
+            }
+        });
+    }
+
+
+    public void dynamicMode() {
+
+        Map<String, String> QueryString = new HashMap<>();
+        QueryString.put("axn", "table/list");
+        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+        String commonLeaveType = "{\"tableName\":\"getmodeoftravel\",\"coloumns\":\"[\\\"id\\\",\\\"name\\\",\\\"Leave_Name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+
+        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+        Call<Object> call = service.GetRouteObjects(QueryString, commonLeaveType);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+
+                userType = new TypeToken<ArrayList<ModeOfTravel>>() {
+                }.getType();
+                modelOfTravel = gson.fromJson(new Gson().toJson(response.body()), userType);
+                for (int i = 0; i < modelOfTravel.size(); i++) {
+                    String id = String.valueOf(modelOfTravel.get(i).getStEndNeed());
+                    String name = modelOfTravel.get(i).getName();
+                    Model_Pojo = new Common_Model(id, name, "flag");
+                    Log.e("LeaveType_Request", id);
+                    Log.e("LeaveType_Request", name);
+                    modelTravelType.add(Model_Pojo);
+                }
+
+                customDialog = new CustomListViewDialog(On_Duty_Activity.this, modelTravelType, 8);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Log.d("LeaveTypeList", "Error");
+            }
+        });
+    }
+
 
     @Override
     public void onClick(View v) {
@@ -346,14 +506,13 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             case R.id.exitclose:
                 startActivity(new Intent(this, Dashboard.class));
                 break;
-            case R.id.selecthaplocationss:
-
+            case R.id.card_hap_loaction:
                 customDialog = new CustomListViewDialog(On_Duty_Activity.this, getfieldforcehqlist, 1);
                 Window window = customDialog.getWindow();
                 window.setGravity(Gravity.CENTER);
                 window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 customDialog.show();
-
+                Log.e("On_Duty_Mode", "On_Duty_Mode");
                 break;
         }
     }
@@ -381,6 +540,38 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         customDialog.dismiss();
         selecthaplocationss.setText(myDataset.get(position).getName());
         hapLocid = String.valueOf(myDataset.get(position).getId());
+
+        if (type == 8) {
+            TextMode.setText(myDataset.get(position).getName());
+            startEnd = myDataset.get(position).getId();
+            Log.e("Mode_Count", startEnd);
+            shared_common_pref.save("MC", startEnd);
+
+            if (startEnd.equals("0")) {
+                mode = "11";
+                BikeMode.setVisibility(View.GONE);
+                BusMode.setVisibility(View.VISIBLE);
+                ReasonPhoto.setVisibility(View.VISIBLE);
+                BusFrom.setText("");
+                TextToAddress.setText("");
+                EditFare.setText("");
+                attachedImage.setImageURI(null);
+
+
+            } else {
+                mode = "12";
+                BusMode.setVisibility(View.GONE);
+                BikeMode.setVisibility(View.VISIBLE);
+                ReasonPhoto.setVisibility(View.VISIBLE);
+                StartKm.setText("");
+                attachedImage.setImageURI(null);
+
+            }
+
+            sharedpreferences.edit().remove("SharedImage");
+        } else if (type == 10) {
+            TextToAddress.setText(myDataset.get(position).getName());
+        }
     }
 
     public void GetfieldforceHq() {
@@ -460,281 +651,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
 
     }
 
-
-    /*Allowance Activity Method*/
-    public void popupSpinner() {
-
-
-        final Dialog dialog = new Dialog(On_Duty_Activity.this, R.style.AlertDialogCustom);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setContentView(R.layout.popup_dynamic_view);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
-        ListView popup_list = (ListView) dialog.findViewById(R.id.popup_list);
-        ImageView iv_close_popup = (ImageView) dialog.findViewById(R.id.iv_close_popup);
-        Button ok = (Button) dialog.findViewById(R.id.ok);
-        ArrayList<SelectionModel> array = new ArrayList<>();
-        array.add(new SelectionModel("Bike", false, "12"));
-        array.add(new SelectionModel("Bus", false, "11"));
-        TextView tv_todayplan_popup_head = (TextView) dialog.findViewById(R.id.tv_todayplan_popup_head);
-        tv_todayplan_popup_head.setText("Mode of Travel");
-        AdapterForSelectionList adapt = new AdapterForSelectionList(On_Duty_Activity.this, array, 0);
-        popup_list.setAdapter(adapt);
-        final SearchView search_view = (SearchView) dialog.findViewById(R.id.search_view);
-        search_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                search_view.setIconified(false);
-                InputMethodManager im = ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE));
-                im.showSoftInput(search_view, 0);
-            }
-        });
-        search_view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                Log.v("search_view_str", s);
-                adapt.getFilter().filter(s);
-                return false;
-            }
-        });
-        iv_close_popup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-/*
-                if(isEmpty) {
-                    if (array_selection.contains(new SelectionModel(true))) {
-                        for (int i = 0; i < array_selection.size(); i++) {
-                            SelectionModel m = array_selection.get(i);
-                            m.setClick(false);
-                        }
-                    }
-                }
-*/
-
-                dialog.dismiss();
-                //commonFun();
-            }
-        });
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (array.contains(new SelectionModel(true))) {
-                    for (int i = 0; i < array.size(); i++) {
-                        SelectionModel m = array.get(i);
-                        if (m.isClick()) {
-                            mode = m.getCode();
-
-                            Log.e("Allowance_Activity", m.getTxt());
-                            edt_frm.getText().clear();
-                            txt_hq.setText("");
-                            edt_fare.setText("");
-                            edt_km.setText("");
-                            edt_rmk.setText("");
-                            txt_mode.setText(m.getTxt());
-                            enableFields();
-                        }
-                    }
-                }
-
-                dialog.dismiss();
-                capture_img.setImageURI(null);
-            }
-        });
-
-
-    }
-
-
-    public void imageTake() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        outputFileUri = FileProvider.getUriForFile(On_Duty_Activity.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), "pickImageResult" + System.currentTimeMillis() + ".jpeg"));
-        Log.v("priniting_uri", outputFileUri.toString() + " output " + outputFileUri.getPath() + " raw_msg " + getExternalCacheDir().getPath());
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivityForResult(intent, 12);
-    }
-
-    public void popupSpinnerType() {
-        final Dialog dialog = new Dialog(On_Duty_Activity.this, R.style.AlertDialogCustom);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setContentView(R.layout.popup_dynamic_view);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
-        ListView popup_list = (ListView) dialog.findViewById(R.id.popup_list);
-        ImageView iv_close_popup = (ImageView) dialog.findViewById(R.id.iv_close_popup);
-        Button ok = (Button) dialog.findViewById(R.id.ok);
-        ArrayList<SelectionModel> array = new ArrayList<>();
-        array.add(new SelectionModel("Metro", false, "MT"));
-        array.add(new SelectionModel("Major", false, "MJ"));
-        array.add(new SelectionModel("Others", false, "OT"));
-        TextView tv_todayplan_popup_head = (TextView) dialog.findViewById(R.id.tv_todayplan_popup_head);
-        tv_todayplan_popup_head.setText("Travel Type");
-        AdapterForSelectionList adapt = new AdapterForSelectionList(On_Duty_Activity.this, array, 0);
-        popup_list.setAdapter(adapt);
-        final SearchView search_view = (SearchView) dialog.findViewById(R.id.search_view);
-        search_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                search_view.setIconified(false);
-                InputMethodManager im = ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE));
-                im.showSoftInput(search_view, 0);
-            }
-        });
-        search_view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                Log.v("search_view_str", s);
-                adapt.getFilter().filter(s);
-                return false;
-            }
-        });
-        iv_close_popup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-/*
-                if(isEmpty) {
-                    if (array_selection.contains(new SelectionModel(true))) {
-                        for (int i = 0; i < array_selection.size(); i++) {
-                            SelectionModel m = array_selection.get(i);
-                            m.setClick(false);
-                        }
-                    }
-                }
-*/
-                dialog.dismiss();
-                //commonFun();
-            }
-        });
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (array.contains(new SelectionModel(true))) {
-                    for (int i = 0; i < array.size(); i++) {
-                        SelectionModel m = array.get(i);
-                        if (m.isClick()) {
-                            typ_code = m.getCode();
-                            txt_typ.setText(m.getTxt());
-
-                        }
-                    }
-                }
-                dialog.dismiss();
-
-            }
-        });
-
-
-    }
-
-    public void popupSpinnerHq() {
-        final Dialog dialog = new Dialog(On_Duty_Activity.this, R.style.AlertDialogCustom);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setContentView(R.layout.popup_dynamic_view);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.show();
-        ListView popup_list = (ListView) dialog.findViewById(R.id.popup_list);
-        ImageView iv_close_popup = (ImageView) dialog.findViewById(R.id.iv_close_popup);
-        Button ok = (Button) dialog.findViewById(R.id.ok);
-
-        TextView tv_todayplan_popup_head = (TextView) dialog.findViewById(R.id.tv_todayplan_popup_head);
-        tv_todayplan_popup_head.setText("Select Headquater");
-        AdapterForSelectionList adapt = new AdapterForSelectionList(On_Duty_Activity.this, array_hq, 0);
-        popup_list.setAdapter(adapt);
-        final SearchView search_view = (SearchView) dialog.findViewById(R.id.search_view);
-        search_view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                search_view.setIconified(false);
-                InputMethodManager im = ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE));
-                im.showSoftInput(search_view, 0);
-            }
-        });
-        search_view.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String s) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
-                Log.v("search_view_str", s);
-                adapt.getFilter().filter(s);
-                return false;
-            }
-        });
-        iv_close_popup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-/*
-                if(isEmpty) {
-                    if (array_selection.contains(new SelectionModel(true))) {
-                        for (int i = 0; i < array_selection.size(); i++) {
-                            SelectionModel m = array_selection.get(i);
-                            m.setClick(false);
-                        }
-                    }
-                }
-*/
-                dialog.dismiss();
-                //commonFun();
-            }
-        });
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (array_hq.contains(new SelectionModel(true))) {
-                    for (int i = 0; i < array_hq.size(); i++) {
-                        SelectionModel m = array_hq.get(i);
-                        if (m.isClick()) {
-                            hq_code = m.getCode();
-                            txt_hq.setText(m.getTxt());
-                            if (hq_code.equalsIgnoreCase("-1")) {
-                                card_to.setVisibility(View.VISIBLE);
-                                card_typ.setVisibility(View.VISIBLE);
-                            }
-                        }
-                    }
-                }
-                dialog.dismiss();
-
-            }
-        });
-
-
-    }
-
-    public void enableFields() {
-        if (mode.equalsIgnoreCase("11")) {
-            rlay_pic.setVisibility(View.VISIBLE);
-            lay_det.setVisibility(View.GONE);
-            lay_From.setVisibility(View.VISIBLE);
-            lay_to.setVisibility(View.VISIBLE);
-            card_to.setVisibility(View.GONE);
-            card_typ.setVisibility(View.GONE);
-            lay_fare.setVisibility(View.VISIBLE);
-            txt_mode.setText("Bus");
-        } else {
-            rlay_pic.setVisibility(View.VISIBLE);
-            lay_km.setVisibility(View.VISIBLE);
-            lay_det.setVisibility(View.VISIBLE);
-            lay_From.setVisibility(View.GONE);
-            lay_to.setVisibility(View.GONE);
-            card_to.setVisibility(View.GONE);
-            card_typ.setVisibility(View.GONE);
-            lay_fare.setVisibility(View.GONE);
-            txt_mode.setText("Bike");
-        }
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -885,111 +801,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                                 //common_class.CommonIntentwithFinish(AllowanceActivityTwo.class);
                             } else
                                 Toast.makeText(On_Duty_Activity.this, " Cannot submitted the data ", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (Exception e) {
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                }
-            });
-        } catch (Exception e) {
-        }
-    }
-
-    public void getTravelMode() {
-        try {
-            JSONObject jj = new JSONObject();
-
-            jj.put("sf", SF_code);
-            jj.put("div", div);
-            //jj.put("url",url);
-            //saveAllowance
-            Log.v("printing_allow", jj.toString());
-            Call<ResponseBody> Callto = apiInterface.getTravelMode(jj.toString());
-            Callto.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    try {
-                        if (response.isSuccessful()) {
-
-
-                            Log.v("print_upload_file_true", "ggg" + response);
-                            JSONObject jb = null;
-                            String jsonData = null;
-                            jsonData = response.body().string();
-                            Log.v("get_mode_Res", jsonData);
-                            JSONArray ja = new JSONArray(jsonData);
-                            if (ja.length() != 0) {
-                                JSONObject js = ja.getJSONObject(0);
-                                mode = js.getString("MOT");
-                                enableFields();
-                                updateMode = true;
-                            }
-                            getHeadQuaters();
-                           /* JSONObject js=new JSONObject(jsonData);
-                            if(js.getString("success").equalsIgnoreCase("true")){
-                                Toast.makeText(AllowanceActivity.this," Submitted successfully ",Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                                Toast.makeText(AllowanceActivity.this," Cannot submitted the data ",Toast.LENGTH_SHORT).show();*/
-                        }
-                    } catch (Exception e) {
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                }
-            });
-        } catch (Exception e) {
-        }
-    }
-
-    public void getHeadQuaters() {
-        try {
-            JSONObject jj = new JSONObject();
-
-            jj.put("sfCode", SF_code);
-            jj.put("divisionCode", div);
-            //jj.put("url",url);
-            //saveAllowance
-            Log.v("printing_allow", jj.toString());
-            Call<ResponseBody> Callto = apiInterface.gethq(jj.toString());
-            Callto.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    try {
-                        if (response.isSuccessful()) {
-
-
-                            Log.v("print_upload_file_true", "ggg" + response);
-                            JSONObject jb = null;
-                            String jsonData = null;
-                            jsonData = response.body().string();
-                            Log.v("get_mode_Res", jsonData);
-                            JSONArray ja = new JSONArray(jsonData);
-                            for (int i = 0; i < ja.length(); i++) {
-                                JSONObject jjson = ja.getJSONObject(i);
-                                array_hq.add(new SelectionModel(jjson.getString("name"), false, jjson.getString("id")));
-                            }
-                            array_hq.add(new SelectionModel("Others", false, "-1"));
-                           /* if(ja.length()!=0){
-                                card_travel.setEnabled(false);
-                                JSONObject js=ja.getJSONObject(0);
-                                mode=js.getString("MOT");
-                                enableFields();
-                                updateMode=true;
-                            }*/
-                           /* JSONObject js=new JSONObject(jsonData);
-                            if(js.getString("success").equalsIgnoreCase("true")){
-                                Toast.makeText(AllowanceActivity.this," Submitted successfully ",Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                                Toast.makeText(AllowanceActivity.this," Cannot submitted the data ",Toast.LENGTH_SHORT).show();*/
                         }
                     } catch (Exception e) {
                     }

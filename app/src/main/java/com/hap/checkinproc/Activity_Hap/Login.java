@@ -45,7 +45,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -115,7 +114,6 @@ public class Login extends AppCompatActivity {
                         // Log and toast
 
                         Log.e("LoginActivity", deviceToken);
-                        Toast.makeText(Login.this, deviceToken, Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -210,15 +208,17 @@ public class Login extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-      /*         if(mLUService == null)
-                   mLUService = new SANGPSTracker(getApplicationContext());
-              *//* if(mTimerService == null)
-                   mTimerService = new TimerService();
-               mTimerService.startTimerService();*//*
 
-               startService(new Intent(Login.this, TimerService.class));
-               mLUService.requestLocationUpdates();
-               mProgress.show();*/
+                if (mLUService == null)
+                    mLUService = new SANGPSTracker(getApplicationContext());
+                myReceiver = new LocationReceiver();
+                // Bind to the service. If the service is in foreground mode, this signals to the service
+                // that since this activity is in the foreground, the service can exit foreground mode.
+                bindService(new Intent(getApplicationContext(), SANGPSTracker.class), mServiceConection,
+                        Context.BIND_AUTO_CREATE);
+                LocalBroadcastManager.getInstance(getApplication()).registerReceiver(myReceiver,
+                        new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
+                mLUService.requestLocationUpdates();
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
 
@@ -391,6 +391,7 @@ public class Login extends AppCompatActivity {
             // clear the notification area when the app is opened
             MyNotificationManager.clearNotifications(getApplicationContext());*/
 
+            Log.e("Loaction_Check", "Loaction_Check");
 
         }
     }
@@ -436,16 +437,16 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        Log.d(TAG,"TWO                    "+ deviceToken);
+        Log.d(TAG, "TWO                    " + deviceToken);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-      Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
-   //   Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
+        Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
+        //   Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
 
                 if (response.isSuccessful()) {
-                    Log.d(TAG,"Three "+ deviceToken);
+                    Log.d(TAG, "Three " + deviceToken);
 
 
                     // Log.e("sfName",response.body().getData().get(0).getSfCode());
@@ -457,12 +458,12 @@ public class Login extends AppCompatActivity {
 
                         if (requestCode == RC_SIGN_IN) {
                             if (CheckIn == true) {
+
                                 intent = new Intent(Login.this, Dashboard_Two.class);
-                                intent = new Intent(Login.this, Dashboard_Two.class);
-                              //  intent = new Intent(Login.this, TAClaimActivity.class);
+                                //  intent = new Intent(Login.this, TAClaimActivity.class);
                                 intent.putExtra("Mode", "CIN");
                             } else {
-                               intent = new Intent(Login.this, Dashboard.class);
+                                intent = new Intent(Login.this, Dashboard.class);
                                 // intent = new Intent(Login.this, TAClaimActivity.class);
                             }
                             //  intent = new Intent(Login.this, OrderDashBoard.class);
