@@ -64,6 +64,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     public static final String mypreference = "mypref";
     public static final String Name = "Allowance";
     public static final String MOT = "ModeOfTravel";
+    public static final String SKM = "Started_km";
 
     String PrivacyScreen = "", ModeOfTravel = "";
     SharedPreferences sharedpreferences;
@@ -82,13 +83,17 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
         mShared_common_pref.save("Dashboard", "one");
 
-        /* shared_common_pref.save("MC", startEnd);*/
-
         dashMdeCnt = mShared_common_pref.getvalue("MC");
         Log.e("Dash_Mode_Count", dashMdeCnt);
 
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
+
+
+
+
+
+
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);

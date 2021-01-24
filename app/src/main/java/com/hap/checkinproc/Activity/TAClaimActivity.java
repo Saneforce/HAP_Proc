@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -20,7 +19,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.InputType;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -45,7 +43,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
-import androidx.core.content.res.ResourcesCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -79,6 +76,7 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -160,6 +158,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     EditText editTextRemarks;
     String driverAllowance = "0";
     String DateTime = "";
+    SharedPreferences TaSharedPrefernce;
+    public static final String mypreference = "mypref";
+    public static final String Name = "Allowance";
+    public static final String MOT = "ModeOfTravel";
+    public static final String MOC = "ModeOfCount";
+    public static final String SKM = "Started_km";
+    Integer S = 0;
+    String shortName = "";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,8 +214,19 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         callApi(DateForAPi, "");
 
         mShared_common_pref = new Shared_Common_Pref(this);
-        StartedKm = mShared_common_pref.getvalue("Started_km");
-        ModeOfTravel = mShared_common_pref.getvalue("mode_of_travel");
+
+
+        TaSharedPrefernce = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+
+        if (TaSharedPrefernce.contains(SKM)) {
+
+            StartedKm = TaSharedPrefernce.getString(SKM, "");
+        }
+
+        if (TaSharedPrefernce.contains(MOT)) {
+            ModeOfTravel = TaSharedPrefernce.getString(MOT, "");
+
+        }
 
 
         dynamicDate();
@@ -464,10 +482,20 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 Log.d("JSON_VALUE", jsonArray.toString());
                 Log.d("JSON_VALUE", "CHECKING");
-                TravelBike.setVisibility(View.VISIBLE);
+                /* TravelBike.setVisibility(View.VISIBLE);*/
                 for (int a = 0; a < jsonArray.size(); a++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(a);
                     StartedKm = String.valueOf(jsonObject.get("Start_Km"));
+                    if (StartedKm != null && !StartedKm.isEmpty() && !StartedKm.equals("null") && !StartedKm.equals("")) {
+
+                    } else {
+                        TxtStartedKm.setText(StartedKm);
+
+
+                        S = Integer.valueOf(String.valueOf(TxtStartedKm.getText()));
+
+                    }
+
                     ClosingKm = String.valueOf(jsonObject.get("End_Km"));
                     PersonalKm = String.valueOf(jsonObject.get("Personal_Km"));
                     StartedKm = StartedKm.replaceAll("^[\"']+|[\"']+$", "");
@@ -476,9 +504,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         PersonalKiloMeter.setText(PersonalKm);
                     }
                     PersonalKiloMeter.setText(PersonalKm);
-                    TxtStartedKm.setText(StartedKm);
-
-                    Integer S = Integer.valueOf(String.valueOf(TxtStartedKm.getText()));
 
 
                     if (ClosingKm != null && !ClosingKm.isEmpty() && !ClosingKm.equals("null") && !ClosingKm.equals("")) {
@@ -554,9 +579,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
 
         } else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
- /* ModelDynamicView mm = array.get(pos_upload_file);
- if (!TextUtils.isEmpty(mm.getValue()))
- filePathing = mm.getValue();*/
             String finalPath = "/storage/emulated/0";
             String filePath = outputFileUri.getPath();
             filePath = filePath.substring(1);
@@ -692,19 +714,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             jjMain.put("EA", ja);
 
             Log.e("JSONOBJECT", jjMain.toString());
-          /*  Log.v("thirumalaifinal", jjMain.toString());
-            ja = new JSONArray();
-            for (int i = 0; i < picPath.size(); i++) {
-                JSONObject jjjj = new JSONObject();
-                jjjj.put("imgurl", picPath.get(i).substring(picPath.get(i).lastIndexOf("/") + 1));
-                jjjj.put("title", "");
-                jjjj.put("remarks", "");
-                ja.put(jjjj);
-            }
-            jjMain.put("ActivityCaptures", ja);
-            //ja1.put(jjMain);*/
-
-
             Call<ResponseBody> submit = apiInterface.saveDailyAllowance(jjMain.toString());
             submit.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -717,8 +726,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         if (json.getString("success").equalsIgnoreCase("true")) {
                             Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(TAClaimActivity.this, ViewTASummary.class);
-                            intent.putExtra("DateofExpense",DateTime);
-                            intent.putExtra("travelMode",travelTypeMode.getText().toString());
+                            intent.putExtra("DateofExpense", DateTime);
+                            intent.putExtra("travelMode", travelTypeMode.getText().toString());
                             startActivity(intent);
                         }
                     } catch (Exception e) {
@@ -870,7 +879,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void callApi(String date, String OS) {
-
+        ArrayList<String> arryShort = new ArrayList<>();
         Log.e("OS_VALLUE", " " + OS);
         try {
             JSONObject jj = new JSONObject();
@@ -899,6 +908,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 JSONObject json_oo = ja.getJSONObject(i);
                                 JSONObject json_o = json_oo.getJSONObject("value1");
                                 exp_for = json_o.getString("Exp_For");
+                                shortName = json_o.getString("Short_Name");
+                                Log.d("SHORT_NAME", shortName);
+                                List<String> elements = new ArrayList<>(Arrays.asList(shortName));
+                                Log.d("SHORT_NAME_AR", elements.toString());
+                                Log.d("SHORT_NAME_AR", String.valueOf(elements.size()));
+
                                 Log.e("EXP", exp_for);
                                 ArrayList<SelectionModel> arr = new ArrayList<>();
                                 ArrayList<SelectionModel> arr1 = new ArrayList<>();
@@ -915,7 +930,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                         array.add(new SelectionModel(json_o.getString("Short_Name"), json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
                                     }
                                 } else if (OS.equals("DIVER")) {
+
                                     if (exp_for.equals("0") || exp_for.equals("1") || exp_for.equals("2")) {
+
                                         array.add(new SelectionModel(json_o.getString("Short_Name"), json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
                                     }
                                 } else {
@@ -927,6 +944,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 arr1.add(new SelectionModel("", arr));
 
                             }
+
                             JSONArray ja1 = js.getJSONArray("TodayExpense");
                             if (ja1.length() != 0)
                                 todayExp = ja1.getJSONObject(0).toString();
@@ -937,6 +955,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 createDynamicViewForSingleRow(array.get(i).getHeader(), array.get(i).getTxt(), array.get(i).getArray(), i, array.get(i).getUser_enter(), array.get(i).getAttachment(), array.get(i).getMax());
                                 Log.e("String_Name", array.get(i).getTxt());
                                 Log.e("String_Name", String.valueOf(array.get(i).getArray()));
+                            }
+
+
+
+
+
+
+                            for (int i = 0; i < arryShort.size(); i++) {
+                                Log.d("SHORT_NAME_ARRAY", arryShort.toString());
                             }
                         }
                     } catch (Exception e) {
@@ -955,125 +982,51 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     @SuppressLint("ResourceType")
     public void createDynamicViewForSingleRow(String headerValue, String name, ArrayList<SelectionModel> array, int position, String userenter, String attachment, String max) {
-        RelativeLayout rl = new RelativeLayout(this);
-        RelativeLayout.LayoutParams layoutparams_1 = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
+/*
+        RelativeLayout ChildRelative = new RelativeLayout(this);
+
+        RelativeLayout.LayoutParams childRelParams = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
-        rl.setLayoutParams(layoutparams_1);
+        ChildRelative.setLayoutParams(childRelParams);
 
 
-
- /* RelativeLayout.LayoutParams header = new RelativeLayout.LayoutParams(
- RelativeLayout.LayoutParams.WRAP_CONTENT,
- RelativeLayout.LayoutParams.WRAP_CONTENT);
- TextView header_Txt = new TextView(this);
- header_Txt.setText(headerValue);
- Log.e("CREATE_DYNAMIC_VIEW", name);
- header_Txt.setLayoutParams(header);
- header_Txt.setTextSize(16f);
- header_Txt.setId(54321);
- header_Txt.setTextColor(Color.BLACK);
- rl.addView(header_Txt);
- */
-
-
-        RelativeLayout.LayoutParams layoutparams_2 = new RelativeLayout.LayoutParams(
+        *//*Short Name*//*
+        RelativeLayout.LayoutParams short_name_realtive = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-        layoutparams_2.setMargins(5, 0, 0, 0);
-        TextView txt = new TextView(this);
-        txt.setText(name);
-        Log.e("CREATE_DYNAMIC_VIEW", name);
-        Typeface typeface = ResourcesCompat.getFont(this, R.font.basic);
-        txt.setLayoutParams(layoutparams_2);
-        txt.setTypeface(typeface);
-        txt.setTextSize(16f);
-        txt.setId(54321);
-
-        txt.setTextColor(Color.BLACK);
-        rl.addView(txt);
+        short_name_realtive.setMargins(5, 0, 0, 0);
+        TextView ShortName = new TextView(this);
+        ShortName.setText(headerValue);
+        ShortName.setLayoutParams(short_name_realtive);
+        ShortName.setTextSize(16f);
+        ShortName.setId(1);
+        ShortName.setTextColor(Color.BLACK);
+        ChildRelative.addView(ShortName);
 
 
-        RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_END);
-        layoutparams_3.setMargins(0, 10, 0, 0);
-        EditText edt = new EditText(this);
-        edt.setLayoutParams(layoutparams_3);
-        edt.setBackgroundResource(R.drawable.hash_border);
-        edt.setEms(5);
-        edt.setId(12345);
-        edt.setInputType(InputType.TYPE_CLASS_NUMBER);
-        /* if (userenter.equalsIgnoreCase("0")) {
-         *//* edt.setEnabled(false);
- edt.setText(max);*//*
- } else if (userenter.equalsIgnoreCase("1")) {
- edt.setFilters(new InputFilter[]{new InputFilterMinMax("0", max)});
- }*/
 
-        if (userenter.equalsIgnoreCase("1")) {
-            edt.setFilters(new InputFilter[]{new InputFilterMinMax("0", max)});
-        }
-        edt.setPadding(9, 9, 9, 9);
-        rl.addView(edt);
-        RelativeLayout.LayoutParams layoutparams_4 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        layoutparams_4.addRule(RelativeLayout.ALIGN_PARENT_END);
-        layoutparams_4.addRule(RelativeLayout.CENTER_VERTICAL);
-        layoutparams_4.setMargins(0, 0, 3, 0);
-        ImageView img = new ImageView(this);
-        img.setImageResource(R.drawable.attach_icon);
-        img.setId(899);
-        if (attachment.equalsIgnoreCase("1")) {
-            img.setVisibility(View.VISIBLE);
-        } else
-            img.setVisibility(View.INVISIBLE);
-        img.setOnClickListener(new View.OnClickListener() {
+        *//*Add Allowance on Short Value*//*
+        RelativeLayout.LayoutParams typeAddAllowance = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        typeAddAllowance.addRule(RelativeLayout.ALIGN_PARENT_END);
+        typeAddAllowance.setMargins(0, 10, 0, 0);
+
+        TextView addAllowance = new TextView(this);
+        addAllowance.setText("Add Allowance");
+        addAllowance.setLayoutParams(typeAddAllowance);
+        addAllowance.setId(2);
+        addAllowance.setTextColor(Color.BLUE);
+        ChildRelative.addView(addAllowance);
+        addAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                pos = position;
-                popupCapture(name);
+            public void onClick(View v) {
+
             }
         });
-        //layoutparams_3.addRule(RelativeLayout.CENTER_VERTICAL);
-        // layoutparams_3.setMargins(0,8,0,0);
-        img.setLayoutParams(layoutparams_4);
-        rl.addView(img);
 
-        RelativeLayout.LayoutParams ParamMaxLimit = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        ParamMaxLimit.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 12345);
-        ParamMaxLimit.addRule(RelativeLayout.ALIGN_LEFT, 12345);
-        ParamMaxLimit.setMarginStart(-60);
-        TextView mtxtTextView = new TextView(this);
-        mtxtTextView.setText((max == "0") ? "" : max);
-        mtxtTextView.setLayoutParams(ParamMaxLimit);
-        Log.e("Create_View_Dynamic", max);
-        rl.addView(mtxtTextView);
 
-        lay_row.addView(rl);
-
-        if (array.get(0).getArray().size() != 0) {
-            LinearLayout r2 = new LinearLayout(this);
-            LinearLayout.LayoutParams params_2 = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            r2.setOrientation(LinearLayout.VERTICAL);
-            r2.setLayoutParams(params_2);
-            r2.setId(rlayCount);
-            array.get(0).getArray().get(0).setTmp_url(String.valueOf(rlayCount));
-            array.get(0).setTxt(String.valueOf(cardViewCount));
-            rlayCount = rlayCount + 1;
-            ArrayList<Integer> cardCountt = new ArrayList<>();
-            r2.addView(generateView(0, array.get(0).getArray(), array, 0, cardCountt));
-            lay_row.addView(r2);
-        } else {
-            View vv = new View(this);
-            vv.setBackgroundColor(Color.BLACK);
-            vv.setLayoutParams(layoutparams_1);
-            lay_row.addView(vv);
-        }
-
+        lay_row.addView(ChildRelative);*/
 
     }
 

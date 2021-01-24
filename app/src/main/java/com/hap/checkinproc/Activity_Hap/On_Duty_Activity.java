@@ -104,10 +104,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
     Shared_Common_Pref mShared_common_pref;
 
-
-
-
-
     /*OnDUTY ALlowance*/
 
     CardView ModeTravel, BusCardTo, cardHapLoaction;
@@ -132,8 +128,17 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     List<com.hap.checkinproc.Model_Class.ModeOfTravel> modelOfTravel;
     Type userType;
     List<Common_Model> modelTravelType = new ArrayList<>();
-    String startEnd = "";
+    String startEnd = "", ModeTravelType = "";
     SharedPreferences CheckInDetails;
+    String modeId = "";
+
+    /*Shared Prefernce*/
+
+    public static final String hapLocation = "hpLoc";
+    public static final String otherLocation = "othLoc";
+    public static final String visitPurpose = "vstPur";
+
+    String strHapLocation = "", strOtherLocation = "", strVisitPurpose = "";
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -215,7 +220,34 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         cardHapLoaction.setOnClickListener(this);
         otherlocationbutton.setOnClickListener(this);
         haplocationbutton.setOnClickListener(this);
-        submitbutton.setOnClickListener(this);
+        submitbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (selecthaplocationss.getText().toString().matches("")) {
+                    Toast.makeText(On_Duty_Activity.this, "Enter Hap Location", Toast.LENGTH_SHORT).show();
+                } else if (purposeofvisitedittext.getText().toString().matches("")) {
+                    Toast.makeText(On_Duty_Activity.this, "Enter Visit purpose", Toast.LENGTH_SHORT).show();
+                } else if (TextMode.getText().toString().matches("")) {
+                    Toast.makeText(On_Duty_Activity.this, "Enter Mode", Toast.LENGTH_SHORT).show();
+                } else if (!TextMode.getText().toString().matches("")) {
+                    if (startEnd.equals("1")) {
+                        if (StartKm.getText().toString().matches("")) {
+                            Toast.makeText(On_Duty_Activity.this, "Enter Start Km", Toast.LENGTH_SHORT).show();
+                        } else if (attachedImage.getDrawable() == null) {
+                            Toast.makeText(On_Duty_Activity.this, "Enter Attachment", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        submitData();
+                    }
+
+                } else {
+                    submitData();
+                }
+
+
+            }
+        });
         closebutton.setOnClickListener(this);
         exitclose.setOnClickListener(this);
         GetfieldforceHq();
@@ -237,7 +269,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SF_code = UserDetails.getString("Sfcode", "");
         div = UserDetails.getString("Divcode", "");
-
 
         mShared_common_pref = new Shared_Common_Pref(this);
 
@@ -296,55 +327,101 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             public void onClick(View v) {
 
                 Intent intent = new Intent(On_Duty_Activity.this, AllowancCapture.class);
-             /*   intent.putExtra("allowance", "One");
+                intent.putExtra("allowance", "three");
                 intent.putExtra("Mode", TextMode.getText().toString());
                 intent.putExtra("Started", StartKm.getText().toString());
                 intent.putExtra("FromKm", BusFrom.getText().toString());
                 intent.putExtra("ToKm", TextToAddress.getText().toString());
-                intent.putExtra("Fare", EditFare.getText().toString());*/
+                intent.putExtra("Fare", EditFare.getText().toString());
                 startActivity(intent);
                 finish();
 
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(visitPurpose, purposeofvisitedittext.getText().toString());
+                editor.putString(otherLocation, ondutyedittext.getText().toString());
+                editor.commit();
             }
         });
 
+        if (sharedpreferences.contains(hapLocation)) {
+            strHapLocation = sharedpreferences.getString(hapLocation, "");
+            selecthaplocationss.setText(strHapLocation);
+            if (!strHapLocation.matches("")) {
+                flag = 0;
+                ondutyedittext.setText("");
+                purposeofvisitedittext.setText("");
+                haplocationtext.setVisibility(View.VISIBLE);
+                purposeofvisittext.setVisibility(View.VISIBLE);
+                submitbutton.setVisibility(View.VISIBLE);
+                closebutton.setVisibility(View.VISIBLE);
+                exitclose.setVisibility(View.GONE);
+                ModeOfTravel.setVisibility(View.VISIBLE);
+                ondutylocations.setVisibility(View.GONE);
+                haplocationbutton.setVisibility(View.GONE);
+                otherlocationbutton.setVisibility(View.GONE);
+            }
+            Log.e("strHapLocation", strHapLocation);
+        }
 
+        if (sharedpreferences.contains(visitPurpose)) {
+            strVisitPurpose = sharedpreferences.getString(visitPurpose, "");
+            if (!strVisitPurpose.matches("")) {
+                flag = 0;
+                ondutyedittext.setText("");
+                purposeofvisitedittext.setText(strVisitPurpose);
+                haplocationtext.setVisibility(View.VISIBLE);
+                purposeofvisittext.setVisibility(View.VISIBLE);
+                submitbutton.setVisibility(View.VISIBLE);
+                closebutton.setVisibility(View.VISIBLE);
+                exitclose.setVisibility(View.GONE);
+                ModeOfTravel.setVisibility(View.VISIBLE);
+                ondutylocations.setVisibility(View.GONE);
+                haplocationbutton.setVisibility(View.GONE);
+                otherlocationbutton.setVisibility(View.GONE);
+            }
+            Log.e("strHapLocation", strHapLocation);
+        }
 
-/*
         if (sharedpreferences.contains("SharedImage")) {
             imageURI = sharedpreferences.getString("SharedImage", "");
             Log.e("Privacypolicy", "Checking" + imageURI);
         }
+
         if (sharedpreferences.contains("SharedFromKm")) {
             FromKm = sharedpreferences.getString("SharedFromKm", "");
             Log.e("Privacypolicy", "Checking" + FromKm);
         }
+
         if (sharedpreferences.contains("SharedToKm")) {
             ToKm = sharedpreferences.getString("SharedToKm", "");
             Log.e("Privacypolicy", "Checking" + ToKm);
         }
+
         if (sharedpreferences.contains("SharedFare")) {
             Fare = sharedpreferences.getString("SharedFare", "");
             Log.e("Privacypolicy", "Checking" + Fare);
         }
+
         if (sharedpreferences.contains("StartedKM")) {
             StartedKM = sharedpreferences.getString("StartedKM", "");
             Log.e("Privacypolicy", "Checking" + StartedKM);
+        }
+
+        if (sharedpreferences.contains("ModeCount")) {
+            ModeTravelType = sharedpreferences.getString("ModeCount", "");
+            Log.e("Mode_Travel_Type", ModeTravelType);
+
         }
 
         if (sharedpreferences.contains("SharedMode")) {
             modeVal = sharedpreferences.getString("SharedMode", "");
             Log.e("Privacypolicy", "Checking" + modeVal);
 
-            if (modeVal.equals("Bus")) {
+            if (ModeTravelType.equals("0")) {
                 TextMode.setText(modeVal);
-                BusMode.setVisibility(View.VISIBLE);
+                BusMode.setVisibility(View.GONE);
                 BikeMode.setVisibility(View.GONE);
-                ReasonPhoto.setVisibility(View.VISIBLE);
-                BusFrom.setText(FromKm);
-                TextToAddress.setText(ToKm);
-                EditFare.setText(Fare);
-                attachedImage.setImageURI(Uri.parse(imageURI));
+                ReasonPhoto.setVisibility(View.GONE);
 
             } else {
                 TextMode.setText(modeVal);
@@ -353,9 +430,13 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 ReasonPhoto.setVisibility(View.VISIBLE);
                 StartKm.setText(StartedKM);
                 attachedImage.setImageURI(Uri.parse(imageURI));
-
             }
-        }*/
+        }
+        if (attachedImage.getDrawable() == null) {
+            Log.e("Image_Draw_able", "Null_Image_View");
+        } else {
+            Log.e("Image_Draw_able", "Not_Null_Image_View");
+        }
     }
 
 
@@ -453,26 +534,45 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 purposeofvisitedittext.setText("");
                 selecthaplocationss.setText("");
                 ondutyedittext.setText("");
+                strHapLocation = "";
                 break;
 
             case R.id.haplocationbutton:
                 flag = 0;
-                ondutyedittext.setText("");
-                selecthaplocationss.setText("");
-                purposeofvisitedittext.setText("");
-                haplocationtext.setVisibility(View.VISIBLE);
-                purposeofvisittext.setVisibility(View.VISIBLE);
-                submitbutton.setVisibility(View.VISIBLE);
-                closebutton.setVisibility(View.VISIBLE);
-                exitclose.setVisibility(View.GONE);
-                ModeOfTravel.setVisibility(View.VISIBLE);
-                ondutylocations.setVisibility(View.GONE);
-                haplocationbutton.setVisibility(View.GONE);
-                otherlocationbutton.setVisibility(View.GONE);
+                if (sharedpreferences.contains(hapLocation)) {
+                    strHapLocation = sharedpreferences.getString(hapLocation, "");
+                    selecthaplocationss.setText("");
+                    ondutyedittext.setText("");
+                    purposeofvisitedittext.setText("");
+                    haplocationtext.setVisibility(View.VISIBLE);
+                    purposeofvisittext.setVisibility(View.VISIBLE);
+                    submitbutton.setVisibility(View.VISIBLE);
+                    closebutton.setVisibility(View.VISIBLE);
+                    exitclose.setVisibility(View.GONE);
+                    ModeOfTravel.setVisibility(View.VISIBLE);
+                    ondutylocations.setVisibility(View.GONE);
+                    haplocationbutton.setVisibility(View.GONE);
+                    otherlocationbutton.setVisibility(View.GONE);
+                } else {
+                    ondutyedittext.setText("");
+                    selecthaplocationss.setText("");
+                    purposeofvisitedittext.setText("");
+                    haplocationtext.setVisibility(View.VISIBLE);
+                    purposeofvisittext.setVisibility(View.VISIBLE);
+                    submitbutton.setVisibility(View.VISIBLE);
+                    closebutton.setVisibility(View.VISIBLE);
+                    exitclose.setVisibility(View.GONE);
+                    ModeOfTravel.setVisibility(View.VISIBLE);
+                    ondutylocations.setVisibility(View.GONE);
+                    haplocationbutton.setVisibility(View.GONE);
+                    otherlocationbutton.setVisibility(View.GONE);
+                }
+
+
                 break;
 
-            case R.id.submitbutton:
-                if (txt_mode.getText().toString().equals("Bike")) {
+            /*            case R.id.submitbutton:
+             *//*   if (txt_mode.getText().toString().equals("Bike")) {
                     if (!filepath_final.equals("") && !edt_km.getText().toString().equals("")) {
                         if (vali()) {
                             submitValue();
@@ -488,9 +588,13 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                     } else {
                         Toast.makeText(On_Duty_Activity.this, "Please enter all the details", Toast.LENGTH_SHORT).show();
                     }
-                }
+                }*//*
 
-                break;
+
+                submitData();
+
+
+                break;*/
 
             case R.id.closebutton:
                 haplocationtext.setVisibility(View.GONE);
@@ -535,42 +639,56 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         startActivity(intent);
     }
 
+
+
+
+
+
+
+
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
-        selecthaplocationss.setText(myDataset.get(position).getName());
-        hapLocid = String.valueOf(myDataset.get(position).getId());
-
         if (type == 8) {
             TextMode.setText(myDataset.get(position).getName());
             startEnd = myDataset.get(position).getId();
-            Log.e("Mode_Count", startEnd);
+            Log.e("Dash_Mode_Count", startEnd);
             shared_common_pref.save("MC", startEnd);
+            modeId = myDataset.get(position).getFlag();
+            Log.e("modeId", modeId);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString("ModeCount", startEnd);
+            editor.commit();
 
             if (startEnd.equals("0")) {
                 mode = "11";
                 BikeMode.setVisibility(View.GONE);
-                BusMode.setVisibility(View.VISIBLE);
-                ReasonPhoto.setVisibility(View.VISIBLE);
-                BusFrom.setText("");
-                TextToAddress.setText("");
-                EditFare.setText("");
-                attachedImage.setImageURI(null);
-
+                ReasonPhoto.setVisibility(View.GONE);
 
             } else {
                 mode = "12";
-                BusMode.setVisibility(View.GONE);
                 BikeMode.setVisibility(View.VISIBLE);
                 ReasonPhoto.setVisibility(View.VISIBLE);
-                StartKm.setText("");
-                attachedImage.setImageURI(null);
-
             }
-
-            sharedpreferences.edit().remove("SharedImage");
+            attachedImage.setImageResource(0);
+            StartKm.setText("");
+            if (attachedImage.getDrawable() == null) {
+                Log.e("Image_Draw_able", "Null_Image_View");
+            } else {
+                Log.e("Image_Draw_able", "Not_Null_Image_View");
+            }
+            Log.e("IMAGE_URI", imageURI);
         } else if (type == 10) {
             TextToAddress.setText(myDataset.get(position).getName());
+        } else if (type == 1) {
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(hapLocation, myDataset.get(position).getName());
+            editor.commit();
+
+            selecthaplocationss.setText(myDataset.get(position).getName());
+            hapLocid = String.valueOf(myDataset.get(position).getId());
+
+
         }
     }
 
@@ -757,7 +875,23 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     }
 
     public void submitData() {
-
+     /*   if (txt_mode.getText().toString().equals("Bike")) {
+            if (!filepath_final.equals("") && !edt_km.getText().toString().equals("")) {
+                if (vali()) {
+                    submitValue();
+                }
+            } else {
+                Toast.makeText(On_Duty_Activity.this, "Please enter all the details", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            if (!filepath_final.equals("") && !edt_frm.getText().toString().equals("") && !txt_hq.getText().toString().equals("") && !edt_fare.getText().toString().equals("")) {
+                if (vali()) {
+                    submitValue();
+                }
+            } else {
+                Toast.makeText(On_Duty_Activity.this, "Please enter all the details", Toast.LENGTH_SHORT).show();
+            }
+        }*/
         mShared_common_pref.save("Started_km", edt_km.getText().toString());
         mShared_common_pref.save("mode_of_travel", txt_mode.getText().toString());
         mShared_common_pref.save("mode_of_travel", txt_mode.getText().toString());
@@ -765,23 +899,23 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         Log.e("MODE_OF_Travel", txt_mode.getText().toString());
         try {
             JSONObject jj = new JSONObject();
+            jj.put("hap_location", strHapLocation);
+            jj.put("visit_purpose", purposeofvisitedittext.getText().toString());
+            jj.put("other_loaction", ondutyedittext.getText().toString());
+            jj.put("mode_allowance", "OnDuty");
             jj.put("km", edt_km.getText().toString());
             jj.put("rmk", edt_rmk.getText().toString());
             jj.put("mod", mode);
             jj.put("sf", SF_code);
             jj.put("div", div);
             jj.put("url", url);
-            jj.put("from", edt_frm.getText().toString());
-            jj.put("to", edt_to.getText().toString());
-            jj.put("fare", edt_fare.getText().toString());
+            jj.put("from", " ");
+            jj.put("to", " ");
+            jj.put("fare", " ");
             //saveAllowance
             Log.v("printing_allow", jj.toString());
             Call<ResponseBody> Callto;
-            if (updateMode)
-                Callto = apiInterface.updateAllowance(jj.toString());
-            else
-                Callto = apiInterface.saveAllowance(jj.toString());
-
+            Callto = apiInterface.saveAllowance(jj.toString());
             Callto.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -797,8 +931,22 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                             JSONObject js = new JSONObject(jsonData);
                             if (js.getString("success").equalsIgnoreCase("true")) {
                                 Toast.makeText(On_Duty_Activity.this, " Submitted successfully ", Toast.LENGTH_SHORT).show();
-                                common_class.CommonIntentwithFinish(Dashboard.class);
-                                //common_class.CommonIntentwithFinish(AllowanceActivityTwo.class);
+                             //   common_class.CommonIntentwithFinish(Dashboard.class);
+                                Intent intent = new Intent(getApplicationContext(), Checkin.class);
+                                Bundle extras = new Bundle();
+                                extras.putString("ODFlag", String.valueOf(flag));
+                                extras.putString("Mode", "onduty");
+                                if (flag == 1) {
+                                    extras.putString("onDutyPlcNm", ondutyedittext.getText().toString());
+                                    extras.putString("onDutyPlcID", "0");
+                                } else {
+                                    extras.putString("onDutyPlcNm", selecthaplocationss.getText().toString());
+                                    extras.putString("onDutyPlcID", hapLocid);
+                                }
+                                extras.putString("vstPurpose", purposeofvisitedittext.getText().toString());
+                                intent.putExtras(extras);
+                                startActivity(intent);
+
                             } else
                                 Toast.makeText(On_Duty_Activity.this, " Cannot submitted the data ", Toast.LENGTH_SHORT).show();
                         }

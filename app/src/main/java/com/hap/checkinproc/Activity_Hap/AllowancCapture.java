@@ -203,9 +203,24 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
 
             Log.e("SHARE_MODE", mode);
             startActivity(new Intent(AllowancCapture.this, AllowanceActivity.class));
+        } else if (allowance.equals("three")) {
+
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString("SharedImage", Uri.fromFile(file).toString());
+            editor.putString("Sharedallowance", "One");
+            editor.putString("SharedMode", mode);
+            editor.putString("StartedKM", StartedKM);
+            editor.putString("SharedFromKm", FromKm);
+            editor.putString("SharedToKm", ToKm);
+            editor.putString("SharedFare", Fare);
+            editor.commit();
+
+            Log.e("SHARE_MODE", mode);
+            startActivity(new Intent(AllowancCapture.this, On_Duty_Activity.class));
         } else if (allowance.equals("Two")) {
 
             SharedPreferences.Editor editor = sharedpreferences.edit();
+
             editor.putString("SharedImages", Uri.fromFile(file).toString());
             editor.commit();
             startActivity(new Intent(AllowancCapture.this, AllowanceActivityTwo.class));

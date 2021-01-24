@@ -46,7 +46,7 @@
                         android:text="Mode of Travels "
                         android:textAllCaps="false"
                         android:textColor="#000"
-                        android:textSize="18sp"
+
                         android:textStyle="bold" />
 
                     <androidx.cardview.widget.CardView
@@ -71,7 +71,7 @@
                             android:padding="10dp"
                             android:textAllCaps="false"
                             android:textColor="#515151"
-                            android:textSize="18sp" />
+                            android:textSize="13sp" />
 
                     </androidx.cardview.widget.CardView>
 
@@ -94,7 +94,6 @@
                         android:text="Starting Km "
                         android:textAllCaps="false"
                         android:textColor="#000"
-                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <androidx.cardview.widget.CardView
@@ -124,7 +123,7 @@
                             android:text=""
                             android:textAllCaps="false"
                             android:textColor="#515151"
-                            android:textSize="18sp" />
+                            android:textSize="14sp" />
                     </androidx.cardview.widget.CardView>
 
                 </LinearLayout>
@@ -308,7 +307,7 @@
                                 android:text="Photo"
                                 android:textAllCaps="false"
                                 android:textColor="#fff"
-                                android:textSize="18sp" />
+                                android:textSize="14sp" />
 
                         </LinearLayout>
 
@@ -338,7 +337,6 @@
                         android:text="Remarks "
                         android:textAllCaps="false"
                         android:textColor="#000"
-                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <androidx.cardview.widget.CardView
@@ -364,7 +362,7 @@
                             android:text=""
                             android:textAllCaps="false"
                             android:textColor="#000"
-                            android:textSize="18sp" />
+                            android:textSize="13sp" />
 
                     </androidx.cardview.widget.CardView>
 
@@ -376,7 +374,7 @@
                         android:layout_below="@+id/card_rmk"
                         android:layout_centerHorizontal="true"
                         android:layout_gravity="center"
-                        android:layout_margin="5dp"
+                        android:layout_margin="@dimen/C8dp"
                         android:background="@drawable/button_blueg"
                         android:text="Submit"
                         android:textColor="#fff" />
