@@ -275,7 +275,6 @@
 
                                 <androidx.recyclerview.widget.RecyclerView
                                     android:layout_width="match_parent"
-
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/C5dp"></androidx.recyclerview.widget.RecyclerView>
 
@@ -358,7 +357,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
                                             android:fontFamily="@font/basic"
-                                            android:text="Other Allowance"
+                                            android:text="Other Expense"
                                             android:textAllCaps="false"
                                             android:textColor="#000"
                                             android:textSize="16sp"

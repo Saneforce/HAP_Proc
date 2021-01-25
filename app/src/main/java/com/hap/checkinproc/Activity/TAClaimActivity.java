@@ -59,6 +59,7 @@ import com.hap.checkinproc.Activity.Util.UpdateUi;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
+import com.hap.checkinproc.Activity_Hap.TravelAllowanceForm;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -76,9 +77,9 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import id.zelory.compressor.Compressor;
@@ -165,7 +166,16 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     public static final String MOC = "ModeOfCount";
     public static final String SKM = "Started_km";
     Integer S = 0;
-    String shortName = "";
+    String shortName = "", Exp_Name = "";
+
+    ArrayList<String> DA = new ArrayList<>();
+    ArrayList<String> OE = new ArrayList<>();
+    ArrayList<String> LC = new ArrayList<>();
+    List<String> listWithoutDuplicates;
+    LinearLayout LDailyAllowance, LOtherExpense, LLocalConve;
+
+    ArrayList<String> Allowance_Id = new ArrayList<>();
+    String Id="",userEnter="",attachment="",maxAllowonce="";
 
 
     @Override
@@ -201,6 +211,52 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         TotalTravelledKm = findViewById(R.id.total_km);
         PersonalKiloMeter = findViewById(R.id.pers_kilo_meter);
         editTextRemarks = findViewById(R.id.edt_rmk);
+
+        LDailyAllowance = findViewById(R.id.lin_daily_allowance);
+        LOtherExpense = findViewById(R.id.lin_other_allowance);
+        LLocalConve = findViewById(R.id.lin_local_con);
+
+/*
+        if (shortName.equals("Daily Allowance")) {
+            DA.add(Exp_Name);
+        }
+
+        if (shortName.equals("Other Expense")) {
+            OE.add(Exp_Name);
+        }
+        if (shortName.equals("Local Conveyance")) {
+            LC.add(Exp_Name);
+        }*/
+
+
+        LDailyAllowance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent DAintent = new Intent(TAClaimActivity.this, TravelAllowanceForm.class);
+                DAintent.putExtra("Type", "Daily Allowance");
+                DAintent.putExtra("DaList", DA);
+                startActivity(DAintent);
+            }
+        });
+
+        LOtherExpense.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent DAintent = new Intent(TAClaimActivity.this, TravelAllowanceForm.class);
+                DAintent.putExtra("Type", "Other Expense");
+                DAintent.putExtra("DaList", OE);
+                startActivity(DAintent);
+            }
+        });
+        LLocalConve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent DAintent = new Intent(TAClaimActivity.this, TravelAllowanceForm.class);
+                DAintent.putExtra("Type", "Local Conveyance");
+                DAintent.putExtra("DaList", LC);
+                startActivity(DAintent);
+            }
+        });
 
 
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -872,14 +928,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         // Uri outputFileUri = Uri.fromFile(new File(getExternalCacheDir().getPath(), "pickImageResult.jpeg"));
         outputFileUri = FileProvider.getUriForFile(TAClaimActivity.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), "pickImageResult" + System.currentTimeMillis() + ".jpeg"));
         Log.v("priniting_uri", outputFileUri.toString() + " output " + outputFileUri.getPath() + " raw_msg " + getExternalCacheDir().getPath());
-        //content://com.saneforce.sbiapplication.fileprovider/shared_video/Android/data/com.saneforce.sbiapplication/cache/pickImageResult.jpeg
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivityForResult(intent, 2);
     }
 
     public void callApi(String date, String OS) {
-        ArrayList<String> arryShort = new ArrayList<>();
+
+        ArrayList listValue = new ArrayList();
         Log.e("OS_VALLUE", " " + OS);
         try {
             JSONObject jj = new JSONObject();
@@ -896,44 +952,56 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     try {
                         if (response.isSuccessful()) {
                             Log.v("print_upload_file_true", "ggg" + response);
-                            JSONObject jb = null;
                             String jsonData = null;
                             jsonData = response.body().string();
                             Log.v("response_data", jsonData);
                             array = new ArrayList<>();
                             lay_row.removeAllViews();
                             JSONObject js = new JSONObject(jsonData);
-                            JSONArray ja = js.getJSONArray("ExpenseWeb");
-                            for (int i = 0; i < ja.length(); i++) {
-                                JSONObject json_oo = ja.getJSONObject(i);
-                                JSONObject json_o = json_oo.getJSONObject("value1");
-                                exp_for = json_o.getString("Exp_For");
-                                shortName = json_o.getString("Short_Name");
+                            JSONArray jsnArValue = js.getJSONArray("ExpenseWeb");
+                            for (int i = 0; i < jsnArValue.length(); i++) {
+                                JSONObject json_oo = jsnArValue.getJSONObject(i);
+                                Exp_Name = json_oo.getString("Name");
+                                shortName = json_oo.getString("Short_Name");
+                                Id = String.valueOf(json_oo.get("ID"));
+                                userEnter = json_oo.getString("user_enter");
+                                attachment =json_oo.getString("Attachemnt");
+                                maxAllowonce = json_oo.getString("Max_Allowance");
+
+
                                 Log.d("SHORT_NAME", shortName);
-                                List<String> elements = new ArrayList<>(Arrays.asList(shortName));
-                                Log.d("SHORT_NAME_AR", elements.toString());
-                                Log.d("SHORT_NAME_AR", String.valueOf(elements.size()));
+                                listValue.add(shortName);
 
-                                Log.e("EXP", exp_for);
-                                ArrayList<SelectionModel> arr = new ArrayList<>();
-                                ArrayList<SelectionModel> arr1 = new ArrayList<>();
-                                JSONArray jjja = json_oo.getJSONArray("value");
+                                HashSet<String> listToSet = new HashSet<String>(listValue);
+                                listWithoutDuplicates = new ArrayList<String>(listToSet);
 
+                                if (shortName.equals("Daily Allowance")) {
+                                    DA.add(Exp_Name);
+                                    Log.e("TA_Claim_userEnter",userEnter);
+                                    Log.e("TA_Claim_attachment",attachment);
+                                    Log.e("TA_Claim_maxAllowonce",maxAllowonce);
 
-                                for (int j = 0; j < jjja.length(); j++) {
-                                    JSONObject json_in = jjja.getJSONObject(j);
-                                    arr.add(new SelectionModel(json_in.getString("Ad_Fld_Name"), "", json_in.getString("Ad_Fld_ID"), "", ""));
                                 }
 
-                                if (OS.equals("")) {
+                                if (shortName.equals("Other Expense")) {
+                                    OE.add(Exp_Name);
+                                }
+                                if (shortName.equals("Local Conveyance")) {
+                                    LC.add(Exp_Name);
+                                }
+                            }
+
+
+
+
+/*
+    if (OS.equals("")) {
                                     if (exp_for.equals("0")) {
                                         array.add(new SelectionModel(json_o.getString("Short_Name"), json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
                                     }
                                 } else if (OS.equals("DIVER")) {
-
                                     if (exp_for.equals("0") || exp_for.equals("1") || exp_for.equals("2")) {
-
-                                        array.add(new SelectionModel(json_o.getString("Short_Name"), json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
+                                        array.add(new (json_o.getString("Short_Name"), json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
                                     }
                                 } else {
                                     if (exp_for.equals("0") || exp_for.equals("1")) {
@@ -944,7 +1012,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 arr1.add(new SelectionModel("", arr));
 
                             }
-
                             JSONArray ja1 = js.getJSONArray("TodayExpense");
                             if (ja1.length() != 0)
                                 todayExp = ja1.getJSONObject(0).toString();
@@ -956,15 +1023,30 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 Log.e("String_Name", array.get(i).getTxt());
                                 Log.e("String_Name", String.valueOf(array.get(i).getArray()));
                             }
+                            */
 
 
 
 
 
 
-                            for (int i = 0; i < arryShort.size(); i++) {
-                                Log.d("SHORT_NAME_ARRAY", arryShort.toString());
-                            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                         }
                     } catch (Exception e) {
                     }
