@@ -11,14 +11,16 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/product_imagess"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_margin="@dimen/C10dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/C5dp"
             android:orientation="vertical">
 
             <TextView
@@ -37,7 +39,6 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/C8dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -80,14 +81,62 @@
             android:id="@+id/lin_allowance_dynamic"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginTop="@dimen/C5dp"
+            android:layout_marginBottom="@dimen/C5dp"
             android:orientation="vertical"
             tools:context=".MainActivity" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/C5dp"
+            android:gravity="center|bottom"
+            android:orientation="vertical">
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/C10dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="@dimen/C10dp"
+                    android:text="Amount"
+                    android:textColor="@color/dark_grey"
+                    android:visibility="gone" />
+
+                <EditText
+                    android:id="@+id/enter_fare_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/C40dp"
+                    android:background="@drawable/textbox_bg"
+                    android:gravity="start"
+                    android:hint="Fare Amount"
+                    android:padding="@dimen/C10dp"
+                    android:textColor="@color/grey_500"
+                    android:textSize="@dimen/C13dp" />
+
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btn_dynmc_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/button_blueg"
+                android:text="Submit"
+                android:textColor="#fff" />
+
+
+        </LinearLayout>
     </LinearLayout>
+
 
 </RelativeLayout>
 

@@ -47,7 +47,6 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     private int noOfCameras;
     Button btnRtPrv, btnOkPrv;
 
-    Intent intents, intev;
     String mode = "", allowance = "", StartedKM = "", FromKm = "", ToKm = "", Fare = "", Closing = "";
 
     Shared_Common_Pref mShared_common_pref;
@@ -61,21 +60,14 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         setContentView(R.layout.activity_allowanc_capture);
         StartSelfiCamera();
 
-        intents = getIntent();
-        if (getIntent().getExtras() != null) {
-            allowance = intents.getStringExtra("allowance");
-            mode = intents.getStringExtra("Mode");
-            StartedKM = intents.getStringExtra("Started");
-            FromKm = intents.getStringExtra("FromKm");
-            ToKm = intents.getStringExtra("ToKm");
-            Fare = intents.getStringExtra("Fare");
-        }
+
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
         mShared_common_pref = new Shared_Common_Pref(this);
         textureView = (TextureView) findViewById(R.id.ImagePreview);
         button = (Button) findViewById(R.id.button_capture);
-
+        allowance = String.valueOf(getIntent().getSerializableExtra("allowance"));
+        Log.e("allowance",allowance);
         btnRtPrv = (Button) findViewById(R.id.btnRtPrv);
         btnOkPrv = (Button) findViewById(R.id.btnOkPrv);
 
@@ -190,18 +182,11 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         Log.e("Image_Capture", Uri.fromFile(file).toString());
         Log.e("Image_Capture", "IAMGE     " + bitmap);
         if (allowance.equals("One")) {
-
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString("SharedImage", Uri.fromFile(file).toString());
-            editor.putString("Sharedallowance", "One");
-            editor.putString("SharedMode", mode);
-            editor.putString("StartedKM", StartedKM);
-            editor.putString("SharedFromKm", FromKm);
-            editor.putString("SharedToKm", ToKm);
-            editor.putString("SharedFare", Fare);
             editor.commit();
 
-            Log.e("SHARE_MODE", mode);
+
             startActivity(new Intent(AllowancCapture.this, AllowanceActivity.class));
         } else if (allowance.equals("three")) {
 

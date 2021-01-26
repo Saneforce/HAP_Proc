@@ -276,7 +276,8 @@
                                 <androidx.recyclerview.widget.RecyclerView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C5dp"></androidx.recyclerview.widget.RecyclerView>
+                                    android:layout_marginTop="@dimen/C5dp"
+                                    android:visibility="gone"></androidx.recyclerview.widget.RecyclerView>
 
                             </LinearLayout>
 
@@ -329,10 +330,22 @@
                                     </LinearLayout>
                                 </RelativeLayout>
 
+                                <LinearLayout
+                                    android:id="@+id/lin_dyn_dly_allow"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/C5dp"
+                                    android:orientation="vertical"
+                                    tools:ignore="MissingPrefix">
+
+                                </LinearLayout>
+
+
                                 <androidx.recyclerview.widget.RecyclerView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C5dp"></androidx.recyclerview.widget.RecyclerView>
+                                    android:layout_marginTop="@dimen/C5dp"
+                                    android:visibility="gone"></androidx.recyclerview.widget.RecyclerView>
 
                             </LinearLayout>
 
@@ -387,9 +400,9 @@
 
                                 <androidx.recyclerview.widget.RecyclerView
                                     android:layout_width="match_parent"
-
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C5dp"></androidx.recyclerview.widget.RecyclerView>
+                                    android:layout_marginTop="@dimen/C5dp"
+                                    android:visibility="gone"></androidx.recyclerview.widget.RecyclerView>
 
                             </LinearLayout>
 
@@ -445,7 +458,8 @@
                                 <androidx.recyclerview.widget.RecyclerView
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C5dp"></androidx.recyclerview.widget.RecyclerView>
+                                    android:layout_marginTop="@dimen/C5dp"
+                                    android:visibility="gone"></androidx.recyclerview.widget.RecyclerView>
 
                             </LinearLayout>
 

@@ -17,11 +17,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -51,6 +49,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.Util.ImageFilePath;
@@ -173,9 +172,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     ArrayList<String> LC = new ArrayList<>();
     List<String> listWithoutDuplicates;
     LinearLayout LDailyAllowance, LOtherExpense, LLocalConve;
+    String Id = "", userEnter = "", attachment = "", maxAllowonce = "";
 
-    ArrayList<String> Allowance_Id = new ArrayList<>();
-    String Id="",userEnter="",attachment="",maxAllowonce="";
+    String strRetriveType = "";
+    ArrayList<String> strRetriveTaList = new ArrayList<>();
+    LinearLayout dymicDailyAllowance;
+    JSONObject jsonDailyAllowance =  new JSONObject();
 
 
     @Override
@@ -190,6 +192,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         getToolbar();
+
+
         txt_date = findViewById(R.id.txt_date);
         card_date = findViewById(R.id.card_date);
         card_type_travel = findViewById(R.id.card_type_travel);
@@ -216,17 +220,19 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         LOtherExpense = findViewById(R.id.lin_other_allowance);
         LLocalConve = findViewById(R.id.lin_local_con);
 
-/*
-        if (shortName.equals("Daily Allowance")) {
-            DA.add(Exp_Name);
-        }
+        dymicDailyAllowance = findViewById(R.id.lin_dyn_dly_allow);
 
-        if (shortName.equals("Other Expense")) {
-            OE.add(Exp_Name);
+        strRetriveType = String.valueOf(getIntent().getSerializableExtra("Retrive_Type"));
+        if (strRetriveType.equals("Daily Allowance")) {
+            jsonDailyAllowance =(JSONObject) getIntent().getSerializableExtra("Retrive_Ta_List");
+            Log.e("AllowanceType", strRetriveType);
+            Log.e("AllowanceType", String.valueOf(jsonDailyAllowance));
+
+       //     dynamicViewAllowance(jsonDailyAllowance);
+        } else {
+            Log.e("AllowanceType", strRetriveType);
+
         }
-        if (shortName.equals("Local Conveyance")) {
-            LC.add(Exp_Name);
-        }*/
 
 
         LDailyAllowance.setOnClickListener(new View.OnClickListener() {
@@ -431,6 +437,30 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 startActivity(new Intent(getApplicationContext(), TAClaimActivity.class));
             }
         });
+    }
+
+
+    @SuppressLint("ResourceType")
+    public void dynamicViewAllowance(ArrayList<String> mStr) {
+
+        Log.e("ARRAY_SIZE", String.valueOf(mStr.size()));
+        for (int l = 0; l <= mStr.size(); l++) {
+            Log.e("ARRAY_SIZE", mStr.toString());
+            RelativeLayout childRel = new RelativeLayout(getApplicationContext());
+            RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_END);
+            layoutparams_3.setMargins(0, 10, 0, 0);
+            TextView edt = new TextView(getApplicationContext());
+            edt.setLayoutParams(layoutparams_3);
+            edt.setId(12345);
+            edt.setTextSize(13);
+            edt.setTextColor(R.color.grey_500);
+            edt.setBackgroundResource(R.drawable.textbox_bg);
+            edt.setPadding(9, 9, 9, 9);
+
+            childRel.addView(edt);
+            dymicDailyAllowance.addView(childRel, dymicDailyAllowance.getChildCount() - 1);
+        }
     }
 
 
@@ -965,7 +995,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 shortName = json_oo.getString("Short_Name");
                                 Id = String.valueOf(json_oo.get("ID"));
                                 userEnter = json_oo.getString("user_enter");
-                                attachment =json_oo.getString("Attachemnt");
+                                attachment = json_oo.getString("Attachemnt");
                                 maxAllowonce = json_oo.getString("Max_Allowance");
 
 
@@ -977,9 +1007,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                                 if (shortName.equals("Daily Allowance")) {
                                     DA.add(Exp_Name);
-                                    Log.e("TA_Claim_userEnter",userEnter);
-                                    Log.e("TA_Claim_attachment",attachment);
-                                    Log.e("TA_Claim_maxAllowonce",maxAllowonce);
+                                    Log.e("TA_Claim_userEnter", userEnter);
+                                    Log.e("TA_Claim_attachment", attachment);
+                                    Log.e("TA_Claim_maxAllowonce", maxAllowonce);
 
                                 }
 
@@ -990,62 +1020,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                     LC.add(Exp_Name);
                                 }
                             }
-
-
-
-
-/*
-    if (OS.equals("")) {
-                                    if (exp_for.equals("0")) {
-                                        array.add(new SelectionModel(json_o.getString("Short_Name"), json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
-                                    }
-                                } else if (OS.equals("DIVER")) {
-                                    if (exp_for.equals("0") || exp_for.equals("1") || exp_for.equals("2")) {
-                                        array.add(new (json_o.getString("Short_Name"), json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
-                                    }
-                                } else {
-                                    if (exp_for.equals("0") || exp_for.equals("1")) {
-                                        array.add(new SelectionModel(json_o.getString("Short_Name"), json_o.getString("Name"), "", json_o.getString("ID"), "", arr1, json_o.getString("user_enter"), json_o.getString("Attachemnt"), json_o.getString("Max_Allowance")));
-                                    }
-                                }
-
-                                arr1.add(new SelectionModel("", arr));
-
-                            }
-                            JSONArray ja1 = js.getJSONArray("TodayExpense");
-                            if (ja1.length() != 0)
-                                todayExp = ja1.getJSONObject(0).toString();
-                            Log.v("todayExp_val", todayExp);
-                            DailyExpenseAdapter adpt = new DailyExpenseAdapter(TAClaimActivity.this, array);
-                            list.setAdapter(adpt);
-                            for (int i = 0; i < array.size(); i++) {
-                                createDynamicViewForSingleRow(array.get(i).getHeader(), array.get(i).getTxt(), array.get(i).getArray(), i, array.get(i).getUser_enter(), array.get(i).getAttachment(), array.get(i).getMax());
-                                Log.e("String_Name", array.get(i).getTxt());
-                                Log.e("String_Name", String.valueOf(array.get(i).getArray()));
-                            }
-                            */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
                         }
                     } catch (Exception e) {
@@ -1062,207 +1036,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    @SuppressLint("ResourceType")
-    public void createDynamicViewForSingleRow(String headerValue, String name, ArrayList<SelectionModel> array, int position, String userenter, String attachment, String max) {
-/*
-        RelativeLayout ChildRelative = new RelativeLayout(this);
-
-        RelativeLayout.LayoutParams childRelParams = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        ChildRelative.setLayoutParams(childRelParams);
-
-
-        *//*Short Name*//*
-        RelativeLayout.LayoutParams short_name_realtive = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-        short_name_realtive.setMargins(5, 0, 0, 0);
-        TextView ShortName = new TextView(this);
-        ShortName.setText(headerValue);
-        ShortName.setLayoutParams(short_name_realtive);
-        ShortName.setTextSize(16f);
-        ShortName.setId(1);
-        ShortName.setTextColor(Color.BLACK);
-        ChildRelative.addView(ShortName);
-
-
-
-        *//*Add Allowance on Short Value*//*
-        RelativeLayout.LayoutParams typeAddAllowance = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        typeAddAllowance.addRule(RelativeLayout.ALIGN_PARENT_END);
-        typeAddAllowance.setMargins(0, 10, 0, 0);
-
-        TextView addAllowance = new TextView(this);
-        addAllowance.setText("Add Allowance");
-        addAllowance.setLayoutParams(typeAddAllowance);
-        addAllowance.setId(2);
-        addAllowance.setTextColor(Color.BLUE);
-        ChildRelative.addView(addAllowance);
-        addAllowance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-
-        lay_row.addView(ChildRelative);*/
-
-    }
-
-    @SuppressLint("ResourceType")
-    public CardView generateView(int x, ArrayList<SelectionModel> arr, ArrayList<SelectionModel> arrayList, int pos, ArrayList<Integer> cardPos) {
-        CardView cardview = new CardView(this);
-        cardview.setId(cardViewCount);
-        cardPos.add(cardViewCount);
-        cardViewCount = cardViewCount + 1;
-        LinearLayout.LayoutParams layoutparams = new LinearLayout.LayoutParams(
-                RelativeLayout.LayoutParams.FILL_PARENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        if (x != 0) {
-            // CardView cc=lay_row.findViewById(x);
-            //layoutparams.addRule(RelativeLayout.BELOW,cc.getId());
-        }
-        cardview.setLayoutParams(layoutparams);
-
-        cardview.setRadius(5);
-
-        cardview.setPadding(18, 18, 18, 18);
-
-        cardview.setCardBackgroundColor(Color.GRAY);
-
-        cardview.setUseCompatPadding(true);
-        //cardview.setMaxCardElevation(2);
-        cardview.setCardElevation(5);
-
-        /* cardview.setMaxCardElevation(6);*/
-        cardview.setRadius(8);
-        LinearLayout lay = new LinearLayout(this);
-        LinearLayout.LayoutParams params_3 = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        lay.setBackgroundColor(Color.parseColor("#ffffff"));
-        lay.setPadding(5, 5, 5, 5);
-        params_3.setMargins(5, 6, 5, 3);
-        lay.setOrientation(LinearLayout.VERTICAL);
-
-        try {
-            for (int i = 0; i < arr.size(); i++) {
-
-                SelectionModel mm = arr.get(i);
-                EditText edt1 = new EditText(this);
-                edt1.setLayoutParams(params_3);
-                edt1.setHint(arr.get(i).getTxt());
-                edt1.setHintTextColor(Color.parseColor("#C0C0C0"));
-                edt1.setBackgroundResource(R.drawable.hash_border);
-                edt1.setText("");
-                edt1.setPadding(9, 9, 9, 9);
-                lay.addView(edt1);
-                edt1.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable editable) {
-                        mm.setValue(editable.toString());
-                    }
-                });
-            }
-        } catch (Exception e) {
-
-        }
-
-        LinearLayout.LayoutParams params_4 = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        params_4.setMargins(0, 5, 0, 0);
-        RelativeLayout rlay_icon = new RelativeLayout(this);
-        rlay_icon.setId(657);
-        RelativeLayout.LayoutParams params_5 = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        //rlay_icon.setLayoutParams(params_5);
-        params_5.addRule(RelativeLayout.ALIGN_PARENT_END);
-        params_5.setMargins(0, 6, 0, 0);
-        ImageView img1 = new ImageView(this);
-        img1.setImageResource(R.drawable.circle_plus_icon);
-        img1.setId(899);
-
-        img1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int countt = Integer.parseInt(arr.get(0).getTmp_url());
-                ArrayList<SelectionModel> arr_new = new ArrayList<>();
-                for (int l = 0; l < arr.size(); l++) {
-                    SelectionModel mm = arr.get(l);
-                    arr_new.add(new SelectionModel(mm.getTxt(), "", mm.getCode(), "", mm.getTmp_url()));
-                }
-                arrayList.add(new SelectionModel(String.valueOf(cardViewCount), arr_new));
-                Log.v("arraylist_selection", arrayList.size() + "");
-                LinearLayout rlays = lay_row.findViewById(countt);
-                img1.setVisibility(View.INVISIBLE);
-                rlays.addView(generateView(cardview.getId(), arr_new, arrayList, pos + 1, cardPos));
-                // lay_row.addView(rlays);
-            }
-        });
-
-        img1.setLayoutParams(params_5);
-        rlay_icon.addView(img1);
-        RelativeLayout.LayoutParams params_6 = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.WRAP_CONTENT,
-                RelativeLayout.LayoutParams.WRAP_CONTENT);
-        //rlay_icon.setLayoutParams(params_5);
-
-        params_6.addRule(RelativeLayout.LEFT_OF, img1.getId());
-        params_6.setMargins(0, 6, 6, 0);
-        ImageView img2 = new ImageView(this);
-        img2.setImageResource(R.drawable.circle_minus_icon);
-        img2.setId(500);
-
-        //layoutparams_3.addRule(RelativeLayout.CENTER_VERTICAL);
-        // layoutparams_3.setMargins(0,8,0,0);
-        img2.setLayoutParams(params_6);
-        img2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int countt = Integer.parseInt(arr.get(0).getTmp_url());
-                LinearLayout rlays = lay_row.findViewById(countt);
-                Log.v("printing_pos_are ", pos + " end ");
-                int pos = cardPos.indexOf(cardview.getId());
-                Log.v("positon_vard", pos + " mock ");
-                cardPos.remove(pos);
-                rlays.removeView(cardview);
-                arrayList.remove(pos);
-
-                int cardCount = Integer.parseInt(arrayList.get(arrayList.size() - 1).getTxt());
-                CardView card = rlays.findViewById(cardCount);
-                RelativeLayout rlayay = card.findViewById(657);
-                ImageView img = rlayay.findViewById(899);
-                img.setVisibility(View.VISIBLE);
-
-
-                // lay_row.addView(rlays);
-            }
-        });
-        if (pos == 0) {
-            img2.setVisibility(View.INVISIBLE);
-        }
-        rlay_icon.addView(img2);
-        //lay.addView(edt1);
-        lay.addView(rlay_icon);
-
-        cardview.addView(lay);
-        return cardview;
-    }
 
     @Override
     public void onClick(View v) {

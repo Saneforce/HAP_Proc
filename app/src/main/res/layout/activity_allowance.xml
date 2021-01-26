@@ -22,7 +22,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/C5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -31,179 +32,33 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/mode_of_travel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/txt"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        android:text="Mode of Travels "
-                        android:textAllCaps="false"
-                        android:textColor="#000"
-
-                        android:textStyle="bold" />
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/card_travel_mode"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/txt"
-                        android:layout_marginTop="6dp"
-                        android:background="#B1AFAF"
-                        android:padding="18dp"
-                        app:cardCornerRadius="5dp"
-                        app:cardElevation="2dp"
-                        app:cardUseCompatPadding="true">
-
-                        <TextView
-                            android:id="@+id/txt_mode"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_toRightOf="@+id/txt"
-                            android:fontFamily="@font/basic"
-                            android:hint="Mode of travel"
-                            android:padding="10dp"
-                            android:textAllCaps="false"
-                            android:textColor="#515151"
-                            android:textSize="13sp" />
-
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/bike_mode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-             >
-
-                    <TextView
-                        android:id="@+id/txt_km"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="8dp"
-                        android:fontFamily="@font/basic"
-                        android:text="Starting Km "
-                        android:textAllCaps="false"
-                        android:textColor="#000"
-                        android:textStyle="bold" />
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/card_km"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/txt_km"
-                        android:layout_marginTop="6dp"
-                        android:background="#B1AFAF"
-                        android:padding="18dp"
-                        app:cardCornerRadius="5dp"
-                        app:cardElevation="2dp"
-                        app:cardUseCompatPadding="true">
-
-                        <EditText
-                            android:id="@+id/edt_km"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/toolbar3"
-                            android:layout_toRightOf="@+id/txt"
-                            android:background="@null"
-                            android:digits="1234567890."
-                            android:fontFamily="@font/basic"
-                            android:hint="Starting Km"
-                            android:inputType="number"
-                            android:padding="10dp"
-                            android:text=""
-                            android:textAllCaps="false"
-                            android:textColor="#515151"
-                            android:textSize="14sp" />
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/bus_mode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
                     <LinearLayout
+                        android:id="@+id/mode_of_travel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/txt_frm"
+                            android:id="@+id/txt"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            android:layout_marginTop="8dp"
+                            android:layout_marginTop="5dp"
                             android:fontFamily="@font/basic"
-                            android:text="From"
+                            android:text="Mode of Travel"
                             android:textAllCaps="false"
                             android:textColor="#000"
-                            android:textSize="18sp"
                             android:textStyle="bold" />
 
                         <androidx.cardview.widget.CardView
-                            android:id="@+id/card_from"
+                            android:id="@+id/card_travel_mode"
                             android:layout_width="fill_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/txt_frm"
-                            android:layout_marginTop="6dp"
-                            android:background="#B1AFAF"
-                            android:padding="18dp"
-                            app:cardCornerRadius="5dp"
-                            app:cardElevation="2dp"
-                            app:cardUseCompatPadding="true">
-
-                            <EditText
-                                android:id="@+id/edt_frm"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@null"
-                                android:fontFamily="@font/basic"
-                                android:hint="From Place"
-                                android:padding="10dp"
-                                android:text=""
-                                android:textAllCaps="false"
-                                android:textColor="#515151"
-                                android:textSize="18sp" />
-
-                        </androidx.cardview.widget.CardView>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/txt_to"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/basic"
-                            android:text="To"
-                            android:textAllCaps="false"
-                            android:textColor="#000"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/card_bus_mode"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/card_to_hq"
+                            android:layout_below="@+id/txt"
                             android:layout_marginTop="6dp"
                             android:background="#B1AFAF"
                             android:padding="18dp"
@@ -212,19 +67,19 @@
                             app:cardUseCompatPadding="true">
 
                             <TextView
-                                android:id="@+id/edt_to"
+                                android:id="@+id/txt_mode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@null"
+                                android:layout_toRightOf="@+id/txt"
                                 android:fontFamily="@font/basic"
-                                android:hint="To Place"
-                                android:padding="10dp"
-                                android:text=""
+                                android:hint="Mode of Travel"
+                                android:padding="@dimen/C10dp"
                                 android:textAllCaps="false"
                                 android:textColor="#515151"
-                                android:textSize="18sp" />
+                                android:textSize="13sp" />
 
                         </androidx.cardview.widget.CardView>
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -232,157 +87,310 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-
-                        <TextView
-                            android:id="@+id/txt_fare"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="8dp"
-                            android:fontFamily="@font/basic"
-                            android:text="Fare"
-                            android:textAllCaps="false"
-                            android:textColor="#000"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/card_fare"
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/txt_fare"
-                            android:layout_marginTop="6dp"
-                            android:background="#B1AFAF"
-                            android:padding="18dp"
-                            app:cardCornerRadius="5dp"
-                            app:cardElevation="2dp"
-                            app:cardUseCompatPadding="true">
-
-                            <EditText
-                                android:id="@+id/edt_fare"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@null"
-                                android:digits="1234567890."
-                                android:fontFamily="@font/basic"
-                                android:hint="Fare amount"
-                                android:inputType="number"
-                                android:padding="10dp"
-                                android:text=""
-                                android:textAllCaps="false"
-                                android:textColor="#515151"
-                                android:textSize="18sp" />
-
-                        </androidx.cardview.widget.CardView>
-
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/reason_photo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/C10dp"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:id="@+id/rlay_pic"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginTop="10dp"
-                        android:orientation="horizontal">
-
                         <LinearLayout
-                            android:id="@+id/proof_pic"
-                            android:layout_width="wrap_content"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:background="@drawable/button_blueg"
-                            android:padding="@dimen/C10dp">
+                            android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Photo"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="5dp"
+                                android:fontFamily="@font/basic"
+                                android:text="Daily Allowance"
                                 android:textAllCaps="false"
-                                android:textColor="#fff"
-                                android:textSize="14sp" />
+                                android:textColor="#000"
+                                android:textStyle="bold" />
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/card_daily_allowance"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/txt"
+                                android:layout_marginTop="6dp"
+                                android:background="#B1AFAF"
+                                android:padding="18dp"
+                                app:cardCornerRadius="5dp"
+                                app:cardElevation="2dp"
+                                app:cardUseCompatPadding="true">
+
+                                <TextView
+                                    android:id="@+id/text_daily_allowance"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_toRightOf="@+id/txt"
+                                    android:fontFamily="@font/basic"
+                                    android:hint="Mode of Allowance"
+                                    android:padding="@dimen/C10dp"
+                                    android:textAllCaps="false"
+                                    android:textColor="#515151"
+                                    android:textSize="13sp" />
+
+                            </androidx.cardview.widget.CardView>
 
                         </LinearLayout>
 
-                        <ImageView
-                            android:id="@+id/capture_img"
-                            android:layout_width="@dimen/C80dp"
-                            android:layout_height="@dimen/C80dp"
-                            android:layout_marginLeft="@dimen/C20dp"
-                            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+                        <CheckBox
+                            android:id="@+id/da_driver_allowance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C10dp"
+                            android:text="Driver Allowance"
+                            android:visibility="gone">
+
+                        </CheckBox>
 
 
                     </LinearLayout>
 
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/reason_view"
-                    android:layout_marginLeft="5dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/txt_km1"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/bike_mode"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp"
-                        android:fontFamily="@font/basic"
-                        android:text="Remarks "
-                        android:textAllCaps="false"
-                        android:textColor="#000"
-                        android:textStyle="bold" />
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/card_rmk"
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/relative_remarks"
-                        android:layout_marginTop="6dp"
-                        android:background="#B1AFAF"
-                        android:padding="18dp"
-                        app:cardCornerRadius="5dp"
-                        app:cardElevation="2dp"
-                        app:cardUseCompatPadding="true">
-
-                        <EditText
-                            android:id="@+id/edt_rmk"
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:id="@+id/txt_km"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@null"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="8dp"
                             android:fontFamily="@font/basic"
-                            android:hint="Remarks"
-                            android:padding="10dp"
-                            android:text=""
+                            android:text="Bike Details "
                             android:textAllCaps="false"
                             android:textColor="#000"
-                            android:textSize="13sp" />
+                            android:textStyle="bold" />
 
-                    </androidx.cardview.widget.CardView>
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/card_km"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/txt_km"
+                            android:layout_marginTop="6dp"
+                            android:background="#B1AFAF"
+                            app:cardCornerRadius="5dp"
+                            app:cardElevation="2dp"
+                            app:cardUseCompatPadding="true">
 
+                            <EditText
+                                android:id="@+id/edt_km"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/toolbar3"
+                                android:layout_toRightOf="@+id/txt"
+                                android:background="@null"
+                                android:digits="1234567890."
+                                android:fontFamily="@font/basic"
+                                android:hint="Starting Km"
+                                android:inputType="number"
+                                android:padding="@dimen/C10dp"
+                                android:text=""
+                                android:textAllCaps="false"
+                                android:textColor="#515151"
+                                android:textSize="13sp" />
+                        </androidx.cardview.widget.CardView>
 
-                    <Button
-                        android:id="@+id/btn_submit"
-                        android:layout_width="wrap_content"
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/bus_mode"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/card_rmk"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center"
-                        android:layout_margin="@dimen/C8dp"
-                        android:background="@drawable/button_blueg"
-                        android:text="Submit"
-                        android:textColor="#fff" />
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txt_frm"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/basic"
+                                android:text="From"
+                                android:textAllCaps="false"
+                                android:textColor="#000"
+                                android:textStyle="bold" />
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/card_from"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/txt_frm"
+                                android:layout_marginTop="6dp"
+                                android:background="#B1AFAF"
+                                android:padding="18dp"
+                                app:cardCornerRadius="5dp"
+                                app:cardElevation="2dp"
+                                app:cardUseCompatPadding="true">
+
+                                <EditText
+                                    android:id="@+id/edt_frm"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@null"
+                                    android:fontFamily="@font/basic"
+                                    android:hint="From Place"
+                                    android:padding="@dimen/C10dp"
+                                    android:text=""
+                                    android:textAllCaps="false"
+                                    android:textColor="#515151"
+                                    android:textSize="13sp" />
+
+                            </androidx.cardview.widget.CardView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txt_to"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="8dp"
+                                android:fontFamily="@font/basic"
+                                android:text="To"
+                                android:textAllCaps="false"
+                                android:textColor="#000"
+                                android:textStyle="bold" />
+
+                            <androidx.cardview.widget.CardView
+                                android:id="@+id/card_bus_mode"
+                                android:layout_width="fill_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/card_to_hq"
+                                android:layout_marginTop="6dp"
+                                android:background="#B1AFAF"
+                                android:padding="18dp"
+                                app:cardCornerRadius="5dp"
+                                app:cardElevation="2dp"
+                                app:cardUseCompatPadding="true">
+
+                                <TextView
+                                    android:id="@+id/edt_to"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@null"
+                                    android:fontFamily="@font/basic"
+                                    android:hint="To Place"
+                                    android:padding="@dimen/C10dp"
+                                    android:text=""
+                                    android:textAllCaps="false"
+                                    android:textColor="#515151"
+                                    android:textSize="13sp" />
+
+                            </androidx.cardview.widget.CardView>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/reason_photo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/C10dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
 
+                        <LinearLayout
+                            android:id="@+id/rlay_pic"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="10dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:id="@+id/proof_pic"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:background="@drawable/button_blueg"
+                                android:padding="@dimen/C10dp">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Photo"
+                                    android:textAllCaps="false"
+                                    android:textColor="#fff" />
+
+                            </LinearLayout>
+
+                            <ImageView
+                                android:id="@+id/capture_img"
+                                android:layout_width="@dimen/C80dp"
+                                android:layout_height="@dimen/C80dp"
+                                android:layout_marginLeft="@dimen/C20dp"
+                                app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
+
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/txt_km1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginTop="8dp"
+                            android:fontFamily="@font/basic"
+                            android:text="Remarks "
+                            android:textAllCaps="false"
+                            android:textColor="#000"
+
+                            android:textStyle="bold" />
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/card_rmk"
+                            android:layout_width="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/relative_remarks"
+                            android:background="#B1AFAF"
+                            app:cardCornerRadius="5dp"
+                            app:cardElevation="2dp"
+                            app:cardUseCompatPadding="true">
+
+                            <EditText
+                                android:id="@+id/edt_rmk"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@null"
+                                android:fontFamily="@font/basic"
+                                android:hint="Remarks"
+                                android:padding="@dimen/C10dp"
+                                android:text=""
+                                android:textAllCaps="false"
+                                android:textColor="#000"
+                                android:textSize="13sp" />
+
+                        </androidx.cardview.widget.CardView>
+
+
+                        <Button
+                            android:id="@+id/btn_submit"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_margin="@dimen/C5dp"
+                            android:background="@drawable/button_blueg"
+                            android:text="Submit"
+                            android:textColor="#fff" />
+
+                    </LinearLayout>
                 </LinearLayout>
 
             </LinearLayout>
+
         </ScrollView>
 
     </LinearLayout>
@@ -390,7 +398,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent">
 
 
