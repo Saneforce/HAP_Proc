@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusableInTouchMode="true"
@@ -20,7 +19,7 @@
         <LinearLayout
             android:id="@+id/map"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/header_width1"
+            android:layout_height="@dimen/header_date_width"
             android:layout_below="@+id/tool_header">
 
 
@@ -34,978 +33,813 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/map">
+            android:layout_height="match_parent">
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
-                android:layout_marginLeft="@dimen/C5dp"
+                android:orientation="vertical"
                 android:padding="8dp">
 
                 <LinearLayout
-                    android:id="@+id/card_dates"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/C10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:text="Date "
+                        android:textAllCaps="false"
+                        android:textColor="#000"
+                        android:textSize="13sp" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_date"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/txt"
+                        android:layout_marginTop="@dimen/C5dp"
+                        android:background="#B1AFAF"
+                        android:padding="@dimen/C10dp"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="2dp"
+                        app:cardUseCompatPadding="true">
+
+                        <TextView
+                            android:id="@+id/txt_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/basic"
+                            android:hint="Choose Date"
+                            android:padding="@dimen/C10dp"
+                            android:textAllCaps="false"
+                            android:textColor="#515151"
+                            android:textSize="14sp" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/type_allowance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/card_date"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:text="Location Type "
+                        android:textAllCaps="false"
+                        android:textColor="#000"
+                        android:textSize="13sp"
+                        android:visibility="gone" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_type_travel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/type_allowance"
+                        android:layout_marginTop="@dimen/C5dp"
+                        android:background="#B1AFAF"
+                        android:padding="@dimen/C10dp"
+                        android:visibility="gone"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="2dp"
+                        app:cardUseCompatPadding="true">
+
+                        <TextView
+                            android:id="@+id/txt_type_travel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/basic"
+                            android:hint="Choose Location Type"
+                            android:padding="@dimen/C10dp"
+                            android:textAllCaps="false"
+                            android:textColor="#515151"
+                            android:textSize="14sp" />
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/C10dp"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/txt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:fontFamily="@font/basic"
-                            android:text="Date "
-                            android:textAllCaps="false"
-                            android:textColor="#000"
-                            android:textSize="13sp" />
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/card_date"
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/txt"
+                            android:layout_marginTop="@dimen/C5dp">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/basic"
+                                    android:text="Travel Allowance"
+                                    android:textAllCaps="false"
+                                    android:textColor="#000"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/lin_add_allowance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:drawableLeft="@drawable/add"
+                                    android:text="Add Allowance"
+                                    android:textAllCaps="false"
+                                    android:textColor="#3700B3"
+                                    android:textSize="12sp"
+                                    android:visibility="gone" />
+                            </LinearLayout>
+
+                        </RelativeLayout>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/linear_bike"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/C5dp"
                             android:background="#B1AFAF"
-                            android:padding="@dimen/C10dp"
                             app:cardCornerRadius="5dp"
                             app:cardElevation="2dp"
                             app:cardUseCompatPadding="true">
 
-                            <TextView
-                                android:id="@+id/txt_date"
+                            <LinearLayout
+                                android:id="@+id/linear_mode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="@font/basic"
-                                android:hint="Choose Date"
-                                android:padding="@dimen/C10dp"
-                                android:textAllCaps="false"
-                                android:textColor="#515151"
-                                android:textSize="14sp" />
+                                android:layout_margin="@dimen/C8dp"
+                                android:visibility="gone"
+                                android:orientation="vertical">
 
-                        </androidx.cardview.widget.CardView>
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/C5dp"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:text="Mode of Travel"
+                                        android:textAllCaps="false"
+                                        android:textColor="#000"
+                                        android:textSize="12sp" />
 
 
-                        <TextView
-                            android:id="@+id/type_allowance"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/card_date"
-                            android:layout_marginTop="5dp"
-                            android:fontFamily="@font/basic"
-                            android:text="Location Type "
-                            android:textAllCaps="false"
-                            android:textColor="#000"
-                            android:textSize="13sp" />
+                                    <TextView
+                                        android:id="@+id/mode_name"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:layout_marginLeft="@dimen/C10dp"
+                                        android:text="Bike"
+                                        android:textColor="#000"
+                                        android:textSize="12sp"
+                                        android:textStyle="bold" />
 
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/card_type_travel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/type_allowance"
-                            android:layout_marginTop="@dimen/C5dp"
-                            android:background="#B1AFAF"
-                            android:padding="@dimen/C10dp"
-                            app:cardCornerRadius="5dp"
-                            app:cardElevation="2dp"
-                            app:cardUseCompatPadding="true">
+                                </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/txt_type_travel"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/basic"
-                                android:hint="Choose Location Type"
-                                android:padding="@dimen/C10dp"
-                                android:textAllCaps="false"
-                                android:textColor="#515151"
-                                android:textSize="14sp" />
+                                <LinearLayout
+                                    android:id="@+id/linear_bike_mode"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:visibility="gone">
 
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/C5dp"
+                                        android:orientation="horizontal">
+
+
+                                        <RelativeLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/C5dp">
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal">
+
+                                                <LinearLayout
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="vertical">
+
+                                                    <TextView
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:text="Started km"
+                                                        android:textAllCaps="false"
+                                                        android:textColor="#000"
+                                                        android:textSize="13sp" />
+
+
+                                                    <TextView
+                                                        android:id="@+id/txt_started_km"
+                                                        android:layout_width="@dimen/C80dp"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_marginTop="@dimen/C5dp"
+                                                        android:background="#F2EDEDED"
+                                                        android:padding="@dimen/C5dp"
+                                                        android:text=" "
+                                                        android:textAllCaps="false"
+                                                        android:textSize="13sp" />
+
+
+                                                </LinearLayout>
+
+                                                <ImageView
+                                                    android:layout_width="@dimen/C60dp"
+                                                    android:layout_height="match_parent"
+                                                    android:layout_gravity="center"
+                                                    android:layout_marginLeft="@dimen/C20dp"></ImageView>
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_alignParentLeft="true"
+                                                android:layout_alignParentEnd="true"
+                                                android:layout_alignParentRight="true"
+                                                android:orientation="horizontal">
+
+
+                                                <LinearLayout
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="vertical">
+
+                                                    <TextView
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:text="Closing km"
+                                                        android:textAllCaps="false"
+                                                        android:textColor="#000"
+                                                        android:textSize="13sp" />
+
+
+                                                    <TextView
+                                                        android:id="@+id/txt_ended_km"
+                                                        android:layout_width="@dimen/C80dp"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_marginTop="@dimen/C5dp"
+                                                        android:background="#F2EDEDED"
+                                                        android:padding="@dimen/C5dp"
+                                                        android:text=" "
+                                                        android:textAllCaps="false"
+                                                        android:textSize="13sp" />
+
+                                                </LinearLayout>
+
+                                                <ImageView
+                                                    android:layout_width="@dimen/C60dp"
+                                                    android:layout_height="match_parent"
+                                                    android:layout_gravity="center"
+                                                    android:layout_marginLeft="@dimen/C20dp"></ImageView>
+
+                                            </LinearLayout>
+
+                                        </RelativeLayout>
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/C10dp"
+                                        android:orientation="horizontal">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:text="Travelled  Km : "
+                                                android:textAllCaps="false"
+                                                android:textColor="#000"
+                                                android:textSize="12sp" />
+
+
+                                            <TextView
+                                                android:id="@+id/total_km"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:layout_marginLeft="@dimen/C10dp"
+                                                android:text=""
+                                                android:textColor="#000"
+                                                android:textSize="12sp" />
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="@dimen/C20dp"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:text="Personal  Km : "
+                                                android:textAllCaps="false"
+                                                android:textColor="#000"
+                                                android:textSize="12sp" />
+
+
+                                            <TextView
+                                                android:id="@+id/pers_kilo_meter"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="center"
+                                                android:layout_marginLeft="@dimen/C10dp"
+                                                android:text=""
+                                                android:textColor="#000"
+                                                android:textSize="12sp" />
+                                        </LinearLayout>
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/C10dp"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:text="Total Claiming Km : "
+                                            android:textAllCaps="false"
+                                            android:textColor="#000"
+                                            android:textSize="12sp" />
+
+
+                                        <TextView
+                                            android:id="@+id/personal_km_text"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:layout_marginLeft="@dimen/C10dp"
+                                            android:text=" "
+                                            android:textColor="#000"
+                                            android:textSize="12sp" />
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/linear_bus_mode"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:visibility="gone">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="3"
+                                        android:orientation="horizontal">
+
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/C5dp"
+                                            android:layout_weight="1"
+                                            android:orientation="vertical">
+
+
+                                            <TextView
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/C5dp"
+                                                android:text="From"
+                                                android:textAllCaps="false"
+                                                android:textColor="#000"
+                                                android:textSize="13sp" />
+
+                                            <TextView
+                                                android:id="@+id/txt_bus_from"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/C8dp"
+                                                android:background="#F2EDEDED"
+                                                android:padding="@dimen/C5dp"
+                                                android:text=" "
+                                                android:textAllCaps="false"
+                                                android:textSize="13sp" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/C5dp"
+                                            android:layout_weight="1"
+                                            android:orientation="vertical">
+
+
+                                            <TextView
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/C5dp"
+                                                android:text="To"
+                                                android:textAllCaps="false"
+                                                android:textColor="#000"
+                                                android:textSize="13sp" />
+
+                                            <TextView
+                                                android:id="@+id/txt_bus_to"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/C8dp"
+                                                android:background="#F2EDEDED"
+                                                android:padding="@dimen/C5dp"
+                                                android:text=" "
+                                                android:textAllCaps="false"
+                                                android:textSize="13sp" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/C5dp"
+                                            android:layout_weight="1"
+                                            android:orientation="vertical">
+
+
+                                            <TextView
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/C5dp"
+                                                android:text="Fare"
+                                                android:textAllCaps="false"
+                                                android:textColor="#000"
+                                                android:textSize="13sp" />
+
+                                            <androidx.cardview.widget.CardView
+
+                                                android:layout_width="@dimen/C80dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_below="@+id/txt_rmk"
+                                                android:background="#B1AFAF"
+                                                app:cardCornerRadius="5dp"
+                                                app:cardElevation="1dp"
+                                                app:cardUseCompatPadding="true">
+
+                                                <EditText
+                                                    android:id="@+id/edt_fare"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="match_parent"
+                                                    android:background="@null"
+                                                    android:gravity="start"
+                                                    android:hint="Fare"
+                                                    android:inputType="number"
+                                                    android:maxLength="5"
+                                                    android:padding="@dimen/C5dp"
+                                                    android:textAllCaps="false"
+                                                    android:textSize="14sp" />
+
+                                            </androidx.cardview.widget.CardView>
+                                        </LinearLayout>
+
+
+                                    </LinearLayout>
+
+
+                                </LinearLayout>
+
+                            </LinearLayout>
                         </androidx.cardview.widget.CardView>
 
 
                     </LinearLayout>
-                </LinearLayout>
-
-
-                <RelativeLayout
-                    android:id="@+id/expense"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/card_dates"
-                    android:layout_marginTop="@dimen/C10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_marginTop="@dimen/C10dp">
 
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/basic"
+                                    android:text="Daily Allowance"
+                                    android:textAllCaps="false"
+                                    android:textColor="#000"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/lin_add_daily_allowance"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:drawableLeft="@drawable/add"
+                                    android:text="Add Allowance"
+                                    android:textAllCaps="false"
+                                    android:textColor="#3700B3"
+                                    android:textSize="12sp"></TextView>
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/txt_rmk"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:background="#B1AFAF"
+                            app:cardCornerRadius="5dp"
+                            app:cardElevation="2dp"
+                            app:cardUseCompatPadding="true">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C5dp">
-
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:fontFamily="@font/basic"
-                                            android:text="Travel Allowance"
-                                            android:textAllCaps="false"
-                                            android:textColor="#000"
-                                            android:textSize="16sp"
-                                            android:textStyle="bold" />
-
-                                    </LinearLayout>
-
-                                    <LinearLayout
-                                        android:id="@+id/lin_add_allowance"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentEnd="true"
-                                        android:layout_alignParentRight="true">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:drawableLeft="@drawable/add"
-                                            android:text="Add Allowance"
-                                            android:textAllCaps="false"
-                                            android:textColor="#3700B3"
-                                            android:textSize="12sp" />
-                                    </LinearLayout>
-
-
-                                </RelativeLayout>
-
+                                android:orientation="vertical"
+                                android:layout_margin="@dimen/C5dp"
+                                android:padding="@dimen/C5dp"
+                                android:layout_height="wrap_content">
 
                                 <LinearLayout
-                                    android:id="@+id/lin_travel_bus"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C10dp"
-                                    android:orientation="vertical"></LinearLayout>
+                                    android:orientation="vertical">
 
-                                <ListView
-                                    android:id="@+id/list_allowance_type"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="280dp"
-                                    android:layout_below="@+id/lin_travel_bus"
-                                    android:layout_marginLeft="5dp"
-                                    android:layout_marginTop="6dp"
-                                    android:divider="#fff"
-                                    android:visibility="gone" />
+                                    <RelativeLayout
+                                        android:id="@+id/allowance_information"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
 
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content">
 
-                            </LinearLayout>
+                                            <TextView
+                                                android:id="@+id/txt_mode_of_travel"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:background="#F2EDEDED"
+                                                android:padding="@dimen/C5dp"
+                                                android:text="Head Quaters"
+                                                android:textAllCaps="false"
+                                                android:textSize="13sp" />
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                        </LinearLayout>
 
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C10dp">
-
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center">
-
-                                        <TextView
+                                        <LinearLayout
+                                            android:id="@+id/lin_daily_allowance"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:fontFamily="@font/basic"
-                                            android:text="Travel Location"
-                                            android:textAllCaps="false"
-                                            android:textColor="#000"
-                                            android:textSize="16sp"
-                                            android:textStyle="bold" />
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_alignParentRight="true">
 
-                                    </LinearLayout>
+                                            <TextView
+                                                android:id="@+id/txt_mode_amount"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:background="#F2EDEDED"
+                                                android:padding="@dimen/C5dp"
+                                                android:text="500"
+                                                android:textAllCaps="false"
+                                                android:textSize="13sp" />
 
-                                    <LinearLayout
-                                        android:id="@+id/lin_travel_location"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentEnd="true"
-                                        android:layout_alignParentRight="true">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:drawableLeft="@drawable/add"
-                                            android:text="Add Allowance"
-                                            android:textAllCaps="false"
-                                            android:textColor="#3700B3"
-                                            android:textSize="12sp" />
-                                    </LinearLayout>
-                                </RelativeLayout>
-
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C5dp"
-                                    android:visibility="gone"></androidx.recyclerview.widget.RecyclerView>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <RelativeLayout
-
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C10dp">
-
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:fontFamily="@font/basic"
-                                            android:text="Daily Allowance"
-                                            android:textAllCaps="false"
-                                            android:textColor="#000"
-                                            android:textSize="16sp"
-                                            android:textStyle="bold" />
-
-                                    </LinearLayout>
-
-                                    <LinearLayout
-                                        android:id="@+id/lin_daily_allowance"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentEnd="true"
-                                        android:layout_alignParentRight="true">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:drawableLeft="@drawable/add"
-                                            android:text="Add Allowance"
-                                            android:textAllCaps="false"
-                                            android:textColor="#3700B3"
-                                            android:textSize="12sp" />
-                                    </LinearLayout>
-                                </RelativeLayout>
+                                        </LinearLayout>
+                                    </RelativeLayout>
+                                </LinearLayout>
 
                                 <LinearLayout
                                     android:id="@+id/lin_dyn_dly_allow"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/C5dp"
                                     android:orientation="vertical"
+                                    android:layout_marginTop="@dimen/C5dp"
                                     tools:ignore="MissingPrefix">
 
                                 </LinearLayout>
-
-
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C5dp"
-                                    android:visibility="gone"></androidx.recyclerview.widget.RecyclerView>
-
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                        </androidx.cardview.widget.CardView>
+                    </LinearLayout>
 
-                                <RelativeLayout
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C10dp">
-
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:fontFamily="@font/basic"
-                                            android:text="Other Expense"
-                                            android:textAllCaps="false"
-                                            android:textColor="#000"
-                                            android:textSize="16sp"
-                                            android:textStyle="bold" />
-
-                                    </LinearLayout>
-
-                                    <LinearLayout
-                                        android:id="@+id/lin_other_allowance"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentEnd="true"
-                                        android:layout_alignParentRight="true">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:drawableLeft="@drawable/add"
-                                            android:text="Add Allowance"
-                                            android:textAllCaps="false"
-                                            android:textColor="#3700B3"
-                                            android:textSize="12sp" />
-                                    </LinearLayout>
-                                </RelativeLayout>
-
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C5dp"
-                                    android:visibility="gone"></androidx.recyclerview.widget.RecyclerView>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <RelativeLayout
-
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C10dp">
-
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:fontFamily="@font/basic"
-                                            android:text="Local Conveyance"
-                                            android:textAllCaps="false"
-                                            android:textColor="#000"
-                                            android:textSize="16sp"
-                                            android:textStyle="bold" />
-
-                                    </LinearLayout>
-
-                                    <LinearLayout
-                                        android:id="@+id/lin_local_con"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentEnd="true"
-                                        android:layout_alignParentRight="true">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:drawableLeft="@drawable/add"
-                                            android:text="Add Allowance"
-                                            android:textAllCaps="false"
-                                            android:textColor="#3700B3"
-                                            android:textSize="12sp" />
-                                    </LinearLayout>
-                                </RelativeLayout>
-
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C5dp"
-                                    android:visibility="gone"></androidx.recyclerview.widget.RecyclerView>
-
-                            </LinearLayout>
-
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/linear_bike"
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/C8dp"
-                            android:orientation="vertical"
-                            android:visibility="gone">
+                            android:layout_marginTop="@dimen/C10dp">
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/C5dp"
-                                android:orientation="horizontal">
+                                android:gravity="center">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="Mode of Travel"
+                                    android:fontFamily="@font/basic"
+                                    android:text="Other Expense"
                                     android:textAllCaps="false"
                                     android:textColor="#000"
-                                    android:textSize="12sp" />
-
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="@dimen/C10dp"
-                                    android:text="Bike"
-                                    android:textColor="#000"
-                                    android:textSize="12sp"
+                                    android:textSize="14sp"
                                     android:textStyle="bold" />
 
                             </LinearLayout>
 
                             <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/C5dp"
-                                android:orientation="horizontal">
-
-
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C5dp">
-
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="horizontal">
-
-                                        <LinearLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:orientation="vertical">
-
-                                            <TextView
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:text="Started km"
-                                                android:textAllCaps="false"
-                                                android:textColor="#000"
-                                                android:textSize="13sp" />
-
-
-                                            <TextView
-                                                android:id="@+id/txt_started_km"
-                                                android:layout_width="@dimen/C80dp"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginTop="@dimen/C5dp"
-                                                android:background="#F2EDEDED"
-                                                android:padding="@dimen/C5dp"
-                                                android:text=" "
-                                                android:textAllCaps="false"
-                                                android:textSize="13sp" />
-
-
-                                        </LinearLayout>
-
-                                        <ImageView
-                                            android:layout_width="@dimen/C60dp"
-                                            android:layout_height="match_parent"
-                                            android:layout_gravity="center"
-                                            android:layout_marginLeft="@dimen/C20dp"></ImageView>
-
-                                    </LinearLayout>
-
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentEnd="true"
-                                        android:layout_alignParentRight="true"
-                                        android:orientation="horizontal">
-
-
-                                        <LinearLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:orientation="vertical">
-
-                                            <TextView
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:text="Closing km"
-                                                android:textAllCaps="false"
-                                                android:textColor="#000"
-                                                android:textSize="13sp" />
-
-
-                                            <TextView
-                                                android:id="@+id/txt_ended_km"
-                                                android:layout_width="@dimen/C80dp"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginTop="@dimen/C5dp"
-                                                android:background="#F2EDEDED"
-                                                android:padding="@dimen/C5dp"
-                                                android:text=" "
-                                                android:textAllCaps="false"
-                                                android:textSize="13sp" />
-
-                                        </LinearLayout>
-
-                                        <ImageView
-                                            android:layout_width="@dimen/C60dp"
-                                            android:layout_height="match_parent"
-                                            android:layout_gravity="center"
-                                            android:layout_marginLeft="@dimen/C20dp"></ImageView>
-
-                                    </LinearLayout>
-
-                                </RelativeLayout>
-
-                            </LinearLayout>
-
-
-                            <LinearLayout
+                                android:id="@+id/lin_other_allowance"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/C10dp"
-                                android:orientation="horizontal">
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:text="Travelled  Km : "
-                                        android:textAllCaps="false"
-                                        android:textColor="#000"
-                                        android:textSize="12sp" />
-
-
-                                    <TextView
-                                        android:id="@+id/total_km"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:layout_marginLeft="@dimen/C10dp"
-                                        android:text=""
-                                        android:textColor="#000"
-                                        android:textSize="12sp" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="@dimen/C20dp"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:text="Personal  Km : "
-                                        android:textAllCaps="false"
-                                        android:textColor="#000"
-                                        android:textSize="12sp" />
-
-
-                                    <TextView
-                                        android:id="@+id/pers_kilo_meter"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:layout_marginLeft="@dimen/C10dp"
-                                        android:text=""
-                                        android:textColor="#000"
-                                        android:textSize="12sp" />
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/C10dp"
-                                android:orientation="horizontal">
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
-                                    android:text="Total Claiming Km : "
+                                    android:drawableLeft="@drawable/add"
+                                    android:text="Add Allowance"
                                     android:textAllCaps="false"
-                                    android:textColor="#000"
+                                    android:textColor="#3700B3"
                                     android:textSize="12sp" />
-
-
-                                <TextView
-                                    android:id="@+id/personal_km_text"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="@dimen/C10dp"
-                                    android:text=" "
-                                    android:textColor="#000"
-                                    android:textSize="12sp" />
-
                             </LinearLayout>
-
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:id="@+id/linear_bus"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:visibility="gone">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="5dp"
-                                        android:layout_marginTop="10dp"
-                                        android:text="From"
-                                        android:textAllCaps="false"
-                                        android:textColor="#000"
-                                        android:textSize="18sp"
-                                        android:textStyle="bold" />
-
-                                    <androidx.cardview.widget.CardView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_below="@+id/txt"
-                                        android:layout_marginTop="6dp"
-                                        android:padding="18dp"
-                                        app:cardCornerRadius="5dp"
-                                        app:cardElevation="2dp"
-                                        app:cardUseCompatPadding="true">
-
-                                        <TextView
-                                            android:id="@+id/txt_from_palce"
-                                            android:layout_width="100dp"
-                                            android:layout_height="wrap_content"
-                                            android:padding="10dp"
-                                            android:textAllCaps="false"
-                                            android:textColor="#515151"
-                                            android:textSize="18sp" />
-
-                                    </androidx.cardview.widget.CardView>
-
-
-                                </LinearLayout>
-
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginLeft="10dp"></ImageView>
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
-                                    android:layout_marginTop="10dp"
-                                    android:text="To"
-                                    android:textAllCaps="false"
-                                    android:textColor="#000"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-
-                                <androidx.cardview.widget.CardView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@+id/txt"
-                                    android:layout_marginTop="6dp"
-                                    android:padding="18dp"
-                                    app:cardCornerRadius="5dp"
-                                    app:cardElevation="2dp"
-                                    app:cardUseCompatPadding="true">
-
-                                    <TextView
-                                        android:id="@+id/txt_to_place"
-                                        android:layout_width="100dp"
-                                        android:layout_height="wrap_content"
-                                        android:padding="10dp"
-                                        android:textAllCaps="false"
-                                        android:textColor="#515151"
-                                        android:textSize="18sp" />
-
-                                </androidx.cardview.widget.CardView>
-
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="5dp"
-                                    android:layout_marginTop="10dp"
-                                    android:text="Fare"
-                                    android:textAllCaps="false"
-                                    android:textColor="#000"
-                                    android:textSize="18sp"
-                                    android:textStyle="bold" />
-
-                                <androidx.cardview.widget.CardView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@+id/txt"
-                                    android:layout_marginTop="6dp"
-                                    android:padding="18dp"
-                                    app:cardCornerRadius="5dp"
-                                    app:cardElevation="2dp"
-                                    app:cardUseCompatPadding="true">
-
-                                    <TextView
-                                        android:id="@+id/txt_bus_fare"
-                                        android:layout_width="100dp"
-                                        android:layout_height="wrap_content"
-                                        android:padding="10dp"
-                                        android:textAllCaps="false"
-                                        android:textColor="#515151"
-                                        android:textSize="18sp" />
-
-                                </androidx.cardview.widget.CardView>
-
-
-                            </LinearLayout>
-
-
-                        </LinearLayout>
-
+                        </RelativeLayout>
 
                     </LinearLayout>
-                </RelativeLayout>
 
-
-                <TextView
-                    android:id="@+id/txt_exp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/expense"
-                    android:layout_marginTop="@dimen/C12dp"
-                    android:fontFamily="@font/basic"
-                    android:text="Daily Allowance"
-                    android:textAllCaps="false"
-                    android:textColor="#000"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:visibility="gone" />
-
-
-                <LinearLayout
-                    android:id="@+id/linear_da_allowance"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txt_exp"
-                    android:layout_marginTop="@dimen/C5dp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <CheckBox
-                        android:id="@+id/diver_allowance"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Driver Allowance"></CheckBox>
+                        android:orientation="vertical">
 
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/lay_row"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/linear_da_allowance"
-                    android:orientation="vertical"
-                    android:padding="5dp">
-
-                </LinearLayout>
-
-                <ListView
-                    android:id="@+id/list"
-                    android:layout_width="match_parent"
-                    android:layout_height="280dp"
-                    android:layout_below="@+id/lay_row"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="6dp"
-                    android:divider="#fff"
-                    android:visibility="gone" />
-
-                <TextView
-                    android:id="@+id/txt_fare"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/list"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/basic"
-                    android:text="Enter the Fare "
-                    android:textAllCaps="false"
-                    android:textColor="#000"
-                    android:textSize="13sp"
-                    android:visibility="gone" />
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/card_fare"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txt_fare"
-                    android:layout_marginTop="6dp"
-                    android:background="#B1AFAF"
-                    android:padding="18dp"
-                    app:cardCornerRadius="5dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone">
-
-                        <EditText
-                            android:id="@+id/edt_fare"
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:background="@null"
-                            android:fontFamily="@font/basic"
-                            android:inputType="number"
-                            android:padding="10dp"
-                            android:text=""
-                            android:textAllCaps="false"
-                            android:textColor="#515151"
-                            android:textSize="18sp" />
+                            android:layout_marginTop="@dimen/C10dp">
 
-                        <ImageView
-                            android:id="@+id/img_attach"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="8dp"
-                            android:src="@drawable/attach_icon" />
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
 
-                    </RelativeLayout>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:fontFamily="@font/basic"
+                                    android:text="Local Conveyance"
+                                    android:textAllCaps="false"
+                                    android:textColor="#000"
+                                    android:textSize="14sp"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/lin_local_con"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:drawableLeft="@drawable/add"
+                                    android:text="Add Allowance"
+                                    android:textAllCaps="false"
+                                    android:textColor="#3700B3"
+                                    android:textSize="12sp" />
+                            </LinearLayout>
+                        </RelativeLayout>
+
+                    </LinearLayout>
 
 
-                </androidx.cardview.widget.CardView>
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/txt_rmk"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/card_fare"
-                    android:text="Remarks "
-                    android:textAllCaps="false"
-                    android:textColor="#000"
-                    android:textSize="13sp" />
-
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/card_rmk"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/C60dp"
-                    android:layout_below="@+id/txt_rmk"
-                    android:layout_marginTop="6dp"
-                    android:background="#B1AFAF"
-                    android:padding="18dp"
-                    app:cardCornerRadius="5dp"
-                    app:cardElevation="2dp"
-                    app:cardUseCompatPadding="true">
-
-                    <EditText
-                        android:id="@+id/edt_rmk"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="@null"
-                        android:gravity="start"
-                        android:hint="@string/remark"
-                        android:padding="@dimen/C3dp"
-                        android:textAllCaps="false"
-                        android:textSize="14sp" />
-
-                </androidx.cardview.widget.CardView>
-
-                <Button
-                    android:id="@+id/btn_sub"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/card_rmk"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/button_blueg"
-                    android:text="Submit for Approval"
-                    android:textColor="#fff" />
+                    android:layout_marginTop="@dimen/C5dp"
+                    android:orientation="vertical">
 
-            </RelativeLayout>
+                    <TextView
+                        android:id="@+id/txt_rmk"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/card_fare"
+                        android:text="Remarks "
+                        android:textAllCaps="false"
+                        android:textColor="#000"
+                        android:textSize="13sp" />
+
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_rmk"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/C60dp"
+                        android:layout_below="@+id/txt_rmk"
+                        android:layout_marginTop="6dp"
+                        android:background="#B1AFAF"
+                        android:padding="18dp"
+                        app:cardCornerRadius="5dp"
+                        app:cardElevation="2dp"
+                        app:cardUseCompatPadding="true">
+
+                        <EditText
+                            android:id="@+id/edt_rmk"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@null"
+                            android:gravity="start"
+                            android:hint="@string/remark"
+                            android:padding="@dimen/C3dp"
+                            android:textAllCaps="false"
+                            android:textSize="14sp" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <Button
+                        android:id="@+id/btn_sub"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/button_blueg"
+                        android:text="Submit for Approval"
+                        android:textColor="#fff" />
+
+                </LinearLayout>
+
+            </LinearLayout>
         </ScrollView>
 
 
-    </RelativeLayout>
-</LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

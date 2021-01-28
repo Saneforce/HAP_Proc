@@ -77,9 +77,9 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         shared_common_pref = new Shared_Common_Pref(this);
         getToolbar();
 
-        if (sharedpreferences.contains("SharedMode")) {
-            ModeOfTravel = sharedpreferences.getString("SharedMode", "");
-            Log.e("Privacypolicy", "Checking" + ModeOfTravel);
+        if (sharedpreferences.contains("SharedModeTypeVale")) {
+            ModeOfTravel = sharedpreferences.getString("SharedModeTypeVale", "");
+            Log.e("Privacypolicy", "ModeOfTravel" + ModeOfTravel);
             TextModeTravel.setText(ModeOfTravel);
         }
 
@@ -315,5 +315,10 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         } else
             startActivity(new Intent(getApplicationContext(), Dashboard.class));
     }
+
+
+
+
+
 
 }

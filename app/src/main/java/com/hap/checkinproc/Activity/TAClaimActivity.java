@@ -17,8 +17,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,7 +26,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -49,7 +46,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.Util.ImageFilePath;
@@ -73,6 +69,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -129,7 +126,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     List<Common_Model> modelTypeList = new ArrayList<>();
     CustomListViewDialog customDialog;
     LinearLayout linAddAllowance;
-    LinearLayout TravelBike;
+    CardView TravelBike;
     TextView TxtStartedKm, TxtClosingKm;
     LinearLayout LinearTravelBus;
     ListView ListAllowanceMode;
@@ -177,7 +174,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     String strRetriveType = "";
     ArrayList<String> strRetriveTaList = new ArrayList<>();
     LinearLayout dymicDailyAllowance;
-    JSONObject jsonDailyAllowance =  new JSONObject();
+    JSONObject jsonDailyAllowance = new JSONObject();
+    String StrToEnd = "", StrBus = "", StrTo = "", StrDaName = "";
+    TextView txtBusFrom, txtBusTo, txtTaClaim;
+    LinearLayout linBusMode, linBikeMode, linMode;
+    ArrayList<String> LatArrayList = new ArrayList<>();
+    ArrayList<String> LonArrayList = new ArrayList<>();
 
 
     @Override
@@ -196,21 +198,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
         txt_date = findViewById(R.id.txt_date);
         card_date = findViewById(R.id.card_date);
-        card_type_travel = findViewById(R.id.card_type_travel);
-        img_attach = findViewById(R.id.img_attach);
         btn_sub = findViewById(R.id.btn_sub);
-        list = findViewById(R.id.list);
-        lay_row = findViewById(R.id.lay_row);
-        linAddAllowance = findViewById(R.id.lin_add_allowance);
+
+        linAddAllowance = findViewById(R.id.lin_add_daily_allowance);
         TravelBike = findViewById(R.id.linear_bike);
         TxtStartedKm = findViewById(R.id.txt_started_km);
         TxtClosingKm = findViewById(R.id.txt_ended_km);
         travelTypeMode = findViewById(R.id.txt_type_travel);
-        chkDriverAllow = findViewById(R.id.diver_allowance);
         PersonalTextKM = findViewById(R.id.personal_km_text);
 
-        LinearTravelBus = findViewById(R.id.lin_travel_bus);
-        ListAllowanceMode = findViewById(R.id.list_allowance_type);
         diverAllowanceLinear = findViewById(R.id.linear_da_allowance);
         TotalTravelledKm = findViewById(R.id.total_km);
         PersonalKiloMeter = findViewById(R.id.pers_kilo_meter);
@@ -221,14 +217,20 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         LLocalConve = findViewById(R.id.lin_local_con);
 
         dymicDailyAllowance = findViewById(R.id.lin_dyn_dly_allow);
+        linBusMode = findViewById(R.id.linear_bus_mode);
+        linBikeMode = findViewById(R.id.linear_bike_mode);
+        linMode = findViewById(R.id.linear_mode);
+
+        txtBusFrom = findViewById(R.id.txt_bus_from);
+        txtBusTo = findViewById(R.id.txt_bus_to);
+        txtTaClaim = findViewById(R.id.mode_name);
 
         strRetriveType = String.valueOf(getIntent().getSerializableExtra("Retrive_Type"));
         if (strRetriveType.equals("Daily Allowance")) {
-            jsonDailyAllowance =(JSONObject) getIntent().getSerializableExtra("Retrive_Ta_List");
+            jsonDailyAllowance = (JSONObject) getIntent().getSerializableExtra("Retrive_Ta_List");
             Log.e("AllowanceType", strRetriveType);
             Log.e("AllowanceType", String.valueOf(jsonDailyAllowance));
 
-       //     dynamicViewAllowance(jsonDailyAllowance);
         } else {
             Log.e("AllowanceType", strRetriveType);
 
@@ -290,7 +292,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
         }
 
-
         dynamicDate();
         btn_sub.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -314,13 +315,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 popupCapture("attachName");
             }
         });
-        img_attach.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pos = -1;
-                popupCapture("attachName");
-            }
-        });
 
         card_date.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -333,15 +327,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-        card_type_travel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                listOrderType.clear();
-                OrderType();
-            }
-        });
-
-
         linAddAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -353,9 +338,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-
                 layoutParams.setMargins(0, 10, 0, 0);
-                LinearTravelBus.addView(rowView, layoutParams);
+                dymicDailyAllowance.addView(rowView, layoutParams);
                 ImageView imageAttach = findViewById(R.id.image_attach);
                 imageAttach.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -365,31 +349,18 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 });
 
-                int size = LinearTravelBus.getChildCount();
+                int size = dymicDailyAllowance.getChildCount();
                 Log.d("PARENT_COUNT", String.valueOf(size));
 
 
             }
         });
 
-        chkDriverAllow.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    Log.e("LOGGGGGG", "LOGGGGGGGGGGGGGGGG");
-                    callApi(DateForAPi, "DIVER");
-                    driverAllowance = "1";
-                } else {
-                    callApi(DateForAPi, "asd");
-                    Log.e("LOGGGGGG", "L");
-                }
-            }
-        });
     }
 
 
     public void onDelete(View v) {
-        LinearTravelBus.removeView((View) v.getParent());
+        dymicDailyAllowance.removeView((View) v.getParent());
     }
 
 
@@ -459,7 +430,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             edt.setPadding(9, 9, 9, 9);
 
             childRel.addView(edt);
-            dymicDailyAllowance.addView(childRel, dymicDailyAllowance.getChildCount() - 1);
+
         }
     }
 
@@ -499,51 +470,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    /*Travel Type*/
-
-    /* Order Types*/
-    public void OrderType() {
-        travelTypeList = new ArrayList<>();
-        travelTypeList.add("HQ");
-        travelTypeList.add("EXQ");
-        travelTypeList.add("Out Station");
-
-        for (int i = 0; i < travelTypeList.size(); i++) {
-            String id = String.valueOf(travelTypeList.get(i));
-            String name = travelTypeList.get(i);
-            mCommon_model_spinner = new Common_Model(id, name, "flag");
-            listOrderType.add(mCommon_model_spinner);
-        }
-        customDialog = new CustomListViewDialog(TAClaimActivity.this, listOrderType, 100);
-        Window window = customDialog.getWindow();
-        window.setGravity(Gravity.CENTER);
-        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        customDialog.show();
-
-    }
-
-
-    /*Mode Type*/
-    public void ModeType() {
-        ModeList = new ArrayList<>();
-        ModeList.add("Bus");
-        ModeList.add("Car");
-        ModeList.add("Taxi");
-
-        for (int i = 0; i < ModeList.size(); i++) {
-            String id = String.valueOf(ModeList.get(i));
-            String name = ModeList.get(i);
-            mCommon_model_spinner = new Common_Model(id, name, "flag");
-            modelTypeList.add(mCommon_model_spinner);
-        }
-        customDialog = new CustomListViewDialog(TAClaimActivity.this, modelTypeList, 1);
-        Window window = customDialog.getWindow();
-        window.setGravity(Gravity.CENTER);
-        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        customDialog.show();
-
-    }
-
     /*Display Mode of travel View based on the choosed Date*/
     public void displayTravelMode(String ChoosedDate) {
         Log.d("JSON_VALUE_O", ChoosedDate);
@@ -565,32 +491,69 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 JsonArray jsonArray = response.body();
-
+                callMap(DateTime);
                 Log.d("JSON_VALUE", jsonArray.toString());
                 Log.d("JSON_VALUE", "CHECKING");
-                /* TravelBike.setVisibility(View.VISIBLE);*/
+                TravelBike.setVisibility(View.VISIBLE);
                 for (int a = 0; a < jsonArray.size(); a++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(a);
                     StartedKm = String.valueOf(jsonObject.get("Start_Km"));
-                    if (StartedKm != null && !StartedKm.isEmpty() && !StartedKm.equals("null") && !StartedKm.equals("")) {
+                    StrToEnd = String.valueOf(jsonObject.get("StEndNeed"));
+                    StrBus = String.valueOf(jsonObject.get("From_Place"));
+                    StrTo = String.valueOf(jsonObject.get("To_Place"));
+                    StrDaName = String.valueOf(jsonObject.get("MOT_Name"));
+                    StrDaName = StrDaName.replaceAll("^[\"']+|[\"']+$", "");
+                    StrToEnd = StrToEnd.replaceAll("^[\"']+|[\"']+$", "");
+                    txtTaClaim.setText(StrDaName);
 
+                    Log.e("STRTOEND", StrToEnd);
+                    Log.e("STR", StrBus);
+                    Log.e("STREND", StrTo);
+
+                    if (StrToEnd.equals("0")) {
+                        TravelBike.setVisibility(View.VISIBLE);
+                        linBusMode.setVisibility(View.VISIBLE);
+                        linBikeMode.setVisibility(View.GONE);
+                        linMode.setVisibility(View.VISIBLE);
+                        if (StrBus != null && !StrBus.isEmpty() && !StrBus.equals("null") && !StrBus.equals("")) {
+                            StrBus = StrBus.replaceAll("^[\"']+|[\"']+$", "");
+                            txtBusFrom.setText(StrBus);
+                        }
+
+                        if (StrTo != null && !StrTo.isEmpty() && !StrTo.equals("null") && !StrTo.equals("")) {
+                            StrTo = StrTo.replaceAll("^[\"']+|[\"']+$", "");
+                            txtBusTo.setText(StrTo);
+                        }
                     } else {
+
+                        TravelBike.setVisibility(View.VISIBLE);
+                        linMode.setVisibility(View.VISIBLE);
+                        linBusMode.setVisibility(View.GONE);
+                        linBikeMode.setVisibility(View.VISIBLE);
+                    }
+
+                    StartedKm = StartedKm.replaceAll("^[\"']+|[\"']+$", "");
+                    if (StartedKm != null && !StartedKm.isEmpty() && !StartedKm.equals("null") && !StartedKm.equals("")) {
+                        Log.e("TxtStartedKm2", StartedKm);
+                        S = Integer.valueOf(StartedKm);
+                        Log.e("TxtStartedKm3", String.valueOf(S));
                         TxtStartedKm.setText(StartedKm);
+                    } else {
 
-
-                        S = Integer.valueOf(String.valueOf(TxtStartedKm.getText()));
 
                     }
 
                     ClosingKm = String.valueOf(jsonObject.get("End_Km"));
                     PersonalKm = String.valueOf(jsonObject.get("Personal_Km"));
-                    StartedKm = StartedKm.replaceAll("^[\"']+|[\"']+$", "");
+
                     PersonalKm = PersonalKm.replaceAll("^[\"']+|[\"']+$", "");
+
+
                     if (PersonalKm.equals("null")) {
+                        PersonalKiloMeter.setText("0");
+                    } else {
                         PersonalKiloMeter.setText(PersonalKm);
                     }
-                    PersonalKiloMeter.setText(PersonalKm);
-
 
                     if (ClosingKm != null && !ClosingKm.isEmpty() && !ClosingKm.equals("null") && !ClosingKm.equals("")) {
                         ClosingKm = ClosingKm.replaceAll("^[\"']+|[\"']+$", "");
@@ -706,11 +669,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
             Log.e("travelAllowancesize()", String.valueOf(travelAllowanceList.size()));
 
-            int size = LinearTravelBus.getChildCount();
+            int size = dymicDailyAllowance.getChildCount();
             Log.d("PARENT_COUNT", String.valueOf(size));
             for (int i = 0; i < size; i++) {
                 JSONObject AditionalTravelallowance = new JSONObject();
-                View view = LinearTravelBus.getChildAt(i);
+                View view = dymicDailyAllowance.getChildAt(i);
                 enterMode = view.findViewById(R.id.enter_mode);
                 enterFrom = view.findViewById(R.id.enter_from);
                 enterTo = view.findViewById(R.id.enter_to);
@@ -981,12 +944,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         if (response.isSuccessful()) {
+
                             Log.v("print_upload_file_true", "ggg" + response);
                             String jsonData = null;
                             jsonData = response.body().string();
                             Log.v("response_data", jsonData);
                             array = new ArrayList<>();
-                            lay_row.removeAllViews();
+
                             JSONObject js = new JSONObject(jsonData);
                             JSONArray jsnArValue = js.getJSONArray("ExpenseWeb");
                             for (int i = 0; i < jsnArValue.length(); i++) {
@@ -1049,7 +1013,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             txt_date.setText(myDataset.get(position).getName());
             Log.d("JSON_VALUE", myDataset.get(position).getId());
             DateTime = myDataset.get(position).getId();
-            onMapReady(mGoogleMap);
+
             displayTravelMode(myDataset.get(position).getId());
         } else if (type == 11) {
             modeTextView.setText(myDataset.get(position).getName());
@@ -1082,10 +1046,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             LatLng locationOne = new LatLng(13.1148, 80.2872);
             LatLng locationTwo = new LatLng(13.0300, 80.2421);
 
- /* BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.marker_icon);
- googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Old washermenpet"));
- googleMap.addMarker(new MarkerOptions().position(sydney2).title("Marker in Nandanam"));
- *//* googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*//*
+         /* BitmapDescriptor bd = BitmapDescriptorFactory.fromResource(R.drawable.marker_icon);
+         googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Old washermenpet"));
+         googleMap.addMarker(new MarkerOptions().position(sydney2).title("Marker in Nandanam"));
+         *//* googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*//*
              */
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(locationTwo, 15));
             // Zoom in, animating the camera.
@@ -1105,33 +1069,56 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public class InputFilterMinMax implements InputFilter {
 
-        private int min, max;
 
-        public InputFilterMinMax(int min, int max) {
-            this.min = min;
-            this.max = max;
-        }
 
-        public InputFilterMinMax(String min, String max) {
-            this.min = Integer.parseInt(min);
-            this.max = Integer.parseInt(max);
-        }
+    /*Showing Map based on Map*/
 
-        @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-            try {
-                int input = Integer.parseInt(dest.toString() + source.toString());
-                if (isInRange(min, max, input))
-                    return null;
-            } catch (NumberFormatException nfe) {
+    public void callMap(String date) {
+
+        Log.v("MAOOOOOOOO", "MAAAAAAAAAAAAAA");
+        Call<ResponseBody> Callto = apiInterface.getMap(SF_code, "2020-12-24");
+        Callto.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                String jsonData = null;
+                try {
+                    jsonData = response.body().string();
+                    try {
+                        JSONArray jsonArray = new JSONArray(jsonData);
+                        for (int i = 0; i < jsonArray.length() - 1; i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i + 1);
+                            String strLat = jsonObject.getString("lat");
+                            String strLon = jsonObject.getString("lng");
+                            Log.e("STR_LAT", strLat);
+                            Log.e("STR_LAT", strLon);
+
+                            Polyline line = mGoogleMap.addPolyline(new PolylineOptions()
+                                    .add(new LatLng(Double.valueOf(strLat), Double.valueOf(strLon)),
+                                            new LatLng(Double.valueOf(jsonObject1.getString("lat")), Double.valueOf(jsonObject1.getString("lat"))))
+                                    .width(5).color(Color.BLUE).geodesic(true));
+                            line.setTag("A");
+                            line.setColor(COLOR_ORANGE_ARGB);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Log.v("response_data", jsonData);
             }
-            return "";
-        }
 
-        private boolean isInRange(int a, int b, int c) {
-            return b > a ? c >= a && c <= b : c >= b && c <= a;
-        }
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
+
     }
+
+
 }

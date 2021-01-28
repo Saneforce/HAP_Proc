@@ -460,20 +460,20 @@ public class Login extends AppCompatActivity {
                         if (requestCode == RC_SIGN_IN) {
                             if (CheckIn == true) {
 
-                                intent = new Intent(Login.this, AllowanceActivity.class);
+                                intent = new Intent(Login.this, Dashboard_Two.class);
                                // intent = new Intent(Login.this, Dashboard_Two.class);
                                 //  intent = new Intent(Login.this, TAClaimActivity.class);
                                 intent.putExtra("Mode", "CIN");
                             } else {
-                                intent = new Intent(Login.this, AllowanceActivity.class);
+                                intent = new Intent(Login.this, Dashboard.class);
                                // intent = new Intent(Login.this, Dashboard.class);
                                 // intent = new Intent(Login.this, TAClaimActivity.class);
                             }
-                            //  intent = new Intent(Login.this, OrderDashBoard.class);
+                            // intent = new Intent(Login.this, OrderDashBoard.class);
                         } else {
-                            // intent = new Intent(Login.this, TAClaimActivity.class);
-                            intent = new Intent(Login.this, AllowanceActivity.class);
-                          //  intent = new Intent(Login.this, Dashboard_Two.class);
+                            //intent = new Intent(Login.this, TAClaimActivity.class);
+                            intent = new Intent(Login.this, Dashboard_Two.class);
+                          // intent = new Intent(Login.this, Dashboard_Two.class);
                             intent.putExtra("Mode", "RPT");
                         }/*
                         Log.d("Sales",String.valueOf(response.body()));
