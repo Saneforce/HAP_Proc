@@ -46,8 +46,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity.Util.ImageFilePath;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Activity.Util.UpdateUi;
@@ -61,6 +63,7 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.DailyExpenseAdapter;
 
@@ -70,13 +73,16 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 import id.zelory.compressor.Compressor;
 import okhttp3.MultipartBody;
@@ -150,7 +156,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     EditText enterMode, enterFrom, enterTo, enterFare;
     TextView PersonalTextKM;
     Integer Pva, C = 0;
-    TextView PersonalKiloMeter;
+    TextView PersonalKiloMeter, txtDailyAllowance;
     ArrayList<SelectionModel> travelAllowanceList = new ArrayList<>();
     EditText editTextRemarks;
     String driverAllowance = "0";
@@ -175,11 +181,32 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     ArrayList<String> strRetriveTaList = new ArrayList<>();
     LinearLayout dymicDailyAllowance;
     JSONObject jsonDailyAllowance = new JSONObject();
-    String StrToEnd = "", StrBus = "", StrTo = "", StrDaName = "";
+    String StrToEnd = "", StrBus = "", StrTo = "", StrDaName = "", StrDailyAllowance = "";
     TextView txtBusFrom, txtBusTo, txtTaClaim;
     LinearLayout linBusMode, linBikeMode, linMode;
     ArrayList<String> LatArrayList = new ArrayList<>();
     ArrayList<String> LonArrayList = new ArrayList<>();
+    ArrayList<String> temaplateList;
+    LinearLayout travelDynamicLoaction;
+    CardView crdDynamicLocation;
+    String STRCHECKING;
+    TextView editText;
+    int size = 0;
+    LinearLayout lin_daily_allowance;
+    View childView;
+    List<Common_Model> myDataset = new ArrayList<>();
+    int position;
+    int type;
+    LinearLayout linlocalCon;
+    SharedPreferences mSharedPreferences;
+    String jsnLocalCon;
+    Type userType;
+    Common_Model Model_Pojo;
+    List<Common_Model> modelTravelType = new ArrayList<>();
+    List<ModeOfTravel> modelOfTravel;
+    Gson gson;
+    TextView fuelAmount, TextTotalAmount;
+    String strFuelAmount = "";
 
 
     @Override
@@ -194,13 +221,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         getToolbar();
-
-
+        temaplateList = new ArrayList<>();
+        gson = new Gson();
         txt_date = findViewById(R.id.txt_date);
         card_date = findViewById(R.id.card_date);
         btn_sub = findViewById(R.id.btn_sub);
 
-        linAddAllowance = findViewById(R.id.lin_add_daily_allowance);
+        linAddAllowance = findViewById(R.id.lin_travel_loaction);
         TravelBike = findViewById(R.id.linear_bike);
         TxtStartedKm = findViewById(R.id.txt_started_km);
         TxtClosingKm = findViewById(R.id.txt_ended_km);
@@ -216,7 +243,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         LOtherExpense = findViewById(R.id.lin_other_allowance);
         LLocalConve = findViewById(R.id.lin_local_con);
 
-        dymicDailyAllowance = findViewById(R.id.lin_dyn_dly_allow);
         linBusMode = findViewById(R.id.linear_bus_mode);
         linBikeMode = findViewById(R.id.linear_bike_mode);
         linMode = findViewById(R.id.linear_mode);
@@ -224,12 +250,21 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         txtBusFrom = findViewById(R.id.txt_bus_from);
         txtBusTo = findViewById(R.id.txt_bus_to);
         txtTaClaim = findViewById(R.id.mode_name);
+        txtDailyAllowance = findViewById(R.id.txt_daily_allowance_mode);
+        travelDynamicLoaction = findViewById(R.id.lin_travel_dynamic_location);
+        crdDynamicLocation = findViewById(R.id.card_travel_loaction);
+        lin_daily_allowance = findViewById(R.id.lin_da_type);
+        linlocalCon = findViewById(R.id.lin_dyn_local_con);
+        fuelAmount = findViewById(R.id.fuel_amount);
+        mSharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+        TextTotalAmount = findViewById(R.id.txt_total_amt);
+
 
         strRetriveType = String.valueOf(getIntent().getSerializableExtra("Retrive_Type"));
         if (strRetriveType.equals("Daily Allowance")) {
             jsonDailyAllowance = (JSONObject) getIntent().getSerializableExtra("Retrive_Ta_List");
             Log.e("AllowanceType", strRetriveType);
-            Log.e("AllowanceType", String.valueOf(jsonDailyAllowance));
+            Log.e("AllowanceType", jsonDailyAllowance.toString());
 
         } else {
             Log.e("AllowanceType", strRetriveType);
@@ -338,29 +373,46 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                layoutParams.setMargins(0, 10, 0, 0);
-                dymicDailyAllowance.addView(rowView, layoutParams);
-                ImageView imageAttach = findViewById(R.id.image_attach);
-                imageAttach.setOnClickListener(new View.OnClickListener() {
+                layoutParams.setMargins(15, 15, 15, 15);
+                // travelDynamicLoaction.addView(rowView, layoutParams);
+                travelDynamicLoaction.addView(rowView, layoutParams);
+
+                crdDynamicLocation.setVisibility(View.VISIBLE);
+
+                size = travelDynamicLoaction.getChildCount();
+                Log.d("PARENT_COUNT", String.valueOf(size));
+
+                int finalC = 0;
+                for (int c = 0; c < size; c++) {
+                    childView = travelDynamicLoaction.getChildAt(c);
+                    finalC = c;
+                }
+
+
+                int finalC1 = finalC;
+                editText = (TextView) (childView.findViewById(R.id.enter_mode));
+                editText.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.e("ImageCapture", "ImageCapture");
-
+                        modelTravelType.clear();
+                        localCon();
                     }
                 });
 
-                int size = dymicDailyAllowance.getChildCount();
-                Log.d("PARENT_COUNT", String.valueOf(size));
-
-
             }
         });
+
 
     }
 
 
     public void onDelete(View v) {
-        dymicDailyAllowance.removeView((View) v.getParent());
+        int size = travelDynamicLoaction.getChildCount();
+        Log.d("PARENT_COUNT", String.valueOf(size));
+        travelDynamicLoaction.removeView((View) v.getParent());
+        if (size == 0) {
+            crdDynamicLocation.setVisibility(View.GONE);
+        }
     }
 
 
@@ -495,6 +547,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 Log.d("JSON_VALUE", jsonArray.toString());
                 Log.d("JSON_VALUE", "CHECKING");
                 TravelBike.setVisibility(View.VISIBLE);
+                lin_daily_allowance.setVisibility(View.VISIBLE);
                 for (int a = 0; a < jsonArray.size(); a++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(a);
                     StartedKm = String.valueOf(jsonObject.get("Start_Km"));
@@ -502,13 +555,23 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     StrBus = String.valueOf(jsonObject.get("From_Place"));
                     StrTo = String.valueOf(jsonObject.get("To_Place"));
                     StrDaName = String.valueOf(jsonObject.get("MOT_Name"));
+                    StrDailyAllowance = String.valueOf(jsonObject.get("dailyAllowance"));
+                    StrDailyAllowance = StrDailyAllowance.replaceAll("^[\"']+|[\"']+$", "");
                     StrDaName = StrDaName.replaceAll("^[\"']+|[\"']+$", "");
                     StrToEnd = StrToEnd.replaceAll("^[\"']+|[\"']+$", "");
+                    strFuelAmount = String.valueOf(jsonObject.get("FuelAmt"));
+                    /*  strFuelAmount = strFuelAmount.replaceAll("^[\"']+|[\"']+$", "");*/
+
+
+                    Double fAmount= Double.valueOf(strFuelAmount);
+                    fuelAmount.setText("Rs. " + new DecimalFormat("##0.00").format(fAmount));
                     txtTaClaim.setText(StrDaName);
+                    txtDailyAllowance.setText(StrDailyAllowance);
 
                     Log.e("STRTOEND", StrToEnd);
                     Log.e("STR", StrBus);
                     Log.e("STREND", StrTo);
+                    Log.e("STRDAILY", StrDailyAllowance);
 
                     if (StrToEnd.equals("0")) {
                         TravelBike.setVisibility(View.VISIBLE);
@@ -561,7 +624,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         C = Integer.valueOf(ClosingKm);
                         Log.e("TOTAL_KM", String.valueOf(C));
                         totalkm = C - S;
+                        Double totalAmount = Double.valueOf(strFuelAmount);
+
+
+                        Double tofuel = totalkm * totalAmount;
                         Log.e("TOTAL_Claim_KM", String.valueOf(totalPersonalKm));
+                        Log.e("TOTAL_tofuel", String.valueOf(tofuel));
+
+                        TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(tofuel));
                         TotalTravelledKm.setText(String.valueOf(totalkm));
                     }
 
@@ -571,6 +641,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         totalPersonalKm = totalkm - Pva;
                         PersonalTextKM.setText(String.valueOf(totalPersonalKm));
                         Log.e("TOTAL_Claim_KM", (PersonalTextKM.getText().toString()));
+
+
                     }
 
                 }
@@ -583,6 +655,78 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
+
+    @SuppressLint("ResourceType")
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mSharedPreferences.contains("Retrive_Type")) {
+            Log.d("Retrive_Type", mSharedPreferences.getString("Retrive_Type", ""));
+        }
+
+        if (mSharedPreferences.contains("Retrive_Ta_List")) {
+            jsnLocalCon = mSharedPreferences.getString("Retrive_Ta_List", "");
+            Log.d("Retrive_Ta_List", mSharedPreferences.getString("Retrive_Ta_List", ""));
+/*
+            try {
+                JSONArray jsonArray = new JSONArray(jsnLocalCon);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject json_in = jsonArray.getJSONObject(i);
+                    String name = json_in.getString("From");
+
+                    for (int j = 0; j < json_in.length(); j++) {
+
+                        Log.e("Json_Object", String.valueOf(json_in.length()));
+                        RelativeLayout childRel = new RelativeLayout(getApplicationContext());
+                        RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                        layoutparams_3.setMargins(0, 10, 0, 0);
+                        TextView edt = new TextView(getApplicationContext());
+                        edt.setLayoutParams(layoutparams_3);
+                        edt.setId(12345);
+                        edt.setTextSize(13);
+*//*
+                        edt.setHint(name);
+*//*
+                        edt.setTextColor(R.color.green);
+                        edt.setPadding(9, 9, 9, 9);
+                        childRel.addView(edt);
+                        linlocalCon.addView(childRel, linlocalCon.getChildCount() - 1);
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+
+        }*/
+        }
+
+    }
+
+    public void ModeType(int c) {
+        listOrderType.clear();
+
+        temaplateList.add("Phone Order");
+        temaplateList.add("Phone1 Order");
+
+
+        Log.e("POSition", String.valueOf(c));
+        for (int i = 0; i < temaplateList.size(); i++) {
+            String id = String.valueOf(temaplateList.get(i));
+            String name = temaplateList.get(i);
+            mCommon_model_spinner = new Common_Model(id, name, String.valueOf(c));
+            Log.e("LeaveType_Request", id);
+            Log.e("LeaveType_Request", name);
+            Log.e("IMAGE_ATTACH_IN", String.valueOf(c));
+
+            listOrderType.add(mCommon_model_spinner);
+        }
+        customDialog = new CustomListViewDialog(TAClaimActivity.this, listOrderType, 99);
+        Window window = customDialog.getWindow();
+        window.setGravity(Gravity.CENTER);
+        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        customDialog.show();
+
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -1013,11 +1157,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             txt_date.setText(myDataset.get(position).getName());
             Log.d("JSON_VALUE", myDataset.get(position).getId());
             DateTime = myDataset.get(position).getId();
-
             displayTravelMode(myDataset.get(position).getId());
         } else if (type == 11) {
             modeTextView.setText(myDataset.get(position).getName());
             Log.d("JSON_VALUE", myDataset.get(position).getName());
+        } else if (type == 8) {
+            editText.setText(myDataset.get(position).getName());
+            Log.e("IMAGE_ATTACH_next", myDataset.get(position).getFlag());
         } else if (type == 100) {
             String TrTyp = myDataset.get(position).getName();
             travelTypeMode.setText(TrTyp);
@@ -1077,7 +1223,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     public void callMap(String date) {
 
         Log.v("MAOOOOOOOO", "MAAAAAAAAAAAAAA");
-        Call<ResponseBody> Callto = apiInterface.getMap(SF_code, "2020-12-24");
+        Call<ResponseBody> Callto = apiInterface.getMap(SF_code, date);
         Callto.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -1118,6 +1264,57 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         });
 
 
+    }
+
+
+    public void localCon() {
+
+        Map<String, String> QueryString = new HashMap<>();
+        QueryString.put("axn", "table/list");
+        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+        String commonLeaveType = "{\"tableName\":\"getmodeoftravel\",\"coloumns\":\"[\\\"id\\\",\\\"name\\\",\\\"Leave_Name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+
+        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+        Call<Object> call = service.GetRouteObjects(QueryString, commonLeaveType);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+
+                userType = new TypeToken<ArrayList<com.hap.checkinproc.Model_Class.ModeOfTravel>>() {
+                }.getType();
+                modelOfTravel = gson.fromJson(new Gson().toJson(response.body()), userType);
+                for (int i = 0; i < modelOfTravel.size(); i++) {
+                    String id = String.valueOf(modelOfTravel.get(i).getStEndNeed());
+                    String name = modelOfTravel.get(i).getName();
+                    String modeId = String.valueOf(modelOfTravel.get(i).getId());
+                    String driverMode = String.valueOf(modelOfTravel.get(i).getDriverNeed());
+
+
+                    Model_Pojo = new Common_Model(id, name, modeId, driverMode);
+                    Log.e("LeaveType_Request", id);
+                    Log.e("LeaveType_Request", name);
+                    Log.e("DriverMode", driverMode);
+                    if (id.equals("0")) {
+                        modelTravelType.add(Model_Pojo);
+                    }
+
+                }
+
+                customDialog = new CustomListViewDialog(TAClaimActivity.this, modelTravelType, 8);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                Log.d("LeaveTypeList", "Error");
+            }
+        });
     }
 
 

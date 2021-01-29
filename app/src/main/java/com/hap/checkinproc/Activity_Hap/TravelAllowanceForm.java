@@ -56,14 +56,15 @@ public class TravelAllowanceForm extends AppCompatActivity implements View.OnCli
     ApiInterface apiInterface;
     SharedPreferences UserDetails;
     public static final String MyPREFERENCES = "MyPrefs";
-
+    SharedPreferences sharedpreferences;
+    public static final String mypreference = "mypref";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_travel_allowance_form);
-
+        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         ModeType = String.valueOf(getIntent().getSerializableExtra("Type"));
         modeList = (ArrayList<String>) getIntent().getSerializableExtra("DaList");
         Log.e("AllowanceType", ModeType);
@@ -146,13 +147,19 @@ public class TravelAllowanceForm extends AppCompatActivity implements View.OnCli
 
                     cccccccc.add(AditionalTravelallowance.toString());
                     Log.d("KARTHIC_ARRAY_List", cccccccc.toString());
-                    Log.d("KARTHIC_ARRAY_OBJECT", String.valueOf(AditionalTravelallowance.length()));
+                    Log.d("KARTHIC_ARRAY_OBJECT", AditionalTravelallowance.toString());
 
 
-                    Intent totalAllowance = new Intent(TravelAllowanceForm.this, TAClaimActivity.class);
+/*                    Intent totalAllowance = new Intent(TravelAllowanceForm.this, TAClaimActivity.class);
                     totalAllowance.putExtra("Retrive_Type", ModeType);
                     totalAllowance.putExtra("Retrive_Ta_List", AditionalTravelallowance.toString());
-                    startActivity(totalAllowance);
+                    startActivity(totalAllowance);*/
+                    finish();
+
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putString("Retrive_Type", ModeType);
+                    editor.putString("Retrive_Ta_List", cccccccc.toString());
+                    editor.commit();
 
 
                 } catch (JSONException e) {

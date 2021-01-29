@@ -127,10 +127,9 @@
                 android:id="@+id/btn_dynmc_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/button_blueg"
-                android:text="Submit"
+                android:text="Add"
                 android:textColor="#fff" />
 
 

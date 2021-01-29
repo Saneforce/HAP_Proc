@@ -215,7 +215,7 @@ public interface ApiInterface {
 
 
     @FormUrlEncoded
-    @POST("db_new_activity.php?axn=get/expensedatedetails")
+        @POST("db_new_activity.php?axn=get/expensedatedetails")
     Call<JsonArray> getTAdateDetails(@Field("data") String userData);
 
     @Multipart
