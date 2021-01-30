@@ -35,7 +35,7 @@ public class PrivacyPolicy extends AppCompatActivity {
 
         /*webView*/
         privacyWebView = (WebView) findViewById(R.id.privacy_webview);
-        privacyWebView.loadUrl("http://fmcg.sanfmcg.com/");
+        privacyWebView.loadUrl("https://hap.sanfmcg.com/Privacy.html");
 
 
         if (sharedpreferences.contains(Name)) {
