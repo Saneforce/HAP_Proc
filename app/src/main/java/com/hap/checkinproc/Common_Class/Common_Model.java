@@ -8,6 +8,9 @@ public class Common_Model {
     private String phone;
      String checkouttime;
      boolean isSelected;
+     private Integer Pho;
+
+
 
     public Common_Model(String name, String id, String flag, String address, String phone) {
         this.name = name;
@@ -15,6 +18,14 @@ public class Common_Model {
         this.flag = flag;
         this.address = address;
         this.phone = phone;
+    }
+
+    public Common_Model(String name, String id, String flag, String address, Integer phone) {
+        this.name = name;
+        this.id = id;
+        this.flag = flag;
+        this.address = address;
+        this.Pho = phone;
     }
 
     public Common_Model(String id, String name, String flag, String checkouttime) {
@@ -97,5 +108,13 @@ public class Common_Model {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Integer getPho() {
+        return Pho;
+    }
+
+    public void setPho(Integer pho) {
+        Pho = pho;
     }
 }

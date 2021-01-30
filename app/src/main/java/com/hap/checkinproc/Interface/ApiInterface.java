@@ -215,7 +215,7 @@ public interface ApiInterface {
 
 
     @FormUrlEncoded
-    @POST("db_new_activity.php?axn=get/expensedatedetails")
+        @POST("db_new_activity.php?axn=get/expensedatedetails")
     Call<JsonArray> getTAdateDetails(@Field("data") String userData);
 
     @Multipart
@@ -338,5 +338,12 @@ public interface ApiInterface {
     Call<Object> getHolidayStatus(@Query("AMod") String Amod, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                               @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn,
                               @Field("data") String data);
+
+
+
+    @POST("Db_v300.php?axn=get/track")
+    Call<ResponseBody> getMap(@Query("SF_Code") String SfCode, @Query("Dt") String Date);
+
+
 
 }

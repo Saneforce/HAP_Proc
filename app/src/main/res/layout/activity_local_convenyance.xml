@@ -1,62 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/hash_border"
     android:orientation="vertical">
 
     <LinearLayout
-
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/enter_to"
-        android:layout_weight="2"
-        android:layout_margin="@dimen/C3dp"
-        android:orientation="horizontal">
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/C5dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/enter_mode"
+            android:id="@+id/local_enter_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:hint="Select the Mode"
             android:paddingLeft="@dimen/C10dp"
-            android:layout_weight="1"
             android:paddingTop="@dimen/C5dp"
             android:paddingBottom="@dimen/C5dp"
             android:textSize="@dimen/C16dp" />
 
 
-        <ImageView
-            android:layout_width="@dimen/C10dp"
-            android:layout_height="@dimen/C10dp"
-            android:layout_margin="@dimen/C10dp"
-            android:src="@drawable/spin_down_arrow">
-
-
-        </ImageView>
-
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/enter_from"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter From"
-        android:padding="@dimen/C10dp"
-        android:textColorHint="#C0C0C0"
-        android:textSize="@dimen/C16dp" />
-
-    <EditText
-        android:id="@+id/enter_to"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter To"
-        android:padding="@dimen/C10dp"
-        android:textColorHint="#C0C0C0"
-        android:textSize="@dimen/C14dp" />
-
     <LinearLayout
-        android:id="@+id/txt_nu"
+        android:id="@+id/lin_allowance_dynamic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/C5dp"
+        android:layout_marginBottom="@dimen/C5dp"
+        android:orientation="vertical"
+        tools:context=".MainActivity" />
+    <LinearLayout
+        android:id="@+id/lin_fare_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/enter_to"
@@ -64,7 +46,7 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/enter_fare"
+            android:id="@+id/edt_la_fare"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -75,7 +57,7 @@
             android:textSize="@dimen/C14dp" />
 
         <ImageView
-            android:id="@+id/image_attach"
+            android:id="@+id/la_attach_iamg"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="-8dp"
@@ -87,14 +69,15 @@
 
 
     <ImageView
-        android:id="@+id/delete_button"
+        android:id="@+id/lc_delete"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_gravity="right"
         android:gravity="right"
         android:layout_margin="@dimen/C8dp"
-        android:onClick="onTADelete"
+        android:onClick="onLCDelete"
         android:src="@drawable/delete_cart" />
+
 
 </LinearLayout>

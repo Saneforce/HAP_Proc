@@ -45,6 +45,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -461,16 +462,19 @@ public class Login extends AppCompatActivity {
                             if (CheckIn == true) {
 
                                 intent = new Intent(Login.this, Dashboard_Two.class);
+                               // intent = new Intent(Login.this, Dashboard_Two.class);
                                 //  intent = new Intent(Login.this, TAClaimActivity.class);
                                 intent.putExtra("Mode", "CIN");
                             } else {
                                 intent = new Intent(Login.this, Dashboard.class);
+                               // intent = new Intent(Login.this, Dashboard.class);
                                 // intent = new Intent(Login.this, TAClaimActivity.class);
                             }
-                            //  intent = new Intent(Login.this, OrderDashBoard.class);
+                            // intent = new Intent(Login.this, OrderDashBoard.class);
                         } else {
-                            // intent = new Intent(Login.this, TAClaimActivity.class);
+                            //intent = new Intent(Login.this, TAClaimActivity.class);
                             intent = new Intent(Login.this, Dashboard_Two.class);
+                          // intent = new Intent(Login.this, Dashboard_Two.class);
                             intent.putExtra("Mode", "RPT");
                         }/*
                         intent.putExtra("photo", photo);

@@ -35,7 +35,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".Activity_Hap.TravelAllowanceForm"></activity>
+        <activity android:name=".Activity_Hap.TravelAllowanceForm"
+            android:theme="@style/AppTheme.Dialog" ></activity>
         <activity android:name=".Activity_Hap.QRCodeScanner" />
         <activity android:name=".Activity_Hap.AllowancCapture" />
         <activity

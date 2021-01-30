@@ -47,6 +47,7 @@
     <dimen name="sno">10dp</dimen>
     <dimen name="sno1">4dp</dimen>
     <dimen name="product_image">350dp</dimen>
+    <dimen name="travel_allowance">300dp</dimen>
     <dimen name="product_imagess">500dp</dimen>
     <dimen name="product_images">270dp</dimen>
 </resources>
