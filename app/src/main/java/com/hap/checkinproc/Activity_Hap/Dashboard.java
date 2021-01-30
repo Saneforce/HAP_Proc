@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivity;
@@ -69,18 +70,20 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         String eMail = UserDetails.getString("email", "");
         String sSFName = UserDetails.getString("SfName", "");
+        String sSFType = UserDetails.getString("Sf_Type", "");
         lblUserName.setText(sSFName);
         lblEmail.setText(eMail);
 
-        linMyday = (findViewById(R.id.lin_myday_plan));
+        linMyday = (findViewById(R.id.lin_myday_plan)); linMyday.setVisibility(View.GONE); if(sSFType=="1") linMyday.setVisibility(View.VISIBLE);
+
 
         linCheckin = (findViewById(R.id.lin_check_in));
         linRequstStaus = (findViewById(R.id.lin_request_status));
         linReport = (findViewById(R.id.lin_report));
-        linOnDuty = (findViewById(R.id.lin_onduty));
+        linOnDuty = (findViewById(R.id.lin_onduty)); linOnDuty.setVisibility(View.GONE); if(sSFType=="0") linOnDuty.setVisibility(View.VISIBLE);
         linApprovals = (findViewById(R.id.lin_approvals));
         linTaClaim = (findViewById(R.id.lin_ta_claim));
-        linExtShift = (findViewById(R.id.lin_extenden_shift));
+        linExtShift = (findViewById(R.id.lin_extenden_shift)); linExtShift.setVisibility(View.GONE); if(sSFType=="0") linExtShift.setVisibility(View.VISIBLE);
         linTourPlan = (findViewById(R.id.lin_tour_plan));
         linHolidayWorking = findViewById(R.id.lin_holiday_working);
         linExit = (findViewById(R.id.lin_exit));
@@ -92,8 +95,23 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         } else {
             linApprovals.setVisibility(View.VISIBLE);
         }
-
-
+        FlexboxLayout flexboxLayout=findViewById(R.id.flxlayut);
+        View flxlastChild=null;
+        int flg=0;
+        for(int il=0;il<flexboxLayout.getChildCount();il++){
+            if(flexboxLayout.getChildAt(il).getVisibility()==View.VISIBLE) {
+                flxlastChild = flexboxLayout.getChildAt(il);
+                if (flg == 1) flg = 0;
+                else flg = 1;
+            }
+        }
+        if(flg==1) {
+            FlexboxLayout.LayoutParams lp = (FlexboxLayout.LayoutParams) flxlastChild.getLayoutParams();
+            lp.setFlexBasisPercent(100);
+            //lp.setOrder(-1);
+            //lp.setFlexGrow(2);
+            flxlastChild.setLayoutParams(lp);
+        }
         linMyday.setOnClickListener(this);
         linCheckin.setOnClickListener(this);
         linRequstStaus.setOnClickListener(this);
@@ -204,7 +222,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 // locationList=response.body();
-
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     // Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
@@ -217,11 +234,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                         Log.e("MyDAY_LENGTH", String.valueOf(jsoncc.length()));
                         if (jsoncc.length() > 0) {
                             Log.e("LENGTH_FOR_LOOP", String.valueOf(jsoncc.length()));
-
                             linMyday.setVisibility(View.GONE);
                             linCheckin.setVisibility(View.VISIBLE);
-
-
                         } else {
                             linCheckin.setVisibility(View.GONE);
                             linMyday.setVisibility(View.VISIBLE);
@@ -234,8 +248,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                                 @Override
                                 public void PositiveMethod(DialogInterface dialog, int id) {
                                     dialog.dismiss();
-
-
                                 }
 
                                 @Override
@@ -244,14 +256,11 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                                 }
                             });
                         } else {
-
-
                             AlertDialogBox.showDialog(Dashboard.this, "HAP Check-In", Msg, "YES", "NO", false, new AlertBox() {
                                 @Override
                                 public void PositiveMethod(DialogInterface dialog, int id) {
                                     dialog.dismiss();
                                     common_class.CommonIntentwithoutFinishputextra(Checkin.class, "Mode", "extended");
-
                                     /*Intent intent = new Intent(getApplicationContext(), Checkin.class);
                                     Bundle extras = new Bundle();
                                     extras.putString("Extended_Flag", "extended");

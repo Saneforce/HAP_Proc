@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.WindowManager;
@@ -13,6 +14,7 @@ import com.hap.checkinproc.common.TimerService;
 
 public class MainActivity extends AppCompatActivity      {
     private static int SPLASH_SCREEN = 3000;
+    public static final String mypreference = "mypref";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +27,18 @@ public class MainActivity extends AppCompatActivity      {
                 Intent tmrIntent = new Intent(MainActivity.this, TimerService.class);
                 //bindService(tmrIntent, mServiceConection, Context.BIND_AUTO_CREATE);
                 startService(tmrIntent);
-                Intent intent=new Intent(MainActivity.this, Login.class);
-                startActivity(intent);
+
+                SharedPreferences sharedpreferences;
+
+                sharedpreferences = getSharedPreferences(mypreference,
+                        Context.MODE_PRIVATE);
+                if(sharedpreferences.getString("nameKey","")=="") {
+                    Intent intent = new Intent(MainActivity.this, PrivacyPolicy.class);
+                    startActivity(intent);
+                }else {
+                    Intent intent = new Intent(MainActivity.this, Login.class);
+                    startActivity(intent);
+                }
                 finish();
 
             }

@@ -448,6 +448,7 @@ public class Login extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Log.d(TAG, "Three " + deviceToken);
 
+                    Log.d("LoginData",String.valueOf(response.body()));
 
                     // Log.e("sfName",response.body().getData().get(0).getSfCode());
 
@@ -472,7 +473,6 @@ public class Login extends AppCompatActivity {
                             intent = new Intent(Login.this, Dashboard_Two.class);
                             intent.putExtra("Mode", "RPT");
                         }/*
-                        Log.d("Sales",String.valueOf(response.body()));
                         intent.putExtra("photo", photo);
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                         Intent intent;
@@ -491,6 +491,7 @@ public class Login extends AppCompatActivity {
                         Integer type = response.body().getData().get(0).getCheckCount();
                         String DeptCd = response.body().getData().get(0).getDeptCd();
                         String DeptType = response.body().getData().get(0).getDeptType();
+                        Integer OTFlg= response.body().getData().get(0).getOTFlg();
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         Shared_Common_Pref.Sf_Code = code;
                         Shared_Common_Pref.Sf_Name = response.body().getData().get(0).getSfName();
@@ -519,6 +520,7 @@ public class Login extends AppCompatActivity {
                         editor.putInt("CheckCount", type);
                         editor.putString("DeptCd", DeptCd);
                         editor.putString("DeptType", DeptType);
+                        editor.putInt("OTFlg", OTFlg);
                         Log.d("DeptType", String.valueOf(DeptType));
                         editor.putString("State_Code", Sf_type);
                         editor.putString("email", eMail);

@@ -47,11 +47,6 @@
         <activity android:name=".Activity_Hap.HolidayEntryStatus" />
         <activity android:name=".Activity_Hap.DeviationEntry" />
         <activity android:name=".Activity_Hap.PrivacyPolicy">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".Activity.AllowanceActivityTwo" />
         <activity android:name=".Activity_Hap.EventCaptureActivity" />
@@ -138,7 +133,13 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".Activity_Hap.MainActivity" />
+        <activity android:name=".Activity_Hap.MainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Activity.DesignActivity" />
         <activity
             android:name=".Activity.FilterActivity"
