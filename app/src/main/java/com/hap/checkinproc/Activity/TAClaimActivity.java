@@ -233,6 +233,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     Double tofuel = 0.0;
 
     ImageView taAttach, lcAttach, oeAttach;
+    String allowanceAmt = "";
+    TextView txtallamt;
 
 
     @Override
@@ -273,6 +275,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         linBikeMode = findViewById(R.id.linear_bike_mode);
         linMode = findViewById(R.id.linear_mode);
 
+        txtallamt = findViewById(R.id.txt_mode_amount);
         txtBusFrom = findViewById(R.id.txt_bus_from);
         txtBusTo = findViewById(R.id.txt_bus_to);
         txtTaClaim = findViewById(R.id.mode_name);
@@ -448,8 +451,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         getMulipart(imp[j], i);
                     }
                 }
-                submitData();
 
+                if (txt_date.getText().toString().matches("")) {
+                    Toast.makeText(TAClaimActivity.this, "Please choose Date", Toast.LENGTH_SHORT).show();
+                } else {
+                    submitData();
+                }
 
             }
         });
@@ -703,8 +710,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     StrDaName = StrDaName.replaceAll("^[\"']+|[\"']+$", "");
                     StrToEnd = StrToEnd.replaceAll("^[\"']+|[\"']+$", "");
                     strFuelAmount = String.valueOf(jsonObject.get("FuelAmt"));
-                    /*  strFuelAmount = strFuelAmount.replaceAll("^[\"']+|[\"']+$", "");*/
-
+                    allowanceAmt = String.valueOf(jsonObject.get("Allowance_Value"));
 
                     Double fAmount = Double.valueOf(strFuelAmount);
                     fuelAmount.setText(" Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM ");
@@ -713,7 +719,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                     if (StrDailyAllowance.equals("Out Station")) {
 
-
+                        txtallamt.setText("");
+                    } else {
+                        allowanceAmt = allowanceAmt.replaceAll("^[\"']+|[\"']+$", "");
+                        Double doubleAmount = Double.valueOf(allowanceAmt);
+                        txtallamt.setText(" Rs. " + new DecimalFormat("##0.00").format(doubleAmount));
                     }
 
                     Log.e("STRTOEND", StrToEnd);
@@ -906,6 +916,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         JSONObject jsonData = new JSONObject();
 
 
+        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+        StrBus = StrBus.replaceAll("^[\"']+|[\"']+$", "");
+        StrTo = StrTo.replaceAll("^[\"']+|[\"']+$", "");
+
         try {
 
             /*Head Json*/
@@ -1048,7 +1062,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         submit.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                try {
+            /*    try {
                     String jsonData = null;
                     jsonData = response.body().string();
                     Log.v("printing_json", jsonData);
@@ -1062,7 +1076,19 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 } catch (Exception e) {
                     Log.v("printing_excep_va", e.getMessage());
-                }
+                }*/
+
+
+                Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
+
+         /*       txt_date.setText("");
+                travelDynamicLoaction.removeAllViews();
+                linlocalCon.removeAllViews();
+                LinearOtherAllowance.removeAllViews();
+                lin_daily_allowance.setVisibility(View.GONE);
+                linlocalCon.setVisibility();
+               */
+
             }
 
             @Override
@@ -1822,14 +1848,16 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                         Log.d("TAF_Ex", dynamicLabelList.toString());
                                         RelativeLayout childRel = new RelativeLayout(getApplicationContext());
                                         RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                                        layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_END);
+                                        layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_START);
                                         layoutparams_3.setMargins(0, 10, 0, 0);
                                         edt = new EditText(getApplicationContext());
                                         edt.setLayoutParams(layoutparams_3);
-                                        for (int da = 0; da < dynamicLabelList.size(); da++) {
+                                      /*  for (int da = 0; da < dynamicLabelList.size(); da++) {
                                             edt.setHint(dynamicLabelList.get(da));
                                             Log.e("DYNAMICE_LABEL_LIST", dynamicLabelList.get(da).toString());
-                                        }
+                                        }*/
+
+                                        edt.setHint(dynamicLabel);
                                         edt.setId(12345);
                                         edt.setTextSize(13);
                                         edt.setTextColor(R.color.grey_500);
@@ -1854,7 +1882,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                                         View view = linlocalCon.getChildAt(editTextPositionss);
                                         Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
-                                        Dynamicallowance.addView(childRel, Dynamicallowance.getChildCount() - 1);
+                                        Dynamicallowance.addView(childRel);
                                     }
 
                                 }
@@ -1956,7 +1984,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                                         View view = LinearOtherAllowance.getChildAt(editTextPositionss);
                                         OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
-                                        OtherExpense.addView(childRel, OtherExpense.getChildCount() - 1);
+                                        OtherExpense.addView(childRel);
                                     }
                                 }
                             }
