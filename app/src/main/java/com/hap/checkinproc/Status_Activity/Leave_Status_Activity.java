@@ -101,7 +101,7 @@ public class Leave_Status_Activity extends AppCompatActivity {
         AMOD = mShared_common_pref.getvalue("AMod");
         getleavestatus();
 
-        Log.e("AMODE_LEAVE", AMOD);
+
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override

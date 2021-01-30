@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/hash_border"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_margin="@dimen/C5dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/other_enter_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Select the Mode"
+            android:paddingLeft="@dimen/C10dp"
+            android:paddingTop="@dimen/C5dp"
+            android:paddingBottom="@dimen/C5dp"
+            android:textSize="@dimen/C16dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin_other_expense_dynamic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/C5dp"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin_fare_amount"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/C5dp">
+
+
+        <EditText
+            android:id="@+id/enter_fare_amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:hint="Fare Amount"
+            android:padding="@dimen/C10dp"
+            android:textColor="@color/grey_500"
+            android:textSize="@dimen/C13dp" />
+
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/oe_delete"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="right"
+        android:gravity="right"
+        android:layout_margin="@dimen/C8dp"
+        android:onClick="onOEDelete"
+        android:src="@drawable/delete_cart" />
+
+
+</LinearLayout>

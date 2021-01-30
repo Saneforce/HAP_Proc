@@ -16,7 +16,6 @@
             android:id="@+id/tool_header"
             layout="@layout/custom_toolbar_help"></include>
 
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -131,6 +130,104 @@
                     android:orientation="vertical"
                     android:padding="8dp">
 
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/C2dp"
+                        app:cardCornerRadius="@dimen/C5dp">
+
+                        <LinearLayout
+
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/Extended"
+                                    android:padding="@dimen/C8dp">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="center"
+                                        android:fontFamily="@font/basic"
+                                        android:text="Daily Allowance"
+                                        android:textAllCaps="false"
+                                        android:textColor="#FFF"
+                                        android:textSize="14sp"
+                                        android:textStyle="bold" />
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/lin_da_type"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/C5dp"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <RelativeLayout
+                                        android:id="@+id/allowance_information"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content">
+
+                                            <TextView
+                                                android:id="@+id/txt_daily_allowance_mode"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:padding="@dimen/C5dp"
+                                                android:text="Head Quaters"
+                                                android:textAllCaps="false"
+                                                android:textColor="@android:color/black"
+                                                android:textSize="13sp"
+                                                android:textStyle="bold" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/lin_daily_allowance"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentLeft="true"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_alignParentRight="true">
+
+                                            <TextView
+                                                android:id="@+id/txt_mode_amount"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:padding="@dimen/C5dp"
+                                                android:text="Rs. 500"
+                                                android:textAllCaps="false"
+                                                android:textColor="@android:color/black"
+                                                android:textSize="13sp"
+                                                android:textStyle="bold" />
+
+                                        </LinearLayout>
+                                    </RelativeLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+
+                    </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/linear_bike"
@@ -169,9 +266,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/C8dp"
+                                android:orientation="vertical"
                                 android:padding="@dimen/C10dp"
-                                android:visibility="gone"
-                                android:orientation="vertical">
+                                android:visibility="gone">
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -249,7 +346,7 @@
                                                         android:padding="@dimen/C5dp"
                                                         android:text=" "
                                                         android:textAllCaps="false"
-                                                        android:textSize="14sp"
+                                                        android:textSize="15sp"
                                                         android:textStyle="bold" />
 
 
@@ -294,7 +391,7 @@
                                                         android:padding="@dimen/C5dp"
                                                         android:text=" "
                                                         android:textAllCaps="false"
-                                                        android:textSize="14sp"
+                                                        android:textSize="15sp"
                                                         android:textStyle="bold" />
 
                                                 </LinearLayout>
@@ -320,13 +417,13 @@
                                         <LinearLayout
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:orientation="horizontal">
+                                            android:orientation="vertical">
 
                                             <TextView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center"
-                                                android:text="Travelled  Km : "
+                                                android:text="Travelled  Km"
                                                 android:textAllCaps="false"
                                                 android:textColor="#000"
                                                 android:textSize="12sp" />
@@ -337,23 +434,22 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center"
-                                                android:layout_marginLeft="@dimen/C10dp"
                                                 android:text=""
                                                 android:textColor="#000"
-                                                android:textSize="12sp" />
+                                                android:textSize="14sp" />
                                         </LinearLayout>
 
                                         <LinearLayout
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginLeft="@dimen/C20dp"
-                                            android:orientation="horizontal">
+                                            android:orientation="vertical">
 
                                             <TextView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center"
-                                                android:text="Personal  Km : "
+                                                android:text="Personal  Km"
                                                 android:textAllCaps="false"
                                                 android:textColor="#000"
                                                 android:textSize="12sp" />
@@ -364,10 +460,9 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="center"
-                                                android:layout_marginLeft="@dimen/C10dp"
                                                 android:text=""
                                                 android:textColor="#000"
-                                                android:textSize="12sp" />
+                                                android:textSize="14sp" />
                                         </LinearLayout>
 
 
@@ -377,28 +472,26 @@
                                     <LinearLayout
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/C5dp">
+                                        android:layout_marginTop="@dimen/C5dp"
+                                        android:orientation="vertical">
 
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
-                                            android:text="Total Claiming Km : "
+                                            android:text="Total Claiming Km"
                                             android:textAllCaps="false"
                                             android:textColor="#000"
                                             android:textSize="12sp" />
-
 
                                         <TextView
                                             android:id="@+id/personal_km_text"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
-                                            android:layout_marginLeft="@dimen/C10dp"
                                             android:text=" "
                                             android:textColor="#000"
-                                            android:textSize="12sp" />
-
+                                            android:textSize="14sp" />
 
                                     </LinearLayout>
 
@@ -625,9 +718,11 @@
                                         android:id="@+id/lin_travel_loaction"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+
                                         android:layout_alignParentLeft="true"
                                         android:layout_alignParentEnd="true"
-                                        android:layout_alignParentRight="true">
+                                        android:layout_alignParentRight="true"
+                                        android:visibility="gone">
 
                                         <TextView
                                             android:layout_width="wrap_content"
@@ -640,6 +735,7 @@
                                     </LinearLayout>
                                 </LinearLayout>
                             </LinearLayout>
+
 
                             <LinearLayout
                                 android:id="@+id/lin_travel_dynamic_location"
@@ -659,179 +755,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/C2dp"
-                        app:cardCornerRadius="@dimen/C5dp">
-
-                        <LinearLayout
-
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/Extended"
-                                    android:padding="@dimen/C8dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:fontFamily="@font/basic"
-                                        android:text="Daily Allowance"
-                                        android:textAllCaps="false"
-                                        android:textColor="#FFF"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/lin_da_type"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/C5dp"
-                                android:orientation="vertical"
-                                android:visibility="gone">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical">
-
-                                    <RelativeLayout
-                                        android:id="@+id/allowance_information"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <LinearLayout
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content">
-
-                                            <TextView
-                                                android:id="@+id/txt_daily_allowance_mode"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:padding="@dimen/C5dp"
-                                                android:text="Head Quaters"
-                                                android:textAllCaps="false"
-                                                android:textColor="@android:color/black"
-                                                android:textSize="13sp"
-                                                android:textStyle="bold" />
-
-                                        </LinearLayout>
-
-                                        <LinearLayout
-                                            android:id="@+id/lin_daily_allowance"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_alignParentLeft="true"
-                                            android:layout_alignParentEnd="true"
-                                            android:layout_alignParentRight="true">
-
-                                            <TextView
-                                                android:id="@+id/txt_mode_amount"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:padding="@dimen/C5dp"
-                                                android:text="500"
-                                                android:textAllCaps="false"
-                                                android:textColor="@android:color/black"
-                                                android:textSize="13sp"
-                                                android:textStyle="bold" />
-
-                                        </LinearLayout>
-                                    </RelativeLayout>
-                                </LinearLayout>
-                            </LinearLayout>
-
-                        </LinearLayout>
-
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/C5dp"
-                        app:cardCornerRadius="@dimen/C5dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:background="@color/Extended"
-                                    android:padding="@dimen/C8dp">
-
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:gravity="center">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:fontFamily="@font/basic"
-                                            android:text="Other Expense"
-                                            android:textAllCaps="false"
-                                            android:textColor="#FFF"
-                                            android:textSize="14sp"
-                                            android:textStyle="bold" />
-
-                                    </LinearLayout>
-
-                                    <LinearLayout
-                                        android:id="@+id/lin_other_allowance"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentLeft="true"
-                                        android:layout_alignParentEnd="true"
-                                        android:layout_alignParentRight="true">
-
-                                        <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:text="+ Add Allowance"
-                                            android:textAllCaps="false"
-                                            android:textColor="#FFF"
-                                            android:textSize="12sp" />
-                                    </LinearLayout>
-                                </RelativeLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-
-                                android:id="@+id/lin_other_Expense"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                            </LinearLayout>
-
-
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/C5dp"
                         app:cardCornerRadius="@dimen/C5dp">
 
                         <LinearLayout
@@ -896,7 +819,82 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
+
                             </LinearLayout>
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/C2dp"
+                        app:cardCornerRadius="@dimen/C5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/Extended"
+                                    android:padding="@dimen/C8dp">
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:gravity="center">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:fontFamily="@font/basic"
+                                            android:text="Other Expense"
+                                            android:textAllCaps="false"
+                                            android:textColor="#FFF"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/lin_other_allowance"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_alignParentRight="true">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:text="+ Add Allowance"
+                                            android:textAllCaps="false"
+                                            android:textColor="#FFF"
+                                            android:textSize="12sp" />
+                                    </LinearLayout>
+                                </RelativeLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+
+                                android:id="@+id/lin_dyn_other_Expense"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                            </LinearLayout>
+
+
                         </LinearLayout>
 
                     </androidx.cardview.widget.CardView>
@@ -960,7 +958,6 @@
 
             </LinearLayout>
         </ScrollView>
-
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,7 +2,6 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
-import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -149,11 +147,6 @@ public class TravelAllowanceForm extends AppCompatActivity implements View.OnCli
                     Log.d("KARTHIC_ARRAY_List", cccccccc.toString());
                     Log.d("KARTHIC_ARRAY_OBJECT", AditionalTravelallowance.toString());
 
-
-/*                    Intent totalAllowance = new Intent(TravelAllowanceForm.this, TAClaimActivity.class);
-                    totalAllowance.putExtra("Retrive_Type", ModeType);
-                    totalAllowance.putExtra("Retrive_Ta_List", AditionalTravelallowance.toString());
-                    startActivity(totalAllowance);*/
                     finish();
 
                     SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -198,6 +191,7 @@ public class TravelAllowanceForm extends AppCompatActivity implements View.OnCli
 
         customDialog.dismiss();
         StrModeValue = myDataset.get(position).getName();
+        Log.e("StrMode", StrModeValue);
         callApi(StrModeValue);
         txtModeValue.setText(StrModeValue);
         String fareAmount = "Enter " + StrModeValue + " Amount";

@@ -129,7 +129,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     Common_Model mCommon_model_spinner;
     List<Common_Model> listOrderType = new ArrayList<>();
     List<Common_Model> modelRetailDetails = new ArrayList<>();
-    List<Common_Model> modelTypeList = new ArrayList<>();
+    List<Common_Model> OtherExpenseList = new ArrayList<>();
     CustomListViewDialog customDialog;
     LinearLayout linAddAllowance;
     CardView TravelBike;
@@ -191,7 +191,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     CardView crdDynamicLocation;
     String STRCHECKING;
     TextView editText;
-    int size = 0;
+    int size = 0, lcSize = 0, OeSize = 0;
     LinearLayout lin_daily_allowance;
     View childView;
     List<Common_Model> myDataset = new ArrayList<>();
@@ -205,8 +205,28 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     List<Common_Model> modelTravelType = new ArrayList<>();
     List<ModeOfTravel> modelOfTravel;
     Gson gson;
-    TextView fuelAmount, TextTotalAmount;
+    TextView fuelAmount, TextTotalAmount, editTexts, oeEditext;
     String strFuelAmount = "";
+    View rowView;
+    ImageView deleteButton;
+
+    LinearLayout LinearOtherAllowance;
+
+    String ModeType = "", StrModeValue = "", dynamicLabel = "";
+    String OEdynamicLabel = "";
+    ArrayList<String> OEdynamicList, dynamicLabelList;
+
+    ArrayList<String> cccccccc = new ArrayList<String>();
+    CardView cardModeList;
+    TextView txtmodeType, txtModeValue;
+
+    LinearLayout Dynamicallowance, OtherExpense;
+    EditText enterFareAmount, edt;
+    Button DynamicSave;
+    List<EditText> allEds = new ArrayList<EditText>();
+    List<EditText> allEds1 = new ArrayList<EditText>();
+    Integer editTextPositionss;
+    EditText editLaFare;
 
 
     @Override
@@ -258,7 +278,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         fuelAmount = findViewById(R.id.fuel_amount);
         mSharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         TextTotalAmount = findViewById(R.id.txt_total_amt);
-
+        LinearOtherAllowance = findViewById(R.id.lin_dyn_other_Expense);
+        dynamicLabelList = new ArrayList<>();
+        OEdynamicList = new ArrayList<>();
 
         strRetriveType = String.valueOf(getIntent().getSerializableExtra("Retrive_Type"));
         if (strRetriveType.equals("Daily Allowance")) {
@@ -285,19 +307,89 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         LOtherExpense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent DAintent = new Intent(TAClaimActivity.this, TravelAllowanceForm.class);
+/*                Intent DAintent = new Intent(TAClaimActivity.this, TravelAllowanceForm.class);
                 DAintent.putExtra("Type", "Other Expense");
                 DAintent.putExtra("DaList", OE);
-                startActivity(DAintent);
+                startActivity(DAintent);*/
+
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View rowView = null;
+
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                layoutParams.setMargins(15, 15, 15, 15);
+
+                rowView = inflater.inflate(R.layout.activity_other_expense, null);
+                LinearOtherAllowance.addView(rowView, layoutParams);
+                OeSize = LinearOtherAllowance.getChildCount();
+
+                for (int c = 0; c < OeSize; c++) {
+                    childView = LinearOtherAllowance.getChildAt(c);
+
+                    oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
+                    OtherExpense = (LinearLayout) childView.findViewById(R.id.lin_other_expense_dynamic);
+                    Integer finalC = c;
+
+                    oeEditext.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            OtherExpenseList.clear();
+                            OtherExpenseMode(finalC);
+                            Log.e("CLICK_POSITION", String.valueOf(finalC));
+                        }
+                    });
+
+                }
+
             }
         });
         LLocalConve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent DAintent = new Intent(TAClaimActivity.this, TravelAllowanceForm.class);
+            /*    Intent DAintent = new Intent(TAClaimActivity.this, TravelAllowanceForm.class);
                 DAintent.putExtra("Type", "Local Conveyance");
                 DAintent.putExtra("DaList", LC);
                 startActivity(DAintent);
+*/
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View rowView = null;
+
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                layoutParams.setMargins(15, 15, 15, 15);
+
+                rowView = inflater.inflate(R.layout.activity_local_convenyance, null);
+
+
+                linlocalCon.addView(rowView, layoutParams);
+
+
+                lcSize = linlocalCon.getChildCount();
+                Log.d("PARENT_COUNT", String.valueOf(size));
+
+
+                for (int c = 0; c < lcSize; c++) {
+                    childView = linlocalCon.getChildAt(c);
+
+                    editTexts = (TextView) (childView.findViewById(R.id.local_enter_mode));
+                    editLaFare = (EditText) (childView.findViewById(R.id.edt_la_fare));
+                    Dynamicallowance = (LinearLayout) childView.findViewById(R.id.lin_allowance_dynamic);
+                    Integer finalC = c;
+
+                    editTexts.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            listOrderType.clear();
+                            dynamicModeType(finalC);
+                            Log.e("CLICK_POSITION", String.valueOf(finalC));
+                        }
+                    });
+
+                }
             }
         });
 
@@ -341,6 +433,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 }
                 submitData();
+
+
             }
         });
         DailyExpenseAdapter.bindUpdateListener(new UpdateUi() {
@@ -359,54 +453,69 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 window.setGravity(Gravity.CENTER);
                 window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 customDialog.show();
+
+
             }
         });
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View rowView = null;
+
 
         linAddAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                final View rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
-                // Add the new row before the add field button.
+                View rowView = null;
+
 
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
                 layoutParams.setMargins(15, 15, 15, 15);
-                // travelDynamicLoaction.addView(rowView, layoutParams);
-                travelDynamicLoaction.addView(rowView, layoutParams);
 
-                crdDynamicLocation.setVisibility(View.VISIBLE);
-
-                size = travelDynamicLoaction.getChildCount();
-                Log.d("PARENT_COUNT", String.valueOf(size));
-
-                int finalC = 0;
-                for (int c = 0; c < size; c++) {
-                    childView = travelDynamicLoaction.getChildAt(c);
-                    finalC = c;
-                }
+                if (StrToEnd.equals("0")) {
+                    crdDynamicLocation.setVisibility(View.VISIBLE);
+                    rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
+                    travelDynamicLoaction.addView(rowView, layoutParams);
+                    deleteButton = findViewById(R.id.delete_button);
+                    size = travelDynamicLoaction.getChildCount();
+                    Log.d("PARENT_COUNT", String.valueOf(size));
 
 
-                int finalC1 = finalC;
-                editText = (TextView) (childView.findViewById(R.id.enter_mode));
-                editText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        modelTravelType.clear();
-                        localCon();
+                    for (int c = 0; c < size; c++) {
+                        childView = travelDynamicLoaction.getChildAt(c);
+
+                        editText = (TextView) (childView.findViewById(R.id.enter_mode));
+                        Integer finalC = c;
+
+                        editText.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                modelTravelType.clear();
+                                localCon(finalC);
+                                Log.e("CLICK_POSITION", String.valueOf(finalC));
+                            }
+                        });
+
                     }
-                });
+                } else {
+                    rowView = inflater.inflate(R.layout.travel_allowance_dynamic_one, null);
+                    travelDynamicLoaction.addView(rowView, layoutParams);
+
+                    crdDynamicLocation.setVisibility(View.VISIBLE);
+                    deleteButton = findViewById(R.id.delete_button);
+                    size = travelDynamicLoaction.getChildCount();
+                    Log.d("PARENT_COUNT", String.valueOf(size));
+                }
 
             }
         });
 
-
     }
 
 
-    public void onDelete(View v) {
+    public void onTADelete(View v) {
         int size = travelDynamicLoaction.getChildCount();
         Log.d("PARENT_COUNT", String.valueOf(size));
         travelDynamicLoaction.removeView((View) v.getParent());
@@ -415,6 +524,16 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+
+    public void onLCDelete(View v) {
+        Log.d("PARENT_COUNT", String.valueOf(lcSize));
+        linlocalCon.removeView((View) v.getParent());
+    }
+
+    public void onOEDelete(View v) {
+        Log.d("PARENT_COUNT", String.valueOf(lcSize));
+        LinearOtherAllowance.removeView((View) v.getParent());
+    }
 
 
     /*Toolbar*/
@@ -480,7 +599,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             edt.setTextColor(R.color.grey_500);
             edt.setBackgroundResource(R.drawable.textbox_bg);
             edt.setPadding(9, 9, 9, 9);
-
             childRel.addView(edt);
 
         }
@@ -546,7 +664,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 callMap(DateTime);
                 Log.d("JSON_VALUE", jsonArray.toString());
                 Log.d("JSON_VALUE", "CHECKING");
-                TravelBike.setVisibility(View.VISIBLE);
+                //  TravelBike.setVisibility(View.VISIBLE);
                 lin_daily_allowance.setVisibility(View.VISIBLE);
                 for (int a = 0; a < jsonArray.size(); a++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(a);
@@ -563,8 +681,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     /*  strFuelAmount = strFuelAmount.replaceAll("^[\"']+|[\"']+$", "");*/
 
 
-                    Double fAmount= Double.valueOf(strFuelAmount);
-                    fuelAmount.setText("Rs. " + new DecimalFormat("##0.00").format(fAmount));
+                    Double fAmount = Double.valueOf(strFuelAmount);
+                    fuelAmount.setText(" Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM ");
                     txtTaClaim.setText(StrDaName);
                     txtDailyAllowance.setText(StrDailyAllowance);
 
@@ -574,10 +692,42 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     Log.e("STRDAILY", StrDailyAllowance);
 
                     if (StrToEnd.equals("0")) {
-                        TravelBike.setVisibility(View.VISIBLE);
+                        StrBus = StrBus.replaceAll("^[\"']+|[\"']+$", "");
+                        StrTo = StrTo.replaceAll("^[\"']+|[\"']+$", "");
+
+                        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                        layoutParams.setMargins(15, 15, 15, 15);
+
+                        /*  for (int i = 0; i <=0; i++) {*/
+                        rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
+                        travelDynamicLoaction.addView(rowView, layoutParams);
+
+                        View views = travelDynamicLoaction.getChildAt(0);
+                        editText = views.findViewById(R.id.enter_mode);
+                        enterFrom = views.findViewById(R.id.enter_from);
+                        enterTo = views.findViewById(R.id.enter_to);
+                        enterFare = views.findViewById(R.id.enter_fare);
+                        deleteButton = findViewById(R.id.delete_button);
+
+                        editText.setText(StrDaName);
+                        enterFrom.setText(StrBus);
+                        enterTo.setText(StrTo);
+                        deleteButton.setVisibility(View.GONE);
+
+
+                        editText.setOnClickListener(null);
+                        enterFrom.setEnabled(false);
+                        enterTo.setEnabled(false);
+
+
+                        TravelBike.setVisibility(View.GONE);
                         linBusMode.setVisibility(View.VISIBLE);
                         linBikeMode.setVisibility(View.GONE);
                         linMode.setVisibility(View.VISIBLE);
+
                         if (StrBus != null && !StrBus.isEmpty() && !StrBus.equals("null") && !StrBus.equals("")) {
                             StrBus = StrBus.replaceAll("^[\"']+|[\"']+$", "");
                             txtBusFrom.setText(StrBus);
@@ -655,78 +805,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-
-    @SuppressLint("ResourceType")
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mSharedPreferences.contains("Retrive_Type")) {
-            Log.d("Retrive_Type", mSharedPreferences.getString("Retrive_Type", ""));
-        }
-
-        if (mSharedPreferences.contains("Retrive_Ta_List")) {
-            jsnLocalCon = mSharedPreferences.getString("Retrive_Ta_List", "");
-            Log.d("Retrive_Ta_List", mSharedPreferences.getString("Retrive_Ta_List", ""));
-/*
-            try {
-                JSONArray jsonArray = new JSONArray(jsnLocalCon);
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject json_in = jsonArray.getJSONObject(i);
-                    String name = json_in.getString("From");
-
-                    for (int j = 0; j < json_in.length(); j++) {
-
-                        Log.e("Json_Object", String.valueOf(json_in.length()));
-                        RelativeLayout childRel = new RelativeLayout(getApplicationContext());
-                        RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                        layoutparams_3.setMargins(0, 10, 0, 0);
-                        TextView edt = new TextView(getApplicationContext());
-                        edt.setLayoutParams(layoutparams_3);
-                        edt.setId(12345);
-                        edt.setTextSize(13);
-*//*
-                        edt.setHint(name);
-*//*
-                        edt.setTextColor(R.color.green);
-                        edt.setPadding(9, 9, 9, 9);
-                        childRel.addView(edt);
-                        linlocalCon.addView(childRel, linlocalCon.getChildCount() - 1);
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-
-        }*/
-        }
-
-    }
-
-    public void ModeType(int c) {
-        listOrderType.clear();
-
-        temaplateList.add("Phone Order");
-        temaplateList.add("Phone1 Order");
-
-
-        Log.e("POSition", String.valueOf(c));
-        for (int i = 0; i < temaplateList.size(); i++) {
-            String id = String.valueOf(temaplateList.get(i));
-            String name = temaplateList.get(i);
-            mCommon_model_spinner = new Common_Model(id, name, String.valueOf(c));
-            Log.e("LeaveType_Request", id);
-            Log.e("LeaveType_Request", name);
-            Log.e("IMAGE_ATTACH_IN", String.valueOf(c));
-
-            listOrderType.add(mCommon_model_spinner);
-        }
-        customDialog = new CustomListViewDialog(TAClaimActivity.this, listOrderType, 99);
-        Window window = customDialog.getWindow();
-        window.setGravity(Gravity.CENTER);
-        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-        customDialog.show();
-
-    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -808,30 +886,99 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             JSONArray ja = new JSONArray();
 
             /*Addtion Allowance Object*/
-            JSONObject additionalAllowanceObject = new JSONObject();
-            JSONArray AditionalAlowanceArray = new JSONArray();
 
-            Log.e("travelAllowancesize()", String.valueOf(travelAllowanceList.size()));
 
-            int size = dymicDailyAllowance.getChildCount();
-            Log.d("PARENT_COUNT", String.valueOf(size));
-            for (int i = 0; i < size; i++) {
-                JSONObject AditionalTravelallowance = new JSONObject();
-                View view = dymicDailyAllowance.getChildAt(i);
-                enterMode = view.findViewById(R.id.enter_mode);
-                enterFrom = view.findViewById(R.id.enter_from);
-                enterTo = view.findViewById(R.id.enter_to);
-                enterFare = view.findViewById(R.id.enter_fare);
-                AditionalTravelallowance.put("MODE", enterMode.getText().toString());
-                AditionalTravelallowance.put("FROM", enterFrom.getText().toString());
-                AditionalTravelallowance.put("TO", enterTo.getText().toString());
-                AditionalTravelallowance.put("FARE", enterFare.getText().toString());
-                Log.e("Inside_mode", String.valueOf(enterFare.getText().toString()));
-                AditionalAlowanceArray.put(AditionalTravelallowance);
-                // additionalAllowanceObject.put("Aditional_Allowance", AditionalAlowanceArray);
+            if (StrToEnd.equals("0")) {
+
+                JSONArray AditionalAlowanceArray = new JSONArray();
+
+                Log.d("PARENT_COUNT", String.valueOf(size));
+                for (int i = 0; i < size; i++) {
+                    JSONObject AditionalTravelallowance = new JSONObject();
+                    View views = travelDynamicLoaction.getChildAt(i);
+                    editText = views.findViewById(R.id.enter_mode);
+                    enterFrom = views.findViewById(R.id.enter_from);
+                    enterTo = views.findViewById(R.id.enter_to);
+                    enterFare = views.findViewById(R.id.enter_fare);
+                    deleteButton = findViewById(R.id.delete_button);
+                    try {
+                        AditionalTravelallowance.put("MODE", editText.getText().toString());
+                        AditionalTravelallowance.put("FROM", enterFrom.getText().toString());
+                        AditionalTravelallowance.put("TO", enterTo.getText().toString());
+                        AditionalTravelallowance.put("FARE", enterFare.getText().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.e("Inside_mode", String.valueOf(editText.getText().toString()));
+                    AditionalAlowanceArray.put(AditionalTravelallowance);
+                }
+
+                Log.d("Karthick_ARRAY", AditionalAlowanceArray.toString());
+            } else {
+                JSONArray AditionalAlowanceArray = new JSONArray();
+
+                Log.d("PARENT_COUNT", String.valueOf(size));
+                for (int i = 0; i < size; i++) {
+                    JSONObject AditionalTravelallowance = new JSONObject();
+                    View views = travelDynamicLoaction.getChildAt(i);
+                    enterFrom = views.findViewById(R.id.enter_from);
+                    enterTo = views.findViewById(R.id.enter_to);
+                    try {
+                        AditionalTravelallowance.put("FROM", enterFrom.getText().toString());
+                        AditionalTravelallowance.put("TO", enterTo.getText().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    Log.e("Inside_mode", String.valueOf(editText.getText().toString()));
+                    AditionalAlowanceArray.put(AditionalTravelallowance);
+                }
+
+                Log.d("Karthick_ARRAY", AditionalAlowanceArray.toString());
+            }
+            JSONArray AditionalLAarray = new JSONArray();
+            JSONArray jsonObject = new JSONArray();
+            for (int la = 0; la < lcSize; la++) {
+
+                View views = linlocalCon.getChildAt(la);
+                editTexts = (TextView) (views.findViewById(R.id.local_enter_mode));
+                editLaFare = (EditText) (views.findViewById(R.id.edt_la_fare));
+                Dynamicallowance = (LinearLayout) childView.findViewById(R.id.lin_allowance_dynamic);
+                JSONObject AditionallLocalConvenyance = null;
+                AditionallLocalConvenyance = new JSONObject();
+
+                Log.e("allEDt_Size", String.valueOf(allEds.size()));
+
+                for (int da = 0; da < dynamicLabelList.size(); da++) {
+                    try {
+                        JSONObject asd = new JSONObject();
+                        asd.put(editText.getText().toString() + " : " +dynamicLabelList.get(da), allEds.get(da).getText().toString());
+                        jsonObject.put(asd);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    AditionallLocalConvenyance.put("v", jsonObject);
+                    AditionallLocalConvenyance.put("total_amount", editLaFare.getText().toString());
+                    AditionallLocalConvenyance.put("type", editTexts.getText().toString());
+                    AditionalLAarray.put(AditionallLocalConvenyance);
+                }
+                Log.d("Karthic_LA_Allowance", jsonObject.toString());
+                Log.d("Karthic_LA_Allowance", AditionalLAarray.toString());
             }
 
-            Log.e("Karthick_ARRAY", AditionalAlowanceArray.toString());
+            Log.d("Karthic_LA_Allowance", jsonObject.toString());
+            Log.d("Karthic_LA_Allowance", AditionalLAarray.toString());
+
+
+
+            JSONObject AditionalTravelallowance1 = new JSONObject();
+            for (int da = 0; da < allEds.size(); da++) {
+                AditionalTravelallowance1.put(dynamicLabelList.get(da), allEds.get(da).getText().toString());
+            }
+
+            Log.d("KARTHIC_ARRAY_OBJECT", AditionalTravelallowance1.toString());
 
 
             JSONObject jjMain = new JSONObject();
@@ -867,18 +1014,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 ja.put(thi);
             }
 
-            /* thi.put("Aditional_Allowance", AditionalAlowanceArray);*/
-
-            //    ja.put(additionalAllowanceObject);
-
-            // ja.put(addtionDataObject);
-            // ja.put(addtionDataObject);
             Log.v("printing_final", ja.toString());
             jjMain.put("sf", SF_code);
             jjMain.put("div", div);
             jjMain.put("date", dateTime);
             jjMain.put("dailyExpense", ja);
-            jjMain.put("AditionalAlowanceArray", AditionalAlowanceArray);
+            ///////////////////  jjMain.put("AditionalAlowanceArray", AditionalAlowanceArray);
 
             ja = new JSONArray();
             JSONObject jj = new JSONObject();
@@ -1158,12 +1299,58 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             Log.d("JSON_VALUE", myDataset.get(position).getId());
             DateTime = myDataset.get(position).getId();
             displayTravelMode(myDataset.get(position).getId());
+            travelDynamicLoaction.removeAllViews();
+            linAddAllowance.setVisibility(View.VISIBLE);
+
         } else if (type == 11) {
             modeTextView.setText(myDataset.get(position).getName());
             Log.d("JSON_VALUE", myDataset.get(position).getName());
         } else if (type == 8) {
+
+            Log.d("PARENT_COUNT", String.valueOf(size));
+
+            Log.e("IMAGE_ATTACH_next", String.valueOf(myDataset.get(position).getPho()));
+            Integer editTextPosition = myDataset.get(position).getPho();
+
+            View view = travelDynamicLoaction.getChildAt(editTextPosition);
+            editText = (TextView) (view.findViewById(R.id.enter_mode));
+            //  enterMode = view.findViewById(R.id.enter_mode);
             editText.setText(myDataset.get(position).getName());
-            Log.e("IMAGE_ATTACH_next", myDataset.get(position).getFlag());
+
+
+        } else if (type == 80) {
+
+            Log.d("PARENT_COUNT", String.valueOf(size));
+
+            Log.e("IMAGE_ATTACH_next", String.valueOf(myDataset.get(position).getPho()));
+            editTextPositionss = myDataset.get(position).getPho();
+
+            View view = linlocalCon.getChildAt(editTextPositionss);
+            editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
+            //  enterMode = view.findViewById(R.id.enter_mode);
+            editTexts.setText(myDataset.get(position).getName());
+            StrModeValue = myDataset.get(position).getName();
+            Log.e("StrMode", StrModeValue);
+            Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
+            Dynamicallowance.removeAllViews();
+            LocalConvenyanceApi(StrModeValue);
+
+
+        } else if (type == 90) {
+
+            Log.d("PARENT_COUNT", String.valueOf(size));
+            Log.e("IMAGE_ATTACH_next", String.valueOf(myDataset.get(position).getPho()));
+            editTextPositionss = myDataset.get(position).getPho();
+            View view = LinearOtherAllowance.getChildAt(editTextPositionss);
+            oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
+            OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
+            oeEditext.setText(myDataset.get(position).getName());
+            StrModeValue = myDataset.get(position).getName();
+            Log.e("StrMode", StrModeValue);
+            OtherExpense.removeAllViews();
+            OtherExpenseApi(StrModeValue);
+
+
         } else if (type == 100) {
             String TrTyp = myDataset.get(position).getName();
             travelTypeMode.setText(TrTyp);
@@ -1267,7 +1454,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    public void localCon() {
+    public void localCon(Integer countPosition) {
 
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "table/list");
@@ -1293,14 +1480,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     String driverMode = String.valueOf(modelOfTravel.get(i).getDriverNeed());
 
 
-                    Model_Pojo = new Common_Model(id, name, modeId, driverMode);
+                    Model_Pojo = new Common_Model(name, id, modeId, "", countPosition);
                     Log.e("LeaveType_Request", id);
                     Log.e("LeaveType_Request", name);
                     Log.e("DriverMode", driverMode);
                     if (id.equals("0")) {
                         modelTravelType.add(Model_Pojo);
                     }
-
                 }
 
                 customDialog = new CustomListViewDialog(TAClaimActivity.this, modelTravelType, 8);
@@ -1315,6 +1501,216 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 Log.d("LeaveTypeList", "Error");
             }
         });
+    }
+
+
+    public void dynamicModeType(Integer poisition) {
+        /*  Dynamicallowance.removeAllViews();*/
+        for (int i = 0; i < LC.size(); i++) {
+            String name = LC.get(i);
+            mCommon_model_spinner = new Common_Model(name, name, "", "", poisition);
+            listOrderType.add(mCommon_model_spinner);
+        }
+        customDialog = new CustomListViewDialog(TAClaimActivity.this, listOrderType, 80);
+        Window window = customDialog.getWindow();
+        window.setGravity(Gravity.CENTER);
+        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        customDialog.show();
+    }
+
+
+    public void OtherExpenseMode(Integer poisition) {
+        /*  Dynamicallowance.removeAllViews();*/
+        for (int i = 0; i < OE.size(); i++) {
+            String name = OE.get(i);
+            mCommon_model_spinner = new Common_Model(name, name, "", "", poisition);
+            OtherExpenseList.add(mCommon_model_spinner);
+        }
+        customDialog = new CustomListViewDialog(TAClaimActivity.this, OtherExpenseList, 90);
+        Window window = customDialog.getWindow();
+        window.setGravity(Gravity.CENTER);
+        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        customDialog.show();
+    }
+
+
+    public void LocalConvenyanceApi(String sss) {
+
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
+        Log.e("StrModeValue", sss);
+        try {
+
+            JSONObject jj = new JSONObject();
+            jj.put("Ta_Date", "");
+            jj.put("div", div);
+            jj.put("sf", SF_code);
+            jj.put("rSF", SF_code);
+            jj.put("State_Code", State_Code);
+            Log.v("json_obj_ta", jj.toString());
+            Call<ResponseBody> Callto = apiInterface.getDailyAllowance(jj.toString());
+            Callto.enqueue(new Callback<ResponseBody>() {
+                @SuppressLint({"ResourceType", "NewApi"})
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            Log.v("print_upload_file_true", "ggg" + response);
+                            String jsonData = null;
+                            jsonData = response.body().string();
+                            Log.v("response_data", jsonData);
+                            JSONObject js = new JSONObject(jsonData);
+                            JSONArray jsnArValue = js.getJSONArray("ExpenseWeb");
+
+                            for (int i = 0; i < jsnArValue.length(); i++) {
+                                JSONObject jsonHeaderObject = jsnArValue.getJSONObject(i);
+                                String Exp_Name = jsonHeaderObject.getString("Name");
+
+
+                                if (Exp_Name.equals(sss)) {
+                                    Log.d("TAF", Exp_Name);
+                                    Log.d("TAF", sss);
+                                    Log.d("TAF", jsonHeaderObject.getString("user_enter"));
+                                    Log.d("TAF", jsonHeaderObject.getString("Max_Allowance"));
+                                    JSONArray additionArray = null;
+
+                                    additionArray = jsonHeaderObject.getJSONArray("value");
+
+                                    for (int l = 0; l <= additionArray.length(); l++) {
+                                        JSONObject json_in = additionArray.getJSONObject(l);
+                                        dynamicLabel = json_in.getString("Ad_Fld_Name");
+                                        dynamicLabelList.add(dynamicLabel);
+                                        Log.d("TAF_Exp_Nameffdd", additionArray.toString());
+                                        Log.d("TAF_Ex", dynamicLabel);
+                                        Log.d("TAF_Ex", dynamicLabelList.toString());
+                                        RelativeLayout childRel = new RelativeLayout(getApplicationContext());
+                                        RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                                        layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_END);
+                                        layoutparams_3.setMargins(0, 10, 0, 0);
+                                        edt = new EditText(getApplicationContext());
+                                        edt.setLayoutParams(layoutparams_3);
+                                        for (int da = 0; da < dynamicLabelList.size(); da++) {
+                                            edt.setHint(dynamicLabelList.get(da));
+                                            Log.e("DYNAMICE_LABEL_LIST", dynamicLabelList.get(da).toString());
+                                        }
+                                        edt.setId(12345);
+                                        edt.setTextSize(13);
+                                        edt.setTextColor(R.color.grey_500);
+
+                                        childRel.addView(edt);
+                                        allEds.add(edt);
+                                        View view = linlocalCon.getChildAt(editTextPositionss);
+                                        Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
+                                        Dynamicallowance.addView(childRel, Dynamicallowance.getChildCount() - 1);
+                                    }
+                                }
+                            }
+
+
+                        }
+                    } catch (Exception e) {
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+
+        } catch (Exception e) {
+        }
+    }
+
+
+    public void OtherExpenseApi(String sss) {
+
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
+        Log.e("StrModeValue", sss);
+        try {
+
+            JSONObject jj = new JSONObject();
+            jj.put("Ta_Date", "");
+            jj.put("div", div);
+            jj.put("sf", SF_code);
+            jj.put("rSF", SF_code);
+            jj.put("State_Code", State_Code);
+            Log.v("json_obj_ta", jj.toString());
+            Call<ResponseBody> Callto = apiInterface.getDailyAllowance(jj.toString());
+            Callto.enqueue(new Callback<ResponseBody>() {
+                @SuppressLint({"ResourceType", "NewApi"})
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+                        if (response.isSuccessful()) {
+                            Log.v("print_upload_file_true", "ggg" + response);
+                            String jsonData = null;
+                            jsonData = response.body().string();
+                            Log.v("response_data", jsonData);
+                            JSONObject js = new JSONObject(jsonData);
+                            JSONArray jsnArValue = js.getJSONArray("ExpenseWeb");
+
+                            for (int i = 0; i < jsnArValue.length(); i++) {
+                                JSONObject jsonHeaderObject = jsnArValue.getJSONObject(i);
+                                String Exp_Name = jsonHeaderObject.getString("Name");
+
+
+                                if (Exp_Name.equals(sss)) {
+                                    Log.d("TAF", Exp_Name);
+                                    Log.d("TAF", sss);
+                                    Log.d("TAF", jsonHeaderObject.getString("user_enter"));
+                                    Log.d("TAF", jsonHeaderObject.getString("Max_Allowance"));
+                                    JSONArray additionArray = null;
+
+                                    additionArray = jsonHeaderObject.getJSONArray("value");
+
+                                    for (int l = 0; l <= additionArray.length(); l++) {
+                                        JSONObject json_in = additionArray.getJSONObject(l);
+                                        OEdynamicLabel = json_in.getString("Ad_Fld_Name");
+                                        OEdynamicList.add(OEdynamicLabel);
+                                        Log.d("TAF_Exp_Nameffdd", additionArray.toString());
+                                        Log.d("TAF_Ex", OEdynamicLabel);
+                                        Log.d("TAF_Ex", OEdynamicList.toString());
+                                        RelativeLayout childRel = new RelativeLayout(getApplicationContext());
+                                        RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                                        layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_END);
+                                        layoutparams_3.setMargins(0, 10, 0, 0);
+                                        edt = new EditText(getApplicationContext());
+                                        edt.setLayoutParams(layoutparams_3);
+                                        for (int da = 0; da < OEdynamicList.size(); da++) {
+                                            edt.setHint(OEdynamicList.get(da));
+                                            Log.e("DYNAMICE_LABEL_LIST", OEdynamicList.get(da).toString());
+                                        }
+                                        edt.setId(12345);
+                                        edt.setTextSize(13);
+                                        edt.setTextColor(R.color.grey_500);
+                                        edt.setBackgroundResource(R.drawable.textbox_bg);
+
+
+                                        childRel.addView(edt);
+                                        allEds1.add(edt);
+                                        View view = LinearOtherAllowance.getChildAt(editTextPositionss);
+                                        OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
+                                        OtherExpense.addView(childRel, OtherExpense.getChildCount() - 1);
+                                    }
+                                }
+                            }
+
+
+                        }
+                    } catch (Exception e) {
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+
+        } catch (Exception e) {
+        }
     }
 
 
