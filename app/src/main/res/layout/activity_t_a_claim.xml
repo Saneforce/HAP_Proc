@@ -133,7 +133,7 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/C2dp"
+                        android:layout_margin="@dimen/C8dp"
                         app:cardCornerRadius="@dimen/C5dp">
 
                         <LinearLayout
@@ -233,7 +233,7 @@
                         android:id="@+id/linear_bike"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/C2dp"
+                        android:layout_margin="@dimen/C8dp"
                         app:cardCornerRadius="@dimen/C5dp">
 
                         <LinearLayout
@@ -266,15 +266,15 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/C8dp"
+                                android:visibility="gone"
                                 android:orientation="vertical"
-                                android:padding="@dimen/C10dp"
-                                android:visibility="gone">
+                                android:padding="@dimen/C5dp">
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/C5dp"
-                                    android:orientation="horizontal">
+                                    android:orientation="vertical">
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -290,11 +290,9 @@
                                         android:id="@+id/mode_name"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
-                                        android:layout_marginLeft="@dimen/C10dp"
                                         android:text="Bike"
                                         android:textColor="#000"
-                                        android:textSize="12sp"
+                                        android:textSize="15sp"
                                         android:textStyle="bold" />
 
                                 </LinearLayout>
@@ -356,7 +354,8 @@
                                                     android:layout_width="@dimen/C60dp"
                                                     android:layout_height="match_parent"
                                                     android:layout_gravity="center"
-                                                    android:layout_marginLeft="@dimen/C20dp"></ImageView>
+                                                    android:layout_marginLeft="@dimen/C20dp"
+                                                    android:src="@drawable/button_grey"></ImageView>
 
                                             </LinearLayout>
 
@@ -400,7 +399,8 @@
                                                     android:layout_width="@dimen/C60dp"
                                                     android:layout_height="match_parent"
                                                     android:layout_gravity="center"
-                                                    android:layout_marginLeft="@dimen/C20dp"></ImageView>
+                                                    android:layout_marginLeft="@dimen/C20dp"
+                                                    android:src="@drawable/button_grey"></ImageView>
 
                                             </LinearLayout>
 
@@ -409,20 +409,22 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="@dimen/C10dp"
+                                        android:layout_weight="3"
                                         android:orientation="horizontal">
 
                                         <LinearLayout
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
+                                            android:layout_weight="1"
                                             android:orientation="vertical">
 
                                             <TextView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_gravity="center"
+                                                android:layout_gravity="start"
                                                 android:text="Travelled  Km"
                                                 android:textAllCaps="false"
                                                 android:textColor="#000"
@@ -433,22 +435,23 @@
                                                 android:id="@+id/total_km"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_gravity="center"
+                                                android:layout_gravity="start"
                                                 android:text=""
                                                 android:textColor="#000"
-                                                android:textSize="14sp" />
+                                                android:textSize="15sp"
+                                                android:textStyle="bold" />
                                         </LinearLayout>
 
                                         <LinearLayout
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="@dimen/C20dp"
+                                            android:layout_weight="1"
                                             android:orientation="vertical">
 
                                             <TextView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_gravity="center"
+                                                android:layout_gravity="start"
                                                 android:text="Personal  Km"
                                                 android:textAllCaps="false"
                                                 android:textColor="#000"
@@ -459,41 +462,42 @@
                                                 android:id="@+id/pers_kilo_meter"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_gravity="center"
+                                                android:layout_gravity="start"
                                                 android:text=""
                                                 android:textColor="#000"
-                                                android:textSize="14sp" />
+                                                android:textSize="15sp"
+                                                android:textStyle="bold" />
                                         </LinearLayout>
 
-
-                                    </LinearLayout>
-
-
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/C5dp"
-                                        android:orientation="vertical">
-
-                                        <TextView
+                                        <LinearLayout
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:text="Total Claiming Km"
-                                            android:textAllCaps="false"
-                                            android:textColor="#000"
-                                            android:textSize="12sp" />
+                                            android:layout_weight="1"
+                                            android:gravity="right"
+                                            android:orientation="vertical">
 
-                                        <TextView
-                                            android:id="@+id/personal_km_text"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_gravity="center"
-                                            android:text=" "
-                                            android:textColor="#000"
-                                            android:textSize="14sp" />
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="start"
+                                                android:text="Claiming Km"
+                                                android:textAllCaps="false"
+                                                android:textColor="#000"
+                                                android:textSize="12sp" />
 
+                                            <TextView
+                                                android:id="@+id/personal_km_text"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="start"
+                                                android:text=" "
+                                                android:textColor="#000"
+                                                android:textSize="15sp"
+                                                android:textStyle="bold" />
+
+                                        </LinearLayout>
                                     </LinearLayout>
+
 
                                     <View
                                         android:layout_width="match_parent"
@@ -677,7 +681,7 @@
                         android:id="@+id/card_travel_loaction"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/C2dp"
+                        android:layout_margin="@dimen/C8dp"
                         app:cardCornerRadius="@dimen/C5dp">
 
                         <LinearLayout
@@ -754,7 +758,7 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/C2dp"
+                        android:layout_margin="@dimen/C8dp"
                         app:cardCornerRadius="@dimen/C5dp">
 
                         <LinearLayout
@@ -828,7 +832,7 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/C2dp"
+                        android:layout_margin="@dimen/C8dp"
                         app:cardCornerRadius="@dimen/C5dp">
 
                         <LinearLayout

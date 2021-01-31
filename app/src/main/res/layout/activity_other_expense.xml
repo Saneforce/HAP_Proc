@@ -47,7 +47,7 @@
 
 
         <EditText
-            android:id="@+id/enter_fare_amount"
+            android:id="@+id/oe_fre_amt"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="start"
