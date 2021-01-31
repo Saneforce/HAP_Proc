@@ -39,23 +39,35 @@
 
     </LinearLayout>
 
+
+
+
     <LinearLayout
         android:id="@+id/lin_fare_amount"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/C5dp">
-
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/enter_to"
+        android:layout_margin="@dimen/C3dp"
+        android:orientation="horizontal">
 
         <EditText
             android:id="@+id/oe_fre_amt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:hint="Fare Amount"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:hint="Enter Fare"
+            android:inputType="number"
             android:padding="@dimen/C10dp"
-            android:textColor="@color/grey_500"
-            android:textSize="@dimen/C13dp" />
+            android:textColorHint="#C0C0C0"
+            android:textSize="@dimen/C14dp" />
 
+        <ImageView
+            android:id="@+id/oe_attach_img"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-8dp"
+            android:padding="@dimen/C5dp"
+            android:src="@drawable/attach_files" />
 
     </LinearLayout>
 

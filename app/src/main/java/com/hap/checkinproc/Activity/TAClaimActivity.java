@@ -32,6 +32,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -231,6 +232,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     String editMode = "";
     Double tofuel = 0.0;
 
+    ImageView taAttach, lcAttach, oeAttach;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -309,10 +313,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         LOtherExpense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-/*                Intent DAintent = new Intent(TAClaimActivity.this, TravelAllowanceForm.class);
-                DAintent.putExtra("Type", "Other Expense");
-                DAintent.putExtra("DaList", OE);
-                startActivity(DAintent);*/
+
 
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View rowView = null;
@@ -332,7 +333,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                     oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
                     edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
-
+                    oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
                     OtherExpense = (LinearLayout) childView.findViewById(R.id.lin_other_expense_dynamic);
                     Integer finalC = c;
 
@@ -345,6 +346,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         }
                     });
 
+                    oeAttach.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popupCapture("OE");
+                        }
+                    });
+
                 }
 
             }
@@ -352,11 +360,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         LLocalConve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            /*    Intent DAintent = new Intent(TAClaimActivity.this, TravelAllowanceForm.class);
-                DAintent.putExtra("Type", "Local Conveyance");
-                DAintent.putExtra("DaList", LC);
-                startActivity(DAintent);
-*/
+
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View rowView = null;
 
@@ -381,6 +385,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                     editTexts = (TextView) (childView.findViewById(R.id.local_enter_mode));
                     editLaFare = (EditText) (childView.findViewById(R.id.edt_la_fare));
+                    lcAttach = (ImageView) (childView.findViewById(R.id.la_attach_iamg));
                     Dynamicallowance = (LinearLayout) childView.findViewById(R.id.lin_allowance_dynamic);
                     Integer finalC = c;
 
@@ -390,6 +395,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             listOrderType.clear();
                             dynamicModeType(finalC);
                             Log.e("CLICK_POSITION", String.valueOf(finalC));
+                        }
+                    });
+
+                    lcAttach.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popupCapture("LC");
                         }
                     });
 
@@ -491,6 +503,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         childView = travelDynamicLoaction.getChildAt(c);
 
                         editText = (TextView) (childView.findViewById(R.id.enter_mode));
+                        taAttach = (ImageView) (childView.findViewById(R.id.image_attach));
                         Integer finalC = c;
 
                         editText.setOnClickListener(new View.OnClickListener() {
@@ -501,6 +514,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 Log.e("CLICK_POSITION", String.valueOf(finalC));
                             }
                         });
+
+                        taAttach.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                popupCapture("attachName");
+                            }
+                        });
+
 
                     }
                 } else {
@@ -690,6 +711,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     txtTaClaim.setText(StrDaName);
                     txtDailyAllowance.setText(StrDailyAllowance);
 
+                    if (StrDailyAllowance.equals("Out Station")) {
+
+
+                    }
+
                     Log.e("STRTOEND", StrToEnd);
                     Log.e("STR", StrBus);
                     Log.e("STREND", StrTo);
@@ -876,7 +902,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
 
         JSONArray transHead = new JSONArray();
-
+        JSONObject transJson = new JSONObject();
         JSONObject jsonData = new JSONObject();
 
 
@@ -1009,11 +1035,44 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
             transHead.put(jsonData);
 
+
             Log.e("TOTAL_JSON", transHead.toString());
+            Log.e("TOTAL_JSON_HHHH", jsonData.toString());
 
         } catch (Exception e) {
             Log.e("TOTAL_JSON_OUT", e.toString());
         }
+
+
+        Call<ResponseBody> submit = apiInterface.saveDailyAllowance(jsonData.toString());
+        submit.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                try {
+                    String jsonData = null;
+                    jsonData = response.body().string();
+                    Log.v("printing_json", jsonData);
+                    JSONObject json = new JSONObject(jsonData);
+                    if (json.getString("success").equalsIgnoreCase("true")) {
+                        Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(TAClaimActivity.this, ViewTASummary.class);
+                        intent.putExtra("DateofExpense", DateTime);
+                        intent.putExtra("travelMode", travelTypeMode.getText().toString());
+                        startActivity(intent);
+                    }
+                } catch (Exception e) {
+                    Log.v("printing_excep_va", e.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+
+
+
 
 /*
 
@@ -1797,14 +1856,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                         Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
                                         Dynamicallowance.addView(childRel, Dynamicallowance.getChildCount() - 1);
                                     }
-
-
-                                    Log.e("EDITTEX_SISE", "cc  " + String.valueOf(users.size()));
-                                    Log.e("EDITTEX_SISE", "dd " + String.valueOf(allEds.size()));
-                                    Log.e("EDITTEX_SISE", "dd " + String.valueOf(usersByCountry.size()));
-                                    Log.e("EDITTEX_SISE", "dd " + String.valueOf(usersByCountry.keySet()));
-                                    Log.e("EDITTEX_SISE", "dd " + String.valueOf(usersByCountry.values()));
-
 
                                 }
                             }

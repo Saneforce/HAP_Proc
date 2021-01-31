@@ -43,7 +43,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C10dp"
+                    android:layout_marginLeft="@dimen/C15dp"
+                    android:layout_marginRight="@dimen/C15dp"
                     android:orientation="vertical"
                     android:padding="8dp">
 
@@ -127,8 +128,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="8dp">
+                    android:layout_margin="@dimen/C15dp"
+                    android:orientation="vertical">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -192,7 +193,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:padding="@dimen/C5dp"
-                                                android:text="Head Quaters"
+                                                android:text=""
                                                 android:textAllCaps="false"
                                                 android:textColor="@android:color/black"
                                                 android:textSize="13sp"
@@ -221,6 +222,33 @@
 
                                         </LinearLayout>
                                     </RelativeLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:visibility="gone">
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:text="Lodging"
+                                        android:textAllCaps="false"
+                                        android:textColor="#000"
+                                        android:textSize="12sp"></TextView>
+
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/C5dp"
+                                        android:text="Lodging"
+                                        android:textAllCaps="false"
+                                        android:textColor="#000"
+                                        android:textSize="12sp"></TextView>
+
+
                                 </LinearLayout>
                             </LinearLayout>
 
@@ -266,9 +294,9 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/C8dp"
-                                android:visibility="gone"
                                 android:orientation="vertical"
-                                android:padding="@dimen/C5dp">
+                                android:padding="@dimen/C5dp"
+                                android:visibility="gone">
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -279,11 +307,10 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_gravity="center"
                                         android:text="Mode of Travel"
-                                        android:textAllCaps="false"
+                                        android:textAllCaps="true"
                                         android:textColor="#000"
-                                        android:textSize="12sp" />
+                                        android:textSize="10sp" />
 
 
                                     <TextView
@@ -331,9 +358,9 @@
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:text="Started km"
-                                                        android:textAllCaps="false"
+                                                        android:textAllCaps="true"
                                                         android:textColor="#000"
-                                                        android:textSize="13sp" />
+                                                        android:textSize="10sp" />
 
 
                                                     <TextView
@@ -377,9 +404,9 @@
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:text="Closing km"
-                                                        android:textAllCaps="false"
+                                                        android:textAllCaps="true"
                                                         android:textColor="#000"
-                                                        android:textSize="13sp" />
+                                                        android:textSize="10sp" />
 
 
                                                     <TextView
@@ -411,7 +438,7 @@
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/C10dp"
+                                        android:layout_marginTop="@dimen/C15dp"
                                         android:layout_weight="3"
                                         android:orientation="horizontal">
 
@@ -426,9 +453,9 @@
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="start"
                                                 android:text="Travelled  Km"
-                                                android:textAllCaps="false"
+                                                android:textAllCaps="true"
                                                 android:textColor="#000"
-                                                android:textSize="12sp" />
+                                                android:textSize="10sp" />
 
 
                                             <TextView
@@ -451,18 +478,18 @@
                                             <TextView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_gravity="start"
+                                                android:layout_gravity="center"
                                                 android:text="Personal  Km"
-                                                android:textAllCaps="false"
+                                                android:textAllCaps="true"
                                                 android:textColor="#000"
-                                                android:textSize="12sp" />
+                                                android:textSize="10sp" />
 
 
                                             <TextView
                                                 android:id="@+id/pers_kilo_meter"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_gravity="start"
+                                                android:layout_gravity="center"
                                                 android:text=""
                                                 android:textColor="#000"
                                                 android:textSize="15sp"
@@ -479,17 +506,17 @@
                                             <TextView
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_gravity="start"
+                                                android:layout_gravity="right"
                                                 android:text="Claiming Km"
-                                                android:textAllCaps="false"
+                                                android:textAllCaps="true"
                                                 android:textColor="#000"
-                                                android:textSize="12sp" />
+                                                android:textSize="10sp" />
 
                                             <TextView
                                                 android:id="@+id/personal_km_text"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_gravity="start"
+                                                android:layout_gravity="right"
                                                 android:text=" "
                                                 android:textColor="#000"
                                                 android:textSize="15sp"
@@ -909,7 +936,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C5dp"
+                    android:layout_marginLeft="@dimen/C15dp"
+                    android:layout_marginRight="@dimen/C15dp"
                     android:orientation="vertical"
                     android:padding="8dp">
 

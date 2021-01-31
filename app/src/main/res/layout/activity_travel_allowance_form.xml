@@ -77,14 +77,7 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/lin_allowance_dynamic"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/C5dp"
-            android:layout_marginBottom="@dimen/C5dp"
-            android:orientation="vertical"
-            tools:context=".MainActivity" />
+
 
         <LinearLayout
             android:layout_width="match_parent"
