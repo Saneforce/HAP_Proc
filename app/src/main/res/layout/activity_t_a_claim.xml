@@ -159,7 +159,7 @@
                                         android:layout_gravity="center"
                                         android:fontFamily="@font/basic"
                                         android:text="Daily Allowance"
-                                        android:textAllCaps="false"
+                                        android:textAllCaps="true"
                                         android:textColor="#FFF"
                                         android:textSize="14sp"
                                         android:textStyle="bold" />
@@ -281,7 +281,7 @@
                                     android:layout_gravity="center"
                                     android:fontFamily="@font/basic"
                                     android:text="Travel Allowance"
-                                    android:textAllCaps="false"
+                                    android:textAllCaps="true"
                                     android:textColor="#FFF"
                                     android:textSize="14sp"
                                     android:textStyle="bold" />
@@ -738,7 +738,7 @@
                                             android:layout_gravity="center"
                                             android:fontFamily="@font/basic"
                                             android:text="Travel Location"
-                                            android:textAllCaps="false"
+                                            android:textAllCaps="true"
                                             android:textColor="#FFF"
                                             android:textSize="14sp"
                                             android:textStyle="bold" />
@@ -815,7 +815,7 @@
                                             android:layout_gravity="center"
                                             android:fontFamily="@font/basic"
                                             android:text="Local Conveyance"
-                                            android:textAllCaps="false"
+                                            android:textAllCaps="true"
                                             android:textColor="#FFF"
                                             android:textSize="14sp"
                                             android:textStyle="bold" />
@@ -889,7 +889,7 @@
                                             android:layout_gravity="center"
                                             android:fontFamily="@font/basic"
                                             android:text="Other Expense"
-                                            android:textAllCaps="false"
+                                            android:textAllCaps="true"
                                             android:textColor="#FFF"
                                             android:textSize="14sp"
                                             android:textStyle="bold" />
