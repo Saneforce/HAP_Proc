@@ -247,6 +247,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     double sTotal = 0.0;
     double sums = 0.0;
     LinearLayout otherExpenseLayout, linAll, linRemarks, linFareAmount;
+    //ArrayList<String> AttachmentImg = new ArrayList<>();
+
+    Map<String, String> AttachmentImg = new HashMap<String, String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -1003,6 +1006,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     public void submitData() {
 
 
+        Log.e("AttachmentImg", AttachmentImg.toString());
+
         JSONArray transHead = new JSONArray();
         JSONObject transJson = new JSONObject();
         JSONObject jsonData = new JSONObject();
@@ -1602,16 +1607,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                                 Log.d("SHORT_NAME", Exp_Name + "Attachment" + attachment);
                                 listValue.add(shortName);
+                                AttachmentImg.put(Exp_Name, attachment);
+
 
                                 HashSet<String> listToSet = new HashSet<String>(listValue);
                                 listWithoutDuplicates = new ArrayList<String>(listToSet);
 
                                 if (shortName.equals("Daily Allowance")) {
                                     DA.add(Exp_Name);
-                                    Log.e("TA_Claim_userEnter", userEnter);
-                                    Log.e("TA_Claim_attachment", attachment);
-                                    Log.e("TA_Claim_maxAllowonce", maxAllowonce);
-
                                 }
 
                                 if (shortName.equals("Other Expense")) {
@@ -1688,11 +1691,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
             //  enterMode = view.findViewById(R.id.enter_mode);
             lcAttach = (ImageView) (view.findViewById(R.id.la_attach_iamg));
-            if (myDataset.get(position).getAddress().equals("1")) {
-                lcAttach.setVisibility(View.VISIBLE);
-            } else {
-                lcAttach.setVisibility(View.GONE);
-            }
+
 
             editTexts.setText(myDataset.get(position).getName());
             StrModeValue = myDataset.get(position).getName();
@@ -1700,6 +1699,17 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
             Dynamicallowance.removeAllViews();
             LocalConvenyanceApi(StrModeValue);
+
+            Log.e("ASD_Key", String.valueOf(AttachmentImg.keySet()));
+            Log.e("ASD_Value", String.valueOf(AttachmentImg.values()));
+            Log.e("ASD_Value", String.valueOf(AttachmentImg.get(StrModeValue)));
+             if (AttachmentImg.get(StrModeValue).equals("1")) {
+                lcAttach.setVisibility(View.VISIBLE);
+            } else {
+                lcAttach.setVisibility(View.GONE);
+            }
+
+
 
 
         } else if (type == 90) {
@@ -1712,11 +1722,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
 
             Log.e("Attachment", myDataset.get(position).getAddress());
-            if (myDataset.get(position).getAddress().equals("1")) {
+        /*    if (myDataset.get(position).getAddress().equals("1")) {
                 oeAttach.setVisibility(View.VISIBLE);
             } else {
                 oeAttach.setVisibility(View.GONE);
             }
+*/
+
+
+
 
 
             OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
@@ -1725,6 +1739,17 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             Log.e("StrMode", StrModeValue);
             OtherExpense.removeAllViews();
             OtherExpenseApi(StrModeValue);
+
+            Log.e("ASD_Key", String.valueOf(AttachmentImg.keySet()));
+            Log.e("ASD_Value", String.valueOf(AttachmentImg.values()));
+            Log.e("ASD_Value", String.valueOf(AttachmentImg.get(StrModeValue)));
+
+
+            if (AttachmentImg.get(StrModeValue).equals("1")) {
+                oeAttach.setVisibility(View.VISIBLE);
+            } else {
+                oeAttach.setVisibility(View.GONE);
+            }
 
 
         } else if (type == 100) {
