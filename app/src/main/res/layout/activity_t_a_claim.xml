@@ -18,7 +18,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/C100dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -126,10 +127,12 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/lin_alo_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/C15dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
 
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -214,7 +217,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:padding="@dimen/C5dp"
-                                                android:text="Rs. 500"
+                                                android:text="Rs. "
                                                 android:textAllCaps="false"
                                                 android:textColor="@android:color/black"
                                                 android:textSize="13sp"
@@ -280,7 +283,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:fontFamily="@font/basic"
-                                    android:text="Travel Allowance"
+                                    android:text="Fuel Allowance"
                                     android:textAllCaps="true"
                                     android:textColor="#FFF"
                                     android:textSize="14sp"
@@ -507,7 +510,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_gravity="right"
-                                                android:text="Claiming Km"
+                                                android:text="Total"
                                                 android:textAllCaps="true"
                                                 android:textColor="#000"
                                                 android:textSize="10sp" />
@@ -759,7 +762,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
-                                            android:text="+ Add Allowance"
+                                            android:text="+ Add"
                                             android:textAllCaps="false"
                                             android:textColor="#FFF"
                                             android:textSize="12sp" />
@@ -834,7 +837,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
-                                            android:text="+ Add Allowance"
+                                            android:text="+ Add"
                                             android:textAllCaps="false"
                                             android:textColor="#FFF"
                                             android:textSize="12sp" />
@@ -849,6 +852,34 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/lin_total_loca"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <View
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="@dimen/C1dp"
+                                    android:layout_margin="@dimen/C10dp"
+                                    android:background="@drawable/button_grey"></View>
+
+
+                                <TextView
+                                    android:id="@+id/txt_local"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/C10dp"
+                                    android:text="Total : "
+                                    android:textColor="@android:color/black"
+                                    android:textSize="@dimen/C14dp"
+                                    android:textStyle="bold">
+
+                                </TextView>
 
 
                             </LinearLayout>
@@ -908,7 +939,7 @@
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
-                                            android:text="+ Add Allowance"
+                                            android:text="+ Add"
                                             android:textAllCaps="false"
                                             android:textColor="#FFF"
                                             android:textSize="12sp" />
@@ -916,12 +947,43 @@
                                 </RelativeLayout>
                             </LinearLayout>
 
+
                             <LinearLayout
 
                                 android:id="@+id/lin_dyn_other_Expense"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/lin_total_other"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <View
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="@dimen/C1dp"
+                                    android:layout_margin="@dimen/C10dp"
+                                    android:background="@drawable/button_grey"></View>
+
+
+                                <TextView
+                                    android:id="@+id/txt_oe"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/C10dp"
+                                    android:text="Total : "
+                                    android:textColor="@android:color/black"
+                                    android:textSize="@dimen/C14dp"
+                                    android:textStyle="bold">
+
+                                </TextView>
+
 
                             </LinearLayout>
 
@@ -934,12 +996,14 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/lin_remarks"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C15dp"
                     android:layout_marginRight="@dimen/C15dp"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:padding="8dp"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/txt_rmk"
@@ -975,21 +1039,64 @@
                             android:textSize="14sp" />
 
                     </androidx.cardview.widget.CardView>
-
-                    <Button
-                        android:id="@+id/btn_sub"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="10dp"
-                        android:background="@drawable/button_blueg"
-                        android:text="Submit for Approval"
-                        android:textColor="#fff" />
-
                 </LinearLayout>
 
             </LinearLayout>
         </ScrollView>
 
     </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="-10dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+
+        <LinearLayout
+            android:id="@+id/lin_fare_amount"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/C10dp"
+            android:background="#99ECEAEA"
+            android:orientation="horizontal"
+            android:padding="-10dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/grand_total"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/C10dp"
+                android:layout_marginTop="@dimen/C5dp"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:text="Grand Total : "
+                android:textColor="@android:color/black"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btn_sub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/C10dp"
+                android:background="@drawable/button_blueg"
+                android:padding="8dp"
+                android:layout_marginTop="@dimen/C10dp"
+                android:text="Submit for Approval"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                tools:ignore="RtlCompat" />
+
+        </LinearLayout>
+
+
+        <include layout="@layout/back_arrow"></include>
+    </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

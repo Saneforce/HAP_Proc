@@ -21,9 +21,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="Select the Mode"
-            android:paddingLeft="@dimen/C10dp"
-            android:paddingTop="@dimen/C5dp"
-            android:paddingBottom="@dimen/C5dp"
+android:layout_marginLeft="@dimen/C8dp"
             android:textSize="@dimen/C16dp" />
 
 
@@ -47,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/enter_to"
-        android:layout_margin="@dimen/C3dp"
+
         android:orientation="horizontal">
 
         <EditText
@@ -57,7 +55,7 @@
             android:layout_weight="1"
             android:hint="Enter Fare"
             android:inputType="number"
-            android:padding="@dimen/C10dp"
+            android:layout_marginLeft="@dimen/C8dp"
             android:textColorHint="#C0C0C0"
             android:textSize="@dimen/C14dp" />
 
@@ -67,6 +65,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="-8dp"
             android:padding="@dimen/C5dp"
+            android:visibility="gone"
             android:src="@drawable/attach_files" />
 
     </LinearLayout>
