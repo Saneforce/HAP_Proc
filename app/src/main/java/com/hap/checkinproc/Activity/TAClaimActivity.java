@@ -17,7 +17,9 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -56,7 +58,6 @@ import com.hap.checkinproc.Activity.Util.UpdateUi;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
-import com.hap.checkinproc.Activity_Hap.TravelAllowanceForm;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -206,7 +207,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     String strFuelAmount = "";
     View rowView;
     ImageView deleteButton;
-
+    String attCon = "";
     LinearLayout LinearOtherAllowance;
 
     String ModeType = "", StrModeValue = "", dynamicLabel = "";
@@ -231,11 +232,21 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     List<EditText> otherExpenseEdit = new ArrayList<EditText>();
     String editMode = "";
     Double tofuel = 0.0;
+    LinearLayout localTotal, otherTotal;
 
     ImageView taAttach, lcAttach, oeAttach;
     String allowanceAmt = "";
     TextView txtallamt;
 
+    Double daTotal = 0.0, taTotal = 0.0, lcTotal = 0.0, oeTotal = 0.0;
+    Double fAmount = 0.0;
+    TextView grandTotal;
+    Double doubleAmount = 0.0;
+    TextView localText, OeText;
+    Double GrandTotalAllowance = 0.0;
+    double sTotal = 0.0;
+    double sums = 0.0;
+    LinearLayout otherExpenseLayout, linAll, linRemarks, linFareAmount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,7 +273,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         travelTypeMode = findViewById(R.id.txt_type_travel);
         PersonalTextKM = findViewById(R.id.personal_km_text);
 
-        diverAllowanceLinear = findViewById(R.id.linear_da_allowance);
+
         TotalTravelledKm = findViewById(R.id.total_km);
         PersonalKiloMeter = findViewById(R.id.pers_kilo_meter);
         editTextRemarks = findViewById(R.id.edt_rmk);
@@ -274,6 +285,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         linBusMode = findViewById(R.id.linear_bus_mode);
         linBikeMode = findViewById(R.id.linear_bike_mode);
         linMode = findViewById(R.id.linear_mode);
+        localTotal = findViewById(R.id.lin_total_loca);
+        otherTotal = findViewById(R.id.lin_total_other);
 
         txtallamt = findViewById(R.id.txt_mode_amount);
         txtBusFrom = findViewById(R.id.txt_bus_from);
@@ -290,6 +303,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         LinearOtherAllowance = findViewById(R.id.lin_dyn_other_Expense);
         dynamicLabelList = new ArrayList<>();
         OEdynamicList = new ArrayList<>();
+        grandTotal = findViewById(R.id.grand_total);
+        localText = findViewById(R.id.txt_local);
+        OeText = findViewById(R.id.txt_oe);
+        otherExpenseLayout = findViewById(R.id.lin_total_other);
+        linAll = findViewById(R.id.lin_alo_view);
+        linRemarks = findViewById(R.id.lin_remarks);
+        linFareAmount = findViewById(R.id.lin_fare_amount);
 
         strRetriveType = String.valueOf(getIntent().getSerializableExtra("Retrive_Type"));
         if (strRetriveType.equals("Daily Allowance")) {
@@ -306,10 +326,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         LDailyAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent DAintent = new Intent(TAClaimActivity.this, TravelAllowanceForm.class);
-                DAintent.putExtra("Type", "Daily Allowance");
-                DAintent.putExtra("DaList", DA);
-                startActivity(DAintent);
+
             }
         });
 
@@ -322,6 +339,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 View rowView = null;
 
 
+                otherTotal.setVisibility(View.VISIBLE);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -333,10 +351,46 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 for (int c = 0; c < OeSize; c++) {
                     childView = LinearOtherAllowance.getChildAt(c);
-
+                    otherExpenseLayout.setVisibility(View.VISIBLE);
                     oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
                     edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
                     oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
+
+
+                    edtOE.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                            Double sumsTot = 0.0;
+                            for (int k = 0; k < OeSize; k++) {
+                                View cv = LinearOtherAllowance.getChildAt(k);
+                                edtOE = (EditText) (cv.findViewById(R.id.oe_fre_amt));
+                                String strs = edtOE.getText().toString();
+                                if (strs.matches("")) strs = "0";
+
+                                sumsTot = sumsTot + Double.parseDouble(strs);
+
+                            }
+                            Log.d("Local ", String.valueOf(sumsTot));
+                            //      " Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM "
+                            OeText.setText("Total : Rs. " + new DecimalFormat("##0.00").format(sumsTot));
+                            sTotal = GrandTotalAllowance + sumsTot;
+
+                            Log.e("GRAN__DALLOWANCE", GrandTotalAllowance.toString());
+                            grandTotal.setText("Grand Total : Rs. " + new DecimalFormat("##0.00").format(sTotal));
+
+                        }
+                    });
+
                     OtherExpense = (LinearLayout) childView.findViewById(R.id.lin_other_expense_dynamic);
                     Integer finalC = c;
 
@@ -358,6 +412,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 }
 
+
             }
         });
         LLocalConve.setOnClickListener(new View.OnClickListener() {
@@ -377,7 +432,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
 
                 linlocalCon.addView(rowView, layoutParams);
-
+                localText.setVisibility(View.VISIBLE);
 
                 lcSize = linlocalCon.getChildCount();
                 Log.d("PARENT_COUNT", String.valueOf(lcSize));
@@ -385,10 +440,48 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 for (int c = 0; c < lcSize; c++) {
                     childView = linlocalCon.getChildAt(c);
-
+                    localTotal.setVisibility(View.VISIBLE);
                     editTexts = (TextView) (childView.findViewById(R.id.local_enter_mode));
                     editLaFare = (EditText) (childView.findViewById(R.id.edt_la_fare));
                     lcAttach = (ImageView) (childView.findViewById(R.id.la_attach_iamg));
+
+
+                    editLaFare.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                        }
+
+                        @Override
+                        public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+
+                            Double sum = 0.0;
+                            for (int k = 0; k < lcSize; k++) {
+                                View cv = linlocalCon.getChildAt(k);
+                                editLaFare = (EditText) (cv.findViewById(R.id.edt_la_fare));
+                                String str = editLaFare.getText().toString();
+                                if (str.matches("")) str = "0";
+
+                                sum = sum + Double.parseDouble(str);
+
+                            }
+                            Log.d("Local ", String.valueOf(sum));
+                            //      " Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM "
+                            localText.setText("Total : Rs. " + new DecimalFormat("##0.00").format(sum));
+                            sums = GrandTotalAllowance + sum;
+
+
+                            Log.e("GRANDALLOWANCE", GrandTotalAllowance.toString());
+                            grandTotal.setText("Grand Total : Rs. " + new DecimalFormat("##0.00").format(sums));
+
+                        }
+                    });
+
+
                     Dynamicallowance = (LinearLayout) childView.findViewById(R.id.lin_allowance_dynamic);
                     Integer finalC = c;
 
@@ -409,6 +502,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     });
 
                 }
+
+
             }
         });
 
@@ -534,7 +629,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 } else {
                     rowView = inflater.inflate(R.layout.travel_allowance_dynamic_one, null);
                     travelDynamicLoaction.addView(rowView, layoutParams);
-
                     crdDynamicLocation.setVisibility(View.VISIBLE);
                     deleteButton = findViewById(R.id.delete_button);
                     size = travelDynamicLoaction.getChildCount();
@@ -558,13 +652,21 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
 
     public void onLCDelete(View v) {
-        Log.d("PARENT_COUNT", String.valueOf(lcSize));
+        // Log.d("PARENT_COUNT", String.valueOf(lcSize));
+        Log.d("PARENT_COUNT", String.valueOf(linlocalCon.getChildCount()));
         linlocalCon.removeView((View) v.getParent());
+        if (linlocalCon.getChildCount() == 0) {
+            localTotal.setVisibility(View.GONE);
+        }
     }
 
     public void onOEDelete(View v) {
         Log.d("PARENT_COUNT", String.valueOf(lcSize));
         LinearOtherAllowance.removeView((View) v.getParent());
+
+        if (LinearOtherAllowance.getChildCount() == 0) {
+            otherExpenseLayout.setVisibility(View.GONE);
+        }
     }
 
 
@@ -614,36 +716,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    @SuppressLint("ResourceType")
-    public void dynamicViewAllowance(ArrayList<String> mStr) {
-
-        Log.e("ARRAY_SIZE", String.valueOf(mStr.size()));
-        for (int l = 0; l <= mStr.size(); l++) {
-            Log.e("ARRAY_SIZE", mStr.toString());
-            RelativeLayout childRel = new RelativeLayout(getApplicationContext());
-            RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_END);
-            layoutparams_3.setMargins(0, 10, 0, 0);
-            TextView edt = new TextView(getApplicationContext());
-            edt.setLayoutParams(layoutparams_3);
-            edt.setId(12345);
-            edt.setTextSize(13);
-            edt.setTextColor(R.color.grey_500);
-            edt.setBackgroundResource(R.drawable.textbox_bg);
-            edt.setPadding(9, 9, 9, 9);
-            childRel.addView(edt);
-
-        }
-    }
-
-
     /*Choosing Dynamic date*/
     public void dynamicDate() {
 
         JSONObject jj = new JSONObject();
         try {
-            jj.put("sfCode", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
-            jj.put("divisionCode", mShared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
+            jj.put("sfCode", "MGR5120");
+            jj.put("divisionCode", "3");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -670,7 +749,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
-
 
     /*Display Mode of travel View based on the choosed Date*/
     public void displayTravelMode(String ChoosedDate) {
@@ -712,17 +790,17 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     strFuelAmount = String.valueOf(jsonObject.get("FuelAmt"));
                     allowanceAmt = String.valueOf(jsonObject.get("Allowance_Value"));
 
-                    Double fAmount = Double.valueOf(strFuelAmount);
+                    fAmount = Double.valueOf(strFuelAmount);
                     fuelAmount.setText(" Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM ");
                     txtTaClaim.setText(StrDaName);
                     txtDailyAllowance.setText(StrDailyAllowance);
 
                     if (StrDailyAllowance.equals("Out Station")) {
-
+                        doubleAmount = 0.0;
                         txtallamt.setText("");
                     } else {
                         allowanceAmt = allowanceAmt.replaceAll("^[\"']+|[\"']+$", "");
-                        Double doubleAmount = Double.valueOf(allowanceAmt);
+                        doubleAmount = Double.valueOf(allowanceAmt);
                         txtallamt.setText(" Rs. " + new DecimalFormat("##0.00").format(doubleAmount));
                     }
 
@@ -836,6 +914,20 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     }
 
                 }
+
+
+                Double daTotal = 0.0, taTotal = 0.0, lcTotal = 0.0, oeTotal = 0.0;
+
+
+                daTotal = doubleAmount;
+                taTotal = tofuel;
+
+                GrandTotalAllowance = daTotal + taTotal;
+                Log.e("GRAND_TOTAL_ALLOWANCE", String.valueOf(GrandTotalAllowance));
+                Log.e("GRAND_TOTAL_ALLOWANCE", String.valueOf(daTotal));
+                Log.e("GRAND_TOTAL_ALLOWANCE", String.valueOf(taTotal));
+                grandTotal.setText("Grand Total : Rs." + GrandTotalAllowance.toString());
+
             }
 
             @Override
@@ -1508,7 +1600,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 maxAllowonce = json_oo.getString("Max_Allowance");
 
 
-                                Log.d("SHORT_NAME", shortName);
+                                Log.d("SHORT_NAME", Exp_Name + "Attachment" + attachment);
                                 listValue.add(shortName);
 
                                 HashSet<String> listToSet = new HashSet<String>(listValue);
@@ -1563,7 +1655,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             linAddAllowance.setVisibility(View.VISIBLE);
             linlocalCon.removeAllViews();
             LinearOtherAllowance.removeAllViews();
-
+            localText.setText("");
+            localTotal.setVisibility(View.GONE);
+            linAll.setVisibility(View.VISIBLE);
+            linRemarks.setVisibility(View.VISIBLE);
+            linFareAmount.setVisibility(View.VISIBLE);
 
         } else if (type == 11) {
             modeTextView.setText(myDataset.get(position).getName());
@@ -1591,6 +1687,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             View view = linlocalCon.getChildAt(editTextPositionss);
             editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
             //  enterMode = view.findViewById(R.id.enter_mode);
+            lcAttach = (ImageView) (view.findViewById(R.id.la_attach_iamg));
+            if (myDataset.get(position).getAddress().equals("1")) {
+                lcAttach.setVisibility(View.VISIBLE);
+            } else {
+                lcAttach.setVisibility(View.GONE);
+            }
+
             editTexts.setText(myDataset.get(position).getName());
             StrModeValue = myDataset.get(position).getName();
             Log.e("StrMode", StrModeValue);
@@ -1606,6 +1709,16 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             editTextPositionss = myDataset.get(position).getPho();
             View view = LinearOtherAllowance.getChildAt(editTextPositionss);
             oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
+            oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
+
+            Log.e("Attachment", myDataset.get(position).getAddress());
+            if (myDataset.get(position).getAddress().equals("1")) {
+                oeAttach.setVisibility(View.VISIBLE);
+            } else {
+                oeAttach.setVisibility(View.GONE);
+            }
+
+
             OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
             oeEditext.setText(myDataset.get(position).getName());
             StrModeValue = myDataset.get(position).getName();
@@ -1741,7 +1854,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     String name = modelOfTravel.get(i).getName();
                     String modeId = String.valueOf(modelOfTravel.get(i).getId());
                     String driverMode = String.valueOf(modelOfTravel.get(i).getDriverNeed());
-
+//String attachMode = String.valueOf(modelOfTravel.get(i).get)
 
                     Model_Pojo = new Common_Model(name, id, modeId, "", countPosition);
                     Log.e("LeaveType_Request", id);
@@ -1849,14 +1962,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                         RelativeLayout childRel = new RelativeLayout(getApplicationContext());
                                         RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                                         layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_START);
-                                        layoutparams_3.setMargins(0, 10, 0, 0);
+                                        layoutparams_3.setMargins(20, -10, 0, 0);
                                         edt = new EditText(getApplicationContext());
                                         edt.setLayoutParams(layoutparams_3);
-                                      /*  for (int da = 0; da < dynamicLabelList.size(); da++) {
-                                            edt.setHint(dynamicLabelList.get(da));
-                                            Log.e("DYNAMICE_LABEL_LIST", dynamicLabelList.get(da).toString());
-                                        }*/
-
                                         edt.setHint(dynamicLabel);
                                         edt.setId(12345);
                                         edt.setTextSize(13);
@@ -1957,7 +2065,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                         RelativeLayout childRel = new RelativeLayout(getApplicationContext());
                                         RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                                         layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_END);
-                                        layoutparams_3.setMargins(0, 10, 0, 0);
+                                        layoutparams_3.setMargins(20, 10, 0, 0);
                                         edt = new EditText(getApplicationContext());
                                         edt.setLayoutParams(layoutparams_3);
                                         for (int da = 0; da < OEdynamicList.size(); da++) {
