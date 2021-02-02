@@ -10,17 +10,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/enter_to"
-        android:layout_weight="2"
         android:layout_margin="@dimen/C3dp"
+        android:layout_weight="2"
         android:orientation="horizontal">
 
         <TextView
             android:id="@+id/enter_mode"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:hint="Select the Mode"
             android:paddingLeft="@dimen/C10dp"
-            android:layout_weight="1"
             android:paddingTop="@dimen/C5dp"
             android:paddingBottom="@dimen/C5dp"
             android:textSize="@dimen/C16dp" />
@@ -85,15 +85,14 @@
     </LinearLayout>
 
 
-
     <ImageView
         android:id="@+id/delete_button"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_gravity="right"
-        android:gravity="right"
         android:layout_margin="@dimen/C8dp"
+        android:gravity="right"
         android:onClick="onTADelete"
         android:src="@drawable/delete_cart" />
 
