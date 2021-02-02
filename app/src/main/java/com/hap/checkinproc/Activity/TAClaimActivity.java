@@ -724,8 +724,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
         JSONObject jj = new JSONObject();
         try {
-            jj.put("sfCode", "MGR5120");
-            jj.put("divisionCode", "3");
+            jj.put("sfCode", SF_code);
+            jj.put("divisionCode", div);
         } catch (JSONException e) {
             e.printStackTrace();
         }
