@@ -158,23 +158,31 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         StActivity.setOnClickListener(this);
         btnCheckout.setOnClickListener(this);
         gateIn_gateOut.setOnClickListener(this);
+    if(getIntent().getExtras()!=null){
+       Bundle params = getIntent().getExtras();
+      viewMode = params.getString("Mode");
+     if (viewMode.equalsIgnoreCase("CIN") || viewMode.equalsIgnoreCase("extended")) {
+        cardview3.setVisibility(View.VISIBLE);
+        cardview4.setVisibility(View.VISIBLE);
+        //cardView5.setVisibility(View.VISIBLE);
+        StActivity.setVisibility(View.VISIBLE);
+        btnCheckout.setVisibility(View.VISIBLE);
+    } else {
+        cardview3.setVisibility(View.GONE);
+        cardview4.setVisibility(View.GONE);
+        cardView5.setVisibility(View.GONE);
+        StActivity.setVisibility(View.GONE);
+        btnCheckout.setVisibility(View.GONE);
+    }
+    }else {
+        cardview3.setVisibility(View.GONE);
+        cardview4.setVisibility(View.GONE);
+        cardView5.setVisibility(View.GONE);
+        StActivity.setVisibility(View.GONE);
+        btnCheckout.setVisibility(View.GONE);
+    }
 
-        Bundle params = getIntent().getExtras();
-        viewMode = params.getString("Mode");
 
-        if (viewMode.equalsIgnoreCase("CIN") || viewMode.equalsIgnoreCase("extended")) {
-            cardview3.setVisibility(View.VISIBLE);
-            cardview4.setVisibility(View.VISIBLE);
-            //cardView5.setVisibility(View.VISIBLE);
-            StActivity.setVisibility(View.VISIBLE);
-            btnCheckout.setVisibility(View.VISIBLE);
-        } else {
-            cardview3.setVisibility(View.GONE);
-            cardview4.setVisibility(View.GONE);
-            cardView5.setVisibility(View.GONE);
-            StActivity.setVisibility(View.GONE);
-            btnCheckout.setVisibility(View.GONE);
-        }
         getNotify();
         getDyReports();
         getMnthReports(0);

@@ -3,13 +3,19 @@ package com.hap.checkinproc.Activity;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -19,21 +25,35 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
+import com.bumptech.glide.Glide;
+import com.hap.checkinproc.Activity.Util.ImageFilePath;
 import com.hap.checkinproc.Activity_Hap.AllowancCapture;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Activity_Hap.ImageCapture;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+
+import id.zelory.compressor.Compressor;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -58,7 +78,12 @@ public class AllowanceActivityTwo extends AppCompatActivity {
     public static final String UserInfo = "MyPrefs";
     Shared_Common_Pref shared_common_pref;
     Integer personalKM = 0;
-
+    ApiInterface apiInterface;
+    Uri outputFileUri;
+    String eventListStr;
+    int pos = -1;
+    String Photo_Name="";
+    ArrayList<String> picPath = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,19 +100,20 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         submitAllowance = findViewById(R.id.submit_allowance);
         PersonalKmEdit = findViewById(R.id.personal_ended_km);
         shared_common_pref = new Shared_Common_Pref(this);
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
         getToolbar();
-
-        if (sharedpreferences.contains("SharedModeTypeVale")) {
+        callApi();
+        /*if (sharedpreferences.contains("SharedModeTypeVale")) {
             ModeOfTravel = sharedpreferences.getString("SharedModeTypeVale", "");
             Log.e("Privacypolicy", "ModeOfTravel" + ModeOfTravel);
             TextModeTravel.setText(ModeOfTravel);
-        }
+        }*/
 
         if (sharedpreferences.contains("SharedImage")) {
             StartedImage = sharedpreferences.getString("SharedImage", "");
             Log.e("Privacypolicy", "Checking" + StartedImage);
             if (StartedImage != null && !StartedImage.isEmpty() && !StartedImage.equals("null")) {
-                StartedKmImage.setImageURI(Uri.parse(StartedImage));
+             //   StartedKmImage.setImageURI(Uri.parse(StartedImage));
 
             }
 
@@ -95,12 +121,12 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         if (sharedpreferences.contains("SharedImages")) {
             EndedImage = sharedpreferences.getString("SharedImages", "");
             Log.e("Privacypolicy", "Checking" + EndedImage);
-            EndedKmImage.setImageURI(Uri.parse(EndedImage));
+           // EndedKmImage.setImageURI(Uri.parse(EndedImage));
         }
         if (sharedpreferences.contains("StartedKM")) {
             StartedKm = sharedpreferences.getString("StartedKM", "");
             Log.e("Privacypolicy", "STARTRD      " + StartedKm);
-            TextStartedKm.setText(StartedKm);
+           // TextStartedKm.setText(StartedKm);
         }
 
 
@@ -121,7 +147,13 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (EndedEditText.getText().toString() != null && !EndedEditText.getText().toString().isEmpty() && !EndedEditText.getText().toString().equals("null")) {
-                    stKM = Integer.valueOf(StartedKm);
+
+
+                    try{
+                        stKM = Integer.valueOf(StartedKm);
+                    } catch(NumberFormatException ex){ // handle your exception
+
+                    }
                     if (!EndedEditText.getText().toString().equals("")) {
                         endKm = Integer.valueOf(String.valueOf(EndedEditText.getText()));
                     }
@@ -144,6 +176,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         takeEndedPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+/*
 
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putString("Closing", EndedEditText.getText().toString());
@@ -152,7 +185,15 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                 intent.putExtra("allowance", "Two");
                 startActivity(intent);
                 finish();
-
+*/
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                // Uri outputFileUri = Uri.fromFile(new File(getExternalCacheDir().getPath(), "pickImageResult.jpeg"));
+                outputFileUri = FileProvider.getUriForFile(AllowanceActivityTwo.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), "pickImageResult" + System.currentTimeMillis() + ".jpeg"));
+                Log.v("priniting_uri", outputFileUri.toString() + " output " + outputFileUri.getPath() + " raw_msg " + getExternalCacheDir().getPath());
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivityForResult(intent, 2);
+                eventListStr = String.valueOf(outputFileUri);
             }
         });
 
@@ -162,12 +203,20 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                if (EndedEditText.getText().toString().matches("") || EndedImage.matches("")) {
+                if (EndedEditText.getText().toString().matches("")) {
                     Toast.makeText(AllowanceActivityTwo.this, "Enter details", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    stKM = Integer.valueOf(StartedKm);
+
+                    try{
+                        stKM = Integer.valueOf(StartedKm);
+                    } catch(NumberFormatException ex){ // handle your exception
+
+                    }
                     endKm = Integer.valueOf(String.valueOf(EndedEditText.getText().toString()));
+
+                    Log.e("START_KM", String.valueOf(stKM));
+                    Log.e("End_KM", String.valueOf(endKm));
                     if (stKM < endKm) {
                         submitData();
                     } else {
@@ -200,7 +249,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             jj.put("mod", "11");
             jj.put("sf", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
             jj.put("div", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
-            jj.put("url", "url");
+            jj.put("url", Photo_Name);
             jj.put("from", "");
             jj.put("to", "");
             jj.put("fare", "");
@@ -317,8 +366,188 @@ public class AllowanceActivityTwo extends AppCompatActivity {
     }
 
 
+    public void callApi() {
 
 
+        try {
+            JSONObject jj = new JSONObject();
+            jj.put("div", Shared_Common_Pref.Div_Code);
+            jj.put("sf", Shared_Common_Pref.Sf_Code);
+            jj.put("rSF", Shared_Common_Pref.Sf_Code);
+            jj.put("State_Code", Shared_Common_Pref.StateCode);
+            jj.put("Activity_Date", Common_Class.GetDate());
+            Log.v("json_obj_ta", jj.toString());
+            Call<ResponseBody> Callto = apiInterface.getStartKmDetails(jj.toString());
+            Callto.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    try {
+                        if (response.isSuccessful()) {
+
+                            Log.v("print_upload_file_true", "ggg" + response);
+                            String jsonData = null;
+                            jsonData = response.body().string();
+                            Log.v("response_data", jsonData);
+                            JSONObject js = new JSONObject(jsonData);
+                            JSONArray jsnArValue = js.getJSONArray("StartDetails");
+                            for (int i = 0; i < jsnArValue.length(); i++) {
+                                JSONObject json_oo = jsnArValue.getJSONObject(i);
+                                TextModeTravel.setText(json_oo.getString("MOT_Name"));
+                                TextStartedKm.setText(json_oo.getString("Start_Km"));
+                                Glide.with(getApplicationContext())
+                                        .load(json_oo.getString("start_Photo"))
+                                        .into(StartedKmImage);
+                            }
+
+                        }
+                    } catch (Exception e) {
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+
+        } catch (Exception e) {
+        }
+    }
+    public void getMulipart(String path, int x) {
+        MultipartBody.Part imgg = convertimg("file", path);
+        HashMap<String, RequestBody> values = field("MR0417");
+        CallApiImage(values, imgg, x);
+    }
+
+    public HashMap<String, RequestBody> field(String val) {
+        HashMap<String, RequestBody> xx = new HashMap<String, RequestBody>();
+        xx.put("data", createFromString(val));
+
+        return xx;
+
+    }
+    private RequestBody createFromString(String txt) {
+        return RequestBody.create(MultipartBody.FORM, txt);
+    }
+    public MultipartBody.Part convertimg(String tag, String path) {
+        MultipartBody.Part yy = null;
+        Log.v("full_profile", path);
+        try {
+            if (!TextUtils.isEmpty(path)) {
+
+                File file = new File(path);
+                if (path.contains(".png") || path.contains(".jpg") || path.contains(".jpeg"))
+                    file = new Compressor(getApplicationContext()).compressToFile(new File(path));
+                else
+                    file = new File(path);
+                RequestBody requestBody = RequestBody.create(MultipartBody.FORM, file);
+                yy = MultipartBody.Part.createFormData(tag, file.getName(), requestBody);
+            }
+        } catch (Exception e) {
+        }
+        Log.v("full_profile", yy + "");
+        return yy;
+    }
+
+    public void CallApiImage(HashMap<String, RequestBody> values, MultipartBody.Part imgg, final int x) {
+        Call<ResponseBody> Callto;
+
+        Callto = apiInterface.uploadkmimg(values, imgg);
+
+        Callto.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.v("print_upload_file", "ggg" + response.isSuccessful() + response.body());
+
+                try {
+                    if (response.isSuccessful()) {
+
+
+                        Log.v("print_upload_file_true", "ggg" + response);
+                        JSONObject jb = null;
+                        String jsonData = null;
+                        jsonData = response.body().string();
+                        Log.v("request_data_upload", String.valueOf(jsonData));
+                        JSONObject js = new JSONObject(jsonData);
+                        if (js.getString("success").equalsIgnoreCase("true")) {
+                            Photo_Name=js.getString("url");
+                            Log.v("printing_dynamic_cou", js.getString("url"));
+
+
+                        }
+
+                    }
+
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.v("print_failure", "ggg" + t.getMessage());
+            }
+        });
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 10) {
+            //TODO: action
+
+            ClipData mClipData = data.getClipData();
+            int pickedImageCount;
+            String filepathing = "";
+            if (data.getData() == null) {
+                Log.v("onactivity_result", data.getData() + " ");
+                for (pickedImageCount = 0; pickedImageCount < mClipData.getItemCount();
+                     pickedImageCount++) {
+                    Log.v("picked_image_value", mClipData.getItemAt(pickedImageCount).getUri() + "");
+                    ImageFilePath filepath = new ImageFilePath();
+                    String fullPath = filepath.getPath(AllowanceActivityTwo.this, mClipData.getItemAt(pickedImageCount).getUri());
+                    Log.v("picked_fullPath", fullPath + "");
+                    if (pos == -1)
+                        picPath.add(fullPath);
+                    else {
+
+                    }
+                }
+            } else {
+                Log.v("data_pic_multiple", "is in empty");
+                ImageFilePath filepath = new ImageFilePath();
+                String fullPath = filepath.getPath(AllowanceActivityTwo.this, data.getData());
+                Log.v("data_pic_multiple11", fullPath);
+                if (pos == -1)
+                    picPath.add(fullPath);
+                else {
+
+
+                }
+            }
+
+        } else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
+            String finalPath = "/storage/emulated/0";
+            String filePath = outputFileUri.getPath();
+            filePath = filePath.substring(1);
+            filePath = finalPath + filePath.substring(filePath.indexOf("/"));
+            Log.v("printing__file_path", filePath);
+            Log.v("printing__Position", String.valueOf(pos));
+
+            EndedKmImage.setImageURI(Uri.fromFile(new File(filePath)));
+         /*   Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+            EndedKmImage.setImageBitmap(bitmap);*/
+            if (pos == -1) {
+
+                // picPath.add(filePath);
+                Log.v("printing__eventListStr",filePath);
+                getMulipart(filePath, 0);
+            }
+
+            else {
+
+            }
+            //filePathing = filePathing + filePath + ",";
+        }
+    }
 
 
 }

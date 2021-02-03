@@ -222,10 +222,16 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=upload/img")
     Call<ResponseBody> uploadimg(@PartMap() HashMap<String, RequestBody> values, @Part MultipartBody.Part file);
 
+    @Multipart
+    @POST("db_new_activity.php?axn=upload/start")
+    Call<ResponseBody> uploadkmimg(@PartMap() HashMap<String, RequestBody> values, @Part MultipartBody.Part file);
+
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/daexp")
     Call<ResponseBody> getDailyAllowance(@Field("data") String userData);
-
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=get/startkmdetails")
+    Call<ResponseBody> getStartKmDetails(@Field("data") String userData);
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=save/daexp")
     Call<ResponseBody> saveDailyAllowance(@Field("data") String userData);

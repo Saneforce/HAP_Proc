@@ -42,6 +42,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -260,8 +261,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     LinearLayout linLocalSpinner, linOtherSpinner;
     Dialog dialog;
     SharedPreferences CheckInDetails;
-
+    String eventListStr;
     LinearLayout LinearMap;
+ImageView endkmimage,startkmimage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -287,6 +290,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         TxtClosingKm = findViewById(R.id.txt_ended_km);
         travelTypeMode = findViewById(R.id.txt_type_travel);
         PersonalTextKM = findViewById(R.id.personal_km_text);
+        endkmimage = findViewById(R.id.endkmimage);
+        startkmimage = findViewById(R.id.startkmimage);
 
 
         TotalTravelledKm = findViewById(R.id.total_km);
@@ -567,6 +572,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onClick(View view) {
                 for (int i = 0; i < picPath.size(); i++) {
+                    Log.e("UPloadimageThiru", String.valueOf(picPath.size()));
                     getMulipart(picPath.get(i), -1);
                 }
                 for (int i = 0; i < array.size(); i++) {
@@ -871,6 +877,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     StrToEnd = StrToEnd.replaceAll("^[\"']+|[\"']+$", "");
                     strFuelAmount = String.valueOf(jsonObject.get("FuelAmt"));
                     allowanceAmt = String.valueOf(jsonObject.get("Allowance_Value"));
+                    String start_Image= String.valueOf(jsonObject.get("start_Photo"));
+                    String End_Imge=String.valueOf(jsonObject.get("End_photo"));
+                    Glide.with(getApplicationContext())
+                            .load(start_Image.replaceAll("^[\"']+|[\"']+$", ""))
+                            .into(startkmimage);
+                    Glide.with(getApplicationContext())
+                            .load(End_Imge.replaceAll("^[\"']+|[\"']+$", ""))
+                            .into(endkmimage);
 
                     fAmount = Double.valueOf(strFuelAmount);
                     fuelAmount.setText(" Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM ");
@@ -1056,8 +1070,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             filePath = filePath.substring(1);
             filePath = finalPath + filePath.substring(filePath.indexOf("/"));
             Log.v("printing__file_path", filePath);
-            if (pos == -1)
-                picPath.add(filePath);
+            Log.v("printing__Position", String.valueOf(pos));
+            if (pos == -1) {
+                // picPath.add(filePath);
+                Log.v("printing__eventListStr",filePath);
+                getMulipart(filePath, 0);
+            }
+
             else {
                 SelectionModel m = array.get(pos);
                 String filepathing = "";
@@ -1632,6 +1651,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivityForResult(intent, 2);
+        eventListStr = String.valueOf(outputFileUri);
     }
 
     public void callApi(String date, String OS) {
