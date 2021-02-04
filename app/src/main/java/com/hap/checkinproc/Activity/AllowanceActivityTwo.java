@@ -8,8 +8,6 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -49,7 +47,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 import id.zelory.compressor.Compressor;
 import okhttp3.MultipartBody;
@@ -82,8 +79,9 @@ public class AllowanceActivityTwo extends AppCompatActivity {
     Uri outputFileUri;
     String eventListStr;
     int pos = -1;
-    String Photo_Name="";
+    String Photo_Name = "",imageConvert="";
     ArrayList<String> picPath = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -113,7 +111,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             StartedImage = sharedpreferences.getString("SharedImage", "");
             Log.e("Privacypolicy", "Checking" + StartedImage);
             if (StartedImage != null && !StartedImage.isEmpty() && !StartedImage.equals("null")) {
-             //   StartedKmImage.setImageURI(Uri.parse(StartedImage));
+                //   StartedKmImage.setImageURI(Uri.parse(StartedImage));
 
             }
 
@@ -121,12 +119,18 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         if (sharedpreferences.contains("SharedImages")) {
             EndedImage = sharedpreferences.getString("SharedImages", "");
             Log.e("Privacypolicy", "Checking" + EndedImage);
-           // EndedKmImage.setImageURI(Uri.parse(EndedImage));
+             EndedKmImage.setImageURI(Uri.parse(EndedImage));
+
+
+            imageConvert = EndedImage.substring(7);
+            Log.e("COnvert", EndedImage.substring(7));
+            Log.e("COnvert", imageConvert);
+            getMulipart(imageConvert, 0);
         }
         if (sharedpreferences.contains("StartedKM")) {
             StartedKm = sharedpreferences.getString("StartedKM", "");
             Log.e("Privacypolicy", "STARTRD      " + StartedKm);
-           // TextStartedKm.setText(StartedKm);
+            // TextStartedKm.setText(StartedKm);
         }
 
 
@@ -149,9 +153,9 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                 if (EndedEditText.getText().toString() != null && !EndedEditText.getText().toString().isEmpty() && !EndedEditText.getText().toString().equals("null")) {
 
 
-                    try{
+                    try {
                         stKM = Integer.valueOf(StartedKm);
-                    } catch(NumberFormatException ex){ // handle your exception
+                    } catch (NumberFormatException ex) { // handle your exception
 
                     }
                     if (!EndedEditText.getText().toString().equals("")) {
@@ -176,7 +180,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         takeEndedPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-/*
 
                 SharedPreferences.Editor editor = sharedpreferences.edit();
                 editor.putString("Closing", EndedEditText.getText().toString());
@@ -185,15 +188,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                 intent.putExtra("allowance", "Two");
                 startActivity(intent);
                 finish();
-*/
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                // Uri outputFileUri = Uri.fromFile(new File(getExternalCacheDir().getPath(), "pickImageResult.jpeg"));
-                outputFileUri = FileProvider.getUriForFile(AllowanceActivityTwo.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), "pickImageResult" + System.currentTimeMillis() + ".jpeg"));
-                Log.v("priniting_uri", outputFileUri.toString() + " output " + outputFileUri.getPath() + " raw_msg " + getExternalCacheDir().getPath());
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivityForResult(intent, 2);
-                eventListStr = String.valueOf(outputFileUri);
+
             }
         });
 
@@ -208,9 +203,9 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                     return;
                 } else {
 
-                    try{
-                        stKM = Integer.valueOf(StartedKm);
-                    } catch(NumberFormatException ex){ // handle your exception
+                    try {
+                        stKM = Integer.valueOf(TextStartedKm.getText().toString());
+                    } catch (NumberFormatException ex) { // handle your exception
 
                     }
                     endKm = Integer.valueOf(String.valueOf(EndedEditText.getText().toString()));
@@ -287,8 +282,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                                 editor.remove("SharedFare");
                                 editor.remove("SharedImages");
                                 editor.remove("Closing");
-                                editor.commit();
-                                Intent takePhoto = new Intent(AllowanceActivityTwo.this, ImageCapture.class);
+                                  Intent takePhoto = new Intent(AllowanceActivityTwo.this, ImageCapture.class);
                                 takePhoto.putExtra("Mode", "COUT");
                                 startActivity(takePhoto);
 
@@ -397,6 +391,8 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                                 Glide.with(getApplicationContext())
                                         .load(json_oo.getString("start_Photo"))
                                         .into(StartedKmImage);
+
+                                Log.e("Text_Strat", TextStartedKm.getText().toString());
                             }
 
                         }
@@ -413,9 +409,10 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         } catch (Exception e) {
         }
     }
+
     public void getMulipart(String path, int x) {
         MultipartBody.Part imgg = convertimg("file", path);
-        HashMap<String, RequestBody> values = field("MR0417");
+        HashMap<String, RequestBody> values = field(UserDetails.getString("Sfcode", ""));
         CallApiImage(values, imgg, x);
     }
 
@@ -426,9 +423,11 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         return xx;
 
     }
+
     private RequestBody createFromString(String txt) {
         return RequestBody.create(MultipartBody.FORM, txt);
     }
+
     public MultipartBody.Part convertimg(String tag, String path) {
         MultipartBody.Part yy = null;
         Log.v("full_profile", path);
@@ -470,7 +469,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                         Log.v("request_data_upload", String.valueOf(jsonData));
                         JSONObject js = new JSONObject(jsonData);
                         if (js.getString("success").equalsIgnoreCase("true")) {
-                            Photo_Name=js.getString("url");
+                            Photo_Name = js.getString("url");
                             Log.v("printing_dynamic_cou", js.getString("url"));
 
 
@@ -488,6 +487,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -538,11 +538,12 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             if (pos == -1) {
 
                 // picPath.add(filePath);
-                Log.v("printing__eventListStr",filePath);
-                getMulipart(filePath, 0);
-            }
+                Log.v("printing__eventListStr", filePath);
 
-            else {
+
+
+                getMulipart(filePath, 0);
+            } else {
 
             }
             //filePathing = filePathing + filePath + ",";

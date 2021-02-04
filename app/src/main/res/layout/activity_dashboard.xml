@@ -100,11 +100,13 @@
                 android:layout_height="wrap_content"
                 app:flexDirection="row"
                 app:showDivider="middle"
+                app:alignItems="stretch"
+                app:alignContent="stretch"
                 app:flexWrap="wrap" >
 
                 <LinearLayout
                     android:id="@+id/lin_request_status"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@drawable/button_amber"
                     android:padding="@dimen/C10dp"
@@ -123,7 +125,7 @@
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/lin_report"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@drawable/button_blueg"
                     android:padding="@dimen/C10dp"
@@ -140,7 +142,7 @@
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/lin_onduty"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_blue"
                     android:padding="@dimen/C10dp"
@@ -159,7 +161,7 @@
 
                 <RelativeLayout
                     android:id="@+id/lin_approvals"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_dgreen"
                     android:visibility="gone"
@@ -180,7 +182,7 @@
 
                 <LinearLayout
                     android:id="@+id/lin_ta_claim"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@drawable/button_purple"
                     android:padding="@dimen/C10dp"
@@ -199,7 +201,7 @@
 
                 <LinearLayout
                     android:id="@+id/lin_extenden_shift"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@drawable/button_orange"
                     android:padding="@dimen/C10dp"
@@ -216,7 +218,7 @@
                 </LinearLayout>
                 <LinearLayout
                     android:id="@+id/lin_tour_plan"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/C5dp"
                     android:background="@drawable/g_sign"

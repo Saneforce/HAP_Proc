@@ -92,8 +92,8 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     Button btn_submit, btn_ta;
     String filepath_final = "";
     String mode, url, hq_code, typ_code;
-    EditText edt_km, edt_rmk, edt_frm, edt_to, edt_fare;
-    TextView txt_mode, txt_hq, txt_typ;
+
+    TextView  txt_hq, txt_typ;
     Common_Class common_class;
     boolean updateMode = false;
     SharedPreferences UserDetails;
@@ -108,7 +108,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
 
     CardView ModeTravel, BusCardTo, cardHapLoaction;
     LinearLayout BikeMode, BusMode, ReasonPhoto, ProofImage;
-    EditText StartKm, BusFrom, EditFare, EditRemarks;
+    EditText StartKm, onDutyFrom, EditRemarks;
     ImageView attachedImage;
     Button SubmitValue;
     TextView TextMode, TextToAddress;
@@ -131,12 +131,17 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     String startEnd = "", ModeTravelType = "";
     SharedPreferences CheckInDetails;
     String modeId = "";
-
     /*Shared Prefernce*/
-
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
     public static final String visitPurpose = "vstPur";
+    public static final String modeTravelId = "ShareMode";
+    public static final String modeTypeVale = "SharedModeTypeVale";
+    public static final String modeFromKm = "SharedFromKm";
+    public static final String modeToKm = "SharedToKm";
+    public static final String StartedKm = "StartedKM";
+
+    String busTo = " ";
 
     String strHapLocation = "", strOtherLocation = "", strVisitPurpose = "";
 
@@ -146,6 +151,18 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on__duty_);
+
+        shared_common_pref = new Shared_Common_Pref(this);
+        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+
+        CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+        common_class = new Common_Class(this);
+
+
+
+        SF_code = UserDetails.getString("Sfcode", "");
+        div = UserDetails.getString("Divcode", "");
 
 
         if (!checkPermission()) {
@@ -217,6 +234,27 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         exitclose = findViewById(R.id.exitclose);
         ModeOfTravel = findViewById(R.id.mode_of_travel);
         cardHapLoaction = findViewById(R.id.card_hap_loaction);
+
+        TextMode = findViewById(R.id.txt_mode);
+        TextToAddress = findViewById(R.id.on_duty_to);
+        onDutyFrom = findViewById(R.id.on_duty_from);
+        StartKm = findViewById(R.id.on_duty_start);
+
+
+        ModeTravel = findViewById(R.id.card_travel_mode);
+        BikeMode = findViewById(R.id.bike_mode);
+        BusMode = findViewById(R.id.bus_mode);
+        ReasonPhoto = findViewById(R.id.reason_photo);
+
+
+        BusCardTo = findViewById(R.id.card_bus_mode);
+
+        ProofImage = findViewById(R.id.proof_pic);
+        attachedImage = findViewById(R.id.capture_img);
+        EditRemarks = findViewById(R.id.edt_rmk);
+        SubmitValue = findViewById(R.id.btn_submit);
+
+
         cardHapLoaction.setOnClickListener(this);
         otherlocationbutton.setOnClickListener(this);
         haplocationbutton.setOnClickListener(this);
@@ -255,20 +293,13 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
 
         /*Allowance Activity*/
 
-        common_class = new Common_Class(this);
+
         capture_img = findViewById(R.id.capture_img);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         btn_submit = findViewById(R.id.btn_submit);
-        edt_km = findViewById(R.id.edt_km);
-        edt_rmk = findViewById(R.id.edt_rmk);
-        edt_frm = findViewById(R.id.edt_frm);
 
-        edt_fare = findViewById(R.id.edt_fare);
-        txt_mode = findViewById(R.id.txt_mode);
-        txt_hq = findViewById(R.id.txt_hq);
-        UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        SF_code = UserDetails.getString("Sfcode", "");
-        div = UserDetails.getString("Divcode", "");
+
+
 
         mShared_common_pref = new Shared_Common_Pref(this);
 
@@ -277,30 +308,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
 
 
     public void onDutycreate() {
-        shared_common_pref = new Shared_Common_Pref(this);
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-
-        gson = new Gson();
-        CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
-        UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
-
-        common_class = new Common_Class(this);
-        ModeTravel = findViewById(R.id.card_travel_mode);
-        BikeMode = findViewById(R.id.bike_mode);
-        BusMode = findViewById(R.id.bus_mode);
-        ReasonPhoto = findViewById(R.id.reason_photo);
-        StartKm = findViewById(R.id.edt_km);
-        BusFrom = findViewById(R.id.edt_frm);
-        BusCardTo = findViewById(R.id.card_bus_mode);
-        EditFare = findViewById(R.id.edt_fare);
-        ProofImage = findViewById(R.id.proof_pic);
-        attachedImage = findViewById(R.id.capture_img);
-        EditRemarks = findViewById(R.id.edt_rmk);
-        SubmitValue = findViewById(R.id.btn_submit);
-        TextMode = findViewById(R.id.txt_mode);
-        TextToAddress = findViewById(R.id.edt_to);
-
-
         BusToValue();
 
         ModeTravel.setOnClickListener(new View.OnClickListener() {
@@ -326,116 +333,53 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
 
+                SharedPreferences.Editor ed = sharedpreferences.edit();
+                ed.putString(modeTravelId, startEnd);
+                ed.putString(modeTypeVale, busTo);
+                ed.putString(modeFromKm, onDutyFrom.getText().toString());
+                ed.putString(modeToKm, TextToAddress.getText().toString());
+                ed.putString(StartedKm, StartKm.getText().toString());
+                ed.commit();
+
+
                 Intent intent = new Intent(On_Duty_Activity.this, AllowancCapture.class);
                 intent.putExtra("allowance", "three");
-                intent.putExtra("Mode", TextMode.getText().toString());
-                intent.putExtra("Started", StartKm.getText().toString());
-                intent.putExtra("FromKm", BusFrom.getText().toString());
-                intent.putExtra("ToKm", TextToAddress.getText().toString());
-                intent.putExtra("Fare", EditFare.getText().toString());
                 startActivity(intent);
-                finish();
 
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putString(visitPurpose, purposeofvisitedittext.getText().toString());
-                editor.putString(otherLocation, ondutyedittext.getText().toString());
-                editor.commit();
+
             }
         });
 
-        if (sharedpreferences.contains(hapLocation)) {
-            strHapLocation = sharedpreferences.getString(hapLocation, "");
-            selecthaplocationss.setText(strHapLocation);
-            if (!strHapLocation.matches("")) {
-                flag = 0;
-                ondutyedittext.setText("");
-                purposeofvisitedittext.setText("");
-                haplocationtext.setVisibility(View.VISIBLE);
-                purposeofvisittext.setVisibility(View.VISIBLE);
-                submitbutton.setVisibility(View.VISIBLE);
-                closebutton.setVisibility(View.VISIBLE);
-                exitclose.setVisibility(View.GONE);
-                ModeOfTravel.setVisibility(View.VISIBLE);
-                ondutylocations.setVisibility(View.GONE);
-                haplocationbutton.setVisibility(View.GONE);
-                otherlocationbutton.setVisibility(View.GONE);
-            }
-            Log.e("strHapLocation", strHapLocation);
+
+
+        mShared_common_pref.save(modeTravelId,startEnd);
+        mShared_common_pref.save(modeTypeVale,busTo);
+        mShared_common_pref.save(modeFromKm,onDutyFrom.getText().toString());
+        mShared_common_pref.save(modeToKm,TextToAddress.getText().toString());
+        mShared_common_pref.save(StartedKm,StartKm.getText().toString());
+
+/*
+
+        editor.putString(modeTravelId, startEnd);
+        editor.putString(modeTypeVale, busTo);
+        editor.putString(modeFromKm, onDutyFrom.getText().toString());
+        editor.putString(modeToKm, TextToAddress.getText().toString());
+        editor.putString(StartedKm, StartKm.getText().toString());*/
+
+    /*    if (sharedpreferences.contains(modeTravelId)) {
+            Log.e("MODE_MODE", sharedpreferences.getString(modeTravelId, ""));
         }
-
-        if (sharedpreferences.contains(visitPurpose)) {
-            strVisitPurpose = sharedpreferences.getString(visitPurpose, "");
-            if (!strVisitPurpose.matches("")) {
-                flag = 0;
-                ondutyedittext.setText("");
-                purposeofvisitedittext.setText(strVisitPurpose);
-                haplocationtext.setVisibility(View.VISIBLE);
-                purposeofvisittext.setVisibility(View.VISIBLE);
-                submitbutton.setVisibility(View.VISIBLE);
-                closebutton.setVisibility(View.VISIBLE);
-                exitclose.setVisibility(View.GONE);
-                ModeOfTravel.setVisibility(View.VISIBLE);
-                ondutylocations.setVisibility(View.GONE);
-                haplocationbutton.setVisibility(View.GONE);
-                otherlocationbutton.setVisibility(View.GONE);
-            }
-            Log.e("strHapLocation", strHapLocation);
+        if (sharedpreferences.contains(modeTypeVale)) {
+            Log.e("MODE_MODE", sharedpreferences.getString(modeTypeVale, ""));
+        }*/
+        if (sharedpreferences.contains(modeFromKm)) {
+            Log.e("MODE_MODE", sharedpreferences.getString(modeFromKm, ""));
         }
-
-        if (sharedpreferences.contains("SharedImage")) {
-            imageURI = sharedpreferences.getString("SharedImage", "");
-            Log.e("Privacypolicy", "Checking" + imageURI);
+        if (sharedpreferences.contains(modeToKm)) {
+            Log.e("MODE_MODE", sharedpreferences.getString(modeToKm, ""));
         }
-
-        if (sharedpreferences.contains("SharedFromKm")) {
-            FromKm = sharedpreferences.getString("SharedFromKm", "");
-            Log.e("Privacypolicy", "Checking" + FromKm);
-        }
-
-        if (sharedpreferences.contains("SharedToKm")) {
-            ToKm = sharedpreferences.getString("SharedToKm", "");
-            Log.e("Privacypolicy", "Checking" + ToKm);
-        }
-
-        if (sharedpreferences.contains("SharedFare")) {
-            Fare = sharedpreferences.getString("SharedFare", "");
-            Log.e("Privacypolicy", "Checking" + Fare);
-        }
-
-        if (sharedpreferences.contains("StartedKM")) {
-            StartedKM = sharedpreferences.getString("StartedKM", "");
-            Log.e("Privacypolicy", "Checking" + StartedKM);
-        }
-
-        if (sharedpreferences.contains("ModeCount")) {
-            ModeTravelType = sharedpreferences.getString("ModeCount", "");
-            Log.e("Mode_Travel_Type", ModeTravelType);
-
-        }
-
-        if (sharedpreferences.contains("SharedMode")) {
-            modeVal = sharedpreferences.getString("SharedMode", "");
-            Log.e("Privacypolicy", "Checking" + modeVal);
-
-            if (ModeTravelType.equals("0")) {
-                TextMode.setText(modeVal);
-                BusMode.setVisibility(View.GONE);
-                BikeMode.setVisibility(View.GONE);
-                ReasonPhoto.setVisibility(View.GONE);
-
-            } else {
-                TextMode.setText(modeVal);
-                BusMode.setVisibility(View.GONE);
-                BikeMode.setVisibility(View.VISIBLE);
-                ReasonPhoto.setVisibility(View.VISIBLE);
-                StartKm.setText(StartedKM);
-                attachedImage.setImageURI(Uri.parse(imageURI));
-            }
-        }
-        if (attachedImage.getDrawable() == null) {
-            Log.e("Image_Draw_able", "Null_Image_View");
-        } else {
-            Log.e("Image_Draw_able", "Not_Null_Image_View");
+        if (sharedpreferences.contains(StartedKm)) {
+            Log.e("MODE_MODE", sharedpreferences.getString(StartedKm, ""));
         }
     }
 
@@ -640,12 +584,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     }
 
 
-
-
-
-
-
-
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
@@ -663,11 +601,14 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             if (startEnd.equals("0")) {
                 mode = "11";
                 BikeMode.setVisibility(View.GONE);
-                ReasonPhoto.setVisibility(View.GONE);
+                BusMode.setVisibility(View.VISIBLE);
+                ReasonPhoto.setVisibility(View.VISIBLE);
 
             } else {
                 mode = "12";
                 BikeMode.setVisibility(View.VISIBLE);
+                //  BusMode.setVisibility(View.GONE);
+                BusMode.setVisibility(View.VISIBLE);
                 ReasonPhoto.setVisibility(View.VISIBLE);
             }
             attachedImage.setImageResource(0);
@@ -679,7 +620,10 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             }
             Log.e("IMAGE_URI", imageURI);
         } else if (type == 10) {
-            TextToAddress.setText(myDataset.get(position).getName());
+
+            busTo = myDataset.get(position).getName();
+            TextToAddress.setText(busTo);
+
         } else if (type == 1) {
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString(hapLocation, myDataset.get(position).getName());
@@ -892,19 +836,16 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 Toast.makeText(On_Duty_Activity.this, "Please enter all the details", Toast.LENGTH_SHORT).show();
             }
         }*/
-        mShared_common_pref.save("Started_km", edt_km.getText().toString());
-        mShared_common_pref.save("mode_of_travel", txt_mode.getText().toString());
-        mShared_common_pref.save("mode_of_travel", txt_mode.getText().toString());
 
-        Log.e("MODE_OF_Travel", txt_mode.getText().toString());
+
         try {
             JSONObject jj = new JSONObject();
             jj.put("hap_location", strHapLocation);
             jj.put("visit_purpose", purposeofvisitedittext.getText().toString());
             jj.put("other_loaction", ondutyedittext.getText().toString());
             jj.put("mode_allowance", "OnDuty");
-            jj.put("km", edt_km.getText().toString());
-            jj.put("rmk", edt_rmk.getText().toString());
+            jj.put("km", StartKm.getText().toString());
+            jj.put("rmk", StartKm.getText().toString());
             jj.put("mod", mode);
             jj.put("sf", SF_code);
             jj.put("div", div);
@@ -931,7 +872,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                             JSONObject js = new JSONObject(jsonData);
                             if (js.getString("success").equalsIgnoreCase("true")) {
                                 Toast.makeText(On_Duty_Activity.this, " Submitted successfully ", Toast.LENGTH_SHORT).show();
-                             //   common_class.CommonIntentwithFinish(Dashboard.class);
+                                //   common_class.CommonIntentwithFinish(Dashboard.class);
                                 Intent intent = new Intent(getApplicationContext(), Checkin.class);
                                 Bundle extras = new Bundle();
                                 extras.putString("ODFlag", String.valueOf(flag));

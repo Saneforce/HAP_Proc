@@ -556,6 +556,22 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 takePhoto.putExtra("Mode", "COUT");
                                 startActivity(takePhoto);
                             } else {
+
+
+                                SharedPreferences.Editor editor = sharedpreferences.edit();
+                                editor.remove(Name);
+                                editor.remove(MOT);
+                                editor.remove("SharedImage");
+                                editor.remove("Sharedallowance");
+                                editor.remove("SharedMode");
+                                editor.remove("StartedKM");
+                                editor.remove("SharedFromKm");
+                                editor.remove("SharedToKm");
+                                editor.remove("SharedFare");
+                                editor.remove("SharedImages");
+                                editor.remove("Closing");
+                                editor.commit();
+
                                 Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
                                 takePhoto.putExtra("Mode", "COUT");
                                 startActivity(takePhoto);
