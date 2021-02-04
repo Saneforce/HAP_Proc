@@ -28,11 +28,14 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +66,7 @@ import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
+import com.hap.checkinproc.Activity_Hap.Leave_Request;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -82,6 +86,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -99,7 +104,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         OnMapReadyCallback {
 
     CardView card_date, card_type_travel;
-    TextView txt_date;
+    TextView txt_date,txt_ldg_type;
     ApiInterface apiInterface;
     DatePickerDialog fromDatePickerDialog;
     ImageView img_attach;
@@ -252,7 +257,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     Double GrandTotalAllowance = 0.0;
     double sTotal = 0.0;
     double sums = 0.0;
-    LinearLayout otherExpenseLayout, linAll, linRemarks, linFareAmount;
+    CardView ldg_ara;
+    LinearLayout otherExpenseLayout, linAll, linRemarks, linFareAmount,ldg_typ_sp;
     //ArrayList<String> AttachmentImg = new ArrayList<>();
     String strGT = "";
     Double dcGT = 0.0;
@@ -265,7 +271,16 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     LinearLayout LinearMap;
 ImageView endkmimage,startkmimage;
 
+    //Loadging Expense
 
+    DatePickerDialog picker;
+    Switch ldgNeeded;
+    List<Common_Model> ldgModes = new ArrayList<>();
+    LinearLayout lodgCont,ldg_stayloc,ldg_stayDt,lodgJoin;
+    LinearLayout ldgEAra,ldgMyEAra,JNLdgEAra,drvldgEAra;
+    Button btn_empget;
+    EditText edt_ldg_JnEmp,edt_ldg_bill;
+    TextView ldg_cin,txtJNName,txtJNDesig,txtJNDept,txtJNHQ,txtJNMob,lblHdBill,lblHdBln,ldgWOBBal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -330,6 +345,99 @@ ImageView endkmimage,startkmimage;
         linAll = findViewById(R.id.lin_alo_view);
         linRemarks = findViewById(R.id.lin_remarks);
         linFareAmount = findViewById(R.id.lin_fare_amount);
+
+        //Loadging Expense
+        ldgNeeded=findViewById(R.id.sw_ldgNeed);
+        ldg_ara=findViewById(R.id.linear_loadge);
+        ldg_typ_sp=findViewById(R.id.ldg_typ_spiner);
+        lodgCont=findViewById(R.id.lodgCont);
+        txt_ldg_type=findViewById(R.id.ldg_typ);
+        ldg_stayloc=findViewById(R.id.ldg_stayloc);
+        ldg_stayDt=findViewById(R.id.ldg_stayDt);
+
+        lodgJoin=findViewById(R.id.lodgJoin);
+        ldgEAra=findViewById(R.id.ldgEAra);
+        ldgMyEAra=findViewById(R.id.ldgMyEAra);
+        JNLdgEAra=findViewById(R.id.JNLdgEAra);
+        drvldgEAra=findViewById(R.id.drvldgEAra);
+        btn_empget=findViewById(R.id.btn_empget);
+        edt_ldg_JnEmp=findViewById(R.id.edt_ldg_JnEmp);
+        ldg_cin=findViewById(R.id.ldg_cin);
+        txtJNName=findViewById(R.id.txtJNName);
+        txtJNDesig=findViewById(R.id.txtJNDesig);
+        txtJNDept=findViewById(R.id.txtJNDept);
+        txtJNHQ=findViewById(R.id.txtJNHQ);
+        txtJNMob=findViewById(R.id.txtJNMob);
+        lblHdBill=findViewById(R.id.lblHdBill);
+        lblHdBln=findViewById(R.id.lblHdBln);
+        ldgWOBBal=findViewById(R.id.ldgWOBBal);
+        edt_ldg_bill=findViewById(R.id.edt_ldg_bill);
+
+        ldg_typ_sp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ldgModes.clear();
+                LDGType();
+            }
+        });
+        ldg_stayDt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCldr();
+            }
+        });
+
+        ldg_cin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showCldr();
+            }
+        });
+
+        btn_empget.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String sEmpID= String.valueOf(edt_ldg_JnEmp.getText());
+                Log.d("EmpNo",sEmpID);
+                Call<JsonArray> Callto = apiInterface.getDataArrayList("get/EmpByID",
+                        UserDetails.getString("Divcode", ""),
+                        UserDetails.getString("Sfcode", ""), sEmpID, "", "", null);
+                Callto.enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        JsonArray res = response.body();
+                        if (res.size() < 1) {
+                            Toast.makeText(getApplicationContext(), "Emp Code Not Found !", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                        JsonObject EmpDet=res.get(0).getAsJsonObject();
+                        txtJNName.setText(EmpDet.get("Name").getAsString());
+                        txtJNDesig.setText(EmpDet.get("Desig").getAsString());
+                        txtJNDept.setText(EmpDet.get("DeptName").getAsString());
+                        txtJNHQ.setText(EmpDet.get("HQ").getAsString());
+                        txtJNMob.setText(EmpDet.get("Mob").getAsString());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+Log.d("Error:","Some Error"+ t.getMessage());
+                    }
+                });
+
+                }
+        });
+        /*ldgNeeded.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked==true)
+                {
+                    ldg_ara.setVisibility(View.VISIBLE);
+                }else {
+                    ldg_ara.setVisibility(View.GONE);
+                }
+            }
+        });*/
+
 
 
         strRetriveType = String.valueOf(getIntent().getSerializableExtra("Retrive_Type"));
@@ -680,7 +788,25 @@ ImageView endkmimage,startkmimage;
         Double s = localCov + otherExp + GrandTotalAllowance;
         grandTotal.setText("Rs. " + new DecimalFormat("##0.00").format(s));
     }
+    public void showCldr(){
+        final Calendar cldr = Calendar.getInstance();
+        int day = cldr.get(Calendar.DAY_OF_MONTH);
+        int month = cldr.get(Calendar.MONTH);
+        int year = cldr.get(Calendar.YEAR);
+        // date picker dialog
+        picker = new DatePickerDialog(TAClaimActivity.this,
+                new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        ldg_cin.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                    }
+                }, year, month, day);
+        //Calendar calendarmin = Calendar.getInstance();
+        //calendarmin.set(Integer.parseInt(minYear), Integer.parseInt(minMonth) - 1, Integer.parseInt(minDay));
+        //picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
 
+        picker.show();
+    }
 
     public void onTADelete(View v) {
         int size = travelDynamicLoaction.getChildCount();
@@ -1735,6 +1861,34 @@ ImageView endkmimage,startkmimage;
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
+        if (type==9){
+            //"Independent","Joined Stay","Relaytive Stay"
+
+            String Valname = myDataset.get(position).getName();
+            txt_ldg_type.setText(Valname);
+            lodgCont.setVisibility(View.VISIBLE);
+            ldg_stayloc.setVisibility(View.GONE);
+            ldg_stayDt.setVisibility(View.GONE);
+            lodgJoin.setVisibility(View.GONE);
+            JNLdgEAra.setVisibility(View.GONE);
+            edt_ldg_bill.setVisibility(View.GONE);
+            lblHdBill.setVisibility(View.GONE);
+            lblHdBln.setVisibility(View.GONE);
+            ldgWOBBal.setVisibility(View.GONE);
+            if (Valname=="Joined Stay"){
+                lodgJoin.setVisibility(View.VISIBLE);
+                JNLdgEAra.setVisibility(View.VISIBLE);
+                //ldgMyEAra,JNLdgEAra,drvldgEAra
+            }
+            if (Valname!="Relaytive Stay"){
+                ldg_stayloc.setVisibility(View.VISIBLE);
+                ldg_stayDt.setVisibility(View.VISIBLE);
+                lblHdBill.setVisibility(View.VISIBLE);
+                edt_ldg_bill.setVisibility(View.VISIBLE);
+                lblHdBln.setVisibility(View.VISIBLE);
+                ldgWOBBal.setVisibility(View.VISIBLE);
+            }
+        }
         if (type == 10) {
             txt_date.setText(myDataset.get(position).getName());
             Log.d("JSON_VALUE", myDataset.get(position).getId());
@@ -2019,6 +2173,22 @@ ImageView endkmimage,startkmimage;
         });
     }
 
+
+    public void LDGType() {
+        /*  Dynamicallowance.removeAllViews();*/
+        mCommon_model_spinner = new Common_Model("Independent", "Independent");
+        ldgModes.add(mCommon_model_spinner);
+        mCommon_model_spinner = new Common_Model("Joined Stay", "Joined Stay");
+        ldgModes.add(mCommon_model_spinner);
+        mCommon_model_spinner = new Common_Model("Relaytive Stay", "Relaytive Stay");
+        ldgModes.add(mCommon_model_spinner);
+
+        customDialog = new CustomListViewDialog(TAClaimActivity.this, ldgModes, 9);
+        Window window = customDialog.getWindow();
+        window.setGravity(Gravity.CENTER);
+        window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        customDialog.show();
+    }
 
     public void dynamicModeType(Integer poisition) {
         /*  Dynamicallowance.removeAllViews();*/
