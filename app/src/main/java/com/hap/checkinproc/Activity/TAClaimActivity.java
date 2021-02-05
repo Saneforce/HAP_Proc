@@ -276,11 +276,12 @@ ImageView endkmimage,startkmimage;
     DatePickerDialog picker;
     Switch ldgNeeded;
     List<Common_Model> ldgModes = new ArrayList<>();
-    LinearLayout lodgCont,ldg_stayloc,ldg_stayDt,lodgJoin;
+    LinearLayout lodgCont,lodgContvw,ldg_stayloc,ldg_stayDt,lodgJoin;
     LinearLayout ldgEAra,ldgMyEAra,JNLdgEAra,drvldgEAra;
     Button btn_empget;
     EditText edt_ldg_JnEmp,edt_ldg_bill;
-    TextView ldg_cin,txtJNName,txtJNDesig,txtJNDept,txtJNHQ,txtJNMob,lblHdBill,lblHdBln,ldgWOBBal;
+    TextView ldg_cin,txtJNName,txtJNDesig,txtJNDept,txtJNHQ,txtJNMob,lblHdBill,lblHdBln,ldgWOBBal,
+    ldgAdd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -351,10 +352,10 @@ ImageView endkmimage,startkmimage;
         ldg_ara=findViewById(R.id.linear_loadge);
         ldg_typ_sp=findViewById(R.id.ldg_typ_spiner);
         lodgCont=findViewById(R.id.lodgCont);
+        lodgContvw=findViewById(R.id.lodgContvw);
         txt_ldg_type=findViewById(R.id.ldg_typ);
         ldg_stayloc=findViewById(R.id.ldg_stayloc);
         ldg_stayDt=findViewById(R.id.ldg_stayDt);
-
         lodgJoin=findViewById(R.id.lodgJoin);
         ldgEAra=findViewById(R.id.ldgEAra);
         ldgMyEAra=findViewById(R.id.ldgMyEAra);
@@ -372,7 +373,20 @@ ImageView endkmimage,startkmimage;
         lblHdBln=findViewById(R.id.lblHdBln);
         ldgWOBBal=findViewById(R.id.ldgWOBBal);
         edt_ldg_bill=findViewById(R.id.edt_ldg_bill);
+        ldgAdd=findViewById(R.id.ldg_Add);
 
+        ldgAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ldgAdd.getText().equals("+ Add")){
+                    ldgAdd.setText("- Remove");
+                    lodgContvw.setVisibility(View.VISIBLE);
+                }else{
+                    ldgAdd.setText("+ Add");
+                    lodgContvw.setVisibility(View.GONE);
+                }
+            }
+        });
         ldg_typ_sp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -526,7 +540,7 @@ Log.d("Error:","Some Error"+ t.getMessage());
                             }
                             Log.d("Local ", String.valueOf(sumsTot));
                             //      " Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM "
-                            OeText.setText("Total : Rs. " + new DecimalFormat("##0.00").format(sumsTot));
+                            OeText.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTot));
 
                             otherExp = sumsTot;
 
@@ -615,7 +629,7 @@ Log.d("Error:","Some Error"+ t.getMessage());
                             }
                             Log.d("Local ", String.valueOf(sum));
                             //      " Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM "
-                            localText.setText("Total : Rs. " + new DecimalFormat("##0.00").format(sum));
+                            localText.setText("Rs. " + new DecimalFormat("##0.00").format(sum));
                             localCov = sum;
 
 
@@ -838,7 +852,7 @@ Log.d("Error:","Some Error"+ t.getMessage());
         }
         Log.d("Local ", String.valueOf(sum));
         //      " Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM "
-        localText.setText("Total : Rs. " + new DecimalFormat("##0.00").format(sum));
+        localText.setText("Rs. " + new DecimalFormat("##0.00").format(sum));
         localCov = sum;
 
 
@@ -866,7 +880,7 @@ Log.d("Error:","Some Error"+ t.getMessage());
         }
         Log.d("Local ", String.valueOf(sumsTot));
         //      " Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM "
-        OeText.setText("Total : Rs. " + new DecimalFormat("##0.00").format(sumsTot));
+        OeText.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTot));
 
         otherExp = sumsTot;
 
@@ -1862,8 +1876,9 @@ Log.d("Error:","Some Error"+ t.getMessage());
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
         if (type==9){
-            //"Independent","Joined Stay","Relaytive Stay"
+            //"IS. Independent Stay","JS. Jointly Stay","RS. Stay At Relaytive House"
 
+            String ValCd = myDataset.get(position).getId();
             String Valname = myDataset.get(position).getName();
             txt_ldg_type.setText(Valname);
             lodgCont.setVisibility(View.VISIBLE);
@@ -1875,12 +1890,12 @@ Log.d("Error:","Some Error"+ t.getMessage());
             lblHdBill.setVisibility(View.GONE);
             lblHdBln.setVisibility(View.GONE);
             ldgWOBBal.setVisibility(View.GONE);
-            if (Valname=="Joined Stay"){
+            if (ValCd=="JS"){
                 lodgJoin.setVisibility(View.VISIBLE);
                 JNLdgEAra.setVisibility(View.VISIBLE);
                 //ldgMyEAra,JNLdgEAra,drvldgEAra
             }
-            if (Valname!="Relaytive Stay"){
+            if (ValCd!="RS"){
                 ldg_stayloc.setVisibility(View.VISIBLE);
                 ldg_stayDt.setVisibility(View.VISIBLE);
                 lblHdBill.setVisibility(View.VISIBLE);
@@ -2176,11 +2191,11 @@ Log.d("Error:","Some Error"+ t.getMessage());
 
     public void LDGType() {
         /*  Dynamicallowance.removeAllViews();*/
-        mCommon_model_spinner = new Common_Model("Independent", "Independent");
+        mCommon_model_spinner = new Common_Model("Independent Stay", "IS");
         ldgModes.add(mCommon_model_spinner);
-        mCommon_model_spinner = new Common_Model("Joined Stay", "Joined Stay");
+        mCommon_model_spinner = new Common_Model("Jointly Stay", "JS");
         ldgModes.add(mCommon_model_spinner);
-        mCommon_model_spinner = new Common_Model("Relaytive Stay", "Relaytive Stay");
+        mCommon_model_spinner = new Common_Model("Stay At Relaytive House", "RS");
         ldgModes.add(mCommon_model_spinner);
 
         customDialog = new CustomListViewDialog(TAClaimActivity.this, ldgModes, 9);
