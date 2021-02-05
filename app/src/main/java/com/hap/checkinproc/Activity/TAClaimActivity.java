@@ -1026,7 +1026,7 @@ Log.d("Error:","Some Error"+ t.getMessage());
                         txtallamt.setText(" Rs. " + new DecimalFormat("##0.00").format(doubleAmount));
                     }
 
-                    Log.e("STRTOEND", StrToEnd);
+                    Log.e("STRTOEND", StartedKm);
                     Log.e("STR", StrBus);
                     Log.e("STREND", StrTo);
                     Log.e("STRDAILY", StrDailyAllowance);

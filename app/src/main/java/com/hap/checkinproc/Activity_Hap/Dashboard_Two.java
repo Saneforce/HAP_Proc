@@ -557,7 +557,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 startActivity(takePhoto);
                             } else {
 
-
                                 SharedPreferences.Editor editor = sharedpreferences.edit();
                                 editor.remove(Name);
                                 editor.remove(MOT);

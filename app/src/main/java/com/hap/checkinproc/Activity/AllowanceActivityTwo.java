@@ -393,6 +393,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                                         .into(StartedKmImage);
 
                                 Log.e("Text_Strat", TextStartedKm.getText().toString());
+                                Log.e("Text_Strat", json_oo.getString("start_Photo"));
                             }
 
                         }
