@@ -159,7 +159,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
 
                     }
                     if (!EndedEditText.getText().toString().equals("")) {
-                        endKm = Integer.valueOf(String.valueOf(EndedEditText.getText()));
+                        endKm = Integer.valueOf(EndedEditText.getText().toString());
                     }
                     Log.e("STARTED_KM", String.valueOf(endKm));
                     if (stKM < endKm) {

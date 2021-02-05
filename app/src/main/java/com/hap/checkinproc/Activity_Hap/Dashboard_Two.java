@@ -69,6 +69,17 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     String PrivacyScreen = "", ModeOfTravel = "";
     SharedPreferences sharedpreferences;
 
+
+    public static final String hapLocation = "hpLoc";
+    public static final String otherLocation = "othLoc";
+    public static final String visitPurpose = "vstPur";
+    public static final String modeTravelId = "ShareModesss";
+    public static final String modeTypeVale = "SharedModeTypeValesss";
+    public static final String modeFromKm = "SharedFromKmsss";
+    public static final String modeToKm = "SharedToKmsss";
+    public static final String StartedKm = "StartedKMsss";
+
+
     /*String Mode = "Bus";*/
     CardView gateIn_gateOut;
 
@@ -569,6 +580,22 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 editor.remove("SharedFare");
                                 editor.remove("SharedImages");
                                 editor.remove("Closing");
+
+
+                                editor.remove(hapLocation);
+                                editor.remove(otherLocation);
+                                editor.remove(visitPurpose);
+                                editor.remove(modeTravelId);
+                                editor.remove(modeTypeVale);
+                                editor.remove(modeFromKm);
+                                editor.remove(modeToKm);
+                                editor.remove(StartedKm);
+                                editor.remove("SharedDailyAllowancess");
+                                editor.remove("SharedDriverss");
+                                editor.remove("ShareModeIDs");
+                                editor.remove("StoreId");
+
+
                                 editor.commit();
 
                                 Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);

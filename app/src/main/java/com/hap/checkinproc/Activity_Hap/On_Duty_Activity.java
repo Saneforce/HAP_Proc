@@ -1024,6 +1024,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             jj.put("mod", StrID);
             jj.put("sf", SF_code);
             jj.put("div", div);
+            jj.put("StEndNeed",ModeTravelType );
             jj.put("url", imageServer);
             jj.put("from", onDutyFrom.getText().toString());
             jj.put("to", TextToAddress.getText().toString());

@@ -56,6 +56,18 @@
   </style>
 
 
+
+
+
+    <style name="AppTheme.Dialogs">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="windowActionModeOverlay">true</item>
+    </style>
+
+
     <style name="circleImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">45%</item>

@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -54,6 +53,17 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     RelativeLayout linApprovals;
     Shared_Common_Pref shared_common_pref;
 
+
+    public static final String hapLocation = "hpLoc";
+    public static final String otherLocation = "othLoc";
+    public static final String visitPurpose = "vstPur";
+    public static final String modeTravelId = "ShareModesss";
+    public static final String modeTypeVale = "SharedModeTypeValesss";
+    public static final String modeFromKm = "SharedFromKmsss";
+    public static final String modeToKm = "SharedToKmsss";
+    public static final String StartedKm = "StartedKMsss";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +84,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         lblUserName.setText(sSFName);
         lblEmail.setText(eMail);
 
-        linMyday = (findViewById(R.id.lin_myday_plan)); linMyday.setVisibility(View.GONE); if(sSFType=="1") linMyday.setVisibility(View.VISIBLE);
+        linMyday = (findViewById(R.id.lin_myday_plan));
+        linMyday.setVisibility(View.GONE);
+        if (sSFType == "1") linMyday.setVisibility(View.VISIBLE);
 
 
         linCheckin = (findViewById(R.id.lin_check_in));
@@ -83,7 +95,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linOnDuty = (findViewById(R.id.lin_onduty)); /*linOnDuty.setVisibility(View.GONE); if(sSFType=="0") linOnDuty.setVisibility(View.VISIBLE);*/
         linApprovals = (findViewById(R.id.lin_approvals));
         linTaClaim = (findViewById(R.id.lin_ta_claim));
-        linExtShift = (findViewById(R.id.lin_extenden_shift)); linExtShift.setVisibility(View.GONE); if(sSFType=="0") linExtShift.setVisibility(View.VISIBLE);
+        linExtShift = (findViewById(R.id.lin_extenden_shift));
+        linExtShift.setVisibility(View.GONE);
+        if (sSFType == "0") linExtShift.setVisibility(View.VISIBLE);
         linTourPlan = (findViewById(R.id.lin_tour_plan));
         linHolidayWorking = findViewById(R.id.lin_holiday_working);
         linExit = (findViewById(R.id.lin_exit));
@@ -95,17 +109,17 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         } else {
             linApprovals.setVisibility(View.VISIBLE);
         }
-        FlexboxLayout flexboxLayout=findViewById(R.id.flxlayut);
-        View flxlastChild=null;
-        int flg=0;
-        for(int il=0;il<flexboxLayout.getChildCount();il++){
-            if(flexboxLayout.getChildAt(il).getVisibility()==View.VISIBLE) {
+        FlexboxLayout flexboxLayout = findViewById(R.id.flxlayut);
+        View flxlastChild = null;
+        int flg = 0;
+        for (int il = 0; il < flexboxLayout.getChildCount(); il++) {
+            if (flexboxLayout.getChildAt(il).getVisibility() == View.VISIBLE) {
                 flxlastChild = flexboxLayout.getChildAt(il);
                 if (flg == 1) flg = 0;
                 else flg = 1;
             }
         }
-        if(flg==1) {
+        if (flg == 1) {
             FlexboxLayout.LayoutParams lp = (FlexboxLayout.LayoutParams) flxlastChild.getLayoutParams();
             lp.setFlexBasisPercent(100);
             //lp.setOrder(-1);
@@ -183,6 +197,39 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 });
                 break;
             case R.id.lin_onduty:
+
+
+/*
+                public static final String hapLocation = "hpLoc";
+                public static final String otherLocation = "othLoc";
+                public static final String visitPurpose = "vstPur";
+                public static final String modeTravelId = "ShareModesss";
+                public static final String modeTypeVale = "SharedModeTypeValesss";
+                public static final String modeFromKm = "SharedFromKmsss";
+                public static final String modeToKm = "SharedToKmsss";
+                public static final String StartedKm = "StartedKMsss";
+
+                                ed.putString("SharedDailyAllowancess", dailyAllowance.getText().toString());
+                ed.putString("SharedDriverss", DriverMode);
+                ed.putString("ShareModeIDs", modeId);
+                ed.putString("StoreId", StrToCode);
+*/
+
+
+                SharedPreferences.Editor edd = sharedPreferences.edit();
+                edd.remove(hapLocation);
+                edd.remove(otherLocation);
+                edd.remove(visitPurpose);
+                edd.remove(modeTravelId);
+                edd.remove(modeTypeVale);
+                edd.remove(modeFromKm);
+                edd.remove(modeToKm);
+                edd.remove(StartedKm);
+                edd.remove("SharedDailyAllowancess");
+                edd.remove("SharedDriverss");
+                edd.remove("ShareModeIDs");
+                edd.remove("StoreId");
+                edd.commit();
                 startActivity(new Intent(this, On_Duty_Activity.class));
                 break;
             case R.id.lin_exit:
