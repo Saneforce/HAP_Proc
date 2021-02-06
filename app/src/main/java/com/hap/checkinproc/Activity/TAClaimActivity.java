@@ -1139,19 +1139,20 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                         /* for (int i = 0; i <=0; i++) {*/
                         rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
-                        travelDynamicLoaction.addView(rowView, layoutParams);
 
-                        View views = travelDynamicLoaction.getChildAt(0);
-                        editText = views.findViewById(R.id.enter_mode);
-                        enterFrom = views.findViewById(R.id.enter_from);
-                        enterTo = views.findViewById(R.id.enter_to);
-                        enterFare = views.findViewById(R.id.enter_fare);
-                        deleteButton = findViewById(R.id.delete_button);
+                            travelDynamicLoaction.addView(rowView, layoutParams);
 
-                        editText.setText(StrDaName);
-                        enterFrom.setText(StrBus);
-                        enterTo.setText(StrTo);
-                        deleteButton.setVisibility(View.GONE);
+                            View views = travelDynamicLoaction.getChildAt(0);
+                            editText = views.findViewById(R.id.enter_mode);
+                            enterFrom = views.findViewById(R.id.enter_from);
+                            enterTo = views.findViewById(R.id.enter_to);
+                            enterFare = views.findViewById(R.id.enter_fare);
+                            deleteButton = findViewById(R.id.delete_button);
+
+                            editText.setText(StrDaName);
+                            enterFrom.setText(StrBus);
+                            enterTo.setText(StrTo);
+                            deleteButton.setVisibility(View.GONE);
 
 
                         editText.setOnClickListener(null);
@@ -1420,19 +1421,25 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             JSONArray othrExp = new JSONArray();
             int addOtherExp = LinearOtherAllowance.getChildCount();
 
+
+
+          /*  oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
+            edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
+            oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));*/
+
             for (int lc = 0; lc < addOtherExp; lc++) {
                 View view = LinearOtherAllowance.getChildAt(lc);
-                oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
+                oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
                 edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
-                OtherExpense = (LinearLayout) childView.findViewById(R.id.lin_other_expense_dynamic);
-                editMode = editTexts.getText().toString();
+                OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
+                editMode = oeEditext.getText().toString();
                 newEdt = usersByCountry.get(editMode);
                 JSONObject lcModes2 = new JSONObject();
-                lcModes2.put("type", editTexts.getText().toString());
+                lcModes2.put("type", editMode);
                 lcModes2.put("total_amount", edtOE.getText().toString());
                 lcModes2.put("exp_type", "OE");
 
-                JSONArray lcModeRef1 = new JSONArray();
+    /*            JSONArray lcModeRef1 = new JSONArray();
 
                 for (int da = 0; da < newEdt.size(); da++) {
                     JSONObject AditionallLocalConvenyance = new JSONObject();
@@ -1442,7 +1449,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                     lcModeRef1.put(AditionallLocalConvenyance);
                 }
-                lcModes2.put("ad_exp", lcModeRef1);
+                lcModes2.put("ad_exp", lcModeRef1);*/
                 othrExp.put(lcModes2);
 
             }

@@ -46,7 +46,7 @@ public class TAApprovalActivity extends AppCompatActivity {
         SF_code = UserDetails.getString("Sfcode", "");
         div = UserDetails.getString("Divcode", "");
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        callApi("");
+        callApi("2021-02-05");
     }
 
     public void callApi(String date) {

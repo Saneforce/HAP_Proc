@@ -60,8 +60,7 @@
                     android:layout_marginLeft="@dimen/C10dp"
                     android:layout_marginRight="@dimen/C10dp"
                     android:orientation="vertical"
-                    android:padding="8dp"
-             >
+                    android:padding="8dp">
 
 
                     <androidx.cardview.widget.CardView
@@ -171,6 +170,7 @@
                 <LinearLayout
 
                     android:id="@+id/lin_alo_view"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C15dp"

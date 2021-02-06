@@ -35,8 +35,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".Activity_Hap.MapZoomIn"
-            android:theme="@style/AppTheme.Dialogs"></activity>
+        <activity
+            android:name=".Activity.Util.TaApprovalDisplay"
+            android:label="@string/title_activity_ta_approval_display"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".Activity_Hap.MapZoomIn"
+            android:theme="@style/AppTheme.Dialogs" />
         <activity
             android:name=".Activity_Hap.TravelAllowanceForm"
             android:theme="@style/AppTheme.Dialog" />
@@ -50,7 +55,7 @@
         <activity android:name=".Activity_Hap.DeviationEntryStatus" />
         <activity android:name=".Activity_Hap.HolidayEntryStatus" />
         <activity android:name=".Activity_Hap.DeviationEntry" />
-        <activity android:name=".Activity_Hap.PrivacyPolicy"></activity>
+        <activity android:name=".Activity_Hap.PrivacyPolicy" />
         <activity android:name=".Activity.AllowanceActivityTwo" />
         <activity android:name=".Activity_Hap.EventCaptureActivity" />
         <activity

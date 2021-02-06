@@ -95,16 +95,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         mShared_common_pref.save("Dashboard", "one");
 
         dashMdeCnt = mShared_common_pref.getvalue("MC");
-        Log.e("Dash_Mode_Count", dashMdeCnt);
-
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
-
-
-
-
-
-
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);

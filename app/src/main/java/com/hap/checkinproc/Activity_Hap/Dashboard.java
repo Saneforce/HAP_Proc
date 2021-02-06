@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -52,6 +54,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     TextView approvalcount;
     RelativeLayout linApprovals;
     Shared_Common_Pref shared_common_pref;
+    String imageProfile = "";
+    ImageView profilePic;
 
 
     public static final String hapLocation = "hpLoc";
@@ -71,6 +75,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         username = findViewById(R.id.username);
         lblUserName = (TextView) findViewById(R.id.lblUserName);
         lblEmail = (TextView) findViewById(R.id.lblEmail);
+        profilePic = findViewById(R.id.profile_image);
+
+
+
         Get_MydayPlan(1, "check/mydayplan");
         sharedPreferences = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -78,11 +86,22 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         type = (shared.getInt("CheckCount", 0));
         common_class = new Common_Class(this);
 
+/*
+        editor.putString("url",profile);*/
+
+
         String eMail = UserDetails.getString("email", "");
         String sSFName = UserDetails.getString("SfName", "");
         String sSFType = UserDetails.getString("Sf_Type", "");
+
+        imageProfile = UserDetails.getString("url", "");
+        Log.e("CHECKING", imageProfile);
+
         lblUserName.setText(sSFName);
         lblEmail.setText(eMail);
+
+        profilePic.setImageURI(Uri.parse((UserDetails.getString("url", ""))));
+
 
         linMyday = (findViewById(R.id.lin_myday_plan));
         linMyday.setVisibility(View.GONE);
@@ -92,7 +111,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linCheckin = (findViewById(R.id.lin_check_in));
         linRequstStaus = (findViewById(R.id.lin_request_status));
         linReport = (findViewById(R.id.lin_report));
-        linOnDuty = (findViewById(R.id.lin_onduty)); linOnDuty.setVisibility(View.GONE); if(sSFType=="0") linOnDuty.setVisibility(View.VISIBLE);
+        linOnDuty = (findViewById(R.id.lin_onduty));
+        linOnDuty.setVisibility(View.GONE);
+        if (sSFType == "0") linOnDuty.setVisibility(View.VISIBLE);
         linApprovals = (findViewById(R.id.lin_approvals));
         linTaClaim = (findViewById(R.id.lin_ta_claim));
         linExtShift = (findViewById(R.id.lin_extenden_shift));
@@ -105,9 +126,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         shared_common_pref = new Shared_Common_Pref(this);
         if (shared_common_pref.getvalue(Shared_Common_Pref.CHECK_COUNT).equals("0")) {
-            linApprovals.setVisibility(View.GONE);
+         //   linApprovals.setVisibility(View.GONE);
+            linApprovals .setVisibility(View.VISIBLE);
         } else {
-            linApprovals.setVisibility(View.VISIBLE);
+            linApprovals .setVisibility(View.VISIBLE);
         }
         FlexboxLayout flexboxLayout = findViewById(R.id.flxlayut);
         View flxlastChild = null;
@@ -197,24 +219,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 });
                 break;
             case R.id.lin_onduty:
-
-
-/*
-                public static final String hapLocation = "hpLoc";
-                public static final String otherLocation = "othLoc";
-                public static final String visitPurpose = "vstPur";
-                public static final String modeTravelId = "ShareModesss";
-                public static final String modeTypeVale = "SharedModeTypeValesss";
-                public static final String modeFromKm = "SharedFromKmsss";
-                public static final String modeToKm = "SharedToKmsss";
-                public static final String StartedKm = "StartedKMsss";
-
-                                ed.putString("SharedDailyAllowancess", dailyAllowance.getText().toString());
-                ed.putString("SharedDriverss", DriverMode);
-                ed.putString("ShareModeIDs", modeId);
-                ed.putString("StoreId", StrToCode);
-*/
-
 
                 SharedPreferences.Editor edd = sharedPreferences.edit();
                 edd.remove(hapLocation);

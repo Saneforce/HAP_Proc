@@ -89,6 +89,7 @@ public class Login extends AppCompatActivity {
     private TimerService mTimerService;
 
     String deviceToken = "";
+    Uri profile;
     // Tracks the bound state of the service.
     private boolean mBound = false;
 
@@ -320,9 +321,10 @@ public class Login extends AppCompatActivity {
 
             GoogleSignInAccount account = result.getSignInAccount();
             //assert account != null;
-            Log.d("LoginDetails", String.valueOf(account.getDisplayName()));
+            Log.d("LoginDetails", String.valueOf(account.getPhotoUrl()));
             idToken = account.getIdToken();
             name.setText(account.getEmail());
+            profile =(account.getPhotoUrl());
             eMail = account.getEmail();
             try {
                 Glide.with(this).load(account.getPhotoUrl()).into(profileImage);
@@ -528,6 +530,7 @@ public class Login extends AppCompatActivity {
                         Log.d("DeptType", String.valueOf(DeptType));
                         editor.putString("State_Code", Sf_type);
                         editor.putString("email", eMail);
+                        editor.putString("url", String.valueOf(profile));
                         editor.apply();
                         if (requestCode == RC_SIGN_IN || requestCode == 0)
                             editor.putBoolean("Login", true);

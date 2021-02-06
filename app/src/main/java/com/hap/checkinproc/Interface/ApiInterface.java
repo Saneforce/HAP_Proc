@@ -10,6 +10,8 @@ import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.Model_Class.ReportDataList;
 import com.hap.checkinproc.Model_Class.RetailerViewDetails;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -215,7 +217,7 @@ public interface ApiInterface {
 
 
     @FormUrlEncoded
-        @POST("db_new_activity.php?axn=get/expensedatedetails")
+    @POST("db_new_activity.php?axn=get/expensedatedetails")
     Call<JsonArray> getTAdateDetails(@Field("data") String userData);
 
     @Multipart
@@ -229,9 +231,11 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/daexp")
     Call<ResponseBody> getDailyAllowance(@Field("data") String userData);
+
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/startkmdetails")
     Call<ResponseBody> getStartKmDetails(@Field("data") String userData);
+
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=save/daexp")
     Call<ResponseBody> saveDailyAllowance(@Field("data") String userData);
@@ -337,19 +341,20 @@ public interface ApiInterface {
     Call<JsonObject> permissionHours(@Query("axn") String axn, @Query("start_at") String start_at, @Query("Shift_TimeFlag") String Shift_TimeFlag);
 
 
-
-
     @FormUrlEncoded
     @POST("Db_V244.php")
     Call<Object> getHolidayStatus(@Query("AMod") String Amod, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
-                              @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn,
-                              @Field("data") String data);
-
+                                  @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn,
+                                  @Field("data") String data);
 
 
     @POST("Db_v300.php?axn=get/track")
     Call<ResponseBody> getMap(@Query("SF_Code") String SfCode, @Query("Dt") String Date);
 
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=get/taffdetails")
+    Call<JsonObject> getTaDateApproval(@Field("data") String data);
 
 
 }

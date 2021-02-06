@@ -129,5 +129,6 @@
     <string name="allowance">Do you want to submit Allowance?</string>
 
     <bool name="config_closeDialogWhenTouchOutside">true</bool>
+    <string name="title_activity_ta_approval_display">TaApprovalDisplay</string>
 
 </resources>
