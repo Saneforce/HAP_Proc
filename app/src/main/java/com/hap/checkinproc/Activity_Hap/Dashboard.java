@@ -92,7 +92,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linCheckin = (findViewById(R.id.lin_check_in));
         linRequstStaus = (findViewById(R.id.lin_request_status));
         linReport = (findViewById(R.id.lin_report));
-        linOnDuty = (findViewById(R.id.lin_onduty)); /*linOnDuty.setVisibility(View.GONE); if(sSFType=="0") linOnDuty.setVisibility(View.VISIBLE);*/
+        linOnDuty = (findViewById(R.id.lin_onduty)); linOnDuty.setVisibility(View.GONE); if(sSFType=="0") linOnDuty.setVisibility(View.VISIBLE);
         linApprovals = (findViewById(R.id.lin_approvals));
         linTaClaim = (findViewById(R.id.lin_ta_claim));
         linExtShift = (findViewById(R.id.lin_extenden_shift));

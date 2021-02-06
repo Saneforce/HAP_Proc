@@ -28,6 +28,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -65,7 +66,7 @@ import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
-import com.hap.checkinproc.Activity_Hap.MapZoomIn;
+import com.hap.checkinproc.Activity_Hap.Leave_Request;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -103,7 +104,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         OnMapReadyCallback {
 
     CardView card_date, card_type_travel;
-    TextView txt_date, txt_ldg_type;
+    TextView txt_date,txt_ldg_type;
     ApiInterface apiInterface;
     DatePickerDialog fromDatePickerDialog;
     ImageView img_attach;
@@ -257,7 +258,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     double sTotal = 0.0;
     double sums = 0.0;
     CardView ldg_ara;
-    LinearLayout otherExpenseLayout, linAll, linRemarks, linFareAmount, ldg_typ_sp;
+    LinearLayout otherExpenseLayout, linAll, linRemarks, linFareAmount,ldg_typ_sp;
     //ArrayList<String> AttachmentImg = new ArrayList<>();
     String strGT = "";
     Double dcGT = 0.0;
@@ -268,20 +269,19 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     SharedPreferences CheckInDetails;
     String eventListStr;
     LinearLayout LinearMap;
-    ImageView endkmimage, startkmimage, mapZoomIn;
-    String jsonData = "";
+ImageView endkmimage,startkmimage;
+
     //Loadging Expense
 
     DatePickerDialog picker;
     Switch ldgNeeded;
     List<Common_Model> ldgModes = new ArrayList<>();
-    LinearLayout lodgCont, ldg_stayloc, ldg_stayDt, lodgJoin;
-    LinearLayout ldgEAra, ldgMyEAra, JNLdgEAra, drvldgEAra;
+    LinearLayout lodgCont,lodgContvw,ldg_stayloc,ldg_stayDt,lodgJoin;
+    LinearLayout ldgEAra,ldgMyEAra,JNLdgEAra,drvldgEAra;
     Button btn_empget;
-    EditText edt_ldg_JnEmp, edt_ldg_bill;
-    TextView ldg_cin, txtJNName, txtJNDesig, txtJNDept, txtJNHQ, txtJNMob, lblHdBill, lblHdBln, ldgWOBBal;
-    Polyline polyline1;
-
+    EditText edt_ldg_JnEmp,edt_ldg_bill;
+    TextView ldg_cin,txtJNName,txtJNDesig,txtJNDept,txtJNHQ,txtJNMob,lblHdBill,lblHdBln,ldgWOBBal,
+    ldgAdd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -346,35 +346,47 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         linAll = findViewById(R.id.lin_alo_view);
         linRemarks = findViewById(R.id.lin_remarks);
         linFareAmount = findViewById(R.id.lin_fare_amount);
-        mapZoomIn = findViewById(R.id.map_zoom);
 
         //Loadging Expense
-        ldgNeeded = findViewById(R.id.sw_ldgNeed);
-        ldg_ara = findViewById(R.id.linear_loadge);
-        ldg_typ_sp = findViewById(R.id.ldg_typ_spiner);
-        lodgCont = findViewById(R.id.lodgCont);
-        txt_ldg_type = findViewById(R.id.ldg_typ);
-        ldg_stayloc = findViewById(R.id.ldg_stayloc);
-        ldg_stayDt = findViewById(R.id.ldg_stayDt);
+        ldgNeeded=findViewById(R.id.sw_ldgNeed);
+        ldg_ara=findViewById(R.id.linear_loadge);
+        ldg_typ_sp=findViewById(R.id.ldg_typ_spiner);
+        lodgCont=findViewById(R.id.lodgCont);
+        lodgContvw=findViewById(R.id.lodgContvw);
+        txt_ldg_type=findViewById(R.id.ldg_typ);
+        ldg_stayloc=findViewById(R.id.ldg_stayloc);
+        ldg_stayDt=findViewById(R.id.ldg_stayDt);
+        lodgJoin=findViewById(R.id.lodgJoin);
+        ldgEAra=findViewById(R.id.ldgEAra);
+        ldgMyEAra=findViewById(R.id.ldgMyEAra);
+        JNLdgEAra=findViewById(R.id.JNLdgEAra);
+        drvldgEAra=findViewById(R.id.drvldgEAra);
+        btn_empget=findViewById(R.id.btn_empget);
+        edt_ldg_JnEmp=findViewById(R.id.edt_ldg_JnEmp);
+        ldg_cin=findViewById(R.id.ldg_cin);
+        txtJNName=findViewById(R.id.txtJNName);
+        txtJNDesig=findViewById(R.id.txtJNDesig);
+        txtJNDept=findViewById(R.id.txtJNDept);
+        txtJNHQ=findViewById(R.id.txtJNHQ);
+        txtJNMob=findViewById(R.id.txtJNMob);
+        lblHdBill=findViewById(R.id.lblHdBill);
+        lblHdBln=findViewById(R.id.lblHdBln);
+        ldgWOBBal=findViewById(R.id.ldgWOBBal);
+        edt_ldg_bill=findViewById(R.id.edt_ldg_bill);
+        ldgAdd=findViewById(R.id.ldg_Add);
 
-        lodgJoin = findViewById(R.id.lodgJoin);
-        ldgEAra = findViewById(R.id.ldgEAra);
-        ldgMyEAra = findViewById(R.id.ldgMyEAra);
-        JNLdgEAra = findViewById(R.id.JNLdgEAra);
-        drvldgEAra = findViewById(R.id.drvldgEAra);
-        btn_empget = findViewById(R.id.btn_empget);
-        edt_ldg_JnEmp = findViewById(R.id.edt_ldg_JnEmp);
-        ldg_cin = findViewById(R.id.ldg_cin);
-        txtJNName = findViewById(R.id.txtJNName);
-        txtJNDesig = findViewById(R.id.txtJNDesig);
-        txtJNDept = findViewById(R.id.txtJNDept);
-        txtJNHQ = findViewById(R.id.txtJNHQ);
-        txtJNMob = findViewById(R.id.txtJNMob);
-        lblHdBill = findViewById(R.id.lblHdBill);
-        lblHdBln = findViewById(R.id.lblHdBln);
-        ldgWOBBal = findViewById(R.id.ldgWOBBal);
-        edt_ldg_bill = findViewById(R.id.edt_ldg_bill);
-
+        ldgAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ldgAdd.getText().equals("+ Add")){
+                    ldgAdd.setText("- Remove");
+                    lodgContvw.setVisibility(View.VISIBLE);
+                }else{
+                    ldgAdd.setText("+ Add");
+                    lodgContvw.setVisibility(View.GONE);
+                }
+            }
+        });
         ldg_typ_sp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -399,8 +411,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         btn_empget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String sEmpID = String.valueOf(edt_ldg_JnEmp.getText());
-                Log.d("EmpNo", sEmpID);
+                String sEmpID= String.valueOf(edt_ldg_JnEmp.getText());
+                Log.d("EmpNo",sEmpID);
                 Call<JsonArray> Callto = apiInterface.getDataArrayList("get/EmpByID",
                         UserDetails.getString("Divcode", ""),
                         UserDetails.getString("Sfcode", ""), sEmpID, "", "", null);
@@ -412,7 +424,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             Toast.makeText(getApplicationContext(), "Emp Code Not Found !", Toast.LENGTH_LONG).show();
                             return;
                         }
-                        JsonObject EmpDet = res.get(0).getAsJsonObject();
+                        JsonObject EmpDet=res.get(0).getAsJsonObject();
                         txtJNName.setText(EmpDet.get("Name").getAsString());
                         txtJNDesig.setText(EmpDet.get("Desig").getAsString());
                         txtJNDept.setText(EmpDet.get("DeptName").getAsString());
@@ -422,12 +434,25 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                     @Override
                     public void onFailure(Call<JsonArray> call, Throwable t) {
-                        Log.d("Error:", "Some Error" + t.getMessage());
+Log.d("Error:","Some Error"+ t.getMessage());
                     }
                 });
 
-            }
+                }
         });
+        /*ldgNeeded.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked==true)
+                {
+                    ldg_ara.setVisibility(View.VISIBLE);
+                }else {
+                    ldg_ara.setVisibility(View.GONE);
+                }
+            }
+        });*/
+
+
 
         strRetriveType = String.valueOf(getIntent().getSerializableExtra("Retrive_Type"));
         if (strRetriveType.equals("Daily Allowance")) {
@@ -515,7 +540,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             }
                             Log.d("Local ", String.valueOf(sumsTot));
                             //      " Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM "
-                            OeText.setText("Total : Rs. " + new DecimalFormat("##0.00").format(sumsTot));
+                            OeText.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTot));
 
                             otherExp = sumsTot;
 
@@ -604,7 +629,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             }
                             Log.d("Local ", String.valueOf(sum));
                             //      " Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM "
-                            localText.setText("Total : Rs. " + new DecimalFormat("##0.00").format(sum));
+                            localText.setText("Rs. " + new DecimalFormat("##0.00").format(sum));
                             localCov = sum;
 
 
@@ -771,32 +796,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         });
 
 
-        /*Map Zoom in to next Activity*/
-        mapZoomIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
-                Intent mapZoom = new Intent(getApplicationContext(), MapZoomIn.class);
-                mapZoom.putExtra("date", DateTime);
-
-                startActivity(mapZoom);
-
-                overridePendingTransition(R.anim.fade,
-                        R.anim.fade);
-
-            }
-        });
-
-
     }
 
     private void calOverAllTotal(Double localCov, Double otherExp) {
         Double s = localCov + otherExp + GrandTotalAllowance;
         grandTotal.setText("Rs. " + new DecimalFormat("##0.00").format(s));
     }
-
-    public void showCldr() {
+    public void showCldr(){
         final Calendar cldr = Calendar.getInstance();
         int day = cldr.get(Calendar.DAY_OF_MONTH);
         int month = cldr.get(Calendar.MONTH);
@@ -846,7 +852,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         }
         Log.d("Local ", String.valueOf(sum));
         //      " Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM "
-        localText.setText("Total : Rs. " + new DecimalFormat("##0.00").format(sum));
+        localText.setText("Rs. " + new DecimalFormat("##0.00").format(sum));
         localCov = sum;
 
 
@@ -874,7 +880,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         }
         Log.d("Local ", String.valueOf(sumsTot));
         //      " Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM "
-        OeText.setText("Total : Rs. " + new DecimalFormat("##0.00").format(sumsTot));
+        OeText.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTot));
 
         otherExp = sumsTot;
 
@@ -922,7 +928,17 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
+                Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
+                Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
+                Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
+                if (CheckIn == true) {
+                    Intent Dashboard = new Intent(TAClaimActivity.this, Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                } else
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
             }
         });
     }
@@ -1001,8 +1017,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     StrToEnd = StrToEnd.replaceAll("^[\"']+|[\"']+$", "");
                     strFuelAmount = String.valueOf(jsonObject.get("FuelAmt"));
                     allowanceAmt = String.valueOf(jsonObject.get("Allowance_Value"));
-                    String start_Image = String.valueOf(jsonObject.get("start_Photo"));
-                    String End_Imge = String.valueOf(jsonObject.get("End_photo"));
+                    String start_Image= String.valueOf(jsonObject.get("start_Photo"));
+                    String End_Imge=String.valueOf(jsonObject.get("End_photo"));
                     Glide.with(getApplicationContext())
                             .load(start_Image.replaceAll("^[\"']+|[\"']+$", ""))
                             .into(startkmimage);
@@ -1197,9 +1213,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             Log.v("printing__Position", String.valueOf(pos));
             if (pos == -1) {
                 // picPath.add(filePath);
-                Log.v("printing__eventListStr", filePath);
+                Log.v("printing__eventListStr",filePath);
                 getMulipart(filePath, 0);
-            } else {
+            }
+
+            else {
                 SelectionModel m = array.get(pos);
                 String filepathing = "";
                 filepathing = m.getImg_url();
@@ -1857,9 +1875,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
-        if (type == 9) {
-            //"Independent","Joined Stay","Relaytive Stay"
+        if (type==9){
+            //"IS. Independent Stay","JS. Jointly Stay","RS. Stay At Relaytive House"
 
+            String ValCd = myDataset.get(position).getId();
             String Valname = myDataset.get(position).getName();
             txt_ldg_type.setText(Valname);
             lodgCont.setVisibility(View.VISIBLE);
@@ -1871,12 +1890,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             lblHdBill.setVisibility(View.GONE);
             lblHdBln.setVisibility(View.GONE);
             ldgWOBBal.setVisibility(View.GONE);
-            if (Valname == "Joined Stay") {
+            if (ValCd=="JS"){
                 lodgJoin.setVisibility(View.VISIBLE);
                 JNLdgEAra.setVisibility(View.VISIBLE);
                 //ldgMyEAra,JNLdgEAra,drvldgEAra
             }
-            if (Valname != "Relaytive Stay") {
+            if (ValCd!="RS"){
                 ldg_stayloc.setVisibility(View.VISIBLE);
                 ldg_stayDt.setVisibility(View.VISIBLE);
                 lblHdBill.setVisibility(View.VISIBLE);
@@ -2052,11 +2071,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     /*Showing Map based on Map*/
 
     public void callMap(String date) {
-        mGoogleMap.clear();
+
         Log.v("Map_Date", date + " 00:00:00");
         date = date.replaceAll("^[\"']+|[\"']+$", "");
 
         Log.v("Map_Date", date);
+  /*      DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+        Calendar calobj = Calendar.getInstance();
+        String dateTime = df.format(calobj.getTime());
+        Log.e("DATe_TIME", dateTime);*/
 
         Call<ResponseBody> Callto = apiInterface.getMap(SF_code, date + " 00:00:00");
         Callto.enqueue(new Callback<ResponseBody>() {
@@ -2064,48 +2087,46 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                 String jsonData = null;
-
-
                 try {
                     jsonData = response.body().string();
+                    try {
+                        JSONArray jsonArray = new JSONArray(jsonData);
+                        Double lat = 0.0, lon = 0.0, lat1 = 0.0, lon1 = 0.0;
+                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+                        for (int i = 0; i < jsonArray.length() - 1; i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
 
-                    if (!jsonData.equals("")) {
-
-                        try {
-                            JSONArray jsonArray = new JSONArray(jsonData);
-                            Double lat = 0.0, lon = 0.0, lat1 = 0.0, lon1 = 0.0;
-                            LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                            for (int i = 0; i < jsonArray.length() - 1; i++) {
-                                JSONObject jsonObject = jsonArray.getJSONObject(i);
-                                String strLat = jsonObject.getString("lat");
-                                String strLon = jsonObject.getString("lng");
-                                lat = Double.parseDouble(strLat);
-                                lon = Double.parseDouble(strLon);
-                                LatLng loc = new LatLng(lat, lon);
-                                builder.include(loc);
-                                latLonArray.add(loc);
-                            }
-
-
-                            polyline1 = mGoogleMap.addPolyline(new PolylineOptions()
-                                    .clickable(true)
-                                    .addAll(latLonArray));
-
-                            polyline1.setTag("A");
-                            polyline1.setColor(COLOR_ORANGE_ARGB);
-                            LatLngBounds bounds = builder.build();
-
-                            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            String strLat = jsonObject.getString("lat");
+                            String strLon = jsonObject.getString("lng");
+                            lat = Double.parseDouble(strLat);
+                            lon = Double.parseDouble(strLon);
+                            LatLng loc = new LatLng(lat, lon);
+                            builder.include(loc);
+                            latLonArray.add(loc);
                         }
+
+                        Polyline polyline1 = mGoogleMap.addPolyline(new PolylineOptions()
+                                .clickable(true)
+                                .addAll(latLonArray));
+
+                        polyline1.setTag("A");
+                        polyline1.setColor(COLOR_ORANGE_ARGB);
+
+                        LatLngBounds bounds = builder.build();
+                        LinearMap = findViewById(R.id.map);
+                        int width = LinearMap.getWidth();
+                        int height = LinearMap.getHeight();
+                        int padding = 0; // offset from edges of the map 10% of screen
+                        mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds,0));
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
+                Log.v("response_data", jsonData);
             }
 
             @Override
@@ -2170,11 +2191,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     public void LDGType() {
         /*  Dynamicallowance.removeAllViews();*/
-        mCommon_model_spinner = new Common_Model("Independent", "Independent");
+        mCommon_model_spinner = new Common_Model("Independent Stay", "IS");
         ldgModes.add(mCommon_model_spinner);
-        mCommon_model_spinner = new Common_Model("Joined Stay", "Joined Stay");
+        mCommon_model_spinner = new Common_Model("Jointly Stay", "JS");
         ldgModes.add(mCommon_model_spinner);
-        mCommon_model_spinner = new Common_Model("Relaytive Stay", "Relaytive Stay");
+        mCommon_model_spinner = new Common_Model("Stay At Relaytive House", "RS");
         ldgModes.add(mCommon_model_spinner);
 
         customDialog = new CustomListViewDialog(TAClaimActivity.this, ldgModes, 9);
@@ -2378,7 +2399,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                         }
                                         edt.setId(12345);
                                         edt.setTextSize(13);
-                                        edt.setMaxEms(3);
                                         edt.setTextColor(R.color.grey_500);
                                         edt.setBackgroundResource(R.drawable.textbox_bg);
 
