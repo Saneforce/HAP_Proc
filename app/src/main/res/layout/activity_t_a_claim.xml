@@ -31,7 +31,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/header_date_width"
                     android:layout_below="@+id/tool_header"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                  >
 
 
                     <fragment
@@ -59,7 +60,8 @@
                     android:layout_marginLeft="@dimen/C10dp"
                     android:layout_marginRight="@dimen/C10dp"
                     android:orientation="vertical"
-                    android:padding="8dp">
+                    android:padding="8dp"
+             >
 
 
                     <androidx.cardview.widget.CardView
@@ -167,13 +169,13 @@
                 </LinearLayout>
 
                 <LinearLayout
+
                     android:id="@+id/lin_alo_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C15dp"
                     android:layout_marginRight="@dimen/C15dp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:orientation="vertical">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/linear_bike"
@@ -976,7 +978,39 @@
 
 
                                 </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/C5dp"
+                                    android:layout_marginBottom="@dimen/C5dp"
+                                    android:orientation="horizontal"
+                                    android:paddingLeft="@dimen/C8dp"
+                                    android:paddingTop="@dimen/C5dp"
+                                    android:paddingRight="@dimen/C8dp">
+
+
+                                    <TextView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1"
+                                        android:text="Joint Person"
+                                        android:textAllCaps="true"
+                                        android:textColor="#000"
+                                        android:textSize="10sp"></TextView>
+
+                                    <TextView
+                                        android:id="@+id/txt_joint_add"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="+ Add"
+                                        android:textAllCaps="true"
+                                        android:textColor="#000"
+                                        android:textSize="10sp"></TextView>
+
+                                </LinearLayout>
                             </LinearLayout>
+
 
                             <LinearLayout
                                 android:id="@+id/lodgCont"
@@ -1012,6 +1046,13 @@
                                         android:paddingTop="0dp"
                                         android:textColorHint="#C0C0C0"
                                         android:textSize="@dimen/C13dp" />
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -1071,6 +1112,7 @@
 
                                     <LinearLayout
                                         android:id="@+id/lbl_ldg_JnEmp"
+                                        android:visibility="gone"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="@dimen/C10dp"
@@ -1295,6 +1337,15 @@
                                 </LinearLayout>
 
                                 <LinearLayout
+                                    android:id="@+id/lin_join_person"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/C5dp"
+                                    android:orientation="vertical"
+                                    android:visibility="gone"
+                                    tools:ignore="MissingPrefix"></LinearLayout>
+
+                                <LinearLayout
                                     android:id="@+id/ldgEAra"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -1510,6 +1561,8 @@
 
                                 </LinearLayout>
                             </LinearLayout>
+
+
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
 
@@ -1617,7 +1670,6 @@
                                         android:id="@+id/txt_local"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-
                                         android:text="Rs. 0.00"
                                         android:textColor="@android:color/black"
                                         android:textSize="@dimen/C15dp"
@@ -1733,7 +1785,6 @@
                                         android:id="@+id/txt_oe"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-
                                         android:text="Rs. 0.00"
                                         android:textColor="@android:color/black"
                                         android:textSize="@dimen/C15dp"

@@ -284,6 +284,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             ldgAdd;
 
     ImageView mapZoomIn;
+    LinearLayout jointLodging;
+    TextView txtJointAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -311,7 +313,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         PersonalTextKM = findViewById(R.id.personal_km_text);
         endkmimage = findViewById(R.id.endkmimage);
         startkmimage = findViewById(R.id.startkmimage);
-
+        jointLodging = findViewById(R.id.lin_join_person);
+        txtJointAdd = findViewById(R.id.txt_joint_add);
 
         TotalTravelledKm = findViewById(R.id.total_km);
         PersonalKiloMeter = findViewById(R.id.pers_kilo_meter);
@@ -667,6 +670,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         });
 
 
+        txtJointAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lodingView();
+            }
+        });
+
+
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SF_code = UserDetails.getString("Sfcode", "");
         div = UserDetails.getString("Divcode", "");
@@ -917,6 +928,47 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         calOverAllTotal(localCov, otherExp);
     }
 
+
+    public void lodingView() {
+
+        jointLodging.setVisibility(View.VISIBLE);
+
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View rowView = null;
+
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        layoutParams.setMargins(15, 15, 15, 15);
+
+        rowView = inflater.inflate(R.layout.activity_loding_layout, null);
+
+
+        jointLodging.addView(rowView, layoutParams);
+
+        for (int i = 0; i < jointLodging.getChildCount(); i++) {
+            View childView = jointLodging.getChildAt(i);
+            ImageView deleteLod = (ImageView) childView.findViewById(R.id.ldg_delete);
+
+            if (i == 0) {
+                deleteLod.setVisibility(View.GONE);
+            }else{
+                deleteLod.setVisibility(View.VISIBLE);
+            }
+
+
+        }
+
+
+    }
+
+    public void onLodingDelete(View v) {
+
+        jointLodging.removeView((View) v.getParent());
+
+    }
 
     /*Toolbar*/
 
@@ -1685,6 +1737,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 lodgJoin.setVisibility(View.VISIBLE);
                 JNLdgEAra.setVisibility(View.VISIBLE);
                 //ldgMyEAra,JNLdgEAra,drvldgEAra
+
+                lodingView();
             }
             if (ValCd != "RS") {
                 ldg_stayloc.setVisibility(View.VISIBLE);
@@ -2052,7 +2106,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                         edt.setTextColor(R.color.grey_500);
 
                                         childRel.addView(edt);
-                                     //   allEds.add(edt);
+                                        //   allEds.add(edt);
 
                                         users.add(edt);
 
