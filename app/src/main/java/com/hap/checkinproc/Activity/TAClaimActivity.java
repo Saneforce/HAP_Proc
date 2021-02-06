@@ -254,6 +254,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     Double doubleAmount = 0.0;
     TextView localText, OeText;
     Double GrandTotalAllowance = 0.0;
+    Double TotLdging = 0.0;
     double sTotal = 0.0;
     double sums = 0.0;
     CardView ldg_ara;
@@ -281,11 +282,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     Button btn_empget;
     EditText edt_ldg_JnEmp, edt_ldg_bill;
     TextView ldg_cin, txtJNName, txtJNDesig, txtJNDept, txtJNHQ, txtJNMob, lblHdBill, lblHdBln, ldgWOBBal,
-            ldgAdd;
+            ldgAdd,txtJNMyEli,txtMyEligi,txtDrivEligi,lbl_ldg_eligi;
 
     ImageView mapZoomIn;
     LinearLayout jointLodging;
-    TextView txtJointAdd;
+    TextView txtJointAdd,txtJNEligi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -367,18 +368,22 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         ldgMyEAra = findViewById(R.id.ldgMyEAra);
         JNLdgEAra = findViewById(R.id.JNLdgEAra);
         drvldgEAra = findViewById(R.id.drvldgEAra);
-        btn_empget = findViewById(R.id.btn_empget);
-        edt_ldg_JnEmp = findViewById(R.id.edt_ldg_JnEmp);
+        /*btn_empget = findViewById(R.id.btn_empget);
+        edt_ldg_JnEmp = findViewById(R.id.edt_ldg_JnEmp);*/
         ldg_cin = findViewById(R.id.ldg_cin);
-        txtJNName = findViewById(R.id.txtJNName);
+       /* txtJNName = findViewById(R.id.txtJNName);
         txtJNDesig = findViewById(R.id.txtJNDesig);
         txtJNDept = findViewById(R.id.txtJNDept);
         txtJNHQ = findViewById(R.id.txtJNHQ);
-        txtJNMob = findViewById(R.id.txtJNMob);
+        txtJNMob = findViewById(R.id.txtJNMob);*/
+        txtMyEligi = findViewById(R.id.txtMyEligi);
+        txtDrivEligi = findViewById(R.id.txtDrvLgd);
+        lbl_ldg_eligi = findViewById(R.id.lbl_ldg_eligi);
         lblHdBill = findViewById(R.id.lblHdBill);
         lblHdBln = findViewById(R.id.lblHdBln);
         ldgWOBBal = findViewById(R.id.ldgWOBBal);
         edt_ldg_bill = findViewById(R.id.edt_ldg_bill);
+        txtJNEligi=findViewById(R.id.txtJNEligi);
         ldgAdd = findViewById(R.id.ldg_Add);
         mapZoomIn = findViewById(R.id.map_zoom);
         buttonSave = findViewById(R.id.save_button);
@@ -414,8 +419,22 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 showCldr();
             }
         });
+        edt_ldg_bill.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-        btn_empget.setOnClickListener(new View.OnClickListener() {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                SumWOBLodging();
+            }
+        });
+       /* btn_empget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String sEmpID = String.valueOf(edt_ldg_JnEmp.getText());
@@ -446,7 +465,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 });
 
             }
-        });
+        });*/
  /*ldgNeeded.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
  @Override
  public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -839,7 +858,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void calOverAllTotal(Double localCov, Double otherExp) {
-        Double s = localCov + otherExp + GrandTotalAllowance;
+        Double s = localCov + otherExp + GrandTotalAllowance+TotLdging;
         grandTotal.setText("Rs. " + new DecimalFormat("##0.00").format(s));
     }
 
@@ -932,26 +951,18 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     public void lodingView() {
 
         jointLodging.setVisibility(View.VISIBLE);
-
-
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = null;
-
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         layoutParams.setMargins(15, 15, 15, 15);
-
         rowView = inflater.inflate(R.layout.activity_loding_layout, null);
-
-
         jointLodging.addView(rowView, layoutParams);
-
         for (int i = 0; i < jointLodging.getChildCount(); i++) {
             View childView = jointLodging.getChildAt(i);
             ImageView deleteLod = (ImageView) childView.findViewById(R.id.ldg_delete);
-
             if (i == 0) {
                 deleteLod.setVisibility(View.GONE);
             }else{
@@ -963,15 +974,83 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
 
     }
+    public void onGetEmpDetails(View v){
+        View pv=(View) v.getParent().getParent();
+        edt_ldg_JnEmp = pv.findViewById(R.id.edt_ldg_JnEmp);
+        String sEmpID = String.valueOf(edt_ldg_JnEmp.getText());
+        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+        Log.d("EmpNo", sEmpID);
+        Call<JsonArray> Callto = apiInterface.getDataArrayList("get/EmpByID",
+                UserDetails.getString("Divcode", ""),
+                UserDetails.getString("Sfcode", ""), sEmpID, "", DateTime, null);
+        Callto.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                JsonArray res = response.body();
+                if (res.size() < 1) {
+                    Toast.makeText(getApplicationContext(), "Emp Code Not Found !", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                JsonObject EmpDet = res.get(0).getAsJsonObject();
 
+                txtJNName = pv.findViewById(R.id.txtJNName);
+                txtJNDesig = pv.findViewById(R.id.txtJNDesig);
+                txtJNDept = pv.findViewById(R.id.txtJNDept);
+                txtJNHQ = pv.findViewById(R.id.txtJNHQ);
+                txtJNMob = pv.findViewById(R.id.txtJNMob);
+                txtJNMyEli = pv.findViewById(R.id.txtJNMyEli);
+
+                txtJNName.setText(EmpDet.get("Name").getAsString());
+                txtJNDesig.setText(EmpDet.get("Desig").getAsString());
+                txtJNDept.setText(EmpDet.get("DeptName").getAsString());
+                txtJNHQ.setText(EmpDet.get("HQ").getAsString());
+                txtJNMob.setText(EmpDet.get("Mob").getAsString());
+                float sum =EmpDet.get("ldgAllow").getAsFloat();
+                txtJNMyEli.setText("Rs. " + new DecimalFormat("##0.00").format(sum));
+                SumOFJointLodging();
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                Log.d("Error:", "Some Error" + t.getMessage());
+            }
+        });
+    }
     public void onLodingDelete(View v) {
-
         jointLodging.removeView((View) v.getParent());
-
     }
 
-    /*Toolbar*/
+    public void SumOFJointLodging(){
+        float tTotAmt=0;
+        for (int i = 0; i < jointLodging.getChildCount(); i++) {
+            View childView = jointLodging.getChildAt(i);
+            TextView jLdgEli = (TextView) childView.findViewById(R.id.txtJNMyEli);
+            String sAmt=jLdgEli.getText().toString().replaceAll("Rs. ","");
+            tTotAmt=tTotAmt+Float.parseFloat(sAmt);
+        }
+        txtJNEligi.setText("Rs. " + new DecimalFormat("##0.00").format(tTotAmt));
+        SumOFLodging();
+    }
+    public void SumOFLodging(){
+        String sMyAmt=txtMyEligi.getText().toString().replaceAll("Rs. ","");
+        String sJnAmt=txtJNEligi.getText().toString().replaceAll("Rs. ","");
+        String sDrivAmt=txtDrivEligi.getText().toString().replaceAll("Rs. ","");
 
+        double tTotAmt=Float.parseFloat(sMyAmt)+Float.parseFloat(sJnAmt)+Float.parseFloat(sDrivAmt);
+        lbl_ldg_eligi.setText("Rs. " + new DecimalFormat("##0.00").format(tTotAmt));
+        TotLdging=tTotAmt;
+        SumWOBLodging();
+
+        calOverAllTotal(localCov, otherExp);
+    }
+    public void SumWOBLodging() {
+        String sldgAmt=lbl_ldg_eligi.getText().toString().replaceAll("Rs. ","");
+        String sBillAmt=edt_ldg_bill.getText().toString().replaceAll("Rs. ","");
+        if(sBillAmt.isEmpty()) sBillAmt="0";
+        float tBalAmt=Float.parseFloat(sldgAmt)-Float.parseFloat(sBillAmt);
+        ldgWOBBal.setText("Rs. " + new DecimalFormat("##0.00").format(tBalAmt));
+    }
+    /*Toolbar*/
     public void getToolbar() {
 
         TextView txtHelp = findViewById(R.id.toolbar_help);

@@ -55,11 +55,10 @@
                 android:textAlignment="center"
                 android:textColor="#000"
                 android:textStyle="bold"
+                android:onClick="onGetEmpDetails"
                 tools:ignore="RtlCompat" />
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -231,9 +230,41 @@
                     android:textStyle="bold" />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_margin="@dimen/C10dp"
+                android:background="@color/grey_300"></View>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/C10dp"
+                android:layout_marginRight="@dimen/C10dp"
+                android:layout_marginBottom="@dimen/C5dp"
+                android:orientation="horizontal">
 
-    <ImageView
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Lodging Eligible"
+                    android:textAllCaps="true"
+                    android:textColor="#000"
+                    android:textSize="10sp" ></TextView>
+
+                <TextView
+                    android:id="@+id/txtJNMyEli"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs. 0.00"
+                    android:textColor="@android:color/black"
+                    android:textAllCaps="false"
+                    android:textSize="12sp"
+                    android:textStyle="bold"></TextView>
+            </LinearLayout>
+
+    </LinearLayout>
+        <ImageView
         android:id="@+id/ldg_delete"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -243,4 +274,5 @@
         android:layout_margin="@dimen/C8dp"
         android:onClick="onLodingDelete"
         android:src="@drawable/delete_cart" />
+    </LinearLayout>
 </LinearLayout>
