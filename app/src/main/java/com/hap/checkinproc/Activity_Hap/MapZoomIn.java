@@ -113,15 +113,16 @@ public class MapZoomIn extends AppCompatActivity implements View.OnClickListener
                                 latLonArray.add(loc);
                             }
 
-                            polyline1  = mGoogleMap.addPolyline(new PolylineOptions()
-                                    .clickable(true)
-                                    .addAll(latLonArray));
+                            if (latLonArray.size() != 0) {
+                                polyline1 = mGoogleMap.addPolyline(new PolylineOptions()
+                                        .clickable(true)
+                                        .addAll(latLonArray));
 
-                            polyline1.setTag("A");
-                            polyline1.setColor(COLOR_ORANGE_ARGB);
-                            LatLngBounds bounds = builder.build();
-                            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
-
+                                polyline1.setTag("A");
+                                polyline1.setColor(COLOR_ORANGE_ARGB);
+                                LatLngBounds bounds = builder.build();
+                                mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();

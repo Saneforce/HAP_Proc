@@ -11,7 +11,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -25,7 +24,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.hap.checkinproc.Activity.Util.ImageFilePath;
@@ -79,7 +77,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
     Uri outputFileUri;
     String eventListStr;
     int pos = -1;
-    String Photo_Name = "",imageConvert="";
+    String Photo_Name = "", imageConvert = "";
     ArrayList<String> picPath = new ArrayList<>();
 
     @Override
@@ -119,7 +117,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         if (sharedpreferences.contains("SharedImages")) {
             EndedImage = sharedpreferences.getString("SharedImages", "");
             Log.e("Privacypolicy", "Checking" + EndedImage);
-             EndedKmImage.setImageURI(Uri.parse(EndedImage));
+            EndedKmImage.setImageURI(Uri.parse(EndedImage));
 
 
             imageConvert = EndedImage.substring(7);
@@ -198,7 +196,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                if (EndedEditText.getText().toString().matches("")) {
+                if (EndedEditText.getText().toString().matches("") || EndedImage.matches("")) {
                     Toast.makeText(AllowanceActivityTwo.this, "Enter details", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
@@ -282,7 +280,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                                 editor.remove("SharedFare");
                                 editor.remove("SharedImages");
                                 editor.remove("Closing");
-                                  Intent takePhoto = new Intent(AllowanceActivityTwo.this, ImageCapture.class);
+                                Intent takePhoto = new Intent(AllowanceActivityTwo.this, ImageCapture.class);
                                 takePhoto.putExtra("Mode", "COUT");
                                 startActivity(takePhoto);
 
@@ -540,7 +538,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
 
                 // picPath.add(filePath);
                 Log.v("printing__eventListStr", filePath);
-
 
 
                 getMulipart(filePath, 0);
