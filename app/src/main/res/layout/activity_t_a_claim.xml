@@ -77,7 +77,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@color/Extended"
+                                android:background="@color/subExpHeader"
                                 android:orientation="vertical"
                                 android:padding="@dimen/C8dp">
 
@@ -187,7 +187,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@color/Extended"
+                                android:background="@color/subExpHeader"
                                 android:padding="@dimen/C8dp">
 
                                 <TextView
@@ -626,7 +626,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="2"
-                                    android:background="@color/Extended"
+                                    android:background="@color/subExpHeader"
                                     android:padding="@dimen/C8dp">
 
                                     <LinearLayout
@@ -699,7 +699,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@color/Extended"
+                                android:background="@color/subExpHeader"
                                 android:padding="@dimen/C8dp">
 
                                 <TextView
@@ -886,7 +886,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@color/Extended"
+                                android:background="@color/subExpHeader"
                                 android:padding="@dimen/C8dp">
 
                                 <LinearLayout
@@ -1586,7 +1586,7 @@
                                 <RelativeLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:background="@color/Extended"
+                                    android:background="@color/subExpHeader"
                                     android:padding="@dimen/C8dp">
 
                                     <LinearLayout
@@ -1700,7 +1700,7 @@
                                 <RelativeLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:background="@color/Extended"
+                                    android:background="@color/subExpHeader"
                                     android:padding="@dimen/C8dp">
 
                                     <LinearLayout
@@ -1819,7 +1819,7 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:background="@color/Extended"
+                                    android:background="@color/subExpHeader"
                                     android:orientation="vertical"
                                     android:paddingLeft="@dimen/C8dp"
                                     android:paddingTop="@dimen/C8dp"
@@ -1871,14 +1871,13 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:visibility="gone"
-        android:background="#99ECEAEA"
+        android:background="#ECEAEA"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/dark_grey"></View>
-
+            android:background="@color/grey_300"></View>
         <LinearLayout
 
             android:layout_width="match_parent"
@@ -1887,52 +1886,57 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/C10dp"
-                android:orientation="horizontal">
+                android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/C10dp"
-                    android:layout_marginTop="@dimen/C5dp"
-                    android:gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="Total "
-                    android:textAllCaps="true"
-                    android:textColor="#000"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/C10dp"
-                    android:orientation="vertical">
+                    android:layout_margin="@dimen/C8dp"
+                    app:cardCornerRadius="@dimen/C5dp">
 
-                    <TextView
-                        android:id="@+id/grand_total"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/C5dp"
-                        android:paddingLeft="@dimen/C10dp"
-                        android:paddingRight="@dimen/C10dp"
-                        android:text=""
-                        android:textColor="@color/colorPrimary"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:orientation="vertical">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/colorPrimary"></View>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/GrandTotal"
+                            android:orientation="vertical"
+                            android:paddingLeft="@dimen/C8dp"
+                            android:paddingTop="@dimen/C8dp"
+                            android:paddingRight="@dimen/C8dp"
+                            android:paddingBottom="@dimen/C5dp">
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="@dimen/C1dp"
-                        android:background="@color/colorPrimary"></View>
-                </LinearLayout>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/card_fare"
+                                android:text="TOTAL "
+                                android:textAlignment="center"
+                                android:textAllCaps="true"
+                                android:textColor="#FFF"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/grand_total"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:paddingLeft="@dimen/C10dp"
+                            android:paddingRight="@dimen/C10dp"
+                            android:text=""
+                            android:textAlignment="center"
+                            android:textColor="#333"
+                            android:textSize="25sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
 
             </LinearLayout>
 
