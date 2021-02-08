@@ -56,6 +56,9 @@
     <color name="greyColor">#2C000000</color>
     <color name="subHeader">#9C000000</color>
 
+    <color name="subExpHeader">#009688</color>
+    <color name="GrandTotal">#4CAF50</color>
+
    <!--button Colors-->
    <color name="mDyPlan">#0080ff</color>
    <color name="CheckIn">#009688</color>
