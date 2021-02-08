@@ -285,6 +285,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     TextView txtJointAdd, txtJNEligi;
     String start_Image, End_Imge;
     EditText edtLcFare;
+    String filePath = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -724,7 +725,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         btn_sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for (int i = 0; i < picPath.size(); i++) {
+   /*             for (int i = 0; i < picPath.size(); i++) {
                     Log.e("UPloadimageThiru", String.valueOf(picPath.size()));
                     getMulipart(picPath.get(i), -1);
                 }
@@ -733,7 +734,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     for (int j = 0; j < imp.length - 1; j++) {
                         getMulipart(imp[j], i);
                     }
-                }
+                }*/
 
                 if (txt_date.getText().toString().matches("")) {
                     Toast.makeText(TAClaimActivity.this, "Please choose Date", Toast.LENGTH_SHORT).show();
@@ -1175,6 +1176,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 JsonObject jsonObject = null;
                 for (int i = 0; i < jsonArray.size(); i++) {
+
+
+                    Log.e("JsonArray", String.valueOf(jsonArray.size()));
                     jsonObject = (JsonObject) jsonArray.get(i);
 
                     StartedKm = String.valueOf(jsonObject.get("Start_Km"));
@@ -1238,7 +1242,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         enterFrom = views.findViewById(R.id.enter_from);
                         enterTo = views.findViewById(R.id.enter_to);
                         enterFare = views.findViewById(R.id.enter_fare);
-                        deleteButton = findViewById(R.id.delete_button);
+                        deleteButton = views.findViewById(R.id.delete_button);
+                        taAttach = (ImageView) views.findViewById(R.id.image_attach);
+                        taAttach.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                popupCapture("0");
+                            }
+                        });
 
                         editText.setText(StrDaName);
                         enterFrom.setText(StrBus);
@@ -1408,11 +1419,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         Log.v("oEDraftArray_inner", oEDraft.toString());
         Log.v("oEDraftArray_inner", String.valueOf(oEDraft.size()));
 
-      //  JsonArray jsonAddition = null;
+        //  JsonArray jsonAddition = null;
         for (int i = 0; i < oEDraft.size(); i++) {
             JsonObject lcdraftJson = (JsonObject) oEDraft.get(i);
 
-           // jsonAddition = lcdraftJson.getAsJsonArray("Additional");
+            // jsonAddition = lcdraftJson.getAsJsonArray("Additional");
 
 
             String expCode = String.valueOf(lcdraftJson.get("Exp_Code"));
@@ -1503,6 +1514,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 10) {
+/*
+            if (resultCode == RESULT_OK) {
+                Log.e("PICK_IMAGE_ONCLICK", data.getStringExtra("OnClickVAlue"));
+            }*/
+
+            String requredText=data.getExtras().getString("OnClickVAlue");
+            Log.e("PICK_IMAGE_ONCLICK", requredText);
+
             //TODO: action
             ClipData mClipData = data.getClipData();
             int pickedImageCount;
@@ -1514,8 +1533,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                      pickedImageCount++) {
                     Log.v("picked_image_value", mClipData.getItemAt(pickedImageCount).getUri() + "");
                     ImageFilePath filepath = new ImageFilePath();
+
+
+                    Log.v("Upload_one", String.valueOf(filepath));
                     String fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(pickedImageCount).getUri());
-                    Log.v("picked_fullPath", fullPath + "");
+                    getMulipart(fullPath, 0);
                     if (pos == -1)
                         picPath.add(fullPath);
                     else {
@@ -1530,9 +1552,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 Log.v("data_pic_multiple", "is in empty");
                 ImageFilePath filepath = new ImageFilePath();
                 String fullPath = filepath.getPath(TAClaimActivity.this, data.getData());
-                Log.v("data_pic_multiple11", fullPath);
+                Log.v("Upload_Image_two", fullPath);
+
                 if (pos == -1)
                     picPath.add(fullPath);
+
                 else {
                     SelectionModel m = array.get(pos);
                     filepathing = m.getImg_url();
@@ -1544,15 +1568,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
         } else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
             String finalPath = "/storage/emulated/0";
-            String filePath = outputFileUri.getPath();
+            filePath = outputFileUri.getPath();
             filePath = filePath.substring(1);
             filePath = finalPath + filePath.substring(filePath.indexOf("/"));
-            Log.v("printing__file_path", filePath);
+            Log.v("Upload_Image_three", filePath);
+
+            getMulipart(filePath, 0);
             Log.v("printing__Position", String.valueOf(pos));
             if (pos == -1) {
-                // picPath.add(filePath);
                 Log.v("printing__eventListStr", filePath);
-                getMulipart(filePath, 0);
             } else {
                 SelectionModel m = array.get(pos);
                 String filepathing = "";
@@ -1560,7 +1584,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 filepathing = filepathing + filePath + ",";
                 m.setImg_url(filepathing);
             }
-            //filePathing = filePathing + filePath + ",";
+
         }
     }
 
@@ -1729,33 +1753,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         submit.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
- /* try {
- String jsonData = null;
- jsonData = response.body().string();
- Log.v("printing_json", jsonData);
- JSONObject json = new JSONObject(jsonData);
- if (json.getString("success").equalsIgnoreCase("true")) {
- Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
- Intent intent = new Intent(TAClaimActivity.this, ViewTASummary.class);
- intent.putExtra("DateofExpense", DateTime);
- intent.putExtra("travelMode", travelTypeMode.getText().toString());
- startActivity(intent);
- }
- } catch (Exception e) {
- Log.v("printing_excep_va", e.getMessage());
- }*/
-
-
                 Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
-
- /* txt_date.setText("");
- travelDynamicLoaction.removeAllViews();
- linlocalCon.removeAllViews();
- LinearOtherAllowance.removeAllViews();
- lin_daily_allowance.setVisibility(View.GONE);
- linlocalCon.setVisibility();
- */
-
             }
 
             @Override
@@ -1769,13 +1767,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     public void getMulipart(String path, int x) {
         MultipartBody.Part imgg = convertimg("file", path);
-        HashMap<String, RequestBody> values = field("MR0417");
+        HashMap<String, RequestBody> values = field(mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
         CallApiImage(values, imgg, x);
     }
 
     public MultipartBody.Part convertimg(String tag, String path) {
         MultipartBody.Part yy = null;
-        Log.v("full_profile", path);
+        Log.v("Upload_Image_three", path);
         try {
             if (!TextUtils.isEmpty(path)) {
 
@@ -1789,7 +1787,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
         } catch (Exception e) {
         }
-        Log.v("full_profile", yy + "");
+        Log.v("Upload_Image_three", yy + "");
         return yy;
     }
 
@@ -1808,7 +1806,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     public void CallApiImage(HashMap<String, RequestBody> values, MultipartBody.Part imgg, final int x) {
         Call<ResponseBody> Callto;
 
-        Callto = apiInterface.uploadimg(values, imgg);
+        Callto = apiInterface.uploadkmimg(values, imgg);
 
         Callto.enqueue(new Callback<ResponseBody>() {
             @Override
@@ -1882,7 +1880,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         intent.setType("image/*");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+
         }
+        intent.putExtra("OnClickVAlue", "123456");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), 10);
     }
@@ -1891,7 +1891,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         dialog.dismiss();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Uri outputFileUri = Uri.fromFile(new File(getExternalCacheDir().getPath(), "pickImageResult.jpeg"));
-        outputFileUri = FileProvider.getUriForFile(TAClaimActivity.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), "pickImageResult" + System.currentTimeMillis() + ".jpeg"));
+        outputFileUri = FileProvider.getUriForFile(TAClaimActivity.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), Shared_Common_Pref.Sf_Code + "_" + System.currentTimeMillis() + ".jpeg"));
         Log.v("priniting_uri", outputFileUri.toString() + " output " + outputFileUri.getPath() + " raw_msg " + getExternalCacheDir().getPath());
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
@@ -2315,111 +2315,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
 
     public void LocalConvenyanceApi(String sss) {
-
-        apiInterface = ApiClient.getClient().create(ApiInterface.class);
-
-        Log.e("LC_VALUE", sss);
-        try {
-
-            JSONObject jj = new JSONObject();
-            jj.put("Ta_Date", "");
-            jj.put("div", div);
-            jj.put("sf", SF_code);
-            jj.put("rSF", SF_code);
-            jj.put("State_Code", State_Code);
-            Log.v("json_obj_ta", jj.toString());
-            Call<ResponseBody> Callto = apiInterface.getDailyAllowance(jj.toString());
-            Callto.enqueue(new Callback<ResponseBody>() {
-                @SuppressLint({"ResourceType", "NewApi"})
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    try {
-                        if (response.isSuccessful()) {
-                            Log.v("print_upload_file_true", "ggg" + response);
-                            String jsonData = null;
-                            jsonData = response.body().string();
-                            Log.v("response_data", jsonData);
-                            JSONObject js = new JSONObject(jsonData);
-                            JSONArray jsnArValue = js.getJSONArray("ExpenseWeb");
-
-                            for (int i = 0; i < jsnArValue.length(); i++) {
-                                JSONObject jsonHeaderObject = jsnArValue.getJSONObject(i);
-                                String Exp_Name = jsonHeaderObject.getString("Name");
-
-
-                                Log.v("LC_MODE", lcString.toString());
-                                if (Exp_Name.equals(sss)) {
-                                    Log.d("TAF", Exp_Name);
-                                    Log.d("TAF", sss);
-                                    Log.d("TAF", jsonHeaderObject.getString("user_enter"));
-                                    Log.d("TAF", jsonHeaderObject.getString("Max_Allowance"));
-                                    JSONArray additionArray = null;
-
-                                    additionArray = jsonHeaderObject.getJSONArray("value");
-                                    List<EditText> users = new ArrayList<>();
-                                    for (int l = 0; l <= additionArray.length(); l++) {
-                                        JSONObject json_in = additionArray.getJSONObject(l);
-                                        dynamicLabel = json_in.getString("Ad_Fld_Name");
-                                        dynamicLabelList.add(dynamicLabel);
-                                        Log.d("TAF_Exp_Nameffdd", additionArray.toString());
-                                        Log.d("TAF_Ex", dynamicLabel);
-                                        Log.d("LC_MODE", dynamicLabelList.toString());
-                                        RelativeLayout childRel = new RelativeLayout(getApplicationContext());
-                                        RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                                        layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_START);
-                                        layoutparams_3.setMargins(20, -10, 0, 0);
-                                        edt = new EditText(getApplicationContext());
-                                        edt.setLayoutParams(layoutparams_3);
-                                        edt.setHint(dynamicLabel);
-                                        edt.setId(12345);
-                                        edt.setTextSize(13);
-                                        edt.setTextColor(R.color.grey_500);
-
-                                        childRel.addView(edt);
-                                        //   allEds.add(edt);
-
-                                        users.add(edt);
-
-
-                                        Log.e("EDITTEX_SISE", "bb " + String.valueOf(users.size()));
-                                        Log.e("EDITTEX_SISE", "aa " + String.valueOf(allEds.size()));
-                                        if (l == additionArray.length() - 1) {
-                                            usersByCountry.put(sss, users);
-                                            Log.e("EDITTEX_SISE", "dd " + String.valueOf(usersByCountry.keySet()));
-                                            Log.e("EDITTEX_SISE", "dd " + String.valueOf(usersByCountry.values()));
-                                        }
-
-
-                                        //Create new list
-
-
-                                        View view = linlocalCon.getChildAt(editTextPositionss);
-                                        Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
-                                        Dynamicallowance.addView(childRel);
-                                    }
-
-                                }
-
-
-                            }
-
-
-                        }
-                    } catch (Exception e) {
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                }
-            });
-
-        } catch (Exception e) {
-        }
-    }
-
-    public void LocalConvenyanceApi1(String sss) {
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
