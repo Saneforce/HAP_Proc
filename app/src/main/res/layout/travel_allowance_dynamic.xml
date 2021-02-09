@@ -7,6 +7,7 @@
 
     <LinearLayout
 
+        android:id="@+id/linear_row_ad"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/enter_to"
@@ -103,5 +104,24 @@
         android:gravity="right"
         android:onClick="onTADelete"
         android:src="@drawable/delete_cart" />
+
+
+
+
+    <LinearLayout
+        android:id="@+id/lin_ta_img_prv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+      <!--<ImageView
+       android:id="@+id/image_previews"
+       android:layout_width="wrap_content"
+       android:layout_height="match_parent"
+       android:layout_marginTop="-8dp"
+       android:padding="@dimen/C5dp"
+       android:src="@drawable/image_preview" />
+-->    </LinearLayout>
+
 
 </LinearLayout>

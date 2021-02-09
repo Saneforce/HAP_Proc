@@ -35,10 +35,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
+        <activity android:name=".Activity_Hap.AttachementActivity"></activity>
         <activity
             android:name=".Activity.Util.TaApprovalDisplay"
             android:label="@string/title_activity_ta_approval_display"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity_Hap.MapZoomIn"
             android:theme="@style/AppTheme.Dialogs" />

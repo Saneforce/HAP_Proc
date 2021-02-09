@@ -39,7 +39,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
@@ -195,7 +194,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     String STRCHECKING;
     TextView editText;
     int size = 0, lcSize = 0, OeSize = 0;
-    LinearLayout lin_daily_allowance;
+    LinearLayout linDailyAllowance;
     View childView;
     List<Common_Model> myDataset = new ArrayList<>();
     int position;
@@ -233,13 +232,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     EditText editLaFare, edtOE;
     Map<String, List<EditText>> usersByCountry = new HashMap<String, List<EditText>>();
     Map<String, List<EditText>> userOtherExpense = new HashMap<String, List<EditText>>();
-
+    ImageView previewss;
 
     String editMode = "";
     Double tofuel = 0.0;
     LinearLayout localTotal, otherTotal;
 
-    ImageView taAttach, lcAttach, oeAttach;
+    ImageView taAttach, lcAttach, oeAttach, lcPreview, oePreview;
     String allowanceAmt = "";
     TextView txtallamt;
 
@@ -268,6 +267,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     Button buttonSave;
     ArrayList<String> lcString = new ArrayList<>();
 
+
     //Loadging Expense
 
     DatePickerDialog picker;
@@ -286,6 +286,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     String start_Image, End_Imge;
     EditText edtLcFare;
     String filePath = "";
+    ImageView imgPrev;
+    LinearLayout linTaImgPrv;
+
+    String fullPath = "";
+    ArrayList<ArrayList<String>> tlString = new ArrayList<ArrayList<String>>();
+    Integer taCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -337,7 +343,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         txtDailyAllowance = findViewById(R.id.txt_daily_allowance_mode);
         travelDynamicLoaction = findViewById(R.id.lin_travel_dynamic_location);
         crdDynamicLocation = findViewById(R.id.card_travel_loaction);
-        lin_daily_allowance = findViewById(R.id.lin_da_type);
+        linDailyAllowance = findViewById(R.id.lin_da_type);
         linlocalCon = findViewById(R.id.lin_dyn_local_con);
         fuelAmount = findViewById(R.id.fuel_amount);
         mSharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
@@ -352,6 +358,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         linAll = findViewById(R.id.lin_alo_view);
         linRemarks = findViewById(R.id.lin_remarks);
         linFareAmount = findViewById(R.id.lin_fare_amount);
+        linTaImgPrv = findViewById(R.id.lin_ta_img_prv);
 
         //Loadging Expense
         ldgNeeded = findViewById(R.id.sw_ldgNeed);
@@ -433,49 +440,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 SumWOBLodging();
             }
         });
-       /* btn_empget.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String sEmpID = String.valueOf(edt_ldg_JnEmp.getText());
-                Log.d("EmpNo", sEmpID);
-                Call<JsonArray> Callto = apiInterface.getDataArrayList("get/EmpByID",
-                        UserDetails.getString("Divcode", ""),
-                        UserDetails.getString("Sfcode", ""), sEmpID, "", "", null);
-                Callto.enqueue(new Callback<JsonArray>() {
-                    @Override
-                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                        JsonArray res = response.body();
-                        if (res.size() < 1) {
-                            Toast.makeText(getApplicationContext(), "Emp Code Not Found !", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                        JsonObject EmpDet = res.get(0).getAsJsonObject();
-                        txtJNName.setText(EmpDet.get("Name").getAsString());
-                        txtJNDesig.setText(EmpDet.get("Desig").getAsString());
-                        txtJNDept.setText(EmpDet.get("DeptName").getAsString());
-                        txtJNHQ.setText(EmpDet.get("HQ").getAsString());
-                        txtJNMob.setText(EmpDet.get("Mob").getAsString());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonArray> call, Throwable t) {
-                        Log.d("Error:", "Some Error" + t.getMessage());
-                    }
-                });
-
-            }
-        });*/
- /*ldgNeeded.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
- @Override
- public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
- if (isChecked==true)
- {
- ldg_ara.setVisibility(View.VISIBLE);
- }else {
- ldg_ara.setVisibility(View.GONE);
- }
- }
- });*/
 
 
         strRetriveType = String.valueOf(getIntent().getSerializableExtra("Retrive_Type"));
@@ -536,6 +500,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
                     edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
                     oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
+                    oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
                     linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
 
                     edtOE.addTextChangedListener(new TextWatcher() {
@@ -588,7 +553,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     oeAttach.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            popupCapture("OE");
+                            //popupCapture("OE");
                         }
                     });
 
@@ -626,6 +591,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     editTexts = (TextView) (childView.findViewById(R.id.local_enter_mode));
                     linLocalSpinner = (LinearLayout) childView.findViewById(R.id.lin_loc_spiner);
                     lcAttach = (ImageView) (childView.findViewById(R.id.la_attach_iamg));
+                    lcPreview = (ImageView) (childView.findViewById(R.id.img_prvw_lc));
+
 
                     editLaFare = (EditText) (childView.findViewById(R.id.edt_la_fare));
                     editLaFare.addTextChangedListener(new TextWatcher() {
@@ -677,7 +644,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     lcAttach.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            popupCapture("LC");
+                            //    popupCapture("LC");
                         }
                     });
 
@@ -748,7 +715,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void update(int value, int pos1) {
                 pos = pos1;
-                popupCapture("attachName");
+                //  popupCapture("attachName");
             }
         });
 
@@ -781,21 +748,44 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 layoutParams.setMargins(15, 15, 15, 15);
 
+                tlString.add(new ArrayList<>());
+
                 if (StrToEnd.equals("0")) {
                     crdDynamicLocation.setVisibility(View.VISIBLE);
                     rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
                     travelDynamicLoaction.addView(rowView, layoutParams);
                     deleteButton = findViewById(R.id.delete_button);
                     size = travelDynamicLoaction.getChildCount();
-                    Log.d("PARENT_COUNT", String.valueOf(size));
+                    // Log.d("PARENT_COUNT", String.valueOf(size));
 
 
                     for (int c = 0; c < size; c++) {
+                        Integer finalC = c;
+
+                        Log.d("Travel_location", String.valueOf(c));
                         childView = travelDynamicLoaction.getChildAt(c);
 
+
+                        Log.e("ARRAY_LIST", String.valueOf(tlString.size()));
+
                         editText = (TextView) (childView.findViewById(R.id.enter_mode));
+
                         taAttach = (ImageView) (childView.findViewById(R.id.image_attach));
-                        Integer finalC = c;
+                        previewss = (ImageView) (childView.findViewById(R.id.image_preview));
+                        previewss.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                taCount = finalC;
+                                Log.e("ImageArray_1", String.valueOf(taCount));
+                              //  Log.e("ImageArray_2", taCount + "   " + (tlString.get(taCount).toString()));
+
+
+                              /*  Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                                stat.putExtra("Data", arrImage);
+                                startActivity(stat);*/
+                            }
+                        });
+
 
                         editText.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -806,10 +796,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             }
                         });
 
+
                         taAttach.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                popupCapture("attachName");
+                                taCount = finalC;
+                                popupCapture(finalC);
+                                Log.e("ATTACH_POSITION", String.valueOf(finalC));
+
                             }
                         });
 
@@ -888,12 +882,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         if (size == 0) {
             crdDynamicLocation.setVisibility(View.GONE);
         }
+
     }
 
 
     public void onLCDelete(View v) {
         // Log.d("PARENT_COUNT", String.valueOf(lcSize));
-        Log.d("PARENT_COUNT", String.valueOf(linlocalCon.getChildCount()));
+        Log.d("LC_PARENT_COUNT", String.valueOf(linlocalCon.getChildCount()));
         linlocalCon.removeView((View) v.getParent());
         if (linlocalCon.getChildCount() == 0) {
             localTotal.setVisibility(View.GONE);
@@ -920,7 +915,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void onOEDelete(View v) {
-        Log.d("PARENT_COUNT", String.valueOf(lcSize));
+
+        int lcSizes = LinearOtherAllowance.getChildCount() - 1;
+        Log.d("OE_PARENT_COUNT", String.valueOf(lcSizes));
         LinearOtherAllowance.removeView((View) v.getParent());
 
         if (LinearOtherAllowance.getChildCount() == 0) {
@@ -1176,10 +1173,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 JsonObject jsonObject = null;
                 for (int i = 0; i < jsonArray.size(); i++) {
-
+                    int finalC = i;
 
                     Log.e("JsonArray", String.valueOf(jsonArray.size()));
                     jsonObject = (JsonObject) jsonArray.get(i);
+
+                    linDailyAllowance.setVisibility(View.VISIBLE);
 
                     StartedKm = String.valueOf(jsonObject.get("Start_Km"));
                     StrToEnd = String.valueOf(jsonObject.get("StEndNeed"));
@@ -1207,7 +1206,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     fAmount = Double.valueOf(strFuelAmount);
                     fuelAmount.setText(" Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM ");
                     txtTaClaim.setText(StrDaName);
+
+
+                    Log.e("dailyAllowance", StrDailyAllowance);
                     txtDailyAllowance.setText(StrDailyAllowance);
+
 
                     if (StrDailyAllowance.equals("Out Station")) {
                         doubleAmount = 0.0;
@@ -1237,8 +1240,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                         travelDynamicLoaction.addView(rowView, layoutParams);
 
+                        tlString.add(new ArrayList<>());
+
+
                         View views = travelDynamicLoaction.getChildAt(0);
-                        editText = views.findViewById(R.id.enter_mode);
+                        LinearLayout lad = (LinearLayout) views.findViewById(R.id.linear_row_ad);
+                        editText = (TextView) views.findViewById(R.id.enter_mode);
+
                         enterFrom = views.findViewById(R.id.enter_from);
                         enterTo = views.findViewById(R.id.enter_to);
                         enterFare = views.findViewById(R.id.enter_fare);
@@ -1247,7 +1255,25 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         taAttach.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                popupCapture("0");
+                                popupCapture(finalC);
+
+                            }
+                        });
+
+
+                        previewss = (ImageView) (views.findViewById(R.id.image_preview));
+                        previewss.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+
+                           /*     Log.e("ImageArray_1", String.valueOf(tlString.size()));
+                                Log.e("ImageArray_2", (tlString.get(taCount-1).toString()));*/
+
+                                Log.e("STRING_COOUNT", String.valueOf((0)));
+
+                              /*  Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                                stat.putExtra("Data", arrImage);
+                                startActivity(stat);*/
                             }
                         });
 
@@ -1257,7 +1283,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         deleteButton.setVisibility(View.GONE);
 
 
+                        lad.setClickable(false);
+                        lad.setOnClickListener(null);
                         editText.setOnClickListener(null);
+                        editText.setClickable(false);
                         enterFrom.setEnabled(false);
                         enterTo.setEnabled(false);
 
@@ -1454,6 +1483,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
             edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
             oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
+            oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
             linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
 
             linOtherSpinner.setOnClickListener(new View.OnClickListener() {
@@ -1511,19 +1541,17 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+
         super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == 10) {
-/*
-            if (resultCode == RESULT_OK) {
-                Log.e("PICK_IMAGE_ONCLICK", data.getStringExtra("OnClickVAlue"));
-            }*/
-
-            String requredText=data.getExtras().getString("OnClickVAlue");
-            Log.e("PICK_IMAGE_ONCLICK", requredText);
-
             //TODO: action
             ClipData mClipData = data.getClipData();
+
+
+            Log.v("onactivity_result", mClipData + " ");
             int pickedImageCount;
             String filepathing = "";
             if (data.getData() == null) {
@@ -1533,10 +1561,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                      pickedImageCount++) {
                     Log.v("picked_image_value", mClipData.getItemAt(pickedImageCount).getUri() + "");
                     ImageFilePath filepath = new ImageFilePath();
-
-
                     Log.v("Upload_one", String.valueOf(filepath));
-                    String fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(pickedImageCount).getUri());
+                    fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(pickedImageCount).getUri());
+/*if(arrImage.size()!=0){
+    a
+}*/
+                    tlString.get(taCount).add(fullPath);
+
+                    Log.e("STRING_COOUNT", String.valueOf((taCount)));
                     getMulipart(fullPath, 0);
                     if (pos == -1)
                         picPath.add(fullPath);
@@ -1545,15 +1577,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         filepathing = m.getImg_url();
                         filepathing = filepathing + fullPath + ",";
                         m.setImg_url(filepathing);
-
                     }
                 }
             } else {
                 Log.v("data_pic_multiple", "is in empty");
                 ImageFilePath filepath = new ImageFilePath();
-                String fullPath = filepath.getPath(TAClaimActivity.this, data.getData());
+                fullPath = filepath.getPath(TAClaimActivity.this, data.getData());
                 Log.v("Upload_Image_two", fullPath);
-
+                /////////  arrImage.add(fullPath);
                 if (pos == -1)
                     picPath.add(fullPath);
 
@@ -1566,13 +1597,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }
 
-        } else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
+        } else if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+
+
             String finalPath = "/storage/emulated/0";
             filePath = outputFileUri.getPath();
             filePath = filePath.substring(1);
             filePath = finalPath + filePath.substring(filePath.indexOf("/"));
             Log.v("Upload_Image_three", filePath);
-
+            ////////////     arrImage.add(filePath);
             getMulipart(filePath, 0);
             Log.v("printing__Position", String.valueOf(pos));
             if (pos == -1) {
@@ -1586,6 +1619,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
 
         }
+
+
     }
 
     public void submitData() {
@@ -1700,11 +1735,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             JSONArray othrExp = new JSONArray();
             int addOtherExp = LinearOtherAllowance.getChildCount();
 
-
-
-          /*  oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
-            edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
-            oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));*/
 
             for (int lc = 0; lc < addOtherExp; lc++) {
                 View view = LinearOtherAllowance.getChildAt(lc);
@@ -1852,8 +1882,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    public void popupCapture(String attachName) {
-        Log.d("AttachName", attachName);
+    public void popupCapture(Integer attachName) {
+        Log.d("AttachName", String.valueOf(attachName));
         dialog = new Dialog(TAClaimActivity.this, R.style.AlertDialogCustom);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.popup_capture);
@@ -1869,7 +1899,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                captureFile();
+                captureFile(attachName);
             }
         });
     }
@@ -1880,22 +1910,23 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         intent.setType("image/*");
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-
         }
-        intent.putExtra("OnClickVAlue", "123456");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), 10);
     }
 
-    public void captureFile() {
+    public void captureFile(Integer positionC) {
         dialog.dismiss();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Uri outputFileUri = Uri.fromFile(new File(getExternalCacheDir().getPath(), "pickImageResult.jpeg"));
         outputFileUri = FileProvider.getUriForFile(TAClaimActivity.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), Shared_Common_Pref.Sf_Code + "_" + System.currentTimeMillis() + ".jpeg"));
         Log.v("priniting_uri", outputFileUri.toString() + " output " + outputFileUri.getPath() + " raw_msg " + getExternalCacheDir().getPath());
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        intent.putExtra("OUTPUT", "outputFileUri");
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivityForResult(intent, 2);
+
+        setResult(Activity.RESULT_OK, intent);
+        startActivityForResult(intent, positionC);
         eventListStr = String.valueOf(outputFileUri);
     }
 
@@ -2059,6 +2090,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             edtLcFare = (EditText) (view.findViewById(R.id.edt_la_fare));
             // enterMode = view.findViewById(R.id.enter_mode);
             lcAttach = (ImageView) (view.findViewById(R.id.la_attach_iamg));
+            lcPreview = (ImageView) (view.findViewById(R.id.img_prvw_lc));
 
             edtLcFare.setText("");
 
@@ -2074,8 +2106,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             Log.e("ASD_Value", String.valueOf(AttachmentImg.get(StrModeValue)));
             if (AttachmentImg.get(StrModeValue).equals("1")) {
                 lcAttach.setVisibility(View.VISIBLE);
+                lcPreview.setVisibility(View.VISIBLE);
             } else {
                 lcAttach.setVisibility(View.GONE);
+                lcPreview.setVisibility(View.GONE);
             }
 
 
@@ -2086,16 +2120,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             editTextPositionss = myDataset.get(position).getPho();
             View view = LinearOtherAllowance.getChildAt(editTextPositionss);
             oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
-            oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
+            oeAttach = (ImageView) (view.findViewById(R.id.oe_attach_img));
+            oePreview = (ImageView) (view.findViewById(R.id.img_prvw_oe));
 
             Log.e("Attachment", myDataset.get(position).getAddress());
- /* if (myDataset.get(position).getAddress().equals("1")) {
- oeAttach.setVisibility(View.VISIBLE);
- } else {
- oeAttach.setVisibility(View.GONE);
- }
-*/
-
 
             OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
             oeEditext.setText(myDataset.get(position).getName());
@@ -2111,8 +2139,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
             if (AttachmentImg.get(StrModeValue).equals("1")) {
                 oeAttach.setVisibility(View.VISIBLE);
+                oePreview.setVisibility(View.VISIBLE);
             } else {
                 oeAttach.setVisibility(View.GONE);
+                oePreview.setVisibility(View.GONE);
             }
 
 

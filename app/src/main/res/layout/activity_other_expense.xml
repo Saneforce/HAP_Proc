@@ -65,6 +65,17 @@
             android:textColorHint="#C0C0C0"
             android:textSize="@dimen/C14dp" />
 
+
+        <ImageView
+            android:id="@+id/img_prvw_oe"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-8dp"
+            android:padding="@dimen/C5dp"
+            android:visibility="gone"
+            android:src="@drawable/image_preview" />
+
+
         <ImageView
             android:id="@+id/oe_attach_img"
             android:layout_width="wrap_content"
