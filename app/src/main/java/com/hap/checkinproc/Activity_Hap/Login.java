@@ -331,7 +331,7 @@ public class Login extends AppCompatActivity {
                 Glide.with(this).load(account.getPhotoUrl()).into(profileImage);
                 Log.e("aara", account.getPhotoUrl().toString());
                 photo = account.getPhotoUrl().toString();
-
+                shared_common_pref.save(Shared_Common_Pref.Profile, account.getPhotoUrl().toString());
             } catch (NullPointerException e) {
                 Toast.makeText(getApplicationContext(), "image not found", LENGTH_LONG).show();
             }
@@ -438,6 +438,7 @@ public class Login extends AppCompatActivity {
     public void login(int requestCode) {
         if (eMail.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Invalid Email ID", Toast.LENGTH_LONG).show();
+            mProgress.dismiss();
             return;
         }
 
@@ -463,21 +464,16 @@ public class Login extends AppCompatActivity {
 
                         if (requestCode == RC_SIGN_IN) {
                             if (CheckIn == true) {
-
-                                intent = new Intent(Login.this, AllowanceActivity.class);
-                                // intent = new Intent(Login.this, Dashboard_Two.class);
+                                intent = new Intent(Login.this, Dashboard_Two.class);
                                 //  intent = new Intent(Login.this, TAClaimActivity.class);
                                 intent.putExtra("Mode", "CIN");
                             } else {
-                                intent = new Intent(Login.this, AllowanceActivity.class);
-                                // intent = new Intent(Login.this, Dashboard.class);
+                                intent = new Intent(Login.this, Dashboard.class);
                                 // intent = new Intent(Login.this, TAClaimActivity.class);
                             }
-                            // intent = new Intent(Login.this, OrderDashBoard.class);
                         } else {
-                            //intent = new Intent(Login.this, TAClaimActivity.class);
-                            intent = new Intent(Login.this, AllowanceActivity.class);
-                            // intent = new Intent(Login.this, Dashboard_Two.class);
+                            // intent = new Intent(Login.this, AllowanceActivity.class);
+                            intent = new Intent(Login.this, Dashboard_Two.class);
                             intent.putExtra("Mode", "RPT");
                         }/*
                         intent.putExtra("photo", photo);
@@ -562,7 +558,11 @@ public class Login extends AppCompatActivity {
             public void onFailure(Call<Model> call, Throwable t) {
 
                 Toast.makeText(getApplicationContext(), "Not Working", Toast.LENGTH_LONG).show();
+                try {
+                mProgress.dismiss();
+                } catch (Exception e) {
 
+                }
             }
         });
     }

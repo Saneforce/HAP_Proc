@@ -1240,7 +1240,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
 
                     Log.e("dailyAllowance", StrDailyAllowance);
-                    txtDailyAllowance.setText(StrDailyAllowance);
+                    txtDailyAllowance.setText(StrDailyAllowance +" ( "+ StrTo +" )");
 
 
                     if (StrDailyAllowance.equals("Out Station")) {
@@ -2352,9 +2352,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         /* Dynamicallowance.removeAllViews();*/
         mCommon_model_spinner = new Common_Model("Independent Stay", "IS");
         ldgModes.add(mCommon_model_spinner);
-        mCommon_model_spinner = new Common_Model("Jointly Stay", "JS");
+        mCommon_model_spinner = new Common_Model("Joined Stay", "JS");
         ldgModes.add(mCommon_model_spinner);
-        mCommon_model_spinner = new Common_Model("Stay At Relaytive House", "RS");
+        mCommon_model_spinner = new Common_Model("Stay At Relaytive's House", "RS");
         ldgModes.add(mCommon_model_spinner);
 
         customDialog = new CustomListViewDialog(TAClaimActivity.this, ldgModes, 9);

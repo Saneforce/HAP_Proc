@@ -162,8 +162,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         btnCheckout.setOnClickListener(this);
         gateIn_gateOut.setOnClickListener(this);
     if(getIntent().getExtras()!=null){
-       Bundle params = getIntent().getExtras();
-      viewMode = params.getString("Mode");
+        Bundle params = getIntent().getExtras();
+        viewMode = params.getString("Mode");
      if (viewMode.equalsIgnoreCase("CIN") || viewMode.equalsIgnoreCase("extended")) {
         cardview3.setVisibility(View.VISIBLE);
         cardview4.setVisibility(View.VISIBLE);
@@ -413,6 +413,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                         AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
                                 .setTitle("HAP Check-In")
                                 .setMessage(Html.fromHtml(mMessage))
+                                .setCancelable(false)
                                 .setPositiveButton("Missed Punch Request", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int i) {
@@ -439,6 +440,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
                                         .setTitle("HAP Check-In")
                                         .setMessage(Html.fromHtml(mMessage))
+                                        .setCancelable(false)
                                         .setPositiveButton("Weekoff", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -467,6 +469,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
                                         .setTitle("HAP Check-In")
                                         .setMessage(Html.fromHtml(mMessage))
+                                        .setCancelable(false)
                                         .setPositiveButton("Others", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
@@ -518,6 +521,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 new AlertDialog.Builder(Dashboard_Two.this)
                         .setTitle("HAP Check-In")
                         .setMessage(Html.fromHtml("Are you sure to start your Today Activity Now ?"))
+                        .setCancelable(false)
                         .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {

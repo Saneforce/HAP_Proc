@@ -16,9 +16,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -80,6 +82,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
 
         Get_MydayPlan(1, "check/mydayplan");
+        shared_common_pref = new Shared_Common_Pref(this);
         sharedPreferences = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
@@ -99,8 +102,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         lblUserName.setText(sSFName);
         lblEmail.setText(eMail);
+        Uri Profile=Uri.parse(shared_common_pref.getvalue(Shared_Common_Pref.Profile));
+        Glide.with(this).load(Profile).into(profilePic);
 
-        profilePic.setImageURI(Uri.parse((UserDetails.getString("url", ""))));
+        //Glide.with(this).load(Uri.parse((UserDetails.getString("url", "")))).into(profilePic);
+
+        //profilePic.setImageURI(Uri.parse((UserDetails.getString("url", ""))));
 
 
         linMyday = (findViewById(R.id.lin_myday_plan));
@@ -124,7 +131,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linExit = (findViewById(R.id.lin_exit));
         approvalcount = findViewById(R.id.approvalcount);
 
-        shared_common_pref = new Shared_Common_Pref(this);
         if (shared_common_pref.getvalue(Shared_Common_Pref.CHECK_COUNT).equals("0")) {
          //   linApprovals.setVisibility(View.GONE);
             linApprovals .setVisibility(View.VISIBLE);
@@ -173,8 +179,23 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         switch (view.getId()) {
 
             case R.id.lin_check_in:
-                Intent i = new Intent(this, Checkin.class);
-                startActivity(i);
+               /*
+                if(){
+
+                    Intent takePhoto = new Intent(this, ImageCapture.class);
+
+                    takePhoto.putExtra("Mode", "CIN");
+                    takePhoto.putExtra("ShiftId", itm.get("id").getAsString());
+                    takePhoto.putExtra("ShiftName", itm.get("name").getAsString());
+                    takePhoto.putExtra("On_Duty_Flag", OnDutyFlag);
+                    takePhoto.putExtra("ShiftStart", itm.getAsJsonObject("Sft_STime").get("date").getAsString());
+                    takePhoto.putExtra("ShiftEnd", itm.getAsJsonObject("sft_ETime").get("date").getAsString());
+                    takePhoto.putExtra("ShiftCutOff", itm.getAsJsonObject("ACutOff").get("date").getAsString());
+                    startActivity(takePhoto);
+                }else{*/
+                    Intent i = new Intent(this, Checkin.class);
+                    startActivity(i);
+                //}
                 break;
 
             case R.id.lin_request_status:
@@ -280,13 +301,17 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                         JSONArray jsoncc = jsonObject.getJSONArray("Checkdayplan");
                         Log.e("LENGTH_Checkin", String.valueOf(jsoncc));
                         Log.e("LENGTH_Checkin", String.valueOf(jsoncc.length()));
-
                         //Log.e("TB_MyDAy_Plan",String.valueOf(jsoncc.getJSONObject(0).get("remarks")));
                         Log.e("MyDAY_LENGTH", String.valueOf(jsoncc.length()));
                         if (jsoncc.length() > 0) {
                             Log.e("LENGTH_FOR_LOOP", String.valueOf(jsoncc.length()));
-                            linMyday.setVisibility(View.GONE);
-                            linCheckin.setVisibility(View.VISIBLE);
+                            if(jsoncc.getJSONObject(0).getInt("Cnt")<1){
+                                Intent intent = new Intent(Dashboard.this, AllowanceActivity.class);
+                                startActivity(intent);
+                            }else{
+                                linMyday.setVisibility(View.GONE);
+                                linCheckin.setVisibility(View.VISIBLE);
+                            }
                         } else {
                             linCheckin.setVisibility(View.GONE);
                             linMyday.setVisibility(View.VISIBLE);

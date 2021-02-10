@@ -118,6 +118,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     LinearLayout linCheckdriver;
     List<Common_Model> listOrderType = new ArrayList<>();
     Common_Model mCommon_model_spinner;
+    String startEnd="",ToAddressId="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -351,12 +352,18 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         }
         else if (type == 9) {
             TextToAddress.setText(myDataset.get(position).getName());
+            ToAddressId = myDataset.get(position).getId();
         }
         else if (type == 8) {
             TextMode.setText(myDataset.get(position).getName());
             DriverMode = myDataset.get(position).getCheckouttime();
+/*
+            Model_Pojo = new Common_Model(id, name, modeId, driverMode);*/
+
             Log.e("Dash_Mode_Count", DriverMode);
-            String   startEnd = myDataset.get(position).getId();
+            Log.e("Mode_ID", myDataset.get(position).getId());
+
+            startEnd = myDataset.get(position).getId();
             if (startEnd.equals("0")) {
                 mode = "11";
                 FromKm = "";
@@ -445,10 +452,12 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                         jsonobj.put("HQ_Name", "''");
                         jsonobj.put("Flag", addquote(Fieldworkflag));
                         jsonobj.put("MOT", addquote(TextMode.getText().toString()));
+                        jsonobj.put("MOT_ID", addquote(startEnd));
                         jsonobj.put("DA_Type",addquote(dailyAllowance.getText().toString()) );
                         jsonobj.put("Driver_Allow", addquote((driverAllowance.isChecked() )?  "1" : "0"));
                         jsonobj.put("From_Place", addquote(BusFrom.getText().toString()) );
                         jsonobj.put("To_Place", addquote(TextToAddress.getText().toString()));
+                        jsonobj.put("To_Place_ID", addquote(ToAddressId));
                         jsonarrplan.put("Tour_Plan", jsonobj);
                         jsonarr.put(jsonarrplan);
                         Log.e("Mydayplan_Object", jsonarr.toString());
@@ -716,7 +725,10 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                     Jointworklistview.add(Model_Pojo);
                 } else if (type.equals("4")) {
                     String Odflag = jsonObject1.optString("ODFlag");
-                    Model_Pojo = new Common_Model(id, name, Odflag);
+                    String Toid = jsonObject1.optString("id");
+                    String Toname = jsonObject1.optString(("name"));
+                    Toid = Toid.replaceAll("^[\"']+|[\"']+$", "");
+                    Model_Pojo = new Common_Model(Toid, Toname, Odflag);
                     getfieldforcehqlist.add(Model_Pojo);
                 } else if (type.equals("5")) {
                     Model_Pojo = new Common_Model(id, name, flag);
