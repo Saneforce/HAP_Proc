@@ -196,10 +196,13 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                if (EndedEditText.getText().toString().matches("") || EndedImage.matches("")) {
-                    Toast.makeText(AllowanceActivityTwo.this, "Enter details", Toast.LENGTH_SHORT).show();
+                if (EndedEditText.getText().toString().matches("")) {
+                    Toast.makeText(AllowanceActivityTwo.this, "Enter End KM", Toast.LENGTH_SHORT).show();
                     return;
-                } else {
+                }else if(EndedImage.matches("")){
+                    Toast.makeText(AllowanceActivityTwo.this, "Enter End KM", Toast.LENGTH_SHORT).show();
+                    return;
+                }else {
 
                     try {
                         stKM = Integer.valueOf(TextStartedKm.getText().toString());
@@ -283,7 +286,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                                 Intent takePhoto = new Intent(AllowanceActivityTwo.this, ImageCapture.class);
                                 takePhoto.putExtra("Mode", "COUT");
                                 startActivity(takePhoto);
-
                             } else
                                 Toast.makeText(AllowanceActivityTwo.this, " Cannot submitted the data ", Toast.LENGTH_SHORT).show();
                         }
@@ -344,18 +346,10 @@ public class AllowanceActivityTwo extends AppCompatActivity {
     }
 
     public void openHome() {
-        Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-        Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
-        Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
-        Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
-        Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
-        if (CheckIn == true) {
             Intent Dashboard = new Intent(AllowanceActivityTwo.this, Dashboard_Two.class);
             Dashboard.putExtra("Mode", "CIN");
             startActivity(Dashboard);
-        } else
-            startActivity(new Intent(getApplicationContext(), Dashboard.class));
-    }
+        }
 
 
     public void callApi() {

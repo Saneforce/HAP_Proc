@@ -128,7 +128,6 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         edt_remarks = findViewById(R.id.edt_remarks);
         gson = new Gson();
         tourdate = findViewById(R.id.tourdate);
-        gson = new Gson();
         Log.e("TOuR_PLAN_DATE", common_class.getintentValues("TourDate"));
         Log.e("TOuR_PLAN_DATE", common_class.getintentValues("TourDate"));
         tourdate.setText(common_class.getintentValues("TourDate"));
