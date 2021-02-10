@@ -7,19 +7,21 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name= "AppTheme" parent= "AppBaseTheme" >
-        <item name= "android:textViewStyle" > @style/RobotoTextViewStyle </item>
-        <item name= "android:buttonStyle" > @style/RobotoButtonStyle </item>
+    <style name="AppTheme" parent="AppBaseTheme">
+        <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
+        <item name="android:buttonStyle">@style/RobotoButtonStyle</item>
     </style>
-    <style name= "RobotoTextViewStyle" parent= "android:Widget.TextView" >
-        <item name= "android:fontFamily" > @font/poppins_regular </item>
-        <item name= "android:textSize" > @dimen/C13dp </item>
-        <item name= "android:textColor" > @color/dark_grey </item>
+
+    <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/poppins_regular</item>
+        <item name="android:textSize">@dimen/C13dp</item>
+        <item name="android:textColor">@color/dark_grey</item>
     </style>
-    <style name= "RobotoButtonStyle" parent= "android:Widget.Button" >
-        <item name= "android:fontFamily" > poppins_semibold </item>
-        <item name= "android:textSize" > @dimen/C13dp </item>
-        <item name= "android:padding" > 16dp </item>
+
+    <style name="RobotoButtonStyle" parent="android:Widget.Button">
+        <item name="android:fontFamily">poppins_semibold</item>
+        <item name="android:textSize">@dimen/C13dp</item>
+        <item name="android:padding">16dp</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -29,9 +31,10 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
 
     </style>
+
     <style name="AlertDialogCustom" parent="@android:style/Theme.Dialog">
         <item name="android:background">#00000000</item>
     </style>
@@ -47,15 +50,13 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="android:windowCloseOnTouchOutside">@bool/config_closeDialogWhenTouchOutside</item>
+        <item name="android:windowCloseOnTouchOutside">@bool/config_closeDialogWhenTouchOutside
+        </item>
         <item name="listPreferredItemPaddingLeft">10dip</item>
         <item name="listPreferredItemPaddingRight">10dip</item>
         <item name="listPreferredItemPaddingStart">10dip</item>
         <item name="listPreferredItemPaddingEnd">10dip</item>
-  </style>
-
-
-
+    </style>
 
 
     <style name="AppTheme.Dialogs">
@@ -64,6 +65,18 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
         <item name="windowActionModeOverlay">true</item>
+    </style>
+
+    <style name="AppTheme.Dialogss">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="listPreferredItemPaddingLeft">20dip</item>
+        <item name="listPreferredItemPaddingRight">20dip</item>
+        <item name="listPreferredItemPaddingStart">20dip</item>
+        <item name="listPreferredItemPaddingEnd">20dip</item>
     </style>
 
 

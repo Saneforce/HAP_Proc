@@ -47,8 +47,9 @@ public class Leave_Status_Activity extends AppCompatActivity {
     private RecyclerView recyclerView;
     Type userType;
     Common_Class common_class;
-    String AMOD = " ";
+    String AMOD = "0";
     Shared_Common_Pref mShared_common_pref;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +99,12 @@ public class Leave_Status_Activity extends AppCompatActivity {
         common_class = new Common_Class(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
-        AMOD = mShared_common_pref.getvalue("AMod");
+
+
+
+        AMOD = String.valueOf(getIntent().getSerializableExtra("AMod"));
+
+        Log.v("AMODE", AMOD);
         getleavestatus();
 
 
@@ -106,8 +112,7 @@ public class Leave_Status_Activity extends AppCompatActivity {
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            startActivity(new Intent(Leave_Status_Activity.this, Leave_Dashboard.class));
-            finish();
+                mOnBackPressedDispatcher.onBackPressed();
             }
         });
     }

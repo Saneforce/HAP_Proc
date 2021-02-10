@@ -110,9 +110,121 @@ public class Tp_Approval_Model implements Serializable {
     @Expose
     private String fromdate;
     @SerializedName("Todate")
+
     @Expose
     private String todate;
+    @SerializedName("MOT")
+    @Expose
+    private String mOT;
 
+    public String getsFCode() {
+        return sFCode;
+    }
+
+    public void setsFCode(String sFCode) {
+        this.sFCode = sFCode;
+    }
+
+    public String gethQCode() {
+        return hQCode;
+    }
+
+    public void sethQCode(String hQCode) {
+        this.hQCode = hQCode;
+    }
+
+    public String gethQName() {
+        return hQName;
+    }
+
+    public void sethQName(String hQName) {
+        this.hQName = hQName;
+    }
+
+    public String getsFMobile() {
+        return sFMobile;
+    }
+
+    public void setsFMobile(String sFMobile) {
+        this.sFMobile = sFMobile;
+    }
+
+    public String gethQ() {
+        return hQ;
+    }
+
+    public void sethQ(String hQ) {
+        this.hQ = hQ;
+    }
+
+    public String getcCentreName() {
+        return cCentreName;
+    }
+
+    public void setcCentreName(String cCentreName) {
+        this.cCentreName = cCentreName;
+    }
+
+    public String getsHiftTypeId() {
+        return sHiftTypeId;
+    }
+
+    public void setsHiftTypeId(String sHiftTypeId) {
+        this.sHiftTypeId = sHiftTypeId;
+    }
+
+    public String getmOT() {
+        return mOT;
+    }
+
+    public void setmOT(String mOT) {
+        this.mOT = mOT;
+    }
+
+    public String getdAType() {
+        return dAType;
+    }
+
+    public void setdAType(String dAType) {
+        this.dAType = dAType;
+    }
+
+    public String getDriverAllow() {
+        return driverAllow;
+    }
+
+    public void setDriverAllow(String driverAllow) {
+        this.driverAllow = driverAllow;
+    }
+
+    public String getFromPlace() {
+        return fromPlace;
+    }
+
+    public void setFromPlace(String fromPlace) {
+        this.fromPlace = fromPlace;
+    }
+
+    public String getToPlace() {
+        return toPlace;
+    }
+
+    public void setToPlace(String toPlace) {
+        this.toPlace = toPlace;
+    }
+
+    @SerializedName("DA_Type")
+    @Expose
+    private String dAType;
+    @SerializedName("Driver_Allow")
+    @Expose
+    private String driverAllow;
+    @SerializedName("From_Place")
+    @Expose
+    private String fromPlace;
+    @SerializedName("To_Place")
+    @Expose
+    private String toPlace;
     public String getDate() {
         return date;
     }

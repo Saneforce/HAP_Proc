@@ -43,13 +43,12 @@ import java.util.Map;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClickListener {
-    TextView name, empcode, hq, mobilenumber, designation, plandate, worktype, route, distributor, remarks, tpapprovebutton, tpreject, tp_rejectsave, edt_remarks, routecaption, distributorcaption, tphqcaption, ChillingCentercaption, shifttypecaption, fromdatecaption, todatecaption, tphq, ChillingCenter, shifttype, fromdate, todate, jointworkcaption, jointwork;
+    TextView name, empcode, hq, mobilenumber, designation, plandate, worktype, route, distributor, remarks, tpapprovebutton, tpreject, tp_rejectsave, edt_remarks, routecaption, distributorcaption, tphqcaption, ChillingCentercaption, shifttypecaption, fromdatecaption, todatecaption, tphq, ChillingCenter, shifttype, fromdate, todate, jointworkcaption, jointwork,motravel,Toplace,Fromplace,DAllowance,daype;
     String Sf_Code, Tour_plan_Date;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     LinearLayout Approvereject, rejectonly;
     EditText reason;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +86,11 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
         shifttypecaption = findViewById(R.id.shifttypecaption);
         fromdatecaption = findViewById(R.id.fromdatecaption);
         todatecaption = findViewById(R.id.todatecaption);
+        motravel = findViewById(R.id.motravel);
+        daype = findViewById(R.id.daype);
+        DAllowance = findViewById(R.id.DAllowance);
+        Fromplace = findViewById(R.id.Fromplace);
+        Toplace = findViewById(R.id.Toplace);
         tpapprovebutton.setOnClickListener(this);
         tpreject.setOnClickListener(this);
         tp_rejectsave.setOnClickListener(this);
@@ -104,6 +108,11 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
         remarks.setText(":" + i.getExtras().getString("Remarks"));
         hq.setText(":" + i.getExtras().getString("HQ"));
         jointwork.setText(":" + i.getExtras().getString("workedwithname"));
+        motravel.setText(":" + i.getExtras().getString("motravel"));
+        daype.setText(":" + i.getExtras().getString("daype"));
+        DAllowance.setText(":" + i.getExtras().getString("DAllowance"));
+        Fromplace.setText(":" + i.getExtras().getString("Fromplace"));
+        Toplace.setText(":" + i.getExtras().getString("Toplace"));
         Log.e("DEP_TYPE", String.valueOf(i.getExtras().getString("DeptType")));
         if (i.getExtras().getString("DeptType").equals("1")) {
             tphq.setText(":" + i.getExtras().getString("TPHqname"));
@@ -156,7 +165,7 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
 
 
 
-        TextView txtHelp = findViewById(R.id.toolbar_help);
+        /*TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,31 +188,9 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
 
             }
         });
+*/
 
 
-        ObjectAnimator textColorAnim;
-        textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
-        textColorAnim.setDuration(500);
-        textColorAnim.setEvaluator(new ArgbEvaluator());
-        textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
-        textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
-        textColorAnim.start();
-
-        imgHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
-                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-                if (CheckIn == true) {
-                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
-                    Dashboard.putExtra("Mode", "CIN");
-                    startActivity(Dashboard);
-                } else
-                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
-
-
-            }
-        });
 
 
         ImageView backView = findViewById(R.id.imag_back);

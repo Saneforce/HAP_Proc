@@ -301,6 +301,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     String fullPath = "";
     ArrayList<ArrayList<String>> tlString = new ArrayList<ArrayList<String>>();
     Integer taCount = 0;
+    Polyline polyline1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -748,6 +749,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = null;
 
+
         linAddAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -805,7 +807,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 }
                             }
                         });
-
 
 
                         editText.setOnClickListener(new View.OnClickListener() {
@@ -904,6 +905,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             crdDynamicLocation.setVisibility(View.GONE);
         }
 
+        tlString.remove(v);
+
     }
 
 
@@ -920,6 +923,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         int lcSize = linlocalCon.getChildCount();
 
         for (int k = 0; k < lcSize; k++) {
+            View view = linlocalCon.getChildAt(k);
+            editLaFare = (EditText) (view.findViewById(R.id.edt_la_fare));
             String str = editLaFare.getText().toString();
             if (str.matches("")) str = "0";
             sum = sum + Double.parseDouble(str);
@@ -1117,7 +1122,17 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
+                Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
+                Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
+                Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
+                if (CheckIn == true) {
+                    Intent Dashboard = new Intent(TAClaimActivity.this, Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                } else
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
             }
         });
     }
@@ -2066,6 +2081,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 lodgJoin.setVisibility(View.VISIBLE);
                 JNLdgEAra.setVisibility(View.VISIBLE);
                 //ldgMyEAra,JNLdgEAra,drvldgEAra
+
                 lodingView();
             }
             if (ValCd != "RS") {
@@ -2249,9 +2265,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             }
                         }
 
+
                         if (latLonArray.size() != 0) {
 
-                            Polyline polyline1 = mGoogleMap.addPolyline(new PolylineOptions()
+                            polyline1 = mGoogleMap.addPolyline(new PolylineOptions()
                                     .clickable(true)
                                     .addAll(latLonArray));
 
