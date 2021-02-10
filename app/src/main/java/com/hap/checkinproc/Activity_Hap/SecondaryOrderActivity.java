@@ -300,7 +300,6 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
                 window.setGravity(Gravity.CENTER);
                 window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 customDialog.show();
-
                 eventDb = 1;
             }
         });

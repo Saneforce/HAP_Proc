@@ -23,8 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/C20dp"
-        >
+        android:layout_marginTop="@dimen/C20dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profile_image"
@@ -169,7 +168,16 @@
 
         </Button>
 
-
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/C10dp"
+            android:onClick="checking"
+            android:text="CHECKING"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:visibility="gone">
+        </Button>
 
 
     </LinearLayout>

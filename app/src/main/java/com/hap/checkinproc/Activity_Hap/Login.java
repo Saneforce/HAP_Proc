@@ -650,4 +650,19 @@ public class Login extends AppCompatActivity {
     };
 
 
+
+
+    public void checking(View v) {
+
+        CameraPermission cameraPermission = new CameraPermission(Login.this, getApplicationContext());
+
+        if(!cameraPermission.checkPermission()){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                cameraPermission.requestPermission();
+            }
+            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+        } else {
+            Log.v("PERMISSION", "PERMISSION");
+        }
+    }
 }

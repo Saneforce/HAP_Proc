@@ -1,7 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.app.DatePickerDialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -11,7 +10,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -31,7 +29,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -103,9 +100,9 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     ImageView image;
     int joint_flag = 0;
     DatePickerDialog picker;
-    CardView ModeTravel, card_Toplace, CardDailyAllowance,card_from;
+    CardView ModeTravel, card_Toplace, CardDailyAllowance, card_from;
     LinearLayout BikeMode, BusMode, ReasonPhoto, ProofImage;
-    EditText  BusFrom, EditRemarks;
+    EditText BusFrom, EditRemarks;
     public static final String Name = "Allowance";
     public static final String MOT = "ModeOfTravel";
     String DM = "", DriverNeed = "false", DriverMode = "", modeTypeVale = "", mode = "", imageURI = "", modeVal = "", StartedKM = "", FromKm = "", ToKm = "", Fare = "", strDailyAllowance = "", strDriverAllowance = "", StToEnd = "", StrID = "";
@@ -118,7 +115,8 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     LinearLayout linCheckdriver;
     List<Common_Model> listOrderType = new ArrayList<>();
     Common_Model mCommon_model_spinner;
-    String startEnd="",ToAddressId="";
+    String modeId = "", toId = "", startEnd = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -137,8 +135,8 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         distributors_layout = findViewById(R.id.distributors_layout);
         ModeTravel = findViewById(R.id.card_travel_mode);
         // card_from= findViewById(R.id.card_from);
-        card_Toplace= findViewById(R.id.card_Toplace);
-        eText =findViewById(R.id.from_date);
+        card_Toplace = findViewById(R.id.card_Toplace);
+        eText = findViewById(R.id.from_date);
         eText.setInputType(InputType.TYPE_NULL);
         etext2 = findViewById(R.id.to_date);
         etext2.setInputType(InputType.TYPE_NULL);
@@ -309,7 +307,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 //joint_work_Recyclerview.setVisibility(View.VISIBLE);
                 joint_work_Caption.setVisibility(View.VISIBLE);
                 jointwork_layout.setVisibility(View.VISIBLE);
-            } else if (myDataset.get(position).getFlag().equals("H") || myDataset.get(position).getFlag().equals("W") ) {
+            } else if (myDataset.get(position).getFlag().equals("H") || myDataset.get(position).getFlag().equals("W")) {
                 joint_work_Recyclerview.setVisibility(View.GONE);
                 joint_work_Caption.setVisibility(View.GONE);
                 jointwork_layout.setVisibility(View.GONE);
@@ -345,24 +343,19 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         } else if (type == 5) {
             shift_type.setText(myDataset.get(position).getName());
             shifttypeid = myDataset.get(position).getId();
-        }
-        else if (type == 7) {
+        } else if (type == 7) {
             BusFrom.setText(myDataset.get(position).getName());
             shifttypeid = myDataset.get(position).getId();
-        }
-        else if (type == 9) {
+        } else if (type == 9) {
             TextToAddress.setText(myDataset.get(position).getName());
-            ToAddressId = myDataset.get(position).getId();
-        }
-        else if (type == 8) {
+            toId = myDataset.get(position).getId();
+        } else if (type == 8) {
             TextMode.setText(myDataset.get(position).getName());
             DriverMode = myDataset.get(position).getCheckouttime();
-/*
-            Model_Pojo = new Common_Model(id, name, modeId, driverMode);*/
+            modeId = myDataset.get(position).getFlag();
+
 
             Log.e("Dash_Mode_Count", DriverMode);
-            Log.e("Mode_ID", myDataset.get(position).getId());
-
             startEnd = myDataset.get(position).getId();
             if (startEnd.equals("0")) {
                 mode = "11";
@@ -392,7 +385,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         } else if (type == 100) {
             String TrTyp = myDataset.get(position).getName();
             dailyAllowance.setText(TrTyp);
-        }else {
+        } else {
             chilling_text.setText(myDataset.get(position).getName());
             Chilling_Id = myDataset.get(position).getId();
         }
@@ -452,12 +445,13 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                         jsonobj.put("HQ_Name", "''");
                         jsonobj.put("Flag", addquote(Fieldworkflag));
                         jsonobj.put("MOT", addquote(TextMode.getText().toString()));
-                        jsonobj.put("MOT_ID", addquote(startEnd));
-                        jsonobj.put("DA_Type",addquote(dailyAllowance.getText().toString()) );
-                        jsonobj.put("Driver_Allow", addquote((driverAllowance.isChecked() )?  "1" : "0"));
-                        jsonobj.put("From_Place", addquote(BusFrom.getText().toString()) );
+                        jsonobj.put("DA_Type", addquote(dailyAllowance.getText().toString()));
+                        jsonobj.put("Driver_Allow", addquote((driverAllowance.isChecked()) ? "1" : "0"));
+                        jsonobj.put("From_Place", addquote(BusFrom.getText().toString()));
                         jsonobj.put("To_Place", addquote(TextToAddress.getText().toString()));
-                        jsonobj.put("To_Place_ID", addquote(ToAddressId));
+                        jsonobj.put("MOT_ID", addquote(modeId));
+                        jsonobj.put("To_Place_ID", addquote(toId));
+                        jsonobj.put("Mode_Travel_ID", addquote(startEnd));
                         jsonarrplan.put("Tour_Plan", jsonobj);
                         jsonarr.put(jsonarrplan);
                         Log.e("Mydayplan_Object", jsonarr.toString());
@@ -642,6 +636,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         customDialog.show();
 
     }
+
     public boolean vali() {
         if (worktype_text.getText().toString() == null || worktype_text.getText().toString().isEmpty() || worktype_text.getText().toString().equalsIgnoreCase("")) {
             Toast.makeText(this, "Select The Worktype", Toast.LENGTH_SHORT).show();
@@ -680,7 +675,6 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             Toast.makeText(this, "Select The Mode of Travel", Toast.LENGTH_SHORT).show();
             return false;
         }
-
 
 
         return true;
@@ -724,11 +718,9 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                     Model_Pojo = new Common_Model(name + "-" + jsonObject1.optString("desig"), id, false);
                     Jointworklistview.add(Model_Pojo);
                 } else if (type.equals("4")) {
+                    String sid = jsonObject1.optString(("id"));
                     String Odflag = jsonObject1.optString("ODFlag");
-                    String Toid = jsonObject1.optString("id");
-                    String Toname = jsonObject1.optString(("name"));
-                    Toid = Toid.replaceAll("^[\"']+|[\"']+$", "");
-                    Model_Pojo = new Common_Model(Toid, Toname, Odflag);
+                    Model_Pojo = new Common_Model(sid, name, Odflag);
                     getfieldforcehqlist.add(Model_Pojo);
                 } else if (type.equals("5")) {
                     Model_Pojo = new Common_Model(id, name, flag);
@@ -804,7 +796,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                         if (String.valueOf(jsoncc.getJSONObject(0).get("Driver_Allow")).equals("1")) {
                             linCheckdriver.setVisibility(View.VISIBLE);
                             driverAllowance.setChecked(true);
-                        }else {
+                        } else {
                             linCheckdriver.setVisibility(View.GONE);
                             driverAllowance.setChecked(false);
                         }
