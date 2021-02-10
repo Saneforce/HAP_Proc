@@ -128,9 +128,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     private ArrayList<String> travelTypeList;
     private ArrayList<String> ModeList;
     String StartedKm = "", ClosingKm = "",
-            ModeOfTravel = "", PersonalKm = "",
-            FromPlace = "", ToPlace = "", Bus = "", StratedKmImage = "",
-            EndedKmImage = "", BusFareImage = "";
+            ModeOfTravel = "", PersonalKm = "";
 
     /*12/1/13*/
     Common_Model mCommon_model_spinner;
