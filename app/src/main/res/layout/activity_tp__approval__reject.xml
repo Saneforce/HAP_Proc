@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -13,19 +12,18 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".Activity_Hap.Leave_Approval">
+        <include layout="@layout/custom_toolbar_help" />
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_gravity="center"
             android:layout_margin="5dp"
             app:cardCornerRadius="10dp">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/button_yellow"
                 android:gravity="center">
-
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -36,7 +34,6 @@
                     android:textAlignment="center"
                     android:textColor="@color/color_white"
                     android:textStyle="bold" />
-
             </LinearLayout>
 
 
@@ -130,7 +127,7 @@
                     <TextView
                         android:id="@+id/routecaption"
                         android:layout_width="100dp"
-                        android:layout_height="200dp"
+                        android:layout_height="220dp"
                         android:layout_weight="1"
                         android:text="Route  "
                         android:textColor="@color/txt_color_black"
@@ -212,6 +209,46 @@
                         android:textColor="@color/txt_color_black"
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="MOT"
+                        android:textColor="@color/txt_color_black"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="DA Type"
+                        android:textColor="@color/txt_color_black"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="220dp"
+                        android:layout_weight="1"
+                        android:text="Driver Allowance"
+                        android:textColor="@color/txt_color_black"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="From  Place"
+                        android:textColor="@color/txt_color_black"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:layout_width="100dp"
+                        android:layout_height="220dp"
+                        android:layout_weight="1"
+                        android:text="To  Place"
+                        android:textColor="@color/txt_color_black"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -220,7 +257,6 @@
                     android:layout_weight="1"
                     android:orientation="vertical"
                     android:padding="15dp">
-
                     <TextView
                         android:id="@+id/name"
                         android:layout_width="100dp"
@@ -230,7 +266,6 @@
                         android:textColor="@color/green"
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
-
                     <TextView
                         android:id="@+id/empcode"
                         android:layout_width="100dp"
@@ -240,7 +275,6 @@
                         android:textColor="@color/green"
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
-
                     <TextView
                         android:id="@+id/hq"
                         android:layout_width="100dp"
@@ -253,7 +287,6 @@
 
                     <TextView
                         android:id="@+id/designation"
-
                         android:layout_width="100dp"
                         android:layout_height="200dp"
                         android:layout_weight="1"
@@ -263,7 +296,6 @@
                         android:textStyle="bold" />
 
                     <TextView
-
                         android:id="@+id/mobilenumber"
                         android:layout_width="100dp"
                         android:layout_height="200dp"
@@ -297,7 +329,7 @@
                     <TextView
                         android:id="@+id/route"
                         android:layout_width="100dp"
-                        android:layout_height="200dp"
+                        android:layout_height="220dp"
                         android:layout_weight="1"
                         android:text="Route"
                         android:textColor="@color/green"
@@ -307,7 +339,7 @@
                     <TextView
                         android:id="@+id/distributor"
                         android:layout_width="100dp"
-                        android:layout_height="200dp"
+                        android:layout_height="220dp"
                         android:layout_weight="1"
                         android:text="Distributor"
                         android:textColor="@color/green"
@@ -380,7 +412,51 @@
                         android:layout_weight="1"
                         android:text="Remarks"
                         android:textColor="@color/green"
-
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/motravel"
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="MOT"
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/daype"
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="datype"
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/DAllowance"
+                        android:layout_width="100dp"
+                        android:layout_height="220dp"
+                        android:layout_weight="1"
+                        android:text="Driver Allowance"
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/Fromplace"
+                        android:layout_width="100dp"
+                        android:layout_height="200dp"
+                        android:layout_weight="1"
+                        android:text="From  Place"
+                        android:textColor="@color/green"
+                        android:textSize="@dimen/C16dp"
+                        android:textStyle="bold" />
+                    <TextView
+                        android:id="@+id/Toplace"
+                        android:layout_width="100dp"
+                        android:layout_height="220dp"
+                        android:layout_weight="1"
+                        android:text="To  Place"
+                        android:textColor="@color/green"
                         android:textSize="@dimen/C16dp"
                         android:textStyle="bold" />
                 </LinearLayout>

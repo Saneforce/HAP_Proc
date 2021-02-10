@@ -96,6 +96,8 @@ public class Permission_Status_Activity extends AppCompatActivity {
         gson = new Gson();
         i = getIntent();
         AMOD = i.getExtras().getString("AMod");
+
+        Log.v("AMODE", AMOD);
         getleavestatus();
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {

@@ -300,6 +300,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     Integer taCount = 0;
     ArrayList<String> zero = new ArrayList<>();
     ArrayList<String> nonZero = new ArrayList<>();
+    Polyline polyline1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -915,6 +916,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         int lcSize = linlocalCon.getChildCount();
 
         for (int k = 0; k < lcSize; k++) {
+            View view = linlocalCon.getChildAt(k);
+            editLaFare = (EditText) (view.findViewById(R.id.edt_la_fare));
             String str = editLaFare.getText().toString();
             if (str.matches("")) str = "0";
             sum = sum + Double.parseDouble(str);
@@ -1107,17 +1110,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-                Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
-                Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
-                Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
-                Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
-                if (CheckIn == true) {
-                    Intent Dashboard = new Intent(TAClaimActivity.this, Dashboard_Two.class);
-                    Dashboard.putExtra("Mode", "CIN");
-                    startActivity(Dashboard);
-                } else
-                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
             }
         });
     }
@@ -1160,6 +1153,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     /*Display Mode of travel View based on the choosed Date*/
     public void displayTravelMode(String ChoosedDate) {
         Log.d("JSON_VALUE_O", ChoosedDate);
+        /*      if(polyline1!=null) polyline1.remove();*/
+
 
         ChoosedDate = ChoosedDate.replaceAll("^[\"']+|[\"']+$", "");
 
@@ -1723,6 +1718,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
 
             /*Local Convenyance*/
+
             JSONArray addExp = new JSONArray();
             int addExpSize = linlocalCon.getChildCount();
 
@@ -1756,7 +1752,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 lcMode.put("ad_exp", lcModeRef);
                 addExp.put(lcMode);
 
+
             }
+
+
+
 
             /*Other Expensive*/
             JSONArray othrExp = new JSONArray();
@@ -1775,7 +1775,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 lcModes2.put("total_amount", edtOE.getText().toString());
                 lcModes2.put("exp_type", "OE");
 
-    /*            JSONArray lcModeRef1 = new JSONArray();
+ /*            JSONArray lcModeRef1 = new JSONArray();
 
                 for (int da = 0; da < newEdt.size(); da++) {
                     JSONObject AditionallLocalConvenyance = new JSONObject();
@@ -1789,6 +1789,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 othrExp.put(lcModes2);
 
             }
+
+            Log.v("OTHER_EXPENSE", othrExp.toString());
 
             jsonData.put("Add_Exp", addExp);
             jsonData.put("Other_Exp", othrExp);
@@ -2241,9 +2243,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             }
                         }
 
+
                         if (latLonArray.size() != 0) {
 
-                            Polyline polyline1 = mGoogleMap.addPolyline(new PolylineOptions()
+                            polyline1 = mGoogleMap.addPolyline(new PolylineOptions()
                                     .clickable(true)
                                     .addAll(latLonArray));
 

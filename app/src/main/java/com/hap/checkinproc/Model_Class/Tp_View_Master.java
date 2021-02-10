@@ -59,6 +59,64 @@ public class Tp_View_Master {
     @SerializedName("dayofplan")
     @Expose
     private Integer dayofcout;
+    @Expose
+    private String todate;
+    @SerializedName("MOT")
+    @Expose
+    private String mOT;
+    @SerializedName("DA_Type")
+    @Expose
+    private String dAType;
+    @SerializedName("Driver_Allow")
+    @Expose
+    private String driverAllow;
+
+    public String getmOT() {
+        return mOT;
+    }
+
+    public void setmOT(String mOT) {
+        this.mOT = mOT;
+    }
+
+    public String getdAType() {
+        return dAType;
+    }
+
+    public void setdAType(String dAType) {
+        this.dAType = dAType;
+    }
+
+    public String getDriverAllow() {
+        return driverAllow;
+    }
+
+    public void setDriverAllow(String driverAllow) {
+        this.driverAllow = driverAllow;
+    }
+
+    public String getFromPlace() {
+        return fromPlace;
+    }
+
+    public void setFromPlace(String fromPlace) {
+        this.fromPlace = fromPlace;
+    }
+
+    public String getToPlace() {
+        return toPlace;
+    }
+
+    public void setToPlace(String toPlace) {
+        this.toPlace = toPlace;
+    }
+
+    @SerializedName("From_Place")
+    @Expose
+    private String fromPlace;
+    @SerializedName("To_Place")
+    @Expose
+    private String toPlace;
     public Integer getDayofcout() {
         return dayofcout;
     }

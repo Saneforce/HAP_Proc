@@ -25,11 +25,10 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
     private List<Leave_Status_Model> Leave_Status_ModelsList;
     private int rowLayout;
     private Context context;
-    String AMod;
+
     LeaveCancelReason mLeaveCancelRea;
     String EditextReason = "";
-    Integer count = 0;
-
+    String AMod;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView fromdatetodate, leavetype, leavedays, leavereason, applieddate, LStatus, SfName;
@@ -64,6 +63,8 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
         this.context = context;
         this.AMod = AMod;
         this.mLeaveCancelRea = mLeaveCancelRea;
+
+
     }
 
     @Override
@@ -81,7 +82,6 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
     @Override
     public void onBindViewHolder(Leave_Status_Adapter.MyViewHolder holder, int position) {
         Leave_Status_Model Leave_Status_Model = Leave_Status_ModelsList.get(position);
-        Log.e("SF_MODE", AMod);
         holder.fromdatetodate.setText(Leave_Status_ModelsList.get(position).getFromDate() + " TO " + Leave_Status_ModelsList.get(position).getToDate());
         holder.leavetype.setText("" + Leave_Status_ModelsList.get(position).getLeaveType());
         holder.leavedays.setText("" + Leave_Status_ModelsList.get(position).getNoOfDays());
@@ -137,7 +137,6 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
             }
             holder.LStatus.setBackgroundResource(R.drawable.button_red);
         }
-
     }
 
     @Override

@@ -101,10 +101,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
                         android:text="Type"
                         android:textColor="@android:color/black"
-                        android:textSize="14dp"></TextView>
+                        android:textSize="11dp"></TextView>
 
 
                     <TextView
@@ -112,10 +111,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:fontFamily="@font/poppins_semibold"
                         android:text="Days"
                         android:textColor="@android:color/black"
-                        android:textSize="14dp"></TextView>
+                        android:textSize="11dp"></TextView>
 
                 </RelativeLayout>
 
@@ -130,10 +128,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
                         android:text="CasualLeave"
                         android:textColor="@android:color/black"
-                        android:textSize="16dp"></TextView>
+                        android:textSize="11dp"></TextView>
 
 
                     <TextView
@@ -143,10 +140,9 @@
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:fontFamily="@font/poppins_semibold"
                         android:text="0.5"
                         android:textColor="@android:color/black"
-                        android:textSize="14dp"></TextView>
+                        android:textSize="11dp"></TextView>
 
                 </RelativeLayout>
 
@@ -161,10 +157,8 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
                         android:text="Reason"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"></TextView>
+   ></TextView>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -179,7 +173,8 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
                         android:text="Test Entry"
-                        android:textSize="14dp"></TextView>
+                        android:textColor="@android:color/black"
+                        android:textSize="11dp"></TextView>
                 </RelativeLayout>
 
                 <RelativeLayout
@@ -195,7 +190,8 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
                         android:text="Applied: 09-11-2020"
-                        android:textSize="14dp"></TextView>
+                        android:textColor="@android:color/black"
+                        android:textSize="11dp"></TextView>
                 </RelativeLayout>
 
 
