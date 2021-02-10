@@ -2,11 +2,15 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
+import android.widget.FrameLayout;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -19,52 +23,86 @@ import java.util.ArrayList;
 
 public class AttachementActivity extends AppCompatActivity {
     ArrayList<String> intentValue;
-    private LinearLayout parentLinearLayout;
+    private GridLayout parentLinearLayout;
+    FrameLayout frameLayout;
+    ImageView deleteImage;
+    int position;
+    RelativeLayout allRelative;
 
 
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_attachement);
+
+        frameLayout = findViewById(R.id.frame_Layout_imag_preview);
+        frameLayout.setBackgroundColor(Color.TRANSPARENT);
+
+        allRelative= findViewById(R.id.re_Layout_imag_preview);
+        allRelative.setBackgroundColor(Color.TRANSPARENT);
+
         intentValue = new ArrayList<String>();
         intentValue = (ArrayList<String>) getIntent().getSerializableExtra("Data");
 
-        parentLinearLayout = (LinearLayout) findViewById(R.id.parent_linear_layout);
+        Log.v("ATTACHMENT", String.valueOf(intentValue.size()));
+        Log.v("ATTACHMENT", intentValue.toString());
+        parentLinearLayout = (GridLayout) findViewById(R.id.parent_linear_layout);
+
+        parentLinearLayout.setRowCount(4);
+        parentLinearLayout.setColumnCount(4);
+
 
         for (int i = 1; i <= intentValue.size(); i++) {
-
-         /*   LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            position = i;
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View rowView = null;
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-            layoutParams.setMargins(15, 15, 15, 15);
 
             rowView = inflater.inflate(R.layout.activity_layout_img_preview, null);
 
-            parentLinearLayout.addView(rowView, layoutParams);
+            parentLinearLayout.addView(rowView, parentLinearLayout.getChildCount());
 
+            int size = parentLinearLayout.getChildCount();
+            Log.v("ATTACHMENT_OUTER_SIZE", String.valueOf(size));
+            for (int j = 0; j < size; j++) {
 
-
-                View childView = parentLinearLayout.getChildAt(i);
-
+                Log.v("ATTACHMENT_SIZE", String.valueOf(size));
+                Log.v("ATTACHMENT_POSITION", String.valueOf(position));
+                View childView = parentLinearLayout.getChildAt(j);
                 ImageView taAttach = (ImageView) (childView.findViewById(R.id.img_preview));
-                taAttach.setImageURI(Uri.parse((intentValue.get(i-1))));*/
+                deleteImage = (ImageView) childView.findViewById(R.id.img_delete);
+                taAttach.setImageURI(Uri.parse((intentValue.get(j))));
+
+            }
 
 
-            Log.e("array_length", String.valueOf(intentValue.get(i-1)));
-            RelativeLayout childRel = new RelativeLayout(this);
-            RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-            ImageView edt = new ImageView(this);
-            edt.setLayoutParams(layoutparams_3);
-            edt.setImageURI(Uri.parse((intentValue.get(i-1))));
-            childRel.addView(edt);
-
-            parentLinearLayout.addView(childRel, parentLinearLayout.getChildCount());
         }
 
 
+    }
+
+
+    public void DeleteLayout(View v) {
+        finish();
+    }
+
+    public void OnItemDelete(View v) {
+        int size = parentLinearLayout.getChildCount();
+
+
+        Log.d("PARENT_COUNT", String.valueOf(size));
+        parentLinearLayout.removeView((View) v.getParent());
+        int ps = 0;
+        for (int p = 0; p < size; p++) {
+            ps = p;
+            Log.v("ATTACHMENT_DELETE", String.valueOf(p));
+            //    intentValue.remove();
+        }
+
+        Log.v("ATT_DELETE", String.valueOf(ps));
+        intentValue.remove(ps);
+
+        Log.v("ATTACHMENT_DE", String.valueOf(intentValue.size()));
     }
 }
