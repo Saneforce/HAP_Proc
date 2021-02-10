@@ -264,7 +264,10 @@
             </LinearLayout>
 
     </LinearLayout>
-        <ImageView
+
+    </LinearLayout>
+
+    <ImageView
         android:id="@+id/ldg_delete"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -274,5 +277,4 @@
         android:layout_margin="@dimen/C8dp"
         android:onClick="onLodingDelete"
         android:src="@drawable/delete_cart" />
-    </LinearLayout>
 </LinearLayout>

@@ -35,7 +35,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="n">
-        <activity android:name=".Activity_Hap.AttachementActivity"></activity>
+        <activity
+            android:name=".Activity_Hap.AttachementActivity"
+            android:theme="@style/AppTheme.Dialogs"></activity>
+
         <activity
             android:name=".Activity.Util.TaApprovalDisplay"
             android:label="@string/title_activity_ta_approval_display"

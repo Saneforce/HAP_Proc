@@ -44,10 +44,14 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -55,6 +59,7 @@ import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity.Util.ImageFilePath;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Activity.Util.UpdateUi;
+import com.hap.checkinproc.Activity_Hap.AttachementActivity;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
@@ -76,6 +81,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -292,6 +298,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     String fullPath = "";
     ArrayList<ArrayList<String>> tlString = new ArrayList<ArrayList<String>>();
     Integer taCount = 0;
+    ArrayList<String> zero = new ArrayList<>();
+    ArrayList<String> nonZero = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -777,12 +785,20 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             public void onClick(View v) {
                                 taCount = finalC;
                                 Log.e("ImageArray_1", String.valueOf(taCount));
-                              //  Log.e("ImageArray_2", taCount + "   " + (tlString.get(taCount).toString()));
+                                Log.e("ImageArray_final", String.valueOf(finalC));
+                                Log.e("ImageArray_2", taCount + "   " + (tlString.get(taCount).toString()));
 
+                                nonZero = tlString.get(taCount);
+                                Log.v("NON_ZERO_ARRAY", nonZero.toString());
+                                Log.v("NON_ZERO_ARRAY", String.valueOf(nonZero.size()));
 
-                              /*  Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-                                stat.putExtra("Data", arrImage);
-                                startActivity(stat);*/
+                                if (nonZero.size() != 0) {
+                                    Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                                    stat.putExtra("Data", nonZero);
+                                    startActivity(stat);
+                                } else {
+                                    Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         });
 
@@ -832,8 +848,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 startActivity(mapZoom);
 
-                overridePendingTransition(R.anim.fade,
-                        R.anim.fade);
+                overridePendingTransition(R.anim.fade, R.anim.fade);
 
             }
         });
@@ -847,7 +862,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 submitData();
             }
         });
-
     }
 
     private void calOverAllTotal(Double localCov, Double otherExp) {
@@ -882,6 +896,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         if (size == 0) {
             crdDynamicLocation.setVisibility(View.GONE);
         }
+
+        tlString.remove(v);
 
     }
 
@@ -1158,6 +1174,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         }
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonObject> call = apiInterface.getTAdateDetails(jj.toString());
+        String finalChoosedDate = ChoosedDate;
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -1170,7 +1187,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 lcDraftArray = jsonObjects.getAsJsonArray("Additional_ExpenseLC");
                 oeDraftArray = jsonObjects.getAsJsonArray("Additional_ExpenseOE");
 
-
+                callMap(finalChoosedDate);
                 JsonObject jsonObject = null;
                 for (int i = 0; i < jsonArray.size(); i++) {
                     int finalC = i;
@@ -1271,9 +1288,19 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                                 Log.e("STRING_COOUNT", String.valueOf((0)));
 
-                              /*  Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-                                stat.putExtra("Data", arrImage);
-                                startActivity(stat);*/
+
+                                zero = tlString.get(0);
+
+                                Log.e("ZERO_ARRAY", String.valueOf(zero.size()));
+                                Log.e("ZERO_ARRAY", zero.toString());
+
+                                if (zero.size() != 0) {
+                                    Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                                    stat.putExtra("Data", zero);
+                                    startActivity(stat);
+                                } else {
+                                    Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
+                                }
                             }
                         });
 
@@ -2193,7 +2220,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-           /*     String jsonData = null;
+                String jsonData = null;
                 try {
                     jsonData = response.body().string();
                     try {
@@ -2235,7 +2262,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Log.v("response_data", jsonData);*/
+                Log.v("response_data", jsonData);
             }
 
             @Override

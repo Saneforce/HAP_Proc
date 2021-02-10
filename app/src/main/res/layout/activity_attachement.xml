@@ -1,20 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    android:orientation="vertical"
-    >
+    android:id="@+id/re_Layout_imag_preview"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <FrameLayout
+        android:id="@+id/frame_Layout_imag_preview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
 
     <LinearLayout
         android:id="@+id/parent_linear_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="5dp"
-        android:background="#003F51B5"
-        android:orientation="vertical"
-        tools:context=".MainActivity">
+        android:background="#FFF"
+        android:layout_marginTop="@dimen/C20dp"
+        android:layout_marginRight="@dimen/C20dp"
+        android:layout_height="500dp"
+        android:orientation="horizontal">
 
     </LinearLayout>
-</ScrollView>
+
+        <ImageView
+            android:id="@+id/widget_title_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|right"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:adjustViewBounds="true"
+            android:scaleType="fitStart"
+            android:onClick="DeleteLayout"
+            android:src="@drawable/close" />
+
+
+    </FrameLayout>
+
+
+
+</RelativeLayout>
