@@ -155,7 +155,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="gone">
+           >
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -252,10 +252,11 @@
 
                     <LinearLayout
                         android:id="@+id/bike_mode"
+                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:visibility="gone">
+                       >
 
                         <TextView
                             android:id="@+id/txt_km"
@@ -307,8 +308,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/C10dp"
-                        android:orientation="vertical"
-                        android:visibility="gone">
+                        android:orientation="vertical">
 
 
                         <LinearLayout
