@@ -53,7 +53,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     SharedPreferences sharedpreferences;
     public static final String mypreference = "mypref";
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
+/*    @RequiresApi(api = Build.VERSION_CODES.M)*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

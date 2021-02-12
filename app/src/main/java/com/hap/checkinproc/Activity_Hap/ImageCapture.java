@@ -38,6 +38,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -108,6 +109,17 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         common_class = new com.hap.checkinproc.Common_Class.Common_Class(this);
 
 
+        CameraPermission cameraPermission = new CameraPermission(ImageCapture.this, getApplicationContext());
+
+        if(!cameraPermission.checkPermission()){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                cameraPermission.requestPermission();
+            }
+            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+        } else {
+            Log.v("PERMISSION", "PERMISSION");
+        }
+
 
 
         Bundle params = getIntent().getExtras();
@@ -159,6 +171,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+
 
         StartSelfiCamera();
 
@@ -650,4 +664,18 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         }
     }
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        CameraPermission cameraPermission = new CameraPermission(ImageCapture.this, getApplicationContext());
+        if(!cameraPermission.checkPermission()){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                cameraPermission.requestPermission();
+            }
+            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+        } else {
+            Log.v("PERMISSION", "PERMISSION");
+        }
+    }
 }

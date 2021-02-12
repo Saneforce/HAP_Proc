@@ -45,7 +45,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -164,7 +163,7 @@ public class Login extends AppCompatActivity {
         eMail = sharedPreferences.getString("email", "");
         name.setText(eMail);
         if (!checkPermission()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 requestPermissions();
             }
         } else {
@@ -574,7 +573,6 @@ public class Login extends AppCompatActivity {
     }
 
     //Location service part
-    @RequiresApi(api = Build.VERSION_CODES.Q)
     private void requestPermissions() {
         boolean shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);
@@ -650,14 +648,12 @@ public class Login extends AppCompatActivity {
     };
 
 
-
-
     public void checking(View v) {
 
         CameraPermission cameraPermission = new CameraPermission(Login.this, getApplicationContext());
 
-        if(!cameraPermission.checkPermission()){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (!cameraPermission.checkPermission()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 cameraPermission.requestPermission();
             }
             Log.v("PERMISSION_NOT", "PERMISSION_NOT");
