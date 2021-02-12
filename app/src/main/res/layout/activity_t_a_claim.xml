@@ -261,6 +261,84 @@
                                     </RelativeLayout>
 
                                     <LinearLayout
+                                        android:id="@+id/vwBoarding"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:paddingLeft="@dimen/C5dp"
+                                        android:paddingBottom="@dimen/C5dp"
+                                        android:visibility="gone"
+                                        android:weightSum="2">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:id="@+id/lblBrding"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:text="Borading Allowance"
+                                                android:textAllCaps="true"
+                                                android:textColor="@android:color/black"
+                                                android:textSize="11sp"
+                                                android:textStyle="bold"></TextView>
+
+                                            <TextView
+                                                android:id="@+id/txt_BrdAmt"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:padding="@dimen/C5dp"
+                                                android:text="Rs. "
+                                                android:textAllCaps="false"
+                                                android:textColor="@android:color/black"
+                                                android:textSize="13sp"
+                                                android:textStyle="bold" />
+                                        </LinearLayout>
+                                    </LinearLayout>
+                                    <LinearLayout
+                                        android:id="@+id/vwDrvBoarding"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        android:paddingLeft="@dimen/C5dp"
+                                        android:paddingBottom="@dimen/C5dp"
+                                        android:visibility="gone"
+                                        android:weightSum="2">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal">
+
+                                            <TextView
+                                                android:id="@+id/lblDrvBrd"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:text="Driver Boarding"
+                                                android:textAllCaps="true"
+                                                android:textColor="@android:color/black"
+                                                android:textSize="11sp"
+                                                android:textStyle="bold"></TextView>
+
+                                            <TextView
+                                                android:id="@+id/txt_DrvBrdAmt"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:padding="@dimen/C5dp"
+                                                android:text="Rs. "
+                                                android:textAllCaps="false"
+                                                android:textColor="@android:color/black"
+                                                android:textSize="13sp"
+                                                android:textStyle="bold" />
+                                        </LinearLayout>
+                                    </LinearLayout>
+
+
+                                    <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical"
@@ -340,7 +418,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_weight="1"
-                                    android:text="Total DA"
+                                    android:text="Total"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C15dp"
                                     android:textStyle="bold"></TextView>
@@ -1470,6 +1548,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
                                         android:gravity="left"
+                                        android:visibility="gone"
                                         android:orientation="vertical">
 
                                         <TextView
@@ -1482,7 +1561,7 @@
                                             android:textSize="10sp" />
 
                                         <TextView
-                                            android:id="@+id/lbl_ldg_eligi"
+                                            android:id="@+id/lbl_ldg_eligi1"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_marginTop="@dimen/C10dp"
@@ -1556,7 +1635,40 @@
                                     </LinearLayout>
 
                                 </LinearLayout>
-                            </LinearLayout>
+
+                                    <View
+                                        android:layout_width="match_parent"
+                                        android:layout_height="1dp"
+                                        android:layout_margin="@dimen/C10dp"
+                                        android:background="@color/grey_300"></View>
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/C10dp"
+                                        android:layout_marginRight="@dimen/C10dp"
+                                        android:layout_marginBottom="@dimen/C5dp"
+                                        android:orientation="horizontal">
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:text="Total"
+                                            android:textColor="@color/black"
+                                            android:textSize="@dimen/C15dp"
+                                            android:textStyle="bold"></TextView>
+
+                                        <TextView
+                                            android:id="@+id/lbl_ldg_eligi"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="Rs. 0.00"
+                                            android:textColor="@android:color/black"
+                                            android:textSize="@dimen/C15dp"
+                                            android:textStyle="bold"></TextView>
+                                    </LinearLayout>
+
+                                </LinearLayout>
                             </LinearLayout>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
@@ -1643,7 +1755,6 @@
                                     android:layout_height="1dp"
                                     android:layout_margin="@dimen/C10dp"
                                     android:background="@color/grey_300"></View>
-
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -1656,7 +1767,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
-                                        android:text="Total Conveyance"
+                                        android:text="Total"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C15dp"
                                         android:textStyle="bold"></TextView>
@@ -1771,7 +1882,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_weight="1"
-                                        android:text="Total Other Expense"
+                                        android:text="Total"
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C15dp"
                                         android:textStyle="bold"></TextView>

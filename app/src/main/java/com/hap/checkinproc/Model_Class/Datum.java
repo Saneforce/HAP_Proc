@@ -1,7 +1,10 @@
 package com.hap.checkinproc.Model_Class;
 
+import com.google.gson.JsonArray;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
+import org.json.JSONArray;
 
 public class Datum {
 
@@ -159,5 +162,6 @@ public class Datum {
     public void setDeptType(String deptType) {
         DeptType = deptType;
     }
+
 
 }

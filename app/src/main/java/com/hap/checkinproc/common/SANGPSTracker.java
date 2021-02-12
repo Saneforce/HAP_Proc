@@ -89,6 +89,7 @@ public class SANGPSTracker extends Service {
      */
     private static final String CHANNEL_ID = "channel_01";
 
+
     public static final String ACTION_BROADCAST = PACKAGE_NAME + ".broadcast";
 
     static final String EXTRA_LOCATION = PACKAGE_NAME + ".location";
@@ -168,6 +169,7 @@ public class SANGPSTracker extends Service {
                 onNewLocation(locationResult.getLastLocation());
             }
         };
+
 
         createLocationRequest();
         getLastLocation();
@@ -451,6 +453,7 @@ public class SANGPSTracker extends Service {
         double longitude, latitude;
         //imei = mSharedPreferences.getString(APP_PREFERENCES_IMEI, "");
 
+        DatabaseHandler db = new DatabaseHandler(this);
         mLocation = location;
 
         longitude = mLocation.getLongitude();
@@ -490,6 +493,7 @@ public class SANGPSTracker extends Service {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                db.addTrackDetails(paramObject);
                 Log.d(TAG, "onFailure Location");
             }
         });

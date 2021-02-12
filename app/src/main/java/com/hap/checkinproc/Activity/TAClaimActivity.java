@@ -18,6 +18,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -130,7 +132,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     private ArrayList<String> travelTypeList;
     private ArrayList<String> ModeList;
     String StartedKm = "", ClosingKm = "",
-            ModeOfTravel = "", PersonalKm = "";
+            ModeOfTravel = "", PersonalKm = "",DriverNeed="";
 
     /*12/1/13*/
     Common_Model mCommon_model_spinner;
@@ -242,16 +244,18 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     String editMode = "";
     Double tofuel = 0.0;
+    double TotDA = 0.0;
     LinearLayout localTotal, otherTotal;
 
     ImageView taAttach, lcAttach, oeAttach, lcPreview, oePreview;
-    String allowanceAmt = "",myldgEliAmt="";
-    TextView txtallamt;
+    String allowanceAmt = "", myldgEliAmt = "", myBrdEliAmt = "",drvldgEliAmt = "", drvBrdEliAmt = "";
+    TextView txtallamt, txt_BrdAmt, txt_DrvBrdAmt;
 
-    Double daTotal = 0.0, taTotal = 0.0, lcTotal = 0.0, oeTotal = 0.0;
+    Double gTotal = 0.0, taTotal = 0.0, lcTotal = 0.0, oeTotal = 0.0;
     Double fAmount = 0.0;
     TextView grandTotal;
-    Double doubleAmount = 0.0;
+    Double doubleAmount = 0.0, myBrdAmt = 0.0,drvBrdAmt=0.0;
+
     TextView localText, OeText;
     Double GrandTotalAllowance = 0.0;
     Double TotLdging = 0.0;
@@ -290,7 +294,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             ldgAdd, txtJNMyEli, txtMyEligi, txtDrivEligi, lbl_ldg_eligi, txt_totDA;
 
     ImageView mapZoomIn;
-    LinearLayout jointLodging;
+    LinearLayout jointLodging, vwBoarding,vwDrvBoarding;
     TextView txtJointAdd, txtJNEligi;
     String start_Image, End_Imge;
     EditText edtLcFare;
@@ -322,6 +326,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         btn_sub = findViewById(R.id.btn_sub);
 
         linAddAllowance = findViewById(R.id.lin_travel_loaction);
+        vwBoarding = findViewById(R.id.vwBoarding);
+        vwDrvBoarding= findViewById(R.id.vwDrvBoarding);
         TravelBike = findViewById(R.id.linear_bike);
         TxtStartedKm = findViewById(R.id.txt_started_km);
         TxtClosingKm = findViewById(R.id.txt_ended_km);
@@ -347,6 +353,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         otherTotal = findViewById(R.id.lin_total_other);
 
         txtallamt = findViewById(R.id.txt_mode_amount);
+        txt_BrdAmt = findViewById(R.id.txt_BrdAmt);
+        txt_DrvBrdAmt = findViewById(R.id.txt_DrvBrdAmt);
+
+
         txtBusFrom = findViewById(R.id.txt_bus_from);
         txtBusTo = findViewById(R.id.txt_bus_to);
         txtTaClaim = findViewById(R.id.mode_name);
@@ -400,6 +410,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         lblHdBln = findViewById(R.id.lblHdBln);
         ldgWOBBal = findViewById(R.id.ldgWOBBal);
         edt_ldg_bill = findViewById(R.id.edt_ldg_bill);
+
+
         txtJNEligi = findViewById(R.id.txtJNEligi);
         ldgAdd = findViewById(R.id.ldg_Add);
         mapZoomIn = findViewById(R.id.map_zoom);
@@ -440,6 +452,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 showCldr();
             }
         });
+
         edt_ldg_bill.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -870,11 +883,25 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
+
+
+/*
+        String sMyAmt = txtMyEligi.getText().toString().replaceAll("Rs. ", "");
+        String sJnAmt = txtJNEligi.getText().toString().replaceAll("Rs. ", "");
+        String sDrivAmt = txtDrivEligi.getText().toString().replaceAll("Rs. ", "");
+
+        double tTotAmt = Float.parseFloat(sMyAmt) + Float.parseFloat(sJnAmt) + Float.parseFloat(sDrivAmt);
+
+*/
+
+
+
+
     }
 
     private void calOverAllTotal(Double localCov, Double otherExp) {
-        Double s = localCov + otherExp + GrandTotalAllowance + TotLdging;
-        grandTotal.setText("Rs. " + new DecimalFormat("##0.00").format(s));
+        gTotal = localCov + myBrdAmt + drvBrdAmt + otherExp + GrandTotalAllowance + TotLdging;
+        grandTotal.setText("Rs. " + new DecimalFormat("##0.00").format(gTotal));
     }
 
     public void showCldr() {
@@ -1044,12 +1071,21 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
+
     public void SumOFDAAmount() {
         String sAmt = txtallamt.getText().toString().replaceAll("Rs. ", "");
+        String sBrdAmt = txt_BrdAmt.getText().toString().replaceAll("Rs. ", "");
+        String sDrvBrdAmt = txt_DrvBrdAmt.getText().toString().replaceAll("Rs. ", "");
         Log.e("STRDAILY", StrDailyAllowance);
+        if (sAmt.equalsIgnoreCase("")) sAmt = "0.00";
+        if (sBrdAmt.equalsIgnoreCase("")) sBrdAmt = "0.00";
+        if (sDrvBrdAmt.equalsIgnoreCase("")) sDrvBrdAmt = "0.00";
+        TotDA = Double.parseDouble(sAmt) + Double.parseDouble(sBrdAmt)+ Double.parseDouble(sDrvBrdAmt);
         //tTotAmt = tTotAmt + Float.parseFloat(sAmt);
-        txt_totDA.setText("Rs. " + new DecimalFormat("##0.00").format(Float.parseFloat(sAmt)));
+        txt_totDA.setText("Rs. " + new DecimalFormat("##0.00").format(TotDA));
+        calOverAllTotal(localCov, otherExp);
     }
+
     public void SumOFJointLodging() {
         float tTotAmt = 0;
         for (int i = 0; i < jointLodging.getChildCount(); i++) {
@@ -1072,6 +1108,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         TotLdging = tTotAmt;
         SumWOBLodging();
 
+
+        int IntValue = (int) tTotAmt;
+
+        edt_ldg_bill.setFilters(new InputFilter[]{new InputFilterMinMax(1,IntValue)});
         calOverAllTotal(localCov, otherExp);
     }
 
@@ -1214,8 +1254,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                     StartedKm = String.valueOf(jsonObject.get("Start_Km"));
                     StrToEnd = String.valueOf(jsonObject.get("StEndNeed"));
-                    StrBus = String.valueOf(jsonObject.get("From_Place"));
-                    StrTo = String.valueOf(jsonObject.get("To_Place"));
+                    StrBus = jsonObject.get("From_Place").getAsString();
+                    StrTo = jsonObject.get("To_Place").getAsString();
                     StrDaName = String.valueOf(jsonObject.get("MOT_Name"));
                     StrDailyAllowance = String.valueOf(jsonObject.get("dailyAllowance"));
                     StrDailyAllowance = StrDailyAllowance.replaceAll("^[\"']+|[\"']+$", "");
@@ -1224,10 +1264,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     strFuelAmount = String.valueOf(jsonObject.get("FuelAmt"));
                     allowanceAmt = String.valueOf(jsonObject.get("Allowance_Value"));
                     myldgEliAmt = String.valueOf(jsonObject.get("myLdgAmt"));
-                    start_Image = String.valueOf(jsonObject.get("start_Photo"));
-                    End_Imge = String.valueOf(jsonObject.get("End_photo"));
-                    ClosingKm = String.valueOf(jsonObject.get("End_Km"));
-                    PersonalKm = String.valueOf(jsonObject.get("Personal_Km"));
+                    myBrdEliAmt = String.valueOf(jsonObject.get("myBrdAmt"));
+                    drvldgEliAmt = String.valueOf(jsonObject.get("drvLdgAmt"));
+                    drvBrdEliAmt = String.valueOf(jsonObject.get("drvBrdAmt"));
+                    start_Image = String.valueOf(jsonObject.get("start_Photo").getAsString());
+                    End_Imge = String.valueOf(jsonObject.get("End_photo").getAsString());
+                    ClosingKm = String.valueOf(jsonObject.get("End_Km").getAsString());
+                    PersonalKm = String.valueOf(jsonObject.get("Personal_Km").getAsString());
+                    DriverNeed = jsonObject.get("driverAllowance").getAsString();
 
                     Glide.with(getApplicationContext())
                             .load(start_Image.replaceAll("^[\"']+|[\"']+$", ""))
@@ -1242,16 +1286,43 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
 
                     Log.e("dailyAllowance", StrDailyAllowance);
-                    txtDailyAllowance.setText(StrDailyAllowance +" ( "+ StrTo +" )");
+                    txtDailyAllowance.setText(StrDailyAllowance + " ( " + StrTo.toString() + " )");
 
-
+                    myBrdAmt = 0.0;
+                    drvBrdAmt = 0.0;
+                    vwDrvBoarding.setVisibility(View.GONE);
                     if (StrDailyAllowance.equals("Out Station")) {
                         doubleAmount = 0.0;
                         txtallamt.setText("");
+                        myBrdEliAmt = myBrdEliAmt.replaceAll("^[\"']+|[\"']+$", "");
+                        myBrdAmt = Double.valueOf(myBrdEliAmt);
+                        txt_BrdAmt.setText(" Rs. " + new DecimalFormat("##0.00").format(myBrdAmt));
+                        if (DriverNeed.equalsIgnoreCase("true")) {
+                            drvBrdEliAmt = drvBrdEliAmt.replaceAll("^[\"']+|[\"']+$", "");
+                            drvBrdAmt = Double.valueOf(drvBrdEliAmt);
+                            txt_DrvBrdAmt.setText(" Rs. " + new DecimalFormat("##0.00").format(drvBrdAmt));
+
+                            vwDrvBoarding.setVisibility(View.VISIBLE);
+                        }
+                        //txt_DrvBrdAmt
+                        vwBoarding.setVisibility(View.VISIBLE);
+                        SumOFDAAmount();
                     } else {
                         allowanceAmt = allowanceAmt.replaceAll("^[\"']+|[\"']+$", "");
                         doubleAmount = Double.valueOf(allowanceAmt);
+                        myBrdAmt = 0.0;
                         txtallamt.setText(" Rs. " + new DecimalFormat("##0.00").format(doubleAmount));
+                        txt_BrdAmt.setText(" Rs. 0.00");
+
+                        if (DriverNeed.equalsIgnoreCase("true")) {
+                            drvBrdEliAmt = drvBrdEliAmt.replaceAll("^[\"']+|[\"']+$", "");
+                            drvBrdAmt = Double.valueOf(drvBrdEliAmt);
+                            txt_DrvBrdAmt.setText(" Rs. " + new DecimalFormat("##0.00").format(drvBrdAmt));
+
+                            vwDrvBoarding.setVisibility(View.VISIBLE);
+                        }
+
+                        vwBoarding.setVisibility(View.GONE);
 
                         SumOFDAAmount();
                     }
@@ -1384,15 +1455,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         C = Integer.valueOf(ClosingKm);
                         Log.e("TOTAL_KM", String.valueOf(C));
                         totalkm = C - S;
-                        Double totalAmount = Double.valueOf(strFuelAmount);
-
-
-                        tofuel = totalkm * totalAmount;
                         Log.e("TOTAL_Claim_KM", String.valueOf(totalPersonalKm));
                         Log.e("TOTAL_tofuel", String.valueOf(tofuel));
 
-                        TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(tofuel));
-                        TotalTravelledKm.setText(String.valueOf(totalkm));
                     }
 
                     if (PersonalKm != null && !PersonalKm.isEmpty() && !PersonalKm.equals("null") && !PersonalKm.equals("")) {
@@ -1401,11 +1466,18 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         totalPersonalKm = totalkm - Pva;
                         PersonalTextKM.setText(String.valueOf(totalPersonalKm));
                         Log.e("TOTAL_Claim_KM", (PersonalTextKM.getText().toString()));
+
                     }
+
+                    Double totalAmount = Double.valueOf(strFuelAmount);
+                    tofuel = totalPersonalKm * totalAmount;
+                    TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(tofuel));
+                    TotalTravelledKm.setText(String.valueOf(totalkm));
                 }
 
                 GrandTotalAllowance = doubleAmount + tofuel;
-                grandTotal.setText("Rs. " + GrandTotalAllowance.toString());
+
+                calOverAllTotal(localCov, otherExp);//grandTotal.setText("Rs. " + GrandTotalAllowance.toString());
 
 
 
@@ -1691,6 +1763,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             jsonData.put("from_place", StrBus);
             jsonData.put("to_place", StrTo);
             jsonData.put("al_amount", "0");
+            jsonData.put("da_amount", TotDA);
+            jsonData.put("gr_total", gTotal);
 
 
             /*Travel Mode Json*/
@@ -1706,6 +1780,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             trDet.put("fuel_amt", tofuel);
             trDet.put("st_km_img", "");
             trDet.put("ed_km_img", "");
+            trDet.put("fuel_amount", strFuelAmount);
+            trDet.put("ta_total_amount", tofuel);
 
             JSONArray trvLoc = new JSONArray();
             int travelBike = travelDynamicLoaction.getChildCount();
@@ -2069,10 +2145,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             lblHdBill.setVisibility(View.GONE);
             lblHdBln.setVisibility(View.GONE);
             ldgWOBBal.setVisibility(View.GONE);
-            if(myldgEliAmt==null) myldgEliAmt="0.0";
-            Log.d("My ldg Amount",myldgEliAmt);
+            if (myldgEliAmt == null) myldgEliAmt = "0.0";
+            Log.d("My ldg Amount", myldgEliAmt);
             myldgEliAmt = myldgEliAmt.replaceAll("^[\"']+|[\"']+$", "");
-            Log.d("My ldg Amount1",myldgEliAmt);
+            Log.d("My ldg Amount1", myldgEliAmt);
             jointLodging.removeAllViews();
             txtMyEligi.setText("Rs. " + new DecimalFormat("##0.00").format(Double.valueOf(myldgEliAmt)));
             SumOFJointLodging();
@@ -2243,7 +2319,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         Callto.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
+                latLonArray = new ArrayList<>();
+                mGoogleMap.clear();
                 String jsonData = null;
                 try {
                     jsonData = response.body().string();
@@ -2617,7 +2694,29 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    public class InputFilterMinMax implements InputFilter {
+
+        private int min, max;
+
+        public InputFilterMinMax(int min, int max) {
+            this.min = min;
+            this.max = max;
+        }
 
 
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
+            try {
+                int input = Integer.parseInt(dest.toString() + source.toString());
+                if (isInRange(min, max, input))
+                    return null;
+            } catch (NumberFormatException nfe) {
+            }
+            return "";
+        }
 
+        private boolean isInRange(int a, int b, int c) {
+            return b > a ? c >= a && c <= b : c >= b && c <= a;
+        }
+    }
 }

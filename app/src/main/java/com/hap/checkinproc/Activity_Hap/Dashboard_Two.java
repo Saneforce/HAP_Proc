@@ -553,57 +553,113 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 AlertDialogBox.showDialog(Dashboard_Two.this, "HAP Check-In", "Do you want to Checkout?", "Yes", "No", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
-                        if (sharedpreferences.contains(Name) && sharedpreferences.contains(MOT)) {
-                            PrivacyScreen = sharedpreferences.getString(Name, "");
-                            ModeOfTravel = sharedpreferences.getString(MOT, "");
-                            Log.e("Privacypolicy", "Checking" + ModeOfTravel);
-                            Log.e("Privacypolicy", "Checking" + PrivacyScreen);
-                            if (PrivacyScreen.equals("True") && dashMdeCnt.equals("1")) {
-                                Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
-                                takePhoto.putExtra("Mode", "COUT");
-                                startActivity(takePhoto);
-                            } else {
+                        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                        Call<JsonArray> Callto = apiInterface.getDataArrayList("get/CLSExp",
+                                UserDetails.getString("Divcode", ""),
+                                UserDetails.getString("Sfcode", ""));
+                        Callto.enqueue(new Callback<JsonArray>() {
+                            @Override
+                            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                                //if (PrivacyScreen.equals("True") && dashMdeCnt.equals("1")) {
+                                if(response.body().size()>0){
+                                    Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
+                                    takePhoto.putExtra("Mode", "COUT");
+                                    startActivity(takePhoto);
+                                } else {
 
-                                SharedPreferences.Editor editor = sharedpreferences.edit();
-                                editor.remove(Name);
-                                editor.remove(MOT);
-                                editor.remove("SharedImage");
-                                editor.remove("Sharedallowance");
-                                editor.remove("SharedMode");
-                                editor.remove("StartedKM");
-                                editor.remove("SharedFromKm");
-                                editor.remove("SharedToKm");
-                                editor.remove("SharedFare");
-                                editor.remove("SharedImages");
-                                editor.remove("Closing");
-
-
-                                editor.remove(hapLocation);
-                                editor.remove(otherLocation);
-                                editor.remove(visitPurpose);
-                                editor.remove(modeTravelId);
-                                editor.remove(modeTypeVale);
-                                editor.remove(modeFromKm);
-                                editor.remove(modeToKm);
-                                editor.remove(StartedKm);
-                                editor.remove("SharedDailyAllowancess");
-                                editor.remove("SharedDriverss");
-                                editor.remove("ShareModeIDs");
-                                editor.remove("StoreId");
+                                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                                    editor.remove(Name);
+                                    editor.remove(MOT);
+                                    editor.remove("SharedImage");
+                                    editor.remove("Sharedallowance");
+                                    editor.remove("SharedMode");
+                                    editor.remove("StartedKM");
+                                    editor.remove("SharedFromKm");
+                                    editor.remove("SharedToKm");
+                                    editor.remove("SharedFare");
+                                    editor.remove("SharedImages");
+                                    editor.remove("Closing");
 
 
-                                editor.commit();
+                                    editor.remove(hapLocation);
+                                    editor.remove(otherLocation);
+                                    editor.remove(visitPurpose);
+                                    editor.remove(modeTravelId);
+                                    editor.remove(modeTypeVale);
+                                    editor.remove(modeFromKm);
+                                    editor.remove(modeToKm);
+                                    editor.remove(StartedKm);
+                                    editor.remove("SharedDailyAllowancess");
+                                    editor.remove("SharedDriverss");
+                                    editor.remove("ShareModeIDs");
+                                    editor.remove("StoreId");
 
-                                Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
-                                takePhoto.putExtra("Mode", "COUT");
-                                startActivity(takePhoto);
+
+                                    editor.commit();
+
+                                    Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
+                                    takePhoto.putExtra("Mode", "COUT");
+                                    startActivity(takePhoto);
+                                }
                             }
 
-                        } else {
-                            Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
-                            takePhoto.putExtra("Mode", "COUT");
-                            startActivity(takePhoto);
-                        }
+                            @Override
+                            public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                            }
+                        });
+
+//                        if (sharedpreferences.contains(Name) && sharedpreferences.contains(MOT)) {
+//                            PrivacyScreen = sharedpreferences.getString(Name, "");
+//                            ModeOfTravel = sharedpreferences.getString(MOT, "");
+//                            Log.e("Privacypolicy", "Checking" + ModeOfTravel);
+//                            Log.e("Privacypolicy", "Checking" + PrivacyScreen);
+//                            if (PrivacyScreen.equals("True") && dashMdeCnt.equals("1")) {
+//                                Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
+//                                takePhoto.putExtra("Mode", "COUT");
+//                                startActivity(takePhoto);
+//                            } else {
+//
+//                                SharedPreferences.Editor editor = sharedpreferences.edit();
+//                                editor.remove(Name);
+//                                editor.remove(MOT);
+//                                editor.remove("SharedImage");
+//                                editor.remove("Sharedallowance");
+//                                editor.remove("SharedMode");
+//                                editor.remove("StartedKM");
+//                                editor.remove("SharedFromKm");
+//                                editor.remove("SharedToKm");
+//                                editor.remove("SharedFare");
+//                                editor.remove("SharedImages");
+//                                editor.remove("Closing");
+//
+//
+//                                editor.remove(hapLocation);
+//                                editor.remove(otherLocation);
+//                                editor.remove(visitPurpose);
+//                                editor.remove(modeTravelId);
+//                                editor.remove(modeTypeVale);
+//                                editor.remove(modeFromKm);
+//                                editor.remove(modeToKm);
+//                                editor.remove(StartedKm);
+//                                editor.remove("SharedDailyAllowancess");
+//                                editor.remove("SharedDriverss");
+//                                editor.remove("ShareModeIDs");
+//                                editor.remove("StoreId");
+//
+//
+//                                editor.commit();
+//
+//                                Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
+//                                takePhoto.putExtra("Mode", "COUT");
+//                                startActivity(takePhoto);
+//                            }
+//
+//                        } else {
+//                            Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
+//                            takePhoto.putExtra("Mode", "COUT");
+//                            startActivity(takePhoto);
+//                        }
 
                     }
 

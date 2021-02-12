@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Handler;
 import android.os.IBinder;
@@ -21,21 +22,33 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.Block_Information;
 import com.hap.checkinproc.Activity_Hap.Common_Class;
 import com.hap.checkinproc.Activity_Hap.Login;
 import com.hap.checkinproc.HAPApp;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class TimerService extends Service {
+    private static final String TAG = TimerService.class.getSimpleName();
     public static final int notify = 1000;  //interval between two services(Here Service run every 5 Minute)
     private Handler mHandler = new Handler();   //run on another Thread to avoid crash
     private Timer mTimer = null;    //timer handling
-
+    private Boolean UpdtFlag=false;
     @Override
     public IBinder onBind(Intent intent) {
         throw new UnsupportedOperationException("Not yet implemented");
@@ -87,6 +100,42 @@ public void startTimerService(){
                     } catch(Exception e){}
 
                     if (context != null) {
+                        DatabaseHandler db = new DatabaseHandler(context);
+                        JSONArray locations=db.getAllPendingTrackDetails();
+                        if(locations.length()>0){
+                            try {
+                                if(UpdtFlag==false) {
+                                    UpdtFlag = true;
+                                    JSONObject loc = locations.getJSONObject(0);
+
+                                    loc.put("DvcID", "");
+                                    JSONArray param = new JSONArray();
+                                    param.put(loc);
+                                    SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                                    if (UserDetails.getString("Sfcode", "") != "") {
+                                        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                                        Call<JsonObject> call = apiInterface.JsonSave("save/track", "3", UserDetails.getString("Sfcode", ""), "", "", param.toString());
+                                        call.enqueue(new Callback<JsonObject>() {
+                                            @Override
+                                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                                // Get result Repo from response.body()
+                                                db.deleteTrackDetails(loc);
+                                                UpdtFlag=false;
+                                                Log.d(TAG, "Local Location" + String.valueOf(response.body()));
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<JsonObject> call, Throwable t) {
+                                                UpdtFlag=false;
+                                                Log.d(TAG, "onFailure Local Location");
+                                            }
+                                        });
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         if (isTimeAutomatic(context) != true ) {
                             if(HAPApp.activeActivity.getClass()!=Block_Information.class){
                                 Intent nwScr = new Intent(context, Block_Information.class);

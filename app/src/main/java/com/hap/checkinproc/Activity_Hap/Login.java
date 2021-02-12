@@ -45,6 +45,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -76,7 +79,7 @@ public class Login extends AppCompatActivity {
     private final static int RC_MYREPORTS = 2;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener authStateListener;
-    SharedPreferences sharedPreferences;
+    SharedPreferences UserDetails;
     SharedPreferences CheckInDetails;
     public static final String CheckInDetail = "CheckInDetail";
     public static final String MyPREFERENCES = "MyPrefs";
@@ -93,6 +96,9 @@ public class Login extends AppCompatActivity {
     Uri profile;
     // Tracks the bound state of the service.
     private boolean mBound = false;
+    ApiInterface apiInterface;
+
+    Common_Class DT = new Common_Class();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -101,6 +107,7 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
+        apiInterface = ApiClient.getClient().create(ApiInterface.class);
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
                     @Override
@@ -152,7 +159,7 @@ public class Login extends AppCompatActivity {
         shared_common_pref = new Shared_Common_Pref(this);
         btnLogin = (Button) findViewById(R.id.btnLogin);
         profileImage = (ImageView) findViewById(R.id.profile_image);
-        sharedPreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
         mProgress = new ProgressDialog(this);
         String titleId = "Signing in...";
@@ -161,12 +168,12 @@ public class Login extends AppCompatActivity {
 
         deviceToken = shared_common_pref.getvalue(Shared_Common_Pref.Dv_ID);
 
-        eMail = sharedPreferences.getString("email", "");
+        eMail = UserDetails.getString("email", "");
         name.setText(eMail);
         if (!checkPermission()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 requestPermissions();
-            }
+            //}
         } else {
         }
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -249,13 +256,32 @@ public class Login extends AppCompatActivity {
         ExitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences.Editor editor = sharedPreferences.edit();
+                SharedPreferences.Editor editor = UserDetails.edit();
                 editor.putBoolean("Login", false);
                 editor.apply();
                 finishAffinity();
             }
         });
-        Boolean Login = sharedPreferences.getBoolean("Login", false);
+        /*
+        if(UserDetails.getString("Sfcode", "")!="") {
+            Call<JsonArray> Callto = apiInterface.getDataArrayList("get/Signout_Check",
+                    UserDetails.getString("Divcode", ""),
+                    UserDetails.getString("Sfcode", ""));
+            Callto.enqueue(new Callback<JsonArray>() {
+
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+
+                }
+
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                }
+            });
+        }*/
+
+        Boolean Login = UserDetails.getBoolean("Login", false);
         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
 
         if (Login == true || CheckIn == true) {
@@ -264,7 +290,9 @@ public class Login extends AppCompatActivity {
                 Intent playIntent = new Intent(this, SANGPSTracker.class);
                 bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
                 startService(playIntent);
+
             }
+
             if (Login == true && CheckIn == false) {
 
                 try {
@@ -274,10 +302,11 @@ public class Login extends AppCompatActivity {
                 }
                 login(RC_SIGN_IN);
             } else if (CheckIn == true) {
-                Shared_Common_Pref.Sf_Code = sharedPreferences.getString("Sfcode", "");
-                Shared_Common_Pref.Sf_Name = sharedPreferences.getString("SfName", "");
-                Shared_Common_Pref.Div_Code = sharedPreferences.getString("Divcode", "");
-                Shared_Common_Pref.StateCode = sharedPreferences.getString("State_Code", "");
+
+                Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
+                Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
+                Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
+                Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
                 Intent Dashboard = new Intent(Login.this, Dashboard_Two.class);
                 Dashboard.putExtra("Mode", "CIN");
                 startActivity(Dashboard);
@@ -443,7 +472,7 @@ public class Login extends AppCompatActivity {
         }
 
         Log.d(TAG, "TWO                    " + deviceToken);
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        //eMail="ciadmin@hap.in";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         //   Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
@@ -460,7 +489,35 @@ public class Login extends AppCompatActivity {
                     if (response.body().getSuccess() == true) {
                         Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                         Intent intent;
+
                         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                        JsonArray CinData = response.body().getCInData();
+                        if (CinData.size()>0) {
+                            JsonObject CinObj = CinData.get(0).getAsJsonObject();
+                            Log.d("CinData",String.valueOf(CinObj));
+
+                            SharedPreferences.Editor editor = CheckInDetails.edit();
+                            editor.putString("Shift_Selected_Id", CinObj.get("Sft_ID").getAsString());
+                            editor.putString("Shift_Name", CinObj.get("Sft_Name").getAsString());
+                            ///if(CinObj.getAsJsonObject("End_Time").isJsonNull()!= true)
+                            if(CinObj.get("End_Time").isJsonNull()!=true)
+                                editor.putString("CINEnd", CinObj.getAsJsonObject("End_Time").get("date").getAsString());
+                            else
+                                editor.putString("CINEnd", "");
+                            editor.putString("ShiftStart", CinObj.getAsJsonObject("Sft_STime").get("date").getAsString());
+                            editor.putString("ShiftEnd", CinObj.getAsJsonObject("sft_ETime").get("date").getAsString());
+                            editor.putString("ShiftCutOff", CinObj.getAsJsonObject("ACutOff").get("date").getAsString());
+                            editor.putString("On_Duty_Flag", CinObj.get("Wtp").getAsString());
+
+                            String CTime=DT.getDateWithFormat(CinObj.getAsJsonObject("Start_Time").get("date").getAsString(),"HH:mm:ss");
+                            int Type=CinObj.get("Type").getAsInt();
+                            if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
+                                editor.putString("FTime", CTime);
+                            editor.putString("Logintime", CTime);
+                            if(Type==0) CheckIn=true;
+                            editor.putBoolean("CheckIn", CheckIn);
+                            editor.apply();
+                        }
 
                         if (requestCode == RC_SIGN_IN) {
                             if (CheckIn == true) {
@@ -495,7 +552,7 @@ public class Login extends AppCompatActivity {
                         String DeptCd = response.body().getData().get(0).getDeptCd();
                         String DeptType = response.body().getData().get(0).getDeptType();
                         Integer OTFlg = response.body().getData().get(0).getOTFlg();
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        SharedPreferences.Editor editor = UserDetails.edit();
                         Shared_Common_Pref.Sf_Code = code;
                         Shared_Common_Pref.Sf_Name = response.body().getData().get(0).getSfName();
                         Shared_Common_Pref.Div_Code = div;
@@ -574,7 +631,7 @@ public class Login extends AppCompatActivity {
     }
 
     //Location service part
-    @RequiresApi(api = Build.VERSION_CODES.Q)
+    //@RequiresApi(api = Build.VERSION_CODES.Q)
     private void requestPermissions() {
         boolean shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);

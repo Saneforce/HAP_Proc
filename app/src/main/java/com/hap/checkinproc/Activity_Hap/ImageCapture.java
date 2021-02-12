@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -95,7 +96,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
     Button btnRtPrv, btnOkPrv;
 
-
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,9 +106,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         CheckInDetails = getSharedPreferences(sCheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(sUserDetail, Context.MODE_PRIVATE);
         common_class = new com.hap.checkinproc.Common_Class.Common_Class(this);
-
-
-
 
         Bundle params = getIntent().getExtras();
         try {
@@ -276,6 +273,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         try {
             mCamera.setPreviewDisplay(mHolder);
         } catch (IOException e) {
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG);
             e.printStackTrace();
         }
         setCameraDisplayOrientation();

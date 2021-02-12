@@ -46,9 +46,9 @@ public interface ApiInterface {
     @GET("Db_v300.php?")
     Call<JsonArray> getSetups(@Query("axn") String axn, @Query("rSF") String Sf_code);
 
-    /*shift time*/
+    /* get Data as Array List */
     @GET("Db_v300.php?")
-    Call<JsonArray> shiftTime(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code);
+    Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code);
 
     /*Locations*/
     @GET("Db_v300.php?")

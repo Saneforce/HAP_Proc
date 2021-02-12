@@ -29,6 +29,7 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.SANGPSTracker;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +44,7 @@ import retrofit2.Response;
 
 public class Dashboard extends AppCompatActivity implements View.OnClickListener {
     private static String Tag = "HAP_Check-In";
-    SharedPreferences sharedPreferences;
+    SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     public static final String CheckInDetail = "CheckInDetail";
     public static final String MyPREFERENCES = "MyPrefs";
@@ -69,6 +70,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     public static final String modeToKm = "SharedToKmsss";
     public static final String StartedKm = "StartedKMsss";
 
+    com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +85,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         Get_MydayPlan(1, "check/mydayplan");
         shared_common_pref = new Shared_Common_Pref(this);
-        sharedPreferences = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
+        CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         type = (shared.getInt("CheckCount", 0));
@@ -102,9 +104,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         lblUserName.setText(sSFName);
         lblEmail.setText(eMail);
-        Uri Profile=Uri.parse(shared_common_pref.getvalue(Shared_Common_Pref.Profile));
-        Glide.with(this).load(Profile).into(profilePic);
-
+        try {
+            Uri Profile = Uri.parse(shared_common_pref.getvalue(Shared_Common_Pref.Profile));
+            Glide.with(this).load(Profile).into(profilePic);
+        }catch (Exception e){}
         //Glide.with(this).load(Uri.parse((UserDetails.getString("url", "")))).into(profilePic);
 
         //profilePic.setImageURI(Uri.parse((UserDetails.getString("url", ""))));
@@ -179,23 +182,33 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         switch (view.getId()) {
 
             case R.id.lin_check_in:
-               /*
-                if(){
 
+               String ETime=CheckInDetails.getString("CINEnd", "");
+
+                if(! ETime.equalsIgnoreCase("")) {
+
+                    String CutOFFDt = CheckInDetails.getString("ShiftCutOff", "0");
+                    String SftId = CheckInDetails.getString("Shift_Selected_Id", "0");
+
+                    if (DT.GetCurrDateTime(this).getTime() >= DT.getDate(CutOFFDt).getTime() || SftId == "0") {
+                        ETime = "";
+                    }
+                }
+                if(! ETime.equalsIgnoreCase(""))
+                {
                     Intent takePhoto = new Intent(this, ImageCapture.class);
-
                     takePhoto.putExtra("Mode", "CIN");
-                    takePhoto.putExtra("ShiftId", itm.get("id").getAsString());
-                    takePhoto.putExtra("ShiftName", itm.get("name").getAsString());
-                    takePhoto.putExtra("On_Duty_Flag", OnDutyFlag);
-                    takePhoto.putExtra("ShiftStart", itm.getAsJsonObject("Sft_STime").get("date").getAsString());
-                    takePhoto.putExtra("ShiftEnd", itm.getAsJsonObject("sft_ETime").get("date").getAsString());
-                    takePhoto.putExtra("ShiftCutOff", itm.getAsJsonObject("ACutOff").get("date").getAsString());
+                    takePhoto.putExtra("ShiftId", CheckInDetails.getString("Shift_Selected_Id",""));
+                    takePhoto.putExtra("ShiftName", CheckInDetails.getString("Shift_Name",""));
+                    takePhoto.putExtra("On_Duty_Flag", CheckInDetails.getString("On_Duty_Flag","0"));
+                    takePhoto.putExtra("ShiftStart", CheckInDetails.getString("ShiftStart","0"));
+                    takePhoto.putExtra("ShiftEnd", CheckInDetails.getString("ShiftEnd","0"));
+                    takePhoto.putExtra("ShiftCutOff", CheckInDetails.getString("ShiftCutOff","0"));
                     startActivity(takePhoto);
-                }else{*/
+                }else{
                     Intent i = new Intent(this, Checkin.class);
                     startActivity(i);
-                //}
+                }
                 break;
 
             case R.id.lin_request_status:
@@ -241,7 +254,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.lin_onduty:
 
-                SharedPreferences.Editor edd = sharedPreferences.edit();
+                SharedPreferences.Editor edd = CheckInDetails.edit();
                 edd.remove(hapLocation);
                 edd.remove(otherLocation);
                 edd.remove(visitPurpose);
@@ -261,6 +274,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 SharedPreferences.Editor editor = UserDetails.edit();
                 editor.putBoolean("Login", false);
                 editor.apply();
+                Intent playIntent = new Intent(this, SANGPSTracker.class);
+                stopService(playIntent);
                 finishAffinity();
 
                 break;

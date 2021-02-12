@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Model_Class;
 
+import com.google.gson.JsonArray;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -20,6 +21,10 @@ public class Model {
     @SerializedName("BlockMsg")
     @Expose
     private String blockMsg;
+
+    @SerializedName("CInData")
+    @Expose
+    private JsonArray CInData;
 
     public Boolean getSuccess() {
         return success;
@@ -52,5 +57,11 @@ public class Model {
     public void setBlockMsg(String blockMsg) {
         this.blockMsg = blockMsg;
     }
+    public JsonArray getCInData() {
+        return CInData;
+    }
 
+    public void setCInData(JsonArray CInData) {
+        this.CInData = CInData;
+    }
 }
