@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.FrameLayout;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,10 +23,11 @@ import java.util.ArrayList;
 
 public class AttachementActivity extends AppCompatActivity {
     ArrayList<String> intentValue;
-    private LinearLayout parentLinearLayout;
+    private GridLayout parentLinearLayout;
     FrameLayout frameLayout;
     ImageView deleteImage;
     int position;
+    RelativeLayout allRelative;
 
 
     @SuppressLint("ResourceType")
@@ -37,16 +40,18 @@ public class AttachementActivity extends AppCompatActivity {
         frameLayout = findViewById(R.id.frame_Layout_imag_preview);
         frameLayout.setBackgroundColor(Color.TRANSPARENT);
 
+        allRelative= findViewById(R.id.re_Layout_imag_preview);
+        allRelative.setBackgroundColor(Color.TRANSPARENT);
 
         intentValue = new ArrayList<String>();
         intentValue = (ArrayList<String>) getIntent().getSerializableExtra("Data");
 
         Log.v("ATTACHMENT", String.valueOf(intentValue.size()));
         Log.v("ATTACHMENT", intentValue.toString());
-        parentLinearLayout = (LinearLayout) findViewById(R.id.parent_linear_layout);
+        parentLinearLayout = (GridLayout) findViewById(R.id.parent_linear_layout);
 
-     /*   parentLinearLayout.setRowCount(3);
-        parentLinearLayout.setColumnCount(4);*/
+        parentLinearLayout.setRowCount(4);
+        parentLinearLayout.setColumnCount(4);
 
 
         for (int i = 1; i <= intentValue.size(); i++) {

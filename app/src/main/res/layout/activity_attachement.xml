@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:id="@+id/re_Layout_imag_preview"
@@ -13,16 +12,16 @@
         android:layout_height="wrap_content" >
 
 
-    <LinearLayout
-        android:id="@+id/parent_linear_layout"
-        android:layout_width="match_parent"
-        android:background="#FFF"
-        android:layout_marginTop="@dimen/C20dp"
-        android:layout_marginRight="@dimen/C20dp"
-        android:layout_height="500dp"
-        android:orientation="horizontal">
+        <GridLayout
+            android:id="@+id/parent_linear_layout"
+            android:layout_width="match_parent"
+            android:background="#FFF"
+            android:layout_marginTop="@dimen/C20dp"
+            android:layout_marginRight="@dimen/C20dp"
+            android:layout_height="500dp"
+            android:orientation="horizontal">
 
-    </LinearLayout>
+        </GridLayout>
 
         <ImageView
             android:id="@+id/widget_title_icon"

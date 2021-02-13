@@ -13,6 +13,7 @@ public class Shared_Common_Pref {
     Context _context;
     public static final String spName = "SP_LOGIN_DETAILS";
     public static String Sf_Code = "Sf_Code";
+    public static String Profile = "Profile";
     public static String Div_Code = "Div_Code";
     public static String StateCode = "StateCode";
     public static String Sf_Name = "Sf_Name";

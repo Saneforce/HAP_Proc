@@ -707,7 +707,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
     private void spinnerValue(String a, String dc, String sc) {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> shiftCall = apiInterface.shiftTime(a, dc, sc);
+        Call<JsonArray> shiftCall = apiInterface.getDataArrayList(a, dc, sc);
         shiftCall.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {

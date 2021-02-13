@@ -29,6 +29,17 @@ public class Common_Class {
             return android.provider.Settings.System.getInt(c.getContentResolver(), android.provider.Settings.System.AUTO_TIME, 0) == 1;
         }
     }
+    public Date GetCurrDateTime(Context context) {
+        if(isTimeAutomatic(context)==false){
+
+            //this.webView.sendJavascript("blockApp('date')");
+        }
+        Calendar c = Calendar.getInstance();
+
+        Date resultdate = new Date(c.getTimeInMillis());
+        return resultdate;
+
+    }
     public  String GetDateTime(Context context,String pattern) {
         if(isTimeAutomatic(context)==false){
 
@@ -121,5 +132,19 @@ public class Common_Class {
         }
         Date resultdate = new Date(c.getTimeInMillis());
         return resultdate;
+    }
+    public String getDateWithFormat(String dateInString, String pattern) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(dateInString));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        sdf = new SimpleDateFormat(pattern);
+        Date resultdate = new Date(c.getTimeInMillis());
+        dateInString = sdf.format(resultdate);
+        return dateInString;
     }
 }

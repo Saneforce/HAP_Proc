@@ -266,7 +266,6 @@
     </LinearLayout>
 
     </LinearLayout>
-
     <ImageView
         android:id="@+id/ldg_delete"
         android:layout_width="30dp"

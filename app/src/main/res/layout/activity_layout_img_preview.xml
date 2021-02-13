@@ -18,8 +18,8 @@
         android:layout_height="@dimen/C20dp"
         android:layout_gravity="bottom"
         android:layout_marginLeft="-10dp"
+        android:visibility="gone"
         android:onClick="OnItemDelete"
-        android:src="@drawable/close_preview"></ImageView>
+       ></ImageView>
 
 </LinearLayout>
-
