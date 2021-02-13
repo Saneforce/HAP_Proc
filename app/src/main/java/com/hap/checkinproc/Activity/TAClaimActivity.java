@@ -243,7 +243,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     ImageView previewss;
 
     String editMode = "";
-    Double tofuel = 0.0;
+    Double tofuel = 0.0,ldgEliAmt=0.0,ldgDrvEligi=0.0;
     double TotDA = 0.0;
     LinearLayout localTotal, otherTotal;
 
@@ -416,20 +416,21 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         ldgAdd = findViewById(R.id.ldg_Add);
         mapZoomIn = findViewById(R.id.map_zoom);
         buttonSave = findViewById(R.id.save_button);
+        drvldgEAra.setVisibility(View.VISIBLE);
         ldgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ldgEliAmt=0.0;
+                ldgDrvEligi=0.0;
+                drvldgEAra.setVisibility(View.GONE);
                 if (ldgAdd.getText().equals("+ Add")) {
                     ldgAdd.setText("- Remove");
                     lodgContvw.setVisibility(View.VISIBLE);
-                    txtMyEligi.setText("Rs. " + new DecimalFormat("##0.00").format(Double.valueOf(myldgEliAmt)));
                 } else {
                     ldgAdd.setText("+ Add");
                     lodgContvw.setVisibility(View.GONE);
                     txtMyEligi.setText("Rs. " + new DecimalFormat("##0.00").format(Double.valueOf("0.00")));
                 }
-                SumOFJointLodging();
-                SumOFLodging();
             }
         });
         ldg_typ_sp.setOnClickListener(new View.OnClickListener() {
@@ -1103,7 +1104,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         String sJnAmt = txtJNEligi.getText().toString().replaceAll("Rs. ", "");
         String sDrivAmt = txtDrivEligi.getText().toString().replaceAll("Rs. ", "");
 
-        double tTotAmt = Float.parseFloat(sMyAmt) + Float.parseFloat(sJnAmt) + Float.parseFloat(sDrivAmt);
+        double tTotAmt = ldgEliAmt+ldgDrvEligi+ Float.parseFloat(sJnAmt) ;
         lbl_ldg_eligi.setText("Rs. " + new DecimalFormat("##0.00").format(tTotAmt));
         TotLdging = tTotAmt;
         SumWOBLodging();
@@ -2135,6 +2136,16 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
             String ValCd = myDataset.get(position).getId();
             String Valname = myDataset.get(position).getName();
+
+            ldgDrvEligi=0.0;
+            if (DriverNeed.equalsIgnoreCase("true")) {
+                drvldgEAra.setVisibility(View.VISIBLE);
+                if (drvldgEliAmt == null) drvldgEliAmt = "0.0";
+                drvldgEliAmt = drvldgEliAmt.replaceAll("^[\"']+|[\"']+$", "");
+                ldgDrvEligi=Double.valueOf(drvldgEliAmt);
+                txtDrivEligi.setText("Rs. " + new DecimalFormat("##0.00").format(ldgDrvEligi));
+            }
+
             txt_ldg_type.setText(Valname);
             lodgCont.setVisibility(View.VISIBLE);
             ldg_stayloc.setVisibility(View.GONE);
@@ -2150,7 +2161,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             myldgEliAmt = myldgEliAmt.replaceAll("^[\"']+|[\"']+$", "");
             Log.d("My ldg Amount1", myldgEliAmt);
             jointLodging.removeAllViews();
-            txtMyEligi.setText("Rs. " + new DecimalFormat("##0.00").format(Double.valueOf(myldgEliAmt)));
+            ldgEliAmt=Double.valueOf(myldgEliAmt);
+            txtMyEligi.setText("Rs. " + new DecimalFormat("##0.00").format(ldgEliAmt));
             SumOFJointLodging();
             SumOFLodging();
             if (ValCd == "JS") {
