@@ -87,7 +87,6 @@ public class Master_Sync_View implements Main_Model.GetRoutemastersyncResult {
             });
         }
 
-
     }
 }
 

@@ -71,7 +71,6 @@ public class ERTSubAdapter extends RecyclerView.Adapter<ERTSubAdapter.SubMenuVie
 
         Picasso.with(context)
                 .load(menus.get(position).getProfilePic())
-                .error(R.drawable.no_prod)
                 .into(holder.profileImage);
         holder.name.setText(menu.getName());
         holder.price.setText(menu.getDesig());
