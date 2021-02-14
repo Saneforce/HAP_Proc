@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import com.hap.checkinproc.Activity.TaApprovalDisplay;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -251,7 +252,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 finish();
                 break;
             case R.id.lin_travel_allow:
-                //startActivity(new Intent(Approvals.this, Ta_approval.class));
+                startActivity(new Intent(Approvals.this, TaApprovalDisplay.class));
                 //finish();
                 break;
             case R.id.lin_tour_plan:

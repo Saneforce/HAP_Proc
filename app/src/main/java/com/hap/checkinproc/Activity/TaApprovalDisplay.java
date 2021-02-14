@@ -1,4 +1,4 @@
-package com.hap.checkinproc.Activity.Util;
+package com.hap.checkinproc.Activity;
 
 import android.os.Bundle;
 import android.util.Log;

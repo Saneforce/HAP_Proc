@@ -241,6 +241,10 @@ public interface ApiInterface {
     Call<ResponseBody> saveDailyAllowance(@Field("data") String userData);
 
     @FormUrlEncoded
+    @POST("db_new_activity.php?axn=save/expsendtoapproval")
+    Call<ResponseBody> submitOfApp(@Field("data") String userData);
+
+    @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/allowance")
     Call<ResponseBody> getAllowance(@Field("data") String userData);
 

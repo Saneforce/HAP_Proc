@@ -97,6 +97,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     DatePickerDialog picker;
     SharedPreferences sharedpreferences;
     public static final String mypreference = "mypref";
+    SharedPreferences CheckInDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -723,6 +724,20 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     Log.d("QueryString", String.valueOf(QueryString));
                     progressbar.setVisibility(View.GONE);
                     if (response.code() == 200 || response.code() == 201) {
+
+                        SharedPreferences.Editor editors = sharedpreferences.edit();
+                        editors.remove("SharedMode");
+                        editors.remove("SharedModeTypeVale");
+                        editors.remove("StartedKM");
+                        editors.remove("SharedDailyAllowance");
+                        editors.remove("SharedFromKm");
+                        editors.remove("SharedToKm");
+                        editors.remove("ShareStrEnd");
+                        editors.remove("SharedDriver");
+                        editors.remove("ShareModeID");
+                        editors.remove("StoreId");
+                        editors.commit();
+
 
 
 

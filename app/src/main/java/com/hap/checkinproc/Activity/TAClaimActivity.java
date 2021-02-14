@@ -41,12 +41,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -73,11 +73,9 @@ import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Interface.Joint_Work_Listner;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.Status_Adapter.Joint_Work_Adapter;
 import com.hap.checkinproc.adapters.DailyExpenseAdapter;
 
 import org.json.JSONArray;
@@ -132,7 +130,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     private ArrayList<String> travelTypeList;
     private ArrayList<String> ModeList;
     String StartedKm = "", ClosingKm = "",
-            ModeOfTravel = "", PersonalKm = "",DriverNeed="";
+            ModeOfTravel = "", PersonalKm = "", DriverNeed = "";
 
     /*12/1/13*/
     Common_Model mCommon_model_spinner;
@@ -243,18 +241,18 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     ImageView previewss;
 
     String editMode = "";
-    Double tofuel = 0.0,ldgEliAmt=0.0,ldgDrvEligi=0.0;
+    Double tofuel = 0.0, ldgEliAmt = 0.0, ldgDrvEligi = 0.0;
     double TotDA = 0.0;
     LinearLayout localTotal, otherTotal;
 
     ImageView taAttach, lcAttach, oeAttach, lcPreview, oePreview;
-    String allowanceAmt = "", myldgEliAmt = "", myBrdEliAmt = "",drvldgEliAmt = "", drvBrdEliAmt = "";
+    String allowanceAmt = "", myldgEliAmt = "", myBrdEliAmt = "", drvldgEliAmt = "", drvBrdEliAmt = "";
     TextView txtallamt, txt_BrdAmt, txt_DrvBrdAmt;
 
     Double gTotal = 0.0, taTotal = 0.0, lcTotal = 0.0, oeTotal = 0.0;
     Double fAmount = 0.0;
     TextView grandTotal;
-    Double doubleAmount = 0.0, myBrdAmt = 0.0,drvBrdAmt=0.0;
+    Double doubleAmount = 0.0, myBrdAmt = 0.0, drvBrdAmt = 0.0;
 
     TextView localText, OeText;
     Double GrandTotalAllowance = 0.0;
@@ -280,6 +278,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     ArrayList<String> zero = new ArrayList<>();
     ArrayList<String> nonZero = new ArrayList<>();
 
+    ArrayList<String> lodgArrLst = new ArrayList<>();
+    ArrayList<String> oEArrayList = new ArrayList<>();
+    ArrayList<ArrayList<String>> oEString = new ArrayList<ArrayList<String>>();
+    String totLodgAmt = "";
+
 
     //Loadging Expense
 
@@ -294,7 +297,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             ldgAdd, txtJNMyEli, txtMyEligi, txtDrivEligi, lbl_ldg_eligi, txt_totDA;
 
     ImageView mapZoomIn;
-    LinearLayout jointLodging, vwBoarding,vwDrvBoarding;
+    LinearLayout jointLodging, vwBoarding, vwDrvBoarding;
     TextView txtJointAdd, txtJNEligi;
     String start_Image, End_Imge;
     EditText edtLcFare;
@@ -302,10 +305,16 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     ImageView imgPrev;
     LinearLayout linTaImgPrv;
 
+    ImageView img_lodg_prvw, img_lodg_atta;
+
     String fullPath = "";
     ArrayList<ArrayList<String>> tlString = new ArrayList<ArrayList<String>>();
-    Integer taCount = 0;
+    Integer taCount = 0, oeCount = 0;
     Polyline polyline1;
+    String ValCd = "";
+    String witOutBill = "";
+    EditText lodgStyLocation;
+    String ldgEmpName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -327,7 +336,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
         linAddAllowance = findViewById(R.id.lin_travel_loaction);
         vwBoarding = findViewById(R.id.vwBoarding);
-        vwDrvBoarding= findViewById(R.id.vwDrvBoarding);
+        vwDrvBoarding = findViewById(R.id.vwDrvBoarding);
         TravelBike = findViewById(R.id.linear_bike);
         TxtStartedKm = findViewById(R.id.txt_started_km);
         TxtClosingKm = findViewById(R.id.txt_ended_km);
@@ -351,6 +360,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         linMode = findViewById(R.id.linear_mode);
         localTotal = findViewById(R.id.lin_total_loca);
         otherTotal = findViewById(R.id.lin_total_other);
+        lodgStyLocation = findViewById(R.id.edt_stay_loc);
 
         txtallamt = findViewById(R.id.txt_mode_amount);
         txt_BrdAmt = findViewById(R.id.txt_BrdAmt);
@@ -411,6 +421,32 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         ldgWOBBal = findViewById(R.id.ldgWOBBal);
         edt_ldg_bill = findViewById(R.id.edt_ldg_bill);
 
+        img_lodg_prvw = findViewById(R.id.lodg_preview);
+        img_lodg_atta = findViewById(R.id.lodg_attach);
+
+        img_lodg_atta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupCapture(143);
+            }
+        });
+
+        img_lodg_prvw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Log.v("Lodging_List", String.valueOf(lodgArrLst.size()));
+                Log.v("Lodging_List", String.valueOf(lodgArrLst.toString()));
+
+                if (lodgArrLst.size() != 0) {
+                    Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                    stat.putExtra("Data", lodgArrLst);
+                    startActivity(stat);
+                } else {
+                    Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         txtJNEligi = findViewById(R.id.txtJNEligi);
         ldgAdd = findViewById(R.id.ldg_Add);
@@ -420,8 +456,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         ldgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ldgEliAmt=0.0;
-                ldgDrvEligi=0.0;
+                ldgEliAmt = 0.0;
+                ldgDrvEligi = 0.0;
                 drvldgEAra.setVisibility(View.GONE);
                 if (ldgAdd.getText().equals("+ Add")) {
                     ldgAdd.setText("- Remove");
@@ -493,10 +529,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
         strGT = grandTotal.getText().toString();
         Log.e("strGT", strGT);
- /* if (!strGT.matches("")) {
- dcGT = Double.parseDouble(strGT);
- Log.e("strGT_log", String.valueOf(dcGT));
- }*/
         LDailyAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -519,11 +551,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 layoutParams.setMargins(15, 15, 15, 15);
 
+                oEString.add(new ArrayList<>());
+
                 rowView = inflater.inflate(R.layout.activity_other_expense, null);
                 LinearOtherAllowance.addView(rowView, layoutParams);
                 OeSize = LinearOtherAllowance.getChildCount();
 
                 for (int c = 0; c < OeSize; c++) {
+
+                    Integer oESIZE = c;
                     childView = LinearOtherAllowance.getChildAt(c);
                     otherExpenseLayout.setVisibility(View.VISIBLE);
                     oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
@@ -531,6 +567,35 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
                     oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
                     linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
+
+
+                    oeAttach.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            popupCapture(99);
+                        }
+                    });
+
+                    oePreview.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            oeCount = oESIZE;
+
+                            Log.e("OTHER_EXPPENSE_OEC", String.valueOf(oeCount));
+                            Log.e("OTHER_EXPPENSE_OES", String.valueOf(oESIZE));
+                            Log.e("OTHER_EXPPENSE_OESS", oeCount + " " + (oEString.get(oeCount).toString()));
+                            oEArrayList = oEString.get(oeCount);
+                            if (oEArrayList.size() != 0) {
+                                Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                                stat.putExtra("Data", oEArrayList);
+                                startActivity(stat);
+                            } else {
+                                Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
+                    });
+
 
                     edtOE.addTextChangedListener(new TextWatcher() {
                         @Override
@@ -557,7 +622,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 sTotal = GrandTotalAllowance + sumsTot;
                             }
                             Log.d("Local ", String.valueOf(sumsTot));
-                            // " Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM "
                             OeText.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTot));
 
                             otherExp = sumsTot;
@@ -576,13 +640,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             OtherExpenseList.clear();
                             OtherExpenseMode(finalC);
                             Log.e("CLICK_POSITION", String.valueOf(finalC));
-                        }
-                    });
-
-                    oeAttach.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            //popupCapture("OE");
                         }
                     });
 
@@ -721,21 +778,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         btn_sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-   /*             for (int i = 0; i < picPath.size(); i++) {
-                    Log.e("UPloadimageThiru", String.valueOf(picPath.size()));
-                    getMulipart(picPath.get(i), -1);
-                }
-                for (int i = 0; i < array.size(); i++) {
-                    String[] imp = array.get(i).getImg_url().split(",");
-                    for (int j = 0; j < imp.length - 1; j++) {
-                        getMulipart(imp[j], i);
-                    }
-                }*/
 
                 if (txt_date.getText().toString().matches("")) {
                     Toast.makeText(TAClaimActivity.this, "Please choose Date", Toast.LENGTH_SHORT).show();
                 } else {
-                    submitData();
+                    submitData("SubmitForApp");
                 }
 
             }
@@ -785,8 +832,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     travelDynamicLoaction.addView(rowView, layoutParams);
                     deleteButton = findViewById(R.id.delete_button);
                     size = travelDynamicLoaction.getChildCount();
-                    // Log.d("PARENT_COUNT", String.valueOf(size));
-
 
                     for (int c = 0; c < size; c++) {
                         Integer finalC = c;
@@ -880,22 +925,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             public void onClick(View v) {
 
                 Log.e("SUBMIT", "SUBMIT");
-                submitData();
+                submitData("Save");
             }
         });
-
-
-
-/*
-        String sMyAmt = txtMyEligi.getText().toString().replaceAll("Rs. ", "");
-        String sJnAmt = txtJNEligi.getText().toString().replaceAll("Rs. ", "");
-        String sDrivAmt = txtDrivEligi.getText().toString().replaceAll("Rs. ", "");
-
-        double tTotAmt = Float.parseFloat(sMyAmt) + Float.parseFloat(sJnAmt) + Float.parseFloat(sDrivAmt);
-
-*/
-
-
 
 
     }
@@ -915,12 +947,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        ldg_cin.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                        ldg_cin.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                       // ldg_cin.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                     }
                 }, year, month, day);
-        //Calendar calendarmin = Calendar.getInstance();
-        //calendarmin.set(Integer.parseInt(minYear), Integer.parseInt(minMonth) - 1, Integer.parseInt(minDay));
-        //picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
+
 
         picker.show();
     }
@@ -1062,6 +1093,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 txtJNHQ.setText(EmpDet.get("HQ").getAsString());
                 txtJNMob.setText(EmpDet.get("Mob").getAsString());
                 float sum = EmpDet.get("ldgAllow").getAsFloat();
+                ldgEmpName = String.valueOf(sum);
                 txtJNMyEli.setText("Rs. " + new DecimalFormat("##0.00").format(sum));
                 SumOFJointLodging();
             }
@@ -1081,7 +1113,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         if (sAmt.equalsIgnoreCase("")) sAmt = "0.00";
         if (sBrdAmt.equalsIgnoreCase("")) sBrdAmt = "0.00";
         if (sDrvBrdAmt.equalsIgnoreCase("")) sDrvBrdAmt = "0.00";
-        TotDA = Double.parseDouble(sAmt) + Double.parseDouble(sBrdAmt)+ Double.parseDouble(sDrvBrdAmt);
+        TotDA = Double.parseDouble(sAmt) + Double.parseDouble(sBrdAmt) + Double.parseDouble(sDrvBrdAmt);
         //tTotAmt = tTotAmt + Float.parseFloat(sAmt);
         txt_totDA.setText("Rs. " + new DecimalFormat("##0.00").format(TotDA));
         calOverAllTotal(localCov, otherExp);
@@ -1104,7 +1136,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         String sJnAmt = txtJNEligi.getText().toString().replaceAll("Rs. ", "");
         String sDrivAmt = txtDrivEligi.getText().toString().replaceAll("Rs. ", "");
 
-        double tTotAmt = ldgEliAmt+ldgDrvEligi+ Float.parseFloat(sJnAmt) ;
+        double tTotAmt = ldgEliAmt + ldgDrvEligi + Float.parseFloat(sJnAmt);
+        totLodgAmt = String.valueOf(tTotAmt);
         lbl_ldg_eligi.setText("Rs. " + new DecimalFormat("##0.00").format(tTotAmt));
         TotLdging = tTotAmt;
         SumWOBLodging();
@@ -1112,7 +1145,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
         int IntValue = (int) tTotAmt;
 
-        edt_ldg_bill.setFilters(new InputFilter[]{new InputFilterMinMax(1,IntValue)});
+        edt_ldg_bill.setFilters(new InputFilter[]{new InputFilterMinMax(1, IntValue)});
         calOverAllTotal(localCov, otherExp);
     }
 
@@ -1121,6 +1154,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         String sBillAmt = edt_ldg_bill.getText().toString().replaceAll("Rs. ", "");
         if (sBillAmt.isEmpty()) sBillAmt = "0";
         float tBalAmt = Float.parseFloat(sldgAmt) - Float.parseFloat(sBillAmt);
+        witOutBill = String.valueOf(tBalAmt);
+
         ldgWOBBal.setText("Rs. " + new DecimalFormat("##0.00").format(tBalAmt));
     }
 
@@ -1253,26 +1288,26 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                     linDailyAllowance.setVisibility(View.VISIBLE);
 
-                    StartedKm = String.valueOf(jsonObject.get("Start_Km"));
-                    StrToEnd = String.valueOf(jsonObject.get("StEndNeed"));
-                    StrBus = jsonObject.get("From_Place").getAsString();
-                    StrTo = jsonObject.get("To_Place").getAsString();
-                    StrDaName = String.valueOf(jsonObject.get("MOT_Name"));
-                    StrDailyAllowance = String.valueOf(jsonObject.get("dailyAllowance"));
+                    StartedKm = String.valueOf(jsonObject.get("Start_Km").toString());
+                    StrToEnd = String.valueOf(jsonObject.get("StEndNeed").toString());
+                    StrBus = jsonObject.get("From_Place").toString();
+                    StrTo = jsonObject.get("To_Place").toString();
+                    StrDaName = String.valueOf(jsonObject.get("MOT_Name").toString());
+                    StrDailyAllowance = String.valueOf(jsonObject.get("dailyAllowance")).toString();
                     StrDailyAllowance = StrDailyAllowance.replaceAll("^[\"']+|[\"']+$", "");
                     StrDaName = StrDaName.replaceAll("^[\"']+|[\"']+$", "");
                     StrToEnd = StrToEnd.replaceAll("^[\"']+|[\"']+$", "");
-                    strFuelAmount = String.valueOf(jsonObject.get("FuelAmt"));
-                    allowanceAmt = String.valueOf(jsonObject.get("Allowance_Value"));
-                    myldgEliAmt = String.valueOf(jsonObject.get("myLdgAmt"));
-                    myBrdEliAmt = String.valueOf(jsonObject.get("myBrdAmt"));
-                    drvldgEliAmt = String.valueOf(jsonObject.get("drvLdgAmt"));
-                    drvBrdEliAmt = String.valueOf(jsonObject.get("drvBrdAmt"));
-                    start_Image = String.valueOf(jsonObject.get("start_Photo").getAsString());
-                    End_Imge = String.valueOf(jsonObject.get("End_photo").getAsString());
-                    ClosingKm = String.valueOf(jsonObject.get("End_Km").getAsString());
-                    PersonalKm = String.valueOf(jsonObject.get("Personal_Km").getAsString());
-                    DriverNeed = jsonObject.get("driverAllowance").getAsString();
+                    strFuelAmount = String.valueOf(jsonObject.get("FuelAmt").toString());
+                    allowanceAmt = String.valueOf(jsonObject.get("Allowance_Value").toString());
+                    myldgEliAmt = String.valueOf(jsonObject.get("myLdgAmt").toString());
+                    myBrdEliAmt = String.valueOf(jsonObject.get("myBrdAmt").toString());
+                    drvldgEliAmt = String.valueOf(jsonObject.get("drvLdgAmt").toString());
+                    drvBrdEliAmt = String.valueOf(jsonObject.get("drvBrdAmt").toString());
+                    start_Image = String.valueOf(jsonObject.get("start_Photo").toString());
+                    End_Imge = String.valueOf(jsonObject.get("End_photo").toString());
+                    ClosingKm = String.valueOf(jsonObject.get("End_Km").toString());
+                    PersonalKm = String.valueOf(jsonObject.get("Personal_Km").toString());
+                    DriverNeed = jsonObject.get("driverAllowance").toString();
 
                     Glide.with(getApplicationContext())
                             .load(start_Image.replaceAll("^[\"']+|[\"']+$", ""))
@@ -1361,7 +1396,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         taAttach.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                popupCapture(finalC);
+                                popupCapture(1);
 
                             }
                         });
@@ -1657,63 +1692,109 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     }
 
 
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
 
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == 10) {
-            //TODO: action
-            ClipData mClipData = data.getClipData();
+        if (requestCode == 144) {
 
 
-            Log.v("onactivity_result", mClipData + " ");
-            int pickedImageCount;
-            String filepathing = "";
-            if (data.getData() == null) {
-                Log.v("onactivity_result", data.getData() + " ");
+            if (resultCode == RESULT_OK) {
+                if (requestCode == 144) {
+                    if (data.getClipData() != null) {
+                        ClipData mClipData = data.getClipData();
+                        for (int i = 0; i < mClipData.getItemCount(); i++) {
+                            ClipData.Item item = mClipData.getItemAt(i);
+                            Uri uri = item.getUri();
+                            // display your images
+                            ImageFilePath filepath = new ImageFilePath();
+                            Log.v("Upload_one", String.valueOf(filepath));
+                            fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                            lodgArrLst.add(fullPath);
+                            getMulipart(fullPath, 0);
+                            Log.e("IMAGE_UURI", fullPath);
 
-                for (pickedImageCount = 0; pickedImageCount < mClipData.getItemCount();
-                     pickedImageCount++) {
-                    Log.v("picked_image_value", mClipData.getItemAt(pickedImageCount).getUri() + "");
-                    ImageFilePath filepath = new ImageFilePath();
-                    Log.v("Upload_one", String.valueOf(filepath));
-                    fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(pickedImageCount).getUri());
-/*if(arrImage.size()!=0){
-    a
-}*/
-                    tlString.get(taCount).add(fullPath);
+                        }
+                    } else if (data.getData() != null) {
 
-                    Log.e("STRING_COOUNT", String.valueOf((taCount)));
-                    getMulipart(fullPath, 0);
-                    if (pos == -1)
-                        picPath.add(fullPath);
-                    else {
-                        SelectionModel m = array.get(pos);
-                        filepathing = m.getImg_url();
-                        filepathing = filepathing + fullPath + ",";
-                        m.setImg_url(filepathing);
+                        Uri item = data.getData();
+                        ImageFilePath filepath = new ImageFilePath();
+                        Log.v("Upload_one", String.valueOf(filepath));
+                        fullPath = filepath.getPath(TAClaimActivity.this, item);
+                        lodgArrLst.add(fullPath);
+                        getMulipart(fullPath, 0);
                     }
                 }
-            } else {
-                Log.v("data_pic_multiple", "is in empty");
-                ImageFilePath filepath = new ImageFilePath();
-                fullPath = filepath.getPath(TAClaimActivity.this, data.getData());
-                Log.v("Upload_Image_two", fullPath);
-                /////////  arrImage.add(fullPath);
-                if (pos == -1)
-                    picPath.add(fullPath);
+            }
+        } else if (requestCode == 2) {
+            if (resultCode == RESULT_OK) {
+                if (requestCode == 2) {
+                    if (data.getClipData() != null) {
+                        ClipData mClipData = data.getClipData();
+                        for (int i = 0; i < mClipData.getItemCount(); i++) {
+                            ClipData.Item item = mClipData.getItemAt(i);
+                            Uri uri = item.getUri();
+                            // display your images
+                            ImageFilePath filepath = new ImageFilePath();
+                            Log.v("Upload_one", String.valueOf(filepath));
+                            fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                            tlString.get(taCount).add(fullPath);
+                            getMulipart(fullPath, 0);
+                            Log.e("IMAGE_UURI", fullPath);
 
-                else {
-                    SelectionModel m = array.get(pos);
-                    filepathing = m.getImg_url();
-                    filepathing = filepathing + fullPath + ",";
-                    m.setImg_url(filepathing);
+                        }
+                    } else if (data.getData() != null) {
 
+                        Uri item = data.getData();
+                        ImageFilePath filepath = new ImageFilePath();
+                        Log.v("Upload_one", String.valueOf(filepath));
+                        fullPath = filepath.getPath(TAClaimActivity.this, item);
+                        tlString.get(taCount).add(fullPath);
+                        getMulipart(fullPath, 0);
+                    }
                 }
             }
 
+
+        } else if (requestCode == 100) {
+            if (resultCode == RESULT_OK) {
+                if (requestCode == 100) {
+                    if (data.getClipData() != null) {
+                        ClipData mClipData = data.getClipData();
+                        for (int i = 0; i < mClipData.getItemCount(); i++) {
+                            ClipData.Item item = mClipData.getItemAt(i);
+                            Uri uri = item.getUri();
+                            // display your images
+                            ImageFilePath filepath = new ImageFilePath();
+                            Log.v("Upload_one", String.valueOf(filepath));
+                            fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                            oEString.get(oeCount).add(fullPath);
+                            getMulipart(fullPath, 0);
+                            Log.e("IMAGE_UURI", fullPath);
+
+                        }
+                    } else if (data.getData() != null) {
+
+                        Uri item = data.getData();
+                        ImageFilePath filepath = new ImageFilePath();
+                        Log.v("Upload_one", String.valueOf(filepath));
+                        fullPath = filepath.getPath(TAClaimActivity.this, item);
+                        oEString.get(oeCount).add(fullPath);
+                        getMulipart(fullPath, 0);
+                    }
+                }
+            }
+        } else if (requestCode == 143 && resultCode == Activity.RESULT_OK) {
+
+            String finalPath = "/storage/emulated/0";
+            filePath = outputFileUri.getPath();
+            filePath = filePath.substring(1);
+            filePath = finalPath + filePath.substring(filePath.indexOf("/"));
+            lodgArrLst.add(filePath);
+            getMulipart(filePath, 0);
         } else if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
 
 
@@ -1721,28 +1802,24 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             filePath = outputFileUri.getPath();
             filePath = filePath.substring(1);
             filePath = finalPath + filePath.substring(filePath.indexOf("/"));
-            Log.v("Upload_Image_three", filePath);
-            ////////////     arrImage.add(filePath);
-
             tlString.get(taCount).add(filePath);
             getMulipart(filePath, 0);
-            Log.v("printing__Position", String.valueOf(pos));
-            if (pos == -1) {
-                Log.v("printing__eventListStr", filePath);
-            } else {
-                SelectionModel m = array.get(pos);
-                String filepathing = "";
-                filepathing = m.getImg_url();
-                filepathing = filepathing + filePath + ",";
-                m.setImg_url(filepathing);
-            }
 
+        } else if (requestCode == 99 && resultCode == Activity.RESULT_OK) {
+
+
+            String finalPath = "/storage/emulated/0";
+            filePath = outputFileUri.getPath();
+            filePath = filePath.substring(1);
+            filePath = finalPath + filePath.substring(filePath.indexOf("/"));
+            oEString.get(oeCount).add(filePath);
+            getMulipart(filePath, 0);
         }
 
 
     }
 
-    public void submitData() {
+    public void submitData(String responseVal) {
 
 
         JSONArray transHead = new JSONArray();
@@ -1766,6 +1843,45 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             jsonData.put("al_amount", "0");
             jsonData.put("da_amount", TotDA);
             jsonData.put("gr_total", gTotal);
+
+
+            /*Lodging Save*/
+
+            JSONObject ldgSave = new JSONObject();
+            ldgSave.put("ldg_type", ValCd);
+            ldgSave.put("ldg_type_sty", lodgStyLocation.getText().toString());
+            ldgSave.put("sty_dte", ldg_cin.getText().toString());
+            ldgSave.put("elgble", myldgEliAmt);
+            ldgSave.put("bil_amt", edt_ldg_bill.getText().toString());
+            ldgSave.put("wob_amt", witOutBill);
+            ldgSave.put("drv_ldg_amt", "");
+            ldgSave.put("jnt_ldg_amt", "");
+            ldgSave.put("total_ldg_amt", totLodgAmt);
+            ldgSave.put("attch_bill", "");
+
+
+            JSONArray ldgArySve = new JSONArray();
+            for (int jd = 0; jd < jointLodging.getChildCount(); jd++) {
+                View jdV = jointLodging.getChildAt(jd);
+                edt_ldg_JnEmp = (EditText) jdV.findViewById(R.id.edt_ldg_JnEmp);
+                txtJNName = (TextView) jdV.findViewById(R.id.txtJNName);
+                txtJNDesig = (TextView) jdV.findViewById(R.id.txtJNDesig);
+                txtJNDept = (TextView) jdV.findViewById(R.id.txtJNDept);
+                txtJNHQ = (TextView) jdV.findViewById(R.id.txtJNHQ);
+                txtJNMob = (TextView) jdV.findViewById(R.id.txtJNMob);
+                txtJNMyEli = (TextView) jdV.findViewById(R.id.txtJNMyEli);
+                JSONObject jsnLdgSve = new JSONObject();
+                jsnLdgSve.put("emp_cde", edt_ldg_JnEmp.getText().toString());
+                jsnLdgSve.put("emp_Name", txtJNName.getText().toString());
+                jsnLdgSve.put("emp_Desig", txtJNDesig.getText().toString());
+                jsnLdgSve.put("emp_Dept", txtJNDept.getText().toString());
+                jsnLdgSve.put("emp_HQ", txtJNHQ.getText().toString());
+                jsnLdgSve.put("emp_Mob", txtJNMob.getText().toString());
+                jsnLdgSve.put("emp_ldg_amt", ldgEmpName);
+                ldgArySve.put(jsnLdgSve);
+            }
+
+            ldgSave.put("Loding_Emp", ldgArySve);
 
 
             /*Travel Mode Json*/
@@ -1889,6 +2005,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             jsonData.put("Add_Exp", addExp);
             jsonData.put("Other_Exp", othrExp);
             jsonData.put("Trv_details", trDet);
+            jsonData.put("Lodg_details", ldgSave);
 
 
             transHead.put(jsonData);
@@ -1901,11 +2018,16 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             Log.e("TOTAL_JSON_OUT", e.toString());
         }
 
-
-        Call<ResponseBody> submit = apiInterface.saveDailyAllowance(jsonData.toString());
+        Call<ResponseBody> submit;
+        if (responseVal.equals("Save")) {
+            submit = apiInterface.saveDailyAllowance(jsonData.toString());
+        } else {
+            submit = apiInterface.submitOfApp(jsonData.toString());
+        }
         submit.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+               // startActivity(new Intent(getApplicationContext(), Dashboard.class));
                 Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
             }
 
@@ -2016,7 +2138,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                selectMultiImage();
+                selectMultiImage(attachName);
             }
         });
         camera.setOnClickListener(new View.OnClickListener() {
@@ -2027,15 +2149,20 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-    public void selectMultiImage() {
+    public void selectMultiImage(Integer attachName) {
         dialog.dismiss();
-        Intent intent = new Intent();
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        }
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), 10);
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        /*startActivityForResult(Intent.createChooser(intent, "Select Picture"), 10);*/
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), attachName + 1);
+
+/*
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(intent, PICK_IMAGES);*/
     }
 
     public void captureFile(Integer positionC) {
@@ -2046,7 +2173,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         Log.v("priniting_uri", outputFileUri.toString() + " output " + outputFileUri.getPath() + " raw_msg " + getExternalCacheDir().getPath());
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivityForResult(intent, 1);
+        /*   startActivityForResult(intent, 1);*/
+        startActivityForResult(intent, positionC);
         eventListStr = String.valueOf(outputFileUri);
     }
 
@@ -2134,15 +2262,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         if (type == 9) {
             //"IS. Independent Stay","JS. Jointly Stay","RS. Stay At Relaytive House"
 
-            String ValCd = myDataset.get(position).getId();
+            ValCd = myDataset.get(position).getId();
             String Valname = myDataset.get(position).getName();
 
-            ldgDrvEligi=0.0;
+            ldgDrvEligi = 0.0;
             if (DriverNeed.equalsIgnoreCase("true")) {
                 drvldgEAra.setVisibility(View.VISIBLE);
                 if (drvldgEliAmt == null) drvldgEliAmt = "0.0";
                 drvldgEliAmt = drvldgEliAmt.replaceAll("^[\"']+|[\"']+$", "");
-                ldgDrvEligi=Double.valueOf(drvldgEliAmt);
+                ldgDrvEligi = Double.valueOf(drvldgEliAmt);
                 txtDrivEligi.setText("Rs. " + new DecimalFormat("##0.00").format(ldgDrvEligi));
             }
 
@@ -2161,7 +2289,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             myldgEliAmt = myldgEliAmt.replaceAll("^[\"']+|[\"']+$", "");
             Log.d("My ldg Amount1", myldgEliAmt);
             jointLodging.removeAllViews();
-            ldgEliAmt=Double.valueOf(myldgEliAmt);
+            ldgEliAmt = Double.valueOf(myldgEliAmt);
             txtMyEligi.setText("Rs. " + new DecimalFormat("##0.00").format(ldgEliAmt));
             SumOFJointLodging();
             SumOFLodging();
@@ -2364,10 +2492,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             polyline1.setTag("A");
                             polyline1.setColor(COLOR_ORANGE_ARGB);
 
-                            LatLngBounds bounds = builder.build();
+                          /*  LatLngBounds bounds = builder.build();
 
 
-                            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
+                            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));*/
 
                         }
                     } catch (JSONException e) {
