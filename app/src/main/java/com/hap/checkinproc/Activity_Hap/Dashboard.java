@@ -69,6 +69,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     public static final String modeFromKm = "SharedFromKmsss";
     public static final String modeToKm = "SharedToKmsss";
     public static final String StartedKm = "StartedKMsss";
+    public static final String StartedImage = "SharedImage";
 
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
@@ -263,10 +264,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 edd.remove(modeFromKm);
                 edd.remove(modeToKm);
                 edd.remove(StartedKm);
+                edd.remove(StartedImage);
                 edd.remove("SharedDailyAllowancess");
                 edd.remove("SharedDriverss");
                 edd.remove("ShareModeIDs");
                 edd.remove("StoreId");
+
                 edd.commit();
                 startActivity(new Intent(this, On_Duty_Activity.class));
                 break;

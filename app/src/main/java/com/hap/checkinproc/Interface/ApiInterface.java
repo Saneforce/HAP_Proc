@@ -338,11 +338,9 @@ public interface ApiInterface {
     Call<JsonObject> deviationSave(@Query("sf_name") String SfName, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                                    @Query("State_Code") String StateCode, @Query("desig") String desig, @Field("data") String data);
 
-
     /*Permission Select Hours*/
     @GET("Db_V13.php?")
     Call<JsonObject> permissionHours(@Query("axn") String axn, @Query("start_at") String start_at, @Query("Shift_TimeFlag") String Shift_TimeFlag);
-
 
     @FormUrlEncoded
     @POST("Db_V244.php")
@@ -353,7 +351,6 @@ public interface ApiInterface {
 
     @POST("Db_v300.php?axn=get/track")
     Call<ResponseBody> getMap(@Query("SF_Code") String SfCode, @Query("Dt") String Date);
-
 
     @POST("db_new_activity.php?axn=get/expenseApprovalList")
     Call<Travel_Approval_Model> getApprovalList(@Query("SF_Code") String SF_Code);
