@@ -1291,8 +1291,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                     StartedKm = String.valueOf(jsonObject.get("Start_Km").toString());
                     StrToEnd = String.valueOf(jsonObject.get("StEndNeed").toString());
-                    StrBus = jsonObject.get("From_Place").toString();
-                    StrTo = jsonObject.get("To_Place").toString();
+                    StrBus = jsonObject.get("From_Place").getAsString();
+                    StrTo = jsonObject.get("To_Place").getAsString();
                     StrDaName = String.valueOf(jsonObject.get("MOT_Name").toString());
                     StrDailyAllowance = String.valueOf(jsonObject.get("dailyAllowance")).toString();
                     StrDailyAllowance = StrDailyAllowance.replaceAll("^[\"']+|[\"']+$", "");
@@ -2333,9 +2333,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             modeTextView.setText(myDataset.get(position).getName());
             Log.d("JSON_VALUE", myDataset.get(position).getName());
         } else if (type == 8) {
-
             Log.d("PARENT_COUNT", String.valueOf(size));
-
             Log.e("IMAGE_ATTACH_next", String.valueOf(myDataset.get(position).getPho()));
             Integer editTextPosition = myDataset.get(position).getPho();
 
