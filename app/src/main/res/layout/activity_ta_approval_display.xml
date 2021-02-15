@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Activity.TaApprovalDisplay">
 
 
@@ -14,7 +14,6 @@
 
         <include layout="@layout/custom_toolbar_help"></include>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -22,42 +21,23 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/C100dp">
+                android:layout_marginBottom="@dimen/C50dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <RelativeLayout
-                        android:id="@+id/map"
+                    <fragment
+                        android:id="@+id/route_map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/header_date_width"
-                        android:layout_below="@+id/tool_header"
-                        android:orientation="vertical">
-
-
-                        <fragment
-                            android:id="@+id/route_map"
-                            android:name="com.google.android.gms.maps.SupportMapFragment"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent" />
-
-                        <ImageView
-                            android:id="@+id/map_zoom"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_gravity="top|right"
-                            android:layout_margin="@dimen/C5dp"
-                            android:gravity="right"
-                            android:src="@drawable/zoom_in" />
-
-                    </RelativeLayout>
+                        android:layout_height="@dimen/header_date_width" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="#009688"
                         android:orientation="horizontal"
                         android:weightSum="2">
 
@@ -65,26 +45,26 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:padding="@dimen/C5dp"
                             android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:padding="@dimen/C5dp"
-                                android:text="Date "
                                 android:layout_gravity="center"
-                                android:textColor="@android:color/black"
+                                android:text="Date "
+                                android:textColor="@android:color/white"
                                 android:textSize="@dimen/C13dp"
                                 android:textStyle="bold"></TextView>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:padding="@dimen/C5dp"
-                                android:text="2021-02-01"
                                 android:layout_gravity="center"
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/C13dp"></TextView>
+                                android:layout_marginTop="@dimen/C5dp"
+                                android:text="2021-02-01"
+                                android:textColor="@android:color/white"
+                                android:textSize="@dimen/C14dp"></TextView>
 
                         </LinearLayout>
 
@@ -92,26 +72,26 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
+                            android:padding="@dimen/C5dp"
                             android:orientation="vertical">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:padding="@dimen/C5dp"
-                                android:text="Total"
                                 android:layout_gravity="center"
-                                android:textColor="@android:color/black"
+                                android:text="Total"
+                                android:textColor="@android:color/white"
                                 android:textSize="@dimen/C13dp"
                                 android:textStyle="bold"></TextView>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:padding="@dimen/C5dp"
-                                android:text="Rs.1300"
                                 android:layout_gravity="center"
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/C13dp"></TextView>
+                                android:layout_marginTop="@dimen/C5dp"
+                                android:text="Rs.1300"
+                                android:textColor="@android:color/white"
+                                android:textSize="@dimen/C14dp"></TextView>
                         </LinearLayout>
 
 
@@ -119,146 +99,145 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:padding="@dimen/C5dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                            <LinearLayout
-                                android:padding="@dimen/C10dp"
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C2dp">
+
+                            <TextView
+                                android:layout_width="@dimen/C100dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="Name :"
+                                android:textAllCaps="false"
+                                android:textColor="@android:color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/txt_Name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/basic"
-                                    android:text="Name :"
-                                    android:textAllCaps="false"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/txt_Name"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginRight="@dimen/C10dp"
-                                    android:layout_weight="1"
-                                    android:text=""
-                                    android:textAlignment="textEnd"
-                                    tools:ignore="RtlCompat"/>
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:layout_weight="1"
+                                tools:ignore="RtlCompat" />
 
 
                         </LinearLayout>
 
                         <LinearLayout
-                                android:padding="@dimen/C10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C2dp">
+
+                            <TextView
+
+                                android:layout_width="@dimen/C100dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="Headquater :"
+                                android:textAllCaps="false"
+                                android:textColor="@android:color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/txt_hq"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/basic"
-                                    android:text="Headquater :"
-                                    android:textAllCaps="false"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/txt_hq"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginRight="@dimen/C10dp"
-                                    android:layout_weight="1"
-                                    android:text=""
-                                    android:textAlignment="textEnd"
-                                    tools:ignore="RtlCompat"/>
-
-
-                        </LinearLayout> <LinearLayout
-                                android:padding="@dimen/C10dp"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/basic"
-                                    android:text="Designation :"
-                                    android:textAllCaps="false"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/txt_desg"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginRight="@dimen/C10dp"
-                                    android:layout_weight="1"
-                                    android:text=""
-                                    android:textAlignment="textEnd"
-                                    tools:ignore="RtlCompat"/>
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:layout_weight="1"
+                                android:text=""
+                                tools:ignore="RtlCompat" />
 
 
                         </LinearLayout>
+
                         <LinearLayout
-                                android:padding="@dimen/C10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C2dp">
+
+                            <TextView
+                                android:layout_width="@dimen/C100dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="Designation :"
+                                android:textAllCaps="false"
+                                android:textColor="@android:color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/txt_desg"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:layout_weight="1"
+                                android:text=""
+                                tools:ignore="RtlCompat" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/basic"
-                                    android:text="Department :"
-                                    android:textAllCaps="false"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="14sp" />
-
-                                <TextView
-                                    android:id="@+id/txt_dep"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginRight="@dimen/C10dp"
-                                    android:layout_weight="1"
-                                    android:text=""
-                                    android:textAlignment="textEnd"
-                                    tools:ignore="RtlCompat"/>
 
                         </LinearLayout>
+
                         <LinearLayout
-                                android:padding="@dimen/C10dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C2dp">
+
+                            <TextView
+                                android:layout_width="@dimen/C100dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="Department :"
+                                android:textAllCaps="false"
+                                android:textColor="@android:color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/txt_dep"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:layout_weight="1"
+                                android:text=""
+                                tools:ignore="RtlCompat" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/basic"
-                                    android:text="Mode of Travel :"
-                                    android:textAllCaps="false"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="14sp" />
+                        </LinearLayout>
 
-                                <TextView
-                                    android:id="@+id/txt_mde"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginRight="@dimen/C10dp"
-                                    android:layout_weight="1"
-                                    android:text=""
-                                    android:textAlignment="textEnd"
-                                    tools:ignore="RtlCompat"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C2dp">
+
+                            <TextView
+                                android:layout_width="@dimen/C100dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="Mode of Travel :"
+                                android:textAllCaps="false"
+                                android:textColor="@android:color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/txt_mde"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:layout_weight="1"
+                                android:text=""
+                                tools:ignore="RtlCompat" />
 
                         </LinearLayout>
 
@@ -266,47 +245,48 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:background="@color/GrandTotal"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:padding="@dimen/C10dp"
+                        android:background="#009688"
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:layout_width="@dimen/header_width1"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/C10dp"
+                            android:layout_weight="1"
                             android:text="Allowance "
-                            android:layout_weight="1"
-                             android:textAlignment="center"
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/C13dp"
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/C15dp"
                             android:textStyle="bold"></TextView>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/C10dp"
+                            android:layout_weight="1"
                             android:text="Amount"
-                            android:layout_weight="1"
-                            android:textAlignment="center"
-                            android:layout_gravity="center"
-                            android:textStyle="bold"
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/C13dp"></TextView>
+                            android:textColor="@android:color/white"
+                            android:textSize="@dimen/C15dp"
+                            android:textStyle="bold"></TextView>
                     </LinearLayout>
-
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
+                        android:orientation="vertical"
+                        android:padding="@dimen/C5dp"
                         android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="DaApproval"
+                        android:padding="@dimen/C5dp"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="@dimen/header_width1"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/C10dp"
+                            android:layout_weight="1"
                             android:text="Daily Allowance "
-                            android:layout_weight="1"
-
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/C13dp"
                             android:textStyle="bold"></TextView>
@@ -314,25 +294,26 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/C10dp"
-                            android:text="Rs. 1500.00"
+                            android:layout_marginLeft="@dimen/C10dp"
                             android:layout_weight="1"
-                            android:layout_gravity="center"
-                            android:textStyle="bold"
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/C13dp"></TextView>
+                            android:text="Rs. 1500.00"
+                            android:textColor="@android:color/holo_blue_light"
+                            android:textSize="@dimen/C13dp"
+                            android:textStyle="bold"></TextView>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:onClick="BoardingApproval"
+                        android:padding="@dimen/C5dp"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="@dimen/header_width1"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/C10dp"
+                            android:layout_weight="1"
                             android:text="Boarding "
-                            android:layout_weight="1"
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/C13dp"
                             android:textStyle="bold"></TextView>
@@ -340,25 +321,26 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/C10dp"
-                            android:text="Rs. 1500.00"
-                            android:layout_gravity="center"
-                            android:textStyle="bold"
+                            android:layout_marginLeft="@dimen/C10dp"
                             android:layout_weight="1"
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/C13dp"></TextView>
+                            android:text="Rs. 1500.00"
+                            android:textColor="@android:color/holo_blue_light"
+                            android:textSize="@dimen/C13dp"
+                            android:textStyle="bold"></TextView>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:orientation="horizontal"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:onClick="DriverDaApproval"
+                        android:padding="@dimen/C5dp"
+                        android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="@dimen/header_width1"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/C10dp"
-                            android:text="Driver DA "
                             android:layout_weight="1"
+                            android:text="Driver DA "
                             android:textColor="@android:color/black"
                             android:textSize="@dimen/C13dp"
                             android:textStyle="bold"></TextView>
@@ -366,91 +348,83 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/C10dp"
+                            android:layout_marginLeft="@dimen/C10dp"
                             android:layout_weight="1"
                             android:text="Rs. 1500.00"
-                            android:layout_gravity="center"
-                            android:textStyle="bold"
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/C13dp"></TextView>
+                            android:textColor="@android:color/holo_blue_light"
+                            android:textSize="@dimen/C13dp"
+                            android:textStyle="bold"></TextView>
                     </LinearLayout>
+
                     <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="@dimen/header_width1"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/C10dp"
-                        android:text="Fuel Allowance "
-                        android:layout_weight="1"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/C13dp"
-                        android:textStyle="bold"></TextView>
+                        android:onClick="FuelApproval"
+                        android:padding="@dimen/C5dp"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="@dimen/C10dp"
-                        android:layout_weight="1"
-                        android:text="Rs. 1500.00"
-                        android:layout_gravity="center"
-                        android:textStyle="bold"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/C13dp"></TextView>
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="@dimen/header_width1"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Fuel Allowance "
+                            android:textColor="@android:color/black"
+                            android:textSize="@dimen/C13dp"
+                            android:textStyle="bold"></TextView>
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/C10dp"
+                            android:layout_weight="1"
+                            android:text="Rs. 1500.00"
+                            android:textColor="@android:color/holo_blue_light"
+                            android:textSize="@dimen/C13dp"
+                            android:textStyle="bold"></TextView>
+                    </LinearLayout>
 
+                    </LinearLayout>
 
                 </LinearLayout>
             </ScrollView>
 
 
-
-
         </LinearLayout>
-
 
 
     </LinearLayout>
 
 
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-
-        android:layout_height="wrap_content">
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/C10dp"
-            android:text="Approve "
             android:layout_weight="1"
             android:background="@color/GrandTotal"
+            android:padding="@dimen/C10dp"
+            android:text="Approve "
             android:textAlignment="center"
-            android:textSize="@dimen/C13dp"
             android:textColor="@color/white"
+            android:textSize="@dimen/C13dp"
             android:textStyle="bold"></TextView>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/C10dp"
-            android:text="Reject"
             android:layout_weight="1"
             android:background="@color/color_red"
+            android:padding="@dimen/C10dp"
+            android:text="Reject"
             android:textAlignment="center"
-            android:textStyle="bold"
             android:textColor="@color/white"
-            android:textSize="@dimen/C13dp"></TextView>
+            android:textSize="@dimen/C13dp"
+            android:textStyle="bold"></TextView>
     </LinearLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

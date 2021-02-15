@@ -47,6 +47,7 @@ import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -2492,10 +2493,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             polyline1.setTag("A");
                             polyline1.setColor(COLOR_ORANGE_ARGB);
 
-                          /*  LatLngBounds bounds = builder.build();
+                            LatLngBounds bounds = builder.build();
 
-
-                            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));*/
+                            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
 
                         }
                     } catch (JSONException e) {

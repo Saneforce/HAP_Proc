@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import com.hap.checkinproc.Activity.TAApprovalActivity;
 import com.hap.checkinproc.Activity.TaApprovalDisplay;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -252,8 +253,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 finish();
                 break;
             case R.id.lin_travel_allow:
-                startActivity(new Intent(Approvals.this, TaApprovalDisplay.class));
-                //finish();
+                startActivity(new Intent(Approvals.this, TAApprovalActivity.class));
                 break;
             case R.id.lin_tour_plan:
                 startActivity(new Intent(Approvals.this, Tp_Approval.class));
@@ -262,16 +262,14 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
             case R.id.lin_leav_sta:
                 common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "1");
                 finish();
-                //startActivity(new Intent(Approvals.this, Leave_Status_Activity.class));
                 break;
             case R.id.lin_per_sta:
-                // startActivity(new Intent(Approvals.this, Permission_Status_Activity.class));
+
                 common_class.CommonIntentwithoutFinishputextra(Permission_Status_Activity.class, "AMod", "1");
                 finish();
 
                 break;
             case R.id.lin_duty_sta:
-                //startActivity(new Intent(Approvals.this, Onduty_Status_Activity.class));
 
                 common_class.CommonIntentwithoutFinishputextra(Onduty_Status_Activity.class, "AMod", "1");
                 finish();
@@ -280,19 +278,15 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 common_class.CommonIntentwithoutFinishputextra(MissedPunch_Status_Activity.class, "AMod", "1");
                 finish();
 
-                //startActivity(new Intent(Approvals.this, MissedPunch_Status_Activity.class));
                 break;
             case R.id.lin_ext_shift:
                 common_class.CommonIntentwithoutFinishputextra(Extended_Shift_Activity.class, "AMod", "1");
                 finish();
 
-
-                //startActivity(new Intent(Approvals.this, Extended_Shift_Activity.class));
                 break;
             case R.id.lin_weekoff:
                 common_class.CommonIntentwithoutFinishputextra(WeekOff_Status_Activity.class, "AMod", "1");
                 finish();
-                // startActivity(new Intent(Approvals.this, WeekOff_Status_Activity.class));
                 break;
         }
 

@@ -3,9 +3,8 @@ package com.hap.checkinproc.Model_Class;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
+public class Travel_Approval_Model {
 
-public class Tp_Approval_Model implements Serializable {
     @SerializedName("Sf_code")
     @Expose
     private String sfCode;
@@ -83,6 +82,4 @@ public class Tp_Approval_Model implements Serializable {
     public void setSlNo(String slNo) {
         this.slNo = slNo;
     }
-
-
 }

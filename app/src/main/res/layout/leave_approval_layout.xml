@@ -29,7 +29,6 @@
             android:id="@+id/textviewdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_weight="1"
             android:text="2020-11-25" />
 

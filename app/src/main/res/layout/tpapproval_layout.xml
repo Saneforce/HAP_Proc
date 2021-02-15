@@ -6,17 +6,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/bg_color"
-
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/bg_color"
         android:orientation="horizontal"
         android:padding="8dp"
-        android:background="@color/bg_color"
-        android:weightSum="3">
+        android:weightSum="4">
 
 
         <TextView
@@ -30,24 +29,29 @@
             android:id="@+id/textviewdate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
             android:layout_weight="1"
             android:text="2020-11-25" />
+
+        <TextView
+            android:id="@+id/leavedays"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="2" />
 
         <TextView
             android:id="@+id/open"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1.2"
-            android:padding="@dimen/C3dp"
-            android:textColor="@color/color_white"
-            android:gravity="center"
+            android:layout_weight="1"
             android:background="@drawable/blue_txt_bg"
-            android:text="Open" />
+            android:text="Open"
+            android:textAlignment="center"
+            android:textColor="@color/color_white" />
 
 
     </LinearLayout>
-
 
 
 </LinearLayout>

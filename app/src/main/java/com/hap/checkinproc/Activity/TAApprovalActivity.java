@@ -25,15 +25,14 @@ import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
-import com.hap.checkinproc.Activity_Hap.Leave_Approval_Reject;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Model_Class.Leave_Approval_Model;
+import com.hap.checkinproc.Model_Class.Travel_Approval_Model;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.adapters.Leave_Approval_Adapter;
+import com.hap.checkinproc.Status_Adapter.Travel_Approval_Adapter;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -46,16 +45,18 @@ import retrofit2.Response;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class TAApprovalActivity extends AppCompatActivity {
-    List<Leave_Approval_Model> approvalList;
+    List<Travel_Approval_Model> approvalList;
     Gson gson;
     private RecyclerView recyclerView;
     Type userType;
     Common_Class common_class;
+    Shared_Common_Pref mShared_common_pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_t_a_approval);
+        mShared_common_pref = new Shared_Common_Pref(this);
 
         common_class = new Common_Class(this);
         TextView txtHelp = findViewById(R.id.toolbar_help);
@@ -108,7 +109,7 @@ public class TAApprovalActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.leaverecyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
-        getleavedetails();
+        getTAList();
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,51 +120,31 @@ public class TAApprovalActivity extends AppCompatActivity {
         });
     }
 
-    public void getleavedetails() {
-        String routemaster = " {\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+    public void getTAList() {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-
-        Call<Object> mCall = apiInterface.GetTPObject(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "vwLeave", routemaster);
-
-        mCall.enqueue(new Callback<Object>() {
+        Call<Travel_Approval_Model> mCall = apiInterface.getApprovalList("MGR5120");
+        mCall.enqueue(new Callback<Travel_Approval_Model>() {
             @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
+            public void onResponse(Call<Travel_Approval_Model> call, Response<Travel_Approval_Model> response) {
                 // locationList=response.body();
                 Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
                 Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
-
-                userType = new TypeToken<ArrayList<Leave_Approval_Model>>() {
+                userType = new TypeToken<ArrayList<Travel_Approval_Model>>() {
                 }.getType();
                 approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
                 Log.e("Leave_Adapter", String.valueOf(approvalList));
 
-
-                recyclerView.setAdapter(new Leave_Approval_Adapter(approvalList, R.layout.leave_approval_layout, getApplicationContext(), new AdapterOnClick() {
+                recyclerView.setAdapter(new Travel_Approval_Adapter(approvalList, R.layout.leave_approval_layout, getApplicationContext(), new AdapterOnClick() {
                     @Override
                     public void onIntentClick(int Name) {
-                        Intent intent = new Intent(TAApprovalActivity.this, Leave_Approval_Reject.class);
-                        intent.putExtra("LeaveId", String.valueOf(approvalList.get(Name).getLeaveId()));
-                        intent.putExtra("Username", approvalList.get(Name).getFieldForceName());
-                        intent.putExtra("Emp_Code", approvalList.get(Name).getEmpCode());
-                        intent.putExtra("HQ", approvalList.get(Name).getHQ());
-                        intent.putExtra("Designation", approvalList.get(Name).getDesignation());
-                        intent.putExtra("MobileNumber", approvalList.get(Name).getSFMobile());
-                        intent.putExtra("Reason", approvalList.get(Name).getReason());
-                        intent.putExtra("Leavetype", approvalList.get(Name).getLeaveName());
-                        intent.putExtra("fromdate", approvalList.get(Name).getFromDate());
-                        intent.putExtra("todate", approvalList.get(Name).getToDate());
-                        intent.putExtra("leavedays", String.valueOf(approvalList.get(Name).getLeaveDays()));
-                        Log.e("LEAVE_APPROVAL_REJECT", String.valueOf(approvalList.get(Name).getLeaveDays()));
-                        intent.putExtra("Sf_Code", approvalList.get(Name).getSfCode());
+                        Intent intent = new Intent(TAApprovalActivity.this, TaApprovalDisplay.class);
                         startActivity(intent);
-                        Log.e("Leave_Type", approvalList.get(Name).getLeaveType().toString());
-
                     }
                 }));
             }
 
             @Override
-            public void onFailure(Call<Object> call, Throwable t) {
+            public void onFailure(Call<Travel_Approval_Model> call, Throwable t) {
 
             }
         });

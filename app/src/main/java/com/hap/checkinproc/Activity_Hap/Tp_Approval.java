@@ -147,27 +147,8 @@ public class Tp_Approval extends AppCompatActivity {
                 recyclerView.setAdapter(new Tp_Approval_Adapter(Tp_Approval_Model, R.layout.tpapproval_layout, getApplicationContext(), new AdapterOnClick() {
                     @Override
                     public void onIntentClick(int Name) {
-                        Intent intent = new Intent(Tp_Approval.this, Tp_Approval_Reject.class);
-                        intent.putExtra("Username", Tp_Approval_Model.get(Name).getFieldForceName());
-                        intent.putExtra("Emp_Code", Tp_Approval_Model.get(Name).getEmpCode());
-                        intent.putExtra("HQ", Tp_Approval_Model.get(Name).getHQ());
-                        intent.putExtra("Designation", Tp_Approval_Model.get(Name).getDesignation());
-                        intent.putExtra("MobileNumber", Tp_Approval_Model.get(Name).getSFMobile());
-                        intent.putExtra("Plan_Date", Tp_Approval_Model.get(Name).getStartDate());
-                        intent.putExtra("Work_Type", Tp_Approval_Model.get(Name).getWorktypeName());
-                        intent.putExtra("Route", Tp_Approval_Model.get(Name).getRouteName());
-                        intent.putExtra("Distributor", Tp_Approval_Model.get(Name).getWorkedWithName());
-                        intent.putExtra("Sf_Code", Tp_Approval_Model.get(Name).getSFCode());
-                        intent.putExtra("Remarks", Tp_Approval_Model.get(Name).getRemarks());
-                        intent.putExtra("workedwithname", Tp_Approval_Model.get(Name).getJointWorkName());
-                        intent.putExtra("TPHqname", Tp_Approval_Model.get(Name).getTourHQName());
-                        intent.putExtra("ShiftType", Tp_Approval_Model.get(Name).getTypename());
-                        intent.putExtra("ChillCentreName", Tp_Approval_Model.get(Name).getCCentreName());
-                        intent.putExtra("FromDate", Tp_Approval_Model.get(Name).getFromdate());
-                        intent.putExtra("Worktype_Flag", Tp_Approval_Model.get(Name).getWorktypeFlag());
-                        intent.putExtra("ToDate", Tp_Approval_Model.get(Name).getTodate());
-                        intent.putExtra("DeptType", Tp_Approval_Model.get(Name).getDeptType());
-                        startActivity(intent);
+             /*           Intent intent = new Intent(Tp_Approval.this, Tp_Approval_Reject.class);
+                        startActivity(intent);*/
                     }
                 }));
             }

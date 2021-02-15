@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -116,6 +117,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     List<Common_Model> listOrderType = new ArrayList<>();
     Common_Model mCommon_model_spinner;
     String modeId = "", toId = "", startEnd = "";
+    ScrollView tpScrollView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +165,9 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         image = findViewById(R.id.arowimg);
         joint_work_Caption = findViewById(R.id.joint_work_lt);
         joint_work_Recyclerview = findViewById(R.id.joint_work_listlt);
+
+
+
         submitbutton.setOnClickListener(this);
         worktypelayout.setOnClickListener(this);
         distributors_layout.setOnClickListener(this);
@@ -221,6 +226,10 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 OrderType();
             }
         });
+
+        tpScrollView = findViewById(R.id.tp_scroll);
+
+
     }
 
 

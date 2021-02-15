@@ -23,12 +23,13 @@ public class Tp_Approval_Adapter extends RecyclerView.Adapter<Tp_Approval_Adapte
     int dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textviewname, textviewdate, open;
+        public TextView textviewname, textviewdate, open, leavedays;
 
         public MyViewHolder(View view) {
             super(view);
             textviewname = (TextView) view.findViewById(R.id.textviewname);
             textviewdate = (TextView) view.findViewById(R.id.textviewdate);
+            leavedays = view.findViewById(R.id.leavedays);
             open = (TextView) view.findViewById(R.id.open);
         }
     }
@@ -56,16 +57,13 @@ public class Tp_Approval_Adapter extends RecyclerView.Adapter<Tp_Approval_Adapte
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Tp_Approval_Model Tp_Approval_Model = Tp_Approval_ModelsList.get(position);
-        holder.textviewname.setText(Tp_Approval_Model.getFieldForceName());
-        holder.textviewdate.setText(Tp_Approval_Model.getDate());
-
+        holder.textviewname.setText(Tp_Approval_Model.getSfName());
+        holder.textviewdate.setText(Tp_Approval_Model.getId());
+        holder.leavedays.setText("" + Tp_Approval_Model.getTotalAmount());
         holder.open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 mAdapterOnClick.onIntentClick(position);
-
             }
         });
     }

@@ -53,9 +53,11 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/permissionstatus"
-                    android:layout_marginTop="@dimen/C5dp"                     android:layout_width="match_parent"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginBottom="@dimen/C60dp" />
+                    android:layout_marginTop="@dimen/C5dp"
+                    android:layout_marginBottom="@dimen/C60dp"
+      />
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>

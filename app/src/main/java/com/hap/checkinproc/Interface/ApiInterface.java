@@ -9,8 +9,7 @@ import com.hap.checkinproc.Model_Class.Location;
 import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.Model_Class.ReportDataList;
 import com.hap.checkinproc.Model_Class.RetailerViewDetails;
-
-import org.json.JSONObject;
+import com.hap.checkinproc.Model_Class.Travel_Approval_Model;
 
 import java.util.HashMap;
 import java.util.List;
@@ -356,9 +355,8 @@ public interface ApiInterface {
     Call<ResponseBody> getMap(@Query("SF_Code") String SfCode, @Query("Dt") String Date);
 
 
-    @FormUrlEncoded
-    @POST("db_new_activity.php?axn=get/taffdetails")
-    Call<JsonObject> getTaDateApproval(@Field("data") String data);
+    @POST("db_new_activity.php?axn=get/expenseApprovalList")
+    Call<Travel_Approval_Model> getApprovalList(@Query("SF_Code") String SF_Code);
 
 
 }
