@@ -54,7 +54,7 @@
 
             <TextView
                 android:id="@+id/textView34"
-                android:layout_width="@dimen/C20dp"
+                android:layout_width="14dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
@@ -64,33 +64,32 @@
 
             <TextView
                 android:id="@+id/textView35"
-                android:layout_width="0dp"
+                android:layout_width="53dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
                 android:layout_weight="1"
-                android:text="Date"
+                android:text="Applied date"
                 android:textSize="@dimen/C13dp"
+
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView36"
-                android:layout_width="0dp"
+                android:layout_width="44dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Amount"
+                android:text="Total Amount"
                 android:textSize="@dimen/C13dp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/textView37"
-                android:layout_width="0dp"
+                android:layout_width="34dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Click here"
                 android:textSize="@dimen/C13dp"
                 android:textStyle="bold" />
-
-
         </LinearLayout>
 
         <LinearLayout
@@ -102,6 +101,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/leaverecyclerview"
                 android:layout_width="match_parent"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="5dp"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/C60dp" />
         </LinearLayout>

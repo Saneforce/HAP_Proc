@@ -259,7 +259,6 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=reject/taapprove")
     Call<ResponseBody> rejectTAApprove(@Field("data") String userData);
 
-
     /*Done by Karthic */
 
     /*category*/
@@ -352,8 +351,17 @@ public interface ApiInterface {
     @POST("Db_v300.php?axn=get/track")
     Call<ResponseBody> getMap(@Query("SF_Code") String SfCode, @Query("Dt") String Date);
 
-    @POST("db_new_activity.php?axn=get/expenseApprovalList")
-    Call<Travel_Approval_Model> getApprovalList(@Query("SF_Code") String SF_Code);
+    @POST("db_new_activity.php?axn=get/expenseapprovallist")
+    Call<JsonArray> getApprovalList(@Query("SF_Code") String SF_Code);
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=get/expensesflist")
+    Call<JsonArray> getApprovalDisplay(@Field("data") String data);
+
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=save/taapprove")
+    Call<JsonObject> taApprove(@Field("data") String body);
 
 
 }

@@ -114,15 +114,18 @@ public class QRCodeScanner extends AppCompatActivity {
                             } else {
                                 isEmail = false;
                                 btnAction.setText("LAUNCH URL");
-                               String intentData = barcodes.valueAt(0).displayValue.replace("|",",");
-                               Log.e("INTENT_DATA", intentData);
+                                String intentData = barcodes.valueAt(0).displayValue.replace("|", ",");
+                                if (!intentData.equals("")) {
+                                    Log.e("INTENT_DATA", intentData);
+                                  /*  String[] arrSplit_3 = intentData.split(",");
+                                    arrSplit_3[0] = "";*/
 
-                               String[] arrSplit_3 = intentData.split(",");
-                               arrSplit_3[0] = "";
+                                    Toast.makeText(QRCodeScanner.this, "Code is successfull", Toast.LENGTH_SHORT).show();
+                              //      txtBarcodeValue.setText(intentData.split("|")[0]);
+                                    finish();
+                                }
 
 
-
-                              txtBarcodeValue.setText(intentData.split("|")[0]);
                             }
                         }
                     });

@@ -170,9 +170,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C8dp"
+                    android:visibility="gone"
                     android:layout_marginRight="@dimen/C8dp"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                  >
                     <!--Daily Allowance-->
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
