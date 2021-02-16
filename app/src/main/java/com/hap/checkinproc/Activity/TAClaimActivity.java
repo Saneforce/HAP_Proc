@@ -1281,7 +1281,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     linDailyAllowance.setVisibility(View.VISIBLE);
 
                     StartedKm = String.valueOf(jsonObject.get("Start_Km").toString());
-                    StrToEnd = String.valueOf(jsonObject.get("StEndNeed").toString());
+                    StrToEnd = (jsonObject.get("StEndNeed").getAsString());
                     StrBus = jsonObject.get("From_Place").toString();
                     StrTo = jsonObject.get("To_Place").toString();
                     StrDaName = String.valueOf(jsonObject.get("MOT_Name").toString());
@@ -1358,80 +1358,80 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     Log.e("STRTOEND", StartedKm);
                     Log.e("STR", StrBus);
                     Log.e("STREND", StrTo);
+                    Log.v("STRING_TO_END", StrToEnd);
 
                     if (StrToEnd.equals("0")) {
                         StrBus = StrBus.replaceAll("^[\"']+|[\"']+$", "");
                         StrTo = StrTo.replaceAll("^[\"']+|[\"']+$", "");
+                        for (int j = 0; j < trvldArray.size(); j++) {
 
-                        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                            Log.v("TravelldArray", String.valueOf(trvldArray.size()));
 
-                        layoutParams.setMargins(15, 15, 15, 15);
+                            JsonObject tldraftJson = (JsonObject) trvldArray.get(j);
 
-                        rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
+                            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                        travelDynamicLoaction.addView(rowView, layoutParams);
+                            layoutParams.setMargins(15, 15, 15, 15);
 
-                        tlString.add(new ArrayList<>());
+                            rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
 
+                            travelDynamicLoaction.addView(rowView, layoutParams);
 
-                        View views = travelDynamicLoaction.getChildAt(0);
-                        LinearLayout lad = (LinearLayout) views.findViewById(R.id.linear_row_ad);
-                        editText = (TextView) views.findViewById(R.id.enter_mode);
-
-                        enterFrom = views.findViewById(R.id.enter_from);
-                        enterTo = views.findViewById(R.id.enter_to);
-                        enterFare = views.findViewById(R.id.enter_fare);
-                        deleteButton = views.findViewById(R.id.delete_button);
-                        taAttach = (ImageView) views.findViewById(R.id.image_attach);
-                        taAttach.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                popupCapture(1);
-
-                            }
-                        });
+                            tlString.add(new ArrayList<>());
 
 
-                        previewss = (ImageView) (views.findViewById(R.id.image_preview));
-                        previewss.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
+                            View views = travelDynamicLoaction.getChildAt(j);
+                            LinearLayout lad = (LinearLayout) views.findViewById(R.id.linear_row_ad);
+                            editText = (TextView) views.findViewById(R.id.enter_mode);
+                            enterFrom = views.findViewById(R.id.enter_from);
+                            enterTo = views.findViewById(R.id.enter_to);
+                            enterFare = views.findViewById(R.id.enter_fare);
+                            deleteButton = views.findViewById(R.id.delete_button);
+                            taAttach = (ImageView) views.findViewById(R.id.image_attach);
+                            taAttach.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    popupCapture(1);
 
-                           /*     Log.e("ImageArray_1", String.valueOf(tlString.size()));
-                                Log.e("ImageArray_2", (tlString.get(taCount-1).toString()));*/
-
-                                Log.e("STRING_COOUNT", String.valueOf((0)));
-
-
-                                zero = tlString.get(0);
-
-                                Log.e("ZERO_ARRAY", String.valueOf(zero.size()));
-                                Log.e("ZERO_ARRAY", zero.toString());
-
-                                if (zero.size() != 0) {
-                                    Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-                                    stat.putExtra("Data", zero);
-                                    startActivity(stat);
-                                } else {
-                                    Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
                                 }
+                            });
+
+
+                            previewss = (ImageView) (views.findViewById(R.id.image_preview));
+                            previewss.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                    zero = tlString.get(0);
+                                    if (zero.size() != 0) {
+                                        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                                        stat.putExtra("Data", zero);
+                                        startActivity(stat);
+                                    } else {
+                                        Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+
+
+                            editText.setText(StrDaName);
+                            enterFrom.setText(tldraftJson.get("From_P").getAsString());
+                            enterTo.setText(tldraftJson.get("To_P").getAsString());
+
+                            if(j==0) {
+                                deleteButton.setVisibility(View.GONE);
+                                lad.setClickable(false);
+                                lad.setOnClickListener(null);
+                                editText.setOnClickListener(null);
+                                editText.setClickable(false);
+                                enterFrom.setEnabled(false);
+                                enterTo.setEnabled(false);
                             }
-                        });
-
-                        editText.setText(StrDaName);
-                        enterFrom.setText(StrBus);
-                        enterTo.setText(StrTo);
-                        deleteButton.setVisibility(View.GONE);
 
 
-                        lad.setClickable(false);
-                        lad.setOnClickListener(null);
-                        editText.setOnClickListener(null);
-                        editText.setClickable(false);
-                        enterFrom.setEnabled(false);
-                        enterTo.setEnabled(false);
+                        }
 
 
                         TravelBike.setVisibility(View.GONE);
@@ -1684,29 +1684,38 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         Log.v("tlDraftArray_inner", String.valueOf(traveldLoc.size()));
         JsonArray jsonAddition = null;
         for (int i = 0; i < traveldLoc.size(); i++) {
-            JsonObject tldraftJson = (JsonObject) traveldLoc.get(i);
-
-            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = null;
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-            layoutParams.setMargins(15, 15, 15, 15);
-
-            rowView = inflater.inflate(R.layout.travel_allowance_dynamic_one, null);
-            travelDynamicLoaction.addView(rowView, layoutParams);
-            crdDynamicLocation.setVisibility(View.VISIBLE);
-
-            View views = travelDynamicLoaction.getChildAt(i);
-            deleteButton = views.findViewById(R.id.delete_button);
-            etrTaFr = (EditText) views.findViewById(R.id.ta_edt_from);
-            etrTaTo = (EditText) views.findViewById(R.id.ta_edt_to);
 
 
-            etrTaFr.setText(tldraftJson.get("From_P").getAsString());
-            etrTaTo.setText(tldraftJson.get("To_P").getAsString());
+            if (StrToEnd.equals("0")) {
 
+
+            } else {
+
+
+                JsonObject tldraftJson = (JsonObject) traveldLoc.get(i);
+
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                View rowView = null;
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                layoutParams.setMargins(15, 15, 15, 15);
+
+                rowView = inflater.inflate(R.layout.travel_allowance_dynamic_one, null);
+                travelDynamicLoaction.addView(rowView, layoutParams);
+                crdDynamicLocation.setVisibility(View.VISIBLE);
+
+                View views = travelDynamicLoaction.getChildAt(i);
+                deleteButton = views.findViewById(R.id.delete_button);
+                etrTaFr = (EditText) views.findViewById(R.id.ta_edt_from);
+                etrTaTo = (EditText) views.findViewById(R.id.ta_edt_to);
+
+                etrTaFr.setText(tldraftJson.get("From_P").getAsString());
+                etrTaTo.setText(tldraftJson.get("To_P").getAsString());
+
+
+            }
 
         }
 
@@ -1956,7 +1965,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
             JSONArray trvLoc = new JSONArray();
             int travelBike = travelDynamicLoaction.getChildCount();
-            if (StrToEnd.equals("1")) {
+
+
+            Log.v("STRING_TO_END_SUB", StrToEnd);
+            if (StrToEnd.equals("0")) {
 
                 Log.v("TRAVEl_LOCATION", "1");
 
@@ -1969,10 +1981,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     enterTo = views.findViewById(R.id.enter_to);
                     enterFare = views.findViewById(R.id.enter_fare);
                     deleteButton = findViewById(R.id.delete_button);
-                    jsonTrLoc.put("MODE", editText.getText().toString());
-                    jsonTrLoc.put("FROM", enterFrom.getText().toString());
-                    jsonTrLoc.put("TO", enterTo.getText().toString());
-                    jsonTrLoc.put("FARE", enterFare.getText().toString());
+                    jsonTrLoc.put("mode", editText.getText().toString());
+                    jsonTrLoc.put("from", enterFrom.getText().toString());
+                    jsonTrLoc.put("to", enterTo.getText().toString());
+                    jsonTrLoc.put("fare", enterFare.getText().toString());
                     trvLoc.put(jsonTrLoc);
                 }
 
