@@ -736,6 +736,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                         editors.remove("SharedDriver");
                         editors.remove("ShareModeID");
                         editors.remove("StoreId");
+                        editors.remove("SharedImage");
                         editors.commit();
 
 

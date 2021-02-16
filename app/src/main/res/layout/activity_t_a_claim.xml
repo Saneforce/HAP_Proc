@@ -32,7 +32,7 @@
                     android:layout_height="@dimen/header_date_width"
                     android:layout_below="@+id/tool_header"
                     android:orientation="vertical"
-                  >
+                    android:visibility="gone">
 
 
                     <fragment
@@ -53,15 +53,14 @@
 
                 </RelativeLayout>
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C3dp"
                     android:layout_marginRight="@dimen/C3dp"
                     android:orientation="vertical"
-                    android:padding="8dp"
-             >
+                    android:padding="8dp">
+
                     <androidx.cardview.widget.CardView
                         android:id="@+id/card_date"
                         android:layout_width="match_parent"
@@ -124,6 +123,7 @@
                             </LinearLayout>
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
+
                     <TextView
                         android:id="@+id/type_allowance"
                         android:layout_width="wrap_content"
@@ -136,6 +136,7 @@
                         android:textColor="#000"
                         android:textSize="13sp"
                         android:visibility="gone" />
+
                     <androidx.cardview.widget.CardView
                         android:id="@+id/card_type_travel"
                         android:layout_width="match_parent"
@@ -298,6 +299,7 @@
                                                 android:textStyle="bold" />
                                         </LinearLayout>
                                     </LinearLayout>
+
                                     <LinearLayout
                                         android:id="@+id/vwDrvBoarding"
                                         android:layout_width="match_parent"
@@ -1004,6 +1006,7 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical"
                                 android:visibility="gone">
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -1021,6 +1024,7 @@
 
                                     </TextView>
                                 </LinearLayout>
+
                                 <LinearLayout
                                     android:id="@+id/ldg_typ_spiner"
                                     android:layout_width="match_parent"
@@ -1050,338 +1054,302 @@
 
 
                                 </LinearLayout>
-                                <LinearLayout
-                                android:id="@+id/lodgCont"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical"
-                                android:visibility="gone">
 
                                 <LinearLayout
-                                    android:id="@+id/ldg_stayloc"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="@dimen/C8dp"
-                                        android:layout_marginTop="@dimen/C5dp"
-                                        android:layout_marginRight="@dimen/C8dp"
-                                        android:text="Stay Location"
-                                        android:textAllCaps="true"
-                                        android:textColor="#000"
-                                        android:textSize="10sp"></TextView>
-
-                                    <EditText
-                                        android:id="@+id/edt_stay_loc"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="@dimen/C5dp"
-                                        android:layout_marginRight="@dimen/C8dp"
-                                        android:hint="Enter Stay Location"
-                                        android:paddingTop="0dp"
-                                        android:textColorHint="#C0C0C0"
-                                        android:textSize="@dimen/C13dp" />
-                                </LinearLayout>
-
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/ldg_stayDt"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="@dimen/C8dp"
-                                        android:layout_marginTop="@dimen/C5dp"
-                                        android:layout_marginRight="@dimen/C8dp"
-                                        android:text="Stay Date"
-                                        android:textAllCaps="true"
-                                        android:textColor="#000"
-                                        android:textSize="10sp"></TextView>
-
-                                    <LinearLayout
-                                        android:id="@+id/ldg_cin_spiner"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_centerVertical="true"
-                                        android:layout_marginLeft="@dimen/C8dp"
-                                        android:layout_marginRight="@dimen/C8dp"
-                                        android:layout_marginBottom="@dimen/C5dp"
-                                        android:background="@drawable/item_border"
-                                        android:orientation="horizontal"
-                                        android:padding="5dp">
-
-                                        <TextView
-                                            android:id="@+id/ldg_cin"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="@dimen/C8dp"
-                                            android:layout_weight="1"
-                                            android:hint="Select the Stay Date"
-                                            android:inputType="date"
-                                            android:textSize="@dimen/C13dp" />
-
-                                        <ImageView
-                                            android:layout_width="@dimen/C20dp"
-                                            android:layout_height="match_parent"
-                                            android:padding="@dimen/C5dp"
-                                            android:src="@drawable/spin_down_arrow" />
-                                    </LinearLayout>
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/lodgJoin"
+                                    android:id="@+id/lodgCont"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
-                                    android:layout_marginBottom="@dimen/C20dp"
                                     android:orientation="vertical"
                                     android:visibility="gone">
 
                                     <LinearLayout
+                                        android:id="@+id/ldg_stayloc"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/C10dp"
-                                        android:orientation="horizontal"
-                                        android:paddingLeft="@dimen/C8dp"
-                                        android:paddingTop="@dimen/C5dp"
-                                        android:paddingRight="@dimen/C8dp">
-
-
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="1"
-                                            android:text="Joint Person Details"
-                                            android:textAllCaps="true"
-                                            android:textColor="@color/colorPrimary"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold"></TextView>
-
-                                        <TextView
-                                            android:id="@+id/txt_joint_add"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="+ Add"
-                                            android:textAllCaps="true"
-                                            android:textColor="@color/colorPrimary"
-                                            android:textSize="12sp"></TextView>
-
-                                    </LinearLayout>
-
-                                    <LinearLayout
-                                        android:id="@+id/lin_join_person"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="@dimen/C5dp"
-                                        android:layout_marginRight="@dimen/C5dp"
-                                        android:layout_marginBottom="@dimen/C5dp"
-                                        android:orientation="vertical"
-                                        android:visibility="gone"
-                                        tools:ignore="MissingPrefix"></LinearLayout>
-                                </LinearLayout>
-
-
-                                <LinearLayout
-                                    android:id="@+id/ldgEAra"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C15dp"
-                                    android:layout_marginBottom="@dimen/C10dp"
-                                    android:orientation="vertical">
-
-                                    <LinearLayout
-                                        android:id="@+id/ldgMyEAra"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="horizontal"
-                                        android:weightSum="2">
-
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="@dimen/C8dp"
-                                            android:layout_marginRight="@dimen/C8dp"
-                                            android:layout_weight="1"
-                                            android:text="Eligible"
-                                            android:textAllCaps="true"
-                                            android:textColor="#000"
-                                            android:textSize="10sp" />
-
-                                        <TextView
-                                            android:id="@+id/txtMyEligi"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="1"
-                                            android:paddingLeft="@dimen/C8dp"
-                                            android:paddingTop="@dimen/C1dp"
-                                            android:paddingRight="@dimen/C8dp"
-                                            android:paddingBottom="@dimen/C2dp"
-                                            android:text="Rs. 0.00"
-                                            android:textAlignment="textEnd"
-                                            android:textAllCaps="false"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold" />
-
-                                    </LinearLayout>
-
-                                    <LinearLayout
-                                        android:id="@+id/JNLdgEAra"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="horizontal"
-                                        android:weightSum="2">
-
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="@dimen/C8dp"
-                                            android:layout_marginRight="@dimen/C8dp"
-                                            android:layout_weight="1"
-                                            android:text="Join Stay Eligible"
-                                            android:textAllCaps="true"
-                                            android:textColor="#000"
-                                            android:textSize="10sp" />
-
-                                        <TextView
-                                            android:id="@+id/txtJNEligi"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="1"
-                                            android:paddingLeft="@dimen/C8dp"
-                                            android:paddingTop="@dimen/C1dp"
-                                            android:paddingRight="@dimen/C8dp"
-                                            android:paddingBottom="@dimen/C2dp"
-                                            android:text="Rs. 0.00"
-                                            android:textAlignment="textEnd"
-                                            android:textAllCaps="false"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold" />
-
-                                    </LinearLayout>
-
-                                    <LinearLayout
-                                        android:id="@+id/drvldgEAra"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="horizontal"
-                                        android:visibility="gone"
-                                        android:weightSum="2">
-
-                                        <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="@dimen/C8dp"
-                                            android:layout_marginRight="@dimen/C8dp"
-                                            android:layout_weight="1"
-                                            android:text="Driver loadging"
-                                            android:textAllCaps="true"
-                                            android:textColor="#000"
-                                            android:textSize="10sp" />
-
-                                        <TextView
-                                            android:id="@+id/txtDrvLgd"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="1"
-                                            android:paddingLeft="@dimen/C8dp"
-                                            android:paddingTop="@dimen/C1dp"
-                                            android:paddingRight="@dimen/C8dp"
-                                            android:paddingBottom="@dimen/C2dp"
-                                            android:text="Rs. 0.00"
-                                            android:textAlignment="textEnd"
-                                            android:textAllCaps="false"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold" />
-
-                                    </LinearLayout>
-                                </LinearLayout>
-
-                                <View
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:layout_margin="@dimen/C10dp"
-                                    android:background="@color/grey_300"></View>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/C8dp"
-                                    android:orientation="horizontal">
-
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:gravity="left"
-                                        android:visibility="gone"
                                         android:orientation="vertical">
 
                                         <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="1"
-                                            android:text="Total"
-                                            android:textAllCaps="true"
-                                            android:textColor="#000"
-                                            android:textSize="10sp" />
-
-                                        <TextView
-                                            android:id="@+id/lbl_ldg_eligi1"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginTop="@dimen/C10dp"
-                                            android:layout_weight="1"
-                                            android:text="Rs. 0.00"
+                                            android:layout_marginLeft="@dimen/C8dp"
+                                            android:layout_marginTop="@dimen/C5dp"
+                                            android:layout_marginRight="@dimen/C8dp"
+                                            android:text="Stay Location"
+                                            android:textAllCaps="true"
                                             android:textColor="#000"
-                                            android:textSize="13sp"
-                                            android:textStyle="bold" />
+                                            android:textSize="10sp"></TextView>
 
+                                        <EditText
+                                            android:id="@+id/edt_stay_loc"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="@dimen/C5dp"
+                                            android:layout_marginRight="@dimen/C8dp"
+                                            android:hint="Enter Stay Location"
+                                            android:paddingTop="0dp"
+                                            android:textColorHint="#C0C0C0"
+                                            android:textSize="@dimen/C13dp" />
                                     </LinearLayout>
 
 
                                     <LinearLayout
-                                        android:layout_width="wrap_content"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/ldg_stayDt"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:orientation="horizontal">
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="@dimen/C8dp"
+                                            android:layout_marginTop="@dimen/C5dp"
+                                            android:layout_marginRight="@dimen/C8dp"
+                                            android:text="Stay Date"
+                                            android:textAllCaps="true"
+                                            android:textColor="#000"
+                                            android:textSize="10sp"></TextView>
 
                                         <LinearLayout
-                                            android:layout_width="@dimen/C100dp"
+                                            android:id="@+id/ldg_cin_spiner"
+                                            android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:gravity="center"
-                                            android:orientation="vertical">
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginLeft="@dimen/C8dp"
+                                            android:layout_marginRight="@dimen/C8dp"
+                                            android:layout_marginBottom="@dimen/C5dp"
+                                            android:background="@drawable/item_border"
+                                            android:orientation="horizontal"
+                                            android:padding="5dp">
 
                                             <TextView
-                                                android:id="@+id/lblHdBill"
+                                                android:id="@+id/ldg_cin"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginLeft="@dimen/C8dp"
+                                                android:layout_weight="1"
+                                                android:hint="Select the Stay Date"
+                                                android:inputType="date"
+                                                android:textSize="@dimen/C13dp" />
+
+                                            <ImageView
+                                                android:layout_width="@dimen/C20dp"
+                                                android:layout_height="match_parent"
+                                                android:padding="@dimen/C5dp"
+                                                android:src="@drawable/spin_down_arrow" />
+                                        </LinearLayout>
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/lodgJoin"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginBottom="@dimen/C20dp"
+                                        android:orientation="vertical"
+                                        android:visibility="gone">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/C10dp"
+                                            android:orientation="horizontal"
+                                            android:paddingLeft="@dimen/C8dp"
+                                            android:paddingTop="@dimen/C5dp"
+                                            android:paddingRight="@dimen/C8dp">
+
+
+                                            <TextView
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:paddingLeft="@dimen/C5dp"
-                                                android:text="Bill Amount"
-                                                android:textAlignment="textStart"
+                                                android:layout_weight="1"
+                                                android:text="Joint Person Details"
+                                                android:textAllCaps="true"
+                                                android:textColor="@color/colorPrimary"
+                                                android:textSize="12sp"
+                                                android:textStyle="bold"></TextView>
+
+                                            <TextView
+                                                android:id="@+id/txt_joint_add"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="+ Add"
+                                                android:textAllCaps="true"
+                                                android:textColor="@color/colorPrimary"
+                                                android:textSize="12sp"></TextView>
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/lin_join_person"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="@dimen/C5dp"
+                                            android:layout_marginRight="@dimen/C5dp"
+                                            android:layout_marginBottom="@dimen/C5dp"
+                                            android:orientation="vertical"
+                                            android:visibility="gone"
+                                            tools:ignore="MissingPrefix"></LinearLayout>
+                                    </LinearLayout>
+
+
+                                    <LinearLayout
+                                        android:id="@+id/ldgEAra"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/C15dp"
+                                        android:layout_marginBottom="@dimen/C10dp"
+                                        android:orientation="vertical">
+
+                                        <LinearLayout
+                                            android:id="@+id/ldgMyEAra"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal"
+                                            android:weightSum="2">
+
+                                            <TextView
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginLeft="@dimen/C8dp"
+                                                android:layout_marginRight="@dimen/C8dp"
+                                                android:layout_weight="1"
+                                                android:text="Eligible"
                                                 android:textAllCaps="true"
                                                 android:textColor="#000"
                                                 android:textSize="10sp" />
 
-
-                                            <EditText
-                                                android:id="@+id/edt_ldg_bill"
+                                            <TextView
+                                                android:id="@+id/txtMyEligi"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:hint="0.00"
-                                                android:inputType="number"
-                                                android:maxLength="5"
-                                                android:textColorHint="#C0C0C0"
-                                                android:textSize="@dimen/C13dp"
+                                                android:layout_weight="1"
+                                                android:paddingLeft="@dimen/C8dp"
+                                                android:paddingTop="@dimen/C1dp"
+                                                android:paddingRight="@dimen/C8dp"
+                                                android:paddingBottom="@dimen/C2dp"
+                                                android:text="Rs. 0.00"
+                                                android:textAlignment="textEnd"
+                                                android:textAllCaps="false"
+                                                android:textSize="12sp"
+                                                android:textStyle="bold" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/JNLdgEAra"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal"
+                                            android:weightSum="2">
+
+                                            <TextView
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginLeft="@dimen/C8dp"
+                                                android:layout_marginRight="@dimen/C8dp"
+                                                android:layout_weight="1"
+                                                android:text="Join Stay Eligible"
+                                                android:textAllCaps="true"
+                                                android:textColor="#000"
+                                                android:textSize="10sp" />
+
+                                            <TextView
+                                                android:id="@+id/txtJNEligi"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:paddingLeft="@dimen/C8dp"
+                                                android:paddingTop="@dimen/C1dp"
+                                                android:paddingRight="@dimen/C8dp"
+                                                android:paddingBottom="@dimen/C2dp"
+                                                android:text="Rs. 0.00"
+                                                android:textAlignment="textEnd"
+                                                android:textAllCaps="false"
+                                                android:textSize="12sp"
+                                                android:textStyle="bold" />
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:id="@+id/drvldgEAra"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal"
+                                            android:visibility="gone"
+                                            android:weightSum="2">
+
+                                            <TextView
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginLeft="@dimen/C8dp"
+                                                android:layout_marginRight="@dimen/C8dp"
+                                                android:layout_weight="1"
+                                                android:text="Driver loadging"
+                                                android:textAllCaps="true"
+                                                android:textColor="#000"
+                                                android:textSize="10sp" />
+
+                                            <TextView
+                                                android:id="@+id/txtDrvLgd"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:paddingLeft="@dimen/C8dp"
+                                                android:paddingTop="@dimen/C1dp"
+                                                android:paddingRight="@dimen/C8dp"
+                                                android:paddingBottom="@dimen/C2dp"
+                                                android:text="Rs. 0.00"
+                                                android:textAlignment="textEnd"
+                                                android:textAllCaps="false"
+                                                android:textSize="12sp"
+                                                android:textStyle="bold" />
+
+                                        </LinearLayout>
+                                    </LinearLayout>
+
+                                    <View
+                                        android:layout_width="match_parent"
+                                        android:layout_height="1dp"
+                                        android:layout_margin="@dimen/C10dp"
+                                        android:background="@color/grey_300"></View>
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_margin="@dimen/C8dp"
+                                        android:orientation="horizontal">
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:gravity="left"
+                                            android:orientation="vertical"
+                                            android:visibility="gone">
+
+                                            <TextView
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:text="Total"
+                                                android:textAllCaps="true"
+                                                android:textColor="#000"
+                                                android:textSize="10sp" />
+
+                                            <TextView
+                                                android:id="@+id/lbl_ldg_eligi1"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/C10dp"
+                                                android:layout_weight="1"
+                                                android:text="Rs. 0.00"
+                                                android:textColor="#000"
+                                                android:textSize="13sp"
                                                 android:textStyle="bold" />
 
                                         </LinearLayout>
@@ -1390,64 +1358,102 @@
                                         <LinearLayout
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
-                                            android:layout_gravity="bottom"
                                             android:orientation="horizontal">
 
-                                            <ImageView
-                                                android:id="@+id/lodg_attach"
-                                                android:layout_width="@dimen/C40dp"
-                                                android:layout_height="@dimen/C40dp"
-                                                android:padding="@dimen/C2dp"
-                                                android:src="@drawable/attach_files" />
+                                            <LinearLayout
+                                                android:layout_width="@dimen/C100dp"
+                                                android:layout_height="wrap_content"
+                                                android:gravity="center"
+                                                android:orientation="vertical">
+
+                                                <TextView
+                                                    android:id="@+id/lblHdBill"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:paddingLeft="@dimen/C5dp"
+                                                    android:text="Bill Amount"
+                                                    android:textAlignment="textStart"
+                                                    android:textAllCaps="true"
+                                                    android:textColor="#000"
+                                                    android:textSize="10sp" />
 
 
-                                            <ImageView
-                                                android:id="@+id/lodg_preview"
-                                                android:layout_width="@dimen/C40dp"
-                                                android:layout_height="@dimen/C40dp"
-                                                android:padding="@dimen/C2dp"
-                                                android:layout_marginLeft="@dimen/C2dp"
-                                                android:src="@drawable/image_preview" />
+                                                <EditText
+                                                    android:id="@+id/edt_ldg_bill"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:hint="0.00"
+                                                    android:inputType="number"
+                                                    android:maxLength="5"
+                                                    android:textColorHint="#C0C0C0"
+                                                    android:textSize="@dimen/C13dp"
+                                                    android:textStyle="bold" />
+
+                                            </LinearLayout>
+
+
+                                            <LinearLayout
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="bottom"
+                                                android:orientation="horizontal">
+
+                                                <ImageView
+                                                    android:id="@+id/lodg_attach"
+                                                    android:layout_width="@dimen/C40dp"
+                                                    android:layout_height="@dimen/C40dp"
+                                                    android:padding="@dimen/C2dp"
+                                                    android:src="@drawable/attach_files" />
+
+
+                                                <ImageView
+                                                    android:id="@+id/lodg_preview"
+                                                    android:layout_width="@dimen/C40dp"
+                                                    android:layout_height="@dimen/C40dp"
+                                                    android:layout_marginLeft="@dimen/C2dp"
+                                                    android:padding="@dimen/C2dp"
+                                                    android:src="@drawable/image_preview" />
+
+                                            </LinearLayout>
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:gravity="right"
+                                            android:orientation="vertical">
+
+
+                                            <TextView
+                                                android:id="@+id/lblHdBln"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text="Balance"
+                                                android:textAllCaps="true"
+                                                android:textColor="#000"
+                                                android:textSize="10sp" />
+
+                                            <TextView
+                                                android:id="@+id/ldgWOBBal"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/C10dp"
+                                                android:text="Rs. 0.00"
+                                                android:textColor="#000"
+                                                android:textSize="13sp"
+                                                android:textStyle="bold" />
 
                                         </LinearLayout>
-                                    </LinearLayout>
-
-                                    <LinearLayout
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_weight="1"
-                                        android:gravity="right"
-                                        android:orientation="vertical">
-
-
-                                        <TextView
-                                            android:id="@+id/lblHdBln"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text="Balance"
-                                            android:textAllCaps="true"
-                                            android:textColor="#000"
-                                            android:textSize="10sp" />
-
-                                        <TextView
-                                            android:id="@+id/ldgWOBBal"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="@dimen/C10dp"
-                                            android:text="Rs. 0.00"
-                                            android:textColor="#000"
-                                            android:textSize="13sp"
-                                            android:textStyle="bold" />
 
                                     </LinearLayout>
-
-                                </LinearLayout>
 
                                     <View
                                         android:layout_width="match_parent"
                                         android:layout_height="1dp"
                                         android:layout_margin="@dimen/C10dp"
                                         android:background="@color/grey_300"></View>
+
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -1466,7 +1472,7 @@
                                             android:textStyle="bold"></TextView>
 
                                         <TextView
-                                                android:id="@+id/lbl_ldg_eligi"
+                                            android:id="@+id/lbl_ldg_eligi"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="Rs. 0.00"
@@ -1562,6 +1568,7 @@
                                     android:layout_height="1dp"
                                     android:layout_margin="@dimen/C10dp"
                                     android:background="@color/grey_300"></View>
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -1781,17 +1788,18 @@
         android:id="@+id/lin_fare_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:background="#ECEAEA"
         android:layout_marginLeft="@dimen/C5dp"
         android:layout_marginRight="@dimen/C5dp"
+        android:background="#ECEAEA"
+        android:orientation="vertical"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/grey_300"></View>
+
         <LinearLayout
 
             android:layout_width="match_parent"
@@ -1835,6 +1843,7 @@
                                 android:textStyle="bold" />
 
                         </LinearLayout>
+
                         <TextView
                             android:id="@+id/grand_total"
                             android:layout_width="match_parent"

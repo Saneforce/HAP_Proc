@@ -7,7 +7,7 @@
 
 
     <EditText
-        android:id="@+id/enter_from"
+        android:id="@+id/ta_edt_from"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter From"
@@ -16,7 +16,7 @@
         android:textSize="@dimen/C16dp" />
 
     <EditText
-        android:id="@+id/enter_to"
+        android:id="@+id/ta_edt_to"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter To"
@@ -24,52 +24,14 @@
         android:textColorHint="#C0C0C0"
         android:textSize="@dimen/C14dp" />
 
-    <LinearLayout
-        android:id="@+id/txt_nu"
-        android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/enter_to"
-        android:layout_margin="@dimen/C3dp"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/enter_fare"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:hint="Enter Fare"
-            android:inputType="number"
-            android:padding="@dimen/C10dp"
-            android:textColorHint="#C0C0C0"
-            android:textSize="@dimen/C14dp" />
-
-        <ImageView
-            android:id="@+id/image_preview"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="-8dp"
-            android:padding="@dimen/C5dp"
-            android:src="@drawable/image_preview" />
-
-        <ImageView
-            android:id="@+id/image_attach"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginTop="-8dp"
-            android:padding="@dimen/C5dp"
-            android:src="@drawable/attach_files" />
-
-    </LinearLayout>
-
     <ImageView
         android:id="@+id/delete_button"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
         android:layout_gravity="right"
-        android:gravity="right"
         android:layout_margin="@dimen/C8dp"
+        android:gravity="right"
         android:onClick="onTADelete"
         android:src="@drawable/delete_cart" />
 </LinearLayout>

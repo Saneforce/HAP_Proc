@@ -102,8 +102,6 @@ public class TAApprovalActivity extends AppCompatActivity {
                     startActivity(Dashboard);
                 } else
                     startActivity(new Intent(getApplicationContext(), Dashboard.class));
-
-
             }
         });
         recyclerView = findViewById(R.id.leaverecyclerview);
