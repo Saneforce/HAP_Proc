@@ -8,9 +8,14 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <include layout="@layout/custom_toolbar_help"></include>
 
@@ -20,19 +25,14 @@
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/C50dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <fragment
-                        android:id="@+id/route_map"
-                        android:visibility="gone"
-                        android:name="com.google.android.gms.maps.SupportMapFragment"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/header_date_width" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -45,8 +45,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:padding="@dimen/C5dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="@dimen/C5dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -58,11 +58,12 @@
                                 android:textStyle="bold"></TextView>
 
                             <TextView
+                                android:id="@+id/txt_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="@dimen/C5dp"
-                                android:text="2021-02-01"
+                                android:text=""
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/C14dp"></TextView>
 
@@ -72,8 +73,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:padding="@dimen/C5dp"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="@dimen/C5dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -85,11 +86,12 @@
                                 android:textStyle="bold"></TextView>
 
                             <TextView
+                                android:id="@+id/txt_amt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="@dimen/C5dp"
-                                android:text="Rs.1300"
+                                android:text=""
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/C14dp"></TextView>
                         </LinearLayout>
@@ -99,9 +101,9 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:padding="@dimen/C5dp"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:padding="@dimen/C5dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -236,6 +238,7 @@
                                 android:layout_gravity="center"
                                 android:layout_marginRight="@dimen/C10dp"
                                 android:layout_weight="1"
+                                android:baselineAligned="false"
                                 android:text=""
                                 tools:ignore="RtlCompat" />
 
@@ -246,9 +249,9 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/C10dp"
                         android:background="#009688"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="@dimen/C10dp">
 
                         <TextView
                             android:layout_width="@dimen/header_width1"
@@ -271,117 +274,174 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="@dimen/C5dp"
-                        android:layout_height="wrap_content">
+                        android:padding="@dimen/C5dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="DaApproval"
-                        android:padding="@dimen/C5dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="@dimen/header_width1"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Daily Allowance "
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/C13dp"
-                            android:textStyle="bold"></TextView>
+                            android:onClick="DaApproval"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C5dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:layout_width="@dimen/header_width1"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Daily Allowance "
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
+
+                            <TextView
+                                android:id="@+id/txt_da"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/C10dp"
+                                android:layout_weight="1"
+                                android:text=""
+                                android:textColor="@android:color/holo_blue_light"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/C10dp"
-                            android:layout_weight="1"
-                            android:text="Rs. 1500.00"
-                            android:textColor="@android:color/holo_blue_light"
-                            android:textSize="@dimen/C13dp"
-                            android:textStyle="bold"></TextView>
-                    </LinearLayout>
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C5dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="BoardingApproval"
-                        android:padding="@dimen/C5dp"
-                        android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="@dimen/header_width1"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Travel Location "
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
 
-                        <TextView
-                            android:layout_width="@dimen/header_width1"
+                            <TextView
+                                android:id="@+id/txt_tl"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/C10dp"
+                                android:layout_weight="1"
+                                android:text=""
+                                android:textColor="@android:color/holo_blue_light"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Boarding "
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/C13dp"
-                            android:textStyle="bold"></TextView>
+                            android:onClick="FuelApproval"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C5dp"
+                            android:visibility="gone">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:layout_width="@dimen/header_width1"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Fuel Allowance"
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
+
+                            <TextView
+                                android:id="@+id/txt_fa"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/C10dp"
+                                android:layout_weight="1"
+                                android:text=""
+                                android:textColor="@android:color/holo_blue_light"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/C10dp"
-                            android:layout_weight="1"
-                            android:text="Rs. 1500.00"
-                            android:textColor="@android:color/holo_blue_light"
-                            android:textSize="@dimen/C13dp"
-                            android:textStyle="bold"></TextView>
-                    </LinearLayout>
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C5dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="DriverDaApproval"
-                        android:padding="@dimen/C5dp"
-                        android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="@dimen/header_width1"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Loadging Allowance"
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
 
-                        <TextView
-                            android:layout_width="@dimen/header_width1"
+                            <TextView
+                                android:id="@+id/txt_la"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/C10dp"
+                                android:layout_weight="1"
+                                android:text=""
+                                android:textColor="@android:color/holo_blue_light"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Driver DA "
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/C13dp"
-                            android:textStyle="bold"></TextView>
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C5dp">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:layout_width="@dimen/header_width1"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Local Conveyance"
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
+
+                            <TextView
+                                android:id="@+id/txt_lc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/C10dp"
+                                android:layout_weight="1"
+                                android:text=""
+                                android:textColor="@android:color/holo_blue_light"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/C10dp"
-                            android:layout_weight="1"
-                            android:text="Rs. 1500.00"
-                            android:textColor="@android:color/holo_blue_light"
-                            android:textSize="@dimen/C13dp"
-                            android:textStyle="bold"></TextView>
-                    </LinearLayout>
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C5dp">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:onClick="FuelApproval"
-                        android:padding="@dimen/C5dp"
-                        android:orientation="horizontal">
+                            <TextView
+                                android:layout_width="@dimen/header_width1"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Other Expense"
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
 
-                        <TextView
-                            android:layout_width="@dimen/header_width1"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Fuel Allowance "
-                            android:textColor="@android:color/black"
-                            android:textSize="@dimen/C13dp"
-                            android:textStyle="bold"></TextView>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/C10dp"
-                            android:layout_weight="1"
-                            android:text="Rs. 1500.00"
-                            android:textColor="@android:color/holo_blue_light"
-                            android:textSize="@dimen/C13dp"
-                            android:textStyle="bold"></TextView>
-                    </LinearLayout>
+                            <TextView
+                                android:id="@+id/txt_oe"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/C10dp"
+                                android:layout_weight="1"
+                                android:text=""
+                                android:textColor="@android:color/holo_blue_light"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold"></TextView>
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -396,16 +456,77 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/rejectonly"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="@string/reason"
+                android:textColor="@color/txt_color_black"
+                android:textSize="@dimen/C16dp"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/reason"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/C70dp"
+                android:layout_marginTop="@dimen/C10dp"
+                android:background="@drawable/round_white_backround"
+                android:gravity="top"
+                android:hint="@string/txt_enter_reason"
+                android:padding="15dp"
+                android:textSize="@dimen/C12dp"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/L_rejectsave"
+                android:layout_width="110dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/C5dp"
+                android:background="@drawable/blue_txt_bg"
+                android:gravity="center"
+                android:padding="@dimen/C5dp"
+                android:text="Save"
+                android:textAlignment="center"
+                android:textColor="@color/bg_color"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lin_accp"
+        android:layout_width="0dp"
+
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/GrandTotal"
+            android:onClick="onApproval"
             android:padding="@dimen/C10dp"
             android:text="Approve "
             android:textAlignment="center"
@@ -418,6 +539,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/color_red"
+            android:onClick="onReject"
             android:padding="@dimen/C10dp"
             android:text="Reject"
             android:textAlignment="center"

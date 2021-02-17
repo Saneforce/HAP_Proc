@@ -18,8 +18,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.Approvals;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
@@ -30,13 +30,8 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Model_Class.Travel_Approval_Model;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Adapter.Travel_Approval_Adapter;
-
-import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,10 +40,8 @@ import retrofit2.Response;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class TAApprovalActivity extends AppCompatActivity {
-    List<Travel_Approval_Model> approvalList;
-    Gson gson;
+
     private RecyclerView recyclerView;
-    Type userType;
     Common_Class common_class;
     Shared_Common_Pref mShared_common_pref;
 
@@ -57,8 +50,8 @@ public class TAApprovalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_t_a_approval);
         mShared_common_pref = new Shared_Common_Pref(this);
-
         common_class = new Common_Class(this);
+        getTAList();
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -106,8 +99,7 @@ public class TAApprovalActivity extends AppCompatActivity {
         });
         recyclerView = findViewById(R.id.leaverecyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        gson = new Gson();
-        getTAList();
+
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,30 +111,38 @@ public class TAApprovalActivity extends AppCompatActivity {
     }
 
     public void getTAList() {
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<Travel_Approval_Model> mCall = apiInterface.getApprovalList("MGR5120");
-        mCall.enqueue(new Callback<Travel_Approval_Model>() {
-            @Override
-            public void onResponse(Call<Travel_Approval_Model> call, Response<Travel_Approval_Model> response) {
-                // locationList=response.body();
-                Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
-                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
-                userType = new TypeToken<ArrayList<Travel_Approval_Model>>() {
-                }.getType();
-                approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
-                Log.e("Leave_Adapter", String.valueOf(approvalList));
 
-                recyclerView.setAdapter(new Travel_Approval_Adapter(approvalList, R.layout.leave_approval_layout, getApplicationContext(), new AdapterOnClick() {
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> mTrave = apiInterface.getApprovalList(mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+        mTrave.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                JsonArray jsonArray = response.body();
+
+                Log.v("APPROVAL_LIST", jsonArray.toString());
+                recyclerView.setAdapter(new Travel_Approval_Adapter(jsonArray, R.layout.leave_approval_layout, getApplicationContext(), new AdapterOnClick() {
                     @Override
                     public void onIntentClick(int Name) {
-                        Intent intent = new Intent(TAApprovalActivity.this, TaApprovalDisplay.class);
-                        startActivity(intent);
+                        for (int m = 0; m < jsonArray.size(); m++) {
+                            JsonObject jsonObject = (JsonObject) jsonArray.get(m);
+                            Log.v("LIST", jsonObject.toString());
+                            Intent intent = new Intent(TAApprovalActivity.this, TaApprovalDisplay.class);
+                            intent.putExtra("date", jsonObject.get("id").getAsString());
+                            intent.putExtra("name", jsonObject.get("Sf_Name").getAsString());
+                            intent.putExtra("total_amount", jsonObject.get("Total_Amount").getAsString());
+                            intent.putExtra("head_quaters", jsonObject.get("HQ").getAsString());
+                            intent.putExtra("travel_mode", jsonObject.get("MOT_Name").getAsString());
+                            intent.putExtra("desig", jsonObject.get("sf_Designation_Short_Name").getAsString());
+                            intent.putExtra("dept", jsonObject.get("DeptName").getAsString());
+                            intent.putExtra("Sl_No", jsonObject.get("Sl_NoStart").getAsString());
+                            startActivity(intent);
+                        }
                     }
                 }));
             }
 
             @Override
-            public void onFailure(Call<Travel_Approval_Model> call, Throwable t) {
+            public void onFailure(Call<JsonArray> call, Throwable t) {
 
             }
         });
