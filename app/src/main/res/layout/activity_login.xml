@@ -12,7 +12,6 @@
     tools:context=".Activity_Hap.Login">
 
     <ImageView
-        android:id="@+id/LogoImage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -183,7 +182,6 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView45"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"

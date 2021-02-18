@@ -16,7 +16,6 @@
         android:background="@drawable/bottom_border">
 
         <ImageView
-            android:id="@+id/imageView3"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
@@ -27,7 +26,6 @@
             android:src="@drawable/ic_warninghead" />
 
         <TextView
-            android:id="@+id/textView43"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="0dp"
             android:layout_marginEnd="6dp"
@@ -44,7 +42,6 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView44"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"

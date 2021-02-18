@@ -29,7 +29,6 @@
                     android:padding="5dp">
 
                     <TextView
-                        android:id="@+id/textView9"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
@@ -79,7 +78,6 @@
 
 
                         <View
-                            android:id="@+id/divider2"
                             android:layout_width="match_parent"
                             android:layout_height="41dp"
                             android:background="@drawable/button_yellow" />

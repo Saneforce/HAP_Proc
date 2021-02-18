@@ -29,12 +29,6 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
-
-    </style>
-
     <style name="AlertDialogCustom" parent="@android:style/Theme.Dialog">
         <item name="android:background">#00000000</item>
     </style>
@@ -67,22 +61,5 @@
         <item name="windowActionModeOverlay">true</item>
     </style>
 
-    <style name="AppTheme.Dialogss">
-        <item name="android:windowFrame">@null</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
-        <item name="windowActionModeOverlay">true</item>
-        <item name="listPreferredItemPaddingLeft">20dip</item>
-        <item name="listPreferredItemPaddingRight">20dip</item>
-        <item name="listPreferredItemPaddingStart">20dip</item>
-        <item name="listPreferredItemPaddingEnd">20dip</item>
-    </style>
-
-
-    <style name="circleImageView" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">45%</item>
-    </style>
 
 </resources>

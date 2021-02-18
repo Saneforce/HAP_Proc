@@ -123,8 +123,8 @@ public class TAApprovalActivity extends AppCompatActivity {
                 recyclerView.setAdapter(new Travel_Approval_Adapter(jsonArray, R.layout.leave_approval_layout, getApplicationContext(), new AdapterOnClick() {
                     @Override
                     public void onIntentClick(int Name) {
-                        for (int m = 0; m < jsonArray.size(); m++) {
-                            JsonObject jsonObject = (JsonObject) jsonArray.get(m);
+
+                            JsonObject jsonObject = (JsonObject) jsonArray.get(Name);
                             Log.v("LIST", jsonObject.toString());
                             Intent intent = new Intent(TAApprovalActivity.this, TaApprovalDisplay.class);
                             intent.putExtra("date", jsonObject.get("id").getAsString());
@@ -135,9 +135,15 @@ public class TAApprovalActivity extends AppCompatActivity {
                             intent.putExtra("desig", jsonObject.get("sf_Designation_Short_Name").getAsString());
                             intent.putExtra("dept", jsonObject.get("DeptName").getAsString());
                             intent.putExtra("Sl_No", jsonObject.get("Sl_NoStart").getAsString());
+                            intent.putExtra("sfCode", jsonObject.get("Sf_code").getAsString());
                             startActivity(intent);
+
+                            Log.e("sfCode", jsonObject.get("Sf_code").getAsString());
+                            Log.e("Sl_No", jsonObject.get("Sl_NoStart").getAsString());
+                            Log.e("total_amount", jsonObject.get("Total_Amount").getAsString());
+                            Log.e("total_amount","fgd");
                         }
-                    }
+
                 }));
             }
 

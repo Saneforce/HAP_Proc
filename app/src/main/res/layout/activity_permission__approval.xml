@@ -56,7 +56,6 @@
 
 
         <TextView
-            android:id="@+id/textView34"
             android:layout_width="14dp"
             android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
@@ -67,7 +66,6 @@
             android:text="Name" />
 
         <TextView
-            android:id="@+id/textView35"
             android:layout_width="53dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -80,7 +78,6 @@
             android:text="Applied date" />
 
         <TextView
-            android:id="@+id/textView36"
             android:layout_width="44dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -91,7 +88,6 @@
             android:text="No of Hours" />
 
         <TextView
-            android:id="@+id/textView37"
             android:layout_width="34dp"
             android:textSize="@dimen/C13dp"
             android:textStyle="bold"

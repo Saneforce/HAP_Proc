@@ -193,6 +193,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     Switch ldgNeeded;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -761,6 +762,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         });
 
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            shouldShowRequestPermissionRationale("true");
+        }
     }
 
     private void calOverAllTotal(Double localCov, Double otherExp) {
@@ -926,6 +930,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
+
 
     public void SumOFDAAmount() {
         String sAmt = txtallamt.getText().toString().replaceAll("Rs. ", "");
@@ -1122,7 +1127,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     PersonalKm = jsonObject.get("Personal_Km").getAsString();
                     DriverNeed = jsonObject.get("driverAllowance").getAsString();
 
-                    Log.v("DRIVER",DriverNeed);
+                    Log.v("DRIVER", DriverNeed);
 
                     Glide.with(getApplicationContext())
                             .load(start_Image.replaceAll("^[\"']+|[\"']+$", ""))
@@ -1234,7 +1239,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             });
 
 
-                            editText.setText(tldraftJson.get("Mode").getAsString());
+                            editText.setText("" + tldraftJson.get("Mode").getAsString());
                             enterFrom.setText(tldraftJson.get("From_P").getAsString());
                             enterTo.setText(tldraftJson.get("To_P").getAsString());
                             enterFare.setText(tldraftJson.get("Fare").getAsString());
@@ -1316,8 +1321,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 if (lcDraftArray != null || lcDraftArray.size() != 0) {
                     localConDraft(lcDraftArray);
                 }
-                OeDraft(oeDraftArray);
-                trvldLocation(trvldArray);
+                if (oeDraftArray != null || oeDraftArray.size() != 0) OeDraft(oeDraftArray);
+                if (trvldArray != null || trvldArray.size() != 0) trvldLocation(trvldArray);
                 if (ldArray != null || ldArray.size() != 0) lodingDraft(ldArray);
             }
 
@@ -1670,6 +1675,17 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             jsonData.put("gr_total", gTotal);
 
 
+            /*Daily Allowance*/
+            JSONObject daAll = new JSONObject();
+
+            daAll.put("all_name", txtDailyAllowance.getText());
+            daAll.put("brd_amt", myBrdAmt);
+            daAll.put("drvBrdAmt", drvBrdAmt);
+          /*  daAll.put("da_amt", TotDA);
+*/
+
+
+
             /*Lodging Save*/
 
             JSONObject ldgSave = new JSONObject();
@@ -1840,6 +1856,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             jsonData.put("Other_Exp", othrExp);
             jsonData.put("Trv_details", trDet);
             jsonData.put("Lodg_details", ldgSave);
+            jsonData.put("Da_Claim", daAll);
 
 
             transHead.put(jsonData);

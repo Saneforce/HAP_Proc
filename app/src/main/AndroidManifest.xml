@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.hap.checkinproc"
-    >
+    package="com.hap.checkinproc">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -34,16 +33,20 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        tools:replace="android:allowBackup"
         android:theme="@style/AppTheme"
-
+        tools:replace="android:allowBackup"
         tools:targetApi="n">
-        <activity android:name=".Activity_Hap.AttachementActivity"
-            android:theme="@style/AppTheme.Dialogs"
-            android:screenOrientation="portrait"></activity>
+        <activity android:name=".Activity.LocalConvenActivity"></activity>
+        <activity android:name=".Activity.TLClaimActivity" />
+        <activity android:name=".Activity.DAClaimActivity" />
         <activity
-            android:name=".Activity.TaApprovalDisplay" android:screenOrientation="portrait"
+            android:name=".Activity_Hap.AttachementActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Dialogs" />
+        <activity
+            android:name=".Activity.TaApprovalDisplay"
             android:label="@string/title_activity_ta_approval_display"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity_Hap.MapZoomIn"
@@ -51,90 +54,212 @@
         <activity
             android:name=".Activity_Hap.TravelAllowanceForm"
             android:theme="@style/AppTheme.Dialog" />
-        <activity android:name=".Activity_Hap.QRCodeScanner" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.AllowancCapture" android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.QRCodeScanner"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.AllowancCapture"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity_Hap.LeaveReasonStatus"
             android:theme="@style/AppTheme.Dialog" />
-        <activity android:name=".Activity_Hap.ERT" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.LeaveCancelRequestStatus" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.DeviationEntryStatus" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.HolidayEntryStatus" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.DeviationEntry" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.PrivacyPolicy" android:screenOrientation="portrait" />
-        <activity android:name=".Activity.AllowanceActivityTwo" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.EventCaptureActivity" android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity_Hap.OrderCategoryActivity" android:screenOrientation="portrait"
+            android:name=".Activity_Hap.ERT"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.LeaveCancelRequestStatus"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.DeviationEntryStatus"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.HolidayEntryStatus"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.DeviationEntry"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.PrivacyPolicy"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.AllowanceActivityTwo"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.EventCaptureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.OrderCategoryActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".Activity_Hap.AddNewRetailer" android:screenOrientation="portrait"
+            android:name=".Activity_Hap.AddNewRetailer"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".Activity_Hap.SecondaryOrderActivity"
-            android:windowSoftInputMode="stateAlwaysHidden" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.OrderDashBoard" android:screenOrientation="portrait" />
-        <activity android:name=".Activity.ApprovalViewActivity" android:screenOrientation="portrait" />
-        <activity android:name=".Activity.ViewTASummary" android:screenOrientation="portrait" />
-        <activity android:name=".Activity.TAClaimActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity
+            android:name=".Activity_Hap.OrderDashBoard"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity.TAApprovalActivity" android:screenOrientation="portrait" />
-        <activity android:name=".Activity.AllowanceActivity" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Block_Information" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.ImageCapture" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Checkin" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Extendedshift_approval" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Onduty_approval" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Leave_Approval" android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.ApprovalViewActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.ViewTASummary"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.TAClaimActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.TAApprovalActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.AllowanceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Block_Information"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.ImageCapture"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Checkin"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Extendedshift_approval"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Onduty_approval"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Leave_Approval"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ViewActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Reports" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Dashboard_Two" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Weekly_Off" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Missed_Punch" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Permission_Request" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Leave_Request" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Leave_Dashboard" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Ocheck_in" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Approvals" android:screenOrientation="portrait" />
-        <activity android:name=".Status_Activity.Extended_Shift_Activity" android:screenOrientation="portrait" />
-        <activity android:name=".Status_Activity.WeekOff_Status_Activity" android:screenOrientation="portrait" />
-        <activity android:name=".Status_Activity.MissedPunch_Status_Activity" android:screenOrientation="portrait" />
-        <activity android:name=".Status_Activity.Leave_Status_Activity" android:screenOrientation="portrait" />
-        <activity android:name=".Status_Activity.Permission_Status_Activity" android:screenOrientation="portrait" />
-        <activity android:name=".Status_Activity.Onduty_Status_Activity" android:screenOrientation="portrait" />
-        <activity android:name=".Status_Activity.View_All_Status_Activity" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Tp_Mydayplan" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Tp_Calander" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Mydayplan_Activity" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Tp_Month_Select" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Tp_Approval" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Tp_Approval_Reject" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Leave_Approval_Reject" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Permission_Approval" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Permission_Approval_Reject" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Onduty_Approval_Reject" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Webview_Activity" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Missed_punch_Approval" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Missed_Punch_Approval_Reject" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Extended_Approval_Reject" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.ViewCartActivity" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.ReportActivity" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.ViewReportActivity" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.TimeOut" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.On_Duty_Activity" android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.Help_Activity" android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Reports"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Dashboard_Two"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Weekly_Off"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Missed_Punch"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Permission_Request"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Leave_Request"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Leave_Dashboard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Ocheck_in"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Approvals"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Status_Activity.Extended_Shift_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Status_Activity.WeekOff_Status_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Status_Activity.MissedPunch_Status_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Status_Activity.Leave_Status_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Status_Activity.Permission_Status_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Status_Activity.Onduty_Status_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Status_Activity.View_All_Status_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Tp_Mydayplan"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Tp_Calander"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Mydayplan_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Tp_Month_Select"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Tp_Approval"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Tp_Approval_Reject"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Leave_Approval_Reject"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Permission_Approval"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Permission_Approval_Reject"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Onduty_Approval_Reject"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Webview_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Missed_punch_Approval"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Missed_Punch_Approval_Reject"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Extended_Approval_Reject"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.ViewCartActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.ReportActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.ViewReportActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.TimeOut"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.On_Duty_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Help_Activity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity_Hap.UpdateTaskActivity"
             android:theme="@style/AppTheme.Dialog" />
         <activity
-            android:name=".Activity_Hap.Check_in" android:screenOrientation="portrait"
-            android:noHistory="true" />
-        <activity android:name=".Activity_Hap.Dashboard" android:screenOrientation="portrait" />
+            android:name=".Activity_Hap.Check_in"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity_Hap.Login" android:screenOrientation="portrait"
-            android:noHistory="true" />
+            android:name=".Activity_Hap.Dashboard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity_Hap.Login"
+            android:noHistory="true"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity_Hap.ProductImageView"
             android:theme="@style/AppTheme.Dialog" />
@@ -148,14 +273,18 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".Activity_Hap.MainActivity" android:screenOrientation="portrait">
+        <activity
+            android:name=".Activity_Hap.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.DesignActivity" android:screenOrientation="portrait"  />
+        <activity
+            android:name=".Activity.DesignActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.FilterActivity"
             android:screenOrientation="portrait" />

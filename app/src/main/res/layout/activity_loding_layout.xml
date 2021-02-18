@@ -10,7 +10,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
-        android:id="@+id/lbl_ldg_JnEmp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/C10dp"
@@ -44,7 +43,6 @@
                 android:textSize="@dimen/C13dp" />
 
             <Button
-                android:id="@+id/btn_empget"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-5dp"

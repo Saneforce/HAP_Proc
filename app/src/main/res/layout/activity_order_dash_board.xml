@@ -36,7 +36,6 @@
                 android:padding="20dp">
 
                 <ImageView
-                    android:id="@+id/prm_image_orders"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -44,7 +43,6 @@
                     android:src="@drawable/order"></ImageView>
 
                 <TextView
-                    android:id="@+id/prm_text_orders"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"
@@ -69,7 +67,6 @@
                 android:padding="20dp">
 
                 <ImageView
-                    android:id="@+id/prm_image_reports"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -77,7 +74,6 @@
                     android:src="@drawable/report"></ImageView>
 
                 <TextView
-                    android:id="@+id/prm_text_reports"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="15dp"

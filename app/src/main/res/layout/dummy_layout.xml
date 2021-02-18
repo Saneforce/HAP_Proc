@@ -198,8 +198,7 @@
                     android:text="From"
                     android:background="#fff"
                     app:fontFamily="@font/lato_light"
-                    android:layout_marginLeft="13dp"
-                    android:id="@+id/from_txt"/>
+                    android:layout_marginLeft="13dp" />
 
 
                 <RelativeLayout
@@ -232,7 +231,6 @@
                     android:layout_height="wrap_content"
                     android:textColor="#AAADB8"
                     android:text="To"
-                    android:id="@+id/to_txt"
                     android:background="#fff"
                     android:layout_marginLeft="43dp"
                     app:fontFamily="@font/lato_light"
