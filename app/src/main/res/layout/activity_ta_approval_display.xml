@@ -8,7 +8,6 @@
 
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
@@ -309,6 +308,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:onClick="TLApproval"
                             android:orientation="horizontal"
                             android:padding="@dimen/C5dp">
 
@@ -339,7 +339,7 @@
                             android:onClick="FuelApproval"
                             android:orientation="horizontal"
                             android:padding="@dimen/C5dp"
-                            android:visibility="gone">
+                    >
 
                             <TextView
                                 android:layout_width="@dimen/header_width1"
@@ -366,6 +366,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:onClick="LAApproval"
                             android:padding="@dimen/C5dp">
 
                             <TextView
@@ -393,6 +394,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:onClick="LCApproval"
                             android:padding="@dimen/C5dp">
 
                             <TextView
@@ -420,6 +422,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:onClick="OEApproval"
                             android:padding="@dimen/C5dp">
 
                             <TextView
@@ -455,15 +458,22 @@
     </LinearLayout>
 
 
+
+
     <LinearLayout
-        android:id="@+id/rejectonly"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
+  <LinearLayout
+        android:id="@+id/rejectonly"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+      android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -510,43 +520,47 @@
         </LinearLayout>
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/lin_accp"
-        android:layout_width="0dp"
-
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/lin_accp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/GrandTotal"
-            android:onClick="onApproval"
-            android:padding="@dimen/C10dp"
-            android:text="Approve "
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/C13dp"
-            android:textStyle="bold"></TextView>
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/color_red"
-            android:onClick="onReject"
-            android:padding="@dimen/C10dp"
-            android:text="Reject"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="@dimen/C13dp"
-            android:textStyle="bold"></TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/GrandTotal"
+                android:onClick="onApproval"
+                android:padding="@dimen/C10dp"
+                android:text="Approve "
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/C13dp"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/color_red"
+                android:onClick="onReject"
+                android:padding="@dimen/C10dp"
+                android:text="Reject"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/C13dp"
+                android:textStyle="bold"></TextView>
+
+
+        </LinearLayout>
+
+        <include layout="@layout/back_arrow"></include>
     </LinearLayout>
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

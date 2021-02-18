@@ -2,6 +2,8 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -15,13 +17,33 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.vision.CameraSource;
 import com.google.android.gms.vision.Detector;
 import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class QRCodeScanner extends AppCompatActivity {
     SurfaceView surfaceView;
@@ -32,24 +54,58 @@ public class QRCodeScanner extends AppCompatActivity {
     Button btnAction;
     String intentData = "";
     boolean isEmail = false;
+    String[] arrSplit;
+    String latlon="";
+
+    private FusedLocationProviderClient fusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_q_r_code_scanner);
         initViews();
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+
+            return;
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            Log.v("Loaction", String.valueOf(location.getLatitude()));
+                            Log.v("Loaction", String.valueOf(location.getLongitude()));
+                            latlon = location.getLatitude() +","+location.getLongitude();
+                        }
+                    }
+                });
+
     }
 
     private void initViews() {
+
+
         txtBarcodeValue = findViewById(R.id.txtBarcodeValue);
         surfaceView = findViewById(R.id.surfaceView);
         btnAction = findViewById(R.id.btnAction);
         btnAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(intentData)));
+
+
             }
         });
+
+
     }
 
     private void initialiseDetectorsAndSources() {
@@ -117,14 +173,17 @@ public class QRCodeScanner extends AppCompatActivity {
                                 String intentData = barcodes.valueAt(0).displayValue.replace("|", ",");
                                 if (!intentData.equals("")) {
                                     Log.e("INTENT_DATA", intentData);
-                                  /*  String[] arrSplit_3 = intentData.split(",");
-                                    arrSplit_3[0] = "";*/
+                                    arrSplit = intentData.split(",");
+
+                                    Log.e("INTENT_DATA", arrSplit[0]);
+                                    Log.e("INTENT_DATA", arrSplit[1]);
+                                    Log.e("INTENT_DATA", arrSplit[2]);
+                                    Log.e("INTENT_DATA", arrSplit[3]);
+                                    Log.e("INTENT_DATA", arrSplit[4]);
 
                                     Toast.makeText(QRCodeScanner.this, "Code is successfull", Toast.LENGTH_SHORT).show();
-                              //      txtBarcodeValue.setText(intentData.split("|")[0]);
                                     finish();
                                 }
-
 
                             }
                         }
@@ -133,6 +192,91 @@ public class QRCodeScanner extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
+/*    private void GateIn(String Name, int flag) {
+
+        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dfw2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        DateFormat dfw3 = new SimpleDateFormat("hh:mm:ss");
+
+        //GateIn,GateOut
+        Map<String, String> QueryString = new HashMap<>();
+        QueryString.put("axn", "dcr/save");
+        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+        QueryString.put("State_Code", Shared_Common_Pref.Div_Code);
+        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+      //  QueryString.put("duty_id", duty_id);
+
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        JSONObject sp = new JSONObject();
+        try {
+
+         *//*   itm.HQLoc=res[0];
+            itm.HQLocID=res[1];
+            itm.Location=res[2];
+            itm.MajorType=res[4];
+            itm.latLng= _currentLocation.Latitude+":"+_currentLocation.Longitude;
+            itm.mode=res[3];
+            itm.time=new Date(tDate);
+            Cdate= new Date(tDate);
+            itm.eDate = Cdate.getFullYear() + "-" + (Cdate.getMonth() + 1) + "-" + Cdate.getDate() + " " + Cdate.getHours() + ":" + Cdate.getMinutes() + ":" + Cdate.getSeconds();
+            itm.eTime = Cdate.getHours() + ":" + Cdate.getMinutes() + ":" + Cdate.getSeconds();
+
+*//*
+            sp.put("HQLoc", arrSplit[0]);
+            sp.put("HQLocID", arrSplit[1]);
+            sp.put("Location", latlon);
+            sp.put("MajourType", arrSplit[4]);
+            sp.put("latLng", arrSplit[3]);
+            sp.put("mode", Sf_Code);
+            sp.put("time", dfw.toString());
+            sp.put("eDate", dfw2);
+            sp.put("eTime", dfw3);
+
+
+            jsonObject.put(Name, sp);
+        }  catch (JSONException e) {
+            e.printStackTrace();
+        }
+        jsonArray.put(jsonObject);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, jsonArray.toString());
+        Log.e("Log_TpQuerySTring", QueryString.toString());
+        Log.e("Log_Tp_SELECT", jsonArray.toString());
+
+        mCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                // locationList=response.body();
+                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
+                try {
+                   // common_class.CommonIntentwithFinish(Onduty_approval.class);
+                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    if (flag == 1) {
+                       // common_class.ProgressdialogShow(2, "");
+                        Toast.makeText(getApplicationContext(), "Holiday  Approved Successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                      //  common_class.ProgressdialogShow(2, "");
+                        Toast.makeText(getApplicationContext(), "Holiday Rejected  Successfully", Toast.LENGTH_SHORT).show();
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+              //  common_class.ProgressdialogShow(2, "");
+            }
+        });
+    }*/
 
 
     @Override

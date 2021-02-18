@@ -27,7 +27,6 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/map"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/header_date_width"
                     android:layout_below="@+id/tool_header"
@@ -138,7 +137,6 @@
                         android:visibility="gone" />
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/card_type_travel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/type_allowance"
@@ -219,7 +217,6 @@
                                     android:orientation="vertical">
 
                                     <RelativeLayout
-                                        android:id="@+id/allowance_information"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content">
 
@@ -278,7 +275,6 @@
                                             android:orientation="horizontal">
 
                                             <TextView
-                                                android:id="@+id/lblBrding"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_weight="1"
@@ -317,7 +313,6 @@
                                             android:orientation="horizontal">
 
                                             <TextView
-                                                android:id="@+id/lblDrvBrd"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_weight="1"
@@ -357,7 +352,6 @@
                                             android:orientation="horizontal">
 
                                             <TextView
-                                                android:id="@+id/lbllodgNm"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_weight="1"
@@ -849,7 +843,6 @@
                                                 app:cardUseCompatPadding="true">
 
                                                 <EditText
-                                                    android:id="@+id/edt_fare"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="match_parent"
                                                     android:background="@null"
@@ -1117,7 +1110,6 @@
                                             android:textSize="10sp"></TextView>
 
                                         <LinearLayout
-                                            android:id="@+id/ldg_cin_spiner"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_centerVertical="true"
@@ -1343,7 +1335,6 @@
                                                 android:textSize="10sp" />
 
                                             <TextView
-                                                android:id="@+id/lbl_ldg_eligi1"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginTop="@dimen/C10dp"

@@ -1,19 +1,12 @@
 <resources>
     <string name="app_name" translatable="false">HAP Check In</string>
-    <string name="AppVer" translatable="false">Ver 3.0.0</string>
     <string name="loading_please_wait" translatable="false">Loading Please Wait......</string>
     <string name="todo" translatable="false">TODO</string>
     <string name="sign_in" translatable="false">Sign-In</string>
     <string name="password" translatable="false">password</string>
     <string name="username" translatable="false">username</string>
     <string name="or" translatable="false">or</string>
-    <string name="base_url" translatable="false">http://hap.sanfmcg.com/server/Db_Hap.php?</string>
-    <string name="title_activity_checkin" translatable="false">checkin</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label" translatable="false">First Fragment</string>
-    <string name="second_fragment_label" translatable="false">Second Fragment</string>
-    <string name="next" translatable="false">Next</string>
-    <string name="previous" translatable="false">Previous</string>
     <string name="map_key" translatable="false">AIzaSyB_qsP8AOP_P0MdlPz-48TDaJYjTP3vbjo</string>
     <string name="txt_haplocations" translatable="false">Select the HAP locations <font fgcolor='#E53935'> *</font></string>
     <string name="txt_haplocationss" translatable="false">Select the HAP locations</string>
@@ -23,20 +16,11 @@
     <string name="txt_ondutylocationss" translatable="false">Enter your ON-Duty Location</string>
 
     <string name="selectmissed_date" translatable="false">Select Missed Date</string>
-    <string name="hello_first_fragment" translatable="false">Hello first fragment</string>
-    <string name="hello_second_fragment" translatable="false">Hello second fragment. Arg: %1$s</string>
-    <string name="on_duty_checkin" translatable="false">On-Duty CheckIn</string>
     <string name="select_type" translatable="false">Select Type</string>
     <string name="enter_location" translatable="false">Enter location</string>
-    <string name="select_the_type" translatable="false">SELECT THE TYPE</string>
-    <string name="leave_request" translatable="false">Leave Request</string>
 
-    <string name="weekly_off" translatable="false">Weekly Off</string>
-    <string name="missed_punch" translatable="false">Missed Punch</string>
-    <string name="permission" translatable="false">Permission</string>
     <string name="web_client_id" translatable="false">92787437164-iv0q3cg155ve0a0pl21d4r6e6e295p09.apps.googleusercontent.com</string>
     <string name="launch_activity" translatable="false">open</string>
-    <string name="remove_location_updates" translatable="false">Stop</string>
     <string name="location_updated" translatable="false">Updating</string>
     <string name="permission_rationale" translatable="false">Please Grant Location Permission</string>
     <string name="ok" translatable="false">Ok</string>
@@ -44,28 +28,15 @@
     <string name="settings" translatable="false">string</string>
     <string name="reason" translatable="false">Reason</string>
     <string name="txt_jointwork" translatable="false">Joint work</string>
-    <string name="txt_select_jointwork" translatable="false">Select the Joint work</string>
-    <string name="txt_remarks" translatable="false">Remarks</string>
-    <string name="txt_enter_remarks" translatable="false">Enter the Remarks</string>
     <string name="txt_enter_reason" translatable="false">Enter the Reason</string>
 
 
     <string name="Tourplan" translatable="false">Tour  Plan</string>
-    <string name="Calander" translatable="false">Calendar</string>
-    <string name="monthselection" translatable="false">Month Selection</string>
-    <string name="mydayplan" translatable="false">My day Plan</string>
 
 
-    <string name="txt_password" translatable="false">Password</string>
-    <string name="txt_signin" translatable="false">Sign-In</string>
     <string name="txt_worktype" translatable="false">Work Type</string>
-    <string name="txt_select_worktype">Select the Work Type</string>
     <string name="txt_distributors">Distributors</string>
-    <string name="txt_select_distributors">Select the  Distributors</string>
     <string name="txt_route">Route</string>
-    <string name="txt_route_man">Route *</string>
-    <string name="txt_select_route" translatable="false">Select the  Route</string>
-    <string name="txt_selecttheroute">Select the Route</string>
     <string name="DayPlan">Day  Plan</string>
     <string name="txt_submit">Submit</string>
 
@@ -74,19 +45,11 @@
     <string name="txt_shifttype">Shift M/E</string>
 
     <string name="txt_enter_purpose">Enter The Visiting Purpose</string>
-    <string name="txt_enter_titlepurpose"> Visiting Purpose</string>
 
 
     <string name="leave_type">Leave Type</string>
     <string name="shit_type">Shift Timing</string>
     <string name="half_day_type">Halfday Type</string>
-    <string name="material_calendar_monday">M</string>
-    <string name="material_calendar_tuesday">T</string>
-    <string name="material_calendar_wednesday">W</string>
-    <string name="material_calendar_thursday">T</string>
-    <string name="material_calendar_friday">F</string>
-    <string name="material_calendar_saturday">S</string>
-    <string name="material_calendar_sunday">S</string>
     <array name="MonthArray">
         <item>January</item>
         <item>February</item>
@@ -101,16 +64,10 @@
         <item>November</item>
         <item>December</item>
     </array>
-    <string name="material_calendar_today_button">Today</string>
-    <string name="material_calendar_positive_button">OK</string>
-    <string name="material_calendar_negative_button">Cancel</string>
     <string name="btnsummit">Submit For Approval
-</string>
-    <string name="goback" translatable="false">Back
 </string>
 
     <!--Order Deatils-->
-    <string name="my_orders">My Orders</string>
     <string name="Rep_orders">Reports</string>
     <string name="pri_orders">Orders</string>
     <string name="order_type">Order Type</string>
@@ -121,8 +78,6 @@
     <string name="retailer_channel">Retailer Channel </string>
     <string name="event_capture">Event Capture</string>
     <string name="order">Orders</string>
-    <string name="add_retailer">Add New Retailer</string>
-    <string name="remarks">Enter the Remarks (or) Select from Templates</string>
     <string name="remark">Enter the Remarks </string>
     <string name="from_date">From :</string>
     <string name="to_date">To :</string>

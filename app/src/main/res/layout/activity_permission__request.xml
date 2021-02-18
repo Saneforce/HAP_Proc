@@ -231,7 +231,6 @@
                                     android:textStyle="bold" />
 
                                 <View
-                                    android:id="@+id/divider4"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentBottom="true"
@@ -291,7 +290,6 @@
                                     android:textStyle="bold" />
 
                                 <View
-                                    android:id="@+id/divider23"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentBottom="true"
@@ -343,7 +341,6 @@
                                     android:textStyle="bold" />
 
                                 <View
-                                    android:id="@+id/divider42"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentBottom="true"

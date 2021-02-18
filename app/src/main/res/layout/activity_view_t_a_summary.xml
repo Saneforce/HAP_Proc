@@ -377,7 +377,6 @@
                     </LinearLayout>
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/travel_allowance"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/C5dp" />
@@ -386,7 +385,6 @@
 
                 <!--Daily allowance-->
                 <LinearLayout
-                    android:id="@+id/linear_da_allowance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txt_exp"
@@ -407,7 +405,6 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/daily_mode_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/expense"

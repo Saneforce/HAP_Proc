@@ -46,9 +46,16 @@ public class TaApprovalDisplay extends AppCompatActivity {
     TextView txtDate, txtName, txtTotalAmt, txtHQ, txtTrvlMode, txtDesig, txtDept, txtDA, txtTL, txtLA, txtLC, txtOE, txtfA, txtReject;
     Common_Class common_class;
     Shared_Common_Pref mShared_common_pref;
-    String date = " ", SlStart = "", TotalAmt = "";
+    String date = " ", SlStart = "", TotalAmt = "", sfCode = "",STEND="";
     LinearLayout linAccept, linReject;
     AppCompatEditText appCompatEditText;
+    JsonArray jsonArray = null;
+    JsonArray jsonTravDetai = null;
+    JsonArray lcDraftArray = null;
+    JsonArray oeDraftArray = null;
+    JsonArray trvldArray = null;
+    JsonArray ldArray = null;
+    JsonArray daArray = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +68,6 @@ public class TaApprovalDisplay extends AppCompatActivity {
         date = String.valueOf(getIntent().getSerializableExtra("date"));
         Log.v("datedate", date);
 
-        getTAList(date);
 
         txtDate = findViewById(R.id.txt_date);
         txtTotalAmt = findViewById(R.id.txt_amt);
@@ -98,6 +104,12 @@ public class TaApprovalDisplay extends AppCompatActivity {
         txtTrvlMode.setText(String.valueOf(getIntent().getSerializableExtra("travel_mode")));
 
         SlStart = String.valueOf(getIntent().getSerializableExtra("Sl_No"));
+        sfCode = String.valueOf(getIntent().getSerializableExtra("sfCode"));
+
+        txtTotalAmt.setText("Rs." + getIntent().getSerializableExtra("total_amount") + ".00");
+
+        getTAList(String.valueOf(getIntent().getSerializableExtra("date")), String.valueOf(getIntent().getSerializableExtra("sfCode")));
+        Log.e("SFCode", String.valueOf(getIntent().getSerializableExtra("total_amount")));
 
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
@@ -146,52 +158,80 @@ public class TaApprovalDisplay extends AppCompatActivity {
             }
         });
 
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                common_class.CommonIntentwithFinish(TAApprovalActivity.class);
+
+            }
+        });
+
+        displayTravelMode(String.valueOf(getIntent().getSerializableExtra("date")));
 
     }
 
     public void DaApproval(View v) {
+        Intent intent = new Intent(getApplicationContext(), DAClaimActivity.class);
+        intent.putExtra("DaAllowance", daArray.toString());
+        startActivity(intent);
     }
 
-    public void BoardingApproval(View v) {
+    public void TLApproval(View v) {
+        Intent intent = new Intent(getApplicationContext(), TL_cliam_Apprval.class);
+        intent.putExtra("strEnd", STEND);
+        intent.putExtra("TLAllowance", trvldArray.toString());
+        startActivity(intent);
     }
 
-    public void DriverDaApproval(View v) {
+    public void OEApproval(View v) {
+        Intent intent = new Intent(getApplicationContext(), OEClaimActivity.class);
+        intent.putExtra("OEAllowance", oeDraftArray.toString());
+        startActivity(intent);
     }
 
     public void FuelApproval(View v) {
+        Intent intent = new Intent(getApplicationContext(), FuelAllowance.class);
+        intent.putExtra("jsonTravDetai", jsonTravDetai.toString());
+        startActivity(intent);
+    }
+
+    public void LCApproval(View v) {
+        Intent intent = new Intent(getApplicationContext(), LocalConvenActivity.class);
+        intent.putExtra("LCAllowance", lcDraftArray.toString());
+        startActivity(intent);
+    }
+
+    public void LAApproval(View v) {
     }
 
 
-    public void getTAList(String Date) {
+    public void getTAList(String Date, String sFCode) {
         Log.v("datedatefgdfgd", Date);
         JSONObject taReq = new JSONObject();
         try {
-            taReq.put("sfCode", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+            taReq.put("sfCode", sFCode);
             taReq.put("divisionCode", mShared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
             taReq.put("Selectdate", Date);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Log.v("JSON_VALUE", taReq.toString());
+        Log.v("GET_TA_LIST", taReq.toString());
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonArray> mTrave = apiInterface.getApprovalDisplay(taReq.toString());
         mTrave.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 JsonArray jsonArray = response.body();
-
                 for (int m = 0; m < jsonArray.size(); m++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(m);
-                    Log.v("LIST", jsonObject.toString());
-
                     txtDA.setText("Rs." + jsonObject.get("Boarding_Amt").getAsString() + ".00");
                     txtTL.setText("Rs." + jsonObject.get("Ta_totalAmt").getAsString() + ".00");
                     txtLA.setText("Rs." + jsonObject.get("Ldg_totalAmt").getAsString() + ".00");
                     txtLC.setText("Rs." + jsonObject.get("Lc_totalAmt").getAsString() + ".00");
                     txtOE.setText("Rs." + jsonObject.get("Oe_totalAmt").getAsString() + ".00");
-                    txtTotalAmt.setText("Rs." + jsonObject.get("Total_Amount").getAsString() + ".00");
-                    TotalAmt = jsonObject.get("Total_Amount").getAsString();
+
                 }
 
             }
@@ -231,7 +271,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
         JSONObject taReq = new JSONObject();
 
         try {
-            taReq.put("sfCode", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+            taReq.put("sfCode", sfCode);
             taReq.put("Flag", flag);
             taReq.put("Sl_No", SlStart);
             taReq.put("AAmount", TotalAmt);
@@ -272,5 +312,63 @@ public class TaApprovalDisplay extends AppCompatActivity {
         });
     }
 
+
+    public void displayTravelMode(String Date) {
+
+
+        JSONObject jj = new JSONObject();
+        try {
+            jj.put("sfCode", sfCode);
+            jj.put("divisionCode", mShared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
+            jj.put("Selectdate", Date);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.v("JSON_VALUE", jj.toString());
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> call = apiInterface.getTAdateDetails(jj.toString());
+        call.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                JsonObject jsonObjects = response.body();
+                Log.v("TA_APPROVAl_DISPLAY", jsonObjects.toString());
+                jsonArray = jsonObjects.getAsJsonArray("TodayStart_Details");
+                jsonTravDetai = jsonObjects.getAsJsonArray("Travelled_Details");
+                lcDraftArray = jsonObjects.getAsJsonArray("Additional_ExpenseLC");
+                oeDraftArray = jsonObjects.getAsJsonArray("Additional_ExpenseOE");
+                trvldArray = jsonObjects.getAsJsonArray("Travelled_Loc");
+                ldArray = jsonObjects.getAsJsonArray("Lodging_Head");
+                daArray = jsonObjects.getAsJsonArray("Da_Claim");
+
+
+                Log.v("JSON_ARRAY", jsonArray.toString());
+                Log.v("jsonTravDetai", jsonTravDetai.toString());
+                Log.v("lcDraftArray", lcDraftArray.toString());
+                Log.v("oeDraftArray", oeDraftArray.toString());
+                Log.v("trvldArray", trvldArray.toString());
+                Log.v("ldArray", ldArray.toString());
+                Log.v("daArray", daArray.toString());
+
+
+                JsonObject jsonObject = null;
+                for (int i = 0; i < jsonArray.size(); i++) {
+
+                    jsonObject = (JsonObject) jsonArray.get(i);
+
+                    STEND = jsonObject.get("StEndNeed").getAsString();
+
+                }
+
+
+            }
+
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+            }
+        });
+    }
 
 }

@@ -54,7 +54,6 @@
 
 
             <TextView
-                android:id="@+id/textView34"
                 android:layout_width="14dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
@@ -65,7 +64,6 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/textView35"
                 android:layout_width="53dp"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
@@ -77,7 +75,6 @@
 
 
             <TextView
-                android:id="@+id/textView37"
                 android:layout_width="34dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
