@@ -12,8 +12,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.hap.checkinproc.R;
 
 import org.json.JSONArray;
@@ -23,7 +21,7 @@ import org.json.JSONObject;
 public class OEClaimActivity extends AppCompatActivity {
 
     LinearLayout LinearOtherAllowance, otherExpenseLayout;
-    TextView oeEditext;
+    TextView oeEditext, oeAmt;
     EditText edtOE, edt;
     ImageView delete_lc;
     LinearLayout linLocalSpinner, Dynamicallowance;
@@ -38,8 +36,9 @@ public class OEClaimActivity extends AppCompatActivity {
 
         LinearOtherAllowance = findViewById(R.id.lin_dyn_other_Expense);
         otherExpenseLayout = findViewById(R.id.lin_total_other);
-
+        oeAmt = findViewById(R.id.txt_oe);
         OEClaim = String.valueOf(getIntent().getSerializableExtra("OEAllowance"));
+        oeAmt.setText(String.valueOf(getIntent().getSerializableExtra("OEAll_Total")));
 
         Log.v("JSON_LC", OEClaim);
 

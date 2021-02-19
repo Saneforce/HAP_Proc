@@ -43,10 +43,10 @@ import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class TaApprovalDisplay extends AppCompatActivity {
 
-    TextView txtDate, txtName, txtTotalAmt, txtHQ, txtTrvlMode, txtDesig, txtDept, txtDA, txtTL, txtLA, txtLC, txtOE, txtfA, txtReject;
+    TextView txtDate, txtName, txtTotalAmt, txtHQ, txtTrvlMode, txtDesig, txtDept, txtDA, txtTL, txtLA, txtLC, txtOE,  txtReject;
     Common_Class common_class;
     Shared_Common_Pref mShared_common_pref;
-    String date = " ", SlStart = "", TotalAmt = "", sfCode = "",STEND="";
+    String date = " ", SlStart = "", TotalAmt = "", sfCode = "",STEND="",SDA="",SLC="",SOE="";
     LinearLayout linAccept, linReject;
     AppCompatEditText appCompatEditText;
     JsonArray jsonArray = null;
@@ -93,7 +93,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
         txtLA = findViewById(R.id.txt_la);
         txtLC = findViewById(R.id.txt_lc);
         txtOE = findViewById(R.id.txt_oe);
-        txtfA = findViewById(R.id.txt_fa);
+
 
         txtDate.setText(String.valueOf(getIntent().getSerializableExtra("date")));
 
@@ -174,6 +174,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
     public void DaApproval(View v) {
         Intent intent = new Intent(getApplicationContext(), DAClaimActivity.class);
         intent.putExtra("DaAllowance", daArray.toString());
+        intent.putExtra("DaAll_Total", SDA);
         startActivity(intent);
     }
 
@@ -187,6 +188,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
     public void OEApproval(View v) {
         Intent intent = new Intent(getApplicationContext(), OEClaimActivity.class);
         intent.putExtra("OEAllowance", oeDraftArray.toString());
+        intent.putExtra("OEAll_Total", SOE);
         startActivity(intent);
     }
 
@@ -199,6 +201,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
     public void LCApproval(View v) {
         Intent intent = new Intent(getApplicationContext(), LocalConvenActivity.class);
         intent.putExtra("LCAllowance", lcDraftArray.toString());
+        intent.putExtra("LCAll_Total", SLC);
         startActivity(intent);
     }
 
@@ -231,6 +234,10 @@ public class TaApprovalDisplay extends AppCompatActivity {
                     txtLA.setText("Rs." + jsonObject.get("Ldg_totalAmt").getAsString() + ".00");
                     txtLC.setText("Rs." + jsonObject.get("Lc_totalAmt").getAsString() + ".00");
                     txtOE.setText("Rs." + jsonObject.get("Oe_totalAmt").getAsString() + ".00");
+
+                    SDA = jsonObject.get("Boarding_Amt").getAsString();
+                    SLC = jsonObject.get("Lc_totalAmt").getAsString();
+                    SOE = jsonObject.get("Oe_totalAmt").getAsString();
 
                 }
 

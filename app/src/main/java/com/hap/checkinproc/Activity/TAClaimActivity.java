@@ -116,7 +116,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             linFareAmount, ldg_typ_sp, linLocalSpinner, linOtherSpinner, lodgCont, lodgContvw, ldg_stayloc, ldg_stayDt,
             lodgJoin, ldgEAra, ldgMyEAra, JNLdgEAra, drvldgEAra, jointLodging, vwBoarding, vwDrvBoarding, linTaImgPrv,
             linAddAllowance, diverAllowanceLinear, LDailyAllowance, LOtherExpense, LLocalConve, LinearOtherAllowance,
-            linlocalCon, linBusMode, linBikeMode, linMode, travelDynamicLoaction, linDailyAllowance;
+            linlocalCon, linBusMode, linBikeMode, linMode, travelDynamicLoaction, linDailyAllowance, linback;
 
     CardView card_date, TravelBike, crdDynamicLocation, ldg_ara;
 
@@ -125,13 +125,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             txtDailyAllowance, editText, ldg_cin, txtJNName, txtJNDesig, txtJNDept, txtJNHQ, txtJNMob,
             lblHdBill, lblHdBln, ldgWOBBal, ldgAdd, txtJNMyEli, txtMyEligi, txtDrivEligi, lbl_ldg_eligi, txt_totDA,
             fuelAmount, TextTotalAmount, editTexts, oeEditext, localText, OeText, grandTotal, txtallamt, txt_BrdAmt,
-            txt_DrvBrdAmt, txtJointAdd, txtJNEligi;
+            txt_DrvBrdAmt, txtJointAdd, txtJNEligi, txtTAamt;
 
     EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt, edt1, edt_ldg_JnEmp,
             edt_ldg_bill, edtLcFare, lodgStyLocation;
 
     ImageView deleteButton, previewss, taAttach, lcAttach, oeAttach, lcPreview, oePreview, endkmimage, startkmimage,
-            img_lodg_prvw, img_lodg_atta, mapZoomIn;
+            img_lodg_prvw, img_lodg_atta, mapZoomIn, imgBck;
 
     String SF_code = "", div = "", State_Code = "", StartedKm = "", ClosingKm = "", ModeOfTravel = "", PersonalKm = "",
             DriverNeed = "", DateForAPi = "", DateTime = "", shortName = "", Exp_Name = "", Id = "", userEnter = "",
@@ -146,9 +146,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     Double tofuel = 0.0, ldgEliAmt = 0.0, ldgDrvEligi = 0.0, gTotal = 0.0, TotLdging = 0.0,
             GrandTotalAllowance = 0.0, fAmount = 0.0, doubleAmount = 0.0, myBrdAmt = 0.0, drvBrdAmt = 0.0,
-            otherExp = 0.0, localCov = 0.0, sum = 0.0, sumsTotss = 0.0;
+            otherExp = 0.0, localCov = 0.0, sum = 0.0, sumsTotss = 0.0, sumsTot = 0.0;
 
-    double TotDA = 0.0, sTotal = 0.0, sums = 0.0;
+    double TotDA = 0.0, sTotal = 0.0, sums = 0.0, sumsTa = 0.0;
     Button btn_sub, buttonSave;
 
     ArrayList<SelectionModel> array = new ArrayList<>();
@@ -291,6 +291,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         ldgAdd = findViewById(R.id.ldg_Add);
         mapZoomIn = findViewById(R.id.map_zoom);
         buttonSave = findViewById(R.id.save_button);
+        txtTAamt = findViewById(R.id.txt_trav_loca);
+        linback = findViewById(R.id.lin_back);
+        imgBck = findViewById(R.id.imag_backs);
 
         img_lodg_atta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -384,6 +387,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
+        imgBck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
+
 
         strGT = grandTotal.getText().toString();
         LDailyAllowance.setOnClickListener(new View.OnClickListener() {
@@ -465,20 +475,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         public void afterTextChanged(Editable s) {
 
                             SumOFOTAmount();
-                            /*for (int k = 0; k < OeSize; k++) {
-                                View cv = LinearOtherAllowance.getChildAt(k);
-                                edtOE = (EditText) (cv.findViewById(R.id.oe_fre_amt));
-                                String strs = edtOE.getText().toString();
-                                if (strs.matches("")) strs = "0";
-                                sumsTotss = sumsTotss + Double.parseDouble(strs);
-
-                                sTotal = GrandTotalAllowance + sumsTotss;
-                            }
-                            OeText.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTotss));
-
-                            otherExp = sumsTotss;
-
-                            calOverAllTotal(localCov, otherExp);*/
                         }
                     });
 
@@ -669,6 +665,25 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         childView = travelDynamicLoaction.getChildAt(c);
 
                         editText = (TextView) (childView.findViewById(R.id.enter_mode));
+                        enterFare = childView.findViewById(R.id.enter_fare);
+
+                        enterFare.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+                                SumOFTAAmount();
+                            }
+                        });
+
+
                         taAttach = (ImageView) (childView.findViewById(R.id.image_attach));
                         previewss = (ImageView) (childView.findViewById(R.id.image_preview));
                         previewss.setOnClickListener(new View.OnClickListener() {
@@ -903,6 +918,25 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
+    public void SumOFTAAmount() {
+        sumsTotss = 0.0;
+        int lcSize = travelDynamicLoaction.getChildCount();
+        for (int k = 0; k < lcSize; k++) {
+            View cv = travelDynamicLoaction.getChildAt(k);
+            enterFare = childView.findViewById(R.id.enter_fare);
+            String str = editLaFare.getText().toString();
+            if (str.matches("")) str = "0";
+            sumsTotss = sumsTotss + Double.parseDouble(str);
+            sumsTa = GrandTotalAllowance + sumsTotss;
+        }
+        txtTAamt.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTa));
+        localCov = sumsTotss;
+
+
+        calOverAllTotal(localCov, otherExp);
+    }
+
+
     public void SumOFLCAmount() {
         sum = 0.0;
         int lcSize = linlocalCon.getChildCount();
@@ -921,15 +955,19 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         calOverAllTotal(localCov, otherExp);
     }
 
+
     public void SumOFOTAmount() {
-        Double sumsTot = 0.0;
+        sumsTot = 0.0;
         int OeSize = LinearOtherAllowance.getChildCount();
         for (int k = 0; k < OeSize; k++) {
+            View cv = LinearOtherAllowance.getChildAt(k);
+            edtOE = (EditText) (cv.findViewById(R.id.oe_fre_amt));
             String strs = edtOE.getText().toString();
             if (strs.matches("")) strs = "0";
             sumsTot = sumsTot + Double.parseDouble(strs);
 
             sTotal = GrandTotalAllowance + sumsTot;
+
         }
         OeText.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTot));
 
@@ -1775,7 +1813,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             jsonData.put("al_amount", "0");
             jsonData.put("da_amount", TotDA);
             jsonData.put("lc_amount", sum);
-            jsonData.put("oe_amount", sumsTotss);
+            jsonData.put("oe_amount", sumsTot);
             jsonData.put("total_ldg_amt", totLodgAmt);
             jsonData.put("ta_total_amount", tofuel);
             jsonData.put("drvBrdAmt", drvBrdAmt);
@@ -1995,7 +2033,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 startActivity(new Intent(getApplicationContext(), Dashboard.class));
-                Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
+                if (responseVal.equals("Save")) {
+                    Toast.makeText(TAClaimActivity.this, "Saved Successfully ", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -2262,6 +2304,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             linRemarks.setVisibility(View.VISIBLE);
             linFareAmount.setVisibility(View.VISIBLE);
             lcString.clear();
+            linback.setVisibility(View.GONE);
 
 
         } else if (type == 11) {
@@ -2473,7 +2516,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         ldgModes.add(mCommon_model_spinner);
         mCommon_model_spinner = new Common_Model("Joined Stay", "JS");
         ldgModes.add(mCommon_model_spinner);
-        mCommon_model_spinner = new Common_Model("Stay At Relative's House", "RS");
+        mCommon_model_spinner = new Common_Model("Stay At Relaytive's House", "RS");
         ldgModes.add(mCommon_model_spinner);
 
         customDialog = new CustomListViewDialog(TAClaimActivity.this, ldgModes, 9);

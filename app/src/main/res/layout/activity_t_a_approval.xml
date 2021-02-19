@@ -32,11 +32,10 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:fontFamily="@font/alegreya_sans_sc"
-                    android:text="TRAVEl ALLOWANCE APPROVAL"
+                    android:text="TRAVEL ALLOWANCE APPROVAL"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
-
 
             </LinearLayout>
 

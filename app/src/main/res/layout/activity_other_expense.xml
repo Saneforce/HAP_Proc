@@ -60,7 +60,7 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/C8dp"
             android:layout_weight="1"
-            android:hint="Enter Fare"
+            android:hint="Amount"
             android:inputType="number"
             android:textColorHint="#C0C0C0"
             android:textSize="@dimen/C14dp" />

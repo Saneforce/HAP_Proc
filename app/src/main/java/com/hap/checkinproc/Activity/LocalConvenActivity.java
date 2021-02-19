@@ -27,7 +27,7 @@ public class LocalConvenActivity extends AppCompatActivity {
     EditText edtLcFare, edt;
     ImageView delete_lc;
     LinearLayout linLocalSpinner, Dynamicallowance;
-    String LCClaim = "";
+    String LCClaim = "", LLCAmt = "";
     JSONArray jsonArray = null;
 
     @Override
@@ -37,7 +37,7 @@ public class LocalConvenActivity extends AppCompatActivity {
         linlocalCon = findViewById(R.id.lin_dyn_local_con);
         txtLCAmnt = findViewById(R.id.txt_local);
         LCClaim = String.valueOf(getIntent().getSerializableExtra("LCAllowance"));
-
+        txtLCAmnt.setText("Rs." + String.valueOf(getIntent().getSerializableExtra("LCAll_Total")) + ".00");
         Log.v("JSON_LC", LCClaim);
 
         try {
