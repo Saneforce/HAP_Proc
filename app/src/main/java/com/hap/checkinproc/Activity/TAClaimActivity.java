@@ -1370,7 +1370,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             } else if (ldraft.get("Lodging_Type").getAsString().equals("IS")) {
                 txt_ldg_type.setText("Independent Stay");
             } else {
-                txt_ldg_type.setText("Stay At Relaytive's House");
+                txt_ldg_type.setText("Stay At Relative's House");
             }
 
         }
@@ -1994,7 +1994,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         submit.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                // startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                startActivity(new Intent(getApplicationContext(), Dashboard.class));
                 Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
             }
 
@@ -2473,7 +2473,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         ldgModes.add(mCommon_model_spinner);
         mCommon_model_spinner = new Common_Model("Joined Stay", "JS");
         ldgModes.add(mCommon_model_spinner);
-        mCommon_model_spinner = new Common_Model("Stay At Relaytive's House", "RS");
+        mCommon_model_spinner = new Common_Model("Stay At Relative's House", "RS");
         ldgModes.add(mCommon_model_spinner);
 
         customDialog = new CustomListViewDialog(TAClaimActivity.this, ldgModes, 9);
