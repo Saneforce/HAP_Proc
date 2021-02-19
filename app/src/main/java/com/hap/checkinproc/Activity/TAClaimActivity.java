@@ -301,7 +301,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         img_lodg_prvw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (lodgArrLst.size() != 0) {
                     Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
                     stat.putExtra("Data", lodgArrLst);
@@ -464,8 +463,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         @Override
                         public void afterTextChanged(Editable s) {
 
-
-                            for (int k = 0; k < OeSize; k++) {
+                            SumOFOTAmount();
+                            /*for (int k = 0; k < OeSize; k++) {
                                 View cv = LinearOtherAllowance.getChildAt(k);
                                 edtOE = (EditText) (cv.findViewById(R.id.oe_fre_amt));
                                 String strs = edtOE.getText().toString();
@@ -478,7 +477,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                             otherExp = sumsTotss;
 
-                            calOverAllTotal(localCov, otherExp);
+                            calOverAllTotal(localCov, otherExp);*/
                         }
                     });
 
@@ -542,21 +541,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                         @Override
                         public void afterTextChanged(Editable s) {
-
-
-                            for (int k = 0; k < lcSize; k++) {
-                                View cv = linlocalCon.getChildAt(k);
-                                editLaFare = (EditText) (cv.findViewById(R.id.edt_la_fare));
-                                String str = editLaFare.getText().toString();
-                                if (str.matches("")) str = "0";
-                                sum = sum + Double.parseDouble(str);
-                                sums = GrandTotalAllowance + sum;
-                            }
-                            localText.setText("Rs. " + new DecimalFormat("##0.00").format(sum));
-                            localCov = sum;
-
-
-                            calOverAllTotal(localCov, otherExp);
+                            SumOFLCAmount();
                         }
                     });
 
@@ -808,7 +793,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         if (linlocalCon.getChildCount() == 0) {
             localTotal.setVisibility(View.GONE);
         }
-
+        SumOFLCAmount();/*
         Double sum = 0.0;
 
         int lcSize = linlocalCon.getChildCount();
@@ -825,7 +810,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         localCov = sum;
 
 
-        calOverAllTotal(localCov, otherExp);
+        calOverAllTotal(localCov, otherExp);*/
 
     }
 
@@ -838,21 +823,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             otherExpenseLayout.setVisibility(View.GONE);
         }
 
-
-        Double sumsTot = 0.0;
-        int OeSize = LinearOtherAllowance.getChildCount();
-        for (int k = 0; k < OeSize; k++) {
-            String strs = edtOE.getText().toString();
-            if (strs.matches("")) strs = "0";
-            sumsTot = sumsTot + Double.parseDouble(strs);
-
-            sTotal = GrandTotalAllowance + sumsTot;
-        }
-        OeText.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTot));
-
-        otherExp = sumsTot;
-
-        calOverAllTotal(localCov, otherExp);
+        SumOFOTAmount();
     }
 
 
@@ -931,7 +902,40 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
+public void SumOFLCAmount()
+{
+    sum =0.0;
+    int lcSize = linlocalCon.getChildCount();
+    for (int k = 0; k < lcSize; k++) {
+        View cv = linlocalCon.getChildAt(k);
+        editLaFare = (EditText) (cv.findViewById(R.id.edt_la_fare));
+        String str = editLaFare.getText().toString();
+        if (str.matches("")) str = "0";
+        sum = sum + Double.parseDouble(str);
+        sums = GrandTotalAllowance + sum;
+    }
+    localText.setText("Rs. " + new DecimalFormat("##0.00").format(sum));
+    localCov = sum;
 
+
+    calOverAllTotal(localCov, otherExp);
+}
+    public void SumOFOTAmount() {
+        Double sumsTot = 0.0;
+        int OeSize = LinearOtherAllowance.getChildCount();
+        for (int k = 0; k < OeSize; k++) {
+            String strs = edtOE.getText().toString();
+            if (strs.matches("")) strs = "0";
+            sumsTot = sumsTot + Double.parseDouble(strs);
+
+            sTotal = GrandTotalAllowance + sumsTot;
+        }
+        OeText.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTot));
+
+        otherExp = sumsTot;
+
+        calOverAllTotal(localCov, otherExp);
+    }
     public void SumOFDAAmount() {
         String sAmt = txtallamt.getText().toString().replaceAll("Rs. ", "");
         String sBrdAmt = txt_BrdAmt.getText().toString().replaceAll("Rs. ", "");
@@ -1324,6 +1328,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 if (oeDraftArray != null || oeDraftArray.size() != 0) OeDraft(oeDraftArray);
                 if (trvldArray != null || trvldArray.size() != 0) trvldLocation(trvldArray);
                 if (ldArray != null || ldArray.size() != 0) lodingDraft(ldArray);
+
+                calOverAllTotal(localCov, otherExp);
             }
 
 
@@ -1384,6 +1390,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
             linlocalCon.addView(rowView, layoutParams);
             localText.setVisibility(View.VISIBLE);
+            localTotal.setVisibility(View.VISIBLE);
             int lcS = linlocalCon.getChildCount() - 1;
 
             View view = linlocalCon.getChildAt(i);
@@ -1391,7 +1398,21 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             edtLcFare = (EditText) (view.findViewById(R.id.edt_la_fare));
             linLocalSpinner = (LinearLayout) view.findViewById(R.id.lin_loc_spiner);
             Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
+            edtLcFare.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    SumOFLCAmount();
+                }
+            });
             linLocalSpinner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1407,13 +1428,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             edtLcFare.setText("" + lcdraftJson.get("Exp_Amt").toString());
 
         }
-
+        SumOFLCAmount();
     }
 
 
     public void OeDraft(JsonArray oEDraft) {
         //  JsonArray jsonAddition = null;
         for (int i = 0; i < oEDraft.size(); i++) {
+            Integer oESIZE = i;
             JsonObject lcdraftJson = (JsonObject) oEDraft.get(i);
             // jsonAddition = lcdraftJson.getAsJsonArray("Additional");
 
@@ -1446,6 +1468,31 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
             linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
 
+
+            oeAttach.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    popupCapture(99);
+                }
+            });
+
+            oePreview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    oeCount = oESIZE;
+
+                    oEArrayList = oEString.get(oeCount);
+                    if (oEArrayList.size() != 0) {
+                        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                        stat.putExtra("Data", oEArrayList);
+                        startActivity(stat);
+                    } else {
+                        Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+
             linOtherSpinner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1454,6 +1501,36 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 }
             });
 
+            edtOE.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                    SumOFOTAmount();
+                            /*for (int k = 0; k < OeSize; k++) {
+                                View cv = LinearOtherAllowance.getChildAt(k);
+                                edtOE = (EditText) (cv.findViewById(R.id.oe_fre_amt));
+                                String strs = edtOE.getText().toString();
+                                if (strs.matches("")) strs = "0";
+                                sumsTotss = sumsTotss + Double.parseDouble(strs);
+
+                                sTotal = GrandTotalAllowance + sumsTotss;
+                            }
+                            OeText.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTotss));
+
+                            otherExp = sumsTotss;
+
+                            calOverAllTotal(localCov, otherExp);*/
+                }
+            });
             //     localConDisplay(expCode, jsonAddition, lcS);
 
 
@@ -1462,7 +1539,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
 
         }
-
+        SumOFOTAmount();
 
     }
 
