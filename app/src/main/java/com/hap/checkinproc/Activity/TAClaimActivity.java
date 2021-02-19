@@ -127,7 +127,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             fuelAmount, TextTotalAmount, editTexts, oeEditext, localText, OeText, grandTotal, txtallamt, txt_BrdAmt,
             txt_DrvBrdAmt, txtJointAdd, txtJNEligi;
 
-    EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt, edt_ldg_JnEmp,
+    EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt,edt1, edt_ldg_JnEmp,
             edt_ldg_bill, edtLcFare, lodgStyLocation;
 
     ImageView deleteButton, previewss, taAttach, lcAttach, oeAttach, lcPreview, oePreview, endkmimage, startkmimage,
@@ -1510,7 +1510,35 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     @SuppressLint("ResourceType")
     public void localConDisplay(String modeName, JsonArray jsonAddition, int position) {
 
+
+        /*
+        JSONObject json_in = additionArray.getJSONObject(l);
+        dynamicLabel = json_in.getString("Ad_Fld_Name");
+        dynamicLabelList.add(dynamicLabel);
+        RelativeLayout childRel = new RelativeLayout(getApplicationContext());
+        RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_START);
+        layoutparams_3.setMargins(20, -10, 0, 0);
+        edt = new EditText(getApplicationContext());
+        edt.setLayoutParams(layoutparams_3);
+        edt.setHint(dynamicLabel);
+        edt.setId(12345);
+        edt.setTextSize(13);
+        edt.setTextColor(R.color.grey_500);
+        childRel.addView(edt);
+        users.add(edt);
+
+        if (l == additionArray.length() - 1) {
+            usersByCountry.put(sss, users);
+        }
+        View view = linlocalCon.getChildAt(editTextPositionss);
+        Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
+        Dynamicallowance.addView(childRel);
+        */
+
+
         JsonObject jsonObjectAdd = null;
+        List<EditText> users = new ArrayList<>();
         for (int l = 0; l < jsonAddition.size(); l++) {
             jsonObjectAdd = (JsonObject) jsonAddition.get(l);
             String edtValueb = String.valueOf(jsonObjectAdd.get("Ref_Value"));
@@ -1518,12 +1546,19 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_START);
             layoutparams_3.setMargins(20, -10, 0, 0);
-            edt = new EditText(getApplicationContext());
-            edt.setLayoutParams(layoutparams_3);
-            edt.setText(edtValueb.replaceAll("^[\"']+|[\"']+$", ""));
-            edt.setId(12345);
-            edt.setTextSize(13);
-            childRel.addView(edt);
+            edt1 = new EditText(getApplicationContext());
+            edt1.setLayoutParams(layoutparams_3);
+            edt1.setText(edtValueb.replaceAll("^[\"']+|[\"']+$", ""));
+            edt1.setId(12345);
+            edt1.setTextSize(13);
+            childRel.addView(edt1);
+            users.add(edt1);
+            dynamicLabelList.add(jsonObjectAdd.get("Ref_Code").getAsString());
+            if (l == jsonAddition.size() - 1) {
+                usersByCountry.put(modeName, users);
+
+            }
+
             View view = linlocalCon.getChildAt(position);
             Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
             Dynamicallowance.addView(childRel);
@@ -1681,8 +1716,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             daAll.put("all_name", txtDailyAllowance.getText());
             daAll.put("brd_amt", myBrdAmt);
             daAll.put("drvBrdAmt", drvBrdAmt);
-          /*  daAll.put("da_amt", TotDA);
-*/
+            /*  daAll.put("da_amt", TotDA);
+             */
 
 
 
@@ -1792,12 +1827,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 View view = linlocalCon.getChildAt(lc);
                 editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
                 editLaFare = (EditText) (view.findViewById(R.id.edt_la_fare));
-                Dynamicallowance = (LinearLayout) childView.findViewById(R.id.lin_allowance_dynamic);
+                Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
+
+
                 editMode = editTexts.getText().toString();
                 newEdt = usersByCountry.get(editMode);
 
                 JSONObject lcMode = new JSONObject();
-                lcMode.put("type", editTexts.getText().toString());
+                lcMode.put("type", editMode);
                 lcMode.put("total_amount", editLaFare.getText().toString());
                 lcMode.put("exp_type", "LC");
 
@@ -1807,16 +1844,26 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 for (int da = 0; da < newEdt.size(); da++) {
 
-
                     JSONObject AditionallLocalConvenyance = new JSONObject();
-
+      /*              Log.e("LOCAL_EXP", newEdt.toString());
+                    Log.e("LOCAL_EXP", newEdt.get(lc).getText().toString());
+                    Log.e("LOCAL_EXP", dynamicLabelList.get(da));
+                    Log.e("LOCAL_EXP", newEdt.get(da).getText().toString());*/
                     AditionallLocalConvenyance.put("KEY", dynamicLabelList.get(da));
                     AditionallLocalConvenyance.put("VALUE", newEdt.get(da).getText().toString());
-
                     lcModeRef.put(AditionallLocalConvenyance);
                 }
+
+
+                Log.v("lcMode_On", lcModeRef.toString());
+
                 lcMode.put("ad_exp", lcModeRef);
+
+                Log.v("lcMode_Tw", lcMode.toString());
+
                 addExp.put(lcMode);
+
+                Log.v("lcMode_Thr", addExp.toString());
 
             }
 
@@ -2419,6 +2466,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 if (Exp_Name.equals(sss)) {
                                     JSONArray additionArray = null;
                                     additionArray = jsonHeaderObject.getJSONArray("value");
+
                                     List<EditText> users = new ArrayList<>();
                                     for (int l = 0; l <= additionArray.length(); l++) {
                                         JSONObject json_in = additionArray.getJSONObject(l);

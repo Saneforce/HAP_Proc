@@ -36,8 +36,10 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
-        <activity android:name=".Activity.LocalConvenActivity"></activity>
-        <activity android:name=".Activity.TLClaimActivity" />
+        <activity android:name=".Activity.FuelAllowance"></activity>
+        <activity android:name=".Activity.TL_cliam_Apprval" />
+        <activity android:name=".Activity.OEClaimActivity" />
+        <activity android:name=".Activity.LocalConvenActivity" />
         <activity android:name=".Activity.DAClaimActivity" />
         <activity
             android:name=".Activity_Hap.AttachementActivity"

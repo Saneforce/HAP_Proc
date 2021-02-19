@@ -308,6 +308,7 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:onClick="TLApproval"
                             android:orientation="horizontal"
                             android:padding="@dimen/C5dp">
 
@@ -338,7 +339,7 @@
                             android:onClick="FuelApproval"
                             android:orientation="horizontal"
                             android:padding="@dimen/C5dp"
-                            android:visibility="gone">
+                    >
 
                             <TextView
                                 android:layout_width="@dimen/header_width1"
@@ -365,6 +366,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:onClick="LAApproval"
                             android:padding="@dimen/C5dp">
 
                             <TextView
@@ -392,6 +394,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:onClick="LCApproval"
                             android:padding="@dimen/C5dp">
 
                             <TextView
@@ -419,6 +422,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:onClick="OEApproval"
                             android:padding="@dimen/C5dp">
 
                             <TextView

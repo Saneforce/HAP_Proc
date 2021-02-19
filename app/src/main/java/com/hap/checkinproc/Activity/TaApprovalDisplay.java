@@ -32,11 +32,9 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,10 +46,11 @@ public class TaApprovalDisplay extends AppCompatActivity {
     TextView txtDate, txtName, txtTotalAmt, txtHQ, txtTrvlMode, txtDesig, txtDept, txtDA, txtTL, txtLA, txtLC, txtOE, txtfA, txtReject;
     Common_Class common_class;
     Shared_Common_Pref mShared_common_pref;
-    String date = " ", SlStart = "", TotalAmt = "", sfCode = "";
+    String date = " ", SlStart = "", TotalAmt = "", sfCode = "",STEND="";
     LinearLayout linAccept, linReject;
     AppCompatEditText appCompatEditText;
     JsonArray jsonArray = null;
+    JsonArray jsonTravDetai = null;
     JsonArray lcDraftArray = null;
     JsonArray oeDraftArray = null;
     JsonArray trvldArray = null;
@@ -109,7 +108,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
 
         txtTotalAmt.setText("Rs." + getIntent().getSerializableExtra("total_amount") + ".00");
 
-        getTAList(String.valueOf(getIntent().getSerializableExtra("date")),String.valueOf(getIntent().getSerializableExtra("sfCode")));
+        getTAList(String.valueOf(getIntent().getSerializableExtra("date")), String.valueOf(getIntent().getSerializableExtra("sfCode")));
         Log.e("SFCode", String.valueOf(getIntent().getSerializableExtra("total_amount")));
 
 
@@ -178,17 +177,36 @@ public class TaApprovalDisplay extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void BoardingApproval(View v) {
+    public void TLApproval(View v) {
+        Intent intent = new Intent(getApplicationContext(), TL_cliam_Apprval.class);
+        intent.putExtra("strEnd", STEND);
+        intent.putExtra("TLAllowance", trvldArray.toString());
+        startActivity(intent);
     }
 
-    public void DriverDaApproval(View v) {
+    public void OEApproval(View v) {
+        Intent intent = new Intent(getApplicationContext(), OEClaimActivity.class);
+        intent.putExtra("OEAllowance", oeDraftArray.toString());
+        startActivity(intent);
     }
 
     public void FuelApproval(View v) {
+        Intent intent = new Intent(getApplicationContext(), FuelAllowance.class);
+        intent.putExtra("jsonTravDetai", jsonTravDetai.toString());
+        startActivity(intent);
+    }
+
+    public void LCApproval(View v) {
+        Intent intent = new Intent(getApplicationContext(), LocalConvenActivity.class);
+        intent.putExtra("LCAllowance", lcDraftArray.toString());
+        startActivity(intent);
+    }
+
+    public void LAApproval(View v) {
     }
 
 
-    public void getTAList(String Date,String sFCode) {
+    public void getTAList(String Date, String sFCode) {
         Log.v("datedatefgdfgd", Date);
         JSONObject taReq = new JSONObject();
         try {
@@ -317,6 +335,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
                 JsonObject jsonObjects = response.body();
                 Log.v("TA_APPROVAl_DISPLAY", jsonObjects.toString());
                 jsonArray = jsonObjects.getAsJsonArray("TodayStart_Details");
+                jsonTravDetai = jsonObjects.getAsJsonArray("Travelled_Details");
                 lcDraftArray = jsonObjects.getAsJsonArray("Additional_ExpenseLC");
                 oeDraftArray = jsonObjects.getAsJsonArray("Additional_ExpenseOE");
                 trvldArray = jsonObjects.getAsJsonArray("Travelled_Loc");
@@ -324,13 +343,23 @@ public class TaApprovalDisplay extends AppCompatActivity {
                 daArray = jsonObjects.getAsJsonArray("Da_Claim");
 
 
-
                 Log.v("JSON_ARRAY", jsonArray.toString());
+                Log.v("jsonTravDetai", jsonTravDetai.toString());
                 Log.v("lcDraftArray", lcDraftArray.toString());
                 Log.v("oeDraftArray", oeDraftArray.toString());
                 Log.v("trvldArray", trvldArray.toString());
                 Log.v("ldArray", ldArray.toString());
                 Log.v("daArray", daArray.toString());
+
+
+                JsonObject jsonObject = null;
+                for (int i = 0; i < jsonArray.size(); i++) {
+
+                    jsonObject = (JsonObject) jsonArray.get(i);
+
+                    STEND = jsonObject.get("StEndNeed").getAsString();
+
+                }
 
 
             }

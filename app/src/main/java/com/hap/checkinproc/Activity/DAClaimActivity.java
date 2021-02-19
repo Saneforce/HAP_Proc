@@ -47,10 +47,5 @@ public class DAClaimActivity extends AppCompatActivity {
         }
 
 
-
-
-
-
-
     }
 }
