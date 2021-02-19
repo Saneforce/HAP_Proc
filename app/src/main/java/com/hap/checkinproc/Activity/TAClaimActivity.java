@@ -127,7 +127,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             fuelAmount, TextTotalAmount, editTexts, oeEditext, localText, OeText, grandTotal, txtallamt, txt_BrdAmt,
             txt_DrvBrdAmt, txtJointAdd, txtJNEligi;
 
-    EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt,edt1, edt_ldg_JnEmp,
+    EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt, edt1, edt_ldg_JnEmp,
             edt_ldg_bill, edtLcFare, lodgStyLocation;
 
     ImageView deleteButton, previewss, taAttach, lcAttach, oeAttach, lcPreview, oePreview, endkmimage, startkmimage,
@@ -138,7 +138,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             attachment = "", maxAllowonce = "", strRetriveType = "", StrToEnd = "", StrBus = "", StrTo = "", StrDaName = "",
             OEdynamicLabel = "", strFuelAmount = "", StrModeValue = "", dynamicLabel = "", StrDailyAllowance = "", ldgEmpName = "",
             witOutBill = "", ValCd = "", fullPath = "", filePath = "", editMode = "", allowanceAmt = "", myldgEliAmt = "", myBrdEliAmt = "",
-            drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "";
+            drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "", finalPath = "", attach_Count = "";
 
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, taCount = 0, oeCount = 0, editTextPositionss;
 
@@ -158,7 +158,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     ArrayList<String> OE = new ArrayList<>();
     ArrayList<String> LC = new ArrayList<>();
     ArrayList<String> temaplateList;
-    ArrayList<String> OEdynamicList, dynamicLabelList;
+    ArrayList<String> OEdynamicList, dynamicLabelList, attachCountList;
     ArrayList<String> lcString = new ArrayList<>();
     ArrayList<String> zero = new ArrayList<>();
     ArrayList<String> nonZero = new ArrayList<>();
@@ -210,6 +210,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         temaplateList = new ArrayList<>();
         dynamicLabelList = new ArrayList<>();
         OEdynamicList = new ArrayList<>();
+        attachCountList = new ArrayList<>();
 
 
         txt_date = findViewById(R.id.txt_date);
@@ -902,24 +903,24 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-public void SumOFLCAmount()
-{
-    sum =0.0;
-    int lcSize = linlocalCon.getChildCount();
-    for (int k = 0; k < lcSize; k++) {
-        View cv = linlocalCon.getChildAt(k);
-        editLaFare = (EditText) (cv.findViewById(R.id.edt_la_fare));
-        String str = editLaFare.getText().toString();
-        if (str.matches("")) str = "0";
-        sum = sum + Double.parseDouble(str);
-        sums = GrandTotalAllowance + sum;
+    public void SumOFLCAmount() {
+        sum = 0.0;
+        int lcSize = linlocalCon.getChildCount();
+        for (int k = 0; k < lcSize; k++) {
+            View cv = linlocalCon.getChildAt(k);
+            editLaFare = (EditText) (cv.findViewById(R.id.edt_la_fare));
+            String str = editLaFare.getText().toString();
+            if (str.matches("")) str = "0";
+            sum = sum + Double.parseDouble(str);
+            sums = GrandTotalAllowance + sum;
+        }
+        localText.setText("Rs. " + new DecimalFormat("##0.00").format(sum));
+        localCov = sum;
+
+
+        calOverAllTotal(localCov, otherExp);
     }
-    localText.setText("Rs. " + new DecimalFormat("##0.00").format(sum));
-    localCov = sum;
 
-
-    calOverAllTotal(localCov, otherExp);
-}
     public void SumOFOTAmount() {
         Double sumsTot = 0.0;
         int OeSize = LinearOtherAllowance.getChildCount();
@@ -936,6 +937,7 @@ public void SumOFLCAmount()
 
         calOverAllTotal(localCov, otherExp);
     }
+
     public void SumOFDAAmount() {
         String sAmt = txtallamt.getText().toString().replaceAll("Rs. ", "");
         String sBrdAmt = txt_BrdAmt.getText().toString().replaceAll("Rs. ", "");
@@ -1131,7 +1133,7 @@ public void SumOFLCAmount()
                     PersonalKm = jsonObject.get("Personal_Km").getAsString();
                     DriverNeed = jsonObject.get("driverAllowance").getAsString();
 
-                    Log.v("DRIVER", DriverNeed);
+                    Log.v("DRIVER", ClosingKm);
 
                     Glide.with(getApplicationContext())
                             .load(start_Image.replaceAll("^[\"']+|[\"']+$", ""))
@@ -1140,8 +1142,48 @@ public void SumOFLCAmount()
                             .load(End_Imge.replaceAll("^[\"']+|[\"']+$", ""))
                             .into(endkmimage);
 
-                    fAmount = Double.valueOf(strFuelAmount);
-                    fuelAmount.setText(" Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM ");
+                    if (StartedKm != null && !StartedKm.isEmpty() && !StartedKm.equals("null") && !StartedKm.equals("")) {
+                        S = Integer.valueOf(StartedKm);
+                        TxtStartedKm.setText(StartedKm);
+                        fAmount = Double.valueOf(strFuelAmount);
+                        fuelAmount.setText(" Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM ");
+                    }
+                    if (!ClosingKm.equals("0")) {
+
+
+                        StartedKm = StartedKm.replaceAll("^[\"']+|[\"']+$", "");
+
+
+                        PersonalKm = PersonalKm.replaceAll("^[\"']+|[\"']+$", "");
+
+                        if (PersonalKm.equals("null")) {
+                            PersonalKiloMeter.setText("0");
+                        } else {
+                            PersonalKiloMeter.setText(PersonalKm);
+                        }
+
+                        if (ClosingKm != null && !ClosingKm.isEmpty() && !ClosingKm.equals("null") && !ClosingKm.equals("")) {
+                            ClosingKm = ClosingKm.replaceAll("^[\"']+|[\"']+$", "");
+                            TxtClosingKm.setText(ClosingKm);
+                            C = Integer.valueOf(ClosingKm);
+                            totalkm = C - S;
+
+                        }
+
+                        if (PersonalKm != null && !PersonalKm.isEmpty() && !PersonalKm.equals("null") && !PersonalKm.equals("")) {
+                            PersonalKm = PersonalKm.replaceAll("^[\"']+|[\"']+$", "");
+                            Pva = Integer.valueOf(PersonalKm);
+                            totalPersonalKm = totalkm - Pva;
+                            PersonalTextKM.setText(String.valueOf(totalPersonalKm));
+                        }
+
+                        Double totalAmount = Double.valueOf(strFuelAmount);
+                        tofuel = totalPersonalKm * totalAmount;
+                        TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(tofuel));
+                        TotalTravelledKm.setText(String.valueOf(totalkm));
+                    }
+
+
                     txtTaClaim.setText(StrDaName);
 
 
@@ -1225,7 +1267,6 @@ public void SumOFLCAmount()
                                 }
                             });
 
-
                             previewss = (ImageView) (views.findViewById(R.id.image_preview));
                             previewss.setOnClickListener(new View.OnClickListener() {
                                 @Override
@@ -1254,7 +1295,12 @@ public void SumOFLCAmount()
                                 editText.setOnClickListener(null);
                                 editText.setClickable(false);
                                 enterFrom.setEnabled(false);
-                                enterTo.setEnabled(false);
+                                if (tldraftJson.get("To_P").getAsString().equals("")) {
+
+                                } else {
+                                    enterTo.setEnabled(false);
+                                }
+
                             }
 
 
@@ -1283,44 +1329,10 @@ public void SumOFLCAmount()
                         linBikeMode.setVisibility(View.VISIBLE);
                     }
 
-                    StartedKm = StartedKm.replaceAll("^[\"']+|[\"']+$", "");
-                    if (StartedKm != null && !StartedKm.isEmpty() && !StartedKm.equals("null") && !StartedKm.equals("")) {
-                        S = Integer.valueOf(StartedKm);
-                        TxtStartedKm.setText(StartedKm);
-                    } else {
 
-                    }
-
-                    PersonalKm = PersonalKm.replaceAll("^[\"']+|[\"']+$", "");
-
-                    if (PersonalKm.equals("null")) {
-                        PersonalKiloMeter.setText("0");
-                    } else {
-                        PersonalKiloMeter.setText(PersonalKm);
-                    }
-
-                    if (ClosingKm != null && !ClosingKm.isEmpty() && !ClosingKm.equals("null") && !ClosingKm.equals("")) {
-                        ClosingKm = ClosingKm.replaceAll("^[\"']+|[\"']+$", "");
-                        TxtClosingKm.setText(ClosingKm);
-                        C = Integer.valueOf(ClosingKm);
-                        totalkm = C - S;
-
-                    }
-
-                    if (PersonalKm != null && !PersonalKm.isEmpty() && !PersonalKm.equals("null") && !PersonalKm.equals("")) {
-                        PersonalKm = PersonalKm.replaceAll("^[\"']+|[\"']+$", "");
-                        Pva = Integer.valueOf(PersonalKm);
-                        totalPersonalKm = totalkm - Pva;
-                        PersonalTextKM.setText(String.valueOf(totalPersonalKm));
-                    }
-
-                    Double totalAmount = Double.valueOf(strFuelAmount);
-                    tofuel = totalPersonalKm * totalAmount;
-                    TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(tofuel));
-                    TotalTravelledKm.setText(String.valueOf(totalkm));
                 }
                 GrandTotalAllowance = doubleAmount + tofuel;
-                calOverAllTotal(localCov, otherExp);//grandTotal.setText("Rs. " + GrandTotalAllowance.toString());
+                // calOverAllTotal(localCov, otherExp);//grandTotal.setText("Rs. " + GrandTotalAllowance.toString());
                 /*Local Convenyance*/
                 if (lcDraftArray != null || lcDraftArray.size() != 0) {
                     localConDraft(lcDraftArray);
@@ -1431,15 +1443,16 @@ public void SumOFLCAmount()
         SumOFLCAmount();
     }
 
-
     public void OeDraft(JsonArray oEDraft) {
         //  JsonArray jsonAddition = null;
+
+        oEString.add(new ArrayList<>());
         for (int i = 0; i < oEDraft.size(); i++) {
-            Integer oESIZE = i;
+
             JsonObject lcdraftJson = (JsonObject) oEDraft.get(i);
             // jsonAddition = lcdraftJson.getAsJsonArray("Additional");
 
-            String expCode = String.valueOf(lcdraftJson.get("Exp_Code"));
+            String expCode = lcdraftJson.get("Exp_Code").getAsString();
 
             expCode = expCode.replaceAll("^[\"']+|[\"']+$", "");
 
@@ -1447,92 +1460,98 @@ public void SumOFLCAmount()
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View rowView = null;
 
+
+            otherTotal.setVisibility(View.VISIBLE);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
             layoutParams.setMargins(15, 15, 15, 15);
 
+            oEString.add(new ArrayList<>());
+
             rowView = inflater.inflate(R.layout.activity_other_expense, null);
-
-
             LinearOtherAllowance.addView(rowView, layoutParams);
-            otherTotal.setVisibility(View.VISIBLE);
-            int lcS = LinearOtherAllowance.getChildCount() - 1;
+            OeSize = LinearOtherAllowance.getChildCount();
+
+            View childViews = LinearOtherAllowance.getChildAt(i);
+            oeAttach = (ImageView) (childViews.findViewById(R.id.oe_attach_img));
+            oePreview = (ImageView) (childViews.findViewById(R.id.img_prvw_oe));
+            if (lcdraftJson.get("Attachments").getAsString().equals("1")) {
+                oeAttach.setVisibility(View.VISIBLE);
+                oePreview.setVisibility(View.VISIBLE);
+            } else {
+                oeAttach.setVisibility(View.GONE);
+                oePreview.setVisibility(View.GONE);
+            }
+
+            for (int c = 0; c < OeSize; c++) {
+
+                Integer oESIZE = c;
+                childView = LinearOtherAllowance.getChildAt(c);
+                otherExpenseLayout.setVisibility(View.VISIBLE);
+                oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
+                edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
+                oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
+                oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
+                linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
 
 
-            childView = LinearOtherAllowance.getChildAt(i);
-            otherExpenseLayout.setVisibility(View.VISIBLE);
-            oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
-            edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
-            oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
-            oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
-            linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
+                oeAttach.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        popupCapture(99);
+                    }
+                });
+
+                oePreview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        oeCount = oESIZE;
+
+                        oEArrayList = oEString.get(oeCount);
+                        if (oEArrayList.size() != 0) {
+                            Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                            stat.putExtra("Data", oEArrayList);
+                            startActivity(stat);
+                        } else {
+                            Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
 
 
-            oeAttach.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    popupCapture(99);
-                }
-            });
+                edtOE.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            oePreview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    oeCount = oESIZE;
-
-                    oEArrayList = oEString.get(oeCount);
-                    if (oEArrayList.size() != 0) {
-                        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-                        stat.putExtra("Data", oEArrayList);
-                        startActivity(stat);
-                    } else {
-                        Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
                     }
 
-                }
-            });
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
 
-            linOtherSpinner.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    OtherExpenseList.clear();
-                    OtherExpenseMode(lcS);
-                }
-            });
+                    @Override
+                    public void afterTextChanged(Editable s) {
 
-            edtOE.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        SumOFOTAmount();
 
-                }
+                    }
+                });
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
 
-                @Override
-                public void afterTextChanged(Editable s) {
+                OtherExpense = (LinearLayout) childView.findViewById(R.id.lin_other_expense_dynamic);
+                Integer finalC = c;
 
-                    SumOFOTAmount();
-                            /*for (int k = 0; k < OeSize; k++) {
-                                View cv = LinearOtherAllowance.getChildAt(k);
-                                edtOE = (EditText) (cv.findViewById(R.id.oe_fre_amt));
-                                String strs = edtOE.getText().toString();
-                                if (strs.matches("")) strs = "0";
-                                sumsTotss = sumsTotss + Double.parseDouble(strs);
+                linOtherSpinner.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        OtherExpenseList.clear();
+                        OtherExpenseMode(finalC);
+                    }
+                });
 
-                                sTotal = GrandTotalAllowance + sumsTotss;
-                            }
-                            OeText.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTotss));
-
-                            otherExp = sumsTotss;
-
-                            calOverAllTotal(localCov, otherExp);*/
-                }
-            });
-            //     localConDisplay(expCode, jsonAddition, lcS);
-
+            }
 
             oeEditext.setText(expCode);
             edtOE.setText(lcdraftJson.get("Exp_Amt").getAsString());
@@ -1576,6 +1595,7 @@ public void SumOFLCAmount()
                 etrTaFr.setText(tldraftJson.get("From_P").getAsString());
                 etrTaTo.setText(tldraftJson.get("To_P").getAsString());
 
+
             }
 
         }
@@ -1586,33 +1606,6 @@ public void SumOFLCAmount()
 
     @SuppressLint("ResourceType")
     public void localConDisplay(String modeName, JsonArray jsonAddition, int position) {
-
-
-        /*
-        JSONObject json_in = additionArray.getJSONObject(l);
-        dynamicLabel = json_in.getString("Ad_Fld_Name");
-        dynamicLabelList.add(dynamicLabel);
-        RelativeLayout childRel = new RelativeLayout(getApplicationContext());
-        RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-        layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_START);
-        layoutparams_3.setMargins(20, -10, 0, 0);
-        edt = new EditText(getApplicationContext());
-        edt.setLayoutParams(layoutparams_3);
-        edt.setHint(dynamicLabel);
-        edt.setId(12345);
-        edt.setTextSize(13);
-        edt.setTextColor(R.color.grey_500);
-        childRel.addView(edt);
-        users.add(edt);
-
-        if (l == additionArray.length() - 1) {
-            usersByCountry.put(sss, users);
-        }
-        View view = linlocalCon.getChildAt(editTextPositionss);
-        Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
-        Dynamicallowance.addView(childRel);
-        */
-
 
         JsonObject jsonObjectAdd = null;
         List<EditText> users = new ArrayList<>();
@@ -1730,14 +1723,14 @@ public void SumOFLCAmount()
             }
         } else if (requestCode == 143 && resultCode == Activity.RESULT_OK) {
 
-            String finalPath = "/storage/emulated/0";
+            finalPath = "/storage/emulated/0";
             filePath = outputFileUri.getPath();
             filePath = filePath.substring(1);
             filePath = finalPath + filePath.substring(filePath.indexOf("/"));
             lodgArrLst.add(filePath);
             getMulipart(filePath, 0);
         } else if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
-            String finalPath = "/storage/emulated/0";
+            finalPath = "/storage/emulated/0";
             filePath = outputFileUri.getPath();
             filePath = filePath.substring(1);
             filePath = finalPath + filePath.substring(filePath.indexOf("/"));
@@ -1745,7 +1738,7 @@ public void SumOFLCAmount()
             getMulipart(filePath, 0);
         } else if (requestCode == 99 && resultCode == Activity.RESULT_OK) {
 
-            String finalPath = "/storage/emulated/0";
+            finalPath = "/storage/emulated/0";
             filePath = outputFileUri.getPath();
             filePath = filePath.substring(1);
             filePath = finalPath + filePath.substring(filePath.indexOf("/"));
@@ -1758,6 +1751,8 @@ public void SumOFLCAmount()
 
     public void submitData(String responseVal) {
 
+
+        Log.e("COUNTATTACH", attachCountList.toString());
 
         JSONArray transHead = new JSONArray();
         JSONObject transJson = new JSONObject();
@@ -1795,7 +1790,6 @@ public void SumOFLCAmount()
             daAll.put("drvBrdAmt", drvBrdAmt);
             /*  daAll.put("da_amt", TotDA);
              */
-
 
 
             /*Lodging Save*/
@@ -1878,9 +1872,7 @@ public void SumOFLCAmount()
                     trvLoc.put(jsonTrLoc);
                 }
 
-
             } else {
-
 
                 Log.v("TRAVEl_LOCATION", "0");
                 for (int i = 0; i < travelBike; i++) {
@@ -1894,7 +1886,6 @@ public void SumOFLCAmount()
                 }
             }
             trDet.put("trv_loca", trvLoc);
-
 
             /*Local Convenyance*/
             JSONArray addExp = new JSONArray();
@@ -1922,10 +1913,6 @@ public void SumOFLCAmount()
                 for (int da = 0; da < newEdt.size(); da++) {
 
                     JSONObject AditionallLocalConvenyance = new JSONObject();
-      /*              Log.e("LOCAL_EXP", newEdt.toString());
-                    Log.e("LOCAL_EXP", newEdt.get(lc).getText().toString());
-                    Log.e("LOCAL_EXP", dynamicLabelList.get(da));
-                    Log.e("LOCAL_EXP", newEdt.get(da).getText().toString());*/
                     AditionallLocalConvenyance.put("KEY", dynamicLabelList.get(da));
                     AditionallLocalConvenyance.put("VALUE", newEdt.get(da).getText().toString());
                     lcModeRef.put(AditionallLocalConvenyance);
@@ -1958,6 +1945,7 @@ public void SumOFLCAmount()
                 newEdt = usersByCountry.get(editMode);
                 JSONObject lcModes2 = new JSONObject();
                 lcModes2.put("type", editMode);
+                lcModes2.put("attach_count", AttachmentImg.get(editMode));
                 lcModes2.put("total_amount", edtOE.getText().toString());
                 lcModes2.put("exp_type", "OE");
 
@@ -1973,6 +1961,8 @@ public void SumOFLCAmount()
                 }
                 lcModes2.put("ad_exp", lcModeRef1);*/
                 othrExp.put(lcModes2);
+
+                Log.v("OE_EXPENSE", lcModes2.toString());
 
             }
 
@@ -1993,6 +1983,8 @@ public void SumOFLCAmount()
             Log.e("TOTAL_JSON_OUT", e.toString());
         }
 
+        /*ImageStore();*/
+
         Call<ResponseBody> submit;
         if (responseVal.equals("Save")) {
             submit = apiInterface.saveDailyAllowance(jsonData.toString());
@@ -2002,7 +1994,7 @@ public void SumOFLCAmount()
         submit.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                // startActivity(new Intent(getApplicationContext(), Dashboard.class));
                 Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
             }
 
@@ -2165,6 +2157,8 @@ public void SumOFLCAmount()
                                 attachment = json_oo.getString("Attachemnt");
                                 maxAllowonce = json_oo.getString("Max_Allowance");
 
+                                Log.e("COUNTATTACH", attachment.toString());
+
                                 listValue.add(shortName);
                                 AttachmentImg.put(Exp_Name, attachment);
 
@@ -2294,6 +2288,7 @@ public void SumOFLCAmount()
             Dynamicallowance.removeAllViews();
             LocalConvenyanceApi(StrModeValue);
 
+
             if (AttachmentImg.get(StrModeValue).equals("1")) {
                 lcAttach.setVisibility(View.VISIBLE);
                 lcPreview.setVisibility(View.VISIBLE);
@@ -2316,6 +2311,11 @@ public void SumOFLCAmount()
             Log.e("StrMode", StrModeValue);
             OtherExpense.removeAllViews();
             OtherExpenseApi(StrModeValue);
+
+            attachCountList.add(AttachmentImg.get(StrModeValue));
+            Log.e("COUNTATTACH", attachCountList.toString());
+            Log.e("COUNTATTACH", AttachmentImg.get(StrModeValue));
+
 
             if (AttachmentImg.get(StrModeValue).equals("1")) {
                 oeAttach.setVisibility(View.VISIBLE);
@@ -2686,5 +2686,46 @@ public void SumOFLCAmount()
     public void onBackPressed() {
 
     }
+
+
+   /* public void ImageStore() {
+
+
+        JSONArray trvLocs = new JSONArray();
+        int travelBike = travelDynamicLoaction.getChildCount();
+
+        JSONObject jsonTrLocss = new JSONObject();
+
+        try {
+            jsonTrLocss.put("SF_Code", "MGR5120");
+            jsonTrLocss.put("Date", "2021-02-19");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < travelBike; i++) {
+            JSONObject jsonTrLocs = new JSONObject();
+
+            View views = travelDynamicLoaction.getChildAt(i);
+            editText = views.findViewById(R.id.enter_mode);
+            enterFrom = views.findViewById(R.id.enter_from);
+            enterTo = views.findViewById(R.id.enter_to);
+            enterFare = views.findViewById(R.id.enter_fare);
+            deleteButton = findViewById(R.id.delete_button);
+            try {
+                jsonTrLocs.put("mode", editText.getText().toString());
+                jsonTrLocs.put("from", enterFrom.getText().toString());
+                jsonTrLocs.put("to", enterTo.getText().toString());
+                jsonTrLocs.put("fare", enterFare.getText().toString());
+                jsonTrLocs.put("Value", jsonTrLocss);
+                trvLocs.put(jsonTrLocs);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        Log.v("IMAGE_URl", trvLocs.toString());
+
+    }*/
 
 }

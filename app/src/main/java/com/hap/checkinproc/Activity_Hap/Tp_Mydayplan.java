@@ -68,9 +68,7 @@ import static com.hap.checkinproc.Common_Class.Common_Class.addquote;
 public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface {
     Spinner worktypespinner, worktypedistributor, worktyperoute;
     List<Common_Model> worktypelist = new ArrayList<>();
-    List<Common_Model> Route_Masterlist = new ArrayList<>(
-    );
-    ;
+    List<Common_Model> Route_Masterlist = new ArrayList<>();
     List<Common_Model> FRoute_Master = new ArrayList<>();
     LinearLayout worktypelayout, distributors_layout, route_layout, joint_work_Caption;
     List<Common_Model> distributor_master = new ArrayList<>();
@@ -92,11 +90,11 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     ImageView backarow;
     ProgressBar progressbar;
     TextView worktype_text, distributor_text, route_text, text_tour_plancount, hq_text, shift_type, chilling_text, Remarkscaption;
-    ;
+
     TextView tourdate;
     Common_Model Model_Pojo;
-    LinearLayout jointwork_layout, joint_work_Recyclerview, hqlayout, shiftypelayout, Procrumentlayout, chillinglayout;
-    ;
+    LinearLayout BusTo, jointwork_layout, joint_work_Recyclerview, hqlayout, shiftypelayout, Procrumentlayout, chillinglayout;
+
     RecyclerView jointwork_recycler;
     ImageView image;
     int joint_flag = 0;
@@ -166,7 +164,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         joint_work_Caption = findViewById(R.id.joint_work_lt);
         joint_work_Recyclerview = findViewById(R.id.joint_work_listlt);
 
-
+        BusTo = findViewById(R.id.lin_to_place);
 
         submitbutton.setOnClickListener(this);
         worktypelayout.setOnClickListener(this);
@@ -394,6 +392,12 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         } else if (type == 100) {
             String TrTyp = myDataset.get(position).getName();
             dailyAllowance.setText(TrTyp);
+            if (TrTyp.equals("HQ")) {
+                BusTo.setVisibility(View.GONE);
+            } else {
+                BusTo.setVisibility(View.VISIBLE);
+            }
+            TextToAddress.setText("");
         } else {
             chilling_text.setText(myDataset.get(position).getName());
             Chilling_Id = myDataset.get(position).getId();
@@ -800,6 +804,12 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                         worktype_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("worktype_name")));
                         TextMode.setText(String.valueOf(jsoncc.getJSONObject(0).get("MOT")));
                         BusFrom.setText(String.valueOf(jsoncc.getJSONObject(0).get("From_Place")));
+
+                        if(jsoncc.getJSONObject(0).get("DA_Type").equals("HQ")){
+                            BusTo.setVisibility(View.GONE);
+                        }else {
+                            BusTo.setVisibility(View.VISIBLE);
+                        }
                         TextToAddress.setText(String.valueOf(jsoncc.getJSONObject(0).get("To_Place")));
                         dailyAllowance.setText(String.valueOf(jsoncc.getJSONObject(0).get("DA_Type")));
                         if (String.valueOf(jsoncc.getJSONObject(0).get("Driver_Allow")).equals("1")) {

@@ -81,7 +81,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
 
     /*String Mode = "Bus";*/
-    CardView gateIn_gateOut;
+    CardView gateIn_gateOut,gateOut_gateIn;
 
     String dashMdeCnt = "";
 
@@ -151,6 +151,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         CardView cardview4 = findViewById(R.id.cardview4);
         CardView cardView5 = findViewById(R.id.cardview5);
         gateIn_gateOut = findViewById(R.id.btn_gate_in);
+        gateOut_gateIn = findViewById(R.id.btn_gate_out);
 
 
         StActivity = findViewById(R.id.StActivity);
@@ -515,7 +516,15 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 intent = new Intent(this, Reports.class);
                 break;
             case R.id.btn_gate_in:
-                startActivity(new Intent(this, QRCodeScanner.class));
+                intent = new Intent(this, QRCodeScanner.class);
+                intent.putExtra("Name","GateIn");
+                startActivity(intent);
+              /*  startActivity(new Intent(this, QRCodeScanner.class));*/
+                break; case R.id.btn_gate_out:
+                intent = new Intent(this, QRCodeScanner.class);
+                intent.putExtra("Name","GateOut");
+                startActivity(intent);
+              /*  startActivity(new Intent(this, QRCodeScanner.class));*/
                 break;
             case R.id.StActivity:
                 new AlertDialog.Builder(Dashboard_Two.this)

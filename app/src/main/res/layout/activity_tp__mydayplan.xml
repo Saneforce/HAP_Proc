@@ -518,7 +518,6 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="5dp"
-
                                         android:fontFamily="@font/basic"
                                         android:text="Mode of Travel"
                                         android:textAllCaps="false"
@@ -674,6 +673,7 @@
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
+                                        android:id="@+id/lin_to_place"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical">
 

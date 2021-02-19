@@ -55,7 +55,7 @@ public class QRCodeScanner extends AppCompatActivity {
     String intentData = "";
     boolean isEmail = false;
     String[] arrSplit;
-    String latlon = "";
+    String latlon = "",NameValue="";
 
     private FusedLocationProviderClient fusedLocationClient;
 
@@ -64,6 +64,8 @@ public class QRCodeScanner extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_q_r_code_scanner);
         initViews();
+
+        NameValue = String.valueOf(getIntent().getSerializableExtra("Name"));
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -174,7 +176,7 @@ public class QRCodeScanner extends AppCompatActivity {
                                 if (!intentData.equals("")) {
                                     Log.e("INTENT_DATA", intentData);
                                     arrSplit = intentData.split(",");
-                                    GateIn("GateOut", arrSplit, 1);
+                                    GateIn(NameValue, arrSplit, 1);
                                     Log.e("INTENT_DATA", arrSplit[0]);
                                     Log.e("INTENT_DATA", arrSplit[1]);
                                     Log.e("INTENT_DATA", arrSplit[2]);
