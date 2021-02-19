@@ -3,7 +3,6 @@ package com.hap.checkinproc.Activity_Hap;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseArray;
@@ -38,6 +37,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,7 +55,7 @@ public class QRCodeScanner extends AppCompatActivity {
     String intentData = "";
     boolean isEmail = false;
     String[] arrSplit;
-    String latlon="";
+    String latlon = "";
 
     private FusedLocationProviderClient fusedLocationClient;
 
@@ -84,7 +84,7 @@ public class QRCodeScanner extends AppCompatActivity {
                         if (location != null) {
                             Log.v("Loaction", String.valueOf(location.getLatitude()));
                             Log.v("Loaction", String.valueOf(location.getLongitude()));
-                            latlon = location.getLatitude() +","+location.getLongitude();
+                            latlon = location.getLatitude() + "," + location.getLongitude();
                         }
                     }
                 });
@@ -174,7 +174,7 @@ public class QRCodeScanner extends AppCompatActivity {
                                 if (!intentData.equals("")) {
                                     Log.e("INTENT_DATA", intentData);
                                     arrSplit = intentData.split(",");
-
+                                    GateIn("GateOut", arrSplit, 1);
                                     Log.e("INTENT_DATA", arrSplit[0]);
                                     Log.e("INTENT_DATA", arrSplit[1]);
                                     Log.e("INTENT_DATA", arrSplit[2]);
@@ -194,12 +194,27 @@ public class QRCodeScanner extends AppCompatActivity {
     }
 
 
+    private void GateIn(String Name, String[] arrSplit, int flag) {
 
 
+        Calendar calendar;
+        SimpleDateFormat dateFormat,dateTime,time;
+        String date,dateTi,ti;
 
-/*    private void GateIn(String Name, int flag) {
+        calendar = Calendar.getInstance();
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        time = new SimpleDateFormat("hh:mm:ss");
+        date = dateFormat.format(calendar.getTime());
+        dateTi = dateTime.format(calendar.getTime());
+        ti = time.format(calendar.getTime());
+        Log.v("DATE_ONLY", date);
+        Log.v("DATE_ONLY", dateTi);
+        Log.v("DATE_ONLY", ti);
+
 
         DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd");
+
         DateFormat dfw2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         DateFormat dfw3 = new SimpleDateFormat("hh:mm:ss");
 
@@ -209,38 +224,29 @@ public class QRCodeScanner extends AppCompatActivity {
         QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
         QueryString.put("State_Code", Shared_Common_Pref.Div_Code);
         QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-      //  QueryString.put("duty_id", duty_id);
+        //  QueryString.put("duty_id", duty_id);
 
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
         JSONObject sp = new JSONObject();
         try {
 
-         *//*   itm.HQLoc=res[0];
-            itm.HQLocID=res[1];
-            itm.Location=res[2];
-            itm.MajorType=res[4];
-            itm.latLng= _currentLocation.Latitude+":"+_currentLocation.Longitude;
-            itm.mode=res[3];
-            itm.time=new Date(tDate);
-            Cdate= new Date(tDate);
-            itm.eDate = Cdate.getFullYear() + "-" + (Cdate.getMonth() + 1) + "-" + Cdate.getDate() + " " + Cdate.getHours() + ":" + Cdate.getMinutes() + ":" + Cdate.getSeconds();
-            itm.eTime = Cdate.getHours() + ":" + Cdate.getMinutes() + ":" + Cdate.getSeconds();
 
-*//*
             sp.put("HQLoc", arrSplit[0]);
             sp.put("HQLocID", arrSplit[1]);
             sp.put("Location", latlon);
             sp.put("MajourType", arrSplit[4]);
-            sp.put("latLng", arrSplit[3]);
-            sp.put("mode", Sf_Code);
-            sp.put("time", dfw.toString());
-            sp.put("eDate", dfw2);
-            sp.put("eTime", dfw3);
+            sp.put("latLng", arrSplit[2]);
+            sp.put("mode", arrSplit[3]);
+            sp.put("time", date);
+            sp.put("eDate", dateTi);
+            sp.put("eTime", ti);
 
-
+          /*  Log.v("DATE_ONLY", date);
+            Log.v("DATE_ONLY", dateTi);
+            Log.v("DATE_ONLY", ti);*/
             jsonObject.put(Name, sp);
-        }  catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
         jsonArray.put(jsonObject);
@@ -255,16 +261,16 @@ public class QRCodeScanner extends AppCompatActivity {
                 // locationList=response.body();
                 Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
                 try {
-                   // common_class.CommonIntentwithFinish(Onduty_approval.class);
+                    // common_class.CommonIntentwithFinish(Onduty_approval.class);
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                    if (flag == 1) {
-                       // common_class.ProgressdialogShow(2, "");
+                   /* if (flag == 1) {
+                        // common_class.ProgressdialogShow(2, "");
                         Toast.makeText(getApplicationContext(), "Holiday  Approved Successfully", Toast.LENGTH_SHORT).show();
                     } else {
-                      //  common_class.ProgressdialogShow(2, "");
+                        //  common_class.ProgressdialogShow(2, "");
                         Toast.makeText(getApplicationContext(), "Holiday Rejected  Successfully", Toast.LENGTH_SHORT).show();
 
-                    }
+                    }*/
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -273,10 +279,10 @@ public class QRCodeScanner extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-              //  common_class.ProgressdialogShow(2, "");
+                //  common_class.ProgressdialogShow(2, "");
             }
         });
-    }*/
+    }
 
 
     @Override
