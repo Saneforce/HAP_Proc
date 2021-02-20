@@ -43,7 +43,7 @@ import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class TaApprovalDisplay extends AppCompatActivity {
 
-    TextView txtDate, txtName, txtTotalAmt, txtHQ, txtTrvlMode, txtDesig, txtDept, txtDA, txtTL, txtLA, txtLC, txtOE,  txtReject;
+    TextView txtTaAmt,txtDate, txtName, txtTotalAmt, txtHQ, txtTrvlMode, txtDesig, txtDept, txtDA, txtTL, txtLA, txtLC, txtOE,  txtReject;
     Common_Class common_class;
     Shared_Common_Pref mShared_common_pref;
     String date = " ", SlStart = "", TotalAmt = "", sfCode = "",STEND="",SDA="",SLC="",SOE="";
@@ -79,6 +79,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
         linAccept = findViewById(R.id.lin_accp);
         linReject = findViewById(R.id.rejectonly);
         txtReject = findViewById(R.id.L_rejectsave);
+        txtTaAmt = findViewById(R.id.txt_tvrl_amt);
 
         appCompatEditText = findViewById(R.id.reason);
         txtReject.setOnClickListener(new View.OnClickListener() {
@@ -234,7 +235,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
                     txtLA.setText("Rs." + jsonObject.get("Ldg_totalAmt").getAsString() + ".00");
                     txtLC.setText("Rs." + jsonObject.get("Lc_totalAmt").getAsString() + ".00");
                     txtOE.setText("Rs." + jsonObject.get("Oe_totalAmt").getAsString() + ".00");
-
+                    txtTaAmt.setText("Rs." + jsonObject.get("trv_lc_amt").getAsString() + ".00");
                     SDA = jsonObject.get("Boarding_Amt").getAsString();
                     SLC = jsonObject.get("Lc_totalAmt").getAsString();
                     SOE = jsonObject.get("Oe_totalAmt").getAsString();
@@ -349,7 +350,6 @@ public class TaApprovalDisplay extends AppCompatActivity {
                 ldArray = jsonObjects.getAsJsonArray("Lodging_Head");
                 daArray = jsonObjects.getAsJsonArray("Da_Claim");
 
-
                 Log.v("JSON_ARRAY", jsonArray.toString());
                 Log.v("jsonTravDetai", jsonTravDetai.toString());
                 Log.v("lcDraftArray", lcDraftArray.toString());
@@ -358,16 +358,11 @@ public class TaApprovalDisplay extends AppCompatActivity {
                 Log.v("ldArray", ldArray.toString());
                 Log.v("daArray", daArray.toString());
 
-
                 JsonObject jsonObject = null;
                 for (int i = 0; i < jsonArray.size(); i++) {
-
                     jsonObject = (JsonObject) jsonArray.get(i);
-
                     STEND = jsonObject.get("StEndNeed").getAsString();
-
                 }
-
 
             }
 

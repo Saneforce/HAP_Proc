@@ -680,6 +680,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             @Override
                             public void afterTextChanged(Editable s) {
                                 SumOFTAAmount();
+                                Log.v("SUM_OF_TOTAL", String.valueOf(s));
                             }
                         });
 
@@ -800,7 +801,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         }
 
         tlString.remove(v);
-
+        SumOFTAAmount();
     }
 
 
@@ -809,24 +810,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         if (linlocalCon.getChildCount() == 0) {
             localTotal.setVisibility(View.GONE);
         }
-        SumOFLCAmount();/*
-        Double sum = 0.0;
-
-        int lcSize = linlocalCon.getChildCount();
-
-        for (int k = 0; k < lcSize; k++) {
-            View view = linlocalCon.getChildAt(k);
-            editLaFare = (EditText) (view.findViewById(R.id.edt_la_fare));
-            String str = editLaFare.getText().toString();
-            if (str.matches("")) str = "0";
-            sum = sum + Double.parseDouble(str);
-            sums = GrandTotalAllowance + sum;
-        }
-        localText.setText("Rs. " + new DecimalFormat("##0.00").format(sum));
-        localCov = sum;
-
-
-        calOverAllTotal(localCov, otherExp);*/
+        SumOFLCAmount();
 
     }
 
@@ -923,8 +907,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         int lcSize = travelDynamicLoaction.getChildCount();
         for (int k = 0; k < lcSize; k++) {
             View cv = travelDynamicLoaction.getChildAt(k);
-            enterFare = childView.findViewById(R.id.enter_fare);
-            String str = editLaFare.getText().toString();
+            enterFare = cv.findViewById(R.id.enter_fare);
+            String str = enterFare.getText().toString();
             if (str.matches("")) str = "0";
             sumsTotss = sumsTotss + Double.parseDouble(str);
             sumsTa = GrandTotalAllowance + sumsTotss;
@@ -1295,6 +1279,23 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             enterFrom = views.findViewById(R.id.enter_from);
                             enterTo = views.findViewById(R.id.enter_to);
                             enterFare = views.findViewById(R.id.enter_fare);
+                            enterFare.addTextChangedListener(new TextWatcher() {
+                                @Override
+                                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                                }
+
+                                @Override
+                                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                }
+
+                                @Override
+                                public void afterTextChanged(Editable s) {
+                                    SumOFTAAmount();
+                                    Log.v("SUM_OF_TOTAL", String.valueOf(s));
+                                }
+                            });
+
                             deleteButton = views.findViewById(R.id.delete_button);
                             taAttach = (ImageView) views.findViewById(R.id.image_attach);
                             taAttach.setOnClickListener(new View.OnClickListener() {
@@ -1817,6 +1818,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             jsonData.put("total_ldg_amt", totLodgAmt);
             jsonData.put("ta_total_amount", tofuel);
             jsonData.put("drvBrdAmt", drvBrdAmt);
+            jsonData.put("trv_lc_amt", sumsTa);
             jsonData.put("gr_total", gTotal);
 
 

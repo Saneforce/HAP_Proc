@@ -45,6 +45,7 @@
             android:layout_weight="1"
             android:background="@drawable/blue_txt_bg"
             android:text="Open"
+            android:padding="@dimen/C5dp"
             android:textAlignment="center"
             android:textColor="@color/color_white" />
 
