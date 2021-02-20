@@ -945,7 +945,7 @@
                                 android:layout_height="1dp"
                                 android:layout_margin="@dimen/C10dp"
                                 android:background="@color/grey_300"
-                                android:visibility="gone"></View>
+                           ></View>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -954,7 +954,7 @@
                                 android:layout_marginRight="@dimen/C10dp"
                                 android:layout_marginBottom="@dimen/C5dp"
                                 android:orientation="horizontal"
-                                android:visibility="gone">
+                          >
 
                                 <TextView
                                     android:layout_width="match_parent"

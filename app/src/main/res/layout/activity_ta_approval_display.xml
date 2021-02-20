@@ -322,7 +322,7 @@
                                 android:textStyle="bold"></TextView>
 
                             <TextView
-
+android:id="@+id/txt_tvrl_amt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/C10dp"
