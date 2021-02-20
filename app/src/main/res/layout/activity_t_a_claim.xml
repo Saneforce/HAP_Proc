@@ -163,13 +163,15 @@
                 </LinearLayout>
 
                 <LinearLayout
+
                     android:id="@+id/lin_alo_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C8dp"
+                    android:visibility="gone"
                     android:layout_marginRight="@dimen/C8dp"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                  >
                     <!--Daily Allowance-->
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -911,6 +913,7 @@
                                         android:id="@+id/lin_travel_loaction"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+
                                         android:layout_alignParentLeft="true"
                                         android:layout_alignParentEnd="true"
                                         android:layout_alignParentRight="true"
@@ -937,42 +940,6 @@
                                 tools:ignore="MissingPrefix">
 
 
-                            </LinearLayout>
-
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:layout_margin="@dimen/C10dp"
-                                android:background="@color/grey_300"
-                           ></View>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/C10dp"
-                                android:layout_marginRight="@dimen/C10dp"
-                                android:layout_marginBottom="@dimen/C5dp"
-                                android:orientation="horizontal"
-                          >
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1"
-                                    android:text="Total"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/C15dp"
-                                    android:textStyle="bold"></TextView>
-
-                                <TextView
-                                    android:id="@+id/txt_trav_loca"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Rs. 0.00"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="@dimen/C15dp"
-                                    android:textStyle="bold"></TextView>
                             </LinearLayout>
 
                         </LinearLayout>
@@ -1315,7 +1282,7 @@
                                                 android:layout_marginLeft="@dimen/C8dp"
                                                 android:layout_marginRight="@dimen/C8dp"
                                                 android:layout_weight="1"
-                                                android:text="Driver Lodging"
+                                                android:text="Driver lodging"
                                                 android:textAllCaps="true"
                                                 android:textColor="#000"
                                                 android:textSize="10sp" />
@@ -1937,30 +1904,10 @@
                     android:textStyle="bold"
                     tools:ignore="RtlCompat" />
             </LinearLayout>
-
-
         </LinearLayout>
 
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#99ECEAEA"
-        android:id="@+id/lin_back"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints">
 
-        <ImageView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:id="@+id/imag_backs"
-            android:layout_margin="@dimen/C5dp"
-            android:paddingLeft="@dimen/C8dp"
-            android:paddingRight="@dimen/C8dp"
-            android:src="@drawable/back_arrow"></ImageView>
-
-
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
