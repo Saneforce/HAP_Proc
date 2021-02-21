@@ -159,7 +159,13 @@ public class AllowanceActivityTwo extends AppCompatActivity {
 
                     }
                     if (!EndedEditText.getText().toString().equals("")) {
-                        endKm = Integer.valueOf(EndedEditText.getText().toString());
+
+                        try{
+                            endKm = Integer.parseInt(EndedEditText.getText().toString());
+                        } catch(NumberFormatException ex){ // handle your exception
+
+                        }
+
                     }
                     Log.e("STARTED_KM", String.valueOf(endKm));
                     if (stKM < endKm) {

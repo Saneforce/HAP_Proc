@@ -84,6 +84,9 @@ public class OEClaimActivity extends AppCompatActivity {
                 oeEditext.setText(expCode);
                 edtOE.setText(oejsonArray.getString("Exp_Amt"));
 
+                oeEditext.setEnabled(false);
+                edtOE.setEnabled(false);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

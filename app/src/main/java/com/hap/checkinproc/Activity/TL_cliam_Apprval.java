@@ -46,9 +46,10 @@ public class TL_cliam_Apprval extends AppCompatActivity {
         try {
             jsonArray = new JSONArray(TLClaim);
             if (StrToEnd.equals("0")) {
-                trvldLocation(jsonArray);
-            } else {
                 trvldLocationBus(jsonArray);
+            } else {
+                trvldLocation(jsonArray);
+
             }
         } catch (JSONException e) {
             e.printStackTrace();

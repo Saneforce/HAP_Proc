@@ -104,6 +104,35 @@
                         android:orientation="vertical"
                         android:padding="@dimen/C5dp">
 
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C2dp">
+
+                            <TextView
+                                android:layout_width="@dimen/C100dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="Employee Id :"
+                                android:textAllCaps="false"
+                                android:textColor="@android:color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/txt_emp_id"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:layout_weight="1"
+                                android:baselineAligned="false"
+                                android:text=""
+                                tools:ignore="RtlCompat" />
+
+                        </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -225,6 +254,33 @@
                                 android:layout_width="@dimen/C100dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/basic"
+                                android:text="Mobile :"
+                                android:textAllCaps="false"
+                                android:textColor="@android:color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/txt_moble"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:layout_weight="1"
+                                android:baselineAligned="false"
+                                android:text=""
+                                tools:ignore="RtlCompat" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C2dp">
+
+                            <TextView
+                                android:layout_width="@dimen/C100dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
                                 android:text="Mode of Travel :"
                                 android:textAllCaps="false"
                                 android:textColor="@android:color/black"
@@ -232,6 +288,34 @@
 
                             <TextView
                                 android:id="@+id/txt_mde"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:layout_weight="1"
+                                android:baselineAligned="false"
+                                android:text=""
+                                tools:ignore="RtlCompat" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C2dp">
+
+                            <TextView
+                                android:layout_width="@dimen/C100dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="Travel Location :"
+                                android:textAllCaps="false"
+                                android:textColor="@android:color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/travel_loc"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
