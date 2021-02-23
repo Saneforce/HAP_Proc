@@ -39,6 +39,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -157,7 +158,17 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             e.printStackTrace();
         }
 
-        StartSelfiCamera();
+        CameraPermission cameraPermission = new CameraPermission(ImageCapture.this, getApplicationContext());
+
+        if (!cameraPermission.checkPermission()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                cameraPermission.requestPermission();
+            }
+            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+        } else {
+            Log.v("PERMISSION", "PERMISSION");
+            StartSelfiCamera();
+        }
 
 
         textureView = (TextureView) findViewById(R.id.ImagePreview);
@@ -230,7 +241,19 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         btnSwchCam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                StartSelfiCamera();
+                CameraPermission cameraPermission = new CameraPermission(ImageCapture.this, getApplicationContext());
+
+                if(!cameraPermission.checkPermission()){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        cameraPermission.requestPermission();
+                    }
+                    Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                } else {
+                    Log.v("PERMISSION", "PERMISSION");
+                    StartSelfiCamera();
+                }
+
+
             }
         });
         btnFlash.setOnClickListener(new View.OnClickListener() {
@@ -273,12 +296,11 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         try {
             mCamera.setPreviewDisplay(mHolder);
         } catch (IOException e) {
-            Toast.makeText(this,e.getMessage(),Toast.LENGTH_LONG);
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
             e.printStackTrace();
         }
         setCameraDisplayOrientation();
         mCamera.startPreview();
-
 
         Log.e("mCAmer_id", String.valueOf(mCamId));
     }
@@ -287,7 +309,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     public void takePicture() {
         long tsLong = System.currentTimeMillis() / 1000;
         imageFileName = Long.toString(tsLong) + ".jpg";
-
         //file  = new File(Environment.getExternalStorageDirectory() + "/"+ts+".jpg");
         imagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + imageFileName;
         file = new File(imagePath);
@@ -329,10 +350,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
 
-
         if (preview != null) {
-
-
             preview = null;
             mHolder.removeCallback(ImageCapture.this);
             mCamera.setPreviewCallback(null);

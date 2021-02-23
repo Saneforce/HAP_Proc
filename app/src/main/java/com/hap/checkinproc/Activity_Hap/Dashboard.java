@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -23,6 +25,7 @@ import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.BlurUtils;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
@@ -82,8 +85,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         lblEmail = (TextView) findViewById(R.id.lblEmail);
         profilePic = findViewById(R.id.profile_image);
 
-
-
         Get_MydayPlan(1, "check/mydayplan");
         shared_common_pref = new Shared_Common_Pref(this);
         CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
@@ -95,10 +96,19 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 /*
         editor.putString("url",profile);*/
 
+/*
+        ImageView inm= findViewById(R.id.imag);
+        Bitmap bitmap = ((BitmapDrawable) inm.getDrawable()).getBitmap();
+
+        //Let's apply Gaussian blur effect with radius "10.5" and set to ImageView.
+        inm.setImageBitmap(new BlurUtils().blur(Dashboard.this, bitmap, 10.5f));*/
 
         String eMail = UserDetails.getString("email", "");
         String sSFName = UserDetails.getString("SfName", "");
         String sSFType = UserDetails.getString("Sf_Type", "");
+
+
+        Log.e("DASHBORAD_SF",sSFType);
 
         imageProfile = UserDetails.getString("url", "");
         Log.e("CHECKING", imageProfile);
@@ -116,7 +126,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         linMyday = (findViewById(R.id.lin_myday_plan));
         linMyday.setVisibility(View.GONE);
-        if (sSFType == "1") linMyday.setVisibility(View.VISIBLE);
+        if (sSFType.equals("1")) linMyday.setVisibility(View.VISIBLE);
 
 
         linCheckin = (findViewById(R.id.lin_check_in));
@@ -124,12 +134,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linReport = (findViewById(R.id.lin_report));
         linOnDuty = (findViewById(R.id.lin_onduty));
         linOnDuty.setVisibility(View.GONE);
-        if (sSFType == "0") linOnDuty.setVisibility(View.VISIBLE);
+        if (sSFType.equals("0")) linOnDuty.setVisibility(View.VISIBLE);
         linApprovals = (findViewById(R.id.lin_approvals));
         linTaClaim = (findViewById(R.id.lin_ta_claim));
         linExtShift = (findViewById(R.id.lin_extenden_shift));
         linExtShift.setVisibility(View.GONE);
-        if (sSFType == "0") linExtShift.setVisibility(View.VISIBLE);
+        if (sSFType.equals("0")) linExtShift.setVisibility(View.VISIBLE);
         linTourPlan = (findViewById(R.id.lin_tour_plan));
         linHolidayWorking = findViewById(R.id.lin_holiday_working);
         linExit = (findViewById(R.id.lin_exit));

@@ -169,7 +169,8 @@
                     android:layout_marginLeft="@dimen/C8dp"
                     android:layout_marginRight="@dimen/C8dp"
                     android:orientation="vertical"
-                    android:visibility="gone">
+                    android:visibility="gone"
+                    >
                     <!--Daily Allowance-->
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -941,12 +942,14 @@
 
 
                             <View
+                                android:id="@+id/vw_tl"
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
                                 android:layout_margin="@dimen/C10dp"
                                 android:background="@color/grey_300"></View>
 
                             <LinearLayout
+                                android:id="@+id/lin_tl"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/C10dp"
@@ -1191,7 +1194,7 @@
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
                                                 android:layout_weight="1"
-                                                android:text="Joint Person Details"
+                                                android:text="Joined Person Details"
                                                 android:textAllCaps="true"
                                                 android:textColor="@color/colorPrimary"
                                                 android:textSize="12sp"

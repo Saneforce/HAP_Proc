@@ -364,4 +364,17 @@ public interface ApiInterface {
     Call<JsonObject> taApprove(@Field("data") String body);
 
 
+    @Multipart
+    @POST("db_new_activity.php?axn=upload/Taimg")
+    Call<ResponseBody> taImage(@Query("U_key") String keyCode,
+                               @Query("HeadTravel") String HeadTravel,
+                               @Query("Mode") String Mode,
+                               @Query("Date") String date,
+                               @Query("sfCode") String sfcode,
+                               @Query("From") String from,
+                               @Query("To") String To,
+                               @Part MultipartBody.Part file);
+
+
+
 }

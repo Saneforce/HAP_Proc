@@ -35,6 +35,7 @@ import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Activity_Hap.ImageCapture;
+import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -187,13 +188,23 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putString("Closing", EndedEditText.getText().toString());
-                editor.commit();
-                Intent intent = new Intent(AllowanceActivityTwo.this, AllowancCapture.class);
-                intent.putExtra("allowance", "Two");
-                startActivity(intent);
-                finish();
+                CameraPermission cameraPermission = new CameraPermission(AllowanceActivityTwo.this, getApplicationContext());
+
+                if(!cameraPermission.checkPermission()){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        cameraPermission.requestPermission();
+                    }
+                    Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                } else {
+                    Log.v("PERMISSION", "PERMISSION");
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putString("Closing", EndedEditText.getText().toString());
+                    editor.commit();
+                    Intent intent = new Intent(AllowanceActivityTwo.this, AllowancCapture.class);
+                    intent.putExtra("allowance", "Two");
+                    startActivity(intent);
+                    finish();
+                }
 
             }
         });
