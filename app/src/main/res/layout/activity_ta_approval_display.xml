@@ -115,7 +115,7 @@
                                 android:layout_width="@dimen/C100dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/basic"
-                                android:text="Employee Id :"
+                                android:text="Employee Id"
                                 android:textAllCaps="false"
                                 android:textColor="@android:color/black"
                                 android:textSize="14sp" />
@@ -143,7 +143,7 @@
                                 android:layout_width="@dimen/C100dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/basic"
-                                android:text="Name :"
+                                android:text="Name "
                                 android:textAllCaps="false"
                                 android:textColor="@android:color/black"
                                 android:textSize="14sp" />
@@ -171,7 +171,7 @@
                                 android:layout_width="@dimen/C100dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/basic"
-                                android:text="Headquater :"
+                                android:text="Headquater "
                                 android:textAllCaps="false"
                                 android:textColor="@android:color/black"
                                 android:textSize="14sp" />
@@ -199,7 +199,7 @@
                                 android:layout_width="@dimen/C100dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/basic"
-                                android:text="Designation :"
+                                android:text="Designation "
                                 android:textAllCaps="false"
                                 android:textColor="@android:color/black"
                                 android:textSize="14sp" />
@@ -227,7 +227,7 @@
                                 android:layout_width="@dimen/C100dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/basic"
-                                android:text="Department :"
+                                android:text="Department "
                                 android:textAllCaps="false"
                                 android:textColor="@android:color/black"
                                 android:textSize="14sp" />
@@ -254,7 +254,7 @@
                                 android:layout_width="@dimen/C100dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/basic"
-                                android:text="Mobile :"
+                                android:text="Mobile "
                                 android:textAllCaps="false"
                                 android:textColor="@android:color/black"
                                 android:textSize="14sp" />
@@ -281,7 +281,7 @@
                                 android:layout_width="@dimen/C100dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/basic"
-                                android:text="Mode of Travel :"
+                                android:text="Mode of Travel "
                                 android:textAllCaps="false"
                                 android:textColor="@android:color/black"
                                 android:textSize="14sp" />
@@ -303,6 +303,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
+                            android:visibility="gone"
                             android:padding="@dimen/C2dp">
 
                             <TextView

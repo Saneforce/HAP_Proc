@@ -35,6 +35,7 @@ import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Activity_Hap.ImageCapture;
+import com.hap.checkinproc.Activity_Hap.ProductImageView;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -43,6 +44,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -182,6 +184,18 @@ public class AllowanceActivityTwo extends AppCompatActivity {
 
             }
         });
+
+
+        if (!EndedImage.matches("")) {
+            EndedKmImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                    intent.putExtra("ImageUrl", EndedImage);
+                    startActivity(intent);
+                }
+            });
+        }
 
 
         takeEndedPhoto.setOnClickListener(new View.OnClickListener() {
@@ -405,6 +419,22 @@ public class AllowanceActivityTwo extends AppCompatActivity {
 
                                 Log.e("Text_Strat", TextStartedKm.getText().toString());
                                 Log.e("Text_Strat", json_oo.getString("start_Photo"));
+
+
+                                if (!json_oo.getString("start_Photo").matches("")) {
+                                    StartedKmImage.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                                            try {
+                                                intent.putExtra("ImageUrl", json_oo.getString("start_Photo"));
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            startActivity(intent);
+                                        }
+                                    });
+                                }
                             }
 
                         }

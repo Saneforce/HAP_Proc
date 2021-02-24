@@ -148,7 +148,6 @@ EventCaptureActivity extends AppCompatActivity {
         mEventCapture.setLayoutManager(layoutManager);
         mEventCapture.setNestedScrollingEnabled(false);
 
-
         RoomDataBase = mShaeShared_common_pref.getvalue("Event_Capture");
         // intent.putExtra("count",eventDb);
         Intent intnet = getIntent();

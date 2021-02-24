@@ -9,7 +9,6 @@ import com.hap.checkinproc.Model_Class.Location;
 import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.Model_Class.ReportDataList;
 import com.hap.checkinproc.Model_Class.RetailerViewDetails;
-import com.hap.checkinproc.Model_Class.Travel_Approval_Model;
 
 import java.util.HashMap;
 import java.util.List;
@@ -374,7 +373,6 @@ public interface ApiInterface {
                                @Query("From") String from,
                                @Query("To") String To,
                                @Part MultipartBody.Part file);
-
 
 
 }

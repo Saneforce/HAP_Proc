@@ -36,7 +36,11 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
-        <activity android:name=".Activity.FuelAllowance"></activity>
+        <activity
+            android:name=".Activity.PDFActivity"
+            android:theme="@style/AppTheme.Dialogs"></activity>
+        <activity android:name=".Activity.PdfViewerActivity" />
+        <activity android:name=".Activity.FuelAllowance" />
         <activity android:name=".Activity.TL_cliam_Apprval" />
         <activity android:name=".Activity.OEClaimActivity" />
         <activity android:name=".Activity.LocalConvenActivity" />
@@ -264,7 +268,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity_Hap.ProductImageView"
-            android:theme="@style/AppTheme.Dialog" />
+            android:theme="@style/AppTheme.Dialogs" />
 
         <service
             android:name=".common.SANGPSTracker"

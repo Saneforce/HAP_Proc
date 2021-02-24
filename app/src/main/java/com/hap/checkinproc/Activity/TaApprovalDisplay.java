@@ -35,7 +35,6 @@ import com.hap.checkinproc.R;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,10 +43,11 @@ import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class TaApprovalDisplay extends AppCompatActivity {
 
-    TextView txtTaAmt,txtDate, txtName, txtTotalAmt, txtHQ, txtTrvlMode, txtDesig, txtDept, txtDA, txtTL, txtLA, txtLC, txtOE,  txtReject;
+    TextView txtTaAmt, txtDate, txtName, txtTotalAmt, txtHQ, txtTrvlMode, txtDesig, txtDept, txtDA,
+            txtTL, txtLA, txtLC, txtOE, txtReject, txtEmpId, txtMobile;
     Common_Class common_class;
     Shared_Common_Pref mShared_common_pref;
-    String date = " ", SlStart = "", TotalAmt = "", sfCode = "",STEND="",SDA="",SLC="",SOE="";
+    String date = " ", SlStart = "", TotalAmt = "", sfCode = "", STEND = "", SDA = "", SLC = "", SOE = "";
     LinearLayout linAccept, linReject;
     AppCompatEditText appCompatEditText;
     JsonArray jsonArray = null;
@@ -81,6 +81,8 @@ public class TaApprovalDisplay extends AppCompatActivity {
         linReject = findViewById(R.id.rejectonly);
         txtReject = findViewById(R.id.L_rejectsave);
         txtTaAmt = findViewById(R.id.txt_tvrl_amt);
+        txtEmpId = findViewById(R.id.txt_emp_id);
+        txtMobile = findViewById(R.id.txt_moble);
 
         appCompatEditText = findViewById(R.id.reason);
         txtReject.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +106,10 @@ public class TaApprovalDisplay extends AppCompatActivity {
         txtDesig.setText(String.valueOf(getIntent().getSerializableExtra("desig")));
         txtDept.setText(String.valueOf(getIntent().getSerializableExtra("dept")));
         txtTrvlMode.setText(String.valueOf(getIntent().getSerializableExtra("travel_mode")));
+
+        txtEmpId.setText(String.valueOf(getIntent().getSerializableExtra("sf_emp_id")));
+        txtMobile.setText(String.valueOf(getIntent().getSerializableExtra("SF_Mobile")));
+
 
         SlStart = String.valueOf(getIntent().getSerializableExtra("Sl_No"));
         sfCode = String.valueOf(getIntent().getSerializableExtra("sfCode"));
@@ -373,7 +379,6 @@ public class TaApprovalDisplay extends AppCompatActivity {
             }
         });
     }
-
 
 
 }

@@ -545,24 +545,13 @@ public class Login extends AppCompatActivity {
                             // intent = new Intent(Login.this, AllowanceActivity.class);
                             intent = new Intent(Login.this, Dashboard_Two.class);
                             intent.putExtra("Mode", "RPT");
-                        }/*
-                        intent.putExtra("photo", photo);
-                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
-                        Intent intent;
-                        if (requestCode == RC_SIGN_IN)
-                           intent = new Intent(Login.this, Dashboard.class);
-                          //intent = new Intent(Login.this, EventCaptureActivity.class);
-                        else
-                            intent = new Intent(Login.this, Dashboard_Two.class);
-                        intent.putExtra("photo", photo);
-
-                        intent.putExtra("Mode", "CIN");*/
+                        }
                         String code = response.body().getData().get(0).getSfCode();
                         String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
                         String sName = response.body().getData().get(0).getSfName();
                         String div = response.body().getData().get(0).getDivisionCode();
                         Integer type = response.body().getData().get(0).getCheckCount();
-                        String DeptCd = response.body().getData().get(0).getDeptCd();
+                        String DeptCd = response.body().getData().get(0).getSFDept();
                         String DeptType = response.body().getData().get(0).getDeptType();
                         Integer OTFlg = response.body().getData().get(0).getOTFlg();
                         SharedPreferences.Editor editor = UserDetails.edit();
@@ -573,6 +562,11 @@ public class Login extends AppCompatActivity {
                         shared_common_pref.save(Shared_Common_Pref.Sf_Code, code);
                         shared_common_pref.save(Shared_Common_Pref.Div_Code, div);
                         shared_common_pref.save(Shared_Common_Pref.StateCode, Sf_type);
+                        shared_common_pref.save(Shared_Common_Pref.SF_EMP_ID, response.body().getData().get(0).getSfEmpId());
+                        shared_common_pref.save(Shared_Common_Pref.Sf_Name, response.body().getData().get(0).getSfName());
+
+                        shared_common_pref.save(Shared_Common_Pref.SF_DEPT, response.body().getData().get(0).getDeptName());
+                        shared_common_pref.save(Shared_Common_Pref.SF_DESIG, response.body().getData().get(0).getSfDesignationShortName());
 
                         shared_common_pref.save(Shared_Common_Pref.CHECK_COUNT, String.valueOf(type));
 
