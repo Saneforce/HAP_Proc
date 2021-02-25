@@ -10,6 +10,8 @@ import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.Model_Class.ReportDataList;
 import com.hap.checkinproc.Model_Class.RetailerViewDetails;
 
+import org.json.JSONArray;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -373,6 +375,19 @@ public interface ApiInterface {
                                @Query("From") String from,
                                @Query("To") String To,
                                @Part MultipartBody.Part file);
+
+
+
+    @POST("db_new_activity.php?axn=get/TA_Image")
+    Call<JsonArray> allPreview(@Query("U_key") String keyCode,
+                               @Query("HeadTravel") String HeadTravel,
+                               @Query("Mode") String Mode,
+                               @Query("Date") String date,
+                               @Query("sfCode") String sfcode);
+
+
+
+
 
 
 }

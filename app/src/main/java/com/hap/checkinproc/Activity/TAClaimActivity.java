@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity;
 
 import android.animation.ArgbEvaluator;
+import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
@@ -144,7 +145,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "",
             finalPath = "", attach_Count = "", ImageURl = "", keyEk = "EK", KeyDate = "", KeyHyp = "-", keyCodeValue = "";
 
-    Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, taCount = 0, oeCount = 0, editTextPositionss;
+    Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, taCount = 0, oeCount = 0, lcCount = 0, editTextPositionss;
 
     int size = 0, lcSize = 0, OeSize = 0, pos = -1;
 
@@ -163,13 +164,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     ArrayList<String> LC = new ArrayList<>();
     ArrayList<String> temaplateList;
     ArrayList<String> OEdynamicList, dynamicLabelList, attachCountList;
-    ArrayList<String> lcString = new ArrayList<>();
+
     ArrayList<String> zero = new ArrayList<>();
     ArrayList<String> nonZero = new ArrayList<>();
     ArrayList<String> lodgArrLst = new ArrayList<>();
     ArrayList<String> oEArrayList = new ArrayList<>();
+    ArrayList<String> lCArrayList = new ArrayList<>();
     ArrayList<String> OECount;
-    ArrayList<ArrayList<String>> oEString = new ArrayList<ArrayList<String>>();
+
+    ArrayList<ArrayList<String>> lCString = new ArrayList<ArrayList<String>>();
     ArrayList<ArrayList<String>> tlString = new ArrayList<ArrayList<String>>();
 
 
@@ -197,6 +200,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     DatePickerDialog picker;
     Switch ldgNeeded;
     View viw;
+    Integer kkk = 0;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -437,8 +441,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             public void onClick(View v) {
 
 
+                Log.e("NAME_dfslkg", "CLICLKINGDS");
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View rowView = null;
 
 
                 otherTotal.setVisibility(View.VISIBLE);
@@ -447,113 +451,119 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 layoutParams.setMargins(15, 15, 15, 15);
 
-                oEString.add(new ArrayList<>());
-
-                rowView = inflater.inflate(R.layout.activity_other_expense, null);
+                final View rowView = inflater.inflate(R.layout.activity_other_expense, null);
                 LinearOtherAllowance.addView(rowView, layoutParams);
-                OeSize = LinearOtherAllowance.getChildCount();
 
-                for (int c = 0; c < OeSize; c++) {
+                Integer valuedfd = LinearOtherAllowance.indexOfChild(rowView);
 
-                    Integer oESIZE = c;
-                    childView = LinearOtherAllowance.getChildAt(c);
-                    otherExpenseLayout.setVisibility(View.VISIBLE);
-                    oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
-                    edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
-                    oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
-                    oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
-                    linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
+                View views = LinearOtherAllowance.getChildAt(valuedfd);
+                otherExpenseLayout.setVisibility(View.VISIBLE);
+                oeEditext = (TextView) (views.findViewById(R.id.other_enter_mode));
+                edtOE = (EditText) (views.findViewById(R.id.oe_fre_amt));
+                oeAttach = (ImageView) (views.findViewById(R.id.oe_attach_img));
+                oePreview = (ImageView) (views.findViewById(R.id.img_prvw_oe));
+                linOtherSpinner = (LinearLayout) (views.findViewById(R.id.lin_othr_spiner));
 
 
-                    oeAttach.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            oeCount = oESIZE;
-                            Log.v("OE_ATTACH_COUNT", String.valueOf(oeCount));
-                            CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+                oeAttach.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
-                            if (!cameraPermission.checkPermission()) {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                    cameraPermission.requestPermission();
-                                }
-                                Log.v("PERMISSION_NOT", "PERMISSION_NOT");
-                            } else {
-                                Log.v("PERMISSION", "PERMISSION");
-                                popupCapture(99);
+
+                        CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+
+                        if (!cameraPermission.checkPermission()) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+
+                                cameraPermission.requestPermission();
                             }
+                            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                        } else {
+                            Log.v("PERMISSION", "PERMISSION");
+                            popupCapture(99);
+                            Integer valuedfd = LinearOtherAllowance.indexOfChild(rowView);
 
+                            View view = LinearOtherAllowance.getChildAt(valuedfd);
+                            oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
+                            editMode = oeEditext.getText().toString();
+                            Log.v("OE_RESULT_VALUE", String.valueOf(editMode));
 
                         }
-                    });
-
-                    oePreview.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            oeCount = oESIZE;
-
-                            oEArrayList = oEString.get(oeCount);
-                            if (oEArrayList.size() != 0) {
 
 
-                                View view = LinearOtherAllowance.getChildAt(oeCount);
+                    }
+                });
+
+                oePreview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Integer valuedf = LinearOtherAllowance.indexOfChild(rowView);
+
+                        Log.v("GOIUNT_COOUNT", String.valueOf(valuedf));
+                        View view = LinearOtherAllowance.getChildAt(valuedf);
+                        oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
+                        editMode = oeEditext.getText().toString();
+                        Log.v("GOIUNT_DETAILS", String.valueOf(editMode));
+
+
+                           /* Log.v("OE_PREVIEW_COUNT", String.valueOf(valuedf));
+                            Log.v("OE_PREVIEW_MODE", String.valueOf(editMode));*/
+
+                         /*       View view = LinearOtherAllowance.getChildAt(oeCount);
                                 oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
                                 edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
                                 OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
                                 editMode = oeEditext.getText().toString();
-
+                                Log.v("OE_COUNT_DETAILS", String.valueOf(editMode));
+                                Log.v("OE_COUNT_DETAILS", String.valueOf(DateTime));
                                 Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-                                stat.putExtra("Data", oEArrayList);
+                                stat.putExtra("position", oeCount);
+                                stat.putExtra("headTravel", "OE");
+                                stat.putExtra("mode", editMode);
+                                stat.putExtra("date", DateTime);
                                 startActivity(stat);
-                                Log.v("OE_COUNT_DETAILS", String.valueOf(oeCount));
+*/
+                    }
+                });
 
 
-                            } else {
-                                Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
-                            }
+                edtOE.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                        }
-                    });
+                    }
 
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        Integer valuedf = LinearOtherAllowance.indexOfChild(rowView);
 
-                    edtOE.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                        Log.v("GOIUNT_COOUNT", String.valueOf(valuedf));
+                    }
 
-                        }
+                    @Override
+                    public void afterTextChanged(Editable s) {
 
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        }
+                        SumOFOTAmount();
+                    }
+                });
 
-                        @Override
-                        public void afterTextChanged(Editable s) {
+/*
+                    OtherExpense = (LinearLayout) findViewById(R.id.lin_other_expense_dynamic);*/
 
-                            SumOFOTAmount();
-                        }
-                    });
+                linOtherSpinner.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
+                        OtherExpenseList.clear();
 
-                    OtherExpense = (LinearLayout) childView.findViewById(R.id.lin_other_expense_dynamic);
-                    Integer finalC = c;
-
-                    linOtherSpinner.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            oeCount = oESIZE;
-                            OtherExpenseList.clear();
-
-                            oEArrayList = oEString.get(oeCount);
-                            if (oEArrayList.size() == 0) {
-                                OtherExpenseMode(finalC);
-                            } else {
-                                Log.e("OE_SIZE", "NOT_ABLE_CLICK");
-                            }
+                        Integer valuedf = LinearOtherAllowance.indexOfChild(rowView);
+                        OtherExpenseMode(valuedf);
 
 
-                        }
-                    });
-
-                }
+                    }
+                });
 
 
             }
@@ -573,7 +583,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 rowView = inflater.inflate(R.layout.activity_local_convenyance, null);
 
-
+                lCString.add(new ArrayList<>());
                 linlocalCon.addView(rowView, layoutParams);
                 localText.setVisibility(View.VISIBLE);
 
@@ -620,12 +630,48 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     lcAttach.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //    popupCapture("LC");
+
+
+                            lcCount = finalC;
+                            Log.v("OE_ATTACH_COUNT", String.valueOf(lcCount));
+                            CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+
+                            if (!cameraPermission.checkPermission()) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                    cameraPermission.requestPermission();
+                                }
+                                Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                            } else {
+                                Log.v("PERMISSION", "PERMISSION");
+                                popupCapture(786);
+                            }
+
+
                         }
                     });
 
-                }
 
+                    lcPreview.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            lcCount = finalC;
+
+                            lCArrayList = lCString.get(lcCount);
+                            if (lCArrayList.size() != 0) {
+                                Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                                stat.putExtra("Data", lCArrayList);
+                                startActivity(stat);
+                                Log.v("OE_COUNT_DETAILS", String.valueOf(lcCount));
+                            } else {
+                                Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
+                            }
+
+
+                        }
+                    });
+
+
+                }
 
             }
         });
@@ -705,13 +751,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View rowView = null;
 
-
+                tlString.add(new ArrayList<>());
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
                 layoutParams.setMargins(15, 15, 15, 15);
 
-                tlString.add(new ArrayList<>());
 
                 if (StrToEnd.equals("0")) {
                     crdDynamicLocation.setVisibility(View.VISIBLE);
@@ -763,12 +808,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             @Override
                             public void onClick(View v) {
                                 taCount = finalC;
-                                nonZero = tlString.get(taCount);
+                                zero = tlString.get(taCount);
                                 Log.v("POSITION_CHOOSED", editText.getText().toString() + "   " + enterFare.getText().toString());
 
-                                if (nonZero.size() != 0) {
+                                if (zero.size() != 0) {
                                     Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-                                    stat.putExtra("Data", nonZero);
+                                    stat.putExtra("Data", zero);
                                     startActivity(stat);
                                 } else {
                                     Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
@@ -905,10 +950,17 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         startActivity(new Intent(getApplicationContext(), PdfViewerActivity.class));
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    @SuppressLint("NewApi")
     public void onOEDelete(View v) {
 
         int lcSizes = LinearOtherAllowance.getChildCount() - 1;
         LinearOtherAllowance.removeView((View) v.getParent());
+
+
+        LOtherExpense.performContextClick(0, 0);
+        LayoutTransition transition = new LayoutTransition();
+        LinearOtherAllowance.setLayoutTransition(transition);
 
         if (LinearOtherAllowance.getChildCount() == 0) {
             otherExpenseLayout.setVisibility(View.GONE);
@@ -1222,7 +1274,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 trvldArray = jsonObjects.getAsJsonArray("Travelled_Loc");
                 ldArray = jsonObjects.getAsJsonArray("Lodging_Head");
 
-                callMap(finalChoosedDate);
                 JsonObject jsonObject = null;
                 for (int i = 0; i < jsonArray.size(); i++) {
                     int finalC = i;
@@ -1383,7 +1434,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         for (int j = 0; j < trvldArray.size(); j++) {
 
                             Integer finc = j;
-                            Log.v("TravelldArray", String.valueOf(trvldArray.size()));
 
                             JsonObject tldraftJson = (JsonObject) trvldArray.get(j);
 
@@ -1393,11 +1443,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                             layoutParams.setMargins(15, 15, 15, 15);
 
+                            tlString.add(new ArrayList<>());
                             rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
 
                             travelDynamicLoaction.addView(rowView, layoutParams);
 
-                            tlString.add(new ArrayList<>());
 
                             viw.setVisibility(View.VISIBLE);
                             lin.setVisibility(View.VISIBLE);
@@ -1409,6 +1459,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             enterFare = views.findViewById(R.id.enter_fare);
                             deleteButton = views.findViewById(R.id.delete_button);
                             taAttach = (ImageView) views.findViewById(R.id.image_attach);
+                            previewss = (ImageView) (views.findViewById(R.id.image_preview));
                             enterFare.addTextChangedListener(new TextWatcher() {
                                 @Override
                                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -1449,7 +1500,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 }
                             });
 
-                            previewss = (ImageView) (views.findViewById(R.id.image_preview));
+
                             previewss.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -1466,7 +1517,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                     }
                                 }
                             });
-
 
                             editText.setText("" + tldraftJson.get("Mode").getAsString());
                             enterFrom.setText(tldraftJson.get("From_P").getAsString());
@@ -1485,7 +1535,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                     enterTo.setEnabled(false);
                                 }
                             }
-
                         }
 
                         TravelBike.setVisibility(View.GONE);
@@ -1563,11 +1612,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
 
         JsonArray jsonAddition = null;
+        JsonObject lcdraftJson = null;
         for (int i = 0; i < lcDraft.size(); i++) {
-            JsonObject lcdraftJson = (JsonObject) lcDraft.get(i);
+            lcdraftJson = (JsonObject) lcDraft.get(i);
 
             jsonAddition = lcdraftJson.getAsJsonArray("Additional");
             String expCode = String.valueOf(lcdraftJson.get("Exp_Code"));
+            String expFare = lcdraftJson.get("Exp_Amt").getAsString();
+
+            Log.v("EXP_AMOUNT", expFare);
 
             expCode = expCode.replaceAll("^[\"']+|[\"']+$", "");
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -1580,45 +1633,102 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
             rowView = inflater.inflate(R.layout.activity_local_convenyance, null);
 
-
+            lCString.add(new ArrayList<>());
             linlocalCon.addView(rowView, layoutParams);
             localText.setVisibility(View.VISIBLE);
             localTotal.setVisibility(View.VISIBLE);
             int lcS = linlocalCon.getChildCount() - 1;
+            lcSize = linlocalCon.getChildCount();
 
-            View view = linlocalCon.getChildAt(i);
-            editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
-            edtLcFare = (EditText) (view.findViewById(R.id.edt_la_fare));
-            linLocalSpinner = (LinearLayout) view.findViewById(R.id.lin_loc_spiner);
-            Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
-            edtLcFare.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            for (int c = 0; c < lcSize; c++) {
+                childView = linlocalCon.getChildAt(c);
+                localTotal.setVisibility(View.VISIBLE);
+                editTexts = (TextView) (childView.findViewById(R.id.local_enter_mode));
+                editLaFare = (EditText) (childView.findViewById(R.id.edt_la_fare));
 
-                }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                }
 
-                @Override
-                public void afterTextChanged(Editable s) {
-                    SumOFLCAmount();
-                }
-            });
-            linLocalSpinner.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listOrderType.clear();
-                    dynamicModeType(lcS);
-                }
-            });
+                /*   edtLcFare.setText(expFare);*/
+                linLocalSpinner = (LinearLayout) childView.findViewById(R.id.lin_loc_spiner);
+                lcAttach = (ImageView) (childView.findViewById(R.id.la_attach_iamg));
+                lcPreview = (ImageView) (childView.findViewById(R.id.img_prvw_lc));
+
+
+                editLaFare.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        SumOFLCAmount();
+                    }
+                });
+
+
+                Dynamicallowance = (LinearLayout) childView.findViewById(R.id.lin_allowance_dynamic);
+                Integer finalC = c;
+
+                linLocalSpinner.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listOrderType.clear();
+                        dynamicModeType(finalC);
+                    }
+                });
+
+                lcAttach.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        lcCount = finalC;
+                        Log.v("OE_ATTACH_COUNT", String.valueOf(lcCount));
+                        CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+
+                        if (!cameraPermission.checkPermission()) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                cameraPermission.requestPermission();
+                            }
+                            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                        } else {
+                            Log.v("PERMISSION", "PERMISSION");
+                            popupCapture(786);
+                        }
+
+                    }
+                });
+
+
+                lcPreview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        lcCount = finalC;
+
+                        lCArrayList = lCString.get(lcCount);
+                        if (lCArrayList.size() != 0) {
+                            Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                            stat.putExtra("Data", lCArrayList);
+                            startActivity(stat);
+                            Log.v("OE_COUNT_DETAILS", String.valueOf(lcCount));
+                        } else {
+                            Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                });
+
+            }
 
             localConDisplay(expCode, jsonAddition, lcS);
-
-
             editTexts.setText(expCode);
-            edtLcFare.setText("" + lcdraftJson.get("Exp_Amt").toString());
+            editLaFare.setText(expFare);
+
+            /* */
 
         }
         SumOFLCAmount();
@@ -1626,11 +1736,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     public void OeDraft(JsonArray oEDraft) {
         //  JsonArray jsonAddition = null;
+        JsonObject lcdraftJson = null;
 
-        oEString.add(new ArrayList<>());
         for (int i = 0; i < oEDraft.size(); i++) {
 
-            JsonObject lcdraftJson = (JsonObject) oEDraft.get(i);
+            lcdraftJson = (JsonObject) oEDraft.get(i);
             // jsonAddition = lcdraftJson.getAsJsonArray("Additional");
 
             String expCode = lcdraftJson.get("Exp_Code").getAsString();
@@ -1647,7 +1757,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
             layoutParams.setMargins(15, 15, 15, 15);
 
-            oEString.add(new ArrayList<>());
 
             rowView = inflater.inflate(R.layout.activity_other_expense, null);
             LinearOtherAllowance.addView(rowView, layoutParams);
@@ -1664,98 +1773,102 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 oePreview.setVisibility(View.GONE);
             }
 
-            for (int c = 0; c < OeSize; c++) {
-                Integer oESIZE = c;
-                childView = LinearOtherAllowance.getChildAt(c);
-                otherExpenseLayout.setVisibility(View.VISIBLE);
-                oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
-                edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
-                oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
-                oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
-                linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
+            Integer valuedf = LinearOtherAllowance.indexOfChild(rowView);
 
-                oeAttach.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        oeCount = oESIZE;
-                        CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+            View childView = LinearOtherAllowance.getChildAt(valuedf);
+            otherExpenseLayout.setVisibility(View.VISIBLE);
+            oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
+            edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
+            oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
+            oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
+            linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
 
-                        if (!cameraPermission.checkPermission()) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                cameraPermission.requestPermission();
-                            }
-                            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
-                        } else {
-                            Log.v("PERMISSION", "PERMISSION");
-                            popupCapture(99);
-                            Log.v("OE_ATTACH_COUNT", String.valueOf(oeCount));
+            oeAttach.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    kkk = valuedf;
+                    CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+                    if (!cameraPermission.checkPermission()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            cameraPermission.requestPermission();
                         }
-
+                        Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                    } else {
+                        Log.v("PERMISSION", "PERMISSION");
+                        popupCapture(99);
                     }
-                });
+                }
+            });
 
-                oePreview.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        oeCount = oESIZE;
+            oePreview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-                        oEArrayList = oEString.get(oeCount);
-                        if (oEArrayList.size() != 0) {
-                            Log.v("OE_COUNT_DETAILS", editMode);
-                            Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-                            stat.putExtra("Data", oEArrayList);
-                            startActivity(stat);
+                    Log.v("OE_PREVIEW_COUNT", String.valueOf(valuedf));
 
-                        } else {
-                            Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                    View view = LinearOtherAllowance.getChildAt(valuedf);
+                    oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
+                    edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
+                    OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
+                    editMode = oeEditext.getText().toString();
 
-
-                edtOE.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                        SumOFOTAmount();
-
-                    }
-                });
+                    Log.v("OE_PREVIEW_MODE", String.valueOf(editMode));
+/*
+                        View view = LinearOtherAllowance.getChildAt(oeCount);
+                        oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
+                        edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
+                        OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
+                        editMode = oeEditext.getText().toString();
+                        Log.v("OE_COUNT_DETAILS", editMode);
+                        Log.v("OE_COUNT_DETAILS", DateTime);
+                        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                        stat.putExtra("position", oeCount);
+                        stat.putExtra("headTravel", "OE");
+                        stat.putExtra("mode", editMode);
+                        stat.putExtra("date", DateTime);
+                        startActivity(stat);*/
 
 
-                OtherExpense = (LinearLayout) childView.findViewById(R.id.lin_other_expense_dynamic);
-                Integer finalC = c;
+                }
+            });
 
-                linOtherSpinner.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
 
-                        oeCount = oESIZE;
-                        OtherExpenseList.clear();
+            edtOE.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
 
-                        oEArrayList = oEString.get(oeCount);
-                        if (oEArrayList.size() == 0) {
-                            OtherExpenseMode(finalC);
-                        } else {
-                            Log.e("OE_SIZE", "NOT_ABLE_CLICK");
-                        }
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
 
-                    }
-                });
+                @Override
+                public void afterTextChanged(Editable s) {
 
-            }
+                    SumOFOTAmount();
+
+                }
+            });
+
+
+            OtherExpense = (LinearLayout) childView.findViewById(R.id.lin_other_expense_dynamic);
+
+
+            linOtherSpinner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    OtherExpenseList.clear();
+
+
+                    OtherExpenseMode(valuedf);
+
+                }
+            });
+
 
             oeEditext.setText(expCode);
             edtOE.setText(lcdraftJson.get("Exp_Amt").getAsString());
-
 
         }
         SumOFOTAmount();
@@ -1765,15 +1878,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     public void trvldLocation(JsonArray traveldLoc) {
 
-
-        JsonArray jsonAddition = null;
+        JsonObject tldraftJson = null;
         for (int i = 0; i < traveldLoc.size(); i++) {
 
             if (StrToEnd.equals("0")) {
 
             } else {
 
-                JsonObject tldraftJson = (JsonObject) traveldLoc.get(i);
+                tldraftJson = (JsonObject) traveldLoc.get(i);
 
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View rowView = null;
@@ -1798,13 +1910,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 etrTaFr.setText(tldraftJson.get("From_P").getAsString());
                 etrTaTo.setText(tldraftJson.get("To_P").getAsString());
-
-
             }
-
         }
-
-
     }
 
 
@@ -1862,14 +1969,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             ImageFilePath filepath = new ImageFilePath();
                             fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
                             lodgArrLst.add(fullPath);
-                            getMulipart(fullPath, "LOD", "", "", "", "");
+                            getMulipart(String.valueOf(0), fullPath, "LOD", "", "", "", "");
                         }
                     } else if (data.getData() != null) {
                         Uri item = data.getData();
                         ImageFilePath filepath = new ImageFilePath();
                         fullPath = filepath.getPath(TAClaimActivity.this, item);
                         lodgArrLst.add(fullPath);
-                        getMulipart(fullPath, "LOD", "", "", "", "");
+                        getMulipart(String.valueOf(0), fullPath, "LOD", "", "", "", "");
                     }
                 }
             }
@@ -1891,7 +1998,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         enterFare = views.findViewById(R.id.enter_fare);
 
                         /*CHEKCING*/
-                        getMulipart(fullPath, "TL", enterFare.getText().toString(), editText.getText().toString(), enterFrom.getText().toString(), enterTo.getText().toString());
+                        getMulipart(String.valueOf(taCount), fullPath, "TL", enterFare.getText().toString(), editText.getText().toString(), enterFrom.getText().toString(), enterTo.getText().toString());
 
                     }
                 } else if (data.getData() != null) {
@@ -1907,7 +2014,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     enterFare = views.findViewById(R.id.enter_fare);
 
                     /*CHEKCING*/
-                    getMulipart(fullPath, "TL", enterFare.getText().toString(), editText.getText().toString(), enterFrom.getText().toString(), enterTo.getText().toString());
+                    getMulipart(String.valueOf(taCount), fullPath, "TL", enterFare.getText().toString(), editText.getText().toString(), enterFrom.getText().toString(), enterTo.getText().toString());
 
                 }
 
@@ -1925,17 +2032,66 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             // display your images
                             ImageFilePath filepath = new ImageFilePath();
                             fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
-                            oEString.get(oeCount).add(fullPath);
+/*
 
 
-                            View view = LinearOtherAllowance.getChildAt(oeCount);
+
+                            View view = LinearOtherAllowance.getChildAt(kkk);
+                            oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
+                            editMode = oeEditext.getText().toString();*/
+                            Log.v("OE_RESULT_VALUE", String.valueOf(editMode));
+
+                          /*  View view = LinearOtherAllowance.getChildAt(kkk);
                             oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
                             edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
                             OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
                             editMode = oeEditext.getText().toString();
-                            Log.v("OE_RESULT_VALUE", editMode);
 
-                            getMulipart(fullPath, "OE", oeEditext.getText().toString(), editMode, "", "");
+*/
+                            Log.v("OE_RESULT_VALUE", String.valueOf(kkk));
+                            getMulipart(String.valueOf(0), fullPath, "OE", editMode, editMode, "", "");
+                        }
+                    } else if (data.getData() != null) {
+
+                        Uri item = data.getData();
+                        ImageFilePath filepath = new ImageFilePath();
+                        fullPath = filepath.getPath(TAClaimActivity.this, item);
+                        Log.v("OE_RESULT_VALUE", String.valueOf(kkk));
+
+                        /*         *//*  View view = LinearOtherAllowance.getChildAt(kkk);
+                        oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
+                        edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
+                        OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
+                        editMode = oeEditext.getText().toString();*//*
+
+
+
+                        View view = LinearOtherAllowance.getChildAt(kkk);
+                        oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
+                        editMode = oeEditext.getText().toString();*/
+                        Log.v("OE_RESULT_VALUE", String.valueOf(editMode));
+
+
+                        getMulipart(String.valueOf(0), fullPath, "OE", editMode, editMode, "", "");
+
+
+                    }
+                }
+            }
+        } else if (requestCode == 787) {
+            if (resultCode == RESULT_OK) {
+                if (requestCode == 787) {
+                    if (data.getClipData() != null) {
+                        ClipData mClipData = data.getClipData();
+                        for (int i = 0; i < mClipData.getItemCount(); i++) {
+                            ClipData.Item item = mClipData.getItemAt(i);
+                            Uri uri = item.getUri();
+                            // display your images
+                            ImageFilePath filepath = new ImageFilePath();
+                            fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                            Log.v("LC_RESULT_VALUE", fullPath);
+                            lCString.get(lcCount).add(fullPath);
+
 
                         }
                     } else if (data.getData() != null) {
@@ -1943,17 +2099,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         Uri item = data.getData();
                         ImageFilePath filepath = new ImageFilePath();
                         fullPath = filepath.getPath(TAClaimActivity.this, item);
-                        oEString.get(oeCount).add(fullPath);
-
-                        View view = LinearOtherAllowance.getChildAt(oeCount);
-                        oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
-                        edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
-                        OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
-                        editMode = oeEditext.getText().toString();
-                        Log.v("OE_RESULT_VALUE", editMode);
+                        Log.v("LC_RESULT_VALUE", fullPath);
+                        lCString.get(lcCount).add(fullPath);
 
 
-                        getMulipart(fullPath, "OE", oeEditext.getText().toString(), editMode, "", "");
                     }
                 }
             }
@@ -1964,7 +2113,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             filePath = filePath.substring(1);
             filePath = finalPath + filePath.substring(filePath.indexOf("/"));
             lodgArrLst.add(filePath);
-            getMulipart(filePath, "LOD", "", "", "", "");
+            getMulipart(String.valueOf(0), filePath, "LOD", "", "", "", "");
         } else if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
             finalPath = "/storage/emulated/0";
             filePath = outputFileUri.getPath();
@@ -1979,25 +2128,34 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             enterFare = views.findViewById(R.id.enter_fare);
 
             /*CHEKCING*/
-            getMulipart(filePath, "TL", enterFare.getText().toString(), editText.getText().toString(), enterFrom.getText().toString(), enterTo.getText().toString());
+            getMulipart(String.valueOf(taCount), filePath, "TL", enterFare.getText().toString(), editText.getText().toString(), enterFrom.getText().toString(), enterTo.getText().toString());
         } else if (requestCode == 99 && resultCode == Activity.RESULT_OK) {
 
             finalPath = "/storage/emulated/0";
             filePath = outputFileUri.getPath();
             filePath = filePath.substring(1);
             filePath = finalPath + filePath.substring(filePath.indexOf("/"));
-            oEString.get(oeCount).add(filePath);
 
-            View view = LinearOtherAllowance.getChildAt(oeCount);
+
+            View view = LinearOtherAllowance.getChildAt(kkk);
             oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
             edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
             OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
             editMode = oeEditext.getText().toString();
-            Log.v("OE_RESULT_VALUE", editMode);
 
 
-            getMulipart(filePath, "OE", oeEditext.getText().toString(), editMode, "", "");
+            getMulipart(String.valueOf(kkk), filePath, "OE", oeEditext.getText().toString(), editMode, "", "");
 
+
+        } else if (requestCode == 786 && resultCode == Activity.RESULT_OK) {
+
+            finalPath = "/storage/emulated/0";
+            filePath = outputFileUri.getPath();
+            filePath = filePath.substring(1);
+            filePath = finalPath + filePath.substring(filePath.indexOf("/"));
+
+            Log.v("LC_RESULT_VALUE", filePath);
+            lCString.get(lcCount).add(filePath);
 
         }
 
@@ -2234,8 +2392,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             int addOtherExp = LinearOtherAllowance.getChildCount();
 
 
-            for (int lc = 0; lc < addOtherExp; lc++) {
-                View view = LinearOtherAllowance.getChildAt(lc);
+            for (int OC = 0; OC < addOtherExp; OC++) {
+                View view = LinearOtherAllowance.getChildAt(OC);
                 oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
                 edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
                 OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
@@ -2247,15 +2405,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 lcModes2.put("total_amount", edtOE.getText().toString());
                 lcModes2.put("exp_type", "OE");
 
-    /*            JSONArray lcModeRef1 = new JSONArray();
-                for (int da = 0; da < newEdt.size(); da++) {
-                    JSONObject AditionallLocalConvenyance = new JSONObject();
-                    AditionallLocalConvenyance.put("KEY", dynamicLabelList.get(da));
-                    AditionallLocalConvenyance.put("VALUE", newEdt.get(da).getText().toString());
-
-                    lcModeRef1.put(AditionallLocalConvenyance);
-                }
-                lcModes2.put("ad_exp", lcModeRef1);*/
+        /*           JSONArray lcModeRef1 = new JSONArray();
+                    for (int da = 0; da < newEdt.size(); da++) {
+                        JSONObject AditionallLocalConvenyance = new JSONObject();
+                        AditionallLocalConvenyance.put("KEY", dynamicLabelList.get(da));
+                        AditionallLocalConvenyance.put("VALUE", newEdt.get(da).getText().toString());
+    
+                        lcModeRef1.put(AditionallLocalConvenyance);
+                    }
+                    lcModes2.put("ad_exp", lcModeRef1);*/
                 othrExp.put(lcModes2);
 
                 Log.v("OE_EXPENSE", lcModes2.toString());
@@ -2307,12 +2465,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    public void getMulipart(String path, String x, String fare, String mode, String from, String to) {
+    public void getMulipart(String count, String path, String x, String fare, String mode, String from, String to) {
 
         Log.v("PATH_IMAGE", path);
         MultipartBody.Part imgg = convertimg("file", path);
         Log.v("PATH_IMAGE_imgg", String.valueOf(imgg));
-        sendImageToServer(x, mode, from, to, imgg);
+        sendImageToServer(count, x, mode, from, to, imgg);
 
     }
 
@@ -2522,7 +2680,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             linAll.setVisibility(View.VISIBLE);
             linRemarks.setVisibility(View.VISIBLE);
             linFareAmount.setVisibility(View.VISIBLE);
-            lcString.clear();
             linback.setVisibility(View.GONE);
 
 
@@ -2608,78 +2765,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
-    }
-
-
-    public void callMap(String date) {
-/*
-        Log.v("Map_Date", date + " 00:00:00");
-        date = date.replaceAll("^[\"']+|[\"']+$", "");
-
-        Log.v("Map_Date", date);
- *//* DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
- Calendar calobj = Calendar.getInstance();
- String dateTime = df.format(calobj.getTime());
- Log.e("DATe_TIME", dateTime);*//*
-
-        Call<ResponseBody> Callto = apiInterface.getMap(SF_code, date + " 00:00:00");
-        Callto.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                latLonArray = new ArrayList<>();
-                mGoogleMap.clear();
-                String jsonData = null;
-                try {
-                    jsonData = response.body().string();
-                    try {
-                        JSONArray jsonArray = new JSONArray(jsonData);
-                        Double lat = 0.0, lon = 0.0, lat1 = 0.0, lon1 = 0.0;
-                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                        for (int i = 0; i < jsonArray.length() - 1; i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                            String strLat = jsonObject.getString("lat");
-                            String strLon = jsonObject.getString("lng");
-                            if (!strLat.matches("")) {
-                                lat = Double.parseDouble(strLat);
-                                lon = Double.parseDouble(strLon);
-                                LatLng loc = new LatLng(lat, lon);
-                                builder.include(loc);
-                                latLonArray.add(loc);
-                            }
-                        }
-
-
-                        if (latLonArray.size() != 0) {
-
-                            polyline1 = mGoogleMap.addPolyline(new PolylineOptions()
-                                    .clickable(true)
-                                    .addAll(latLonArray));
-
-                            polyline1.setTag("A");
-                            polyline1.setColor(COLOR_ORANGE_ARGB);
-
-                            LatLngBounds bounds = builder.build();
-
-                            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
-
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Log.v("response_data", jsonData);
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-        });*/
-
-
     }
 
 
@@ -2953,7 +3038,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     /*Imageview */
 
-    private void sendImageToServer(String HeadTravel, String Mode, String from, String To, MultipartBody.Part imgg) {
+    private void sendImageToServer(String count, String HeadTravel, String Mode, String from, String To, MultipartBody.Part imgg) {
 
         DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
         String one = String.valueOf(taCount);
@@ -2961,7 +3046,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         Log.v("OE_ATTACH_COUNT", one);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-        Call<ResponseBody> mCall = apiInterface.taImage(one, HeadTravel, Mode, DateTime, mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), from, To, imgg);
+        Call<ResponseBody> mCall = apiInterface.taImage(count, HeadTravel, Mode, DateTime, mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), from, To, imgg);
 
         Log.e("SEND_IMAGE_SERVER", mCall.request().toString());
 
