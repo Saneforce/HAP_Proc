@@ -1306,11 +1306,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     }
 
                     txtTaClaim.setText(StrDaName);
-                   /* if (StrTo.equals("")) {
-                        txtDailyAllowance.setText(StrDailyAllowance);
-                    } else {
 
-                    }*/
                     txtDailyAllowance.setText(StrDailyAllowance + " - " + StrTo);
 
                     myBrdAmt = 0.0;
@@ -1391,7 +1387,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             enterFrom.setText(tldraftJson.get("From_P").getAsString());
                             enterTo.setText(tldraftJson.get("To_P").getAsString());
                             enterFare.setText(tldraftJson.get("Fare").getAsString());
-                            tvTxtUKey.setText(tldraftJson.get("Ukey").getAsString());
+                            if (!tldraftJson.get("Ukey").getAsString().equals("")) {
+                                tvTxtUKey.setText(tldraftJson.get("Ukey").getAsString());
+                            }
                             editMode = editText.getText().toString();
 
                             Log.v("Travel_Location", editMode);
@@ -1741,10 +1739,9 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
 
 
-
             oeEditext.setText(expCode);
             edtOE.setText(expFare);
-            if (!oeUKey.equals("") && oeUKey !="" && !oeUKey.isEmpty() && oeUKey !=null) {
+            if (!oeUKey.equals("") && oeUKey != "" && !oeUKey.isEmpty() && oeUKey != null) {
                 oeTxtUKey.setText(oeUKey);
             }
 
@@ -1832,7 +1829,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 }
             });
-
 
 
         }
