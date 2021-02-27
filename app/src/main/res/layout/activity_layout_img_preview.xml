@@ -19,7 +19,6 @@
         android:layout_gravity="bottom"
         android:layout_marginLeft="-10dp"
         android:src="@drawable/delete_cart"
-        android:onClick="OnItemDelete"
        ></ImageView>
 
 </LinearLayout>
