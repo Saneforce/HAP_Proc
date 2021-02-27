@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -30,7 +31,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.hap.checkinproc.Activity.Util.ImageFilePath;
 import com.hap.checkinproc.Activity_Hap.AllowancCapture;
-import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
@@ -102,6 +102,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         PersonalKmEdit = findViewById(R.id.personal_ended_km);
         shared_common_pref = new Shared_Common_Pref(this);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
         getToolbar();
         callApi();
         /*if (sharedpreferences.contains("SharedModeTypeVale")) {
@@ -163,9 +164,9 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                     }
                     if (!EndedEditText.getText().toString().equals("")) {
 
-                        try{
+                        try {
                             endKm = Integer.parseInt(EndedEditText.getText().toString());
-                        } catch(NumberFormatException ex){ // handle your exception
+                        } catch (NumberFormatException ex) { // handle your exception
 
                         }
 
@@ -204,7 +205,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
 
                 CameraPermission cameraPermission = new CameraPermission(AllowanceActivityTwo.this, getApplicationContext());
 
-                if(!cameraPermission.checkPermission()){
+                if (!cameraPermission.checkPermission()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         cameraPermission.requestPermission();
                     }
@@ -232,10 +233,10 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                 if (EndedEditText.getText().toString().matches("")) {
                     Toast.makeText(AllowanceActivityTwo.this, "Enter End KM", Toast.LENGTH_SHORT).show();
                     return;
-                }else if(EndedImage.matches("")){
+                } else if (EndedImage.matches("")) {
                     Toast.makeText(AllowanceActivityTwo.this, "Enter End KM", Toast.LENGTH_SHORT).show();
                     return;
-                }else {
+                } else {
 
                     try {
                         stKM = Integer.valueOf(TextStartedKm.getText().toString());
@@ -379,10 +380,10 @@ public class AllowanceActivityTwo extends AppCompatActivity {
     }
 
     public void openHome() {
-            Intent Dashboard = new Intent(AllowanceActivityTwo.this, Dashboard_Two.class);
-            Dashboard.putExtra("Mode", "CIN");
-            startActivity(Dashboard);
-        }
+        Intent Dashboard = new Intent(AllowanceActivityTwo.this, Dashboard_Two.class);
+        Dashboard.putExtra("Mode", "CIN");
+        startActivity(Dashboard);
+    }
 
 
     public void callApi() {
@@ -417,9 +418,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                                         .load(json_oo.getString("start_Photo"))
                                         .into(StartedKmImage);
 
-                                Log.e("Text_Strat", TextStartedKm.getText().toString());
-                                Log.e("Text_Strat", json_oo.getString("start_Photo"));
-
+                                EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(1, 200)});
 
                                 if (!json_oo.getString("start_Photo").matches("")) {
                                     StartedKmImage.setOnClickListener(new View.OnClickListener() {
@@ -461,9 +460,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
     public HashMap<String, RequestBody> field(String val) {
         HashMap<String, RequestBody> xx = new HashMap<String, RequestBody>();
         xx.put("data", createFromString(val));
-
         return xx;
-
     }
 
     private RequestBody createFromString(String txt) {

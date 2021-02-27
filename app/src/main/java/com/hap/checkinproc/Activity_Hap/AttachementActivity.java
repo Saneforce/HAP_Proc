@@ -2,9 +2,11 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,7 +37,7 @@ public class AttachementActivity extends AppCompatActivity {
     private GridLayout parentLinearLayout;
     FrameLayout frameLayout;
     ImageView deleteImage;
-    int position;
+    Integer position;
     RelativeLayout allRelative;
     Shared_Common_Pref shared_common_pref;
     Uri uri;
@@ -55,50 +57,15 @@ public class AttachementActivity extends AppCompatActivity {
         allRelative.setBackgroundColor(Color.TRANSPARENT);
 
         intentValue = new ArrayList<String>();
-        /* intentValue = (ArrayList<String>) getIntent().getSerializableExtra("Data");*/
-
-
-        Log.v("ATTACHMENT", String.valueOf(intentValue.size()));
-        Log.v("ATTACHMENT", String.valueOf(getIntent().getSerializableExtra("position")));
-        Log.v("ATTACHMENT", String.valueOf(getIntent().getSerializableExtra("headTravel")));
-        Log.v("ATTACHMENT", String.valueOf(getIntent().getSerializableExtra("mode")));
-        Log.v("ATTACHMENT", String.valueOf(getIntent().getSerializableExtra("date")));
-
         allImage(String.valueOf(getIntent().getSerializableExtra("position")),
                 String.valueOf(getIntent().getSerializableExtra("headTravel")),
                 String.valueOf(getIntent().getSerializableExtra("mode")),
                 String.valueOf(getIntent().getSerializableExtra("date")));
 
-
-
         parentLinearLayout = (GridLayout) findViewById(R.id.parent_linear_layout);
 
-        parentLinearLayout.setRowCount(4);
         parentLinearLayout.setColumnCount(4);
-
-       /* for (int i = 1; i <= intentValue.size(); i++) {
-            position = i;
-            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = null;
-
-            rowView = inflater.inflate(R.layout.activity_layout_img_preview, null);
-
-            parentLinearLayout.addView(rowView, parentLinearLayout.getChildCount());
-
-            int size = parentLinearLayout.getChildCount();
-            for (int j = 0; j < size; j++) {
-
-
-                View childView = parentLinearLayout.getChildAt(j);
-                ImageView taAttach = (ImageView) (childView.findViewById(R.id.img_preview));
-                deleteImage = (ImageView) childView.findViewById(R.id.img_delete);
-                taAttach.setImageURI(Uri.parse((intentValue.get(j))));
-
-            }
-
-
-        }*/
-
+        parentLinearLayout.setRowCount(4);
 
     }
 
@@ -107,9 +74,7 @@ public class AttachementActivity extends AppCompatActivity {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         Call<JsonArray> mCall = apiInterface.allPreview(pos, HeadTravel, Mode, Date, shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
-
         Log.e("IMAGE_View_TRAN", mCall.request().toString());
-
         mCall.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
@@ -133,10 +98,21 @@ public class AttachementActivity extends AppCompatActivity {
                     Picasso.with(AttachementActivity.this)
                             .load(jsonObject.get("Imageurl").getAsString())
                             .into(taAttach);
+
+                    position = parentLinearLayout.indexOfChild(rowView);
+                    View cv = parentLinearLayout.getChildAt(position);
+                    ImageView taAttachs = (ImageView) (cv.findViewById(R.id.img_preview));
+                    taAttachs.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            Log.v("Image_Clicked_View", jsonObject.get("Imageurl").getAsString());
+                            Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                            intent.putExtra("ImageUrl", jsonObject.get("Imageurl").getAsString());
+                            startActivity(intent);
+                        }
+                    });
                 }
-
-
-
             }
 
             @Override
@@ -144,31 +120,9 @@ public class AttachementActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
-
 
     public void DeleteLayout(View v) {
         finish();
-    }
-
-    public void OnItemDelete(View v) {
-        int size = parentLinearLayout.getChildCount();
-
-
-        Log.d("PARENT_COUNT", String.valueOf(size));
-        parentLinearLayout.removeView((View) v.getParent());
-        int ps = 0;
-        for (int p = 0; p < size; p++) {
-            ps = p;
-
-            //    intentValue.remove();
-        }
-
-        Log.v("ATT_DELETE", String.valueOf(ps));
-        intentValue.remove(ps);
-
-
     }
 }

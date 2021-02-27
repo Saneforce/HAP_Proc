@@ -34,7 +34,7 @@ public class ProductImageView extends Activity {
         Picasso.with(this)
                 .load(ImageUrl)
                 .into(ProductZoomImage);
-        ProductZoomImage.setRotation(90);
+        /*ProductZoomImage.setRotation(90);*/
     }
 
     public void CloseActivity(View v){
