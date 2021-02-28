@@ -25,9 +25,8 @@ public class LocalConvenActivity extends AppCompatActivity {
     LinearLayout linlocalCon;
     TextView editTexts, txtLCAmnt;
     EditText edtLcFare, edt;
-    ImageView delete_lc;
-    LinearLayout linLocalSpinner, Dynamicallowance;
-    String LCClaim = "", LLCAmt = "";
+    LinearLayout  Dynamicallowance;
+    String LCClaim = "";
     JSONArray jsonArray = null;
 
     @Override
@@ -59,10 +58,6 @@ public class LocalConvenActivity extends AppCompatActivity {
                 lcdraftJson = (JSONObject) lcDraft.get(i);
                 jsonAddition = lcdraftJson.getJSONArray("Additional");
                 String expCode = String.valueOf(lcdraftJson.get("Exp_Code"));
-/*                String amount = String.valueOf(lcdraftJson.get("Exp_Amt"));
-
-                Log.v("TEXT_AMOUNT", amount);
-                txtLCAmnt.setText(amount);*/
                 expCode = expCode.replaceAll("^[\"']+|[\"']+$", "");
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View rowView = null;

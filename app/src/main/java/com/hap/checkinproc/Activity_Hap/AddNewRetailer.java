@@ -34,14 +34,12 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
-import com.hap.checkinproc.Model_Class.ReatilRouteModel;
 import com.hap.checkinproc.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -55,28 +53,21 @@ import retrofit2.Response;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class AddNewRetailer extends AppCompatActivity implements Master_Interface {
-    TextView toolHeader;
     CustomListViewDialog customDialog;
-    ImageView imgBack;
-    EditText toolSearch;
     Button mSubmit;
     ApiInterface service;
     LinearLayout linReatilerRoute, linReatilerClass, linReatilerChannel;
     TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel;
-    Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
     List<Common_Model> modelRetailDetails = new ArrayList<>();
     Common_Model mCommon_model_spinner;
-    List<ReatilRouteModel> mRetailerDetailsModels;
     Gson gson;
     EditText addRetailerName, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail;
-    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
     JSONObject docMasterObject;
-    String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue;
+    String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue,routeId,emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     Integer routeId1, classId, channelID;
-    String routeId;
     Shared_Common_Pref shared_common_pref;
     SharedPreferences CheckInDetails;
 
@@ -129,7 +120,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             @Override
             public void onClick(View v) {
 
-                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
                 Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                 if (CheckIn == true) {
                     Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
@@ -456,6 +447,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         public void PositiveMethod(DialogInterface dialog, int id) {
                             AddNewRetailer.super.onBackPressed();
                         }
+
                         @Override
                         public void NegativeMethod(DialogInterface dialog, int id) {
                         }
@@ -467,10 +459,5 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     public void onBackPressed() {
 
     }
-
-    public void onSuperBackPressed() {
-        super.onBackPressed();
-    }
-
 
 }

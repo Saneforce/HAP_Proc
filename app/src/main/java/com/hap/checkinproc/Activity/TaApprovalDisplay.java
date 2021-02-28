@@ -50,13 +50,8 @@ public class TaApprovalDisplay extends AppCompatActivity {
     String date = " ", SlStart = "", TotalAmt = "", sfCode = "", STEND = "", SDA = "", SLC = "", SOE = "";
     LinearLayout linAccept, linReject;
     AppCompatEditText appCompatEditText;
-    JsonArray jsonArray = null;
-    JsonArray jsonTravDetai = null;
-    JsonArray lcDraftArray = null;
-    JsonArray oeDraftArray = null;
-    JsonArray trvldArray = null;
-    JsonArray ldArray = null;
-    JsonArray daArray = null;
+    JsonArray jsonArray = null,jsonTravDetai = null,lcDraftArray = null,oeDraftArray = null,trvldArray = null,ldArray = null,
+            daArray = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

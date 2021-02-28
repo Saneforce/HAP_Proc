@@ -170,6 +170,14 @@
                             android:padding="10dp"
                             android:textSize="13dp" />
 
+                        <TextView
+                            android:id="@+id/txt_max"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAllCaps="false"
+                            android:layout_marginTop="@dimen/C4dp"
+                            android:textSize="10sp" />
+
                         <Button
                             android:id="@+id/btn_take_photo"
                             android:layout_width="@dimen/C100dp"

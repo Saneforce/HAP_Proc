@@ -22,9 +22,7 @@ public class OEClaimActivity extends AppCompatActivity {
 
     LinearLayout LinearOtherAllowance, otherExpenseLayout;
     TextView oeEditext, oeAmt;
-    EditText edtOE, edt;
-    ImageView delete_lc;
-    LinearLayout linLocalSpinner, Dynamicallowance;
+    EditText edtOE;
     String OEClaim = "";
     JSONArray jsonArray = null;
 

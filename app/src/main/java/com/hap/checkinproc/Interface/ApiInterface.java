@@ -10,8 +10,6 @@ import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.Model_Class.ReportDataList;
 import com.hap.checkinproc.Model_Class.RetailerViewDetails;
 
-import org.json.JSONArray;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -367,7 +365,8 @@ public interface ApiInterface {
 
     @Multipart
     @POST("db_new_activity.php?axn=upload/Taimg")
-    Call<ResponseBody> taImage(@Query("U_key") String keyCode,
+    Call<ResponseBody> taImage(@Query("Img_U_key") String ImgkeyCode,
+                               @Query("U_key") String keyCode,
                                @Query("HeadTravel") String HeadTravel,
                                @Query("Mode") String Mode,
                                @Query("Date") String date,
@@ -377,7 +376,6 @@ public interface ApiInterface {
                                @Part MultipartBody.Part file);
 
 
-
     @POST("db_new_activity.php?axn=get/TA_Image")
     Call<JsonArray> allPreview(@Query("U_key") String keyCode,
                                @Query("HeadTravel") String HeadTravel,
@@ -385,9 +383,11 @@ public interface ApiInterface {
                                @Query("Date") String date,
                                @Query("sfCode") String sfcode);
 
-
-
-
+    @POST("db_new_activity.php?axn=delete/ta_image")
+    Call<JsonObject> dltePrvws(@Query("U_key") String keyCode,
+                              @Query("Img_U_key") String HeadTravel,
+                              @Query("Date") String date,
+                              @Query("sfCode") String sfcode);
 
 
 }

@@ -44,14 +44,11 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     SurfaceHolder mHolder;
     private int noOfCameras;
     Button btnRtPrv, btnOkPrv;
-
     String mode = "", allowance = "", StartedKM = "", FromKm = "", ToKm = "", Fare = "", Closing = "";
-
     Shared_Common_Pref mShared_common_pref;
     SharedPreferences sharedpreferences;
     public static final String mypreference = "mypref";
 
-    /*    @RequiresApi(api = Build.VERSION_CODES.M)*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,8 +94,6 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     public void takePicture() {
         long tsLong = System.currentTimeMillis() / 1000;
         imageFileName = Long.toString(tsLong) + ".jpg";
-
-        //file  = new File(Environment.getExternalStorageDirectory() + "/"+ts+".jpg");
         imagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + imageFileName;
         file = new File(imagePath);
         try {

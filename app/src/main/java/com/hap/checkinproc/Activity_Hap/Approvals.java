@@ -2,40 +2,25 @@ package com.hap.checkinproc.Activity_Hap;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
 import com.hap.checkinproc.Activity.TAApprovalActivity;
-import com.hap.checkinproc.Activity.TaApprovalDisplay;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -47,23 +32,14 @@ import com.hap.checkinproc.Status_Activity.MissedPunch_Status_Activity;
 import com.hap.checkinproc.Status_Activity.Onduty_Status_Activity;
 import com.hap.checkinproc.Status_Activity.Permission_Status_Activity;
 import com.hap.checkinproc.Status_Activity.WeekOff_Status_Activity;
-
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
 public class Approvals extends AppCompatActivity implements View.OnClickListener {
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    DatePickerDialog dialog;
     LinearLayout LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan;
     LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff;
     SharedPreferences CheckInDetails;
@@ -304,7 +280,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    /*common_class.CommonIntentwithFinish(Dashboard.class);*/
+
                     Approvals.super.onBackPressed();
                 }
             });

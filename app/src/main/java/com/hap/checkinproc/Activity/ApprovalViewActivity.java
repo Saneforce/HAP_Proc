@@ -34,66 +34,67 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ApprovalViewActivity extends AppCompatActivity {
-ArrayList<SelectionModel> array=new ArrayList<>();
-ListView list_view;
-EditText edt_amt;
-TextView txt_name,txt_code,txt_hq,txt_des,txt_mob,txt_smod,txt_emod,txt_skm,txt_ekm;
-String sf_code="",sl_no="";
-Button approve,reject;
+    ArrayList<SelectionModel> array = new ArrayList<>();
+    ListView list_view;
+    EditText edt_amt;
+    TextView txt_name, txt_code, txt_hq, txt_des, txt_mob, txt_smod, txt_emod, txt_skm, txt_ekm;
+    String sf_code = "", sl_no = "",SF_code = "", div = "",MyPREFERENCES = "MyPrefs";
+    Button approve, reject;
     ApiInterface apiInterface;
     SharedPreferences UserDetails;
-    public static final String MyPREFERENCES = "MyPrefs";
-    String SF_code="",div="";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_approval_view);
-        list_view=findViewById(R.id.list_view);
-        Bundle extra=getIntent().getExtras();
-        String head_val=extra.getString("head_val");
-        edt_amt=findViewById(R.id.edt_amt);
-        txt_name=findViewById(R.id.txt_name);
-        txt_code=findViewById(R.id.txt_code);
-        txt_hq=findViewById(R.id.txt_hq);
-        txt_des=findViewById(R.id.txt_des);
-        txt_mob=findViewById(R.id.txt_mob);
-        txt_smod=findViewById(R.id.txt_smod);
-        txt_emod=findViewById(R.id.txt_emod);
-        txt_skm=findViewById(R.id.txt_skm);
-        txt_ekm=findViewById(R.id.txt_ekm);
-        approve=findViewById(R.id.approve);
-        reject=findViewById(R.id.reject);
+        list_view = findViewById(R.id.list_view);
+        Bundle extra = getIntent().getExtras();
+        String head_val = extra.getString("head_val");
+        edt_amt = findViewById(R.id.edt_amt);
+        txt_name = findViewById(R.id.txt_name);
+        txt_code = findViewById(R.id.txt_code);
+        txt_hq = findViewById(R.id.txt_hq);
+        txt_des = findViewById(R.id.txt_des);
+        txt_mob = findViewById(R.id.txt_mob);
+        txt_smod = findViewById(R.id.txt_smod);
+        txt_emod = findViewById(R.id.txt_emod);
+        txt_skm = findViewById(R.id.txt_skm);
+        txt_ekm = findViewById(R.id.txt_ekm);
+        approve = findViewById(R.id.approve);
+        reject = findViewById(R.id.reject);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        SF_code=UserDetails.getString("Sfcode","");
-        div=UserDetails.getString("Divcode","");
+        SF_code = UserDetails.getString("Sfcode", "");
+        div = UserDetails.getString("Divcode", "");
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-        try{
-            JSONObject jj=new JSONObject(head_val);
-            JSONArray jjj=jj.getJSONArray("value");
-            Log.v("printing_totl_va",jjj.toString());
-            for(int i=0;i<jjj.length();i++){
-                JSONObject json=jjj.getJSONObject(i);
-                array.add(new SelectionModel(json.getString("name"),json.getString("amt")));
+        try {
+            JSONObject jj = new JSONObject(head_val);
+            JSONArray jjj = jj.getJSONArray("value");
+            Log.v("printing_totl_va", jjj.toString());
+            for (int i = 0; i < jjj.length(); i++) {
+                JSONObject json = jjj.getJSONObject(i);
+                array.add(new SelectionModel(json.getString("name"), json.getString("amt")));
             }
 
-            txt_name.setText(": "+jj.getString("name"));
-            sf_code=jj.getString("sf_code");
-            sl_no=jj.getString("sl_no");
-            txt_code.setText(": "+jj.getString("code"));
-            txt_hq.setText(": "+jj.getString("hq"));
-            txt_des.setText(": "+jj.getString("Designation"));
-            txt_mob.setText(": "+jj.getString("mob"));
-            txt_smod.setText(": "+jj.getString("smod"));
-            txt_emod.setText(": "+jj.getString("emod"));
-            txt_skm.setText(": "+jj.getString("skm"));
-            txt_ekm.setText(": "+jj.getString("ekm"));
+            txt_name.setText(": " + jj.getString("name"));
+            sf_code = jj.getString("sf_code");
+            sl_no = jj.getString("sl_no");
+            txt_code.setText(": " + jj.getString("code"));
+            txt_hq.setText(": " + jj.getString("hq"));
+            txt_des.setText(": " + jj.getString("Designation"));
+            txt_mob.setText(": " + jj.getString("mob"));
+            txt_smod.setText(": " + jj.getString("smod"));
+            txt_emod.setText(": " + jj.getString("emod"));
+            txt_skm.setText(": " + jj.getString("skm"));
+            txt_ekm.setText(": " + jj.getString("ekm"));
 
-            AdapterForViewTA adpt=new AdapterForViewTA(this,array);
+            AdapterForViewTA adpt = new AdapterForViewTA(this, array);
             list_view.setAdapter(adpt);
 
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
 
         reject.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -108,9 +109,10 @@ Button approve,reject;
             }
         });
     }
-    public class AdapterForViewTA extends BaseAdapter{
+
+    public class AdapterForViewTA extends BaseAdapter {
         Context context;
-        ArrayList<SelectionModel> arr=new ArrayList<>();
+        ArrayList<SelectionModel> arr = new ArrayList<>();
 
         public AdapterForViewTA(Context context, ArrayList<SelectionModel> arr) {
             this.context = context;
@@ -134,17 +136,18 @@ Button approve,reject;
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            view= LayoutInflater.from(context).inflate(R.layout.row_item_ta_view,viewGroup,false);
-            TextView txt_start=view.findViewById(R.id.txt_start);
-            TextView txt_amt=view.findViewById(R.id.txt_amt);
+            view = LayoutInflater.from(context).inflate(R.layout.row_item_ta_view, viewGroup, false);
+            TextView txt_start = view.findViewById(R.id.txt_start);
+            TextView txt_amt = view.findViewById(R.id.txt_amt);
             txt_start.setText(arr.get(i).getTxt());
-            //Log.v("printing_txt ",arr.get(i).getTxt()+" val "+arr.get(i).getValue());
+
             txt_amt.setText(arr.get(i).getCode());
             txt_amt.setText("0");
             return view;
         }
     }
-    public void callApi(String date){
+
+    public void callApi(String date) {
         try {
             JSONObject jj = new JSONObject();
             jj.put("Sl_No", sl_no);
@@ -161,9 +164,10 @@ Button approve,reject;
                             JSONObject jb = null;
                             String jsonData = null;
                             jsonData = response.body().string();
-                            Log.v("response_data",jsonData);
+                            Log.v("response_data", jsonData);
                         }
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
 
                 @Override
@@ -172,17 +176,19 @@ Button approve,reject;
                 }
             });
 
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
-    public void popupReject(){
-        final Dialog dialog=new Dialog(ApprovalViewActivity.this, R.style.AlertDialogCustom);
+
+    public void popupReject() {
+        final Dialog dialog = new Dialog(ApprovalViewActivity.this, R.style.AlertDialogCustom);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.popup_reject_leave);
         dialog.setCanceledOnTouchOutside(false);
         dialog.show();
-        RelativeLayout lay_yes=dialog.findViewById(R.id.lay_yes);
-        RelativeLayout lay_cancel=dialog.findViewById(R.id.lay_cancel);
-        EditText edt_feed=dialog.findViewById(R.id.edt_feed);
+        RelativeLayout lay_yes = dialog.findViewById(R.id.lay_yes);
+        RelativeLayout lay_cancel = dialog.findViewById(R.id.lay_cancel);
+        EditText edt_feed = dialog.findViewById(R.id.edt_feed);
         lay_yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -197,7 +203,8 @@ Button approve,reject;
         });
 
     }
-    public void callApiReject(String value){
+
+    public void callApiReject(String value) {
         try {
             JSONObject jj = new JSONObject();
             jj.put("Sl_No", sl_no);
@@ -214,10 +221,11 @@ Button approve,reject;
                             JSONObject jb = null;
                             String jsonData = null;
                             jsonData = response.body().string();
-                            Log.v("response_data",jsonData);
+                            Log.v("response_data", jsonData);
 
                         }
-                    }catch (Exception e){}
+                    } catch (Exception e) {
+                    }
                 }
 
                 @Override
@@ -226,7 +234,8 @@ Button approve,reject;
                 }
             });
 
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
 }

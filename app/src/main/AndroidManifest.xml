@@ -112,9 +112,6 @@
             android:name=".Activity.ApprovalViewActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Activity.ViewTASummary"
-            android:screenOrientation="portrait" />
-        <activity
             android:name=".Activity.TAClaimActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -288,12 +285,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Activity.DesignActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity.FilterActivity"
-            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.ProcurementDashboardActivity"
             android:screenOrientation="portrait" />

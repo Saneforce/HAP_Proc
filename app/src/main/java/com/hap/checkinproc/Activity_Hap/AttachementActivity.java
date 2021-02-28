@@ -4,9 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +38,7 @@ public class AttachementActivity extends AppCompatActivity {
     Integer position;
     RelativeLayout allRelative;
     Shared_Common_Pref shared_common_pref;
-    Uri uri;
+    String ImageUKey = "", ImageUrl = "", DateTime = "";
 
 
     @SuppressLint("ResourceType")
@@ -64,11 +62,10 @@ public class AttachementActivity extends AppCompatActivity {
 
         parentLinearLayout = (GridLayout) findViewById(R.id.parent_linear_layout);
 
-        parentLinearLayout.setColumnCount(4);
+        parentLinearLayout.setColumnCount(3);
         parentLinearLayout.setRowCount(4);
 
     }
-
 
     public void allImage(String pos, String HeadTravel, String Mode, String Date) {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -86,14 +83,12 @@ public class AttachementActivity extends AppCompatActivity {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(m);
 
                     LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                    View rowView = null;
 
-                    rowView = inflater.inflate(R.layout.activity_layout_img_preview, null);
+                    final View rowView = inflater.inflate(R.layout.activity_layout_img_preview, null);
                     parentLinearLayout.addView(rowView, parentLinearLayout.getChildCount());
 
                     View childView = parentLinearLayout.getChildAt(m);
                     ImageView taAttach = (ImageView) (childView.findViewById(R.id.img_preview));
-                    deleteImage = (ImageView) childView.findViewById(R.id.img_delete);
 
                     Picasso.with(AttachementActivity.this)
                             .load(jsonObject.get("Imageurl").getAsString())
@@ -102,6 +97,15 @@ public class AttachementActivity extends AppCompatActivity {
                     position = parentLinearLayout.indexOfChild(rowView);
                     View cv = parentLinearLayout.getChildAt(position);
                     ImageView taAttachs = (ImageView) (cv.findViewById(R.id.img_preview));
+                    deleteImage = (ImageView) cv.findViewById(R.id.img_delete);
+                    deleteImage.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            deleteImage(jsonObject.get("Img_U_key").getAsString(), jsonObject.get("lat").getAsString(), jsonObject.get("Insert_Date_Time").getAsString());
+
+                        }
+                    });
                     taAttachs.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -120,6 +124,29 @@ public class AttachementActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void deleteImage(String ImageUKey, String ImageUrl, String DateTime) {
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
+        Call<JsonObject> mCall = apiInterface.dltePrvws(ImageUrl, ImageUKey, DateTime, shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+        Log.e("IMAGE_DELETE_REPONSE", mCall.request().toString());
+        mCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+
+                JsonObject jsonObject = response.body();
+                Log.e("RESPONSE", jsonObject.get("success").getAsString());
+                if (jsonObject.get("success").getAsString().equals("true")) {
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+            }
+        });
+
     }
 
     public void DeleteLayout(View v) {

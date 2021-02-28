@@ -3,8 +3,6 @@ package com.hap.checkinproc.Activity;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,12 +22,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.hap.checkinproc.Activity.Util.ImageFilePath;
 import com.hap.checkinproc.Activity_Hap.AllowancCapture;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
@@ -48,7 +43,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import id.zelory.compressor.Compressor;
@@ -60,30 +54,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class AllowanceActivityTwo extends AppCompatActivity {
-    String ModeOfTravel = "", StartedKm = "", StartedImage = "", CLOSINGKM = "", EndedImage = "";
-    Shared_Common_Pref mShared_common_pref;
-    TextView TextModeTravel, TextStartedKm;
+
+    TextView TextModeTravel, TextStartedKm, TextMaxKm;
     ImageView StartedKmImage, EndedKmImage;
     Button takeEndedPhoto, submitAllowance;
     EditText EndedEditText, PersonalKmEdit;
-    Integer stKM = 0, endKm = 0;
-    String EndImageURi = " ";
-    public static final String mypreference = "mypref";
-    public static final String Name = "Allowance";
-    public static final String MOT = "ModeOfTravel";
-    SharedPreferences sharedpreferences;
-    SharedPreferences CheckInDetails;
-    SharedPreferences UserDetails;
-    public static final String CheckInfo = "CheckInDetail";
-    public static final String UserInfo = "MyPrefs";
+    Integer stKM = 0, endKm = 0, personalKM = 0, StratKm = 0, maxKM = 0, TotalKm = 0;
+    SharedPreferences CheckInDetails, sharedpreferences, UserDetails;
     Shared_Common_Pref shared_common_pref;
-    Integer personalKM = 0;
     ApiInterface apiInterface;
-    Uri outputFileUri;
-    String eventListStr;
-    int pos = -1;
-    String Photo_Name = "", imageConvert = "";
-    ArrayList<String> picPath = new ArrayList<>();
+    String Photo_Name = "", imageConvert = "", StartedKm = "", StartedImage = "", CLOSINGKM = "", EndedImage = "",
+            CheckInfo = "CheckInDetail", UserInfo = "MyPrefs", MOT = "ModeOfTravel", Name = "Allowance", mypreference = "mypref";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +76,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
         TextModeTravel = findViewById(R.id.txt_mode_travel);
         TextStartedKm = findViewById(R.id.txt_started_km);
+        TextMaxKm = findViewById(R.id.txt_max);
         StartedKmImage = findViewById(R.id.img_started_km);
         EndedEditText = findViewById(R.id.ended_km);
         EndedKmImage = findViewById(R.id.img_ended_km);
@@ -105,26 +88,18 @@ public class AllowanceActivityTwo extends AppCompatActivity {
 
         getToolbar();
         callApi();
-        /*if (sharedpreferences.contains("SharedModeTypeVale")) {
-            ModeOfTravel = sharedpreferences.getString("SharedModeTypeVale", "");
-            Log.e("Privacypolicy", "ModeOfTravel" + ModeOfTravel);
-            TextModeTravel.setText(ModeOfTravel);
-        }*/
 
         if (sharedpreferences.contains("SharedImage")) {
             StartedImage = sharedpreferences.getString("SharedImage", "");
             Log.e("Privacypolicy", "Checking" + StartedImage);
             if (StartedImage != null && !StartedImage.isEmpty() && !StartedImage.equals("null")) {
                 //   StartedKmImage.setImageURI(Uri.parse(StartedImage));
-
             }
-
         }
         if (sharedpreferences.contains("SharedImages")) {
             EndedImage = sharedpreferences.getString("SharedImages", "");
             Log.e("Privacypolicy", "Checking" + EndedImage);
             EndedKmImage.setImageURI(Uri.parse(EndedImage));
-
 
             imageConvert = EndedImage.substring(7);
             Log.e("COnvert", EndedImage.substring(7));
@@ -134,7 +109,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         if (sharedpreferences.contains("StartedKM")) {
             StartedKm = sharedpreferences.getString("StartedKM", "");
             Log.e("Privacypolicy", "STARTRD      " + StartedKm);
-            // TextStartedKm.setText(StartedKm);
         }
 
 
@@ -388,7 +362,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
 
     public void callApi() {
 
-
         try {
             JSONObject jj = new JSONObject();
             jj.put("div", Shared_Common_Pref.Div_Code);
@@ -414,12 +387,21 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                                 JSONObject json_oo = jsnArValue.getJSONObject(i);
                                 TextModeTravel.setText(json_oo.getString("MOT_Name"));
                                 TextStartedKm.setText(json_oo.getString("Start_Km"));
+                                maxKM = json_oo.getInt("Maxkm");
+                             //   TextMaxKm.setText("Maximum km : " + maxKM);
                                 Glide.with(getApplicationContext())
                                         .load(json_oo.getString("start_Photo"))
                                         .into(StartedKmImage);
+                                StratKm = Integer.valueOf(json_oo.getString("Start_Km"));
 
-                                EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(1, 200)});
 
+                                TotalKm = StratKm + maxKM;
+
+                                Log.v("START_KM", String.valueOf(StratKm));
+                                Log.v("ToTAL_KM", String.valueOf(TotalKm));
+
+                            /*    EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(1, TotalKm)});
+*/
                                 if (!json_oo.getString("start_Photo").matches("")) {
                                     StartedKmImage.setOnClickListener(new View.OnClickListener() {
                                         @Override
@@ -500,7 +482,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                 try {
                     if (response.isSuccessful()) {
 
-
                         Log.v("print_upload_file_true", "ggg" + response);
                         JSONObject jb = null;
                         String jsonData = null;
@@ -510,7 +491,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                         if (js.getString("success").equalsIgnoreCase("true")) {
                             Photo_Name = js.getString("url");
                             Log.v("printing_dynamic_cou", js.getString("url"));
-
 
                         }
 
@@ -526,68 +506,5 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             }
         });
     }
-
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 10) {
-            //TODO: action
-
-            ClipData mClipData = data.getClipData();
-            int pickedImageCount;
-            String filepathing = "";
-            if (data.getData() == null) {
-                Log.v("onactivity_result", data.getData() + " ");
-                for (pickedImageCount = 0; pickedImageCount < mClipData.getItemCount();
-                     pickedImageCount++) {
-                    Log.v("picked_image_value", mClipData.getItemAt(pickedImageCount).getUri() + "");
-                    ImageFilePath filepath = new ImageFilePath();
-                    String fullPath = filepath.getPath(AllowanceActivityTwo.this, mClipData.getItemAt(pickedImageCount).getUri());
-                    Log.v("picked_fullPath", fullPath + "");
-                    if (pos == -1)
-                        picPath.add(fullPath);
-                    else {
-
-                    }
-                }
-            } else {
-                Log.v("data_pic_multiple", "is in empty");
-                ImageFilePath filepath = new ImageFilePath();
-                String fullPath = filepath.getPath(AllowanceActivityTwo.this, data.getData());
-                Log.v("data_pic_multiple11", fullPath);
-                if (pos == -1)
-                    picPath.add(fullPath);
-                else {
-
-
-                }
-            }
-
-        } else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
-            String finalPath = "/storage/emulated/0";
-            String filePath = outputFileUri.getPath();
-            filePath = filePath.substring(1);
-            filePath = finalPath + filePath.substring(filePath.indexOf("/"));
-            Log.v("printing__file_path", filePath);
-            Log.v("printing__Position", String.valueOf(pos));
-
-            EndedKmImage.setImageURI(Uri.fromFile(new File(filePath)));
-         /*   Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-            EndedKmImage.setImageBitmap(bitmap);*/
-            if (pos == -1) {
-
-                // picPath.add(filePath);
-                Log.v("printing__eventListStr", filePath);
-
-
-                getMulipart(filePath, 0);
-            } else {
-
-            }
-            //filePathing = filePathing + filePath + ",";
-        }
-    }
-
 
 }

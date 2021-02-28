@@ -97,7 +97,6 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                     drawer.closeDrawer(GravityCompat.START);
                 } else {
                     drawer.openDrawer(GravityCompat.START);
-                    //super.onBackPressed();
                 }
             }
         });
@@ -116,7 +115,6 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                                 aIntent = new Intent(getApplicationContext(), Dashboard_Two.class);
                                 aIntent.putExtra("Mode", "CIN");
                                 startActivity(aIntent);
-                                //((AppCompatActivity) Dashboard_Two.this).finish();
                             }
                         })
                         .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -137,7 +135,6 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                 getTravelMode();
             }
         });
-
 
         upcomingFollow=new UpcomingFollow(ProcurementDashboardActivity.this,array_follow);
         list_follow.setAdapter(upcomingFollow);
@@ -252,60 +249,6 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
             });
 
         }catch (Exception e){}
-
-    }
-    public void callFollowup(){
-        JSONObject json=new JSONObject();
-        try {
-            json.put("div", div);
-
-            Log.v("printing_sf_code",json.toString());
-            Call<ResponseBody> approval=apiService.getMenu(json.toString());
-
-            approval.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    if (response.isSuccessful()) {
-                        Log.v("printing_res_track", response.body().byteStream() + "");
-                        JSONObject jsonObject = null;
-                        String jsonData = null;
-
-                        InputStreamReader ip = null;
-                        StringBuilder is = new StringBuilder();
-                        String line = null;
-                        try {
-                            ip = new InputStreamReader(response.body().byteStream());
-                            BufferedReader bf = new BufferedReader(ip);
-
-                            while ((line = bf.readLine()) != null) {
-                                is.append(line);
-                            }
-
-                            Log.v("printing_dynamic_menu",is.toString());
-                            JSONArray js=new JSONArray(is.toString());
-                            for(int i=0;i<js.length();i++){
-                                JSONObject jj=js.getJSONObject(i);
-                                array_follow.add(new SelectionModel(jj.getString("name"),jj.getString("date"),jj.getString("phone"),jj.getString("url"),""));
-                            }
-                            upcomingFollow=new UpcomingFollow(ProcurementDashboardActivity.this,array_follow);
-                            list_follow.setAdapter(upcomingFollow);
-                            upcomingFollow.notifyDataSetChanged();
-                            //commonFun();
-
-                        } catch (Exception e) {
-                        }
-
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                }
-            });
-
-        }catch (Exception e){}
-
     }
 
     public void getTravelMode(){
@@ -314,8 +257,6 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
 
             jj.put("sf",sf_code);
             jj.put("div",div);
-            //jj.put("url",url);
-            //saveAllowance
             Log.v("printing_allow",jj.toString());
             Call<ResponseBody>  Callto = apiService.getTravelMode(jj.toString());
             Callto.enqueue(new Callback<ResponseBody>() {
@@ -323,7 +264,6 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         if (response.isSuccessful()) {
-
 
                             Log.v("print_upload_file_true", "ggg" + response);
                             JSONObject jb = null;
@@ -344,13 +284,7 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                             else{
 
                             }
-                           /* JSONObject js=new JSONObject(jsonData);
-                            if(js.getString("success").equalsIgnoreCase("true")){
-                                Toast.makeText(AllowanceActivity.this," Submitted successfully ",Toast.LENGTH_SHORT).show();
-                            }
-                            else
-                                Toast.makeText(AllowanceActivity.this," Cannot submitted the data ",Toast.LENGTH_SHORT).show();*/
-                        }
+                  }
                     }catch (Exception e){}
                 }
 
