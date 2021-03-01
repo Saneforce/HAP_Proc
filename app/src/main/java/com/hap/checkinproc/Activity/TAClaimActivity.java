@@ -911,7 +911,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     }
 
     public void ImagePdf(View v) {
-        startActivity(new Intent(getApplicationContext(), PdfViewerActivity.class));
+        pdfViewList();
     }
 
     public void onOEDelete(View v) {
@@ -2086,6 +2086,40 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             getMulipart(LcUKey, filePath, "LC", "", editMode, "", "");
         }
     }
+
+
+    public void pdfViewList() {
+        dialog = new Dialog(TAClaimActivity.this, R.style.AlertDialogCustom);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.row_pdf_viewer_list);
+        dialog.show();
+        LinearLayout pdf1 = dialog.findViewById(R.id.lin_pdf);
+        LinearLayout pdf2 = dialog.findViewById(R.id.lin_pdf2);
+        pdf1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
+                stat.putExtra("PDF_ONE", "https://hap.sanfmcg.com/Travel%20and%20Daily%20Allowance%20Policy%20-%20Domestic%20Travel%20Annexure%20C-1_1%20Feb-21.pdf");
+                startActivity(stat);
+
+                dialog.dismiss();
+
+            }
+        });
+        pdf2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
+                stat.putExtra("PDF_ONE", "https://hap.sanfmcg.com/HAP_ANNEXURE_C.pdf");
+                startActivity(stat);
+
+                dialog.dismiss();
+            }
+        });
+    }
+
 
     public void popupCapture(Integer attachName) {
         dialog = new Dialog(TAClaimActivity.this, R.style.AlertDialogCustom);

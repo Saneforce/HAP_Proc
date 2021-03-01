@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -388,7 +387,8 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                                 TextModeTravel.setText(json_oo.getString("MOT_Name"));
                                 TextStartedKm.setText(json_oo.getString("Start_Km"));
                                 maxKM = json_oo.getInt("Maxkm");
-                             //   TextMaxKm.setText("Maximum km : " + maxKM);
+                                //
+                                //   TextMaxKm.setText("Maximum km : " + maxKM);
                                 Glide.with(getApplicationContext())
                                         .load(json_oo.getString("start_Photo"))
                                         .into(StartedKmImage);
@@ -400,8 +400,8 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                                 Log.v("START_KM", String.valueOf(StratKm));
                                 Log.v("ToTAL_KM", String.valueOf(TotalKm));
 
-                            /*    EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(1, TotalKm)});
-*/
+                                /* EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(1, TotalKm)});*/
+
                                 if (!json_oo.getString("start_Photo").matches("")) {
                                     StartedKmImage.setOnClickListener(new View.OnClickListener() {
                                         @Override
@@ -417,7 +417,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                                     });
                                 }
                             }
-
                         }
                     } catch (Exception e) {
                     }

@@ -1,11 +1,12 @@
 package com.hap.checkinproc.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Window;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.hap.checkinproc.R;
@@ -20,7 +21,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class PdfViewerActivity extends AppCompatActivity {
 
-    String pdfurl = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+    String pdfurl = "";
     PDFView pdfView;
 
 
@@ -28,15 +29,25 @@ public class PdfViewerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_viewer);
+
+        pdfurl = String.valueOf(getIntent().getSerializableExtra("PDF_ONE"));
         pdfView = (PDFView) findViewById(R.id.pdfView);
         new RetrivePDFfromUrl().execute(pdfurl);
+
     }
 
 
     class RetrivePDFfromUrl extends AsyncTask<String, Void, InputStream> {
+        ProgressDialog dialog;
+
+        public RetrivePDFfromUrl() {
+            dialog = new ProgressDialog(PdfViewerActivity.this);
+        }
+
         @Override
         protected InputStream doInBackground(String... strings) {
 
+            Log.e("sdfdsfdfdf", "doInBackground");
             InputStream inputStream = null;
             try {
                 URL url = new URL(strings[0]);
@@ -53,12 +64,22 @@ public class PdfViewerActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(InputStream inputStream) {
-            pdfView.fromStream(inputStream).load();
+
+            super.onPostExecute(inputStream);
+            if (dialog.isShowing()){
+                pdfView.fromStream(inputStream).load();
+                dialog.dismiss();
+            }
+
+
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            dialog.setMessage("please wait.");
+            dialog.show();
+
         }
     }
 }
