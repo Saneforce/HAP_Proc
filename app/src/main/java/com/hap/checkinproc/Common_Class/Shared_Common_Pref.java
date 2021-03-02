@@ -1,7 +1,6 @@
 package com.hap.checkinproc.Common_Class;
 
 
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,10 +17,14 @@ public class Shared_Common_Pref {
     public static String StateCode = "StateCode";
     public static String Sf_Name = "Sf_Name";
     public static String Dv_ID = "DvID";
-    public static  String SF_Type = "SF_Type";
+    public static String SF_Type = "SF_Type";
     public static String CHECK_COUNT = "0";
+    public static String SF_EMP_ID = "sf_emp_id";
+    public static String SF_DESIG = "sf_Designation_Short_Name";
+    public static String SF_DEPT = "DeptName";
 
-    public static  String Dept_Type = "Dept_Type";
+
+    public static String Dept_Type = "Dept_Type";
 
     public static final String spNamemas = "SP_MAS_DETAILS";
     public static final String loggedIn = "loggedIn";
@@ -48,6 +51,7 @@ public class Shared_Common_Pref {
             editor = Common_pref.edit();
         }
     }
+
     public Shared_Common_Pref(Context cc) {
         this._context = cc;
         Common_pref = cc.getSharedPreferences("Preference_values", Context.MODE_PRIVATE);
@@ -58,11 +62,13 @@ public class Shared_Common_Pref {
         editor.putString(key, value);
         editor.commit();
     }
+
     public String getvalue(String key) {
         String text = null;
         text = Common_pref.getString(key, null);
         return text;
     }
+
     public void clear_pref(String key) {
         Common_pref.edit().remove(key).apply();
 

@@ -9,7 +9,6 @@ import com.hap.checkinproc.Model_Class.Location;
 import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.Model_Class.ReportDataList;
 import com.hap.checkinproc.Model_Class.RetailerViewDetails;
-import com.hap.checkinproc.Model_Class.Travel_Approval_Model;
 
 import java.util.HashMap;
 import java.util.List;
@@ -362,6 +361,33 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=save/taapprove")
     Call<JsonObject> taApprove(@Field("data") String body);
+
+
+    @Multipart
+    @POST("db_new_activity.php?axn=upload/Taimg")
+    Call<ResponseBody> taImage(@Query("Img_U_key") String ImgkeyCode,
+                               @Query("U_key") String keyCode,
+                               @Query("HeadTravel") String HeadTravel,
+                               @Query("Mode") String Mode,
+                               @Query("Date") String date,
+                               @Query("sfCode") String sfcode,
+                               @Query("From") String from,
+                               @Query("To") String To,
+                               @Part MultipartBody.Part file);
+
+
+    @POST("db_new_activity.php?axn=get/TA_Image")
+    Call<JsonArray> allPreview(@Query("U_key") String keyCode,
+                               @Query("HeadTravel") String HeadTravel,
+                               @Query("Mode") String Mode,
+                               @Query("Date") String date,
+                               @Query("sfCode") String sfcode);
+
+    @POST("db_new_activity.php?axn=delete/ta_image")
+    Call<JsonObject> dltePrvws(@Query("U_key") String keyCode,
+                              @Query("Img_U_key") String HeadTravel,
+                              @Query("Date") String date,
+                              @Query("sfCode") String sfcode);
 
 
 }

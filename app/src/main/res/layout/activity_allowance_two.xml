@@ -124,6 +124,53 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="To Place"
+                        android:textAllCaps="false"
+                        android:textColor="#000"
+                        android:textSize="13sp" />
+
+                    <ImageView
+                        android:layout_width="@dimen/C8dp"
+                        android:layout_height="@dimen/C8dp"
+                        android:src="@drawable/mandatory" />
+
+                </LinearLayout>
+
+                <LinearLayout
+
+                    android:id="@+id/lin_to"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/C5dp"
+                    android:background="@drawable/round_white_backround"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txt_to"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="@string/app_name"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="13dp" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/C10dp"
                 android:orientation="vertical">
 
@@ -170,6 +217,14 @@
                             android:padding="10dp"
                             android:textSize="13dp" />
 
+                        <TextView
+                            android:id="@+id/txt_max"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C4dp"
+                            android:textAllCaps="false"
+                            android:textSize="10sp" />
+
                         <Button
                             android:id="@+id/btn_take_photo"
                             android:layout_width="@dimen/C100dp"
@@ -213,9 +268,9 @@
 
                     <ImageView
                         android:layout_width="@dimen/C8dp"
-                        android:visibility="gone"
                         android:layout_height="@dimen/C8dp"
-                        android:src="@drawable/mandatory" />
+                        android:src="@drawable/mandatory"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 
@@ -241,11 +296,12 @@
                             android:padding="10dp"
                             android:textSize="13dp" />
 
-                          </LinearLayout>
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
+
             <Button
                 android:id="@+id/submit_allowance"
                 android:layout_width="match_parent"

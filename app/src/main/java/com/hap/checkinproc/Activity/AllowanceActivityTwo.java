@@ -3,8 +3,6 @@ package com.hap.checkinproc.Activity;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
-import android.app.Activity;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,37 +14,46 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.hap.checkinproc.Activity.Util.ImageFilePath;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.AllowancCapture;
-import com.hap.checkinproc.Activity_Hap.Dashboard;
+import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Activity_Hap.ImageCapture;
+import com.hap.checkinproc.Activity_Hap.ProductImageView;
+import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import id.zelory.compressor.Compressor;
 import okhttp3.MultipartBody;
@@ -56,31 +63,24 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class AllowanceActivityTwo extends AppCompatActivity {
-    String ModeOfTravel = "", StartedKm = "", StartedImage = "", CLOSINGKM = "", EndedImage = "";
-    Shared_Common_Pref mShared_common_pref;
-    TextView TextModeTravel, TextStartedKm;
+public class AllowanceActivityTwo extends AppCompatActivity implements Master_Interface {
+
+    TextView TextModeTravel, TextStartedKm, TextMaxKm, TextToPlace;
     ImageView StartedKmImage, EndedKmImage;
     Button takeEndedPhoto, submitAllowance;
     EditText EndedEditText, PersonalKmEdit;
-    Integer stKM = 0, endKm = 0;
-    String EndImageURi = " ";
-    public static final String mypreference = "mypref";
-    public static final String Name = "Allowance";
-    public static final String MOT = "ModeOfTravel";
-    SharedPreferences sharedpreferences;
-    SharedPreferences CheckInDetails;
-    SharedPreferences UserDetails;
-    public static final String CheckInfo = "CheckInDetail";
-    public static final String UserInfo = "MyPrefs";
+    Integer stKM = 0, endKm = 0, personalKM = 0, StratKm = 0, maxKM = 0, TotalKm = 0;
+    SharedPreferences CheckInDetails, sharedpreferences, UserDetails;
     Shared_Common_Pref shared_common_pref;
-    Integer personalKM = 0;
     ApiInterface apiInterface;
-    Uri outputFileUri;
-    String eventListStr;
-    int pos = -1;
-    String Photo_Name = "", imageConvert = "";
-    ArrayList<String> picPath = new ArrayList<>();
+    String Photo_Name = "", imageConvert = "", StartedKm = "", StartedImage = "", CLOSINGKM = "", EndedImage = "",
+            CheckInfo = "CheckInDetail", UserInfo = "MyPrefs", MOT = "ModeOfTravel", Name = "Allowance",
+            mypreference = "mypref", StrToCode = "", toPlace = "", TOKM = " ", cOUT = "", ImageStart = "",
+            strImg = "", strMod = "", strKm = "", Hq = "";
+    LinearLayout linToPlace;
+    CustomListViewDialog customDialog;
+    Common_Model mCommon_model_spinner;
+    List<Common_Model> modelRetailDetails = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,46 +91,84 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
         TextModeTravel = findViewById(R.id.txt_mode_travel);
         TextStartedKm = findViewById(R.id.txt_started_km);
+        TextMaxKm = findViewById(R.id.txt_max);
         StartedKmImage = findViewById(R.id.img_started_km);
         EndedEditText = findViewById(R.id.ended_km);
         EndedKmImage = findViewById(R.id.img_ended_km);
         takeEndedPhoto = findViewById(R.id.btn_take_photo);
         submitAllowance = findViewById(R.id.submit_allowance);
         PersonalKmEdit = findViewById(R.id.personal_ended_km);
+        linToPlace = findViewById(R.id.lin_to);
+        TextToPlace = findViewById(R.id.txt_to);
         shared_common_pref = new Shared_Common_Pref(this);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
         getToolbar();
-        callApi();
-        /*if (sharedpreferences.contains("SharedModeTypeVale")) {
-            ModeOfTravel = sharedpreferences.getString("SharedModeTypeVale", "");
-            Log.e("Privacypolicy", "ModeOfTravel" + ModeOfTravel);
-            TextModeTravel.setText(ModeOfTravel);
-        }*/
+
+        BusToValue();
+
+
+        cOUT = String.valueOf(getIntent().getSerializableExtra("Mode"));
+
+        if (!cOUT.equals("null") && !cOUT.equals("")) {
+            callApi();
+        }
+        Log.v("Text_cOUT", cOUT);
+
+        if (sharedpreferences.contains("Share_to_id")) {
+            StrToCode = sharedpreferences.getString("Share_to_id", "");
+
+            Log.v("Text_To_ID", StrToCode);
+        }
+
+
+        if (sharedpreferences.contains("Share_to")) {
+            TOKM = sharedpreferences.getString("Share_to", "");
+            TextToPlace.setText(TOKM);
+            Log.v("Text_To_Place", TextToPlace.getText().toString());
+        }
+
+        if (sharedpreferences.contains("Share_Mot")) {
+            strMod = sharedpreferences.getString("Share_Mot", "");
+            TextModeTravel.setText(strMod);
+            Log.e("COnvert", "imageConvert");
+
+        }
+        if (sharedpreferences.contains("Share_km")) {
+            strKm = sharedpreferences.getString("Share_km", "");
+            TextStartedKm.setText(strKm);
+            Log.e("COnvert", "imageConvert");
+        }
+
+        if (sharedpreferences.contains("Share_Img")) {
+            strImg = sharedpreferences.getString("Share_Img", "");
+            Glide.with(getApplicationContext())
+                    .load(strImg)
+                    .into(StartedKmImage);
+            Log.e("COnvert", "imageConvert");
+        }
+
 
         if (sharedpreferences.contains("SharedImage")) {
             StartedImage = sharedpreferences.getString("SharedImage", "");
             Log.e("Privacypolicy", "Checking" + StartedImage);
             if (StartedImage != null && !StartedImage.isEmpty() && !StartedImage.equals("null")) {
                 //   StartedKmImage.setImageURI(Uri.parse(StartedImage));
-
             }
-
         }
         if (sharedpreferences.contains("SharedImages")) {
             EndedImage = sharedpreferences.getString("SharedImages", "");
             Log.e("Privacypolicy", "Checking" + EndedImage);
             EndedKmImage.setImageURI(Uri.parse(EndedImage));
-
-
             imageConvert = EndedImage.substring(7);
             Log.e("COnvert", EndedImage.substring(7));
             Log.e("COnvert", imageConvert);
             getMulipart(imageConvert, 0);
+
         }
         if (sharedpreferences.contains("StartedKM")) {
             StartedKm = sharedpreferences.getString("StartedKM", "");
             Log.e("Privacypolicy", "STARTRD      " + StartedKm);
-            // TextStartedKm.setText(StartedKm);
         }
 
 
@@ -152,14 +190,18 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (EndedEditText.getText().toString() != null && !EndedEditText.getText().toString().isEmpty() && !EndedEditText.getText().toString().equals("null")) {
 
-
                     try {
                         stKM = Integer.valueOf(StartedKm);
                     } catch (NumberFormatException ex) { // handle your exception
 
                     }
                     if (!EndedEditText.getText().toString().equals("")) {
-                        endKm = Integer.valueOf(EndedEditText.getText().toString());
+
+                        try {
+                            endKm = Integer.parseInt(EndedEditText.getText().toString());
+                        } catch (NumberFormatException ex) { // handle your exception
+
+                        }
                     }
                     Log.e("STARTED_KM", String.valueOf(endKm));
                     if (stKM < endKm) {
@@ -177,17 +219,47 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         });
 
 
+        if (!EndedImage.matches("")) {
+            EndedKmImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                    intent.putExtra("ImageUrl", EndedImage);
+                    startActivity(intent);
+                }
+            });
+        }
+
+
         takeEndedPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                SharedPreferences.Editor editor = sharedpreferences.edit();
-                editor.putString("Closing", EndedEditText.getText().toString());
-                editor.commit();
-                Intent intent = new Intent(AllowanceActivityTwo.this, AllowancCapture.class);
-                intent.putExtra("allowance", "Two");
-                startActivity(intent);
-                finish();
+                CameraPermission cameraPermission = new CameraPermission(AllowanceActivityTwo.this, getApplicationContext());
+
+                if (!cameraPermission.checkPermission()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        cameraPermission.requestPermission();
+                    }
+                    Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                } else {
+                    Log.v("PERMISSION", "PERMISSION");
+                    Log.v("Text_To_ID", StrToCode);
+
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putString("Closing", EndedEditText.getText().toString());
+                    editor.putString("Share_to", TextToPlace.getText().toString());
+                    editor.putString("Share_Mot", TextModeTravel.getText().toString());
+                    editor.putString("Share_km", TextStartedKm.getText().toString());
+                    editor.putString("Share_Img", ImageStart);
+                    editor.putString("Share_to_id", StrToCode);
+                    editor.commit();
+
+                    Intent intent = new Intent(AllowanceActivityTwo.this, AllowancCapture.class);
+                    intent.putExtra("allowance", "Two");
+                    startActivity(intent);
+
+                }
 
             }
         });
@@ -201,10 +273,10 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                 if (EndedEditText.getText().toString().matches("")) {
                     Toast.makeText(AllowanceActivityTwo.this, "Enter End KM", Toast.LENGTH_SHORT).show();
                     return;
-                }else if(EndedImage.matches("")){
+                } else if (EndedImage.matches("")) {
                     Toast.makeText(AllowanceActivityTwo.this, "Enter End KM", Toast.LENGTH_SHORT).show();
                     return;
-                }else {
+                } else {
 
                     try {
                         stKM = Integer.valueOf(TextStartedKm.getText().toString());
@@ -225,6 +297,20 @@ public class AllowanceActivityTwo extends AppCompatActivity {
 
             }
         });
+
+        linToPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog = new CustomListViewDialog(AllowanceActivityTwo.this, modelRetailDetails, 10);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+            }
+        });
+
+
+
 
     }
 
@@ -249,8 +335,10 @@ public class AllowanceActivityTwo extends AppCompatActivity {
             jj.put("div", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
             jj.put("url", Photo_Name);
             jj.put("from", "");
-            jj.put("to", "");
+            jj.put("to", TextToPlace.getText().toString());
+            jj.put("to_code", StrToCode);
             jj.put("fare", "");
+            jj.put("Activity_Date", Common_Class.GetDate());
             //saveAllowance
             Log.v("printing_allow", jj.toString());
             Call<ResponseBody> Callto;
@@ -305,6 +393,42 @@ public class AllowanceActivityTwo extends AppCompatActivity {
     }
 
 
+    public void BusToValue() {
+
+        JSONObject jj = new JSONObject();
+        try {
+            jj.put("sfCode", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+            jj.put("divisionCode", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> call = apiInterface.getBusTo(jj.toString());
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                JsonArray jsonArray = response.body();
+                for (int a = 0; a < jsonArray.size(); a++) {
+                    JsonObject jsonObject = (JsonObject) jsonArray.get(a);
+
+                    String id = String.valueOf(jsonObject.get("id"));
+                    String name = String.valueOf(jsonObject.get("name"));
+                    String townName = String.valueOf(jsonObject.get("ODFlag"));
+                    name = name.replaceAll("^[\"']+|[\"']+$", "");
+                    id = id.replaceAll("^[\"']+|[\"']+$", "");
+                    mCommon_model_spinner = new Common_Model(id, name, "");
+                    modelRetailDetails.add(mCommon_model_spinner);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+                Log.d("LeaveTypeList", "Error");
+            }
+        });
+    }
+
+
     public void getToolbar() {
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -348,14 +472,13 @@ public class AllowanceActivityTwo extends AppCompatActivity {
     }
 
     public void openHome() {
-            Intent Dashboard = new Intent(AllowanceActivityTwo.this, Dashboard_Two.class);
-            Dashboard.putExtra("Mode", "CIN");
-            startActivity(Dashboard);
-        }
+        Intent Dashboard = new Intent(AllowanceActivityTwo.this, Dashboard_Two.class);
+        Dashboard.putExtra("Mode", "CIN");
+        startActivity(Dashboard);
+    }
 
 
     public void callApi() {
-
 
         try {
             JSONObject jj = new JSONObject();
@@ -385,11 +508,52 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                                 Glide.with(getApplicationContext())
                                         .load(json_oo.getString("start_Photo"))
                                         .into(StartedKmImage);
+                                maxKM = json_oo.getInt("Maxkm");
+                                Hq = json_oo.getString("dailyAllowance");
 
-                                Log.e("Text_Strat", TextStartedKm.getText().toString());
-                                Log.e("Text_Strat", json_oo.getString("start_Photo"));
+                                //   TextMaxKm.setText("Maximum km : " + maxKM);
+
+                                StratKm = Integer.valueOf(json_oo.getString("Start_Km"));
+
+                                ImageStart = json_oo.getString("start_Photo");
+
+
+                                /*b
+                                 *
+                                 *
+                                 *
+                                 *
+                                 *
+                                 *
+                                 * */
+
+                                StrToCode = json_oo.getString("To_Place_Id");
+
+                                TextToPlace.setText(json_oo.getString("To_Place"));
+
+
+                                TotalKm = StratKm + maxKM;
+
+                                Log.v("START_KM", String.valueOf(StratKm));
+                                Log.v("ToTAL_KM", String.valueOf(TotalKm));
+
+                                /* EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(1, TotalKm)});*/
+
+                                if (!json_oo.getString("start_Photo").matches("")) {
+                                    StartedKmImage.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                                            try {
+                                                intent.putExtra("ImageUrl", json_oo.getString("start_Photo"));
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                            startActivity(intent);
+                                        }
+                                    });
+                                }
                             }
-
                         }
                     } catch (Exception e) {
                     }
@@ -414,9 +578,7 @@ public class AllowanceActivityTwo extends AppCompatActivity {
     public HashMap<String, RequestBody> field(String val) {
         HashMap<String, RequestBody> xx = new HashMap<String, RequestBody>();
         xx.put("data", createFromString(val));
-
         return xx;
-
     }
 
     private RequestBody createFromString(String txt) {
@@ -456,7 +618,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                 try {
                     if (response.isSuccessful()) {
 
-
                         Log.v("print_upload_file_true", "ggg" + response);
                         JSONObject jb = null;
                         String jsonData = null;
@@ -466,7 +627,6 @@ public class AllowanceActivityTwo extends AppCompatActivity {
                         if (js.getString("success").equalsIgnoreCase("true")) {
                             Photo_Name = js.getString("url");
                             Log.v("printing_dynamic_cou", js.getString("url"));
-
 
                         }
 
@@ -483,67 +643,14 @@ public class AllowanceActivityTwo extends AppCompatActivity {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 10) {
-            //TODO: action
-
-            ClipData mClipData = data.getClipData();
-            int pickedImageCount;
-            String filepathing = "";
-            if (data.getData() == null) {
-                Log.v("onactivity_result", data.getData() + " ");
-                for (pickedImageCount = 0; pickedImageCount < mClipData.getItemCount();
-                     pickedImageCount++) {
-                    Log.v("picked_image_value", mClipData.getItemAt(pickedImageCount).getUri() + "");
-                    ImageFilePath filepath = new ImageFilePath();
-                    String fullPath = filepath.getPath(AllowanceActivityTwo.this, mClipData.getItemAt(pickedImageCount).getUri());
-                    Log.v("picked_fullPath", fullPath + "");
-                    if (pos == -1)
-                        picPath.add(fullPath);
-                    else {
-
-                    }
-                }
-            } else {
-                Log.v("data_pic_multiple", "is in empty");
-                ImageFilePath filepath = new ImageFilePath();
-                String fullPath = filepath.getPath(AllowanceActivityTwo.this, data.getData());
-                Log.v("data_pic_multiple11", fullPath);
-                if (pos == -1)
-                    picPath.add(fullPath);
-                else {
-
-
-                }
-            }
-
-        } else if (requestCode == 2 && resultCode == Activity.RESULT_OK) {
-            String finalPath = "/storage/emulated/0";
-            String filePath = outputFileUri.getPath();
-            filePath = filePath.substring(1);
-            filePath = finalPath + filePath.substring(filePath.indexOf("/"));
-            Log.v("printing__file_path", filePath);
-            Log.v("printing__Position", String.valueOf(pos));
-
-            EndedKmImage.setImageURI(Uri.fromFile(new File(filePath)));
-         /*   Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-            EndedKmImage.setImageBitmap(bitmap);*/
-            if (pos == -1) {
-
-                // picPath.add(filePath);
-                Log.v("printing__eventListStr", filePath);
-
-
-                getMulipart(filePath, 0);
-            } else {
-
-            }
-            //filePathing = filePathing + filePath + ",";
+    public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
+        customDialog.dismiss();
+        if (type == 10) {
+            TextToPlace.setText(myDataset.get(position).getName());
+            toPlace = myDataset.get(position).getName();
+            StrToCode = myDataset.get(position).getId();
+            Log.e("STRTOCOD", StrToCode);
         }
     }
-
-
 }

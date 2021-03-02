@@ -515,6 +515,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
 
         public boolean CheckTp_View(int a) {
             boolean bflag = false;
+
             for (int i = 0; Tp_View_Master.size() > i; i++) {
                 if (a == Tp_View_Master.get(i).getDayofcout()) {
                     bflag = true;

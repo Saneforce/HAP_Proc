@@ -52,6 +52,198 @@
 
                 </RelativeLayout>
 
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/C10dp"
+                    android:layout_marginRight="@dimen/C5dp"
+                    android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/C5dp"
+                        android:layout_marginTop="@dimen/C5dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C2dp">
+
+                            <TextView
+                                android:id="@+id/txt_Name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:text="sdsad"
+                                android:textColor="@android:color/black"
+                                android:textSize="@dimen/C15dp"
+                                android:textStyle="bold"
+                                tools:ignore="RtlCompat" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:fontFamily="@font/basic"
+                                android:text="-"
+                                android:textAllCaps="false"
+                                android:textColor="@android:color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/txt_emp_id"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_weight="1"
+                                android:text="sdadsa"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C2dp"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="@dimen/C70dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="Name :"
+                                android:textAllCaps="false"
+                                android:textColor="@android:color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:layout_weight="1"
+                                tools:ignore="RtlCompat" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:onClick="ImagePdf"
+                                android:src="@drawable/info">
+
+                            </ImageView>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/C5dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="@dimen/C70dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="Desg :"
+                                android:textAllCaps="false"
+                                android:textColor="@android:color/black"
+                                android:textSize="12sp"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/txt_desg"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:layout_weight="1"
+                                android:baselineAligned="false"
+                                android:text=""
+                                android:textSize="12sp"
+                                tools:ignore="RtlCompat" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="horizontal"
+                            android:padding="@dimen/C2dp"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:layout_width="@dimen/C70dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/basic"
+                                android:text="Dept :"
+                                android:textAllCaps="false"
+                                android:textColor="@android:color/black"
+                                android:textSize="14sp" />
+
+                            <TextView
+                                android:id="@+id/txt_dep"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:layout_weight="1"
+                                tools:ignore="RtlCompat" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginRight="@dimen/C10dp"
+                                android:src="@drawable/eye"
+                                android:visibility="invisible">
+
+                            </ImageView>
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+
+                </LinearLayout>
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -311,10 +503,11 @@
                                             android:orientation="horizontal">
 
                                             <TextView
+                                                android:id="@+id/txt_driver_boarding"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_weight="1"
-                                                android:text="Driver Boarding"
+                                                android:text=""
                                                 android:textAllCaps="true"
                                                 android:textColor="@android:color/black"
                                                 android:textSize="11sp"
@@ -472,7 +665,9 @@
                                 android:layout_margin="@dimen/C8dp"
                                 android:orientation="vertical"
                                 android:padding="@dimen/C5dp"
-                                android:visibility="gone">
+                                android:visibility="gone"
+
+                                >
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -493,7 +688,7 @@
                                         android:id="@+id/mode_name"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Bike"
+                                        android:text=""
                                         android:textColor="#000"
                                         android:textSize="15sp"
                                         android:textStyle="bold" />
@@ -630,6 +825,15 @@
                                                 android:textColor="#000"
                                                 android:textSize="15sp"
                                                 android:textStyle="bold" />
+
+                                            <TextView
+                                                android:id="@+id/max_km"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="start"
+                                                android:text=""
+                                                android:textSize="7sp"
+                                                android:visibility="gone" />
                                         </LinearLayout>
 
                                         <LinearLayout
@@ -936,25 +1140,24 @@
                                 android:orientation="vertical"
                                 tools:ignore="MissingPrefix">
 
-
                             </LinearLayout>
 
 
                             <View
+                                android:id="@+id/vw_tl"
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
                                 android:layout_margin="@dimen/C10dp"
-                                android:background="@color/grey_300"
-                           ></View>
+                                android:background="@color/grey_300"></View>
 
                             <LinearLayout
+                                android:id="@+id/lin_tl"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/C10dp"
                                 android:layout_marginRight="@dimen/C10dp"
                                 android:layout_marginBottom="@dimen/C5dp"
-                                android:orientation="horizontal"
-                          >
+                                android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="match_parent"
@@ -1193,7 +1396,7 @@
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
                                                 android:layout_weight="1"
-                                                android:text="Joint Person Details"
+                                                android:text="Joined Person Details"
                                                 android:textAllCaps="true"
                                                 android:textColor="@color/colorPrimary"
                                                 android:textSize="12sp"
@@ -1921,6 +2124,7 @@
                     android:textAlignment="center"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold"
+                    android:visibility="gone"
                     tools:ignore="RtlCompat" />
 
                 <Button
@@ -1935,6 +2139,7 @@
                     android:textAlignment="center"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold"
+                    android:visibility="gone"
                     tools:ignore="RtlCompat" />
             </LinearLayout>
 
@@ -1945,17 +2150,17 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lin_back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#99ECEAEA"
-        android:id="@+id/lin_back"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints">
 
         <ImageView
+            android:id="@+id/imag_backs"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:id="@+id/imag_backs"
             android:layout_margin="@dimen/C5dp"
             android:paddingLeft="@dimen/C8dp"
             android:paddingRight="@dimen/C8dp"

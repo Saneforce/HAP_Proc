@@ -42,10 +42,15 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/product_image"
         android:layout_below="@+id/searchView"
+        android:scrollbars="vertical"
+        android:fadeScrollbars="false"
+        android:scrollbarThumbVertical="@color/colorPrimaryDark"
+        android:scrollbarSize="@dimen/C5dp"
+        android:scrollbarStyle="outsideOverlay"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"
         android:background="@color/white"
-        android:scrollbars="vertical" />
+ />
 
 
     <LinearLayout

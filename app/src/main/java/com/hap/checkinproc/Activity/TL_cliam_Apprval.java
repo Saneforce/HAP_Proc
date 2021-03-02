@@ -21,14 +21,12 @@ import org.json.JSONObject;
 
 public class TL_cliam_Apprval extends AppCompatActivity {
 
-
-    LinearLayout travelDynamicLoaction, otherExpenseLayout;
+    LinearLayout travelDynamicLoaction;
     TextView editText;
     EditText etrTaFr, etrTaTo, enterFrom, enterTo, enterFare;
-    ImageView delete_lc;
-    LinearLayout linLocalSpinner, Dynamicallowance;
     String TLClaim = "", StrToEnd = "0";
     JSONArray jsonArray = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +44,10 @@ public class TL_cliam_Apprval extends AppCompatActivity {
         try {
             jsonArray = new JSONArray(TLClaim);
             if (StrToEnd.equals("0")) {
-                trvldLocation(jsonArray);
-            } else {
                 trvldLocationBus(jsonArray);
+            } else {
+                trvldLocation(jsonArray);
+
             }
         } catch (JSONException e) {
             e.printStackTrace();

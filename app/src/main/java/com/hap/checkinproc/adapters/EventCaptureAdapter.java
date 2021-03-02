@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.card.MaterialCardView;
 import com.hap.checkinproc.Activity_Hap.UpdateTaskActivity;
-import com.hap.checkinproc.Interface.EventCaptureInterface;
+
 import com.hap.checkinproc.Interface.On_ItemCLick_Listner;
 import com.hap.checkinproc.Model_Class.EventCapture;
 import com.hap.checkinproc.R;
@@ -27,7 +27,7 @@ public class EventCaptureAdapter extends RecyclerView.Adapter<EventCaptureAdapte
     EventCapture evC;
     Context mContext;
     ArrayList<Uri> uriArrayList;
-    EventCaptureInterface eventCaptureInterface;
+
     int post;
     On_ItemCLick_Listner on_itemCLick_listner;
 

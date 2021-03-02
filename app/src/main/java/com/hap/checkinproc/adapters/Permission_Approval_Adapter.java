@@ -20,7 +20,7 @@ public class Permission_Approval_Adapter extends RecyclerView.Adapter<Permission
     private int rowLayout;
     private Context context;
     AdapterOnClick mAdapterOnClick;
-    Integer dummy;
+    Integer dummy =0;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, textviewdate, open, NoofHours;

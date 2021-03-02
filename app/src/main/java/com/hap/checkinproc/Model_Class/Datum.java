@@ -8,9 +8,19 @@ import org.json.JSONArray;
 
 public class Datum {
 
+
     @SerializedName("Sf_UserName")
     @Expose
     private String sfUserName;
+    @SerializedName("sf_emp_id")
+    @Expose
+    private String sfEmpId;
+    @SerializedName("DeptName")
+    @Expose
+    private String deptName;
+    @SerializedName("sf_Designation_Short_Name")
+    @Expose
+    private String sfDesignationShortName;
     @SerializedName("SF_Status")
     @Expose
     private Integer sFStatus;
@@ -23,12 +33,6 @@ public class Datum {
     @SerializedName("Division_Code")
     @Expose
     private String divisionCode;
-    @SerializedName("SFDept")
-    @Expose
-    private String deptCd;
-    @SerializedName("DeptType")
-    @Expose
-    private String DeptType;
     @SerializedName("DisRad")
     @Expose
     private Double disRad;
@@ -44,6 +48,12 @@ public class Datum {
     @SerializedName("SFFType")
     @Expose
     private Integer sFFType;
+    @SerializedName("SFDept")
+    @Expose
+    private String sFDept;
+    @SerializedName("DeptType")
+    @Expose
+    private String deptType;
     @SerializedName("OTFlg")
     @Expose
     private Integer oTFlg;
@@ -57,6 +67,30 @@ public class Datum {
 
     public void setSfUserName(String sfUserName) {
         this.sfUserName = sfUserName;
+    }
+
+    public String getSfEmpId() {
+        return sfEmpId;
+    }
+
+    public void setSfEmpId(String sfEmpId) {
+        this.sfEmpId = sfEmpId;
+    }
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
+    public String getSfDesignationShortName() {
+        return sfDesignationShortName;
+    }
+
+    public void setSfDesignationShortName(String sfDesignationShortName) {
+        this.sfDesignationShortName = sfDesignationShortName;
     }
 
     public Integer getSFStatus() {
@@ -88,7 +122,7 @@ public class Datum {
     }
 
     public void setDivisionCode(String divisionCode) {
-        this.   divisionCode = divisionCode;
+        this.divisionCode = divisionCode;
     }
 
     public Double getDisRad() {
@@ -131,6 +165,22 @@ public class Datum {
         this.sFFType = sFFType;
     }
 
+    public String getSFDept() {
+        return sFDept;
+    }
+
+    public void setSFDept(String sFDept) {
+        this.sFDept = sFDept;
+    }
+
+    public String getDeptType() {
+        return deptType;
+    }
+
+    public void setDeptType(String deptType) {
+        this.deptType = deptType;
+    }
+
     public Integer getOTFlg() {
         return oTFlg;
     }
@@ -145,22 +195,6 @@ public class Datum {
 
     public void setHOLocation(String hOLocation) {
         this.hOLocation = hOLocation;
-    }
-
-
-    public String getDeptCd() {
-        return deptCd;
-    }
-
-    public void setDeptCd(String deptCd) {
-        this.deptCd = deptCd;
-    }
-
-    public String getDeptType() {
-        return DeptType;
-    }
-    public void setDeptType(String deptType) {
-        DeptType = deptType;
     }
 
 

@@ -46,9 +46,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -170,12 +168,27 @@ public class Login extends AppCompatActivity {
 
         eMail = UserDetails.getString("email", "");
         name.setText(eMail);
-        if (!checkPermission()) {
+
+       /* if (!checkPermission()) {
             //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 requestPermissions();
             //}
         } else {
+        }*/
+
+
+        CameraPermission cameraPermission = new CameraPermission(Login.this, getApplicationContext());
+
+        if (!cameraPermission.checkPermission()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                cameraPermission.requestPermission();
+            }
+            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+        } else {
+            Log.v("PERMISSION", "PERMISSION");
         }
+
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -474,7 +487,7 @@ public class Login extends AppCompatActivity {
         Log.d(TAG, "TWO                    " + deviceToken);
         //eMail="ciadmin@hap.in";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
-        //   Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
+        //Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "ciadmin@hap.in", deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
@@ -492,15 +505,15 @@ public class Login extends AppCompatActivity {
 
                         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                         JsonArray CinData = response.body().getCInData();
-                        if (CinData.size()>0) {
+                        if (CinData.size() > 0) {
                             JsonObject CinObj = CinData.get(0).getAsJsonObject();
-                            Log.d("CinData",String.valueOf(CinObj));
+                            Log.d("CinData", String.valueOf(CinObj));
 
                             SharedPreferences.Editor editor = CheckInDetails.edit();
                             editor.putString("Shift_Selected_Id", CinObj.get("Sft_ID").getAsString());
                             editor.putString("Shift_Name", CinObj.get("Sft_Name").getAsString());
                             ///if(CinObj.getAsJsonObject("End_Time").isJsonNull()!= true)
-                            if(CinObj.get("End_Time").isJsonNull()!=true)
+                            if (CinObj.get("End_Time").isJsonNull() != true)
                                 editor.putString("CINEnd", CinObj.getAsJsonObject("End_Time").get("date").getAsString());
                             else
                                 editor.putString("CINEnd", "");
@@ -509,12 +522,12 @@ public class Login extends AppCompatActivity {
                             editor.putString("ShiftCutOff", CinObj.getAsJsonObject("ACutOff").get("date").getAsString());
                             editor.putString("On_Duty_Flag", CinObj.get("Wtp").getAsString());
 
-                            String CTime=DT.getDateWithFormat(CinObj.getAsJsonObject("Start_Time").get("date").getAsString(),"HH:mm:ss");
-                            int Type=CinObj.get("Type").getAsInt();
+                            String CTime = DT.getDateWithFormat(CinObj.getAsJsonObject("Start_Time").get("date").getAsString(), "HH:mm:ss");
+                            int Type = CinObj.get("Type").getAsInt();
                             if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
                                 editor.putString("FTime", CTime);
                             editor.putString("Logintime", CTime);
-                            if(Type==0) CheckIn=true;
+                            if (Type == 0) CheckIn = true;
                             editor.putBoolean("CheckIn", CheckIn);
                             editor.apply();
                         }
@@ -532,24 +545,13 @@ public class Login extends AppCompatActivity {
                             // intent = new Intent(Login.this, AllowanceActivity.class);
                             intent = new Intent(Login.this, Dashboard_Two.class);
                             intent.putExtra("Mode", "RPT");
-                        }/*
-                        intent.putExtra("photo", photo);
-                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
-                        Intent intent;
-                        if (requestCode == RC_SIGN_IN)
-                           intent = new Intent(Login.this, Dashboard.class);
-                          //intent = new Intent(Login.this, EventCaptureActivity.class);
-                        else
-                            intent = new Intent(Login.this, Dashboard_Two.class);
-                        intent.putExtra("photo", photo);
-
-                        intent.putExtra("Mode", "CIN");*/
+                        }
                         String code = response.body().getData().get(0).getSfCode();
                         String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
                         String sName = response.body().getData().get(0).getSfName();
                         String div = response.body().getData().get(0).getDivisionCode();
                         Integer type = response.body().getData().get(0).getCheckCount();
-                        String DeptCd = response.body().getData().get(0).getDeptCd();
+                        String DeptCd = response.body().getData().get(0).getSFDept();
                         String DeptType = response.body().getData().get(0).getDeptType();
                         Integer OTFlg = response.body().getData().get(0).getOTFlg();
                         SharedPreferences.Editor editor = UserDetails.edit();
@@ -560,6 +562,11 @@ public class Login extends AppCompatActivity {
                         shared_common_pref.save(Shared_Common_Pref.Sf_Code, code);
                         shared_common_pref.save(Shared_Common_Pref.Div_Code, div);
                         shared_common_pref.save(Shared_Common_Pref.StateCode, Sf_type);
+                        shared_common_pref.save(Shared_Common_Pref.SF_EMP_ID, response.body().getData().get(0).getSfEmpId());
+                        shared_common_pref.save(Shared_Common_Pref.Sf_Name, response.body().getData().get(0).getSfName());
+
+                        shared_common_pref.save(Shared_Common_Pref.SF_DEPT, response.body().getData().get(0).getDeptName());
+                        shared_common_pref.save(Shared_Common_Pref.SF_DESIG, response.body().getData().get(0).getSfDesignationShortName());
 
                         shared_common_pref.save(Shared_Common_Pref.CHECK_COUNT, String.valueOf(type));
 
@@ -567,7 +574,7 @@ public class Login extends AppCompatActivity {
                         Shared_Common_Pref.SF_Type = Sf_type;
 
 
-                        Log.e("STATECODE", Sf_type);
+                        Log.e("SF_TYPEVALUE", Sf_type);
                         Log.e("STATECODE", code);
                         Log.e("STATECODE", div);
 
@@ -616,7 +623,7 @@ public class Login extends AppCompatActivity {
 
                 Toast.makeText(getApplicationContext(), "Not Working", Toast.LENGTH_LONG).show();
                 try {
-                mProgress.dismiss();
+                    mProgress.dismiss();
                 } catch (Exception e) {
 
                 }
@@ -707,19 +714,4 @@ public class Login extends AppCompatActivity {
     };
 
 
-
-
-    public void checking(View v) {
-
-        CameraPermission cameraPermission = new CameraPermission(Login.this, getApplicationContext());
-
-        if(!cameraPermission.checkPermission()){
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                cameraPermission.requestPermission();
-            }
-            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
-        } else {
-            Log.v("PERMISSION", "PERMISSION");
-        }
-    }
 }

@@ -142,7 +142,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/C10dp"
-                                android:text="Driver Allowance">
+                                android:text="Chauffer driven">
 
 
                             </CheckBox>

@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity;
 
 import android.animation.ArgbEvaluator;
+import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
@@ -47,20 +48,20 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity.Util.ImageFilePath;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
-import com.hap.checkinproc.Activity.Util.UpdateUi;
 import com.hap.checkinproc.Activity_Hap.AttachementActivity;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Activity_Hap.MapZoomIn;
+import com.hap.checkinproc.Activity_Hap.ProductImageView;
+import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -69,7 +70,6 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.adapters.DailyExpenseAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -77,7 +77,9 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -93,7 +95,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TAClaimActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface,
+public class TAClaimActivity extends AppCompatActivity implements Master_Interface,
         OnMapReadyCallback {
 
 
@@ -112,11 +114,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     ApiInterface apiInterface;
     Uri outputFileUri;
 
-    LinearLayout Dynamicallowance, OtherExpense, localTotal, otherTotal, otherExpenseLayout, linAll, linRemarks,
+    LinearLayout Dynamicallowance, OtherExpense, localTotal, otherExpenseLayout, linAll, linRemarks,
             linFareAmount, ldg_typ_sp, linLocalSpinner, linOtherSpinner, lodgCont, lodgContvw, ldg_stayloc, ldg_stayDt,
-            lodgJoin, ldgEAra, ldgMyEAra, JNLdgEAra, drvldgEAra, jointLodging, vwBoarding, vwDrvBoarding, linTaImgPrv,
+            lodgJoin, ldgEAra, ldgMyEAra, JNLdgEAra, drvldgEAra, jointLodging, vwBoarding, vwDrvBoarding,
             linAddAllowance, diverAllowanceLinear, LDailyAllowance, LOtherExpense, LLocalConve, LinearOtherAllowance,
-            linlocalCon, linBusMode, linBikeMode, linMode, travelDynamicLoaction, linDailyAllowance, linback;
+            linlocalCon, linBusMode, linBikeMode, linMode, travelDynamicLoaction, linDailyAllowance, linback, lin;
 
     CardView card_date, TravelBike, crdDynamicLocation, ldg_ara;
 
@@ -125,7 +127,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             txtDailyAllowance, editText, ldg_cin, txtJNName, txtJNDesig, txtJNDept, txtJNHQ, txtJNMob,
             lblHdBill, lblHdBln, ldgWOBBal, ldgAdd, txtJNMyEli, txtMyEligi, txtDrivEligi, lbl_ldg_eligi, txt_totDA,
             fuelAmount, TextTotalAmount, editTexts, oeEditext, localText, OeText, grandTotal, txtallamt, txt_BrdAmt,
-            txt_DrvBrdAmt, txtJointAdd, txtJNEligi, txtTAamt;
+            txt_DrvBrdAmt, txtJointAdd, txtJNEligi, txtTAamt, txtDesig, txtDept, txtEmpId, txtName, oeTxtUKey, oeTxtUKeys,
+            lcTxtUKey, lcTxtUKeys, tvTxtUKey, tvTxtUKeys, txtMaxKm, txtDrvrBrod;
 
     EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt, edt1, edt_ldg_JnEmp,
             edt_ldg_bill, edtLcFare, lodgStyLocation;
@@ -138,11 +141,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             attachment = "", maxAllowonce = "", strRetriveType = "", StrToEnd = "", StrBus = "", StrTo = "", StrDaName = "",
             OEdynamicLabel = "", strFuelAmount = "", StrModeValue = "", dynamicLabel = "", StrDailyAllowance = "", ldgEmpName = "",
             witOutBill = "", ValCd = "", fullPath = "", filePath = "", editMode = "", allowanceAmt = "", myldgEliAmt = "", myBrdEliAmt = "",
-            drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "", finalPath = "", attach_Count = "";
+            drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "",
+            finalPath = "", attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "",
+            tvEditcnt = "", OeUKey = "", LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "";
 
-    Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, taCount = 0, oeCount = 0, editTextPositionss;
+    Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
+            oePosCnt = 0, lcPosCnt = 0, tvSize = 0;
 
-    int size = 0, lcSize = 0, OeSize = 0, pos = -1;
+    int size = 0, lcSize = 0, OeSize = 0;
 
     Double tofuel = 0.0, ldgEliAmt = 0.0, ldgDrvEligi = 0.0, gTotal = 0.0, TotLdging = 0.0,
             GrandTotalAllowance = 0.0, fAmount = 0.0, doubleAmount = 0.0, myBrdAmt = 0.0, drvBrdAmt = 0.0,
@@ -152,21 +158,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     Button btn_sub, buttonSave;
 
     ArrayList<SelectionModel> array = new ArrayList<>();
-    ArrayList<LatLng> latLonArray = new ArrayList<>();
-    ArrayList<String> finalpicPath = new ArrayList<>();
     ArrayList<String> DA = new ArrayList<>();
     ArrayList<String> OE = new ArrayList<>();
     ArrayList<String> LC = new ArrayList<>();
     ArrayList<String> temaplateList;
     ArrayList<String> OEdynamicList, dynamicLabelList, attachCountList;
-    ArrayList<String> lcString = new ArrayList<>();
-    ArrayList<String> zero = new ArrayList<>();
-    ArrayList<String> nonZero = new ArrayList<>();
     ArrayList<String> lodgArrLst = new ArrayList<>();
-    ArrayList<String> oEArrayList = new ArrayList<>();
-    ArrayList<ArrayList<String>> oEString = new ArrayList<ArrayList<String>>();
-    ArrayList<ArrayList<String>> tlString = new ArrayList<ArrayList<String>>();
-
 
     List<Common_Model> listOrderType = new ArrayList<>();
     List<Common_Model> modelRetailDetails = new ArrayList<>();
@@ -175,22 +172,20 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     List<Common_Model> modelTravelType = new ArrayList<>();
     List<ModeOfTravel> modelOfTravel;
     List<EditText> newEdt = new ArrayList<>();
+    List<String> listWithoutDuplicates;
 
     Map<String, List<EditText>> usersByCountry = new HashMap<String, List<EditText>>();
     Map<String, List<EditText>> userOtherExpense = new HashMap<String, List<EditText>>();
     Map<String, String> AttachmentImg = new HashMap<String, String>();
 
     CustomListViewDialog customDialog;
-    private static final int COLOR_ORANGE_ARGB = 0xffF57F17;
-    List<String> listWithoutDuplicates;
     JSONObject jsonDailyAllowance = new JSONObject();
-    View childView, rowView;
-    SharedPreferences mSharedPreferences;
     Type userType;
     Gson gson;
     Dialog dialog;
     DatePickerDialog picker;
     Switch ldgNeeded;
+    View viw;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -204,14 +199,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
-
+        mShared_common_pref = new Shared_Common_Pref(this);
         getToolbar();
         gson = new Gson();
         temaplateList = new ArrayList<>();
         dynamicLabelList = new ArrayList<>();
         OEdynamicList = new ArrayList<>();
         attachCountList = new ArrayList<>();
-
 
         txt_date = findViewById(R.id.txt_date);
         card_date = findViewById(R.id.card_date);
@@ -238,7 +232,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         linBikeMode = findViewById(R.id.linear_bike_mode);
         linMode = findViewById(R.id.linear_mode);
         localTotal = findViewById(R.id.lin_total_loca);
-        otherTotal = findViewById(R.id.lin_total_other);
+        otherExpenseLayout = findViewById(R.id.lin_total_other);
         lodgStyLocation = findViewById(R.id.edt_stay_loc);
         txtallamt = findViewById(R.id.txt_mode_amount);
         txt_BrdAmt = findViewById(R.id.txt_BrdAmt);
@@ -252,17 +246,14 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         linDailyAllowance = findViewById(R.id.lin_da_type);
         linlocalCon = findViewById(R.id.lin_dyn_local_con);
         fuelAmount = findViewById(R.id.fuel_amount);
-        mSharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         TextTotalAmount = findViewById(R.id.txt_total_amt);
         LinearOtherAllowance = findViewById(R.id.lin_dyn_other_Expense);
         grandTotal = findViewById(R.id.grand_total);
         localText = findViewById(R.id.txt_local);
         OeText = findViewById(R.id.txt_oe);
-        otherExpenseLayout = findViewById(R.id.lin_total_other);
         linAll = findViewById(R.id.lin_alo_view);
         linRemarks = findViewById(R.id.lin_remarks);
         linFareAmount = findViewById(R.id.lin_fare_amount);
-        linTaImgPrv = findViewById(R.id.lin_ta_img_prv);
         ldgNeeded = findViewById(R.id.sw_ldgNeed);
         ldg_ara = findViewById(R.id.linear_loadge);
         ldg_typ_sp = findViewById(R.id.ldg_typ_spiner);
@@ -294,11 +285,35 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         txtTAamt = findViewById(R.id.txt_trav_loca);
         linback = findViewById(R.id.lin_back);
         imgBck = findViewById(R.id.imag_backs);
+        txtName = findViewById(R.id.txt_Name);
+        txtDesig = findViewById(R.id.txt_desg);
+        txtDept = findViewById(R.id.txt_dep);
+        txtEmpId = findViewById(R.id.txt_emp_id);
+        txtName.setText(Shared_Common_Pref.Sf_Name);
+        txtDesig.setText(mShared_common_pref.getvalue(Shared_Common_Pref.SF_DESIG));
+        txtDept.setText(mShared_common_pref.getvalue(Shared_Common_Pref.SF_DEPT));
+        txtEmpId.setText("(" + mShared_common_pref.getvalue(Shared_Common_Pref.SF_EMP_ID) + ")");
+        viw = findViewById(R.id.vw_tl);
+        lin = findViewById(R.id.lin_tl);
+        txtMaxKm = findViewById(R.id.max_km);
+        txtDrvrBrod = findViewById(R.id.txt_driver_boarding);
 
         img_lodg_atta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popupCapture(143);
+
+                CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+
+                if (!cameraPermission.checkPermission()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        cameraPermission.requestPermission();
+                    }
+                    Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                } else {
+                    Log.v("PERMISSION", "PERMISSION");
+                    popupCapture(143);
+                }
+
             }
         });
 
@@ -314,7 +329,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }
         });
-
 
         drvldgEAra.setVisibility(View.VISIBLE);
         ldgAdd.setOnClickListener(new View.OnClickListener() {
@@ -374,9 +388,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         strRetriveType = String.valueOf(getIntent().getSerializableExtra("Retrive_Type"));
         if (strRetriveType.equals("Daily Allowance")) {
             jsonDailyAllowance = (JSONObject) getIntent().getSerializableExtra("Retrive_Ta_List");
-
-        } else {
-
         }
 
         ImageView backView = findViewById(R.id.imag_back);
@@ -396,102 +407,124 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
 
         strGT = grandTotal.getText().toString();
-        LDailyAllowance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         LOtherExpense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View rowView = null;
 
 
-                otherTotal.setVisibility(View.VISIBLE);
+                otherExpenseLayout.setVisibility(View.VISIBLE);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
                 layoutParams.setMargins(15, 15, 15, 15);
 
-                oEString.add(new ArrayList<>());
-
-                rowView = inflater.inflate(R.layout.activity_other_expense, null);
+                final View rowView = inflater.inflate(R.layout.activity_other_expense, null);
                 LinearOtherAllowance.addView(rowView, layoutParams);
-                OeSize = LinearOtherAllowance.getChildCount();
 
-                for (int c = 0; c < OeSize; c++) {
+                oePosCnt = LinearOtherAllowance.indexOfChild(rowView);
 
-                    Integer oESIZE = c;
-                    childView = LinearOtherAllowance.getChildAt(c);
-                    otherExpenseLayout.setVisibility(View.VISIBLE);
-                    oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
-                    edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
-                    oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
-                    oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
-                    linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
+                View views = LinearOtherAllowance.getChildAt(oePosCnt);
+                otherExpenseLayout.setVisibility(View.VISIBLE);
+                oeEditext = (TextView) (views.findViewById(R.id.other_enter_mode));
+                edtOE = (EditText) (views.findViewById(R.id.oe_fre_amt));
+                oeAttach = (ImageView) (views.findViewById(R.id.oe_attach_img));
+                oePreview = (ImageView) (views.findViewById(R.id.img_prvw_oe));
+                oeTxtUKey = (TextView) (views.findViewById(R.id.txt_oe_ukey));
+                OtherExpense = (LinearLayout) views.findViewById(R.id.lin_other_expense_dynamic);
 
+                linOtherSpinner = (LinearLayout) (views.findViewById(R.id.lin_othr_spiner));
 
-                    oeAttach.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
+                oeAttach.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+
+                        if (!cameraPermission.checkPermission()) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+                                cameraPermission.requestPermission();
+                            }
+                            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                        } else {
+                            Log.v("PERMISSION", "PERMISSION");
                             popupCapture(99);
-                        }
-                    });
+                            Integer valuedfd = LinearOtherAllowance.indexOfChild(rowView);
 
-                    oePreview.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            oeCount = oESIZE;
+                            View view = LinearOtherAllowance.getChildAt(valuedfd);
+                            oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
+                            oeTxtUKeys = (TextView) (view.findViewById(R.id.txt_oe_ukey));
+                            editMode = oeEditext.getText().toString();
 
-                            oEArrayList = oEString.get(oeCount);
-                            if (oEArrayList.size() != 0) {
-                                Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-                                stat.putExtra("Data", oEArrayList);
-                                startActivity(stat);
-                            } else {
-                                Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
+                            if (oeTxtUKeys.getText().toString().equals("")) {
+                                DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                Calendar calobjw = Calendar.getInstance();
+                                oeEditCnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                                oeTxtUKeys.setText(oeEditCnt);
                             }
 
-                        }
-                    });
-
-
-                    edtOE.addTextChangedListener(new TextWatcher() {
-                        @Override
-                        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                            OeUKey = oeTxtUKeys.getText().toString();
                         }
 
-                        @Override
-                        public void onTextChanged(CharSequence s, int start, int before, int count) {
-                        }
+                    }
+                });
 
-                        @Override
-                        public void afterTextChanged(Editable s) {
-
-                            SumOFOTAmount();
-                        }
-                    });
+                oePreview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 
 
-                    OtherExpense = (LinearLayout) childView.findViewById(R.id.lin_other_expense_dynamic);
-                    Integer finalC = c;
+                        Integer valuedfd = LinearOtherAllowance.indexOfChild(rowView);
+                        View view = LinearOtherAllowance.getChildAt(valuedfd);
+                        oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
+                        oeTxtUKeys = (TextView) (view.findViewById(R.id.txt_oe_ukey));
+                        editMode = oeEditext.getText().toString();
 
-                    linOtherSpinner.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            OtherExpenseList.clear();
-                            OtherExpenseMode(finalC);
-                        }
-                    });
+                        OeUKey = oeTxtUKeys.getText().toString();
 
-                }
+                        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
 
+                        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                        stat.putExtra("position", OeUKey);
+                        stat.putExtra("headTravel", "OE");
+                        stat.putExtra("mode", editMode);
+                        stat.putExtra("date", DateTime);
+                        startActivity(stat);
+
+                    }
+                });
+
+
+                edtOE.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                        SumOFOTAmount();
+                    }
+                });
+
+                linOtherSpinner.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        OtherExpenseList.clear();
+                        Integer valuedf = LinearOtherAllowance.indexOfChild(rowView);
+                        OtherExpenseMode(valuedf);
+
+                    }
+                });
 
             }
         });
@@ -500,36 +533,151 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             public void onClick(View v) {
 
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View rowView = null;
-
 
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
                 layoutParams.setMargins(15, 15, 15, 15);
 
-                rowView = inflater.inflate(R.layout.activity_local_convenyance, null);
-
+                final View rowView = inflater.inflate(R.layout.activity_local_convenyance, null);
 
                 linlocalCon.addView(rowView, layoutParams);
                 localText.setVisibility(View.VISIBLE);
 
-                lcSize = linlocalCon.getChildCount();
+                lcPosCnt = linlocalCon.indexOfChild(rowView);
 
-                for (int c = 0; c < lcSize; c++) {
-                    childView = linlocalCon.getChildAt(c);
-                    localTotal.setVisibility(View.VISIBLE);
-                    editTexts = (TextView) (childView.findViewById(R.id.local_enter_mode));
-                    linLocalSpinner = (LinearLayout) childView.findViewById(R.id.lin_loc_spiner);
-                    lcAttach = (ImageView) (childView.findViewById(R.id.la_attach_iamg));
-                    lcPreview = (ImageView) (childView.findViewById(R.id.img_prvw_lc));
+                View LcchildView = linlocalCon.getChildAt(lcPosCnt);
+                localTotal.setVisibility(View.VISIBLE);
+                editTexts = (TextView) (LcchildView.findViewById(R.id.local_enter_mode));
+                linLocalSpinner = (LinearLayout) LcchildView.findViewById(R.id.lin_loc_spiner);
+                lcAttach = (ImageView) (LcchildView.findViewById(R.id.la_attach_iamg));
+                lcPreview = (ImageView) (LcchildView.findViewById(R.id.img_prvw_lc));
+                lcTxtUKey = (TextView) (LcchildView.findViewById(R.id.txt_lc_ukey));
+                editLaFare = (EditText) (LcchildView.findViewById(R.id.edt_la_fare));
+                editLaFare.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        SumOFLCAmount();
+                    }
+                });
 
 
-                    editLaFare = (EditText) (childView.findViewById(R.id.edt_la_fare));
-                    editLaFare.addTextChangedListener(new TextWatcher() {
+                Dynamicallowance = (LinearLayout) LcchildView.findViewById(R.id.lin_allowance_dynamic);
+
+                linLocalSpinner.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listOrderType.clear();
+                        Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
+                        dynamicModeType(lcPosCntS);
+                    }
+                });
+
+                lcAttach.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+
+                        if (!cameraPermission.checkPermission()) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+                                cameraPermission.requestPermission();
+                            }
+                            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                        } else {
+                            Log.v("PERMISSION", "PERMISSION");
+
+                            popupCapture(786);
+
+                            Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
+                            View view = linlocalCon.getChildAt(lcPosCntS);
+                            editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
+                            lcTxtUKeys = (TextView) (view.findViewById(R.id.txt_lc_ukey));
+                            editMode = editTexts.getText().toString();
+
+                            if (lcTxtUKeys.getText().toString().equals("")) {
+                                DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                Calendar calobjw = Calendar.getInstance();
+                                lcEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                                lcTxtUKeys.setText(lcEditcnt);
+                            }
+                            LcUKey = lcTxtUKeys.getText().toString();
+                        }
+
+                    }
+                });
+
+                lcPreview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Integer valuelc = linlocalCon.indexOfChild(rowView);
+                        View view = linlocalCon.getChildAt(valuelc);
+                        editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
+                        lcTxtUKeys = (TextView) (view.findViewById(R.id.txt_lc_ukey));
+                        editMode = editTexts.getText().toString();
+                        LcUKey = lcTxtUKeys.getText().toString();
+
+                        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+
+                        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                        stat.putExtra("position", LcUKey);
+                        stat.putExtra("headTravel", "LC");
+                        stat.putExtra("mode", editMode);
+                        stat.putExtra("date", DateTime);
+                        startActivity(stat);
+                    }
+                });
+            }
+        });
+        linAddAllowance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                layoutParams.setMargins(15, 15, 15, 15);
+
+                if (StrToEnd.equals("0")) {
+                    crdDynamicLocation.setVisibility(View.VISIBLE);
+                    final View rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
+                    travelDynamicLoaction.addView(rowView, layoutParams);
+                    deleteButton = findViewById(R.id.delete_button);
+
+                    tvSize = travelDynamicLoaction.indexOfChild(rowView);
+                    View tvchildView = travelDynamicLoaction.getChildAt(tvSize);
+                    viw.setVisibility(View.VISIBLE);
+                    lin.setVisibility(View.VISIBLE);
+
+                    editText = (TextView) (tvchildView.findViewById(R.id.enter_mode));
+                    enterFare = (EditText) tvchildView.findViewById(R.id.enter_fare);
+                    taAttach = (ImageView) (tvchildView.findViewById(R.id.image_attach));
+                    previewss = (ImageView) (tvchildView.findViewById(R.id.image_preview));
+                    tvTxtUKey = (TextView) (tvchildView.findViewById(R.id.txt_tv_ukey));
+
+                    editText.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            modelTravelType.clear();
+                            Integer tvSizes = travelDynamicLoaction.indexOfChild(rowView);
+                            localCon(tvSizes);
+                        }
+                    });
+                    enterFare.addTextChangedListener(new TextWatcher() {
                         @Override
                         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                         }
 
                         @Override
@@ -538,31 +686,88 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                         @Override
                         public void afterTextChanged(Editable s) {
-                            SumOFLCAmount();
+                            SumOFTAAmount();
                         }
                     });
 
 
-                    Dynamicallowance = (LinearLayout) childView.findViewById(R.id.lin_allowance_dynamic);
-                    Integer finalC = c;
-
-                    linLocalSpinner.setOnClickListener(new View.OnClickListener() {
+                    previewss.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            listOrderType.clear();
-                            dynamicModeType(finalC);
+
+                            Integer tvSizes = travelDynamicLoaction.indexOfChild(rowView);
+                            View view = travelDynamicLoaction.getChildAt(tvSizes);
+                            editText = (TextView) (view.findViewById(R.id.enter_mode));
+                            enterFare = (EditText) view.findViewById(R.id.enter_fare);
+                            tvTxtUKeys = (TextView) (view.findViewById(R.id.txt_tv_ukey));
+                            editMode = editText.getText().toString();
+                            TlUKey = tvTxtUKeys.getText().toString();
+
+                            DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+
+                            Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                            stat.putExtra("position", TlUKey);
+                            stat.putExtra("headTravel", "TL");
+                            stat.putExtra("mode", editMode);
+                            stat.putExtra("date", DateTime);
+                            startActivity(stat);
+
+
                         }
                     });
 
-                    lcAttach.setOnClickListener(new View.OnClickListener() {
+
+                    taAttach.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            //    popupCapture("LC");
+
+                            CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+
+                            if (!cameraPermission.checkPermission()) {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                    cameraPermission.requestPermission();
+                                }
+                                Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                            } else {
+                                Log.v("PERMISSION", "PERMISSION");
+                                popupCapture(123);
+
+                                Integer tvSizes = travelDynamicLoaction.indexOfChild(rowView);
+                                View view = travelDynamicLoaction.getChildAt(tvSizes);
+                                editText = (TextView) (view.findViewById(R.id.enter_mode));
+                                enterFare = (EditText) view.findViewById(R.id.enter_fare);
+                                tvTxtUKeys = (TextView) (view.findViewById(R.id.txt_tv_ukey));
+                                editMode = editText.getText().toString();
+
+                                if (tvTxtUKeys.getText().toString().equals("")) {
+                                    DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                    Calendar calobjw = Calendar.getInstance();
+                                    tvEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                                    tvTxtUKeys.setText(tvEditcnt);
+                                }
+                                TlUKey = tvTxtUKeys.getText().toString();
+
+                            }
+
                         }
                     });
 
+
+                } else {
+                    final View rowView = inflater.inflate(R.layout.travel_allowance_dynamic_one, null);
+                    travelDynamicLoaction.addView(rowView, layoutParams);
+
+                    viw.setVisibility(View.GONE);
+                    lin.setVisibility(View.GONE);
+                    crdDynamicLocation.setVisibility(View.VISIBLE);
+                    size = travelDynamicLoaction.getChildCount();
+                    for (int c = 0; c < size; c++) {
+                        View views = travelDynamicLoaction.getChildAt(c);
+                        deleteButton = views.findViewById(R.id.delete_button);
+                        etrTaFr = (EditText) views.findViewById(R.id.ta_edt_from);
+                        etrTaTo = (EditText) views.findViewById(R.id.ta_edt_to);
+                    }
                 }
-
 
             }
         });
@@ -586,9 +791,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         DateForAPi = date.substring(0, date.indexOf(" "));
         callApi(DateForAPi, "");
 
-        mShared_common_pref = new Shared_Common_Pref(this);
-
-
         TaSharedPrefernce = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
 
         if (TaSharedPrefernce.contains(SKM)) {
@@ -611,13 +813,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 } else {
                     submitData("SubmitForApp");
                 }
-
-            }
-        });
-        DailyExpenseAdapter.bindUpdateListener(new UpdateUi() {
-            @Override
-            public void update(int value, int pos1) {
-                pos = pos1;
             }
         });
 
@@ -629,112 +824,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 window.setGravity(Gravity.CENTER);
                 window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 customDialog.show();
-
-
-            }
-        });
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View rowView = null;
-
-
-        linAddAllowance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View rowView = null;
-
-
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                layoutParams.setMargins(15, 15, 15, 15);
-
-                tlString.add(new ArrayList<>());
-
-                if (StrToEnd.equals("0")) {
-                    crdDynamicLocation.setVisibility(View.VISIBLE);
-                    rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
-                    travelDynamicLoaction.addView(rowView, layoutParams);
-                    deleteButton = findViewById(R.id.delete_button);
-                    size = travelDynamicLoaction.getChildCount();
-
-                    for (int c = 0; c < size; c++) {
-                        Integer finalC = c;
-
-                        childView = travelDynamicLoaction.getChildAt(c);
-
-                        editText = (TextView) (childView.findViewById(R.id.enter_mode));
-                        enterFare = childView.findViewById(R.id.enter_fare);
-
-                        enterFare.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                            }
-
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable s) {
-                                SumOFTAAmount();
-                                Log.v("SUM_OF_TOTAL", String.valueOf(s));
-                            }
-                        });
-
-
-                        taAttach = (ImageView) (childView.findViewById(R.id.image_attach));
-                        previewss = (ImageView) (childView.findViewById(R.id.image_preview));
-                        previewss.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                taCount = finalC;
-                                nonZero = tlString.get(taCount);
-                                if (nonZero.size() != 0) {
-                                    Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-                                    stat.putExtra("Data", nonZero);
-                                    startActivity(stat);
-                                } else {
-                                    Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-
-
-                        editText.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                modelTravelType.clear();
-                                localCon(finalC);
-                            }
-                        });
-
-
-                        taAttach.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                taCount = finalC;
-                                popupCapture(finalC);
-                            }
-                        });
-
-
-                    }
-                } else {
-                    rowView = inflater.inflate(R.layout.travel_allowance_dynamic_one, null);
-                    travelDynamicLoaction.addView(rowView, layoutParams);
-                    crdDynamicLocation.setVisibility(View.VISIBLE);
-                    size = travelDynamicLoaction.getChildCount();
-                    for (int c = 0; c < size; c++) {
-                        View views = travelDynamicLoaction.getChildAt(c);
-                        deleteButton = views.findViewById(R.id.delete_button);
-                        etrTaFr = (EditText) views.findViewById(R.id.ta_edt_from);
-                        etrTaTo = (EditText) views.findViewById(R.id.ta_edt_to);
-                    }
-                }
-
             }
         });
 
@@ -789,24 +878,33 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 }, year, month, day);
 
-
         picker.show();
     }
 
     public void onTADelete(View v) {
         int size = travelDynamicLoaction.getChildCount();
         travelDynamicLoaction.removeView((View) v.getParent());
+
+        LayoutTransition transition = new LayoutTransition();
+        travelDynamicLoaction.setLayoutTransition(transition);
+
         if (size == 0) {
             crdDynamicLocation.setVisibility(View.GONE);
         }
 
-        tlString.remove(v);
-        SumOFTAAmount();
-    }
+        if (StrToEnd.equals("0")) {
+            SumOFTAAmount();
+        } else {
 
+        }
+    }
 
     public void onLCDelete(View v) {
         linlocalCon.removeView((View) v.getParent());
+
+        LayoutTransition transition = new LayoutTransition();
+        linlocalCon.setLayoutTransition(transition);
+
         if (linlocalCon.getChildCount() == 0) {
             localTotal.setVisibility(View.GONE);
         }
@@ -814,10 +912,16 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    public void ImagePdf(View v) {
+        pdfViewList();
+    }
+
     public void onOEDelete(View v) {
 
-        int lcSizes = LinearOtherAllowance.getChildCount() - 1;
         LinearOtherAllowance.removeView((View) v.getParent());
+
+        LayoutTransition transition = new LayoutTransition();
+        LinearOtherAllowance.setLayoutTransition(transition);
 
         if (LinearOtherAllowance.getChildCount() == 0) {
             otherExpenseLayout.setVisibility(View.GONE);
@@ -825,7 +929,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
         SumOFOTAmount();
     }
-
 
     public void lodingView() {
 
@@ -847,17 +950,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             } else {
                 deleteLod.setVisibility(View.VISIBLE);
             }
-
         }
-
     }
-
 
     public void onLodingDelete(View v) {
         jointLodging.removeView((View) v.getParent());
         SumOFJointLodging();
     }
-
 
     public void onGetEmpDetails(View v) {
         View pv = (View) v.getParent().getParent();
@@ -913,13 +1012,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             sumsTotss = sumsTotss + Double.parseDouble(str);
             sumsTa = GrandTotalAllowance + sumsTotss;
         }
-        txtTAamt.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTa));
+        txtTAamt.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTotss));
         localCov = sumsTotss;
-
 
         calOverAllTotal(localCov, otherExp);
     }
-
 
     public void SumOFLCAmount() {
         sum = 0.0;
@@ -935,10 +1032,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         localText.setText("Rs. " + new DecimalFormat("##0.00").format(sum));
         localCov = sum;
 
-
         calOverAllTotal(localCov, otherExp);
     }
-
 
     public void SumOFOTAmount() {
         sumsTot = 0.0;
@@ -949,18 +1044,17 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             String strs = edtOE.getText().toString();
             if (strs.matches("")) strs = "0";
             sumsTot = sumsTot + Double.parseDouble(strs);
-
             sTotal = GrandTotalAllowance + sumsTot;
 
         }
         OeText.setText("Rs. " + new DecimalFormat("##0.00").format(sumsTot));
 
         otherExp = sumsTot;
-
         calOverAllTotal(localCov, otherExp);
     }
 
     public void SumOFDAAmount() {
+
         String sAmt = txtallamt.getText().toString().replaceAll("Rs. ", "");
         String sBrdAmt = txt_BrdAmt.getText().toString().replaceAll("Rs. ", "");
         String sDrvBrdAmt = txt_DrvBrdAmt.getText().toString().replaceAll("Rs. ", "");
@@ -969,7 +1063,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         if (sBrdAmt.equalsIgnoreCase("")) sBrdAmt = "0.00";
         if (sDrvBrdAmt.equalsIgnoreCase("")) sDrvBrdAmt = "0.00";
         TotDA = Double.parseDouble(sAmt) + Double.parseDouble(sBrdAmt) + Double.parseDouble(sDrvBrdAmt);
-        //tTotAmt = tTotAmt + Float.parseFloat(sAmt);
         txt_totDA.setText("Rs. " + new DecimalFormat("##0.00").format(TotDA));
         calOverAllTotal(localCov, otherExp);
     }
@@ -997,8 +1090,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         TotLdging = tTotAmt;
         SumWOBLodging();
         int IntValue = (int) tTotAmt;
-
-        /* edt_ldg_bill.setFilters(new InputFilter[]{new InputFilterMinMax(0, IntValue)});*/
         edt_ldg_bill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue)});
         calOverAllTotal(localCov, otherExp);
     }
@@ -1041,7 +1132,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
         textColorAnim.setDuration(500);
@@ -1057,7 +1147,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
-
 
     /*Choosing Dynamic date*/
     public void dynamicDate() {
@@ -1116,6 +1205,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 JsonArray oeDraftArray = null;
                 JsonArray trvldArray = null;
                 JsonArray ldArray = null;
+                JsonArray travelDetails = null;
                 JsonObject jsonObjects = response.body();
                 Log.v("JSON_OBJECT", jsonObjects.toString());
                 jsonArray = jsonObjects.getAsJsonArray("TodayStart_Details");
@@ -1123,8 +1213,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 oeDraftArray = jsonObjects.getAsJsonArray("Additional_ExpenseOE");
                 trvldArray = jsonObjects.getAsJsonArray("Travelled_Loc");
                 ldArray = jsonObjects.getAsJsonArray("Lodging_Head");
+                travelDetails = jsonObjects.getAsJsonArray("Travelled_Details");
 
-                callMap(finalChoosedDate);
                 JsonObject jsonObject = null;
                 for (int i = 0; i < jsonArray.size(); i++) {
                     int finalC = i;
@@ -1140,9 +1230,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     StrTo = jsonObject.get("To_Place").getAsString();
                     StrDaName = jsonObject.get("MOT_Name").getAsString();
                     StrDailyAllowance = jsonObject.get("dailyAllowance").getAsString();
-                    StrDailyAllowance = StrDailyAllowance.replaceAll("^[\"']+|[\"']+$", "");
-                    StrDaName = StrDaName.replaceAll("^[\"']+|[\"']+$", "");
-                    StrToEnd = StrToEnd.replaceAll("^[\"']+|[\"']+$", "");
                     strFuelAmount = jsonObject.get("FuelAmt").getAsString();
                     allowanceAmt = jsonObject.get("Allowance_Value").getAsString();
                     myldgEliAmt = jsonObject.get("myLdgAmt").getAsString();
@@ -1155,6 +1242,16 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     PersonalKm = jsonObject.get("Personal_Km").getAsString();
                     DriverNeed = jsonObject.get("driverAllowance").getAsString();
 
+
+                    for (int l = 0; l < travelDetails.size(); l++) {
+
+                        JsonObject js = (JsonObject) travelDetails.get(l);
+                        Log.v("ta_total_amount", js.get("ta_total_amount").getAsString());
+                        String taAmt = js.get("ta_total_amount").getAsString();
+                        txtTAamt.setText("Rs. " + taAmt + ".00");
+                    }
+
+
                     Log.v("DRIVER", ClosingKm);
 
                     Glide.with(getApplicationContext())
@@ -1164,6 +1261,27 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             .load(End_Imge.replaceAll("^[\"']+|[\"']+$", ""))
                             .into(endkmimage);
 
+                    if (!start_Image.matches("")) {
+                        startkmimage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                                intent.putExtra("ImageUrl", start_Image);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                    if (!End_Imge.matches("")) {
+                        endkmimage.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                                intent.putExtra("ImageUrl", End_Imge);
+                                startActivity(intent);
+                            }
+                        });
+                    }
+
                     if (StartedKm != null && !StartedKm.isEmpty() && !StartedKm.equals("null") && !StartedKm.equals("")) {
                         S = Integer.valueOf(StartedKm);
                         TxtStartedKm.setText(StartedKm);
@@ -1172,9 +1290,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     }
                     if (!ClosingKm.equals("0")) {
 
-
                         StartedKm = StartedKm.replaceAll("^[\"']+|[\"']+$", "");
-
 
                         PersonalKm = PersonalKm.replaceAll("^[\"']+|[\"']+$", "");
 
@@ -1189,27 +1305,59 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             TxtClosingKm.setText(ClosingKm);
                             C = Integer.valueOf(ClosingKm);
                             totalkm = C - S;
-
+                            TotalTravelledKm.setText(String.valueOf(totalkm));
                         }
 
                         if (PersonalKm != null && !PersonalKm.isEmpty() && !PersonalKm.equals("null") && !PersonalKm.equals("")) {
                             PersonalKm = PersonalKm.replaceAll("^[\"']+|[\"']+$", "");
                             Pva = Integer.valueOf(PersonalKm);
                             totalPersonalKm = totalkm - Pva;
-                            PersonalTextKM.setText(String.valueOf(totalPersonalKm));
+
                         }
 
-                        Double totalAmount = Double.valueOf(strFuelAmount);
-                        tofuel = totalPersonalKm * totalAmount;
-                        TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(tofuel));
-                        TotalTravelledKm.setText(String.valueOf(totalkm));
+
+                        txtTaClaim.setText(StrDaName);
+
+                        if (totalPersonalKm > 200 && StrDaName.equals("Two Wheeler")) {
+                            PersonalTextKM.setText("200");
+                            txtMaxKm.setText("Actual Allowance is " + totalkm + " but the max allowance is 200 ");
+                            txtMaxKm.setVisibility(View.VISIBLE);
+
+                            Double totalAmount = Double.valueOf(strFuelAmount);
+                            tofuel = 200 * totalAmount;
+                            TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(tofuel));
+
+
+                        } else if (totalkm > 500 && StrDaName.equals("Four Wheeler")) {
+                            PersonalTextKM.setText("500");
+                            txtMaxKm.setText("Actual Allowance is " + totalkm + " but the max allowance is 500 ");
+
+                            Double totalAmount = Double.valueOf(strFuelAmount);
+                            tofuel = 500 * totalAmount;
+                            TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(tofuel));
+
+                            txtMaxKm.setVisibility(View.VISIBLE);
+                        } else {
+                            PersonalTextKM.setText(String.valueOf(totalPersonalKm));
+
+                            Double totalAmount = Double.valueOf(strFuelAmount);
+                            tofuel = totalPersonalKm * totalAmount;
+                            TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(tofuel));
+
+
+                            txtMaxKm.setVisibility(View.GONE);
+                        }
+
+                        btn_sub.setVisibility(View.VISIBLE);
+                        buttonSave.setVisibility(View.VISIBLE);
+
+                    } else {
+
+                        btn_sub.setVisibility(View.GONE);
+                        buttonSave.setVisibility(View.GONE);
                     }
 
-
-                    txtTaClaim.setText(StrDaName);
-
-
-                    txtDailyAllowance.setText(StrDailyAllowance + " ( " + StrTo.toString() + " )");
+                    txtDailyAllowance.setText(StrDailyAllowance + " - " + StrTo);
 
                     myBrdAmt = 0.0;
                     drvBrdAmt = 0.0;
@@ -1226,8 +1374,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             txt_DrvBrdAmt.setText(" Rs. " + new DecimalFormat("##0.00").format(drvBrdAmt));
 
                             vwDrvBoarding.setVisibility(View.VISIBLE);
+                            txtDrvrBrod.setText("Chauffer driven Boarding");
+                        } else {
+                            txt_DrvBrdAmt.setText("");
                         }
-                        //txt_DrvBrdAmt
+
                         vwBoarding.setVisibility(View.VISIBLE);
                         SumOFDAAmount();
                     } else {
@@ -1243,20 +1394,20 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             txt_DrvBrdAmt.setText(" Rs. " + new DecimalFormat("##0.00").format(drvBrdAmt));
 
                             vwDrvBoarding.setVisibility(View.VISIBLE);
+                            txtDrvrBrod.setText("Chauffer driven Boarding");
+                        } else {
+                            txt_DrvBrdAmt.setText("");
                         }
-
                         vwBoarding.setVisibility(View.GONE);
-
                         SumOFDAAmount();
                     }
-
 
                     if (StrToEnd.equals("0")) {
                         StrBus = StrBus.replaceAll("^[\"']+|[\"']+$", "");
                         StrTo = StrTo.replaceAll("^[\"']+|[\"']+$", "");
                         for (int j = 0; j < trvldArray.size(); j++) {
 
-                            Log.v("TravelldArray", String.valueOf(trvldArray.size()));
+                            Integer finc = j;
 
                             JsonObject tldraftJson = (JsonObject) trvldArray.get(j);
 
@@ -1266,23 +1417,46 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                             layoutParams.setMargins(15, 15, 15, 15);
 
-                            rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
+                            final View rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
 
                             travelDynamicLoaction.addView(rowView, layoutParams);
+                            tvSize = travelDynamicLoaction.indexOfChild(rowView);
 
-                            tlString.add(new ArrayList<>());
+                            View tvchildView = travelDynamicLoaction.getChildAt(tvSize);
+                            viw.setVisibility(View.VISIBLE);
+                            lin.setVisibility(View.VISIBLE);
+
+                            LinearLayout lad = (LinearLayout) tvchildView.findViewById(R.id.linear_row_ad);
+                            editText = (TextView) tvchildView.findViewById(R.id.enter_mode);
+                            enterFrom = tvchildView.findViewById(R.id.enter_from);
+                            enterTo = tvchildView.findViewById(R.id.enter_to);
+                            enterFare = tvchildView.findViewById(R.id.enter_fare);
+                            tvTxtUKey = (TextView) (tvchildView.findViewById(R.id.txt_tv_ukey));
 
 
-                            View views = travelDynamicLoaction.getChildAt(j);
-                            LinearLayout lad = (LinearLayout) views.findViewById(R.id.linear_row_ad);
-                            editText = (TextView) views.findViewById(R.id.enter_mode);
-                            enterFrom = views.findViewById(R.id.enter_from);
-                            enterTo = views.findViewById(R.id.enter_to);
-                            enterFare = views.findViewById(R.id.enter_fare);
+                            editText.setText("" + tldraftJson.get("Mode").getAsString());
+                            enterFrom.setText(tldraftJson.get("From_P").getAsString());
+                            enterTo.setText(tldraftJson.get("To_P").getAsString());
+                            enterFare.setText(tldraftJson.get("Fare").getAsString());
+
+
+                            if (!tldraftJson.get("Ukey").getAsString().equals("") &&
+                                    !tldraftJson.get("Ukey").getAsString().isEmpty() &&
+                                    tldraftJson.get("Ukey").getAsString() != null) {
+                                tvTxtUKey.setText(tldraftJson.get("Ukey").getAsString());
+                            }
+
+
+                            editMode = editText.getText().toString();
+
+                            Log.v("Travel_Location", editMode);
+
+                            deleteButton = tvchildView.findViewById(R.id.delete_button);
+                            taAttach = (ImageView) tvchildView.findViewById(R.id.image_attach);
+                            previewss = (ImageView) tvchildView.findViewById(R.id.image_preview);
                             enterFare.addTextChangedListener(new TextWatcher() {
                                 @Override
                                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                                 }
 
                                 @Override
@@ -1292,41 +1466,69 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 @Override
                                 public void afterTextChanged(Editable s) {
                                     SumOFTAAmount();
-                                    Log.v("SUM_OF_TOTAL", String.valueOf(s));
                                 }
                             });
 
-                            deleteButton = views.findViewById(R.id.delete_button);
-                            taAttach = (ImageView) views.findViewById(R.id.image_attach);
                             taAttach.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    popupCapture(1);
 
-                                }
-                            });
+                                    CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
 
-                            previewss = (ImageView) (views.findViewById(R.id.image_preview));
-                            previewss.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-
-                                    zero = tlString.get(0);
-                                    if (zero.size() != 0) {
-                                        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-                                        stat.putExtra("Data", zero);
-                                        startActivity(stat);
+                                    if (!cameraPermission.checkPermission()) {
+                                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                                            cameraPermission.requestPermission();
+                                        }
+                                        Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                                     } else {
-                                        Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
+                                        Log.v("PERMISSION", "PERMISSION");
+                                        popupCapture(123);
+
+                                        Integer tvSizes = travelDynamicLoaction.indexOfChild(rowView);
+                                        View view = travelDynamicLoaction.getChildAt(tvSizes);
+                                        editText = (TextView) (view.findViewById(R.id.enter_mode));
+                                        enterFare = (EditText) view.findViewById(R.id.enter_fare);
+                                        tvTxtUKeys = (TextView) (view.findViewById(R.id.txt_tv_ukey));
+                                        editMode = editText.getText().toString();
+
+                                        Log.v("Travel_Location_imagw", editMode);
+
+                                        if (tvTxtUKeys.getText().toString().equals("")) {
+                                            DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                            Calendar calobjw = Calendar.getInstance();
+                                            tvEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                                            tvTxtUKeys.setText(tvEditcnt);
+                                        }
+                                        TlUKey = tvTxtUKeys.getText().toString();
+
+
                                     }
                                 }
                             });
 
+                            previewss.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
 
-                            editText.setText("" + tldraftJson.get("Mode").getAsString());
-                            enterFrom.setText(tldraftJson.get("From_P").getAsString());
-                            enterTo.setText(tldraftJson.get("To_P").getAsString());
-                            enterFare.setText(tldraftJson.get("Fare").getAsString());
+                                    Integer tvSizes = travelDynamicLoaction.indexOfChild(rowView);
+                                    View view = travelDynamicLoaction.getChildAt(tvSizes);
+                                    editText = (TextView) (view.findViewById(R.id.enter_mode));
+                                    enterFare = (EditText) view.findViewById(R.id.enter_fare);
+                                    tvTxtUKeys = (TextView) (view.findViewById(R.id.txt_tv_ukey));
+                                    editMode = editText.getText().toString();
+                                    TlUKey = tvTxtUKeys.getText().toString();
+                                    Log.v("Travel_Location_preview", editMode);
+
+                                    DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+                                    Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                                    stat.putExtra("position", TlUKey);
+                                    stat.putExtra("headTravel", "TL");
+                                    stat.putExtra("mode", editMode);
+                                    stat.putExtra("date", DateTime);
+                                    startActivity(stat);
+
+                                }
+                            });
 
                             if (j == 0) {
                                 deleteButton.setVisibility(View.GONE);
@@ -1339,12 +1541,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 } else {
                                     enterTo.setEnabled(false);
                                 }
-
                             }
-
-
                         }
-
 
                         TravelBike.setVisibility(View.GONE);
                         linBusMode.setVisibility(View.VISIBLE);
@@ -1368,10 +1566,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         linBikeMode.setVisibility(View.VISIBLE);
                     }
 
-
                 }
                 GrandTotalAllowance = doubleAmount + tofuel;
-                // calOverAllTotal(localCov, otherExp);//grandTotal.setText("Rs. " + GrandTotalAllowance.toString());
                 /*Local Convenyance*/
                 if (lcDraftArray != null || lcDraftArray.size() != 0) {
                     localConDraft(lcDraftArray);
@@ -1383,16 +1579,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 calOverAllTotal(localCov, otherExp);
             }
 
-
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
             }
         });
     }
 
-
     public void lodingDraft(JsonArray lodingDraft) {
-
 
         JsonArray jsonAddition = null;
         for (int i = 0; i < lodingDraft.size(); i++) {
@@ -1411,48 +1604,67 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             } else {
                 txt_ldg_type.setText("Stay At Relative's House");
             }
-
         }
-
     }
-
 
     public void localConDraft(JsonArray lcDraft) {
 
-
         JsonArray jsonAddition = null;
+        JsonObject lcdraftJson = null;
         for (int i = 0; i < lcDraft.size(); i++) {
-            JsonObject lcdraftJson = (JsonObject) lcDraft.get(i);
+            lcdraftJson = (JsonObject) lcDraft.get(i);
 
             jsonAddition = lcdraftJson.getAsJsonArray("Additional");
             String expCode = String.valueOf(lcdraftJson.get("Exp_Code"));
+            String expFare = lcdraftJson.get("Exp_Amt").getAsString();
+            lcUKey = lcdraftJson.get("Ukey").getAsString();
+
+            Log.v("EXP_AMOUNT", expFare);
 
             expCode = expCode.replaceAll("^[\"']+|[\"']+$", "");
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = null;
 
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
             layoutParams.setMargins(15, 15, 15, 15);
 
-            rowView = inflater.inflate(R.layout.activity_local_convenyance, null);
-
-
+            final View rowView = inflater.inflate(R.layout.activity_local_convenyance, null);
             linlocalCon.addView(rowView, layoutParams);
             localText.setVisibility(View.VISIBLE);
             localTotal.setVisibility(View.VISIBLE);
-            int lcS = linlocalCon.getChildCount() - 1;
 
-            View view = linlocalCon.getChildAt(i);
-            editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
-            edtLcFare = (EditText) (view.findViewById(R.id.edt_la_fare));
-            linLocalSpinner = (LinearLayout) view.findViewById(R.id.lin_loc_spiner);
-            Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
-            edtLcFare.addTextChangedListener(new TextWatcher() {
+            lcSize = linlocalCon.indexOfChild(rowView);
+
+            View LcchildView = linlocalCon.getChildAt(lcSize);
+            localTotal.setVisibility(View.VISIBLE);
+            editTexts = (TextView) (LcchildView.findViewById(R.id.local_enter_mode));
+            editLaFare = (EditText) (LcchildView.findViewById(R.id.edt_la_fare));
+            linLocalSpinner = (LinearLayout) LcchildView.findViewById(R.id.lin_loc_spiner);
+            lcAttach = (ImageView) (LcchildView.findViewById(R.id.la_attach_iamg));
+            lcPreview = (ImageView) (LcchildView.findViewById(R.id.img_prvw_lc));
+
+            editTexts.setText(expCode);
+            editLaFare.setText(expFare);
+            if (!lcUKey.equals("")) {
+                lcTxtUKey.setText(lcUKey);
+            }
+
+
+            if (lcdraftJson.get("Attachments").getAsString().equals("1")) {
+                lcAttach.setVisibility(View.VISIBLE);
+                lcPreview.setVisibility(View.VISIBLE);
+            } else {
+                lcAttach.setVisibility(View.GONE);
+                lcPreview.setVisibility(View.GONE);
+            }
+
+            Dynamicallowance = (LinearLayout) LcchildView.findViewById(R.id.lin_allowance_dynamic);
+            lcTxtUKey = (TextView) (LcchildView.findViewById(R.id.txt_lc_ukey));
+
+            editLaFare.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
                 }
 
                 @Override
@@ -1464,57 +1676,116 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     SumOFLCAmount();
                 }
             });
+
+
             linLocalSpinner.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     listOrderType.clear();
-                    dynamicModeType(lcS);
+                    Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
+                    dynamicModeType(lcPosCntS);
                 }
             });
 
-            localConDisplay(expCode, jsonAddition, lcS);
+            lcAttach.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+                    if (!cameraPermission.checkPermission()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 
+                            cameraPermission.requestPermission();
+                        }
+                        Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                    } else {
+                        Log.v("PERMISSION", "PERMISSION");
 
-            editTexts.setText(expCode);
-            edtLcFare.setText("" + lcdraftJson.get("Exp_Amt").toString());
+                        popupCapture(786);
+
+                        Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
+                        View view = linlocalCon.getChildAt(lcPosCntS);
+                        editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
+                        lcTxtUKey = (TextView) (view.findViewById(R.id.txt_lc_ukey));
+                        editMode = editTexts.getText().toString();
+
+                        if (lcTxtUKey.getText().toString().equals("")) {
+                            DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                            Calendar calobjw = Calendar.getInstance();
+                            lcEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                            lcTxtUKey.setText(lcEditcnt);
+
+                        } else {
+                        }
+                        LcUKey = lcTxtUKey.getText().toString();
+                    }
+
+                }
+            });
+
+            lcPreview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Integer valuelc = linlocalCon.indexOfChild(rowView);
+                    View view = linlocalCon.getChildAt(valuelc);
+                    editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
+                    lcTxtUKeys = (TextView) (view.findViewById(R.id.txt_lc_ukey));
+                    editMode = editTexts.getText().toString();
+                    LcUKey = lcTxtUKeys.getText().toString();
+
+                    DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+
+                    Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                    stat.putExtra("position", LcUKey);
+                    stat.putExtra("headTravel", "LC");
+                    stat.putExtra("mode", editMode);
+                    stat.putExtra("date", DateTime);
+                    startActivity(stat);
+                }
+            });
+
+            localConDisplay(expCode, jsonAddition, lcSize);
+
 
         }
+
         SumOFLCAmount();
+
     }
 
     public void OeDraft(JsonArray oEDraft) {
         //  JsonArray jsonAddition = null;
-
-        oEString.add(new ArrayList<>());
+        JsonObject lcdraftJson = null;
         for (int i = 0; i < oEDraft.size(); i++) {
-
-            JsonObject lcdraftJson = (JsonObject) oEDraft.get(i);
+            lcdraftJson = (JsonObject) oEDraft.get(i);
             // jsonAddition = lcdraftJson.getAsJsonArray("Additional");
-
             String expCode = lcdraftJson.get("Exp_Code").getAsString();
-
-            expCode = expCode.replaceAll("^[\"']+|[\"']+$", "");
+            String expFare = lcdraftJson.get("Exp_Amt").getAsString();
+            oeUKey = lcdraftJson.get("Ukey").getAsString();
 
 
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View rowView = null;
-
-
-            otherTotal.setVisibility(View.VISIBLE);
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            otherExpenseLayout.setVisibility(View.VISIBLE);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
 
             layoutParams.setMargins(15, 15, 15, 15);
 
-            oEString.add(new ArrayList<>());
-
-            rowView = inflater.inflate(R.layout.activity_other_expense, null);
+            final View rowView = inflater.inflate(R.layout.activity_other_expense, null);
             LinearOtherAllowance.addView(rowView, layoutParams);
             OeSize = LinearOtherAllowance.getChildCount();
 
-            View childViews = LinearOtherAllowance.getChildAt(i);
-            oeAttach = (ImageView) (childViews.findViewById(R.id.oe_attach_img));
-            oePreview = (ImageView) (childViews.findViewById(R.id.img_prvw_oe));
+            oePosCnt = LinearOtherAllowance.indexOfChild(rowView);
+
+            View childView = LinearOtherAllowance.getChildAt(oePosCnt);
+            otherExpenseLayout.setVisibility(View.VISIBLE);
+            oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
+            edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
+            oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
+            oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
+            linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
+            oeTxtUKey = (TextView) (childView.findViewById(R.id.txt_oe_ukey));
+
             if (lcdraftJson.get("Attachments").getAsString().equals("1")) {
                 oeAttach.setVisibility(View.VISIBLE);
                 oePreview.setVisibility(View.VISIBLE);
@@ -1523,96 +1794,119 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 oePreview.setVisibility(View.GONE);
             }
 
-            for (int c = 0; c < OeSize; c++) {
-
-                Integer oESIZE = c;
-                childView = LinearOtherAllowance.getChildAt(c);
-                otherExpenseLayout.setVisibility(View.VISIBLE);
-                oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
-                edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
-                oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
-                oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
-                linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
-
-
-                oeAttach.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        popupCapture(99);
-                    }
-                });
-
-                oePreview.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        oeCount = oESIZE;
-
-                        oEArrayList = oEString.get(oeCount);
-                        if (oEArrayList.size() != 0) {
-                            Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-                            stat.putExtra("Data", oEArrayList);
-                            startActivity(stat);
-                        } else {
-                            Toast.makeText(TAClaimActivity.this, "Nothing to preview", Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
-
-
-                edtOE.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-
-                        SumOFOTAmount();
-
-                    }
-                });
-
-
-                OtherExpense = (LinearLayout) childView.findViewById(R.id.lin_other_expense_dynamic);
-                Integer finalC = c;
-
-                linOtherSpinner.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        OtherExpenseList.clear();
-                        OtherExpenseMode(finalC);
-                    }
-                });
-
-            }
 
             oeEditext.setText(expCode);
-            edtOE.setText(lcdraftJson.get("Exp_Amt").getAsString());
+            edtOE.setText(expFare);
+            if (!oeUKey.equals("") && oeUKey != "" && !oeUKey.isEmpty() && oeUKey != null) {
+                oeTxtUKey.setText(oeUKey);
+            }
+
+            oeAttach.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+
+                    CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+                    if (!cameraPermission.checkPermission()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            cameraPermission.requestPermission();
+                        }
+                        Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                    } else {
+                        Log.v("PERMISSION", "PERMISSION");
+                        popupCapture(99);
+
+                        Integer valuedfd = LinearOtherAllowance.indexOfChild(rowView);
+                        View view = LinearOtherAllowance.getChildAt(valuedfd);
+                        oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
+                        oeTxtUKeys = (TextView) (view.findViewById(R.id.txt_oe_ukey));
+                        editMode = oeEditext.getText().toString();
+
+                        if (oeTxtUKeys.getText().toString().equals("")) {
+                            DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                            Calendar calobjw = Calendar.getInstance();
+                            oeEditCnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                            oeTxtUKeys.setText(oeEditCnt);
+                        }
+                        OeUKey = oeTxtUKeys.getText().toString();
+                    }
+                }
+            });
+
+            oePreview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Integer valuedfd = LinearOtherAllowance.indexOfChild(rowView);
+                    View view = LinearOtherAllowance.getChildAt(valuedfd);
+                    oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
+                    oeTxtUKeys = (TextView) (view.findViewById(R.id.txt_oe_ukey));
+                    editMode = oeEditext.getText().toString();
+
+                    OeUKey = oeTxtUKeys.getText().toString();
+                    DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+
+                    Log.v("OE_UKEY", OeUKey);
+                    Log.v("OE_mode", editMode);
+                    Log.v("OE_date", DateTime);
+
+                    Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                    stat.putExtra("position", OeUKey);
+                    stat.putExtra("headTravel", "OE");
+                    stat.putExtra("mode", editMode);
+                    stat.putExtra("date", DateTime);
+                    startActivity(stat);
+
+                }
+            });
+
+
+            edtOE.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                    SumOFOTAmount();
+
+                }
+            });
+
+
+            OtherExpense = (LinearLayout) childView.findViewById(R.id.lin_other_expense_dynamic);
+            linOtherSpinner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    OtherExpenseList.clear();
+                    Integer valuedf = LinearOtherAllowance.indexOfChild(rowView);
+                    OtherExpenseMode(valuedf);
+
+                }
+            });
 
 
         }
         SumOFOTAmount();
-
     }
-
 
     public void trvldLocation(JsonArray traveldLoc) {
 
-
-        JsonArray jsonAddition = null;
+        JsonObject tldraftJson = null;
         for (int i = 0; i < traveldLoc.size(); i++) {
 
             if (StrToEnd.equals("0")) {
 
+
             } else {
 
-                JsonObject tldraftJson = (JsonObject) traveldLoc.get(i);
+                tldraftJson = (JsonObject) traveldLoc.get(i);
 
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 View rowView = null;
@@ -1623,6 +1917,10 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 layoutParams.setMargins(15, 15, 15, 15);
 
                 rowView = inflater.inflate(R.layout.travel_allowance_dynamic_one, null);
+
+                viw.setVisibility(View.GONE);
+                lin.setVisibility(View.GONE);
+
                 travelDynamicLoaction.addView(rowView, layoutParams);
                 crdDynamicLocation.setVisibility(View.VISIBLE);
 
@@ -1631,19 +1929,18 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 etrTaFr = (EditText) views.findViewById(R.id.ta_edt_from);
                 etrTaTo = (EditText) views.findViewById(R.id.ta_edt_to);
 
-                etrTaFr.setText(tldraftJson.get("From_P").getAsString());
-                etrTaTo.setText(tldraftJson.get("To_P").getAsString());
+                if (!tldraftJson.get("From_P").getAsString().isEmpty() && !tldraftJson.get("From_P").getAsString().equals("")) {
+                    etrTaFr.setText(tldraftJson.get("From_P").getAsString());
+                }
 
+                if (!tldraftJson.get("To_P").getAsString().isEmpty() && !tldraftJson.get("To_P").getAsString().equals("")) {
+                    etrTaTo.setText(tldraftJson.get("To_P").getAsString());
+                }
 
             }
-
         }
-
-
     }
 
-
-    @SuppressLint("ResourceType")
     public void localConDisplay(String modeName, JsonArray jsonAddition, int position) {
 
         JsonObject jsonObjectAdd = null;
@@ -1658,16 +1955,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             edt1 = new EditText(getApplicationContext());
             edt1.setLayoutParams(layoutparams_3);
             edt1.setText(edtValueb.replaceAll("^[\"']+|[\"']+$", ""));
-            edt1.setId(12345);
             edt1.setTextSize(13);
             childRel.addView(edt1);
             users.add(edt1);
             dynamicLabelList.add(jsonObjectAdd.get("Ref_Code").getAsString());
             if (l == jsonAddition.size() - 1) {
                 usersByCountry.put(modeName, users);
-
             }
-
             View view = linlocalCon.getChildAt(position);
             Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
             Dynamicallowance.addView(childRel);
@@ -1675,16 +1969,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 144) {
-
 
             if (resultCode == RESULT_OK) {
                 if (requestCode == 144) {
@@ -1697,43 +1988,47 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                             ImageFilePath filepath = new ImageFilePath();
                             fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
                             lodgArrLst.add(fullPath);
-                            getMulipart(fullPath, 0);
+
+
+                            getMulipart(String.valueOf(0), fullPath, "LOD", "", "", "", "");
+
                         }
                     } else if (data.getData() != null) {
                         Uri item = data.getData();
                         ImageFilePath filepath = new ImageFilePath();
                         fullPath = filepath.getPath(TAClaimActivity.this, item);
                         lodgArrLst.add(fullPath);
-                        getMulipart(fullPath, 0);
+
+
+                        getMulipart(String.valueOf(0), fullPath, "LOD", "", "", "", "");
+
                     }
                 }
             }
-        } else if (requestCode == 2) {
+        } else if (requestCode == 124) {
             if (resultCode == RESULT_OK) {
-                if (requestCode == 2) {
-                    if (data.getClipData() != null) {
-                        ClipData mClipData = data.getClipData();
-                        for (int i = 0; i < mClipData.getItemCount(); i++) {
-                            ClipData.Item item = mClipData.getItemAt(i);
-                            Uri uri = item.getUri();
-                            // display your images
-                            ImageFilePath filepath = new ImageFilePath();
-                            fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
-                            tlString.get(taCount).add(fullPath);
-                            getMulipart(fullPath, 0);
-
-                        }
-                    } else if (data.getData() != null) {
-
-                        Uri item = data.getData();
+                if (data.getClipData() != null) {
+                    ClipData mClipData = data.getClipData();
+                    for (int i = 0; i < mClipData.getItemCount(); i++) {
+                        ClipData.Item item = mClipData.getItemAt(i);
+                        Uri uri = item.getUri();
+                        // display your images
                         ImageFilePath filepath = new ImageFilePath();
-                        fullPath = filepath.getPath(TAClaimActivity.this, item);
-                        tlString.get(taCount).add(fullPath);
-                        getMulipart(fullPath, 0);
+                        fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+
+                        getMulipart(TlUKey, fullPath, "TL", "", editMode, "", "");
+
                     }
+                } else if (data.getData() != null) {
+                    Uri item = data.getData();
+                    ImageFilePath filepath = new ImageFilePath();
+                    fullPath = filepath.getPath(TAClaimActivity.this, item);
+
+
+                    getMulipart(TlUKey, fullPath, "TL", "", editMode, "", "");
+
                 }
             }
-
 
         } else if (requestCode == 100) {
             if (resultCode == RESULT_OK) {
@@ -1743,11 +2038,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         for (int i = 0; i < mClipData.getItemCount(); i++) {
                             ClipData.Item item = mClipData.getItemAt(i);
                             Uri uri = item.getUri();
-                            // display your images
                             ImageFilePath filepath = new ImageFilePath();
                             fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
-                            oEString.get(oeCount).add(fullPath);
-                            getMulipart(fullPath, 0);
+
+                            getMulipart(OeUKey, fullPath, "OE", "", editMode, "", "");
+
 
                         }
                     } else if (data.getData() != null) {
@@ -1755,8 +2050,34 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                         Uri item = data.getData();
                         ImageFilePath filepath = new ImageFilePath();
                         fullPath = filepath.getPath(TAClaimActivity.this, item);
-                        oEString.get(oeCount).add(fullPath);
-                        getMulipart(fullPath, 0);
+                        getMulipart(OeUKey, fullPath, "OE", "", editMode, "", "");
+
+                    }
+                }
+            }
+        } else if (requestCode == 787) {
+            if (resultCode == RESULT_OK) {
+                if (requestCode == 787) {
+                    if (data.getClipData() != null) {
+                        ClipData mClipData = data.getClipData();
+                        for (int i = 0; i < mClipData.getItemCount(); i++) {
+                            ClipData.Item item = mClipData.getItemAt(i);
+                            Uri uri = item.getUri();
+                            // display your images
+                            ImageFilePath filepath = new ImageFilePath();
+                            fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+
+                            getMulipart(LcUKey, fullPath, "LC", "", editMode, "", "");
+
+                        }
+                    } else if (data.getData() != null) {
+
+                        Uri item = data.getData();
+                        ImageFilePath filepath = new ImageFilePath();
+                        fullPath = filepath.getPath(TAClaimActivity.this, item);
+
+                        getMulipart(LcUKey, fullPath, "LC", "", editMode, "", "");
+
                     }
                 }
             }
@@ -1767,36 +2088,118 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             filePath = filePath.substring(1);
             filePath = finalPath + filePath.substring(filePath.indexOf("/"));
             lodgArrLst.add(filePath);
-            getMulipart(filePath, 0);
-        } else if (requestCode == 1 && resultCode == Activity.RESULT_OK) {
+
+            getMulipart(String.valueOf(0), filePath, "LOD", "", "", "", "");
+
+        } else if (requestCode == 123 && resultCode == Activity.RESULT_OK) {
             finalPath = "/storage/emulated/0";
             filePath = outputFileUri.getPath();
             filePath = filePath.substring(1);
             filePath = finalPath + filePath.substring(filePath.indexOf("/"));
-            tlString.get(taCount).add(filePath);
-            getMulipart(filePath, 0);
+
+            getMulipart(TlUKey, filePath, "TL", "", editMode, "", "");
+
         } else if (requestCode == 99 && resultCode == Activity.RESULT_OK) {
 
             finalPath = "/storage/emulated/0";
             filePath = outputFileUri.getPath();
             filePath = filePath.substring(1);
             filePath = finalPath + filePath.substring(filePath.indexOf("/"));
-            oEString.get(oeCount).add(filePath);
-            getMulipart(filePath, 0);
-        }
 
+            getMulipart(OeUKey, filePath, "OE", "", editMode, "", "");
+
+        } else if (requestCode == 786 && resultCode == Activity.RESULT_OK) {
+
+            finalPath = "/storage/emulated/0";
+            filePath = outputFileUri.getPath();
+            filePath = filePath.substring(1);
+            filePath = finalPath + filePath.substring(filePath.indexOf("/"));
+
+            getMulipart(LcUKey, filePath, "LC", "", editMode, "", "");
+        }
+    }
+
+
+    public void pdfViewList() {
+        dialog = new Dialog(TAClaimActivity.this, R.style.AlertDialogCustom);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.row_pdf_viewer_list);
+        dialog.show();
+        LinearLayout pdf1 = dialog.findViewById(R.id.lin_pdf);
+        LinearLayout pdf2 = dialog.findViewById(R.id.lin_pdf2);
+        pdf1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+
+                Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
+                stat.putExtra("PDF_ONE", "https://hap.sanfmcg.com/Travel%20and%20Daily%20Allowance%20Policy%20-%20Domestic%20Travel%20Annexure%20C-1_1%20Feb-21.pdf");
+                startActivity(stat);
+
+                dialog.dismiss();
+
+            }
+        });
+        pdf2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
+                stat.putExtra("PDF_ONE", "https://hap.sanfmcg.com/HAP_ANNEXURE_C.pdf");
+                startActivity(stat);
+
+                dialog.dismiss();
+            }
+        });
+    }
+
+
+    public void popupCapture(Integer attachName) {
+        dialog = new Dialog(TAClaimActivity.this, R.style.AlertDialogCustom);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.setContentView(R.layout.popup_capture);
+        dialog.show();
+        TextView upload = dialog.findViewById(R.id.upload);
+        TextView camera = dialog.findViewById(R.id.camera);
+        upload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                selectMultiImage(attachName);
+            }
+        });
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                captureFile(attachName);
+            }
+        });
+    }
+
+    public void selectMultiImage(Integer attachName) {
+        dialog.dismiss();
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), attachName + 1);
+
+    }
+
+    public void captureFile(Integer positionC) {
+        dialog.dismiss();
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        outputFileUri = FileProvider.getUriForFile(TAClaimActivity.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), Shared_Common_Pref.Sf_Code + "_" + System.currentTimeMillis() + ".jpeg"));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivityForResult(intent, positionC);
 
     }
 
     public void submitData(String responseVal) {
 
-
         Log.e("COUNTATTACH", attachCountList.toString());
-
         JSONArray transHead = new JSONArray();
         JSONObject transJson = new JSONObject();
         JSONObject jsonData = new JSONObject();
-
 
         DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
         StrBus = StrBus.replaceAll("^[\"']+|[\"']+$", "");
@@ -1821,16 +2224,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             jsonData.put("trv_lc_amt", sumsTa);
             jsonData.put("gr_total", gTotal);
 
-
             /*Daily Allowance*/
             JSONObject daAll = new JSONObject();
-
             daAll.put("all_name", txtDailyAllowance.getText());
             daAll.put("brd_amt", myBrdAmt);
             daAll.put("drvBrdAmt", drvBrdAmt);
-            /*  daAll.put("da_amt", TotDA);
-             */
-
 
             /*Lodging Save*/
 
@@ -1845,7 +2243,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             ldgSave.put("jnt_ldg_amt", "");
             ldgSave.put("total_ldg_amt", totLodgAmt);
             ldgSave.put("attch_bill", "");
-
 
             JSONArray ldgArySve = new JSONArray();
             for (int jd = 0; jd < jointLodging.getChildCount(); jd++) {
@@ -1870,7 +2267,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
             ldgSave.put("Loding_Emp", ldgArySve);
 
-
             /*Travel Mode Json*/
             JSONObject trDet = new JSONObject();
 
@@ -1885,9 +2281,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             trDet.put("st_km_img", "");
             trDet.put("ed_km_img", "");
             trDet.put("fuel_amount", strFuelAmount);
-            trDet.put("ta_total_amount", tofuel);
+            trDet.put("ta_total_amount", sumsTotss);
 
             JSONArray trvLoc = new JSONArray();
+
+
             int travelBike = travelDynamicLoaction.getChildCount();
 
 
@@ -1904,11 +2302,15 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     enterFrom = views.findViewById(R.id.enter_from);
                     enterTo = views.findViewById(R.id.enter_to);
                     enterFare = views.findViewById(R.id.enter_fare);
-                    deleteButton = findViewById(R.id.delete_button);
+                    deleteButton = views.findViewById(R.id.delete_button);
+                    tvTxtUKeys = views.findViewById(R.id.txt_tv_ukey);
+
                     jsonTrLoc.put("mode", editText.getText().toString());
                     jsonTrLoc.put("from", enterFrom.getText().toString());
                     jsonTrLoc.put("to", enterTo.getText().toString());
                     jsonTrLoc.put("fare", enterFare.getText().toString());
+                    jsonTrLoc.put("u_key", tvTxtUKeys.getText().toString());
+                    jsonTrLoc.put("attach_count", AttachmentImg.get(editMode));
                     trvLoc.put(jsonTrLoc);
                 }
 
@@ -1925,6 +2327,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     trvLoc.put(jsonTrLoc);
                 }
             }
+
             trDet.put("trv_loca", trvLoc);
 
             /*Local Convenyance*/
@@ -1936,16 +2339,16 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                 editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
                 editLaFare = (EditText) (view.findViewById(R.id.edt_la_fare));
                 Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
-
-
+                lcTxtUKeys = (TextView) (view.findViewById(R.id.txt_lc_ukey));
                 editMode = editTexts.getText().toString();
                 newEdt = usersByCountry.get(editMode);
 
                 JSONObject lcMode = new JSONObject();
                 lcMode.put("type", editMode);
+                lcMode.put("attach_count", AttachmentImg.get(editMode));
                 lcMode.put("total_amount", editLaFare.getText().toString());
+                lcMode.put("u_key", lcTxtUKeys.getText().toString());
                 lcMode.put("exp_type", "LC");
-
 
                 JSONArray lcModeRef = new JSONArray();
                 Log.e("ADD_SIZE", String.valueOf(newEdt.size()));
@@ -1958,16 +2361,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                     lcModeRef.put(AditionallLocalConvenyance);
                 }
 
-
-                Log.v("lcMode_On", lcModeRef.toString());
-
                 lcMode.put("ad_exp", lcModeRef);
-
-                Log.v("lcMode_Tw", lcMode.toString());
-
                 addExp.put(lcMode);
-
-                Log.v("lcMode_Thr", addExp.toString());
 
             }
 
@@ -1975,33 +2370,32 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             JSONArray othrExp = new JSONArray();
             int addOtherExp = LinearOtherAllowance.getChildCount();
 
-
-            for (int lc = 0; lc < addOtherExp; lc++) {
-                View view = LinearOtherAllowance.getChildAt(lc);
+            for (int OC = 0; OC < addOtherExp; OC++) {
+                View view = LinearOtherAllowance.getChildAt(OC);
                 oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
                 edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
                 OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
                 editMode = oeEditext.getText().toString();
-                newEdt = usersByCountry.get(editMode);
+                oeTxtUKey = (TextView) (view.findViewById(R.id.txt_oe_ukey));
+
+                newEdt = userOtherExpense.get(editMode);
                 JSONObject lcModes2 = new JSONObject();
                 lcModes2.put("type", editMode);
                 lcModes2.put("attach_count", AttachmentImg.get(editMode));
                 lcModes2.put("total_amount", edtOE.getText().toString());
+                lcModes2.put("u_key", oeTxtUKey.getText().toString());
                 lcModes2.put("exp_type", "OE");
 
-    /*            JSONArray lcModeRef1 = new JSONArray();
-
+             /*   JSONArray lcModeRef1 = new JSONArray();
                 for (int da = 0; da < newEdt.size(); da++) {
                     JSONObject AditionallLocalConvenyance = new JSONObject();
-
-                    AditionallLocalConvenyance.put("KEY", dynamicLabelList.get(da));
+                    AditionallLocalConvenyance.put("KEY", OEdynamicList.get(da));
                     AditionallLocalConvenyance.put("VALUE", newEdt.get(da).getText().toString());
 
                     lcModeRef1.put(AditionallLocalConvenyance);
                 }
                 lcModes2.put("ad_exp", lcModeRef1);*/
                 othrExp.put(lcModes2);
-
                 Log.v("OE_EXPENSE", lcModes2.toString());
 
             }
@@ -2012,9 +2406,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             jsonData.put("Lodg_details", ldgSave);
             jsonData.put("Da_Claim", daAll);
 
-
             transHead.put(jsonData);
-
 
             Log.e("TOTAL_JSON", transHead.toString());
             Log.e("TOTAL_JSON_HHHH", jsonData.toString());
@@ -2048,13 +2440,13 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
 
-
     }
 
-    public void getMulipart(String path, int x) {
+    public void getMulipart(String count, String path, String x, String imageKEY, String mode, String from, String to) {
+        Log.v("PATH_IMAGE", path);
         MultipartBody.Part imgg = convertimg("file", path);
-        HashMap<String, RequestBody> values = field(mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
-        CallApiImage(values, imgg, x);
+        Log.v("PATH_IMAGE_imgg", String.valueOf(imgg));
+        sendImageToServer(count, x, mode, from, to, imgg);
     }
 
     public MultipartBody.Part convertimg(String tag, String path) {
@@ -2073,97 +2465,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         } catch (Exception e) {
         }
         return yy;
-    }
-
-    public HashMap<String, RequestBody> field(String val) {
-        HashMap<String, RequestBody> xx = new HashMap<String, RequestBody>();
-        xx.put("data", createFromString(val));
-        return xx;
-
-    }
-
-    private RequestBody createFromString(String txt) {
-        return RequestBody.create(MultipartBody.FORM, txt);
-    }
-
-    public void CallApiImage(HashMap<String, RequestBody> values, MultipartBody.Part imgg, final int x) {
-        Call<ResponseBody> Callto;
-
-        Callto = apiInterface.uploadkmimg(values, imgg);
-
-        Callto.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                try {
-                    if (response.isSuccessful()) {
-
-                        String jsonData = null;
-                        jsonData = response.body().string();
-                        JSONObject js = new JSONObject(jsonData);
-                        if (js.getString("success").equalsIgnoreCase("true")) {
-                            if (x == -1) {
-                                finalpicPath.add(js.getString("url"));
-                            } else {
-                                String filepathing = array.get(x).getImg_url();
-                                filepathing = filepathing + js.getString("url") + ",";
-                                array.get(x).setImg_url(filepathing);
-                            }
-
-                        }
-
-                    }
-
-                } catch (Exception e) {
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Log.v("print_failure", "ggg" + t.getMessage());
-            }
-        });
-    }
-
-
-    public void popupCapture(Integer attachName) {
-        dialog = new Dialog(TAClaimActivity.this, R.style.AlertDialogCustom);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setContentView(R.layout.popup_capture);
-        dialog.show();
-        TextView upload = dialog.findViewById(R.id.upload);
-        TextView camera = dialog.findViewById(R.id.camera);
-        upload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                selectMultiImage(attachName);
-            }
-        });
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                captureFile(attachName);
-            }
-        });
-    }
-
-    public void selectMultiImage(Integer attachName) {
-        dialog.dismiss();
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), attachName + 1);
-
-    }
-
-    public void captureFile(Integer positionC) {
-        dialog.dismiss();
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        outputFileUri = FileProvider.getUriForFile(TAClaimActivity.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), Shared_Common_Pref.Sf_Code + "_" + System.currentTimeMillis() + ".jpeg"));
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivityForResult(intent, positionC);
-
     }
 
     public void callApi(String date, String OS) {
@@ -2201,7 +2502,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 attachment = json_oo.getString("Attachemnt");
                                 maxAllowonce = json_oo.getString("Max_Allowance");
 
-                                Log.e("COUNTATTACH", attachment.toString());
+                                Log.v("Response_Count", shortName + " : " + attachment + " : " + Exp_Name);
 
                                 listValue.add(shortName);
                                 AttachmentImg.put(Exp_Name, attachment);
@@ -2234,12 +2535,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
         } catch (Exception e) {
         }
-    }
-
-
-    @Override
-    public void onClick(View v) {
-
     }
 
     @Override
@@ -2293,6 +2588,7 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             txt_date.setText(myDataset.get(position).getName());
             Log.d("JSON_VALUE", myDataset.get(position).getId());
             DateTime = myDataset.get(position).getId();
+            DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
             displayTravelMode(myDataset.get(position).getId());
             travelDynamicLoaction.removeAllViews();
             linAddAllowance.setVisibility(View.VISIBLE);
@@ -2301,13 +2597,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             localText.setText("");
             OeText.setText("");
             localTotal.setVisibility(View.GONE);
-            otherTotal.setVisibility(View.GONE);
+            otherExpenseLayout.setVisibility(View.GONE);
             linAll.setVisibility(View.VISIBLE);
             linRemarks.setVisibility(View.VISIBLE);
             linFareAmount.setVisibility(View.VISIBLE);
-            lcString.clear();
             linback.setVisibility(View.GONE);
-
 
         } else if (type == 11) {
             modeTextView.setText(myDataset.get(position).getName());
@@ -2317,7 +2611,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             View view = travelDynamicLoaction.getChildAt(editTextPosition);
             editText = (TextView) (view.findViewById(R.id.enter_mode));
             editText.setText(myDataset.get(position).getName());
-
 
         } else if (type == 80) {
             editTextPositionss = myDataset.get(position).getPho();
@@ -2332,7 +2625,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
             Dynamicallowance.removeAllViews();
             LocalConvenyanceApi(StrModeValue);
-
 
             if (AttachmentImg.get(StrModeValue).equals("1")) {
                 lcAttach.setVisibility(View.VISIBLE);
@@ -2360,7 +2652,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
             attachCountList.add(AttachmentImg.get(StrModeValue));
             Log.e("COUNTATTACH", attachCountList.toString());
             Log.e("COUNTATTACH", AttachmentImg.get(StrModeValue));
-
 
             if (AttachmentImg.get(StrModeValue).equals("1")) {
                 oeAttach.setVisibility(View.VISIBLE);
@@ -2392,79 +2683,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
     }
-
-
-    public void callMap(String date) {
-/*
-        Log.v("Map_Date", date + " 00:00:00");
-        date = date.replaceAll("^[\"']+|[\"']+$", "");
-
-        Log.v("Map_Date", date);
- *//* DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
- Calendar calobj = Calendar.getInstance();
- String dateTime = df.format(calobj.getTime());
- Log.e("DATe_TIME", dateTime);*//*
-
-        Call<ResponseBody> Callto = apiInterface.getMap(SF_code, date + " 00:00:00");
-        Callto.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                latLonArray = new ArrayList<>();
-                mGoogleMap.clear();
-                String jsonData = null;
-                try {
-                    jsonData = response.body().string();
-                    try {
-                        JSONArray jsonArray = new JSONArray(jsonData);
-                        Double lat = 0.0, lon = 0.0, lat1 = 0.0, lon1 = 0.0;
-                        LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                        for (int i = 0; i < jsonArray.length() - 1; i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                            String strLat = jsonObject.getString("lat");
-                            String strLon = jsonObject.getString("lng");
-                            if (!strLat.matches("")) {
-                                lat = Double.parseDouble(strLat);
-                                lon = Double.parseDouble(strLon);
-                                LatLng loc = new LatLng(lat, lon);
-                                builder.include(loc);
-                                latLonArray.add(loc);
-                            }
-                        }
-
-
-                        if (latLonArray.size() != 0) {
-
-                            polyline1 = mGoogleMap.addPolyline(new PolylineOptions()
-                                    .clickable(true)
-                                    .addAll(latLonArray));
-
-                            polyline1.setTag("A");
-                            polyline1.setColor(COLOR_ORANGE_ARGB);
-
-                            LatLngBounds bounds = builder.build();
-
-                            mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100));
-
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                Log.v("response_data", jsonData);
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-        });*/
-
-
-    }
-
 
     public void localCon(Integer countPosition) {
 
@@ -2511,7 +2729,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-
     public void LDGType() {
 
         mCommon_model_spinner = new Common_Model("Independent Stay", "IS");
@@ -2542,7 +2759,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         customDialog.show();
     }
 
-
     public void OtherExpenseMode(Integer poisition) {
         for (int i = 0; i < OE.size(); i++) {
             String name = OE.get(i);
@@ -2555,7 +2771,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         customDialog.show();
     }
-
 
     public void LocalConvenyanceApi(String sss) {
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -2633,13 +2848,11 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-
     public void OtherExpenseApi(String sss) {
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         try {
-
             JSONObject jj = new JSONObject();
             jj.put("Ta_Date", "");
             jj.put("div", div);
@@ -2665,11 +2878,8 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                 JSONObject jsonHeaderObject = jsnArValue.getJSONObject(i);
                                 String Exp_Name = jsonHeaderObject.getString("Name");
 
-
                                 if (Exp_Name.equals(sss)) {
-
                                     JSONArray additionArray = null;
-
                                     additionArray = jsonHeaderObject.getJSONArray("value");
                                     List<EditText> otherExpenseEdit = new ArrayList<>();
                                     for (int l = 0; l <= additionArray.length(); l++) {
@@ -2695,15 +2905,12 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
                                         if (l == additionArray.length() - 1) {
                                             userOtherExpense.put(sss, otherExpenseEdit);
                                         }
-
                                         View view = LinearOtherAllowance.getChildAt(editTextPositionss);
                                         OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
                                         OtherExpense.addView(childRel);
                                     }
                                 }
                             }
-
-
                         }
                     } catch (Exception e) {
                     }
@@ -2711,7 +2918,6 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-
                 }
             });
 
@@ -2729,48 +2935,39 @@ public class TAClaimActivity extends AppCompatActivity implements View.OnClickLi
 
     @Override
     public void onBackPressed() {
-
     }
 
+    /*Imageview */
+    private void sendImageToServer(String count, String HeadTravel, String Mode, String from, String To, MultipartBody.Part imgg) {
 
-   /* public void ImageStore() {
+        long nano_startTime = System.nanoTime();
+        Log.e("nano_startTime", String.valueOf(nano_startTime));
+        ImageUKey = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + nano_startTime;
 
+        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<ResponseBody> mCall = apiInterface.taImage(ImageUKey, count, HeadTravel, Mode, DateTime, mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), from, To, imgg);
+        Log.e("SEND_IMAGE_SERVER", mCall.request().toString());
 
-        JSONArray trvLocs = new JSONArray();
-        int travelBike = travelDynamicLoaction.getChildCount();
+        mCall.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
-        JSONObject jsonTrLocss = new JSONObject();
+                try {
+                    if (response.isSuccessful()) {
+                        String jsonData = null;
+                        jsonData = response.body().string();
+                        JSONObject js = new JSONObject(jsonData);
+                    }
 
-        try {
-            jsonTrLocss.put("SF_Code", "MGR5120");
-            jsonTrLocss.put("Date", "2021-02-19");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        for (int i = 0; i < travelBike; i++) {
-            JSONObject jsonTrLocs = new JSONObject();
-
-            View views = travelDynamicLoaction.getChildAt(i);
-            editText = views.findViewById(R.id.enter_mode);
-            enterFrom = views.findViewById(R.id.enter_from);
-            enterTo = views.findViewById(R.id.enter_to);
-            enterFare = views.findViewById(R.id.enter_fare);
-            deleteButton = findViewById(R.id.delete_button);
-            try {
-                jsonTrLocs.put("mode", editText.getText().toString());
-                jsonTrLocs.put("from", enterFrom.getText().toString());
-                jsonTrLocs.put("to", enterTo.getText().toString());
-                jsonTrLocs.put("fare", enterFare.getText().toString());
-                jsonTrLocs.put("Value", jsonTrLocss);
-                trvLocs.put(jsonTrLocs);
-            } catch (JSONException e) {
-                e.printStackTrace();
+                } catch (Exception e) {
+                }
             }
 
-        }
-
-        Log.v("IMAGE_URl", trvLocs.toString());
-
-    }*/
-
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.e("SEND_IMAGE_Response", "ERROR");
+            }
+        });
+    }
 }

@@ -73,10 +73,7 @@ public class Master_Sync_View implements Main_Model.GetRoutemastersyncResult {
             call.enqueue(new Callback<Object>() {
                 @Override
                 public void onResponse(Call<Object> call, Response<Object> response) {
-                    Log.e("MAsterSyncView_Result", response.body() + "");
-                    System.out.println("Route_Matser" + response.body().toString());
-                    Log.e("TAG", "response 33: " + new Gson().toJson(response.body()));
-                    //approvalList=response.body();
+                         //approvalList=response.body();
                     onFinishedListener.onFinishedrouteObject(response.body(), ii);
                 }
 

@@ -22,9 +22,7 @@ public class OEClaimActivity extends AppCompatActivity {
 
     LinearLayout LinearOtherAllowance, otherExpenseLayout;
     TextView oeEditext, oeAmt;
-    EditText edtOE, edt;
-    ImageView delete_lc;
-    LinearLayout linLocalSpinner, Dynamicallowance;
+    EditText edtOE;
     String OEClaim = "";
     JSONArray jsonArray = null;
 
@@ -83,6 +81,9 @@ public class OEClaimActivity extends AppCompatActivity {
 
                 oeEditext.setText(expCode);
                 edtOE.setText(oejsonArray.getString("Exp_Amt"));
+
+                oeEditext.setEnabled(false);
+                edtOE.setEnabled(false);
 
             } catch (JSONException e) {
                 e.printStackTrace();
