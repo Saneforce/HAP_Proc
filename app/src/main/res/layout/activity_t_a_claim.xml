@@ -81,18 +81,18 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginRight="@dimen/C10dp"
-                                android:textStyle="bold"
                                 android:text="sdsad"
-                                android:textSize="@dimen/C15dp"
                                 android:textColor="@android:color/black"
+                                android:textSize="@dimen/C15dp"
+                                android:textStyle="bold"
                                 tools:ignore="RtlCompat" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginRight="@dimen/C10dp"
                                 android:fontFamily="@font/basic"
                                 android:text="-"
-                                android:layout_marginRight="@dimen/C10dp"
                                 android:textAllCaps="false"
                                 android:textColor="@android:color/black"
                                 android:textSize="14sp" />
@@ -103,8 +103,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_weight="1"
-                                android:textSize="12sp"
-                                android:text="sdadsa" />
+                                android:text="sdadsa"
+                                android:textSize="12sp" />
 
                         </LinearLayout>
 
@@ -112,9 +112,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:visibility="gone"
                             android:orientation="horizontal"
-                            android:padding="@dimen/C2dp">
+                            android:padding="@dimen/C2dp"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="@dimen/C70dp"
@@ -173,10 +173,10 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/basic"
                                 android:text="Desg :"
-                                android:visibility="gone"
                                 android:textAllCaps="false"
                                 android:textColor="@android:color/black"
-                                android:textSize="12sp" />
+                                android:textSize="12sp"
+                                android:visibility="gone" />
 
                             <TextView
                                 android:id="@+id/txt_desg"
@@ -196,9 +196,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:visibility="gone"
                             android:orientation="horizontal"
-                            android:padding="@dimen/C2dp">
+                            android:padding="@dimen/C2dp"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="@dimen/C70dp"
@@ -361,8 +361,7 @@
                     android:layout_marginLeft="@dimen/C8dp"
                     android:layout_marginRight="@dimen/C8dp"
                     android:orientation="vertical"
-                    android:visibility="gone"
-                    >
+                    android:visibility="gone">
                     <!--Daily Allowance-->
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -504,10 +503,11 @@
                                             android:orientation="horizontal">
 
                                             <TextView
+                                                android:id="@+id/txt_driver_boarding"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:layout_weight="1"
-                                                android:text="Driver Boarding"
+                                                android:text=""
                                                 android:textAllCaps="true"
                                                 android:textColor="@android:color/black"
                                                 android:textSize="11sp"
@@ -665,7 +665,9 @@
                                 android:layout_margin="@dimen/C8dp"
                                 android:orientation="vertical"
                                 android:padding="@dimen/C5dp"
-                                android:visibility="gone">
+                                android:visibility="gone"
+
+                                >
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -686,7 +688,7 @@
                                         android:id="@+id/mode_name"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Bike"
+                                        android:text=""
                                         android:textColor="#000"
                                         android:textSize="15sp"
                                         android:textStyle="bold" />
@@ -823,6 +825,15 @@
                                                 android:textColor="#000"
                                                 android:textSize="15sp"
                                                 android:textStyle="bold" />
+
+                                            <TextView
+                                                android:id="@+id/max_km"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_gravity="start"
+                                                android:text=""
+                                                android:textSize="7sp"
+                                                android:visibility="gone" />
                                         </LinearLayout>
 
                                         <LinearLayout
@@ -2113,6 +2124,7 @@
                     android:textAlignment="center"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold"
+                    android:visibility="gone"
                     tools:ignore="RtlCompat" />
 
                 <Button
@@ -2127,6 +2139,7 @@
                     android:textAlignment="center"
                     android:textColor="#FFFFFF"
                     android:textStyle="bold"
+                    android:visibility="gone"
                     tools:ignore="RtlCompat" />
             </LinearLayout>
 

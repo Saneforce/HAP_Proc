@@ -128,7 +128,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             lblHdBill, lblHdBln, ldgWOBBal, ldgAdd, txtJNMyEli, txtMyEligi, txtDrivEligi, lbl_ldg_eligi, txt_totDA,
             fuelAmount, TextTotalAmount, editTexts, oeEditext, localText, OeText, grandTotal, txtallamt, txt_BrdAmt,
             txt_DrvBrdAmt, txtJointAdd, txtJNEligi, txtTAamt, txtDesig, txtDept, txtEmpId, txtName, oeTxtUKey, oeTxtUKeys,
-            lcTxtUKey, lcTxtUKeys, tvTxtUKey, tvTxtUKeys;
+            lcTxtUKey, lcTxtUKeys, tvTxtUKey, tvTxtUKeys, txtMaxKm, txtDrvrBrod;
 
     EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt, edt1, edt_ldg_JnEmp,
             edt_ldg_bill, edtLcFare, lodgStyLocation;
@@ -295,6 +295,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         txtEmpId.setText("(" + mShared_common_pref.getvalue(Shared_Common_Pref.SF_EMP_ID) + ")");
         viw = findViewById(R.id.vw_tl);
         lin = findViewById(R.id.lin_tl);
+        txtMaxKm = findViewById(R.id.max_km);
+        txtDrvrBrod = findViewById(R.id.txt_driver_boarding);
 
         img_lodg_atta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1303,23 +1305,57 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             TxtClosingKm.setText(ClosingKm);
                             C = Integer.valueOf(ClosingKm);
                             totalkm = C - S;
-
+                            TotalTravelledKm.setText(String.valueOf(totalkm));
                         }
 
                         if (PersonalKm != null && !PersonalKm.isEmpty() && !PersonalKm.equals("null") && !PersonalKm.equals("")) {
                             PersonalKm = PersonalKm.replaceAll("^[\"']+|[\"']+$", "");
                             Pva = Integer.valueOf(PersonalKm);
                             totalPersonalKm = totalkm - Pva;
-                            PersonalTextKM.setText(String.valueOf(totalPersonalKm));
+
                         }
 
-                        Double totalAmount = Double.valueOf(strFuelAmount);
-                        tofuel = totalPersonalKm * totalAmount;
-                        TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(tofuel));
-                        TotalTravelledKm.setText(String.valueOf(totalkm));
-                    }
 
-                    txtTaClaim.setText(StrDaName);
+                        txtTaClaim.setText(StrDaName);
+
+                        if (totalPersonalKm > 200 && StrDaName.equals("Two Wheeler")) {
+                            PersonalTextKM.setText("200");
+                            txtMaxKm.setText("Actual Allowance is " + totalkm + " but the max allowance is 200 ");
+                            txtMaxKm.setVisibility(View.VISIBLE);
+
+                            Double totalAmount = Double.valueOf(strFuelAmount);
+                            tofuel = 200 * totalAmount;
+                            TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(tofuel));
+
+
+                        } else if (totalkm > 500 && StrDaName.equals("Four Wheeler")) {
+                            PersonalTextKM.setText("500");
+                            txtMaxKm.setText("Actual Allowance is " + totalkm + " but the max allowance is 500 ");
+
+                            Double totalAmount = Double.valueOf(strFuelAmount);
+                            tofuel = 500 * totalAmount;
+                            TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(tofuel));
+
+                            txtMaxKm.setVisibility(View.VISIBLE);
+                        } else {
+                            PersonalTextKM.setText(String.valueOf(totalPersonalKm));
+
+                            Double totalAmount = Double.valueOf(strFuelAmount);
+                            tofuel = totalPersonalKm * totalAmount;
+                            TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(tofuel));
+
+
+                            txtMaxKm.setVisibility(View.GONE);
+                        }
+
+                        btn_sub.setVisibility(View.VISIBLE);
+                        buttonSave.setVisibility(View.VISIBLE);
+
+                    } else {
+
+                        btn_sub.setVisibility(View.GONE);
+                        buttonSave.setVisibility(View.GONE);
+                    }
 
                     txtDailyAllowance.setText(StrDailyAllowance + " - " + StrTo);
 
@@ -1338,6 +1374,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             txt_DrvBrdAmt.setText(" Rs. " + new DecimalFormat("##0.00").format(drvBrdAmt));
 
                             vwDrvBoarding.setVisibility(View.VISIBLE);
+                            txtDrvrBrod.setText("Chauffer driven Boarding");
                         } else {
                             txt_DrvBrdAmt.setText("");
                         }
@@ -1357,6 +1394,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             txt_DrvBrdAmt.setText(" Rs. " + new DecimalFormat("##0.00").format(drvBrdAmt));
 
                             vwDrvBoarding.setVisibility(View.VISIBLE);
+                            txtDrvrBrod.setText("Chauffer driven Boarding");
                         } else {
                             txt_DrvBrdAmt.setText("");
                         }
@@ -1383,11 +1421,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                             travelDynamicLoaction.addView(rowView, layoutParams);
                             tvSize = travelDynamicLoaction.indexOfChild(rowView);
-
-
-
-
-                            /*  txtTAamt.setText("Rs. " + jsonObject.get("ta_total_amount").getAsString());*/
 
                             View tvchildView = travelDynamicLoaction.getChildAt(tvSize);
                             viw.setVisibility(View.VISIBLE);
@@ -1872,7 +1905,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
 
             } else {
-
 
                 tldraftJson = (JsonObject) traveldLoc.get(i);
 

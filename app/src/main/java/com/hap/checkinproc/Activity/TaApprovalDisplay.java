@@ -50,7 +50,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
     String date = " ", SlStart = "", TotalAmt = "", sfCode = "", STEND = "", SDA = "", SLC = "", SOE = "";
     LinearLayout linAccept, linReject;
     AppCompatEditText appCompatEditText;
-    JsonArray jsonArray = null,jsonTravDetai = null,lcDraftArray = null,oeDraftArray = null,trvldArray = null,ldArray = null,
+    JsonArray jsonArray = null, jsonTravDetai = null, lcDraftArray = null, oeDraftArray = null, trvldArray = null, ldArray = null,
             daArray = null;
 
     @Override
@@ -109,7 +109,10 @@ public class TaApprovalDisplay extends AppCompatActivity {
         SlStart = String.valueOf(getIntent().getSerializableExtra("Sl_No"));
         sfCode = String.valueOf(getIntent().getSerializableExtra("sfCode"));
 
-        txtTotalAmt.setText("Rs." + getIntent().getSerializableExtra("total_amount") + ".00");
+
+        Double total = Double.parseDouble(String.valueOf(getIntent().getSerializableExtra("total_amount")));
+
+        txtTotalAmt.setText("Rs. " + total);
 
         getTAList(String.valueOf(getIntent().getSerializableExtra("date")), String.valueOf(getIntent().getSerializableExtra("sfCode")));
         Log.e("SFCode", String.valueOf(getIntent().getSerializableExtra("total_amount")));
@@ -232,12 +235,20 @@ public class TaApprovalDisplay extends AppCompatActivity {
                 JsonArray jsonArray = response.body();
                 for (int m = 0; m < jsonArray.size(); m++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(m);
-                    txtDA.setText("Rs." + jsonObject.get("Boarding_Amt").getAsString() + ".00");
-                    txtTL.setText("Rs." + jsonObject.get("Ta_totalAmt").getAsString() + ".00");
-                    txtLA.setText("Rs." + jsonObject.get("Ldg_totalAmt").getAsString() + ".00");
-                    txtLC.setText("Rs." + jsonObject.get("Lc_totalAmt").getAsString() + ".00");
-                    txtOE.setText("Rs." + jsonObject.get("Oe_totalAmt").getAsString() + ".00");
-                    txtTaAmt.setText("Rs." + jsonObject.get("trv_lc_amt").getAsString() + ".00");
+
+                    Double brd = Double.parseDouble(jsonObject.get("Boarding_Amt").getAsString());
+                    Double ta = Double.parseDouble(jsonObject.get("Ta_totalAmt").getAsString());
+                    Double ldg = Double.parseDouble(jsonObject.get("Ldg_totalAmt").getAsString());
+                    Double lc = Double.parseDouble(jsonObject.get("Lc_totalAmt").getAsString());
+                    Double oe = Double.parseDouble(jsonObject.get("Oe_totalAmt").getAsString());
+                    Double trv_lc = Double.parseDouble(jsonObject.get("trv_lc_amt").getAsString());
+
+                    txtDA.setText("Rs. " + brd);
+                    txtTL.setText("Rs. " + ta);
+                    txtLA.setText("Rs. " + ldg);
+                    txtLC.setText("Rs. " + lc);
+                    txtOE.setText("Rs. " + oe);
+                    txtTaAmt.setText("Rs. " + trv_lc);
                     SDA = jsonObject.get("Boarding_Amt").getAsString();
                     SLC = jsonObject.get("Lc_totalAmt").getAsString();
                     SOE = jsonObject.get("Oe_totalAmt").getAsString();
