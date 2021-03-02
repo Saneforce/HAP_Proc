@@ -11,7 +11,93 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/custom_toolbar_help" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark"
+            android:orientation="horizontal"
+            android:paddingBottom="5dp">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/AppTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/C3dp"
+                    android:padding="10dp"
+                    android:text="HAP Check-In"
+                    android:textColor="@color/white"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/AppTitle"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="-14dp"
+                    android:text="Ver 3.0.0"
+
+                    android:textColor="@color/white"
+                    android:textSize="8sp" />
+            </LinearLayout>
+
+            <Space
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/toolbar_ert"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="@dimen/C3dp"
+                android:layout_marginRight="@dimen/C10dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="ERT"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/toolbar_play_slip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="@dimen/C3dp"
+                android:layout_marginRight="@dimen/C10dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="Payslip"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/toolbar_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="@dimen/C3dp"
+                android:layout_marginRight="@dimen/C5dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:text="Help"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+            <ImageView
+                android:id="@+id/toolbar_home"
+                android:layout_width="@dimen/C30dp"
+                android:layout_height="@dimen/C30dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="@dimen/C3dp"
+                android:layout_marginRight="@dimen/C8dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:padding="5dp"
+                android:src="@drawable/logout" />
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -86,6 +172,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <include layout="@layout/back_arrow"></include>
+    <include layout="@layout/back_arrow"
+        android:visibility="gone"></include>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

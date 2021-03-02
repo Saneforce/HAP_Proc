@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.JsonObject;
 import com.hap.checkinproc.R;
 
 import org.json.JSONArray;
@@ -26,6 +25,8 @@ public class TL_cliam_Apprval extends AppCompatActivity {
     EditText etrTaFr, etrTaTo, enterFrom, enterTo, enterFare;
     String TLClaim = "", StrToEnd = "0";
     JSONArray jsonArray = null;
+    ImageView ImgPreview;
+    Integer tlPos = 0;
 
 
     @Override
@@ -37,6 +38,7 @@ public class TL_cliam_Apprval extends AppCompatActivity {
 
         TLClaim = String.valueOf(getIntent().getSerializableExtra("TLAllowance"));
         StrToEnd = String.valueOf(getIntent().getSerializableExtra("strEnd"));
+
 
         Log.v("TLAllowance", TLClaim);
         Log.v("TLStrToEnd", StrToEnd);
@@ -117,11 +119,23 @@ public class TL_cliam_Apprval extends AppCompatActivity {
                 enterFrom = views.findViewById(R.id.enter_from);
                 enterTo = views.findViewById(R.id.enter_to);
                 enterFare = views.findViewById(R.id.enter_fare);
+                ImgPreview = views.findViewById(R.id.img_prv);
 
-                editText.setText(""+ tldraftJsons.getString("Mode"));
-                enterFrom.setText(""+tldraftJsons.getString("From_P"));
-                enterTo.setText(""+tldraftJsons.getString("To_P"));
-                enterFare.setText(""+tldraftJsons.getString("Fare"));
+                editText.setText("" + tldraftJsons.getString("Mode"));
+                enterFrom.setText("" + tldraftJsons.getString("From_P"));
+                enterTo.setText("" + tldraftJsons.getString("To_P"));
+                enterFare.setText("" + tldraftJsons.getString("Fare"));
+
+                tlPos = travelDynamicLoaction.indexOfChild(rowView);
+                ImgPreview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        View views = travelDynamicLoaction.getChildAt(tlPos);
+
+
+                    }
+                });
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

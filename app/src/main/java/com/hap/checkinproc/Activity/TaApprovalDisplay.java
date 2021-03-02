@@ -47,7 +47,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
             txtTL, txtLA, txtLC, txtOE, txtReject, txtEmpId, txtMobile;
     Common_Class common_class;
     Shared_Common_Pref mShared_common_pref;
-    String date = " ", SlStart = "", TotalAmt = "", sfCode = "", STEND = "", SDA = "", SLC = "", SOE = "";
+    String date = " ", SlStart = "", TotalAmt = "", sfCode = "", STEND = "", SDA = "", SLC = "", SOE = "", stImg = "", endImg = "";
     LinearLayout linAccept, linReject;
     AppCompatEditText appCompatEditText;
     JsonArray jsonArray = null, jsonTravDetai = null, lcDraftArray = null, oeDraftArray = null, trvldArray = null, ldArray = null,
@@ -201,6 +201,8 @@ public class TaApprovalDisplay extends AppCompatActivity {
     public void FuelApproval(View v) {
         Intent intent = new Intent(getApplicationContext(), FuelAllowance.class);
         intent.putExtra("jsonTravDetai", jsonTravDetai.toString());
+        intent.putExtra("start_Photo", stImg);
+        intent.putExtra("End_photo", endImg);
         startActivity(intent);
     }
 
@@ -375,6 +377,9 @@ public class TaApprovalDisplay extends AppCompatActivity {
                 for (int i = 0; i < jsonArray.size(); i++) {
                     jsonObject = (JsonObject) jsonArray.get(i);
                     STEND = jsonObject.get("StEndNeed").getAsString();
+                    stImg = jsonObject.get("start_Photo").getAsString();
+                    endImg = jsonObject.get("End_photo").getAsString();
+
                 }
 
             }

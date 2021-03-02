@@ -232,14 +232,8 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
-                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-                if (CheckIn == true) {
-                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
-                    Dashboard.putExtra("Mode", "CIN");
-                    startActivity(Dashboard);
-                } else
-                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+                    startActivity(new Intent(getApplicationContext(), OrderDashBoard.class));
 
 
             }
@@ -313,26 +307,26 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
 
                 Log.e("COUNT", String.valueOf(eventDb));
 
-               if (txtOrder.getText().toString().matches("")) {
+                if (txtOrder.getText().toString().matches("")) {
                     Toast.makeText(SecondaryOrderActivity.this, "Select Order Type", Toast.LENGTH_SHORT).show();
                 } else if (txtRetailer.getText().toString().matches("")) {
                     Toast.makeText(SecondaryOrderActivity.this, "Select Retailer Name", Toast.LENGTH_SHORT).show();
                 } else {
-                   Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
-                   intent.putExtra("EventcapOne", EventcapOne);
-                   intent.putExtra("id", 1);
-                   intent.putExtra("count", eventDb);
-                   intent.putExtra("RetailerChannel", RetailerChannel);
-                   intent.putExtra("Retailerclass", Retailerclass);
-                   intent.putExtra("OrderAmount", OrderAmount);
-                   intent.putExtra("LastVisited", LastVisited);
-                   intent.putExtra("Remarks", Remarks);
-                   intent.putExtra("textMobile", textMobile);
-                   intent.putExtra("PhoneNumber", PhoneNumber);
-                   intent.putExtra("RetailerName", RetailerName);
-                   intent.putExtra("selectOrder", selectOrder);
-                   startActivity(intent);
-                   finish();
+                    Intent intent = new Intent(getApplicationContext(), EventCaptureActivity.class);
+                    intent.putExtra("EventcapOne", EventcapOne);
+                    intent.putExtra("id", 1);
+                    intent.putExtra("count", eventDb);
+                    intent.putExtra("RetailerChannel", RetailerChannel);
+                    intent.putExtra("Retailerclass", Retailerclass);
+                    intent.putExtra("OrderAmount", OrderAmount);
+                    intent.putExtra("LastVisited", LastVisited);
+                    intent.putExtra("Remarks", Remarks);
+                    intent.putExtra("textMobile", textMobile);
+                    intent.putExtra("PhoneNumber", PhoneNumber);
+                    intent.putExtra("RetailerName", RetailerName);
+                    intent.putExtra("selectOrder", selectOrder);
+                    startActivity(intent);
+                    finish();
                 }
 
             }

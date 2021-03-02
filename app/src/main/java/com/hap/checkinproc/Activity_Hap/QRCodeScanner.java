@@ -52,10 +52,8 @@ public class QRCodeScanner extends AppCompatActivity {
     private CameraSource cameraSource;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
     Button btnAction;
-    String intentData = "";
-    boolean isEmail = false;
     String[] arrSplit;
-    String latlon = "",NameValue="";
+    String latlon = "", NameValue = "" ,intentData="";
 
     private FusedLocationProviderClient fusedLocationClient;
 
@@ -112,7 +110,6 @@ public class QRCodeScanner extends AppCompatActivity {
 
     private void initialiseDetectorsAndSources() {
 
-        Toast.makeText(getApplicationContext(), "Barcode scanner started", Toast.LENGTH_SHORT).show();
         barcodeDetector = new BarcodeDetector.Builder(this)
                 .setBarcodeFormats(Barcode.ALL_FORMATS)
                 .build();
@@ -158,35 +155,33 @@ public class QRCodeScanner extends AppCompatActivity {
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
                 if (barcodes.size() != 0) {
-                    txtBarcodeValue.post(new Runnable() {
+                    surfaceView.post(new Runnable() {
                         @Override
                         public void run() {
-
-                            if (barcodes.valueAt(0).email != null) {
-                                txtBarcodeValue.removeCallbacks(null);
-                                intentData = barcodes.valueAt(0).email.address;
+                            intentData= barcodes.valueAt(0).displayValue.replace("|", ",");
+                            if (!intentData.equals("")) {
                                 Log.e("INTENT_DATA", intentData);
-                                txtBarcodeValue.setText(intentData);
-                                isEmail = true;
-                                btnAction.setText("ADD CONTENT TO THE MAIL");
-                            } else {
-                                isEmail = false;
-                                btnAction.setText("LAUNCH URL");
-                                String intentData = barcodes.valueAt(0).displayValue.replace("|", ",");
-                                if (!intentData.equals("")) {
-                                    Log.e("INTENT_DATA", intentData);
-                                    arrSplit = intentData.split(",");
-                                    GateIn(NameValue, arrSplit, 1);
-                                    Log.e("INTENT_DATA", arrSplit[0]);
-                                    Log.e("INTENT_DATA", arrSplit[1]);
-                                    Log.e("INTENT_DATA", arrSplit[2]);
-                                    Log.e("INTENT_DATA", arrSplit[3]);
-                                    Log.e("INTENT_DATA", arrSplit[4]);
+                                arrSplit = intentData.split(",");
+                                Log.e("INTENT_SIZE", String.valueOf(arrSplit.length));
+                                if (String.valueOf(arrSplit.length).equals("5")) {
+                                    if (arrSplit[3].equals("IN") || arrSplit[3].equals("Out")) {
+                                        GateIn(NameValue, arrSplit, 1);
+                                        Log.e("INTENT_DATA", arrSplit[0]);
+                                        Log.e("INTENT_DATA", arrSplit[1]);
+                                        Log.e("INTENT_DATA", arrSplit[2]);
+                                        Log.e("INTENT_DATA", arrSplit[3]);
+                                        Log.e("INTENT_DATA", arrSplit[4]);
 
-                                    Toast.makeText(QRCodeScanner.this, "Code is successfull", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(QRCodeScanner.this, "Code is successfull", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    }
+                                } else {
+                                    Toast.makeText(QRCodeScanner.this, "Provide a Valid Code", Toast.LENGTH_SHORT).show();
                                     finish();
+                                        /*overridePendingTransition( 0, 0);
+                                        startActivity(getIntent());
+                                        overridePendingTransition(0, 0);*/
                                 }
-
                             }
                         }
                     });
@@ -199,72 +194,73 @@ public class QRCodeScanner extends AppCompatActivity {
     private void GateIn(String Name, String[] arrSplit, int flag) {
 
 
-        Calendar calendar;
-        SimpleDateFormat dateFormat,dateTime,time;
-        String date,dateTi,ti;
-
-        calendar = Calendar.getInstance();
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        dateTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        time = new SimpleDateFormat("hh:mm:ss");
-        date = dateFormat.format(calendar.getTime());
-        dateTi = dateTime.format(calendar.getTime());
-        ti = time.format(calendar.getTime());
-        Log.v("DATE_ONLY", date);
-        Log.v("DATE_ONLY", dateTi);
-        Log.v("DATE_ONLY", ti);
+        if (!arrSplit[0].equals("") || !arrSplit[1].equals("") || !arrSplit[2].equals("") || !arrSplit[3].equals("") || !arrSplit[4].equals("")) {
 
 
-        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd");
-
-        DateFormat dfw2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        DateFormat dfw3 = new SimpleDateFormat("hh:mm:ss");
-
-        //GateIn,GateOut
-        Map<String, String> QueryString = new HashMap<>();
-        QueryString.put("axn", "dcr/save");
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("State_Code", Shared_Common_Pref.Div_Code);
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-        //  QueryString.put("duty_id", duty_id);
-
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-        JSONObject sp = new JSONObject();
-        try {
+            Log.e("INTENT_DATA_IN", arrSplit[0]);
+            Log.e("INTENT_DATA_IN", arrSplit[1]);
+            Log.e("INTENT_DATA_IN", arrSplit[2]);
+            Log.e("INTENT_DATA_IN", arrSplit[3]);
+            Log.e("INTENT_DATA_IN", arrSplit[4]);
 
 
-            sp.put("HQLoc", arrSplit[0]);
-            sp.put("HQLocID", arrSplit[1]);
-            sp.put("Location", latlon);
-            sp.put("MajourType", arrSplit[4]);
-            sp.put("latLng", arrSplit[2]);
-            sp.put("mode", arrSplit[3]);
-            sp.put("time", date);
-            sp.put("eDate", dateTi);
-            sp.put("eTime", ti);
+            Calendar calendar;
+            SimpleDateFormat dateFormat, dateTime, time;
+            String date, dateTi, ti;
 
-          /*  Log.v("DATE_ONLY", date);
+            calendar = Calendar.getInstance();
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            dateTime = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            time = new SimpleDateFormat("hh:mm:ss");
+            date = dateFormat.format(calendar.getTime());
+            dateTi = dateTime.format(calendar.getTime());
+            ti = time.format(calendar.getTime());
+            Log.v("DATE_ONLY", date);
             Log.v("DATE_ONLY", dateTi);
-            Log.v("DATE_ONLY", ti);*/
-            jsonObject.put(Name, sp);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        jsonArray.put(jsonObject);
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, jsonArray.toString());
-        Log.e("Log_TpQuerySTring", QueryString.toString());
-        Log.e("Log_Tp_SELECT", jsonArray.toString());
+            Log.v("DATE_ONLY", ti);
 
-        mCall.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                // locationList=response.body();
-                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
-                try {
-                    // common_class.CommonIntentwithFinish(Onduty_approval.class);
-                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+            //GateIn,GateOut
+            Map<String, String> QueryString = new HashMap<>();
+            QueryString.put("axn", "dcr/save");
+            QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+            QueryString.put("State_Code", Shared_Common_Pref.Div_Code);
+            QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+            //  QueryString.put("duty_id", duty_id);
+
+            JSONArray jsonArray = new JSONArray();
+            JSONObject jsonObject = new JSONObject();
+            JSONObject sp = new JSONObject();
+            try {
+
+
+                sp.put("HQLoc", arrSplit[0]);
+                sp.put("HQLocID", arrSplit[1]);
+                sp.put("Location", latlon);
+                sp.put("MajourType", arrSplit[4]);
+                sp.put("latLng", arrSplit[2]);
+                sp.put("mode", arrSplit[3]);
+                sp.put("time", date);
+                sp.put("eDate", dateTi);
+                sp.put("eTime", ti);
+
+                jsonObject.put(Name, sp);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            jsonArray.put(jsonObject);
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, jsonArray.toString());
+            Log.e("Log_TpQuerySTring", QueryString.toString());
+            Log.e("Log_Tp_SELECT", jsonArray.toString());
+
+            mCall.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    // locationList=response.body();
+                    Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
+                    try {
+                        // common_class.CommonIntentwithFinish(Onduty_approval.class);
+                        JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                    /* if (flag == 1) {
                         // common_class.ProgressdialogShow(2, "");
                         Toast.makeText(getApplicationContext(), "Holiday  Approved Successfully", Toast.LENGTH_SHORT).show();
@@ -274,16 +270,17 @@ public class QRCodeScanner extends AppCompatActivity {
 
                     }*/
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-                //  common_class.ProgressdialogShow(2, "");
-            }
-        });
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+                    //  common_class.ProgressdialogShow(2, "");
+                }
+            });
+        }
     }
 
 
