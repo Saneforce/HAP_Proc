@@ -39,8 +39,7 @@
                 android:layout_width="@dimen/C10dp"
                 android:layout_height="@dimen/C10dp"
                 android:layout_margin="@dimen/C10dp"
-                android:src="@drawable/spin_down_arrow">
-            </ImageView>
+                android:src="@drawable/spin_down_arrow"></ImageView>
 
         </LinearLayout>
 
@@ -48,9 +47,9 @@
             android:id="@+id/enter_from"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter From"
-            android:enabled="false"
             android:background="@null"
+            android:enabled="false"
+            android:hint="Enter From"
             android:padding="@dimen/C10dp"
             android:textColorHint="#C0C0C0"
             android:textSize="@dimen/C16dp" />
@@ -59,9 +58,9 @@
             android:id="@+id/enter_to"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter To"
             android:background="@null"
             android:enabled="false"
+            android:hint="Enter To"
             android:padding="@dimen/C10dp"
             android:textColorHint="#C0C0C0"
             android:textSize="@dimen/C14dp" />
@@ -78,13 +77,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:hint="Enter Fare"
-                android:enabled="false"
-                android:inputType="number"
                 android:background="@null"
+                android:enabled="false"
+                android:hint="Enter Fare"
+                android:inputType="number"
                 android:padding="@dimen/C10dp"
                 android:textColorHint="#C0C0C0"
                 android:textSize="@dimen/C14dp" />
+
+
+            <ImageView
+                android:id="@+id/img_prv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.1"
+                android:src="@drawable/image_preview"></ImageView>
+
 
         </LinearLayout>
     </LinearLayout>

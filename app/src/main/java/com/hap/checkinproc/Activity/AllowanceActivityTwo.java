@@ -518,15 +518,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 ImageStart = json_oo.getString("start_Photo");
 
 
-                                /*b
-                                 *
-                                 *
-                                 *
-                                 *
-                                 *
-                                 *
-                                 * */
-
                                 StrToCode = json_oo.getString("To_Place_Id");
 
                                 TextToPlace.setText(json_oo.getString("To_Place"));

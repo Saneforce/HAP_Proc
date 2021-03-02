@@ -5,6 +5,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -18,7 +19,9 @@ import android.widget.TextView;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.R;
 
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
@@ -71,17 +74,29 @@ public class OrderDashBoard extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
-                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-                if (CheckIn == true) {
-                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
-                    Dashboard.putExtra("Mode", "CIN");
-                    startActivity(Dashboard);
-                } else
-                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+                AlertDialogBox.showDialog(OrderDashBoard.this, "", "Do you want to Logout?", "Yes", "NO", false, new AlertBox() {
+                    @Override
+                    public void PositiveMethod(DialogInterface dialog, int id) {
+                        SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                        Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                        if (CheckIn == true) {
+                            Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                            Dashboard.putExtra("Mode", "CIN");
+                            startActivity(Dashboard);
+                        } else
+                            startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
 
+                    }
+
+                    @Override
+                    public void NegativeMethod(DialogInterface dialog, int id) {
+
+                    }
+                });
             }
+
         });
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {

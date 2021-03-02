@@ -1,28 +1,35 @@
 package com.hap.checkinproc.Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.hap.checkinproc.Activity_Hap.ProductImageView;
 import com.hap.checkinproc.R;
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.text.DecimalFormat;
 
 
 public class FuelAllowance extends AppCompatActivity {
 
 
-
-    String FUClaim = "",  StartedKm = "", ClosingKm = "", PersonalKm = "", StrDaName = "", strFuelAmount = "";
-    Double tofuel = 0.0,  fAmount = 0.0;
-    TextView  TxtStartedKm, TxtClosingKm, travelTypeMode, TotalTravelledKm, txtTaClaim, PersonalTextKM, PersonalKiloMeter,
+    String FUClaim = "", StartedKm = "", ClosingKm = "", PersonalKm = "", StrDaName = "", strFuelAmount = "";
+    Double tofuel = 0.0, fAmount = 0.0;
+    TextView TxtStartedKm, TxtClosingKm, travelTypeMode, TotalTravelledKm, txtTaClaim, PersonalTextKM, PersonalKiloMeter,
             fuelAmount, TextTotalAmount;
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0;
     JSONArray jsonArray = null;
+    ImageView startImage, EndImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,7 @@ public class FuelAllowance extends AppCompatActivity {
         TotalTravelledKm = findViewById(R.id.total_km);
         PersonalKiloMeter = findViewById(R.id.pers_kilo_meter);
 
+
         fuelAmount = findViewById(R.id.fuel_amount);
         try {
             jsonArray = new JSONArray(FUClaim);
@@ -51,8 +59,7 @@ public class FuelAllowance extends AppCompatActivity {
     }
 
 
-
-    public void fuelAll(JSONArray jsonArray){
+    public void fuelAll(JSONArray jsonArray) {
         JSONObject jsonObject = null;
         for (int i = 0; i < jsonArray.length(); i++) {
             int finalC = i;
@@ -68,13 +75,39 @@ public class FuelAllowance extends AppCompatActivity {
                 StrDaName = jsonObject.getString("Mode_Of_Travel");
                 strFuelAmount = jsonObject.getString("Fare");
 
-                Log.v("StartedKm", StartedKm);
-                Log.v("ClosingKm", ClosingKm);
-                Log.v("PersonalKm", PersonalKm);
+
+                startImage = findViewById(R.id.startkmimage);
+                EndImage = findViewById(R.id.endkmimage);
+
+                Picasso.with(FuelAllowance.this)
+                        .load(String.valueOf(getIntent().getSerializableExtra("start_Photo")))
+                        .into(startImage);
+                Picasso.with(FuelAllowance.this)
+                        .load(String.valueOf(getIntent().getSerializableExtra("End_photo")))
+                        .into(EndImage);
+
+
+                startImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                        intent.putExtra("ImageUrl", String.valueOf(getIntent().getSerializableExtra("start_Photo")));
+                        startActivity(intent);
+                    }
+                });
+
+                EndImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                        intent.putExtra("ImageUrl", String.valueOf(getIntent().getSerializableExtra("End_photo")));
+                        startActivity(intent);
+                    }
+                });
 
                 fAmount = Double.valueOf(strFuelAmount);
                 fuelAmount.setText(" Rs. " + new DecimalFormat("##0.00").format(fAmount) + " / KM ");
-/*                txtTaClaim.setText(StrDaName);*/
+                /*                txtTaClaim.setText(StrDaName);*/
 
                 StartedKm = StartedKm.replaceAll("^[\"']+|[\"']+$", "");
                 if (StartedKm != null && !StartedKm.isEmpty() && !StartedKm.equals("null") && !StartedKm.equals("")) {
