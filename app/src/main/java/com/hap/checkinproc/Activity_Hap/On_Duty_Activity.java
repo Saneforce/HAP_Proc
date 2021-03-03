@@ -80,24 +80,16 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     LinearLayout ModeOfTravel, haplocationtext, purposeofvisittext, ondutylocations, linearBus;
 
     /*AllowanceActivity*/
-    RelativeLayout pic, rlay_pic, lay_km, lay_to, lay_From, lay_det, lay_fare;
     Uri outputFileUri;
     ImageView capture_img;
-    CardView card_travel, card_to, card_typ;
     ApiInterface apiInterface;
-    Button btn_submit, btn_ta;
+    Button btn_submit;
     String filepath_final = "";
-    String mode, url, hq_code, typ_code;
-
-    TextView txt_hq, txt_typ;
+    String mode;
     Common_Class common_class;
     boolean updateMode = false;
     SharedPreferences UserDetails;
-    public static final String MyPREFERENCES = "MyPrefs";
     String SF_code = "", div = "";
-    ArrayList<SelectionModel> array_hq = new ArrayList<>();
-    RelativeLayout lay_hq, lay_typ;
-    private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
     Shared_Common_Pref mShared_common_pref;
 
     /*OnDUTY ALlowance*/
@@ -108,7 +100,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     ImageView attachedImage;
     Button SubmitValue;
     TextView TextMode, TextToAddress, dailyAllowance;
-    private ArrayList<String> temaplateList;
     Common_Model mCommon_model_spinner;
     List<Common_Model> listOrderType = new ArrayList<>();
     List<Common_Model> modelRetailDetails = new ArrayList<>();
@@ -138,12 +129,11 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     public static final String StartedKm = "StartedKMsss";
 
     CheckBox driverAllowance;
-    String busTo = " ";
     LinearLayout linCheckdriver;
 
-    String strHapLocation = "", strOtherLocation = "", strVisitPurpose = "";
+    String strHapLocation = "", strVisitPurpose = "";
     String imageConvert = "", imageServer = "";
-    String DM = "", DriverNeed = "false", DriverMode = "", strDailyAllowance = "", strDriverAllowance = "", StToEnd = "", StrID = "";
+    String DriverNeed = "false", DriverMode = "", strDailyAllowance = "", StrID = "";
 
     CardView CardDailyAllowance;
     private ArrayList<String> travelTypeList;
@@ -718,23 +708,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    public void submitValue() {
-        Intent intent = new Intent(this, Checkin.class);
-        Bundle extras = new Bundle();
-        extras.putString("ODFlag", String.valueOf(flag));
-        extras.putString("Mode", "onduty");
-        if (flag == 1) {
-            extras.putString("onDutyPlcNm", ondutyedittext.getText().toString());
-            extras.putString("onDutyPlcID", "0");
-        } else {
-            extras.putString("onDutyPlcNm", selecthaplocationss.getText().toString());
-            extras.putString("onDutyPlcID", hapLocid);
-        }
-        extras.putString("vstPurpose", purposeofvisitedittext.getText().toString());
-        intent.putExtras(extras);
-        startActivity(intent);
-    }
-
 
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
@@ -766,7 +739,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             } else {
                 mode = "12";
                 BikeMode.setVisibility(View.VISIBLE);
-                // BusMode.setVisibility(View.GONE);
                 BusMode.setVisibility(View.VISIBLE);
                 ReasonPhoto.setVisibility(View.VISIBLE);
 
@@ -789,7 +761,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 linCheckdriver.setVisibility(View.VISIBLE);
             } else {
                 linCheckdriver.setVisibility(View.GONE);
-
             }
 
             DriverNeed = "";
@@ -862,25 +833,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    public boolean vali() {
-
-        if (flag == 1 && (ondutyedittext.getText().toString() == null || ondutyedittext.getText().toString().isEmpty() || ondutyedittext.getText().toString().equalsIgnoreCase(""))) {
-            Toast.makeText(this, "Enter the ON-Duty Location", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (flag == 0 && (selecthaplocationss.getText().toString() == null || selecthaplocationss.getText().toString().isEmpty() || selecthaplocationss.getText().toString().equalsIgnoreCase(""))) {
-            Toast.makeText(this, "Select The HAP Location", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (purposeofvisitedittext.getText().toString() == null || purposeofvisitedittext.getText().toString().isEmpty() || purposeofvisitedittext.getText().toString().equalsIgnoreCase("")) {
-            Toast.makeText(this, "Enter the Purpose of visit", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-
-        return true;
     }
 
 

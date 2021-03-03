@@ -17,6 +17,7 @@ import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.location.Location;
+import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -28,6 +29,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -452,6 +454,12 @@ public class SANGPSTracker extends Service {
     private void sendLocationDataToWebsite(Location location) {
         double longitude, latitude;
         //imei = mSharedPreferences.getString(APP_PREFERENCES_IMEI, "");
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = mContext.registerReceiver(null, ifilter);
+
+        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+        float batteryPct = (level * 100) / (float)scale;
 
         DatabaseHandler db = new DatabaseHandler(this);
         mLocation = location;
@@ -462,8 +470,20 @@ public class SANGPSTracker extends Service {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strTime = dateFormat.format(new Date(mLocation.getTime()));
 
+        String strBatt=Float.toString(batteryPct);
         String strSpeed = String.valueOf(mLocation.getSpeed()) + " km/h";
-
+        String strHAcc = String.valueOf(mLocation.getAccuracy());
+        String strBear = String.valueOf(mLocation.getBearing());
+        String strEt = String.valueOf(mLocation.getElapsedRealtimeNanos());
+        String strAlt = String.valueOf(mLocation.getAltitude());
+        String strVAcc="";
+        String strSAcc="";
+        String strBAcc="";
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            strVAcc=String.valueOf(mLocation.getVerticalAccuracyMeters());
+            strSAcc=String.valueOf(mLocation.getSpeedAccuracyMetersPerSecond());
+            strBAcc=String.valueOf(mLocation.getBearingAccuracyDegrees());
+        }
 
         JSONArray jsonarray = new JSONArray();
         JSONObject paramObject = new JSONObject();
@@ -472,10 +492,16 @@ public class SANGPSTracker extends Service {
             paramObject.put("Latitude", latitude);
             paramObject.put("Longitude", longitude);
             paramObject.put("Speed", strSpeed);
-            paramObject.put("Bearing", "");
-            paramObject.put("Accuracy", "");
+            paramObject.put("bear", strBear);
+            paramObject.put("hAcc", strHAcc);
+            paramObject.put("et", strEt);
+            paramObject.put("alt", strAlt);
+            paramObject.put("vAcc", strVAcc);
+            paramObject.put("sAcc", strSAcc);
+            paramObject.put("bAcc", strBAcc);
+            paramObject.put("mock", String.valueOf(location.isFromMockProvider()));
+            paramObject.put("batt", strBatt);
             paramObject.put("DvcID", "");
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -14,7 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_NAME = "DBHAPCheckin";
     private static final String TABLE_Track = "Tracking_Location";
     private static final String Loc_Date = "Loc_Date";
@@ -24,6 +24,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String Speed = "Speed";
     private static final String Bearing = "Bearing";
     private static final String Accuracy = "Accuracy";
+    private static final String ET = "et";
+    private static final String Alt = "alt";
+    private static final String vAcc = "vAcc";
+    private static final String sAcc = "sAcc";
+    private static final String bAcc = "bAcc";
+    private static final String Mock = "Mock";
+    private static final String Batt = "Batt";
     private static final String Flag = "Flag";
 
     public DatabaseHandler(Context context) {
@@ -35,7 +42,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_Track + "("
                 + Loc_Date + " TEXT PRIMARY KEY,"
-                + Loc_Lat + " TEXT," + Loc_Lng + " TEXT," + Speed+ " TEXT," + Bearing+ " TEXT," + Accuracy+ " TEXT," + Flag + " INT" + ")";
+                + Loc_Lat + " TEXT," + Loc_Lng + " TEXT," + Speed+ " TEXT," + Bearing+ " TEXT,"
+                + Accuracy + " TEXT,"
+                + ET + " TEXT,"
+                + Alt + " TEXT,"
+                + vAcc + " TEXT,"
+                + sAcc + " TEXT,"
+                + bAcc + " TEXT,"
+                + Mock + " TEXT,"
+                + Batt + " TEXT,"
+                + Flag + " INT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -58,8 +74,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             values.put(Loc_Lat, Location.getString("Latitude"));
             values.put(Loc_Lng, Location.getString("Longitude"));
             values.put(Speed, Location.getString("Speed"));
-            values.put(Bearing, Location.getString("Bearing"));
-            values.put(Accuracy, Location.getString("Accuracy"));
+            values.put(Bearing, Location.getString("bear"));
+            values.put(Accuracy, Location.getString("hAcc"));
+
+            values.put(ET, Location.getString("et"));
+            values.put(Alt, Location.getString("alt"));
+            values.put(vAcc, Location.getString("vAcc"));
+            values.put(sAcc, Location.getString("sAcc"));
+            values.put(bAcc, Location.getString("bAcc"));
+            values.put(Mock, Location.getString("mock"));
+            values.put(Batt, Location.getString("batt"));
             values.put(Flag, 0);
 
 
@@ -113,8 +137,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     item.put("Latitude", cursor.getString(1));
                     item.put("Longitude", cursor.getString(2));
                     item.put("Speed", cursor.getString(3));
-                    item.put("Bearing", cursor.getString(4));
-                    item.put("Accuracy", cursor.getString(5));
+                    item.put("bear", cursor.getString(4));
+                    item.put("hAcc", cursor.getString(5));
+                    item.put("et", cursor.getString(6));
+                    item.put("alt", cursor.getString(7));
+                    item.put("vAcc", cursor.getString(8));
+                    item.put("sAcc", cursor.getString(9));
+                    item.put("bAcc", cursor.getString(10));
+                    item.put("mock", cursor.getString(11));
+                    item.put("batt", cursor.getString(12));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
