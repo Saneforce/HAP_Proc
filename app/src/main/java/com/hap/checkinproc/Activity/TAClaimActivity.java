@@ -143,7 +143,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             witOutBill = "", ValCd = "", fullPath = "", filePath = "", editMode = "", allowanceAmt = "", myldgEliAmt = "", myBrdEliAmt = "",
             drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "",
             finalPath = "", attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "",
-            tvEditcnt = "", OeUKey = "", LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "";
+            tvEditcnt = "", OeUKey = "", LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "";
 
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
             oePosCnt = 0, lcPosCnt = 0, tvSize = 0;
@@ -1242,12 +1242,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     PersonalKm = jsonObject.get("Personal_Km").getAsString();
                     DriverNeed = jsonObject.get("driverAllowance").getAsString();
 
-
+                    JsonObject js = null;
                     for (int l = 0; l < travelDetails.size(); l++) {
-
-                        JsonObject js = (JsonObject) travelDetails.get(l);
-                        Log.v("ta_total_amount", js.get("ta_total_amount").getAsString());
-                        String taAmt = js.get("ta_total_amount").getAsString();
+                        js = (JsonObject) travelDetails.get(l);
+                        taAmt = js.get("ta_total_amount").getAsString();
                         txtTAamt.setText("Rs. " + taAmt + ".00");
                     }
 

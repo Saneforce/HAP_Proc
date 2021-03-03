@@ -1,6 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import android.Manifest;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -8,12 +7,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -31,20 +28,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
-import androidx.core.app.ActivityCompat;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
-import com.hap.checkinproc.BuildConfig;
+import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -74,7 +68,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class On_Duty_Activity extends AppCompatActivity implements View.OnClickListener, Master_Interface {
-    LinearLayout haplocationtext, purposeofvisittext, haplocationbutton, otherlocationbutton, submitbutton, closebutton, exitclose, ondutylocations;
+    Button haplocationbutton, otherlocationbutton, submitbutton, closebutton, exitclose;
     EditText purposeofvisitedittext, ondutyedittext;
     int flag;
     Common_Model Model_Pojo;
@@ -83,7 +77,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     CustomListViewDialog customDialog;
     String hapLocid;
     Gson gson;
-    LinearLayout ModeOfTravel;
+    LinearLayout ModeOfTravel, haplocationtext, purposeofvisittext, ondutylocations, linearBus;
 
     /*AllowanceActivity*/
     RelativeLayout pic, rlay_pic, lay_km, lay_to, lay_From, lay_det, lay_fare;
@@ -174,13 +168,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         SF_code = UserDetails.getString("Sfcode", "");
         div = UserDetails.getString("Divcode", "");
         dailyAllowance = findViewById(R.id.text_daily_allowance);
-
-        if (!checkPermission()) {
-            requestPermissions();
-
-        } else {
-
-        }
+        linearBus = findViewById(R.id.lin_bus);
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -365,27 +353,35 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
 
-              //  StrToCode = StrToCode.replace("^[\"']+|[\"']+$", "");
 
-                SharedPreferences.Editor ed = sharedpreferences.edit();
-                ed.putString(visitPurpose, purposeofvisitedittext.getText().toString());
-                ed.putString(otherLocation, ondutyedittext.getText().toString());
-                ed.putString(modeTravelId, startEnd);
-                ed.putString(modeTypeVale, TextMode.getText().toString());
-                ed.putString(modeFromKm, onDutyFrom.getText().toString());
-                ed.putString(modeToKm, TextToAddress.getText().toString());
-                ed.putString(StartedKm, StartKm.getText().toString());
-                ed.putString("SharedDailyAllowancess", dailyAllowance.getText().toString());
-                ed.putString("SharedDriverss", DriverMode);
-                ed.putString("ShareModeIDs", modeId);
-                ed.putString("StoreId", StrToCode);
-                ed.commit();
+                CameraPermission cameraPermission = new CameraPermission(On_Duty_Activity.this, getApplicationContext());
+
+                if (!cameraPermission.checkPermission()) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        cameraPermission.requestPermission();
+                    }
+                    Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                } else {
+
+                    SharedPreferences.Editor ed = sharedpreferences.edit();
+                    ed.putString(visitPurpose, purposeofvisitedittext.getText().toString());
+                    ed.putString(otherLocation, ondutyedittext.getText().toString());
+                    ed.putString(modeTravelId, startEnd);
+                    ed.putString(modeTypeVale, TextMode.getText().toString());
+                    ed.putString(modeFromKm, onDutyFrom.getText().toString());
+                    ed.putString(modeToKm, TextToAddress.getText().toString());
+                    ed.putString(StartedKm, StartKm.getText().toString());
+                    ed.putString("SharedDailyAllowancess", dailyAllowance.getText().toString());
+                    ed.putString("SharedDriverss", DriverMode);
+                    ed.putString("ShareModeIDs", modeId);
+                    ed.putString("StoreId", StrToCode);
+                    ed.commit();
 
 
-                Intent intent = new Intent(On_Duty_Activity.this, AllowancCapture.class);
-                intent.putExtra("allowance", "three");
-                startActivity(intent);
-
+                    Intent intent = new Intent(On_Duty_Activity.this, AllowancCapture.class);
+                    intent.putExtra("allowance", "three");
+                    startActivity(intent);
+                }
 
             }
         });
@@ -446,6 +442,13 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         if (sharedpreferences.contains("SharedDailyAllowancess")) {
             strDailyAllowance = sharedpreferences.getString("SharedDailyAllowancess", "");
             Log.e("strDailyAllowance", "Checking" + strDailyAllowance);
+
+
+            if (strDailyAllowance.equals("HQ")) {
+                linearBus.setVisibility(View.GONE);
+            } else {
+                linearBus.setVisibility(View.VISIBLE);
+            }
         }
         if (sharedpreferences.contains("SharedDriverAllowancess")) {
             DriverNeed = sharedpreferences.getString("SharedDriverAllowancess", "");
@@ -810,6 +813,12 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         } else if (type == 100) {
             String TrTyp = myDataset.get(position).getName();
             dailyAllowance.setText(TrTyp);
+            if (TrTyp.equals("HQ")) {
+                linearBus.setVisibility(View.GONE);
+            } else {
+                linearBus.setVisibility(View.VISIBLE);
+            }
+            TextToAddress.setText("");
         }
     }
 
@@ -1024,7 +1033,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             jj.put("mod", StrID);
             jj.put("sf", SF_code);
             jj.put("div", div);
-            jj.put("StEndNeed",ModeTravelType );
+            jj.put("StEndNeed", ModeTravelType);
             jj.put("url", imageServer);
             jj.put("from", onDutyFrom.getText().toString());
             jj.put("to", TextToAddress.getText().toString());
@@ -1051,7 +1060,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                             JSONObject js = new JSONObject(jsonData);
                             if (js.getString("success").equalsIgnoreCase("true")) {
                                 Toast.makeText(On_Duty_Activity.this, " Submitted successfully ", Toast.LENGTH_SHORT).show();
-                                // common_class.CommonIntentwithFinish(Dashboard.class);
                                 Intent intent = new Intent(getApplicationContext(), Checkin.class);
                                 Bundle extras = new Bundle();
                                 extras.putString("ODFlag", String.valueOf(flag));
@@ -1083,69 +1091,5 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-
-    private boolean checkPermission() {
-        return (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
-    }
-
-    //Location service part
-    private void requestPermissions() {
-        boolean shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
-                Manifest.permission.CAMERA);
-        if (shouldProvideRationale) {
-            Snackbar.make(
-                    findViewById(R.id.activity_main),
-                    R.string.permission_rationale,
-                    Snackbar.LENGTH_INDEFINITE)
-                    .setAction(R.string.ok, new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // Request permission
-                            ActivityCompat.requestPermissions(On_Duty_Activity.this,
-                                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-                                    REQUEST_PERMISSIONS_REQUEST_CODE);
-                        }
-                    })
-                    .show();
-        } else
-            ActivityCompat.requestPermissions(On_Duty_Activity.this,
-                    new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-                    REQUEST_PERMISSIONS_REQUEST_CODE);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_PERMISSIONS_REQUEST_CODE:
-                if (grantResults.length <= 0) {
-                    // Permission was not granted.
-                } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission was granted.
-                    //mLUService.requestLocationUpdates();
-                } else {
-                    // Permission denied.
-                    Snackbar.make(
-                            findViewById(R.id.activity_main),
-                            R.string.permission_denied_explanation,
-                            Snackbar.LENGTH_INDEFINITE)
-                            .setAction(R.string.settings, new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    // Build intent that displays the App settings screen.
-                                    Intent intent = new Intent();
-                                    intent.setAction(
-                                            Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                    Uri uri = Uri.fromParts("package",
-                                            BuildConfig.APPLICATION_ID, null);
-                                    intent.setData(uri);
-                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                }
-                            })
-                            .show();
-                }
-        }
-    }
 
 }

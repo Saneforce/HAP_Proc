@@ -21,7 +21,6 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,7 +57,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     String viewMode = "";
     int cModMnth = 1;
     Button viewButton;
-    CardView StActivity;
+    Button StActivity, cardview3, cardview4, cardView5, btnCheckout;
     String AllowancePrefernce = "";
 
     public static final String mypreference = "mypref";
@@ -81,7 +80,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
 
     /*String Mode = "Bus";*/
-    CardView gateIn_gateOut,gateOut_gateIn;
+    Button gateIn_gateOut, gateOut_gateIn;
 
     String dashMdeCnt = "";
 
@@ -147,44 +146,46 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         txUserName.setText("HI! " + sUName);
 
 
-        CardView cardview3 = findViewById(R.id.cardview3);
-        CardView cardview4 = findViewById(R.id.cardview4);
-        CardView cardView5 = findViewById(R.id.cardview5);
+        cardview3 = findViewById(R.id.cardview3);
+        cardview4 = findViewById(R.id.cardview4);
+        cardView5 = findViewById(R.id.cardview5);
+
+
         gateIn_gateOut = findViewById(R.id.btn_gate_in);
         gateOut_gateIn = findViewById(R.id.btn_gate_out);
 
 
         StActivity = findViewById(R.id.StActivity);
-        CardView btnCheckout = findViewById(R.id.btnCheckout);
+        btnCheckout = findViewById(R.id.btnCheckout);
         cardview3.setOnClickListener(this);
         cardview4.setOnClickListener(this);
         cardView5.setOnClickListener(this);
         StActivity.setOnClickListener(this);
         btnCheckout.setOnClickListener(this);
         gateIn_gateOut.setOnClickListener(this);
-    if(getIntent().getExtras()!=null){
-        Bundle params = getIntent().getExtras();
-        viewMode = params.getString("Mode");
-     if (viewMode.equalsIgnoreCase("CIN") || viewMode.equalsIgnoreCase("extended")) {
-        cardview3.setVisibility(View.VISIBLE);
-        cardview4.setVisibility(View.VISIBLE);
-        //cardView5.setVisibility(View.VISIBLE);
-        StActivity.setVisibility(View.VISIBLE);
-        btnCheckout.setVisibility(View.VISIBLE);
-    } else {
-        cardview3.setVisibility(View.GONE);
-        cardview4.setVisibility(View.GONE);
-        cardView5.setVisibility(View.GONE);
-        StActivity.setVisibility(View.GONE);
-        btnCheckout.setVisibility(View.GONE);
-    }
-    }else {
-        cardview3.setVisibility(View.GONE);
-        cardview4.setVisibility(View.GONE);
-        cardView5.setVisibility(View.GONE);
-        StActivity.setVisibility(View.GONE);
-        btnCheckout.setVisibility(View.GONE);
-    }
+        if (getIntent().getExtras() != null) {
+            Bundle params = getIntent().getExtras();
+            viewMode = params.getString("Mode");
+            if (viewMode.equalsIgnoreCase("CIN") || viewMode.equalsIgnoreCase("extended")) {
+                cardview3.setVisibility(View.VISIBLE);
+                cardview4.setVisibility(View.VISIBLE);
+                //cardView5.setVisibility(View.VISIBLE);
+                StActivity.setVisibility(View.VISIBLE);
+                btnCheckout.setVisibility(View.VISIBLE);
+            } else {
+                cardview3.setVisibility(View.GONE);
+                cardview4.setVisibility(View.GONE);
+                cardView5.setVisibility(View.GONE);
+                StActivity.setVisibility(View.GONE);
+                btnCheckout.setVisibility(View.GONE);
+            }
+        } else {
+            cardview3.setVisibility(View.GONE);
+            cardview4.setVisibility(View.GONE);
+            cardView5.setVisibility(View.GONE);
+            StActivity.setVisibility(View.GONE);
+            btnCheckout.setVisibility(View.GONE);
+        }
 
 
         getNotify();
@@ -517,14 +518,15 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.btn_gate_in:
                 intent = new Intent(this, QRCodeScanner.class);
-                intent.putExtra("Name","GateIn");
+                intent.putExtra("Name", "GateIn");
                 startActivity(intent);
-              /*  startActivity(new Intent(this, QRCodeScanner.class));*/
-                break; case R.id.btn_gate_out:
+                /*  startActivity(new Intent(this, QRCodeScanner.class));*/
+                break;
+            case R.id.btn_gate_out:
                 intent = new Intent(this, QRCodeScanner.class);
-                intent.putExtra("Name","GateOut");
+                intent.putExtra("Name", "GateOut");
                 startActivity(intent);
-              /*  startActivity(new Intent(this, QRCodeScanner.class));*/
+                /*  startActivity(new Intent(this, QRCodeScanner.class));*/
                 break;
             case R.id.StActivity:
                 new AlertDialog.Builder(Dashboard_Two.this)
@@ -598,8 +600,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 editor.commit();
 
 
-
-                                if(response.body().size()>0){
+                                if (response.body().size() > 0) {
                                     Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
                                     takePhoto.putExtra("Mode", "COUT");
                                     startActivity(takePhoto);

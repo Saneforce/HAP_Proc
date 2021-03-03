@@ -222,111 +222,60 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent">
 
-                    <androidx.cardview.widget.CardView
+                    <Button
                         android:id="@+id/StActivity"
-                        android:layout_width="0dp"
-                        android:layout_height="52dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:elevation="5dp"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="10dp"
-                        app:cardMaxElevation="5dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/g_sign">
-
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentStart="false"
-                                android:layout_alignParentEnd="false"
-                                android:layout_centerHorizontal="true"
-                                android:layout_marginStart="51dp"
-                                android:layout_marginTop="13dp"
-                                android:layout_marginEnd="37dp"
-                                android:text="Start Activity"
-                                android:textColor="#FFFFFF"
-                                android:textSize="@dimen/C13dp" />
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
-
+                        style="@style/ButtonStyle"
+                        android:background="@drawable/g_sign"
+                        android:text="Start Activity"
+                        app:layout_flexBasisPercent="47%" />
 
                 </LinearLayout>
 
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-
-                    <androidx.cardview.widget.CardView
+                    <Button
                         android:id="@+id/btn_gate_in"
-                        android:layout_width="0dp"
-                        android:layout_height="52dp"
-                        android:layout_margin="6dp"
+                        style="@style/ButtonStyle"
                         android:layout_weight="1"
-                        android:elevation="5dp"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="10dp"
-                        app:cardMaxElevation="5dp">
+                        android:background="@drawable/button_green"
+                        android:text="Gate In" />
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/button_green">
-
-                            <TextView
-
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="false"
-                                android:layout_centerHorizontal="true"
-                                android:layout_marginTop="13dp"
-                                android:layout_marginEnd="77dp"
-                                android:text="Gate In"
-                                android:textColor="#FFFFFF"
-                                android:textSize="@dimen/C13dp" />
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="0dp"
-                        android:layout_height="52dp"
-                        android:layout_margin="6dp"
-                        android:layout_weight="1"
+                    <Button
                         android:id="@+id/btn_gate_out"
-                        android:elevation="5dp"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="10dp"
-                        app:cardMaxElevation="5dp">
+                        style="@style/ButtonStyle"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_green"
+                        android:text="Gate Out" />
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/button_green">
-
-                            <TextView
-
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="false"
-                                android:layout_centerHorizontal="true"
-                                android:layout_marginTop="13dp"
-                                android:layout_marginEnd="77dp"
-                                android:text="Gate Out"
-                                android:textColor="#FFFFFF"
-                                android:textSize="@dimen/C13dp" />
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/cardview3"
+                        style="@style/ButtonStyle"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_amber"
+                        android:text="Leave / permission" />
+
+                    <Button
+                        android:id="@+id/cardview4"
+                        style="@style/ButtonStyle"
+                        android:layout_weight="1"
+                        android:background="@drawable/button_purple"
+                        android:text="Travel Allowance" />
+
+                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -334,137 +283,20 @@
                     android:clipToPadding="false"
                     android:orientation="horizontal">
 
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardview3"
-                        android:layout_width="match_parent"
-                        android:layout_height="52dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:elevation="5dp"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="10dp"
-                        app:cardMaxElevation="5dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/button_amber">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="false"
-                                android:layout_centerHorizontal="true"
-                                android:layout_centerVertical="true"
-                                android:text="Leave / permission"
-                                android:textAlignment="center"
-                                android:textColor="#FFFBFB"
-                                android:textSize="@dimen/C13dp" />
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:id="@+id/cardview4"
-                        android:layout_width="0dp"
-                        android:layout_height="52dp"
-                        android:layout_margin="5dp"
-                        android:layout_weight="1"
-                        android:elevation="5dp"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="10dp"
-                        app:cardMaxElevation="5dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/button_purple">
-
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_marginTop="13dp"
-                                android:text="Travel Allowance"
-                                android:textColor="#FFFFFF"
-                                android:textSize="@dimen/C13dp" />
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
-
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:clipToPadding="false"
-                    android:orientation="horizontal"
-
-                    >
-
-                    <androidx.cardview.widget.CardView
+                    <Button
                         android:id="@+id/cardview5"
-                        android:layout_width="0dp"
-                        android:layout_height="52dp"
-                        android:layout_margin="5dp"
+                        style="@style/ButtonStyle"
                         android:layout_weight="1"
-                        android:elevation="5dp"
-                        android:visibility="gone"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="10dp"
-                        app:cardMaxElevation="5dp">
+                        android:background="@drawable/g_sign"
+                        android:text="My Reports"
+                        android:visibility="gone" />
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/g_sign">
-
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentStart="false"
-                                android:layout_alignParentEnd="false"
-                                android:layout_centerHorizontal="true"
-                                android:layout_marginStart="51dp"
-                                android:layout_marginTop="13dp"
-                                android:layout_marginEnd="37dp"
-                                android:text="My Reports"
-                                android:textColor="#FFFFFF"
-                                android:textSize="@dimen/C13dp" />
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
+                    <Button
                         android:id="@+id/btnCheckout"
-                        android:layout_width="0dp"
-                        android:layout_height="52dp"
-                        android:layout_margin="6dp"
+                        style="@style/ButtonStyle"
                         android:layout_weight="1"
-                        android:elevation="5dp"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="10dp"
-                        app:cardMaxElevation="5dp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/button_red">
-
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="false"
-                                android:layout_centerHorizontal="true"
-                                android:layout_marginTop="13dp"
-                                android:layout_marginEnd="77dp"
-                                android:text="Check-out"
-                                android:textColor="#FFFFFF"
-                                android:textSize="@dimen/C13dp" />
-                        </RelativeLayout>
-                    </androidx.cardview.widget.CardView>
+                        android:background="@drawable/button_red"
+                        android:text="Check-out" />
 
                 </LinearLayout>
 
@@ -478,6 +310,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <include layout="@layout/back_arrow"></include>

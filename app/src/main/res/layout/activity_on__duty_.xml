@@ -157,10 +157,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/C8dp"
-                        android:visibility="gone"
                         android:layout_marginRight="@dimen/C8dp"
                         android:orientation="vertical"
-   >
+                        android:visibility="gone">
 
 
                         <LinearLayout
@@ -282,8 +281,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            android:visibility="gone"
-           >
+                            android:visibility="gone">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
@@ -331,6 +329,7 @@
 
                             <LinearLayout
                                 android:layout_width="match_parent"
+                                android:id="@+id/lin_bus"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
@@ -378,11 +377,10 @@
 
                         <LinearLayout
                             android:id="@+id/bike_modes"
-                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                         >
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/txt_km"
@@ -532,26 +530,59 @@
                     </LinearLayout>
 
 
-                    <LinearLayout
+                    <Button
                         android:id="@+id/haplocationbutton"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="@dimen/C5dp"
+                        style="@style/ButtonStyle"
                         android:background="@drawable/otherlocations"
-                        android:padding="@dimen/C3dp">
+                        android:text="HAP Locations" />
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="45dp"
-                            android:layout_gravity="center"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:gravity="center"
-                            android:text="HAP Locations"
-                            android:textColor="#FFFFFF"
-                            android:textStyle="bold" />
-                    </LinearLayout>
 
-                    <LinearLayout
+                    <Button
+                        android:id="@+id/otherlocationbutton"
+                        style="@style/ButtonStyle"
+                        android:background="@drawable/other_location"
+                        android:text="Other Location" />
+
+                    <Button
+                        android:id="@+id/submitbutton"
+                        style="@style/ButtonStyle"
+                        android:visibility="gone"
+                        android:background="@drawable/other_location"
+                        android:text="Submit" />
+
+                    <Button
+                        android:id="@+id/closebutton"
+                        style="@style/ButtonStyle"
+                        android:background="@drawable/button_red"
+                        android:text="Close" />
+                    <Button
+                        android:id="@+id/exitclose"
+                        style="@style/ButtonStyle"
+                        android:visibility="gone"
+                        android:background="@drawable/button_red"
+                        android:text="Close" />
+
+
+                    <!--   <LinearLayout
+                           android:id="@+id/haplocationbutton"
+                           android:layout_width="match_parent"
+                           android:layout_height="match_parent"
+                           android:layout_margin="@dimen/C5dp"
+                           android:background="@drawable/otherlocations"
+                           android:padding="@dimen/C3dp">
+
+                           <TextView
+                               android:layout_width="match_parent"
+                               android:layout_height="45dp"
+                               android:layout_gravity="center"
+                               android:fontFamily="@font/poppins_semibold"
+                               android:gravity="center"
+                               android:text="HAP Locations"
+                               android:textColor="#FFFFFF"
+                               android:textStyle="bold" />
+                       </LinearLayout>-->
+
+                  <!--  <LinearLayout
                         android:id="@+id/otherlocationbutton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -570,9 +601,9 @@
                             android:text="Other Location"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
-                    </LinearLayout>
+                    </LinearLayout>-->
 
-                    <LinearLayout
+<!--                    <LinearLayout
                         android:id="@+id/submitbutton"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -593,9 +624,9 @@
                             android:text="Submit"
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
-                    </LinearLayout>
+                    </LinearLayout>-->
 
-                    <LinearLayout
+<!--                    <LinearLayout
                         android:id="@+id/closebutton"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -613,10 +644,10 @@
                             android:textColor="#FFFFFF"
                             android:textStyle="bold" />
 
-                    </LinearLayout>
+                    </LinearLayout>-->
 
-                    <LinearLayout
-                        android:id="@+id/exitclose"
+                  <!--  <LinearLayout
+
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/C5dp"
@@ -637,7 +668,7 @@
                             android:textStyle="bold" />
 
 
-                    </LinearLayout>
+                    </LinearLayout>-->
                 </LinearLayout>
 
 

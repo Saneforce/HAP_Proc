@@ -110,7 +110,6 @@ public class AttachementActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
 
-                            Log.v("Image_Clicked_View", jsonObject.get("Imageurl").getAsString());
                             Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
                             intent.putExtra("ImageUrl", jsonObject.get("Imageurl").getAsString());
                             startActivity(intent);
