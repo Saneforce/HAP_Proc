@@ -141,11 +141,11 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         }
 
         if (sharedpreferences.contains("Share_Img")) {
-            strImg = sharedpreferences.getString("Share_Img", "");
+            ImageStart = sharedpreferences.getString("Share_Img", "");
             Glide.with(getApplicationContext())
-                    .load(strImg)
+                    .load(ImageStart)
                     .into(StartedKmImage);
-            Log.e("COnvert", "imageConvert");
+            Log.v("ImageStart", ImageStart);
         }
 
 
@@ -153,7 +153,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             StartedImage = sharedpreferences.getString("SharedImage", "");
             Log.e("Privacypolicy", "Checking" + StartedImage);
             if (StartedImage != null && !StartedImage.isEmpty() && !StartedImage.equals("null")) {
-                //   StartedKmImage.setImageURI(Uri.parse(StartedImage));
+                //StartedKmImage.setImageURI(Uri.parse(StartedImage));
             }
         }
         if (sharedpreferences.contains("SharedImages")) {
@@ -228,6 +228,18 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     startActivity(intent);
                 }
             });
+
+            if (!ImageStart.matches("")) {
+                StartedKmImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                        intent.putExtra("ImageUrl", ImageStart);
+                        startActivity(intent);
+
+                    }
+                });
+            }
         }
 
 
@@ -244,7 +256,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                 } else {
                     Log.v("PERMISSION", "PERMISSION");
-                    Log.v("Text_To_ID", StrToCode);
+                    Log.v("ImageStart_ONCLICK", ImageStart);
 
                     SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putString("Closing", EndedEditText.getText().toString());
@@ -274,7 +286,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     Toast.makeText(AllowanceActivityTwo.this, "Enter End KM", Toast.LENGTH_SHORT).show();
                     return;
                 } else if (EndedImage.matches("")) {
-                    Toast.makeText(AllowanceActivityTwo.this, "Enter End KM", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AllowanceActivityTwo.this, "Enter End Image", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
 
@@ -308,8 +320,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                 customDialog.show();
             }
         });
-
-
 
 
     }
