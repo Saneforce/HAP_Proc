@@ -265,7 +265,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity_Hap.ProductImageView"
-            android:theme="@style/AppTheme.Dialogs" />
+            android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
 
         <service
             android:name=".common.SANGPSTracker"
@@ -312,10 +312,7 @@
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_launcher_background" />
-        <!--
- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more.
-        -->
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/black" /> <!-- Notification -->

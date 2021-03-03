@@ -306,7 +306,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/C10dp"
                         android:orientation="vertical"
-                        android:visibility="gone">
+>
 
 
                         <LinearLayout
@@ -380,13 +380,11 @@
 
                         <Button
                             android:id="@+id/btn_submit"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_margin="@dimen/C5dp"
+                            style="@style/ButtonStyle"
                             android:background="@drawable/button_blueg"
                             android:text="Submit"
-                            android:textColor="#fff" />
+                            android:layout_weight="1" />
+
 
                     </LinearLayout>
                 </LinearLayout>

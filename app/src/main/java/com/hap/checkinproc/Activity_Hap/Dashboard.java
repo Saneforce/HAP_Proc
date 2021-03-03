@@ -4,12 +4,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,7 +24,6 @@ import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
-import com.hap.checkinproc.Common_Class.BlurUtils;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
@@ -54,11 +52,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
     TextView username;
     TextView lblUserName, lblEmail;
-    LinearLayout linMyday, linCheckin, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift, linTourPlan, linExit, lin_check_in, linHolidayWorking;
+    Button linApprovals,linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift, linTourPlan, linExit, lin_check_in, linHolidayWorking;
+    Button linMyday, linCheckin;
     Integer type;
     Common_Class common_class;
     TextView approvalcount;
-    RelativeLayout linApprovals;
+
     Shared_Common_Pref shared_common_pref;
     String imageProfile = "";
     ImageView profilePic;
@@ -108,7 +107,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         String sSFType = UserDetails.getString("Sf_Type", "");
 
 
-        Log.e("DASHBORAD_SF",sSFType);
+        Log.e("DASHBORAD_SF", sSFType);
 
         imageProfile = UserDetails.getString("url", "");
         Log.e("CHECKING", imageProfile);
@@ -118,24 +117,25 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         try {
             Uri Profile = Uri.parse(shared_common_pref.getvalue(Shared_Common_Pref.Profile));
             Glide.with(this).load(Profile).into(profilePic);
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
         //Glide.with(this).load(Uri.parse((UserDetails.getString("url", "")))).into(profilePic);
 
         //profilePic.setImageURI(Uri.parse((UserDetails.getString("url", ""))));
 
 
-        linMyday = (findViewById(R.id.lin_myday_plan));
+        linMyday = findViewById(R.id.lin_myday_plan);
         linMyday.setVisibility(View.GONE);
         if (sSFType.equals("1")) linMyday.setVisibility(View.VISIBLE);
 
 
-        linCheckin = (findViewById(R.id.lin_check_in));
+        linCheckin = findViewById(R.id.lin_check_in);
         linRequstStaus = (findViewById(R.id.lin_request_status));
         linReport = (findViewById(R.id.lin_report));
         linOnDuty = (findViewById(R.id.lin_onduty));
         linOnDuty.setVisibility(View.GONE);
         if (sSFType.equals("0")) linOnDuty.setVisibility(View.VISIBLE);
-        linApprovals = (findViewById(R.id.lin_approvals));
+        linApprovals = findViewById(R.id.lin_approvals);
         linTaClaim = (findViewById(R.id.lin_ta_claim));
         linExtShift = (findViewById(R.id.lin_extenden_shift));
         linExtShift.setVisibility(View.GONE);
@@ -146,10 +146,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         approvalcount = findViewById(R.id.approvalcount);
 
         if (shared_common_pref.getvalue(Shared_Common_Pref.CHECK_COUNT).equals("0")) {
-         //   linApprovals.setVisibility(View.GONE);
-            linApprovals .setVisibility(View.VISIBLE);
+            //   linApprovals.setVisibility(View.GONE);
+            linApprovals.setVisibility(View.VISIBLE);
         } else {
-            linApprovals .setVisibility(View.VISIBLE);
+            linApprovals.setVisibility(View.VISIBLE);
         }
         FlexboxLayout flexboxLayout = findViewById(R.id.flxlayut);
         View flxlastChild = null;
@@ -194,9 +194,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
             case R.id.lin_check_in:
 
-               String ETime=CheckInDetails.getString("CINEnd", "");
+                String ETime = CheckInDetails.getString("CINEnd", "");
 
-                if(! ETime.equalsIgnoreCase("")) {
+                if (!ETime.equalsIgnoreCase("")) {
 
                     String CutOFFDt = CheckInDetails.getString("ShiftCutOff", "0");
                     String SftId = CheckInDetails.getString("Shift_Selected_Id", "0");
@@ -205,18 +205,17 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                         ETime = "";
                     }
                 }
-                if(! ETime.equalsIgnoreCase(""))
-                {
+                if (!ETime.equalsIgnoreCase("")) {
                     Intent takePhoto = new Intent(this, ImageCapture.class);
                     takePhoto.putExtra("Mode", "CIN");
-                    takePhoto.putExtra("ShiftId", CheckInDetails.getString("Shift_Selected_Id",""));
-                    takePhoto.putExtra("ShiftName", CheckInDetails.getString("Shift_Name",""));
-                    takePhoto.putExtra("On_Duty_Flag", CheckInDetails.getString("On_Duty_Flag","0"));
-                    takePhoto.putExtra("ShiftStart", CheckInDetails.getString("ShiftStart","0"));
-                    takePhoto.putExtra("ShiftEnd", CheckInDetails.getString("ShiftEnd","0"));
-                    takePhoto.putExtra("ShiftCutOff", CheckInDetails.getString("ShiftCutOff","0"));
+                    takePhoto.putExtra("ShiftId", CheckInDetails.getString("Shift_Selected_Id", ""));
+                    takePhoto.putExtra("ShiftName", CheckInDetails.getString("Shift_Name", ""));
+                    takePhoto.putExtra("On_Duty_Flag", CheckInDetails.getString("On_Duty_Flag", "0"));
+                    takePhoto.putExtra("ShiftStart", CheckInDetails.getString("ShiftStart", "0"));
+                    takePhoto.putExtra("ShiftEnd", CheckInDetails.getString("ShiftEnd", "0"));
+                    takePhoto.putExtra("ShiftCutOff", CheckInDetails.getString("ShiftCutOff", "0"));
                     startActivity(takePhoto);
-                }else{
+                } else {
                     Intent i = new Intent(this, Checkin.class);
                     startActivity(i);
                 }
@@ -333,10 +332,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                         Log.e("MyDAY_LENGTH", String.valueOf(jsoncc.length()));
                         if (jsoncc.length() > 0) {
                             Log.e("LENGTH_FOR_LOOP", String.valueOf(jsoncc.length()));
-                            if(jsoncc.getJSONObject(0).getInt("Cnt")<1){
+                            if (jsoncc.getJSONObject(0).getInt("Cnt") < 1) {
                                 Intent intent = new Intent(Dashboard.this, AllowanceActivity.class);
                                 startActivity(intent);
-                            }else{
+                            } else {
                                 linMyday.setVisibility(View.GONE);
                                 linCheckin.setVisibility(View.VISIBLE);
                             }

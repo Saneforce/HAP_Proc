@@ -26,7 +26,7 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/C100dp"
+                android:layout_marginBottom="@dimen/header_width2"
                 android:scrollbars="none">
 
                 <LinearLayout
@@ -436,16 +436,12 @@
             android:layout_marginLeft="@dimen/C20dp"
             android:layout_marginRight="@dimen/C20dp">
 
-
             <Button
                 android:id="@+id/submit_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                style="@style/ButtonStyle"
                 android:background="@drawable/button_dgreen"
-                android:padding="@dimen/C10dp"
-                android:text="Save"
-                android:textColor="@android:color/white"
-                android:textSize="13dp"></Button>
+                android:text="Save" />
+
 
         </LinearLayout>
 

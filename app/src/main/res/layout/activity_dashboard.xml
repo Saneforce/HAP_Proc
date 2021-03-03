@@ -10,14 +10,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/approvalcount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignRight="@id/textView11"
             android:background="@drawable/newcircle"
+            android:textColor="#FFFCFC"
             android:textSize="10sp"
-            android:textColor="#FFFCFC" android:visibility="gone" />
+            android:visibility="gone" />
+
         <ImageView
             android:id="@+id/imag"
             android:layout_width="wrap_content"
@@ -25,12 +28,13 @@
             android:layout_gravity="center_horizontal"
             android:contentDescription="@string/todo"
             android:src="@drawable/clogo" />
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profile_image"
             android:layout_width="96dp"
             android:layout_height="96dp"
-            android:layout_margin="10dp"
             android:layout_gravity="center_horizontal"
+            android:layout_margin="10dp"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:srcCompat="@drawable/profile_img" />
 
@@ -52,234 +56,105 @@
             android:textAlignment="center"
             android:textSize="@dimen/C10dp"
             android:textStyle="normal" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
             android:layout_marginLeft="15dp"
+            android:layout_marginTop="25dp"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="15dp"
             android:orientation="vertical">
-            <LinearLayout
+
+            <Button
                 android:id="@+id/lin_myday_plan"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/C5dp"
+                style="@style/ButtonStyle"
                 android:background="@drawable/g_sign"
-                android:padding="@dimen/C10dp">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="My day plan"
-                    android:textColor="#FFFFFF" />
-            </LinearLayout>
-            <LinearLayout
+                android:text="My day plan" />
+
+            <Button
                 android:id="@+id/lin_check_in"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="@dimen/C5dp"
+                style="@style/ButtonStyle"
                 android:background="@drawable/button_green"
-                android:padding="@dimen/C10dp"
-                android:visibility="gone">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Check-In"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold" />
-            </LinearLayout>
+                android:text="Check-In"
+                android:visibility="gone" />
 
             <com.google.android.flexbox.FlexboxLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
+
                 android:id="@+id/flxlayut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:flexDirection="row"
-                app:showDivider="middle"
-                app:alignItems="stretch"
                 app:alignContent="stretch"
-                app:flexWrap="wrap" >
+                app:alignItems="stretch"
+                app:flexDirection="row"
+                app:flexWrap="wrap"
+                app:showDivider="middle">
 
-                <LinearLayout
+                <Button
                     android:id="@+id/lin_request_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    style="@style/ButtonStyle"
                     android:background="@drawable/button_amber"
-                    android:padding="@dimen/C10dp"
-                    android:layout_margin="@dimen/C5dp"
-                    app:layout_flexBasisPercent="47%"
-                    >
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Requests/status"
-                        android:textColor="#FFFFFF" />
-                </LinearLayout>
-                <LinearLayout
+                    android:text="Requests/status"
+                    app:layout_flexBasisPercent="47%" />
+
+                <Button
                     android:id="@+id/lin_report"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    style="@style/ButtonStyle"
                     android:background="@drawable/button_blueg"
-                    android:padding="@dimen/C10dp"
-                    android:layout_margin="@dimen/C5dp"
-                    app:layout_flexBasisPercent="47%">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="My DashBoard"
-                        android:textColor="#FFFFFF" />
-                </LinearLayout>
+                    android:text="My DashBoard"
+                    app:layout_flexBasisPercent="47%" />
 
-                <LinearLayout
+                <Button
                     android:id="@+id/lin_onduty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/ButtonStyle"
                     android:background="@drawable/button_blue"
-                    android:padding="@dimen/C10dp"
-                    android:layout_margin="@dimen/C5dp"
-                    app:layout_flexBasisPercent="47%">
+                    android:text="On-Duty "
+                    app:layout_flexBasisPercent="47%" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="On-Duty "
-                        android:textColor="#FFFCFC" />
-
-                </LinearLayout>
-
-
-                <RelativeLayout
+                <Button
                     android:id="@+id/lin_approvals"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/ButtonStyle"
                     android:background="@drawable/button_dgreen"
+                    android:text="Approvals"
                     android:visibility="gone"
-                    android:padding="@dimen/C10dp"
-                    android:layout_margin="@dimen/C5dp"
-                    app:layout_flexBasisPercent="47%">
+                    app:layout_flexBasisPercent="47%" />
 
-                    <TextView
-                        android:id="@+id/textView11"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Approvals"
-                        android:textColor="#FFFCFC" />
-
-
-                </RelativeLayout>
-
-                <LinearLayout
+                <Button
                     android:id="@+id/lin_ta_claim"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    style="@style/ButtonStyle"
                     android:background="@drawable/button_purple"
-                    android:padding="@dimen/C10dp"
-                    android:layout_margin="@dimen/C5dp"
-                    app:layout_flexBasisPercent="47%">
+                    android:text="TA &amp; claim"
+                    app:layout_flexBasisPercent="47%" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="TA &amp; claim"
-                        android:textColor="#FFFFFF" />
-                </LinearLayout>
-
-
-                <LinearLayout
+                <Button
                     android:id="@+id/lin_extenden_shift"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    style="@style/ButtonStyle"
                     android:background="@drawable/button_orange"
-                    android:padding="@dimen/C10dp"
-                    android:layout_margin="@dimen/C5dp"
-                    app:layout_flexBasisPercent="47%">
+                    android:text="Extended Shift"
+                    app:layout_flexBasisPercent="47%" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Extended Shift"
-                        android:textColor="#FFFCFC" />
-                </LinearLayout>
-                <LinearLayout
+                <Button
                     android:id="@+id/lin_tour_plan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/C5dp"
+                    style="@style/ButtonStyle"
                     android:background="@drawable/g_sign"
-                    android:padding="@dimen/C10dp"
-                    app:layout_flexBasisPercent="47%">
+                    android:text="Work Plan - PJP"
+                    app:layout_flexBasisPercent="47%" />
 
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Work Plan - PJP"
-                        android:textColor="#FFFFFF" />
-
-
-                </LinearLayout>
-
-
-                <LinearLayout
+                <Button
                     android:id="@+id/lin_holiday_working"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/C5dp"
+                    style="@style/ButtonStyle"
                     android:background="@drawable/button_green"
-                    android:padding="@dimen/C10dp"
-                    app:layout_flexBasisPercent="47%">
+                    android:text="Holiday Working"
+                    app:layout_flexBasisPercent="47%" />
 
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="Holiday Working"
-                        android:textColor="#FFFFFF" />
-
-
-                </LinearLayout>
             </com.google.android.flexbox.FlexboxLayout>
 
-
-            <LinearLayout
+            <Button
                 android:id="@+id/lin_exit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="35dp"
-                android:layout_marginLeft="@dimen/C5dp"
-                android:layout_marginRight="@dimen/C5dp"
-                android:layout_marginBottom="@dimen/C5dp"
+                style="@style/ButtonStyle"
                 android:background="@drawable/button_red"
-                android:padding="@dimen/C10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="Exit"
-                    android:textColor="#FFFFFF" />
-
-            </LinearLayout>
+                android:text="Exit"
+                app:layout_flexBasisPercent="47%" />
 
         </LinearLayout>
 

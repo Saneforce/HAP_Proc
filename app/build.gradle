@@ -9,7 +9,7 @@ android {
     buildToolsVersion "30.0.2"
     defaultConfig {
         applicationId "com.hap.checkinproc"
-        minSdkVersion 18
+        minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -73,6 +73,7 @@ dependencies {
     implementation 'com.google.android:flexbox:2.0.1'
     //Picasso
     implementation 'com.squareup.picasso:picasso:2.5.2'
+    implementation 'com.squareup.picasso:picasso:2.6.0-SNAPSHOT'
 
     /*Room Database*/
     implementation 'androidx.room:room-runtime:2.2.6'

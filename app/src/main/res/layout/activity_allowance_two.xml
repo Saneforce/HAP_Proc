@@ -279,6 +279,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C5dp"
+                    android:layout_marginBottom="@dimen/C20dp"
                     android:orientation="horizontal">
 
                     <LinearLayout
@@ -304,14 +305,11 @@
 
             <Button
                 android:id="@+id/submit_allowance"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/C20dp"
+                style="@style/ButtonStyle"
+                android:layout_weight="1"
                 android:background="@drawable/button_blueg"
-                android:text="@string/txt_submit"
-                android:textColor="@android:color/white">
+                android:text="@string/txt_submit" />
 
-            </Button>
 
         </LinearLayout>
     </LinearLayout>

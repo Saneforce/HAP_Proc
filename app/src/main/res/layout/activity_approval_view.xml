@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity.ApprovalViewActivity">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_blueg"
+        android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme">
 
@@ -27,32 +27,29 @@
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
+        android:id="@+id/btm_lay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:id="@+id/btm_lay"
-        android:layout_marginBottom="4dp">
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/approve"
-            android:text="Approve"
-            android:background="@drawable/round_rect_green"
-            android:textColor="#fff"
-            android:fontFamily="@font/basic"
-            />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/reject"
-            android:text="Reject"
-            android:background="@drawable/round_rect_red"
-            android:textColor="#fff"
-            android:fontFamily="@font/basic"
-            android:layout_marginLeft="10dp"/>
-    </LinearLayout>
+        android:layout_marginBottom="4dp"
+        android:gravity="center">
 
+
+        <Button
+            android:id="@+id/approve"
+            style="@style/ButtonStyle"
+            android:layout_weight="1"
+            android:background="@drawable/round_rect_green"
+            android:text="Approve" />
+
+        <Button
+            android:id="@+id/reject"
+            style="@style/ButtonStyle"
+            android:layout_weight="1"
+            android:background="@drawable/round_rect_red"
+            android:text="Reject" />
+
+    </LinearLayout>
 
 
     <ScrollView
@@ -60,236 +57,240 @@
         android:layout_height="match_parent"
         android:layout_above="@+id/btm_lay"
         android:layout_below="@+id/toolbar3">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="6dp">
+
             <LinearLayout
+                android:id="@+id/lin_lay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:weightSum="2"
                 android:orientation="horizontal"
-                android:id="@+id/lin_lay">
+                android:weightSum="2">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text="Name"
                         android:textColor="#000"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:padding="5dp"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text="Emp Code"
                         android:textColor="#000"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:padding="5dp"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text="HQ"
                         android:textColor="#000"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:padding="5dp"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text="Designation"
                         android:textColor="#000"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:padding="5dp"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text="Mobile No"
                         android:textColor="#000"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:padding="5dp"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text="Start Mode"
                         android:textColor="#000"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:padding="5dp"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text="End Mode"
                         android:textColor="#000"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:padding="5dp"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text="Start Km"
                         android:textColor="#000"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:padding="5dp"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text="End Km"
                         android:textColor="#000"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:padding="5dp"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textStyle="bold" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text="Approved Amount"
                         android:textColor="#000"
                         android:textSize="15sp"
-                        android:textStyle="bold"
-                        android:padding="5dp"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textStyle="bold" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:orientation="vertical">
+
                     <TextView
+                        android:id="@+id/txt_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text=": NAME"
                         android:textColor="#393838"
-                        android:textSize="15sp"
-                        android:padding="5dp"
-                        android:id="@+id/txt_name"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textSize="15sp" />
+
                     <TextView
+                        android:id="@+id/txt_code"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text=": emp"
                         android:textColor="#393838"
-                        android:textSize="15sp"
-                        android:padding="5dp"
-                        android:id="@+id/txt_code"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textSize="15sp" />
+
                     <TextView
+                        android:id="@+id/txt_hq"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text=": hq"
                         android:textColor="#393838"
-                        android:textSize="15sp"
-                        android:padding="5dp"
-                        android:id="@+id/txt_hq"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textSize="15sp" />
+
                     <TextView
+                        android:id="@+id/txt_des"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text=": designation"
                         android:textColor="#393838"
-                        android:textSize="15sp"
-                        android:padding="5dp"
-                        android:id="@+id/txt_des"
-                        android:fontFamily="@font/basic"
-                        android:layout_marginTop="5dp"
-                        />
+                        android:textSize="15sp" />
+
                     <TextView
+                        android:id="@+id/txt_mob"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text=": monb"
                         android:textColor="#393838"
-                        android:textSize="15sp"
-                        android:padding="5dp"
-                        android:id="@+id/txt_mob"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textSize="15sp" />
+
                     <TextView
+                        android:id="@+id/txt_smod"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text=": start mo"
                         android:textColor="#393838"
-                        android:textSize="15sp"
-                        android:padding="5dp"
-                        android:id="@+id/txt_smod"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textSize="15sp" />
+
                     <TextView
+                        android:id="@+id/txt_emod"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text=": end mo"
                         android:textColor="#393838"
-                        android:textSize="15sp"
-                        android:padding="5dp"
-                        android:id="@+id/txt_emod"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textSize="15sp" />
+
                     <TextView
+                        android:id="@+id/txt_skm"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="@font/basic"
+                        android:padding="5dp"
                         android:text=": start km"
                         android:textColor="#393838"
-                        android:textSize="15sp"
-                        android:padding="5dp"
-                        android:id="@+id/txt_skm"
-                        android:layout_marginTop="5dp"
-                        android:fontFamily="@font/basic"
-                        />
+                        android:textSize="15sp" />
+
                     <TextView
+                        android:id="@+id/txt_ekm"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text=": end km"
-                        android:textColor="#393838"
-                        android:textSize="15sp"
-                        android:padding="5dp"
-                        android:id="@+id/txt_ekm"
                         android:layout_marginTop="5dp"
                         android:fontFamily="@font/basic"
-                        />
+                        android:padding="5dp"
+                        android:text=": end km"
+                        android:textColor="#393838"
+                        android:textSize="15sp" />
 
                     <EditText
                         android:id="@+id/edt_amt"
@@ -310,16 +311,16 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/other"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/lin_lay"
+                android:layout_marginTop="9dp"
+                android:fontFamily="@font/basic"
+                android:padding="5dp"
                 android:text="Other Expenses"
                 android:textColor="#EC2A2A"
                 android:textSize="17sp"
-                android:padding="5dp"
-                android:id="@+id/other"
-                android:fontFamily="@font/basic"
-                android:layout_marginTop="9dp"
-                android:layout_below="@+id/lin_lay"
 
                 />
 
@@ -328,10 +329,11 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/other"
                 android:layout_marginTop="5dp">
+
                 <ListView
+                    android:id="@+id/list_view"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"
-                    android:id="@+id/list_view"
                     android:layout_marginBottom="4dp"></ListView>
 
             </RelativeLayout>
