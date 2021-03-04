@@ -306,6 +306,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/C10dp"
                         android:orientation="vertical"
+                        android:visibility="gone"
 >
 
 

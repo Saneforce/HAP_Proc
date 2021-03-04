@@ -3,8 +3,6 @@ package com.hap.checkinproc.Activity_Hap;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,7 +11,6 @@ import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -34,7 +31,6 @@ import java.io.OutputStream;
 
 public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.Callback {
     Button button;
-    TextureView textureView;
     String imagePath;
     String imageFileName;
     Camera mCamera;
@@ -54,12 +50,10 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allowanc_capture);
         StartSelfiCamera();
-
-
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
         mShared_common_pref = new Shared_Common_Pref(this);
-        textureView = (TextureView) findViewById(R.id.ImagePreview);
+
         button = (Button) findViewById(R.id.button_capture);
         allowance = String.valueOf(getIntent().getSerializableExtra("allowance"));
         Log.e("allowance", allowance);
@@ -69,9 +63,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 takePicture();
-
             }
         });
 
@@ -119,6 +111,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.VISIBLE);
+
         imgPreview.setImageURI(Uri.fromFile(file));
 
         if (mCamId == 1) {
@@ -157,8 +150,6 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         }
         setCameraDisplayOrientation();
         mCamera.startPreview();
-
-
         Log.e("mCAmer_id", String.valueOf(mCamId));
     }
 
@@ -167,18 +158,12 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
-        // imgPreview.setImageURI(Uri.fromFile(file));
-        String filePath = String.valueOf(file);
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-        imgPreview.setImageBitmap(bitmap);
+        imgPreview.setImageURI(Uri.fromFile(file));
 
-        Log.e("Image_Capture", Uri.fromFile(file).toString());
-        Log.e("Image_Capture", "IAMGE     " + bitmap);
         if (allowance.equals("One")) {
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString("SharedImage", Uri.fromFile(file).toString());
             editor.commit();
-
 
             startActivity(new Intent(AllowancCapture.this, AllowanceActivity.class));
         } else if (allowance.equals("three")) {
@@ -196,21 +181,17 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             Log.e("SHARE_MODE", mode);
             startActivity(new Intent(AllowancCapture.this, On_Duty_Activity.class));
         } else if (allowance.equals("Two")) {
-
             SharedPreferences.Editor editor = sharedpreferences.edit();
-
             editor.putString("SharedImages", Uri.fromFile(file).toString());
             editor.commit();
             startActivity(new Intent(AllowancCapture.this, AllowanceActivityTwo.class));
-
         }
-
 
     }
 
 
     private void save(byte[] bytes) throws IOException {
-        OutputStream outputStream = null;
+        FileOutputStream outputStream = null;
         outputStream = new FileOutputStream(file);
         outputStream.write(bytes);
         outputStream.close();
@@ -233,6 +214,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         preview = (SurfaceView) findViewById(R.id.PREVIEW);
         mHolder = preview.getHolder();
         mHolder.addCallback(AllowancCapture.this);
+        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         setDefaultCameraId("back");
         mCamera = Camera.open(mCamId);
 
@@ -268,7 +250,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         mCamera.startPreview();
         int degrees = 0;
         switch (rotation) {
-            case Surface.ROTATION_0:
+            case Surface.ROTATION_90:
                 degrees = 0;
                 break;
         }
@@ -276,6 +258,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+
         mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
         mCamera.setDisplayOrientation(90);
         try {

@@ -259,6 +259,7 @@ public class Login extends AppCompatActivity {
                mTimerService.startTimerService();*/
 
                 startService(new Intent(Login.this, TimerService.class));
+
                 mLUService.requestLocationUpdates();
                 mProgress.show();
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
