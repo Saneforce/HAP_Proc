@@ -2,9 +2,11 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
@@ -16,6 +18,7 @@ import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Model_Class.EventCapture;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 public class UpdateTaskActivity extends Activity {
 
@@ -27,6 +30,7 @@ public class UpdateTaskActivity extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_update_task);
         editTextDesc = findViewById(R.id.editTextDesc);
+        startService(new Intent(this, TimerService.class));
         editTextFinishBy = findViewById(R.id.editTextFinishBy);
 
         final EventCapture task = (EventCapture) getIntent().getSerializableExtra("task");
@@ -121,5 +125,37 @@ public class UpdateTaskActivity extends Activity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
+    }
 }

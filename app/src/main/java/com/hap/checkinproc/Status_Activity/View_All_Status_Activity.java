@@ -42,6 +42,7 @@ import com.hap.checkinproc.Status_Adapter.WeekOff_Status_Adapter;
 import com.hap.checkinproc.Status_Model_Class.Permission_Status_Model;
 import com.hap.checkinproc.Status_Model_Class.View_All_Model;
 import com.hap.checkinproc.Status_Model_Class.WeekOff_Status_Model;
+import com.hap.checkinproc.common.TimerService;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class View_All_Status_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view__all__status_);
+        setContentView(R.layout.activity_view__all__status_);     startService(new Intent(this, TimerService.class));
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
 
@@ -180,6 +181,39 @@ public class View_All_Status_Activity extends AppCompatActivity {
                 }
             });
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
+    }
 
     @Override
     public void onBackPressed() {

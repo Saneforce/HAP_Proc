@@ -10,6 +10,7 @@ import android.webkit.WebViewClient;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 public class Webview_Activity extends AppCompatActivity {
     private WebView wv1;
@@ -19,6 +20,7 @@ public class Webview_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview_);
+        startService(new Intent(this, TimerService.class));
         wv1 = findViewById(R.id.webView);
         i = getIntent();
         wv1.setWebViewClient(new MyBrowser());
@@ -43,5 +45,38 @@ public class Webview_Activity extends AppCompatActivity {
 
 
         return  false;
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
     }
 }

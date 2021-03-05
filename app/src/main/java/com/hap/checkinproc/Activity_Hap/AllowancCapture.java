@@ -23,6 +23,7 @@ import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity.AllowanceActivityTwo;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,6 +50,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allowanc_capture);
+        startService(new Intent(this, TimerService.class));
         StartSelfiCamera();
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
@@ -304,5 +306,38 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     @Override
     public void onBackPressed() {
 
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
     }
 }

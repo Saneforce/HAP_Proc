@@ -55,6 +55,7 @@ import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.RetailerDetailsModel;
 import com.hap.checkinproc.Model_Class.RetailerViewDetails;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -137,6 +138,7 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_secondary_order);
+        startService(new Intent(this, TimerService.class));
 
         gson = new Gson();
         shared_common_pref = new Shared_Common_Pref(this);
@@ -613,16 +615,6 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
 
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (txtRetailer.getText().toString().equals("")) {
-
-            mRetailerDetails.setVisibility(View.GONE);
-        } else {
-            mRetailerDetails.setVisibility(View.VISIBLE);
-        }
-    }
 
     /*Date and Time Format*/
     public void DateTime() {
@@ -969,5 +961,44 @@ public class SecondaryOrderActivity extends AppCompatActivity implements View.On
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (txtRetailer.getText().toString().equals("")) {
+
+            mRetailerDetails.setVisibility(View.GONE);
+        } else {
+            mRetailerDetails.setVisibility(View.VISIBLE);
+        }
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
+    }
 
 }

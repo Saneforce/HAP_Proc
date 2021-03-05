@@ -27,6 +27,7 @@ import com.hap.checkinproc.Model_Class.LeaveCancelStatusModel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Adapter.HolidayStatusAdapter;
 import com.hap.checkinproc.Status_Adapter.LeaveCancelStatusAdapter;
+import com.hap.checkinproc.common.TimerService;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -48,6 +49,7 @@ public class LeaveCancelRequestStatus extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.row_leave_cancel_request_status);
 
+        startService(new Intent(this, TimerService.class));
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -145,4 +147,41 @@ public class LeaveCancelRequestStatus extends AppCompatActivity {
     public void onBackPressed() {
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
+    }
+
 }

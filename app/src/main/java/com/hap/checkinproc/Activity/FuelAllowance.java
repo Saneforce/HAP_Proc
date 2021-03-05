@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.Activity_Hap.ProductImageView;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -35,6 +36,7 @@ public class FuelAllowance extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fuel_allowance);
+        startService(new Intent(this, TimerService.class));
         FUClaim = String.valueOf(getIntent().getSerializableExtra("jsonTravDetai"));
         txtTaClaim = findViewById(R.id.mode_name);
         TxtStartedKm = findViewById(R.id.txt_started_km);
@@ -150,5 +152,37 @@ public class FuelAllowance extends AppCompatActivity {
 
 
         }
+    }  @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
     }
 }

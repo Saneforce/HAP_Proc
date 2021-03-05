@@ -2,6 +2,7 @@ package com.hap.checkinproc.Activity;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -29,7 +31,7 @@ public class PdfViewerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_viewer);
-
+        startService(new Intent(this, TimerService.class));
         pdfurl = String.valueOf(getIntent().getSerializableExtra("PDF_ONE"));
         pdfView = (PDFView) findViewById(R.id.pdfView);
         new RetrivePDFfromUrl().execute(pdfurl);
@@ -81,5 +83,37 @@ public class PdfViewerActivity extends AppCompatActivity {
             dialog.show();
 
         }
+    }  @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
     }
 }

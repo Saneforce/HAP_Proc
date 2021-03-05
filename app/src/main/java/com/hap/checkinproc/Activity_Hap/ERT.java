@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.hap.checkinproc.Model_Class.ERTChild;
 import com.hap.checkinproc.Model_Class.ERTParent;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.ERTMainAdapter;
+import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +45,7 @@ public class ERT extends AppCompatActivity {
         setContentView(R.layout.activity_e_r_t);
         shared_common_pref = new Shared_Common_Pref(this);
 
-
+        startService(new Intent(this, TimerService.class));
         menuRecycler = findViewById(R.id.recylerview_ert);
         cacheMenuRes = new ArrayList<>();
 
@@ -122,6 +124,38 @@ public class ERT extends AppCompatActivity {
 
 
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
+    }
 
 }

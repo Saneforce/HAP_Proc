@@ -126,29 +126,29 @@ public class Login extends AppCompatActivity {
                 });
 
 
-/*        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
+/* mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+ @Override
+ public void onReceive(Context context, Intent intent) {
 
-                // checking for type intent filter
-                if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-                    FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
+ // checking for type intent filter
+ if (intent.getAction().equals(Config.REGISTRATION_COMPLETE)) {
+ // gcm successfully registered
+ // now subscribe to `global` topic to receive app wide notifications
+ FirebaseMessaging.getInstance().subscribeToTopic(Config.TOPIC_GLOBAL);
 
-                    displayFirebaseRegId();
+ displayFirebaseRegId();
 
-                } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
-                    // new push notification is received
+ } else if (intent.getAction().equals(Config.PUSH_NOTIFICATION)) {
+ // new push notification is received
 
-                    String message = intent.getStringExtra("message");
+ String message = intent.getStringExtra("message");
 
-                    Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
+ Toast.makeText(getApplicationContext(), "Push notification: " + message, Toast.LENGTH_LONG).show();
 
-                   // txtMessage.setText(message);
-                }
-            }
-        };*/
+ // txtMessage.setText(message);
+ }
+ }
+ };*/
 
         //displayFirebaseRegId();
 
@@ -169,12 +169,12 @@ public class Login extends AppCompatActivity {
         eMail = UserDetails.getString("email", "");
         name.setText(eMail);
 
-       /* if (!checkPermission()) {
-            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                requestPermissions();
-            //}
-        } else {
-        }*/
+ /* if (!checkPermission()) {
+ //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+ requestPermissions();
+ //}
+ } else {
+ }*/
 
 
         CameraPermission cameraPermission = new CameraPermission(Login.this, getApplicationContext());
@@ -254,9 +254,9 @@ public class Login extends AppCompatActivity {
             public void onClick(View view) {
                 if (mLUService == null)
                     mLUService = new SANGPSTracker(getApplicationContext());
-              /* if(mTimerService == null)
-                   mTimerService = new TimerService();
-               mTimerService.startTimerService();*/
+ /* if(mTimerService == null)
+ mTimerService = new TimerService();
+ mTimerService.startTimerService();*/
 
                 startService(new Intent(Login.this, TimerService.class));
 
@@ -276,30 +276,31 @@ public class Login extends AppCompatActivity {
                 finishAffinity();
             }
         });
-        /*
-        if(UserDetails.getString("Sfcode", "")!="") {
-            Call<JsonArray> Callto = apiInterface.getDataArrayList("get/Signout_Check",
-                    UserDetails.getString("Divcode", ""),
-                    UserDetails.getString("Sfcode", ""));
-            Callto.enqueue(new Callback<JsonArray>() {
+ /*
+ if(UserDetails.getString("Sfcode", "")!="") {
+ Call<JsonArray> Callto = apiInterface.getDataArrayList("get/Signout_Check",
+ UserDetails.getString("Divcode", ""),
+ UserDetails.getString("Sfcode", ""));
+ Callto.enqueue(new Callback<JsonArray>() {
 
-                @Override
-                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+ @Override
+ public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
 
-                }
+ }
 
-                @Override
-                public void onFailure(Call<JsonArray> call, Throwable t) {
+ @Override
+ public void onFailure(Call<JsonArray> call, Throwable t) {
 
-                }
-            });
-        }*/
+ }
+ });
+ }*/
 
         Boolean Login = UserDetails.getBoolean("Login", false);
         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
 
         if (Login == true || CheckIn == true) {
 
+            /*PERMISSION REQUEST*/
             if (checkPermission()) {
                 Intent playIntent = new Intent(this, SANGPSTracker.class);
                 bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
@@ -331,17 +332,17 @@ public class Login extends AppCompatActivity {
     }
 
 
-   /* private void displayFirebaseRegId() {
-        SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
-        String regId = pref.getString("regId", null);
+ /* private void displayFirebaseRegId() {
+ SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
+ String regId = pref.getString("regId", null);
 
-        Log.e(TAG, "Firebase reg id: " + regId);
+ Log.e(TAG, "Firebase reg id: " + regId);
 
-*//*        if (!TextUtils.isEmpty(regId))
-            txtRegId.setText("Firebase Reg Id: " + regId);
-        else
-            txtRegId.setText("Firebase Reg Id is not received yet!");*//*
-    }*/
+*//* if (!TextUtils.isEmpty(regId))
+ txtRegId.setText("Firebase Reg Id: " + regId);
+ else
+ txtRegId.setText("Firebase Reg Id is not received yet!");*//*
+ }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -402,21 +403,46 @@ public class Login extends AppCompatActivity {
                 });
     }
 
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Intent inten = new Intent(this, TimerService.class);
+        startService(inten);
+    }
+
+    @Override
+    protected void onRestart() {
+
+        super.onRestart();
+        Intent inten = new Intent(this, TimerService.class);
+        startService(inten);
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
+
+        Intent inten = new Intent(this, TimerService.class);
+        startService(inten);
+        Log.v("LOG_IN_LOCATION", "ONRESUME");
+        /*REQUEST PERMISISON*/
         if (checkPermission()) {
             if (mLUService == null)
                 mLUService = new SANGPSTracker(getApplicationContext());
 
             myReceiver = new LocationReceiver();
-            /*if (Utils.requestingLocationUpdates(this)) {
-                if (!checkPermission()) {
-                    requestPermissions();
-                } else {
-                   // mLUService.requestLocationUpdates();
-                }
-            }*/
+ /*if (Utils.requestingLocationUpdates(this)) {
+ if (!checkPermission()) {
+ requestPermissions();
+ } else {
+ // mLUService.requestLocationUpdates();
+ }
+ }*/
 
 
             // Bind to the service. If the service is in foreground mode, this signals to the service
@@ -427,16 +453,16 @@ public class Login extends AppCompatActivity {
                     new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
 
 
-           /* LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                    new IntentFilter(Config.REGISTRATION_COMPLETE));
+ /* LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+ new IntentFilter(Config.REGISTRATION_COMPLETE));
 
-            // register new push message receiver
-            // by doing this, the activity will be notified each time a new message arrives
-            LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                    new IntentFilter(Config.PUSH_NOTIFICATION));
+ // register new push message receiver
+ // by doing this, the activity will be notified each time a new message arrives
+ LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+ new IntentFilter(Config.PUSH_NOTIFICATION));
 
-            // clear the notification area when the app is opened
-            MyNotificationManager.clearNotifications(getApplicationContext());*/
+ // clear the notification area when the app is opened
+ MyNotificationManager.clearNotifications(getApplicationContext());*/
 
             Log.e("Loaction_Check", "Loaction_Check");
 
@@ -445,17 +471,26 @@ public class Login extends AppCompatActivity {
 
     @Override
     protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         super.onPause();
+        Intent inten = new Intent(this, TimerService.class);
+        startService(inten);
+        Log.v("LOG_IN_LOCATION", "ONPAUSE");
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
+
     }
 
 
 /*// LocalBroadcastManager.getInstance(this).unregisterReceiver(myReceiver);
-        super.onPause();
-    }*/
+ super.onPause();
+ }*/
+
 
     @Override
     protected void onStart() {
+
+        Intent inten = new Intent(this, TimerService.class);
+        startService(inten);
+        Log.v("LOG_IN_LOCATION", "ONSTART");
         super.onStart();
         if (authStateListener != null) {
             FirebaseAuth.getInstance().signOut();
@@ -465,14 +500,21 @@ public class Login extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-       /* if (mBound) {
-            // Unbind from the service. This signals to the service that this activity is no longer
-            // in the foreground, and the service can respond by promoting itself to a foreground
-            // service.
-            unbindService(mServiceConection);
-            mBound = false;
-        }*/
+ /* if (mBound) {
+ // Unbind from the service. This signals to the service that this activity is no longer
+ // in the foreground, and the service can respond by promoting itself to a foreground
+ // service.
+ unbindService(mServiceConection);
+ mBound = false;
+
+ }*/
         super.onStop();
+        Intent inten = new Intent(this, TimerService.class);
+        startService(inten);
+
+
+        Log.v("LOG_IN_LOCATION", "ONSTOP");
+
         if (authStateListener != null) {
             firebaseAuth.removeAuthStateListener(authStateListener);
         }
@@ -534,7 +576,7 @@ public class Login extends AppCompatActivity {
                         if (requestCode == RC_SIGN_IN) {
                             if (CheckIn == true) {
                                 intent = new Intent(Login.this, Dashboard_Two.class);
-                                //  intent = new Intent(Login.this, TAClaimActivity.class);
+                                // intent = new Intent(Login.this, TAClaimActivity.class);
                                 intent.putExtra("Mode", "CIN");
                             } else {
                                 intent = new Intent(Login.this, Dashboard.class);

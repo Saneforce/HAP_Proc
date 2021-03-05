@@ -37,6 +37,7 @@ import com.hap.checkinproc.Model_Class.Tp_View_Master;
 import com.hap.checkinproc.Model_Class.Work_Type_Model;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.Tp_Approval_Adapter;
+import com.hap.checkinproc.common.TimerService;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class Tp_Approval extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tp__approval);
-
+        startService(new Intent(this, TimerService.class));
 
         recyclerView = findViewById(R.id.tprecyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -172,5 +173,38 @@ public class Tp_Approval extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
     }
 }

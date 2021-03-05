@@ -25,11 +25,9 @@ import java.util.TimerTask;
 public class LocationBackGround extends Service {
     private static final String TAG = LocationBackGround.class.getSimpleName();
     public static final int notify = 1000;  //interval between two services(Here Service run every 5 Minute)
-    private Handler mHandler = new Handler();   //run on another Thread to avoid crash
     private Handler mHandlers = new Handler();   //run on another Thread to avoid crash
-    private Timer mTimer = null;    //timer handling
     private Timer location = null;    //timer handling
-    private Boolean UpdtFlag = false;
+
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
 
     @Override
@@ -72,16 +70,13 @@ public class LocationBackGround extends Service {
                     LocationServices locationServices = new LocationServices(cAtivity, context);
 
                     if (!locationServices.checkPermission()) {
-                        locationServices.requestPermission();
                         sMsg = "NO PERMISSION";
                         Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                     } else {
                         Log.v("PERMISSION", "PERMISSION");
                     }
 
-
                     ViewGroup rootView = cAtivity.getWindow().getDecorView().findViewById(android.R.id.content);
-
                     try {
                         RelativeLayout el = rootView.findViewById(4231);
                         if (el.getVisibility() == View.VISIBLE) {
