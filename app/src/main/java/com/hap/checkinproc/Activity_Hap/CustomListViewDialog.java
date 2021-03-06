@@ -61,7 +61,7 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        /*requestWindowFeature(Window.FEATURE_NO_TITLE);*/
         setContentView(R.layout.custom_dialog_layout);
         no = (Button) findViewById(R.id.no);
         searchView = findViewById(R.id.searchView);

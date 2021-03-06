@@ -37,6 +37,7 @@
                 android:layout_width="@dimen/C20dp"
                 android:layout_height="match_parent"
                 android:padding="@dimen/C5dp"
+                android:visibility="gone"
                 android:src="@drawable/spin_down_arrow" />
         </LinearLayout>
 
@@ -49,6 +50,16 @@
             tools:context=".MainActivity">
         </LinearLayout>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/txt_oe_ukey"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></TextView>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/lin_fare_amount"
@@ -74,10 +85,9 @@
                 android:id="@+id/oe_attach_img"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginTop="-8dp"
                 android:padding="@dimen/C5dp"
-                android:src="@drawable/attach_files"
-                android:visibility="gone" />
+                android:visibility="gone"
+                android:src="@drawable/attach_files" />
 
             <ImageView
                 android:id="@+id/img_prvw_oe"
@@ -86,7 +96,7 @@
                 android:layout_marginTop="-8dp"
                 android:padding="@dimen/C5dp"
                 android:src="@drawable/image_preview"
-                android:visibility="gone" />
+          />
 
         </LinearLayout>
 

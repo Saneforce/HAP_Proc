@@ -31,14 +31,10 @@ public class PrivacyPolicy extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy_policy);
-        startService(new Intent(this, TimerService.class));
-        sharedpreferences = getSharedPreferences(mypreference,
-                Context.MODE_PRIVATE);
-
+        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         /*webView*/
         privacyWebView = (WebView) findViewById(R.id.privacy_webview);
         privacyWebView.loadUrl("https://hap.sanfmcg.com/Privacy.html");
-
 
         if (sharedpreferences.contains(Name)) {
             PrivacyScreen = sharedpreferences.getString(Name, "");
@@ -47,7 +43,6 @@ public class PrivacyPolicy extends AppCompatActivity {
                 startActivity(new Intent(PrivacyPolicy.this, Login.class));
             }
         }
-
 
         privacyCheck = findViewById(R.id.privacy_check_box);
         privacySubmit = findViewById(R.id.submit_privacy);
@@ -73,7 +68,6 @@ public class PrivacyPolicy extends AppCompatActivity {
             }
         });
 
-
         privacySubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -82,48 +76,12 @@ public class PrivacyPolicy extends AppCompatActivity {
         });
     }
 
-
     public void Save() {
         String n = "One";
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(Name, n);
         editor.commit();
         startActivity(new Intent(PrivacyPolicy.this, Login.class));
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
     }
 
 }

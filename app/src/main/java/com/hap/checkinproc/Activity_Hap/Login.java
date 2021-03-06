@@ -258,7 +258,7 @@ public class Login extends AppCompatActivity {
  mTimerService = new TimerService();
  mTimerService.startTimerService();*/
 
-                startService(new Intent(Login.this, TimerService.class));
+                /*startService(new Intent(Login.this, TimerService.class));*/
 
                 mLUService.requestLocationUpdates();
                 mProgress.show();
@@ -409,16 +409,16 @@ public class Login extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
-        Intent inten = new Intent(this, TimerService.class);
-        startService(inten);
+     /*   Intent inten = new Intent(this, TimerService.class);
+        startService(inten);*/
     }
 
     @Override
     protected void onRestart() {
 
         super.onRestart();
-        Intent inten = new Intent(this, TimerService.class);
-        startService(inten);
+      /*  Intent inten = new Intent(this, TimerService.class);
+        startService(inten);*/
         Log.v("LOG_IN_LOCATION", "ONRESTART");
 
     }
@@ -427,8 +427,8 @@ public class Login extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Intent inten = new Intent(this, TimerService.class);
-        startService(inten);
+       /* Intent inten = new Intent(this, TimerService.class);
+        startService(inten);*/
         Log.v("LOG_IN_LOCATION", "ONRESUME");
         /*REQUEST PERMISISON*/
         if (checkPermission()) {
@@ -472,8 +472,8 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        Intent inten = new Intent(this, TimerService.class);
-        startService(inten);
+      /*  Intent inten = new Intent(this, TimerService.class);
+        startService(inten);*/
         Log.v("LOG_IN_LOCATION", "ONPAUSE");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
 
@@ -488,8 +488,8 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onStart() {
 
-        Intent inten = new Intent(this, TimerService.class);
-        startService(inten);
+      /*  Intent inten = new Intent(this, TimerService.class);
+        startService(inten);*/
         Log.v("LOG_IN_LOCATION", "ONSTART");
         super.onStart();
         if (authStateListener != null) {
@@ -509,9 +509,9 @@ public class Login extends AppCompatActivity {
 
  }*/
         super.onStop();
-        Intent inten = new Intent(this, TimerService.class);
+     /*   Intent inten = new Intent(this, TimerService.class);
         startService(inten);
-
+*/
 
         Log.v("LOG_IN_LOCATION", "ONSTOP");
 

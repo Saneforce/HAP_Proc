@@ -17,6 +17,6 @@
         android:layout_height="@dimen/C50dp"
         android:layout_marginTop="@dimen/C20dp"
         android:onClick="CloseActivity"
-        android:src="@drawable/ic_baseline_close_24"></ImageView>
+        android:src="@drawable/close_img"></ImageView>
 </RelativeLayout>
 

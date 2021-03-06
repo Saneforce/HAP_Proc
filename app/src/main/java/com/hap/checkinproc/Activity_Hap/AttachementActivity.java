@@ -66,6 +66,8 @@ public class AttachementActivity extends AppCompatActivity {
 
         parentLinearLayout.setColumnCount(3);
         parentLinearLayout.setRowCount(4);
+        ImageUKey = String.valueOf(getIntent().getSerializableExtra("Delete"));
+
 
     }
 
@@ -100,6 +102,13 @@ public class AttachementActivity extends AppCompatActivity {
                     View cv = parentLinearLayout.getChildAt(position);
                     ImageView taAttachs = (ImageView) (cv.findViewById(R.id.img_preview));
                     deleteImage = (ImageView) cv.findViewById(R.id.img_delete);
+                    if (ImageUKey.equals("1")) {
+                        deleteImage.setVisibility(View.GONE);
+                    } else {
+                        deleteImage.setVisibility(View.VISIBLE);
+                    }
+
+
                     deleteImage.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

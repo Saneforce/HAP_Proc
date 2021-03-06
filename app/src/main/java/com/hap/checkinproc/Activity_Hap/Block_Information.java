@@ -3,6 +3,7 @@ package com.hap.checkinproc.Activity_Hap;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -17,6 +18,8 @@ public class Block_Information extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_block_information);
+
+        Log.v("KARTHIC_BLOCKER", String.valueOf(getIntent().getSerializableExtra("NAME")));
 
         openDateSetting = (Button) findViewById(R.id.openDateTime);
 
