@@ -49,6 +49,7 @@
 
     </RelativeLayout>
 
+
     <Button
         android:id="@+id/button_capture"
         android:layout_width="356dp"

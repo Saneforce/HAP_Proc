@@ -58,8 +58,7 @@ public class Weekly_Off extends AppCompatActivity {
     Gson gson;
     Button weeklySubmit;
     List<MaxMinDate> maxMinDates;
-    String maxDate, minDate;
-    String maxYear, maxMonth, maxDay, minYear, minMonth, minDay;
+    String maxYear, maxMonth, maxDay, minYear, minMonth, minDay,maxDate, minDate;
     Boolean CheckIn;
     ConstraintLayout ConstraintLayout;
 
