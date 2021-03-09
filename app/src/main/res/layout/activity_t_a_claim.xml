@@ -361,10 +361,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C8dp"
                     android:layout_marginRight="@dimen/C8dp"
-                    android:orientation="vertical"
-
-
-                    >
+                    android:orientation="vertical">
                     <!--Daily Allowance-->
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -628,7 +625,6 @@
 
 
                     </androidx.cardview.widget.CardView>
-
                     <!--Allowance by Mode Of Travels-->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/linear_bike"
@@ -1623,6 +1619,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="1dp"
                                             android:layout_margin="@dimen/C10dp"
+                                            android:id="@+id/bill_view"
                                             android:background="@color/grey_300"></View>
 
                                         <LinearLayout
@@ -1699,6 +1696,7 @@
 
 
                                                 <LinearLayout
+                                                    android:id="@+id/lin_img_prv"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_gravity="bottom"
@@ -1789,7 +1787,7 @@
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
                                                 android:text="Rs. 0.00"
-                                                android:textColor="@android:color/black"
+                                                android:textColor="@android:color/holo_red_dark"
                                                 android:textSize="@dimen/C15dp"
                                                 android:textStyle="bold"></TextView>
                                         </LinearLayout>
