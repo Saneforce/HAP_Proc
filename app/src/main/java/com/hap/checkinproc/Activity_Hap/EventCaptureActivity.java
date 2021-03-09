@@ -34,6 +34,7 @@ import com.hap.checkinproc.Interface.On_ItemCLick_Listner;
 import com.hap.checkinproc.Model_Class.EventCapture;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.EventCaptureAdapter;
+import com.hap.checkinproc.common.TimerService;
 
 import java.io.File;
 import java.io.IOException;
@@ -92,6 +93,7 @@ EventCaptureActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_capute);
+        startService(new Intent(this, TimerService.class));
         initialize();
     }
 
@@ -320,17 +322,6 @@ EventCaptureActivity extends AppCompatActivity {
         st.execute();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getTasks();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        getTasks();
-    }
 
 
     /*Call Api Image*/
@@ -475,7 +466,41 @@ EventCaptureActivity extends AppCompatActivity {
         dt.execute();
 
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getTasks();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getTasks();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
+    }
 
 }
 

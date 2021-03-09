@@ -5,12 +5,9 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
-import com.hap.checkinproc.Activity.AllowanceActivity;
 
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
@@ -47,25 +44,19 @@ public class CameraPermission extends Activity {
 
 
     public boolean checkPermission() {
-        int locationReq = ContextCompat.checkSelfPermission(_context, ACCESS_FINE_LOCATION);
+        /*int locationReq = ContextCompat.checkSelfPermission(_context, ACCESS_FINE_LOCATION);*/
         int cameraReq = ContextCompat.checkSelfPermission(_context, CAMERA);
         int wrteStReq = ContextCompat.checkSelfPermission(_context, WRITE_EXTERNAL_STORAGE);
         int readStReq = ContextCompat.checkSelfPermission(_context, READ_EXTERNAL_STORAGE);
 
-        Toast.makeText(CameraPermission.this, "Please provide permission", Toast.LENGTH_SHORT).show();
-
-
-        return locationReq == PackageManager.PERMISSION_GRANTED && cameraReq == PackageManager.PERMISSION_GRANTED &&
+        return /*locationReq == PackageManager.PERMISSION_GRANTED &&*/ cameraReq == PackageManager.PERMISSION_GRANTED &&
                 wrteStReq == PackageManager.PERMISSION_GRANTED && readStReq == PackageManager.PERMISSION_GRANTED;
     }
 
     public void requestPermission() {
 
-        ActivityCompat.requestPermissions(activity, new String[]{ACCESS_FINE_LOCATION, CAMERA, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-
-            Toast.makeText(CameraPermission.this, "Please provide permission", Toast.LENGTH_SHORT).show();
-
-
+        ActivityCompat.requestPermissions(activity, new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_REQUEST_CODE);
+       // ActivityCompat.requestPermissions(activity, new String[]{ACCESS_FINE_LOCATION, CAMERA, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_REQUEST_CODE);
 
     }
 
@@ -86,9 +77,6 @@ public class CameraPermission extends Activity {
                         }
 
                     }
-                }else{
-                    Toast.makeText(CameraPermission.this, "Please provide permission", Toast.LENGTH_SHORT).show();
-
                 }
 
         }

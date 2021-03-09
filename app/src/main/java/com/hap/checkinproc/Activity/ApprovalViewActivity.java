@@ -2,6 +2,7 @@ package com.hap.checkinproc.Activity;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -48,6 +50,7 @@ public class ApprovalViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_approval_view);
+        startService(new Intent(this, TimerService.class));
         list_view = findViewById(R.id.list_view);
         Bundle extra = getIntent().getExtras();
         String head_val = extra.getString("head_val");
@@ -236,6 +239,38 @@ public class ApprovalViewActivity extends AppCompatActivity {
 
         } catch (Exception e) {
         }
+    }  @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
     }
 
 }

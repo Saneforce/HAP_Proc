@@ -1,6 +1,11 @@
 package com.hap.checkinproc.Activity;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,9 +15,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.hap.checkinproc.Activity_Hap.AttachementActivity;
+import com.hap.checkinproc.Activity_Hap.ERT;
+import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,11 +31,11 @@ import org.json.JSONObject;
 public class TL_cliam_Apprval extends AppCompatActivity {
 
     LinearLayout travelDynamicLoaction;
-    TextView editText;
+    TextView editText, tvTxtUKeys;
     EditText etrTaFr, etrTaTo, enterFrom, enterTo, enterFare;
-    String TLClaim = "", StrToEnd = "0";
+    String TLClaim = "", StrToEnd = "0", TlUKey = "";
     JSONArray jsonArray = null;
-    ImageView ImgPreview;
+    ImageView ImgPreview, imgBck;
     Integer tlPos = 0;
 
 
@@ -33,12 +43,19 @@ public class TL_cliam_Apprval extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_t_l_cliam__apprval);
-
+        startService(new Intent(this, TimerService.class));
         travelDynamicLoaction = findViewById(R.id.lin_travel_dynamic_location);
-
+        getToolbar();
         TLClaim = String.valueOf(getIntent().getSerializableExtra("TLAllowance"));
         StrToEnd = String.valueOf(getIntent().getSerializableExtra("strEnd"));
 
+        imgBck = findViewById(R.id.imag_back);
+        imgBck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
 
         Log.v("TLAllowance", TLClaim);
         Log.v("TLStrToEnd", StrToEnd);
@@ -56,6 +73,48 @@ public class TL_cliam_Apprval extends AppCompatActivity {
         }
     }
 
+
+    public void getToolbar() {
+        TextView txtHelp = findViewById(R.id.toolbar_help);
+        ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+
+        TextView txtErt = findViewById(R.id.toolbar_ert);
+        TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
+
+        txtErt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ERT.class));
+            }
+        });
+        txtPlaySlip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+        ObjectAnimator textColorAnim;
+        textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
+        textColorAnim.setDuration(500);
+        textColorAnim.setEvaluator(new ArgbEvaluator());
+        textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
+        textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
+        textColorAnim.start();
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
 
     public void trvldLocation(JSONArray traveldLoc) {
 
@@ -102,13 +161,13 @@ public class TL_cliam_Apprval extends AppCompatActivity {
             try {
                 tldraftJsons = (JSONObject) traveldLoc.get(j);
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                View rowView = null;
+
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
                 layoutParams.setMargins(15, 15, 15, 15);
 
-                rowView = inflater.inflate(R.layout.tl_claim_appro_one, null);
+                View rowView = inflater.inflate(R.layout.tl_claim_appro_one, null);
 
                 travelDynamicLoaction.addView(rowView, layoutParams);
 
@@ -119,18 +178,40 @@ public class TL_cliam_Apprval extends AppCompatActivity {
                 enterFrom = views.findViewById(R.id.enter_from);
                 enterTo = views.findViewById(R.id.enter_to);
                 enterFare = views.findViewById(R.id.enter_fare);
-                ImgPreview = views.findViewById(R.id.img_prv);
+                ImgPreview = views.findViewById(R.id.tl_img_prv);
+                tvTxtUKeys = (TextView) (views.findViewById(R.id.txt_tv_ukey));
+
 
                 editText.setText("" + tldraftJsons.getString("Mode"));
                 enterFrom.setText("" + tldraftJsons.getString("From_P"));
                 enterTo.setText("" + tldraftJsons.getString("To_P"));
                 enterFare.setText("" + tldraftJsons.getString("Fare"));
+                tvTxtUKeys.setText("" + tldraftJsons.getString("Ukey"));
+
 
                 tlPos = travelDynamicLoaction.indexOfChild(rowView);
                 ImgPreview.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        View views = travelDynamicLoaction.getChildAt(tlPos);
+                        /* View views = travelDynamicLoaction.getChildAt(tlPos);*/
+
+
+                        Integer tvSizes = travelDynamicLoaction.indexOfChild(rowView);
+                        View view = travelDynamicLoaction.getChildAt(tvSizes);
+                        editText = (TextView) (view.findViewById(R.id.enter_mode));
+                        enterFare = (EditText) view.findViewById(R.id.enter_fare);
+                        tvTxtUKeys = (TextView) (view.findViewById(R.id.txt_tv_ukey));
+
+                        TlUKey = tvTxtUKeys.getText().toString();
+
+
+                        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                        stat.putExtra("position", TlUKey);
+                        stat.putExtra("headTravel", "TL");
+                        stat.putExtra("mode", editText.getText().toString());
+                        stat.putExtra("Delete", "1");
+                        stat.putExtra("date", String.valueOf(getIntent().getSerializableExtra("date")));
+                        startActivity(stat);
 
 
                     }
@@ -141,5 +222,51 @@ public class TL_cliam_Apprval extends AppCompatActivity {
             }
 
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
+    }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    TL_cliam_Apprval.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
     }
 }

@@ -2,6 +2,7 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Activity.Leave_Status_Activity;
+import com.hap.checkinproc.common.TimerService;
 
 public class LeaveReasonStatus extends AppCompatActivity {
     private EditText edtReason;
@@ -21,6 +23,7 @@ public class LeaveReasonStatus extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_leave_reason_status);
+        startService(new Intent(this, TimerService.class));
         edtReason = findViewById(R.id.edt_reason);
         reasonSend = findViewById(R.id.button_send);
 
@@ -34,4 +37,40 @@ public class LeaveReasonStatus extends AppCompatActivity {
         });
 
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
+    }
+
 }

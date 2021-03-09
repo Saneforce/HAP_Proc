@@ -44,6 +44,7 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,6 +103,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_capture);
+        startService(new Intent(this, TimerService.class));
 
         CheckInInf = new JSONObject();
         CheckInDetails = getSharedPreferences(sCheckInDetail, Context.MODE_PRIVATE);
@@ -664,6 +666,41 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             mCamera.release();
             mCamera = null;
         }
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
     }
 
 }

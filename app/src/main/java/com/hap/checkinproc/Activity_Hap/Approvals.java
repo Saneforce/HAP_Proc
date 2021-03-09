@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.TAApprovalActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.LocationBlocker;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -32,6 +33,8 @@ import com.hap.checkinproc.Status_Activity.MissedPunch_Status_Activity;
 import com.hap.checkinproc.Status_Activity.Onduty_Status_Activity;
 import com.hap.checkinproc.Status_Activity.Permission_Status_Activity;
 import com.hap.checkinproc.Status_Activity.WeekOff_Status_Activity;
+import com.hap.checkinproc.common.TimerService;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import java.util.HashMap;
@@ -55,6 +58,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_approvals);
         shared_common_pref = new Shared_Common_Pref(this);
+        startService(new Intent(this, TimerService.class));
 
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
@@ -273,6 +277,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onRestart() {
         super.onRestart();
+        startService(new Intent(this, TimerService.class));
         getcountdetails();
     }
 
@@ -290,6 +295,34 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     public void onBackPressed() {
 
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
 
 
 }

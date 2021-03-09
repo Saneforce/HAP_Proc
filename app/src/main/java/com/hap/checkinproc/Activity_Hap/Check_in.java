@@ -25,7 +25,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
-
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -44,10 +43,6 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import com.hap.checkinproc.Common_Class.Common_Class;
-import com.hap.checkinproc.Interface.ApiClient;
-import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Model_Class.Example;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -59,7 +54,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Model_Class.Example;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -84,7 +84,7 @@ import static android.hardware.camera2.CameraCaptureSession.StateCallback;
 
 //import com.example.sanloginui.adapters.RecyclerViewAdapter;
 
-public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
+public class Check_in extends FragmentActivity implements OnMapReadyCallback {
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
@@ -95,33 +95,30 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
     private ListPopupWindow statusPopupList;
 
 
+    //    camera
+    Button button;
+    TextureView textureView;
+    private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
-//    camera
-     Button button;
-     TextureView textureView;
-     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
+    static {
+        ORIENTATIONS.append(Surface.ROTATION_0, 90);
+        ORIENTATIONS.append(Surface.ROTATION_90, 0);
+        ORIENTATIONS.append(Surface.ROTATION_180, 270);
+        ORIENTATIONS.append(Surface.ROTATION_270, 180);
 
-     static
-     {
-         ORIENTATIONS.append(Surface.ROTATION_0,90);
-         ORIENTATIONS.append(Surface.ROTATION_90,0);
-         ORIENTATIONS.append(Surface.ROTATION_180,270);
-         ORIENTATIONS.append(Surface.ROTATION_270,180);
-
-     }
+    }
 
 
-     private String cameraId;
-     CameraDevice cameraDevice;
-     CameraCaptureSession cameraCaptureSession;
-     CaptureRequest captureRequest;
-     CaptureRequest.Builder captureRequestBuilder;
-     private Size imageDimensions;
-     private ImageReader imageReader;
-     private File file;
-     Handler mBackgroundHandler;
-     HandlerThread mBackgroundThread;
-
+    private String cameraId;
+    CameraDevice cameraDevice;
+    CameraCaptureSession cameraCaptureSession;
+    CaptureRequest captureRequest;
+    CaptureRequest.Builder captureRequestBuilder;
+    private Size imageDimensions;
+    private ImageReader imageReader;
+    private File file;
+    Handler mBackgroundHandler;
+    HandlerThread mBackgroundThread;
 
 
     List<Example> exampleList;
@@ -133,24 +130,26 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
     String lat;
     String log;
     String ID;
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_in);
+        startService(new Intent(this, TimerService.class));
         Log.d(TAG, "onCreate: started.");
         //in itShift_Time();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLastLocation();
-        textureView =(TextureView)findViewById(R.id.texture);
-        button =(Button)findViewById(R.id.button_capture);
+        textureView = (TextureView) findViewById(R.id.texture);
+        button = (Button) findViewById(R.id.button_capture);
         textureView.setSurfaceTextureListener(textureListener);
 
         SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-         Scode = (shared.getString("Sfcode", "null"));
-         Dcode=(shared.getString("Divcode","null"));
+        Scode = (shared.getString("Sfcode", "null"));
+        Dcode = (shared.getString("Divcode", "null"));
 
-        spinnerValue("get/Shift_timing",Dcode,Scode);
+        spinnerValue("get/Shift_timing", Dcode, Scode);
         button.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -158,13 +157,13 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
 
 
                 send();
-             try {
-                   takePicture();
+                try {
+                    takePicture();
                 } catch (CameraAccessException e) {
                     e.printStackTrace();
                 }
 
-                Intent  i = new Intent(Check_in.this, Dashboard_Two.class);
+                Intent i = new Intent(Check_in.this, Dashboard_Two.class);
 
                 startActivity(i);
 
@@ -194,7 +193,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
         });
     }
 
-    private void spinnerValue( String a,String dc,String sc){
+    private void spinnerValue(String a, String dc, String sc) {
 
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -218,12 +217,11 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
     }
 
 
-
     private void setPopupList() {
 
         final List<String> status = new ArrayList<>();
 
-        for (int i=0;i<exampleList.size();i++) {
+        for (int i = 0; i < exampleList.size(); i++) {
 
             status.add(exampleList.get(i).getName());
         }
@@ -237,7 +235,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 acetStatus.setText(status.get(position));//we set the selected element in the EditText
                 statusPopupList.dismiss();
-                ID= exampleList.get(position).getId();
+                ID = exampleList.get(position).getId();
 
             }
         });
@@ -247,40 +245,40 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
     public void send() {
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        JSONArray jsonarray=new JSONArray();
+        JSONArray jsonarray = new JSONArray();
         JSONObject paramObject = new JSONObject();
         try {
             JSONObject paramObjectdata = new JSONObject();
-            paramObjectdata.put("lat",lat);
-            paramObjectdata.put("long",log);
-            paramObjectdata.put("eDate","2020-9-26 12:26:32");
-            paramObjectdata.put("slfy","1601103391878.jpg");
+            paramObjectdata.put("lat", lat);
+            paramObjectdata.put("long", log);
+            paramObjectdata.put("eDate", "2020-9-26 12:26:32");
+            paramObjectdata.put("slfy", "1601103391878.jpg");
             paramObjectdata.put("WrkType", Common_Class.Work_Type);//static
-            paramObjectdata.put("sfCode",Scode);
+            paramObjectdata.put("sfCode", Scode);
             paramObjectdata.put("App_version", Common_Class.Version_Name);//static
-            paramObjectdata.put("CheckDutyFlag",null);
-            paramObjectdata.put("Shift_Selected_Id",ID);
+            paramObjectdata.put("CheckDutyFlag", null);
+            paramObjectdata.put("Shift_Selected_Id", ID);
 
-            paramObject.put("TP_Attendance",paramObjectdata);
+            paramObject.put("TP_Attendance", paramObjectdata);
             jsonarray.put(paramObject);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println("desd"+jsonarray);
-        System.out.println("iddddd"+ID);
-        Call<JsonObject> modelCall = apiInterface.JsonSave("dcr/save",Dcode,Scode,"24","MGR",jsonarray.toString());
+        System.out.println("desd" + jsonarray);
+        System.out.println("iddddd" + ID);
+        Call<JsonObject> modelCall = apiInterface.JsonSave("dcr/save", Dcode, Scode, "24", "MGR", jsonarray.toString());
         modelCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
-                if(response.isSuccessful()) {
+                if (response.isSuccessful()) {
 
-                    System.out.println("THIRUSUCCESS"+response.body().toString());
-                    }else{
+                    System.out.println("THIRUSUCCESS" + response.body().toString());
+                } else {
 
 
-                    }
                 }
+            }
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
@@ -352,7 +350,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void createCameraPreview() throws CameraAccessException {
         SurfaceTexture texture = textureView.getSurfaceTexture();
-        texture.setDefaultBufferSize(imageDimensions.getWidth(),imageDimensions.getHeight());
+        texture.setDefaultBufferSize(imageDimensions.getWidth(), imageDimensions.getHeight());
         Surface surface = new Surface(texture);
         captureRequestBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_PREVIEW);
         captureRequestBuilder.addTarget(surface);
@@ -360,8 +358,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
         cameraDevice.createCaptureSession(Arrays.asList(surface), new StateCallback() {
             @Override
             public void onConfigured(@NotNull CameraCaptureSession session) {
-                if(cameraDevice==null)
-                {
+                if (cameraDevice == null) {
                     return;
                 }
 
@@ -377,10 +374,10 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
 
             @Override
             public void onConfigureFailed(@NotNull CameraCaptureSession session) {
-                Toast.makeText(getApplicationContext(),"configuration changed",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "configuration changed", Toast.LENGTH_LONG).show();
 
             }
-        },null);
+        }, null);
 
 
     }
@@ -388,22 +385,22 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
     @SuppressLint("NewApi")
     private void updatePreview() throws CameraAccessException {
 
-        if(cameraDevice == null){
+        if (cameraDevice == null) {
             return;
         }
 
         captureRequestBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
 
-        cameraCaptureSession.setRepeatingRequest(captureRequestBuilder.build(),null,mBackgroundHandler);
+        cameraCaptureSession.setRepeatingRequest(captureRequestBuilder.build(), null, mBackgroundHandler);
     }
 
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void openCamera() throws CameraAccessException {
 
-        CameraManager manager = (CameraManager)getSystemService(Context.CAMERA_SERVICE);
+        CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
 
-        cameraId =manager.getCameraIdList()[1];
+        cameraId = manager.getCameraIdList()[1];
 
         CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraId);
 
@@ -412,24 +409,23 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
         assert map != null;
         imageDimensions = map.getOutputSizes(SurfaceTexture.class)[0];
 
-        if(ActivityCompat.checkSelfPermission(this,Manifest.permission.CAMERA)!=PackageManager.PERMISSION_GRANTED
-        && ActivityCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(Check_in.this,new String[]{Manifest.permission.CAMERA,Manifest.permission.WRITE_EXTERNAL_STORAGE},101);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(Check_in.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
             return;
         }
 
-        manager.openCamera(cameraId,stateCallback,null);
+        manager.openCamera(cameraId, stateCallback, null);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void takePicture() throws CameraAccessException {
 
-        if(cameraDevice == null){
+        if (cameraDevice == null) {
             return;
         }
 
-        CameraManager manager = (CameraManager)getSystemService(Context.CAMERA_SERVICE);
+        CameraManager manager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
 
         CameraCharacteristics characteristics = manager.getCameraCharacteristics(cameraDevice.getId());
         Size[] jpegSizes = null;
@@ -439,31 +435,29 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
         int width = 640;
         int height = 480;
 
-        if(jpegSizes!=null && jpegSizes.length>0)
-        {
-            width=jpegSizes[0].getWidth();
-            height=jpegSizes[0].getHeight();
+        if (jpegSizes != null && jpegSizes.length > 0) {
+            width = jpegSizes[0].getWidth();
+            height = jpegSizes[0].getHeight();
         }
 
-        ImageReader reader = ImageReader.newInstance(width,height,ImageFormat.JPEG,1);
-        List<Surface> outputSurfaces = new  ArrayList<>(2);
+        ImageReader reader = ImageReader.newInstance(width, height, ImageFormat.JPEG, 1);
+        List<Surface> outputSurfaces = new ArrayList<>(2);
         outputSurfaces.add(reader.getSurface());
 
         outputSurfaces.add(new Surface(textureView.getSurfaceTexture()));
 
         final CaptureRequest.Builder captureBuilder = cameraDevice.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE);
         captureBuilder.addTarget(reader.getSurface());
-        captureBuilder.set(CaptureRequest.CONTROL_MODE,CameraMetadata.CONTROL_MODE_AUTO);
+        captureBuilder.set(CaptureRequest.CONTROL_MODE, CameraMetadata.CONTROL_MODE_AUTO);
 
         int rotation = getWindowManager().getDefaultDisplay().getRotation();
-        captureBuilder.set(CaptureRequest.JPEG_ORIENTATION,ORIENTATIONS.get(rotation));
+        captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
 
 
-
-        long tsLong = System.currentTimeMillis()/1000;
+        long tsLong = System.currentTimeMillis() / 1000;
         String ts = Long.toString(tsLong);
 
-        file  = new File(Environment.getExternalStorageDirectory() + "/"+ts+".jpg");
+        file = new File(Environment.getExternalStorageDirectory() + "/" + ts + ".jpg");
 
         ImageReader.OnImageAvailableListener readerListener = imageReader -> {
 
@@ -475,35 +469,34 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
                 save(bytes);
             } catch (IOException e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 image.close();
             }
 
         };
 
-        reader.setOnImageAvailableListener(readerListener,mBackgroundHandler);
+        reader.setOnImageAvailableListener(readerListener, mBackgroundHandler);
 
-        final CameraCaptureSession.CaptureCallback captureListener = new CameraCaptureSession.CaptureCallback(){
+        final CameraCaptureSession.CaptureCallback captureListener = new CameraCaptureSession.CaptureCallback() {
 
             @Override
             public void onCaptureCompleted(@NotNull CameraCaptureSession session, @NotNull CaptureRequest request, @NotNull TotalCaptureResult result) {
                 super.onCaptureCompleted(session, request, result);
-                Toast.makeText(getApplicationContext(),"SAVED",Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "SAVED", Toast.LENGTH_LONG).show();
                 // createCameraPreview();
 
             }
 
 
-
         };
 
-        cameraDevice.createCaptureSession(outputSurfaces,new CameraCaptureSession.StateCallback(){
+        cameraDevice.createCaptureSession(outputSurfaces, new CameraCaptureSession.StateCallback() {
 
 
             @Override
             public void onConfigured(CameraCaptureSession session) {
                 try {
-                    session.capture(captureBuilder.build(),captureListener,mBackgroundHandler);
+                    session.capture(captureBuilder.build(), captureListener, mBackgroundHandler);
                 } catch (CameraAccessException e) {
                     e.printStackTrace();
                 }
@@ -515,10 +508,9 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
             public void onConfigureFailed(CameraCaptureSession session) {
 
             }
-        },mBackgroundHandler);
+        }, mBackgroundHandler);
 
     }
-
 
 
     private void save(byte[] bytes) throws IOException {
@@ -538,22 +530,20 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
     protected void onResume() {
         super.onResume();
 
+        startService(new Intent(this, TimerService.class));
         startBackgroundThread();
-        if(textureView.isAvailable())
-        {
+        if (textureView.isAvailable()) {
             try {
                 openCamera();
             } catch (CameraAccessException e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             textureView.setSurfaceTextureListener(textureListener);
         }
     }
 
-    private void startBackgroundThread()
-    {
+    private void startBackgroundThread() {
         mBackgroundThread = new HandlerThread("camera Background");
         mBackgroundThread.start();
         mBackgroundHandler = new Handler(mBackgroundThread.getLooper());
@@ -563,6 +553,7 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
     @Override
     protected void onPause() {
         try {
+            startService(new Intent(this, TimerService.class));
             stopBackgroundThread();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -581,17 +572,17 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
 
     private void fetchLastLocation() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,new String[]
-                    {Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
+            ActivityCompat.requestPermissions(this, new String[]
+                    {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
             return;
         }
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
-                if (location !=null){
+                if (location != null) {
                     currentLocation = location;
-                    Toast.makeText(getApplicationContext(),currentLocation.getLatitude()+""+currentLocation.getLongitude(),Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
                     SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.google_map);
                     assert supportMapFragment != null;
                     supportMapFragment.getMapAsync(Check_in.this);
@@ -622,29 +613,48 @@ public class   Check_in extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng latLng =new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-        lat=String.valueOf(currentLocation.getLatitude());
-        log=String.valueOf(currentLocation.getLongitude());
+        LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
+        lat = String.valueOf(currentLocation.getLatitude());
+        log = String.valueOf(currentLocation.getLongitude());
         MarkerOptions markerOptions = new MarkerOptions().position(latLng)
                 .title("I am here. ");
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,18 ));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
         googleMap.addMarker(markerOptions);
 
     }
 
 
-
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
 
-        switch (requestCode){
+        switch (requestCode) {
             case REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     fetchLastLocation();
                 }
                 break;
-                }
         }
     }
+
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
+    }
+}

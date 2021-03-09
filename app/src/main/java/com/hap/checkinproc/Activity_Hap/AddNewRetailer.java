@@ -35,6 +35,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -77,7 +78,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         setContentView(R.layout.activity_add_new_retailer);
 
         gson = new Gson();
-
+        startService(new Intent(this, TimerService.class));
         service = ApiClient.getClient().create(ApiInterface.class);
         shared_common_pref = new Shared_Common_Pref(this);
         getRouteDetails();
@@ -451,6 +452,38 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     @Override
     public void onBackPressed() {
 
+    }  @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
     }
 
 }

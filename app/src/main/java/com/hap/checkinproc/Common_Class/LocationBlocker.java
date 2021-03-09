@@ -1,50 +1,49 @@
-package com.hap.checkinproc.Activity_Hap;
+package com.hap.checkinproc.Common_Class;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
 
-import com.hap.checkinproc.R;
+import com.hap.checkinproc.Model_Class.Location;
 import com.hap.checkinproc.common.TimerService;
 
+public class LocationBlocker  extends Activity {
 
-public class TimeOut extends AppCompatActivity {
+    public LocationBlocker() {
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_time_out);
         startService(new Intent(this, TimerService.class));
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override

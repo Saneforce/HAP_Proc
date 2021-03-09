@@ -10,6 +10,7 @@ import android.webkit.WebViewClient;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 public class Webview_Activity extends AppCompatActivity {
     private WebView wv1;
@@ -40,8 +41,7 @@ public class Webview_Activity extends AppCompatActivity {
 
     public  boolean valu(){
         String ab="CHECKin";
-
-
         return  false;
     }
+
 }

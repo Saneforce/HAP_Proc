@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 public class PrivacyPolicy extends AppCompatActivity {
     WebView privacyWebView;
@@ -30,13 +31,10 @@ public class PrivacyPolicy extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy_policy);
-        sharedpreferences = getSharedPreferences(mypreference,
-                Context.MODE_PRIVATE);
-
+        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         /*webView*/
         privacyWebView = (WebView) findViewById(R.id.privacy_webview);
         privacyWebView.loadUrl("https://hap.sanfmcg.com/Privacy.html");
-
 
         if (sharedpreferences.contains(Name)) {
             PrivacyScreen = sharedpreferences.getString(Name, "");
@@ -45,7 +43,6 @@ public class PrivacyPolicy extends AppCompatActivity {
                 startActivity(new Intent(PrivacyPolicy.this, Login.class));
             }
         }
-
 
         privacyCheck = findViewById(R.id.privacy_check_box);
         privacySubmit = findViewById(R.id.submit_privacy);
@@ -71,7 +68,6 @@ public class PrivacyPolicy extends AppCompatActivity {
             }
         });
 
-
         privacySubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,7 +75,6 @@ public class PrivacyPolicy extends AppCompatActivity {
             }
         });
     }
-
 
     public void Save() {
         String n = "One";

@@ -46,6 +46,7 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.AdapterForDynamicView;
 import com.hap.checkinproc.adapters.AdapterForSelectionList;
 import com.hap.checkinproc.adapters.FilterDemoAdapter;
+import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -98,6 +99,7 @@ public class ViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view);
+        startService(new Intent(this, TimerService.class));
         extra = getIntent().getExtras();
         frm_id = extra.getString("frmid");
         value = Integer.parseInt(extra.getString("btn_need"));
@@ -1053,5 +1055,39 @@ public class ViewActivity extends AppCompatActivity {
     protected void onPostResume() {
         super.onPostResume();
         header = tool_header.getText().toString();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
     }
 }

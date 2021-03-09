@@ -45,6 +45,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,6 +87,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allowance_two);
+        startService(new Intent(this, TimerService.class));
         sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
@@ -141,11 +143,11 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         }
 
         if (sharedpreferences.contains("Share_Img")) {
-            strImg = sharedpreferences.getString("Share_Img", "");
+            ImageStart = sharedpreferences.getString("Share_Img", "");
             Glide.with(getApplicationContext())
-                    .load(strImg)
+                    .load(ImageStart)
                     .into(StartedKmImage);
-            Log.e("COnvert", "imageConvert");
+            Log.v("ImageStart", ImageStart);
         }
 
 
@@ -153,7 +155,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             StartedImage = sharedpreferences.getString("SharedImage", "");
             Log.e("Privacypolicy", "Checking" + StartedImage);
             if (StartedImage != null && !StartedImage.isEmpty() && !StartedImage.equals("null")) {
-                //   StartedKmImage.setImageURI(Uri.parse(StartedImage));
+                //StartedKmImage.setImageURI(Uri.parse(StartedImage));
             }
         }
         if (sharedpreferences.contains("SharedImages")) {
@@ -228,6 +230,18 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     startActivity(intent);
                 }
             });
+
+            if (!ImageStart.matches("")) {
+                StartedKmImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                        intent.putExtra("ImageUrl", ImageStart);
+                        startActivity(intent);
+
+                    }
+                });
+            }
         }
 
 
@@ -244,7 +258,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                 } else {
                     Log.v("PERMISSION", "PERMISSION");
-                    Log.v("Text_To_ID", StrToCode);
+                    Log.v("ImageStart_ONCLICK", ImageStart);
 
                     SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.putString("Closing", EndedEditText.getText().toString());
@@ -274,7 +288,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     Toast.makeText(AllowanceActivityTwo.this, "Enter End KM", Toast.LENGTH_SHORT).show();
                     return;
                 } else if (EndedImage.matches("")) {
-                    Toast.makeText(AllowanceActivityTwo.this, "Enter End KM", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AllowanceActivityTwo.this, "Enter End Image", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
 
@@ -308,8 +322,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                 customDialog.show();
             }
         });
-
-
 
 
     }
@@ -643,5 +655,39 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             StrToCode = myDataset.get(position).getId();
             Log.e("STRTOCOD", StrToCode);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
     }
 }

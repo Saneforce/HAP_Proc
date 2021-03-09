@@ -34,6 +34,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.MaxMinDate;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -57,8 +58,7 @@ public class Weekly_Off extends AppCompatActivity {
     Gson gson;
     Button weeklySubmit;
     List<MaxMinDate> maxMinDates;
-    String maxDate, minDate;
-    String maxYear, maxMonth, maxDay, minYear, minMonth, minDay;
+    String maxYear, maxMonth, maxDay, minYear, minMonth, minDay,maxDate, minDate;
     Boolean CheckIn;
     ConstraintLayout ConstraintLayout;
 
@@ -66,6 +66,7 @@ public class Weekly_Off extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weekly__off);
+        startService(new Intent(this, TimerService.class));
         TextView txtHelp = findViewById(R.id.toolbar_help);
         SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         CheckIn = CheckInDetails.getBoolean("CheckIn", false);
@@ -321,6 +322,39 @@ public class Weekly_Off extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
     }
 
 }

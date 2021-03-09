@@ -64,7 +64,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Tues"
+                android:text="Tue"
                 android:textColor="#000" />
 
             <TextView
@@ -80,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Thurs"
+                android:text="Thu"
                 android:textColor="#000" />
 
             <TextView

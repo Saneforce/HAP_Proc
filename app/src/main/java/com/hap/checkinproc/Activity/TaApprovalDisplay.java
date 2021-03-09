@@ -31,6 +31,7 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,12 +53,13 @@ public class TaApprovalDisplay extends AppCompatActivity {
     AppCompatEditText appCompatEditText;
     JsonArray jsonArray = null, jsonTravDetai = null, lcDraftArray = null, oeDraftArray = null, trvldArray = null, ldArray = null,
             daArray = null;
+    Double brd, ta, ldg, oe, lc, trv_lc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ta_approval_display);
-
+        startService(new Intent(this, TimerService.class));
         mShared_common_pref = new Shared_Common_Pref(this);
         common_class = new Common_Class(this);
 
@@ -178,39 +180,58 @@ public class TaApprovalDisplay extends AppCompatActivity {
     }
 
     public void DaApproval(View v) {
-        Intent intent = new Intent(getApplicationContext(), DAClaimActivity.class);
-        intent.putExtra("DaAllowance", daArray.toString());
-        intent.putExtra("DaAll_Total", SDA);
-        startActivity(intent);
+
+        /*  brd,ta,ldg,oe,lc,trv_lc*/
+        if (!brd.equals("0.0")) {
+            Intent intent = new Intent(getApplicationContext(), DAClaimActivity.class);
+            intent.putExtra("DaAllowance", daArray.toString());
+            intent.putExtra("DaAll_Total", SDA);
+            intent.putExtra("date", String.valueOf(getIntent().getSerializableExtra("date")));
+            startActivity(intent);
+        }
     }
 
     public void TLApproval(View v) {
-        Intent intent = new Intent(getApplicationContext(), TL_cliam_Apprval.class);
-        intent.putExtra("strEnd", STEND);
-        intent.putExtra("TLAllowance", trvldArray.toString());
-        startActivity(intent);
+
+        if (!trv_lc.equals("0.0")) {
+            Intent intent = new Intent(getApplicationContext(), TL_cliam_Apprval.class);
+            intent.putExtra("strEnd", STEND);
+            intent.putExtra("TLAllowance", trvldArray.toString());
+            intent.putExtra("date", String.valueOf(getIntent().getSerializableExtra("date")));
+            startActivity(intent);
+        }
     }
 
     public void OEApproval(View v) {
-        Intent intent = new Intent(getApplicationContext(), OEClaimActivity.class);
-        intent.putExtra("OEAllowance", oeDraftArray.toString());
-        intent.putExtra("OEAll_Total", SOE);
-        startActivity(intent);
+        if (!oe.equals("0.0")) {
+            Intent intent = new Intent(getApplicationContext(), OEClaimActivity.class);
+            intent.putExtra("OEAllowance", oeDraftArray.toString());
+            intent.putExtra("OEAll_Total", SOE);
+            intent.putExtra("date", String.valueOf(getIntent().getSerializableExtra("date")));
+            startActivity(intent);
+        }
     }
 
     public void FuelApproval(View v) {
-        Intent intent = new Intent(getApplicationContext(), FuelAllowance.class);
-        intent.putExtra("jsonTravDetai", jsonTravDetai.toString());
-        intent.putExtra("start_Photo", stImg);
-        intent.putExtra("End_photo", endImg);
-        startActivity(intent);
+
+        if (!ta.equals("0.0")) {
+            Intent intent = new Intent(getApplicationContext(), FuelAllowance.class);
+            intent.putExtra("jsonTravDetai", jsonTravDetai.toString());
+            intent.putExtra("start_Photo", stImg);
+            intent.putExtra("End_photo", endImg);
+            intent.putExtra("date", String.valueOf(getIntent().getSerializableExtra("date")));
+            startActivity(intent);
+        }
     }
 
     public void LCApproval(View v) {
-        Intent intent = new Intent(getApplicationContext(), LocalConvenActivity.class);
-        intent.putExtra("LCAllowance", lcDraftArray.toString());
-        intent.putExtra("LCAll_Total", SLC);
-        startActivity(intent);
+        if (!lc.equals("0.0")) {
+            Intent intent = new Intent(getApplicationContext(), LocalConvenActivity.class);
+            intent.putExtra("LCAllowance", lcDraftArray.toString());
+            intent.putExtra("LCAll_Total", SLC);
+            intent.putExtra("date", String.valueOf(getIntent().getSerializableExtra("date")));
+            startActivity(intent);
+        }
     }
 
     public void LAApproval(View v) {
@@ -238,12 +259,16 @@ public class TaApprovalDisplay extends AppCompatActivity {
                 for (int m = 0; m < jsonArray.size(); m++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(m);
 
-                    Double brd = Double.parseDouble(jsonObject.get("Boarding_Amt").getAsString());
-                    Double ta = Double.parseDouble(jsonObject.get("Ta_totalAmt").getAsString());
-                    Double ldg = Double.parseDouble(jsonObject.get("Ldg_totalAmt").getAsString());
-                    Double lc = Double.parseDouble(jsonObject.get("Lc_totalAmt").getAsString());
-                    Double oe = Double.parseDouble(jsonObject.get("Oe_totalAmt").getAsString());
-                    Double trv_lc = Double.parseDouble(jsonObject.get("trv_lc_amt").getAsString());
+                    brd = Double.parseDouble(jsonObject.get("Boarding_Amt").getAsString());
+                    ta = Double.parseDouble(jsonObject.get("Ta_totalAmt").getAsString());
+                    ldg = Double.parseDouble(jsonObject.get("Ldg_totalAmt").getAsString());
+                    lc = Double.parseDouble(jsonObject.get("Lc_totalAmt").getAsString());
+                    oe = Double.parseDouble(jsonObject.get("Oe_totalAmt").getAsString());
+                    trv_lc = Double.parseDouble(jsonObject.get("trv_lc_amt").getAsString());
+
+
+
+
 
                     txtDA.setText("Rs. " + brd);
                     txtTL.setText("Rs. " + ta);
@@ -391,5 +416,38 @@ public class TaApprovalDisplay extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
+    }
 
 }
