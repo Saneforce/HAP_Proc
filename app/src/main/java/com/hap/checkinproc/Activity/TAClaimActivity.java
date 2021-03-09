@@ -1743,11 +1743,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
 
             double elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
-/*            double elibs = elib * noday;*/
+            /*            double elibs = elib * noday;*/
 
             txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(elibs));
 
-            txtJNEligi.setText("Rs." + ldraft.get("Joining_Ldg_Amount").getAsString());
+            double srtjdgAmt = Integer.valueOf(ldraft.get("Joining_Ldg_Amount").getAsString());
+            txtJNEligi.setText("Rs." + new DecimalFormat("##0.00").format(srtjdgAmt));
             Double wobal = Double.valueOf(ldraft.get("WOB_Amt").getAsString());
 
             Log.v("ldgWOBBal", String.valueOf(wobal));
@@ -1809,7 +1810,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 txtJNDept.setText(jsonObjectAdd.get("Dept").getAsString());
                 txtJNHQ.setText(jsonObjectAdd.get("Sf_Hq").getAsString());
                 txtJNMob.setText(jsonObjectAdd.get("Sf_Mobile").getAsString());
-                txtJNMyEli.setText(jsonObjectAdd.get("Ldg_Amount").getAsString());
+/*                double jntEli = Integer.valueOf(ldraft.get("Ldg_Amount").getAsString());*//*
+                txtJNMyEli.setText("Rs." + "0.00");*/
+
+
+
+                float sum = jsonObjectAdd.get("Ldg_Amount").getAsFloat();
+                txtJNMyEli.setText("Rs." + new DecimalFormat("##0.00").format(sum));
 
             }
         }
@@ -2460,16 +2467,29 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             Log.e("txtStyDaystoString()", txtJNEligi.getText().toString());
             Log.e("txtStyDaystoString()", lbl_ldg_eligi.getText().toString());
 
+            String strMyEli = txtMyEligi.getText().toString().substring(txtMyEligi.getText().toString().indexOf(".") + 1).trim();
+            String separator = ".";
+            int intMyEli = strMyEli.lastIndexOf(separator);
 
-            String s = txtMyEligi.getText().toString();
-            String s1 = s.substring(s.indexOf(".")+1);
-            s1.trim();
+            String strldgWobBal = ldgWOBBal.getText().toString().substring(ldgWOBBal.getText().toString().indexOf(".") + 1).trim();
+            String separator1 = ".";
+            int intMyldg = strldgWobBal.lastIndexOf(separator1);
 
-            String separator =".";
-            int sepPos = s1.lastIndexOf(separator);
+            String strdrvElig = txtDrivEligi.getText().toString().substring(txtDrivEligi.getText().toString().indexOf(".") + 1).trim();
+            String separator2 = ".";
+            int intMyDrvElg = strdrvElig.lastIndexOf(separator2);
 
-            Log.v("TO_ELIGIBLE_DATE",s1);
-            Log.v("TO_ELIGIBLE_DATE", s1.substring(0,sepPos));
+            String strJNEligi = txtJNEligi.getText().toString().substring(txtJNEligi.getText().toString().indexOf(".") + 1).trim();
+            String separator3 = ".";
+            int intJNEligi = strJNEligi.lastIndexOf(separator3);
+
+            String strLdgEli = lbl_ldg_eligi.getText().toString().substring(lbl_ldg_eligi.getText().toString().indexOf(".") + 1).trim();
+            String separator4 = ".";
+            int intLdgEli = strLdgEli.lastIndexOf(separator4);
+
+            String strJNMyEli = txtJNMyEli.getText().toString().substring(txtJNMyEli.getText().toString().indexOf(".") + 1).trim();
+            String separator5 = ".";
+            int intJNMyEli = strJNMyEli.lastIndexOf(separator5);
 
 
             JSONObject ldgSave = new JSONObject();
@@ -2477,14 +2497,16 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldgSave.put("ldg_type_sty", lodgStyLocation.getText().toString());
             ldgSave.put("sty_dte", ldg_cin.getText().toString());
             ldgSave.put("to_dte", ldg_cout.getText().toString());
-            ldgSave.put("elgble", txtMyEligi.getText().toString().substring(3, 7));
+            ldgSave.put("elgble", strMyEli.substring(0, intMyEli));
             ldgSave.put("noOfDays", txtStyDays.getText().toString());
             ldgSave.put("bil_amt", edt_ldg_bill.getText().toString());
-            ldgSave.put("wob_amt", ldgWOBBal.getText().toString().substring(3, 7));
-            ldgSave.put("drv_ldg_amt", txtDrivEligi.getText().toString().substring(3, 7));
-            ldgSave.put("jnt_ldg_amt", txtJNEligi.getText().toString().substring(3, 7));
-            ldgSave.put("total_ldg_amt", lbl_ldg_eligi.getText().toString().substring(3, 7));
+            ldgSave.put("wob_amt", strldgWobBal.substring(0, intMyldg));
+            /*            ldgSave.put("drv_ldg_amt", "0");*/
+            ldgSave.put("drv_ldg_amt", strdrvElig.substring(0, intMyDrvElg));
+            ldgSave.put("jnt_ldg_amt", strJNEligi.substring(0, intJNEligi));
+            ldgSave.put("total_ldg_amt", strLdgEli.substring(0, intLdgEli));
             ldgSave.put("attch_bill", "");
+
             JSONArray ldgArySve = new JSONArray();
             for (int jd = 0; jd < jointLodging.getChildCount(); jd++) {
                 View jdV = jointLodging.getChildAt(jd);
@@ -2502,7 +2524,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 jsnLdgSve.put("emp_Dept", txtJNDept.getText().toString());
                 jsnLdgSve.put("emp_HQ", txtJNHQ.getText().toString());
                 jsnLdgSve.put("emp_Mob", txtJNMob.getText().toString());
-                jsnLdgSve.put("emp_ldg_amt", "");
+                jsnLdgSve.put("emp_ldg_amt", strJNMyEli.substring(0, intJNMyEli));
                 ldgArySve.put(jsnLdgSve);
 
 
