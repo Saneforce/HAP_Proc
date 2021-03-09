@@ -2460,17 +2460,23 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             Log.e("txtStyDaystoString()", txtJNEligi.getText().toString());
             Log.e("txtStyDaystoString()", lbl_ldg_eligi.getText().toString());
 
-/*
-            Integer jk = (Integer.valueOf(txtMyEligi.getText().toString().substring(3, 7))) / Integer.valueOf((txtStyDays.getText().toString()));
-            Log.e("Integer.valueOf(", String.valueOf(jk));*/
+
+            String s = txtMyEligi.getText().toString();
+            String s1 = s.substring(s.indexOf(".")+1);
+            s1.trim();
+
+            String separator =".";
+            int sepPos = s1.lastIndexOf(separator);
+
+            Log.v("TO_ELIGIBLE_DATE",s1);
+            Log.v("TO_ELIGIBLE_DATE", s1.substring(0,sepPos));
+
 
             JSONObject ldgSave = new JSONObject();
             ldgSave.put("ldg_type", txt_ldg_type.getText().toString());
             ldgSave.put("ldg_type_sty", lodgStyLocation.getText().toString());
             ldgSave.put("sty_dte", ldg_cin.getText().toString());
             ldgSave.put("to_dte", ldg_cout.getText().toString());
-
-
             ldgSave.put("elgble", txtMyEligi.getText().toString().substring(3, 7));
             ldgSave.put("noOfDays", txtStyDays.getText().toString());
             ldgSave.put("bil_amt", edt_ldg_bill.getText().toString());
@@ -2479,7 +2485,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldgSave.put("jnt_ldg_amt", txtJNEligi.getText().toString().substring(3, 7));
             ldgSave.put("total_ldg_amt", lbl_ldg_eligi.getText().toString().substring(3, 7));
             ldgSave.put("attch_bill", "");
-/*
             JSONArray ldgArySve = new JSONArray();
             for (int jd = 0; jd < jointLodging.getChildCount(); jd++) {
                 View jdV = jointLodging.getChildAt(jd);
@@ -2511,7 +2516,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             ldgSave.put("Loding_Emp", ldgArySve);
 
-            Log.v("LODGING_SAVE", ldgSave.toString());*/
+            Log.v("LODGING_SAVE", ldgSave.toString());
 
             /*Travel Mode Json*/
             JSONObject trDet = new JSONObject();
