@@ -1821,7 +1821,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
         }
 
-
     }
 
     public void localConDraft(JsonArray lcDraft) {
@@ -2487,9 +2486,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             String separator4 = ".";
             int intLdgEli = strLdgEli.lastIndexOf(separator4);
 
-            String strJNMyEli = txtJNMyEli.getText().toString().substring(txtJNMyEli.getText().toString().indexOf(".") + 1).trim();
-            String separator5 = ".";
-            int intJNMyEli = strJNMyEli.lastIndexOf(separator5);
+
 
 
             JSONObject ldgSave = new JSONObject();
@@ -2517,6 +2514,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 txtJNHQ = (TextView) jdV.findViewById(R.id.txtJNHQ);
                 txtJNMob = (TextView) jdV.findViewById(R.id.txtJNMob);
                 txtJNMyEli = (TextView) jdV.findViewById(R.id.txtJNMyEli);
+
+
+                String strJNMyEli = txtJNMyEli.getText().toString().substring(txtJNMyEli.getText().toString().indexOf(".") + 1).trim();
+                String separator5 = ".";
+                int intJNMyEli = strJNMyEli.lastIndexOf(separator5);
+
                 JSONObject jsnLdgSve = new JSONObject();
                 jsnLdgSve.put("emp_cde", edt_ldg_JnEmp.getText().toString());
                 jsnLdgSve.put("emp_Name", txtJNName.getText().toString());
