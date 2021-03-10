@@ -537,6 +537,7 @@
                                         <ImageView
                                             android:id="@+id/lodg_attach"
                                             android:layout_width="@dimen/C40dp"
+                                            android:visibility="gone"
                                             android:layout_height="@dimen/C40dp"
                                             android:padding="@dimen/C2dp"
                                             android:src="@drawable/attach_files" />

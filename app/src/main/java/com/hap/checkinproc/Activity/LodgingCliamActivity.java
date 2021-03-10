@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity_Hap.AttachementActivity;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.R;
@@ -170,6 +171,25 @@ public class LodgingCliamActivity extends AppCompatActivity {
                 } else {
                     txt_ldg_type.setText("Stay At Relative's House");
                 }
+
+                img_lodg_prvw.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+
+                        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                        stat.putExtra("position", txtLodgUKey.getText().toString());
+                        stat.putExtra("headTravel", "LOD");
+                        stat.putExtra("mode", "Room");
+                        stat.putExtra("Delete", "1");
+                        stat.putExtra("date", getIntent().getSerializableExtra("date"));
+                        startActivity(stat);
+
+
+                    }
+                });
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
