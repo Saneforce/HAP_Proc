@@ -3,9 +3,11 @@ package com.hap.checkinproc.Activity;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,10 +18,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedDispatcher;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.AttachementActivity;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
@@ -43,49 +44,26 @@ public class LodgingCliamActivity extends AppCompatActivity {
     ImageView imgBck, localImage;
     TextView txt_date, txt_ldg_type, TxtStartedKm, TxtClosingKm, modeTextView, travelTypeMode,
             TotalTravelledKm, txtBusFrom, txtBusTo, txtTaClaim, PersonalTextKM, PersonalKiloMeter,
-            txtDailyAllowance, editText, ldg_cin, ldg_cout, txtJNName, txtJNDesig, txtJNDept, txtJNHQ, txtJNMob,
+            txtDailyAllowance, edt_ldg_JnEmp, ldg_cin, ldg_cout, txtJNName, txtJNDesig, txtJNDept, txtJNHQ, txtJNMob,
             lblHdBill, lblHdBln, ldgWOBBal, ldgAdd, txtJNMyEli, txtMyEligi, txtDrivEligi, lbl_ldg_eligi, txt_totDA,
             fuelAmount, TextTotalAmount, oeEditext, localText, OeText, grandTotal, txtallamt, txt_BrdAmt,
             txt_DrvBrdAmt, txtJointAdd, txtJNEligi, txtTAamt, txtDesig, txtDept, txtEmpId, txtName, oeTxtUKey, oeTxtUKeys,
             lcTxtUKey, lcTxtUKeys, tvTxtUKey, tvTxtUKeys, txtMaxKm, txtDrvrBrod, txtStyDays, txtLodgUKey;
 
-    EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt1, edt_ldg_JnEmp,
-            edt_ldg_bill, lodgStyLocation;
+    EditText edt_ldg_bill, lodgStyLocation;
 
-    ImageView deleteButton, previewss, taAttach, lcAttach, oeAttach, lcPreview, oePreview, endkmimage, startkmimage,
-            img_lodg_prvw, img_lodg_atta, mapZoomIn;
+    ImageView img_lodg_prvw, img_lodg_atta;
 
-    String SF_code = "", div = "", State_Code = "", StartedKm = "", ClosingKm = "", ModeOfTravel = "", PersonalKm = "",
-            DriverNeed = "", DateForAPi = "", DateTime = "", shortName = "", Exp_Name = "", Id = "", userEnter = "",
-            attachment = "", maxAllowonce = "", strRetriveType = "", StrToEnd = "", StrBus = "", StrTo = "", StrDaName = "",
-            OEdynamicLabel = "", strFuelAmount = "", StrModeValue = "", dynamicLabel = "", StrDailyAllowance = "", ldgEmpName = "",
-            witOutBill = "", ValCd = "", fullPath = "", filePath = "", editMode = "", allowanceAmt = "", myldgEliAmt = "", myBrdEliAmt = "",
-            drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "", finalPath = "",
-            attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "", tvEditcnt = "", OeUKey = "",
-            TlUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "";
-
-    Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
-            oePosCnt = 0, lcPosCnt = 0, tvSize = 0, styDate = 0;
-
-    int size = 0, lcSize = 0, OeSize = 0;
-
-    Double tofuel = 0.0, ldgEliAmt = 0.0, ldgDrvEligi = 0.0, gTotal = 0.0, TotLdging = 0.0,
-            GrandTotalAllowance = 0.0, fAmount = 0.0, doubleAmount = 0.0, myBrdAmt = 0.0, drvBrdAmt = 0.0,
-            otherExp = 0.0, localCov = 0.0, sum = 0.0, sumsTotss = 0.0, sumsTot = 0.0;
+    String DateTime = "";
 
 
+    @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lodging_cliam);
 
         startService(new Intent(this, TimerService.class));
-
-
-       /* intent.putExtra("lodgAllowance", ldArray.toString());
-        intent.putExtra("lodgAll_Total", lodgTotal);
-        intent.putExtra("date", String.valueOf(getIntent().getSerializableExtra("date")));*/
-
 
         ldg_cin = findViewById(R.id.from_picker);
         ldg_cout = findViewById(R.id.to_picker);
@@ -128,17 +106,27 @@ public class LodgingCliamActivity extends AppCompatActivity {
 
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void lodging(JSONArray lodingDraft) {
 
-        JSONArray jsonAddition = null;
-        JSONObject ldraft = null;
+
         for (int i = 0; i < lodingDraft.length(); i++) {
+
+
             try {
+
+                JSONArray jsonAddition = null;
+                JSONObject ldraft = null;
+
                 ldraft = (JSONObject) lodingDraft.get(i);
                 ldg_cin.setText(String.valueOf(ldraft.get("Stay_Date")));
                 ldg_cout.setText(String.valueOf(ldraft.get("To_Date")));
                 lodgStyLocation.setText(String.valueOf(ldraft.get("Ldg_Stay_Loc")));
 
+                jsonAddition = ldraft.getJSONArray("Additional");
+
+
+                Log.v("JSON_ADITION", String.valueOf(jsonAddition.length()));
 
                 Double totlLdgAmt = Double.valueOf(String.valueOf(ldraft.get("Total_Ldg_Amount")));
                 Integer noday = Integer.valueOf(String.valueOf(ldraft.get("NO_Of_Days")));
@@ -190,10 +178,45 @@ public class LodgingCliamActivity extends AppCompatActivity {
                     }
                 });
 
+
+                JSONObject jsonObjectAdd = null;
+                for (int l = 0; l < jsonAddition.length(); l++) {
+
+                    jsonObjectAdd = (JSONObject) jsonAddition.get(l);
+
+                    jointLodging.setVisibility(View.VISIBLE);
+                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                    layoutParams.setMargins(15, 15, 15, 15);
+                    View rowView = inflater.inflate(R.layout.activity_approval_lodg, null);
+                    jointLodging.addView(rowView, layoutParams);
+
+                    Integer jfd = jointLodging.indexOfChild(rowView);
+
+                    View jdV = jointLodging.getChildAt(jfd);
+                    edt_ldg_JnEmp = (EditText) jdV.findViewById(R.id.edt_ldg_JnEmp);
+                    txtJNName = (TextView) jdV.findViewById(R.id.txtJNName);
+                    txtJNDesig = (TextView) jdV.findViewById(R.id.txtJNDesig);
+                    txtJNDept = (TextView) jdV.findViewById(R.id.txtJNDept);
+                    txtJNHQ = (TextView) jdV.findViewById(R.id.txtJNHQ);
+                    txtJNMob = (TextView) jdV.findViewById(R.id.txtJNMob);
+                    txtJNMyEli = (TextView) jdV.findViewById(R.id.txtJNMyEli);
+
+                    edt_ldg_JnEmp.setText(jsonObjectAdd.getString("Emp_Code"));
+                    txtJNName.setText(jsonObjectAdd.getString("Sf_Name"));
+                    txtJNDesig.setText(jsonObjectAdd.getString("Desig"));
+                    txtJNDept.setText(jsonObjectAdd.getString("Dept"));
+                    txtJNHQ.setText(jsonObjectAdd.getString("Sf_Hq"));
+                    txtJNMob.setText(jsonObjectAdd.getString("Sf_Mobile"));
+
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
 
 
 
