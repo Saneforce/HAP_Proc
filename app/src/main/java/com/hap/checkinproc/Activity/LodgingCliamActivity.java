@@ -1,0 +1,280 @@
+package com.hap.checkinproc.Activity;
+
+import android.animation.ArgbEvaluator;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity_Hap.ERT;
+import com.hap.checkinproc.Activity_Hap.Help_Activity;
+import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.text.DecimalFormat;
+
+public class LodgingCliamActivity extends AppCompatActivity {
+
+    LinearLayout linlocalCon, linImgPrv, jointLodging;
+    TextView editTexts, txtLCAmnt, lcUKey;
+    EditText edtLcFare, edt;
+    LinearLayout Dynamicallowance;
+    String LCClaim = "", LcUKey = "";
+    JSONArray jsonArray = null;
+    ImageView imgBck, localImage;
+    TextView txt_date, txt_ldg_type, TxtStartedKm, TxtClosingKm, modeTextView, travelTypeMode,
+            TotalTravelledKm, txtBusFrom, txtBusTo, txtTaClaim, PersonalTextKM, PersonalKiloMeter,
+            txtDailyAllowance, editText, ldg_cin, ldg_cout, txtJNName, txtJNDesig, txtJNDept, txtJNHQ, txtJNMob,
+            lblHdBill, lblHdBln, ldgWOBBal, ldgAdd, txtJNMyEli, txtMyEligi, txtDrivEligi, lbl_ldg_eligi, txt_totDA,
+            fuelAmount, TextTotalAmount, oeEditext, localText, OeText, grandTotal, txtallamt, txt_BrdAmt,
+            txt_DrvBrdAmt, txtJointAdd, txtJNEligi, txtTAamt, txtDesig, txtDept, txtEmpId, txtName, oeTxtUKey, oeTxtUKeys,
+            lcTxtUKey, lcTxtUKeys, tvTxtUKey, tvTxtUKeys, txtMaxKm, txtDrvrBrod, txtStyDays, txtLodgUKey;
+
+    EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt1, edt_ldg_JnEmp,
+            edt_ldg_bill, lodgStyLocation;
+
+    ImageView deleteButton, previewss, taAttach, lcAttach, oeAttach, lcPreview, oePreview, endkmimage, startkmimage,
+            img_lodg_prvw, img_lodg_atta, mapZoomIn;
+
+    String SF_code = "", div = "", State_Code = "", StartedKm = "", ClosingKm = "", ModeOfTravel = "", PersonalKm = "",
+            DriverNeed = "", DateForAPi = "", DateTime = "", shortName = "", Exp_Name = "", Id = "", userEnter = "",
+            attachment = "", maxAllowonce = "", strRetriveType = "", StrToEnd = "", StrBus = "", StrTo = "", StrDaName = "",
+            OEdynamicLabel = "", strFuelAmount = "", StrModeValue = "", dynamicLabel = "", StrDailyAllowance = "", ldgEmpName = "",
+            witOutBill = "", ValCd = "", fullPath = "", filePath = "", editMode = "", allowanceAmt = "", myldgEliAmt = "", myBrdEliAmt = "",
+            drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "", finalPath = "",
+            attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "", tvEditcnt = "", OeUKey = "",
+            TlUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "";
+
+    Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
+            oePosCnt = 0, lcPosCnt = 0, tvSize = 0, styDate = 0;
+
+    int size = 0, lcSize = 0, OeSize = 0;
+
+    Double tofuel = 0.0, ldgEliAmt = 0.0, ldgDrvEligi = 0.0, gTotal = 0.0, TotLdging = 0.0,
+            GrandTotalAllowance = 0.0, fAmount = 0.0, doubleAmount = 0.0, myBrdAmt = 0.0, drvBrdAmt = 0.0,
+            otherExp = 0.0, localCov = 0.0, sum = 0.0, sumsTotss = 0.0, sumsTot = 0.0;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_lodging_cliam);
+
+        startService(new Intent(this, TimerService.class));
+
+
+       /* intent.putExtra("lodgAllowance", ldArray.toString());
+        intent.putExtra("lodgAll_Total", lodgTotal);
+        intent.putExtra("date", String.valueOf(getIntent().getSerializableExtra("date")));*/
+
+
+        ldg_cin = findViewById(R.id.from_picker);
+        ldg_cout = findViewById(R.id.to_picker);
+        lodgStyLocation = findViewById(R.id.edt_stay_loc);
+        txtLodgUKey = findViewById(R.id.log_ukey);
+
+        linImgPrv = findViewById(R.id.lin_img_prv);
+        txtMyEligi = findViewById(R.id.txtMyEligi);
+        txtDrivEligi = findViewById(R.id.txtDrvLgd);
+        lbl_ldg_eligi = findViewById(R.id.lbl_ldg_eligi);
+        lblHdBill = findViewById(R.id.lblHdBill);
+        lblHdBln = findViewById(R.id.lblHdBln);
+        ldgWOBBal = findViewById(R.id.ldgWOBBal);
+        edt_ldg_bill = findViewById(R.id.edt_ldg_bill);
+        img_lodg_prvw = findViewById(R.id.lodg_preview);
+        img_lodg_atta = findViewById(R.id.lodg_attach);
+        txtJNEligi = findViewById(R.id.txtJNEligi);
+        txt_ldg_type = findViewById(R.id.ldg_typ);
+        jointLodging = findViewById(R.id.lin_join_person);
+        txtStyDays = findViewById(R.id.txt_stay_total);
+
+        LCClaim = String.valueOf(getIntent().getSerializableExtra("lodgAllowance"));
+
+        String.valueOf(getIntent().getSerializableExtra("date"));
+
+        getToolbar();
+        imgBck = findViewById(R.id.imag_back);
+        imgBck.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
+        try {
+            jsonArray = new JSONArray(LCClaim);
+            lodging(jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void lodging(JSONArray lodingDraft) {
+
+        JSONArray jsonAddition = null;
+        JSONObject ldraft = null;
+        for (int i = 0; i < lodingDraft.length(); i++) {
+            try {
+                ldraft = (JSONObject) lodingDraft.get(i);
+                ldg_cin.setText(String.valueOf(ldraft.get("Stay_Date")));
+                ldg_cout.setText(String.valueOf(ldraft.get("To_Date")));
+                lodgStyLocation.setText(String.valueOf(ldraft.get("Ldg_Stay_Loc")));
+
+
+                Double totlLdgAmt = Double.valueOf(String.valueOf(ldraft.get("Total_Ldg_Amount")));
+                Integer noday = Integer.valueOf(String.valueOf(ldraft.get("NO_Of_Days")));
+
+                txtLodgUKey.setText(String.valueOf(ldraft.get("Ukey")));
+                double elibs = Integer.valueOf(String.valueOf(ldraft.get("Eligible")));
+                /*            double elibs = elib * noday;*/
+
+                txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(elibs));
+
+                double srtjdgAmt = Integer.valueOf(String.valueOf(ldraft.get("Joining_Ldg_Amount")));
+                txtJNEligi.setText("Rs." + new DecimalFormat("##0.00").format(srtjdgAmt));
+                Double wobal = Double.valueOf(String.valueOf(ldraft.get("WOB_Amt")));
+
+                Log.v("ldgWOBBal", String.valueOf(wobal));
+                ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(wobal));
+
+                Log.v("ldgWOBBal_______", ldgWOBBal.getText().toString());
+
+                edt_ldg_bill.setText(String.valueOf(ldraft.get("Bill_Amt")));
+                lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(totlLdgAmt));
+
+                txtStyDays.setText(String.valueOf(ldraft.get("NO_Of_Days")));
+
+                if (String.valueOf(ldraft.get("Lodging_Type")).equals("Joined Stay")) {
+                    txt_ldg_type.setText("Joined Stay");
+                } else if (String.valueOf(ldraft.get("Lodging_Type")).equals("Independent Stay")) {
+                    txt_ldg_type.setText("Independent Stay");
+
+                } else {
+                    txt_ldg_type.setText("Stay At Relative's House");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+
+
+/*
+            JsonObject jsonObjectAdd = null;
+            for (int l = 0; l < jsonAddition.size(); l++) {
+
+
+                Log.e("LOCTAION_LRD", String.valueOf(jsonAddition.size()));
+
+                jsonObjectAdd = (JsonObject) jsonAddition.get(l);
+
+                jointLodging.setVisibility(View.VISIBLE);
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                layoutParams.setMargins(15, 15, 15, 15);
+                View rowView = inflater.inflate(R.layout.activity_loding_layout, null);
+                jointLodging.addView(rowView, layoutParams);
+
+                Integer jfd = jointLodging.indexOfChild(rowView);
+
+                View jdV = jointLodging.getChildAt(jfd);
+                edt_ldg_JnEmp = (EditText) jdV.findViewById(R.id.edt_ldg_JnEmp);
+                txtJNName = (TextView) jdV.findViewById(R.id.txtJNName);
+                txtJNDesig = (TextView) jdV.findViewById(R.id.txtJNDesig);
+                txtJNDept = (TextView) jdV.findViewById(R.id.txtJNDept);
+                txtJNHQ = (TextView) jdV.findViewById(R.id.txtJNHQ);
+                txtJNMob = (TextView) jdV.findViewById(R.id.txtJNMob);
+                txtJNMyEli = (TextView) jdV.findViewById(R.id.txtJNMyEli);
+
+                edt_ldg_JnEmp.setText(jsonObjectAdd.get("Emp_Code").getAsString());
+                txtJNName.setText(jsonObjectAdd.get("Sf_Name").getAsString());
+                txtJNDesig.setText(jsonObjectAdd.get("Desig").getAsString());
+                txtJNDept.setText(jsonObjectAdd.get("Dept").getAsString());
+                txtJNHQ.setText(jsonObjectAdd.get("Sf_Hq").getAsString());
+                txtJNMob.setText(jsonObjectAdd.get("Sf_Mobile").getAsString());
+                float sum = jsonObjectAdd.get("Ldg_Amount").getAsFloat();
+                txtJNMyEli.setText("Rs." + new DecimalFormat("##0.00").format(sum));
+
+            }*/
+        }
+
+    }
+
+
+    public void getToolbar() {
+        TextView txtHelp = findViewById(R.id.toolbar_help);
+        ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+
+        TextView txtErt = findViewById(R.id.toolbar_ert);
+        TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
+
+        txtErt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ERT.class));
+            }
+        });
+        txtPlaySlip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
+        ObjectAnimator textColorAnim;
+        textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
+        textColorAnim.setDuration(500);
+        textColorAnim.setEvaluator(new ArgbEvaluator());
+        textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
+        textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
+        textColorAnim.start();
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+    }
+
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    LodgingCliamActivity.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+    }
+
+}

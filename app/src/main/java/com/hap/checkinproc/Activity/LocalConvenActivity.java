@@ -126,8 +126,9 @@ public class LocalConvenActivity extends AppCompatActivity {
 
 
         JSONArray jsonAddition = null;
+        JSONObject lcdraftJson = null;
         for (int i = 0; i < lcDraft.length(); i++) {
-            JSONObject lcdraftJson = null;
+
             try {
                 lcdraftJson = (JSONObject) lcDraft.get(i);
                 jsonAddition = lcdraftJson.getJSONArray("Additional");
