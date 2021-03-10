@@ -1504,6 +1504,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         }
 
                         if (StrToEnd.equals("0")) {
+                            btn_sub.setVisibility(View.VISIBLE);
+                            buttonSave.setVisibility(View.VISIBLE);
                             StrBus = StrBus.replaceAll("^[\"']+|[\"']+$", "");
                             StrTo = StrTo.replaceAll("^[\"']+|[\"']+$", "");
                             for (int j = 0; j < trvldArray.size(); j++) {
@@ -1741,7 +1743,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             Double totlLdgAmt = Double.valueOf(ldraft.get("Total_Ldg_Amount").getAsString());
             Integer noday = Integer.valueOf(ldraft.get("NO_Of_Days").getAsString());
 
-
+//            txtLodgUKey.setText(ldraft.get("Ukey").getAsString());
             double elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
             /*            double elibs = elib * noday;*/
 
@@ -2503,6 +2505,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldgSave.put("jnt_ldg_amt", strJNEligi.substring(0, intJNEligi));
             ldgSave.put("total_ldg_amt", strLdgEli.substring(0, intLdgEli));
             ldgSave.put("attch_bill", "");
+
+            ldgSave.put("u_key", txtLodgUKey.getText().toString());
 
             JSONArray ldgArySve = new JSONArray();
             for (int jd = 0; jd < jointLodging.getChildCount(); jd++) {

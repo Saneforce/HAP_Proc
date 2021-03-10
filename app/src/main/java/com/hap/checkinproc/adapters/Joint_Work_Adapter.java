@@ -1,4 +1,4 @@
-package com.hap.checkinproc.Status_Adapter;
+package com.hap.checkinproc.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -52,19 +53,14 @@ public class Joint_Work_Adapter extends RecyclerView.Adapter<Joint_Work_Adapter.
     public void onBindViewHolder(Joint_Work_Adapter.MyViewHolder holder, int position) {
         Common_Model Onduty_Status_Model = extendedShift_status_models.get(position);
         holder.jointworkname.setText(extendedShift_status_models.get(position).getName());
-        holder.check.setChecked(extendedShift_status_models.get(position).isSelected());
-
         holder.check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (holder.check.isChecked()) {
 
-                    updateUi.onIntentClick(position,holder.check.isChecked());
-                }
-                else if (!holder.check.isChecked())
-                {
-                    updateUi.onIntentClick(position,holder.check.isChecked());
-                }
+
+                updateUi.onIntentClick(position,false);
+
+
             }
         });
 
@@ -78,12 +74,12 @@ public class Joint_Work_Adapter extends RecyclerView.Adapter<Joint_Work_Adapter.
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView jointworkname, type, shift, odlocation, POV, intime, outtime, geoin, geoout, applieddate, OStatus, Papproved, SfName;
         RelativeLayout sf_namelayout;
-        CheckBox check;
+        ImageView check;
 
         public MyViewHolder(View view) {
             super(view);
             jointworkname = (TextView) view.findViewById(R.id.textView);
-            check = (CheckBox) view.findViewById(R.id.checkBox_select);
+            check = view.findViewById(R.id.checkBox_select);
             geoout = (TextView) view.findViewById(R.id.txt_geo_out_time);
             applieddate = (TextView) view.findViewById(R.id.applieddate);
             Papproved = (TextView) view.findViewById(R.id.applieddate);

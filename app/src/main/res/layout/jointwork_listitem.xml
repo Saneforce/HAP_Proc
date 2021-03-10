@@ -10,10 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="2">
+        android:orientation="horizontal">
 
-        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        <TextView
             android:id="@+id/textView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -23,13 +22,11 @@
             android:text="thirumalaivasan"
             android:textSize="@dimen/C17dp" />
 
-        <CheckBox
+        <ImageView
             android:id="@+id/checkBox_select"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/C10dp"
-            android:layout_weight="1.5"
-            android:text=""
-             />
+            android:layout_margin="@dimen/C10dp"
+            android:src="@drawable/delete_cart" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
