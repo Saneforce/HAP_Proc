@@ -6,7 +6,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -15,24 +17,26 @@
             android:id="@+id/toolbar3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:background="@color/colorAccent"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme">
 
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textView9"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="45dp"
                 android:fontFamily="@font/alegreya_sans_sc"
-                android:text="@string/DayPlan"
+                android:text="@string/Tourplan"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
-
         </androidx.appcompat.widget.Toolbar>
 
         <androidx.core.widget.NestedScrollView
@@ -56,412 +60,376 @@
                     android:orientation="vertical"
                     android:visibility="visible">
 
-
-                    <LinearLayout
-                        android:id="@+id/worktypelayout"
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="horizontal"
+                        android:padding="5dp">
 
                         <TextView
+                            android:id="@+id/tourdate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
                             android:fontFamily="@font/basic"
-                            android:text="@string/txt_worktype"
-                            android:textColor="#000000"
-                            android:textStyle="bold" />
+                            android:text="Time"
+                            android:textColor="@color/color_red" />
 
 
-                        <TextView
-                            android:id="@+id/worktype_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="39dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/round_white_backround"
-                            android:gravity="center_vertical"
-                            android:hint="Select the worktype"
-                            android:padding="@dimen/C4dp"
-                            android:textSize="13sp" />
-                    </LinearLayout>
+                    </RelativeLayout>
+
                     <LinearLayout
-                        android:id="@+id/Procrumentlayout"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:visibility="visible">
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/C10dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:id="@+id/hqlayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="15dp"
-                                android:fontFamily="@font/basic"
-                                android:text="@string/txt_hq"
-                                android:textColor="#000000"
-                                android:textStyle="bold" />
-
-
-                            <TextView
-                                android:id="@+id/hq_text"
-                                android:layout_width="match_parent"
-                                android:layout_height="39dp"
-                                android:layout_marginTop="10dp"
-                                android:background="@drawable/round_white_backround"
-                                android:gravity="center_vertical"
-                                android:hint="Select the HQ"
-                                android:padding="@dimen/C4dp"
-                                android:textSize="13sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/chillinglayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="15dp"
-                                android:fontFamily="@font/basic"
-                                android:text="@string/txt_chillingtext"
-                                android:textColor="#000000"
-                                android:textStyle="bold" />
-
-
-                            <TextView
-                                android:id="@+id/chilling_text"
-                                android:layout_width="match_parent"
-                                android:layout_height="39dp"
-                                android:layout_marginTop="10dp"
-                                android:background="@drawable/round_white_backround"
-                                android:gravity="center_vertical"
-                                android:hint="Select the Center"
-                                android:padding="@dimen/C4dp"
-                                android:textSize="13sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/shiftypelayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="15dp"
-                                android:fontFamily="@font/basic"
-                                android:text="@string/txt_shifttype"
-                                android:textColor="#000000"
-                                android:textStyle="bold" />
-
-
-                            <TextView
-                                android:id="@+id/shift_type"
-                                android:layout_width="match_parent"
-                                android:layout_height="39dp"
-                                android:layout_marginTop="10dp"
-                                android:background="@drawable/round_white_backround"
-                                android:gravity="center_vertical"
-                                android:hint="Select the Shift M/E"
-                                android:padding="@dimen/C4dp"
-                                android:textSize="13sp" />
-                        </LinearLayout>
-
-
-                        <LinearLayout
+                            android:id="@+id/layoutData"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginBottom="10dp"
-                            android:orientation="horizontal"
-                            android:weightSum="2">
+                            android:orientation="vertical"
+                            android:visibility="visible">
+
 
                             <LinearLayout
+                                android:id="@+id/worktypelayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
-
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-
-                                    android:text="From Date"
-                                    android:textColor="#000000"
-                                    android:textStyle="bold"
-
-                                    />
-
-                                <EditText
-                                    android:id="@+id/from_date"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-
-                                    android:layout_marginRight="10dp"
-                                    android:layout_marginBottom="10dp"
-                                    android:background="@drawable/round_white_backround"
-                                    android:clickable="false"
-                                    android:elevation="@dimen/C5dp"
-                                    android:focusable="false"
-                                    android:hint="Select the date"
-                                    android:inputType="date"
-                                    android:padding="@dimen/C10dp"
-                                    android:textColor="@color/grey_500"
-                                    android:textSize="@dimen/C13dp" />
-
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:layout_width="match_parent"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="10dp"
-                                    android:text="To Date"
+                                    android:layout_marginTop="15dp"
+                                    android:fontFamily="@font/basic"
+                                    android:text="@string/txt_worktype"
                                     android:textColor="#000000"
                                     android:textStyle="bold" />
 
-                                <EditText
-                                    android:id="@+id/to_date"
+
+                                <TextView
+                                    android:id="@+id/worktype_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="39dp"
+                                    android:layout_marginTop="10dp"
+                                    android:background="@drawable/round_white_backround"
+                                    android:gravity="center_vertical"
+                                    android:hint="Select the worktype"
+                                    android:padding="@dimen/C4dp"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/Procrumentlayout"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:visibility="visible">
+
+                                <LinearLayout
+                                    android:id="@+id/hqlayout"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
+                                    android:orientation="vertical">
 
-                                    android:layout_marginBottom="10dp"
-                                    android:background="@drawable/round_white_backround"
-                                    android:clickable="false"
-                                    android:elevation="@dimen/C5dp"
-                                    android:focusable="false"
-                                    android:hint="Select the date"
-                                    android:inputType="date"
-                                    android:padding="@dimen/C10dp"
-                                    android:textColor="@color/grey_500"
-                                    android:textSize="@dimen/C13dp" />
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="15dp"
+                                        android:fontFamily="@font/basic"
+                                        android:text="@string/txt_hq"
+                                        android:textColor="#000000"
+                                        android:textStyle="bold" />
+
+
+                                    <TextView
+                                        android:id="@+id/hq_text"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="39dp"
+                                        android:layout_marginTop="10dp"
+                                        android:background="@drawable/round_white_backround"
+                                        android:gravity="center_vertical"
+                                        android:hint="Select the HQ"
+                                        android:padding="@dimen/C4dp"
+                                        android:textSize="13sp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/chillinglayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="15dp"
+                                        android:fontFamily="@font/basic"
+                                        android:text="@string/txt_chillingtext"
+                                        android:textColor="#000000"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/chilling_text"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="39dp"
+                                        android:layout_marginTop="10dp"
+                                        android:background="@drawable/round_white_backround"
+                                        android:gravity="center_vertical"
+                                        android:hint="Select the Center"
+                                        android:padding="@dimen/C4dp"
+                                        android:textSize="13sp" />
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/shiftypelayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="15dp"
+                                        android:fontFamily="@font/basic"
+                                        android:text="@string/txt_shifttype"
+                                        android:textColor="#000000"
+                                        android:textStyle="bold" />
+
+                                    <TextView
+                                        android:id="@+id/shift_type"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="39dp"
+                                        android:layout_marginTop="10dp"
+                                        android:background="@drawable/round_white_backround"
+                                        android:gravity="center_vertical"
+                                        android:hint="Select the Shift M/E"
+                                        android:padding="@dimen/C4dp"
+                                        android:textSize="13sp" />
+                                </LinearLayout>
+
                             </LinearLayout>
-                        </LinearLayout>
 
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/distributors_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/C15dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:fontFamily="@font/basic"
-                            android:text="@string/txt_distributors"
-                            android:textColor="#000000"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/distributor_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="39dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/round_white_backround"
-                            android:gravity="center_vertical"
-                            android:hint="Select the Distributor"
-                            android:padding="@dimen/C4dp"
-                            android:textSize="13sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/route_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/C15dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:fontFamily="@font/basic"
-                            android:text="@string/txt_route"
-                            android:textColor="#000000"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/route_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="39dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/round_white_backround"
-                            android:gravity="center_vertical"
-                            android:hint="Select the Route"
-                            android:padding="@dimen/C4dp"
-                            android:textSize="13sp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/joint_work_lt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/C15dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:fontFamily="@font/basic"
-                            android:text="@string/txt_jointwork"
-                            android:textColor="#000000"
-                            android:textStyle="bold" />
-
-                        <LinearLayout
-                            android:id="@+id/jointwork_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="39dp"
-                            android:layout_gravity="center"
-                            android:background="@drawable/round_white_backround"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-
-                            <RelativeLayout
+                            <LinearLayout
+                                android:id="@+id/distributors_layout"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="15dp"
+                                android:orientation="vertical">
 
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentStart="true"
-                                    android:layout_alignParentLeft="true"
+                                    android:fontFamily="@font/basic"
+                                    android:text="@string/txt_distributors"
+                                    android:textColor="#000000"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/distributor_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="39dp"
+                                    android:layout_marginTop="10dp"
                                     android:background="@drawable/round_white_backround"
+                                    android:gravity="center_vertical"
+                                    android:hint="Select the Distributor"
                                     android:padding="@dimen/C4dp"
-                                    android:text="Select the joint work"
-                                    android:textSize="13sp"></TextView>
+                                    android:textSize="13sp" />
 
+                            </LinearLayout>
 
-                                <LinearLayout
+                            <LinearLayout
+                                android:id="@+id/route_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C15dp"
+                                android:orientation="vertical">
+
+                                <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_alignParentLeft="true"
-                                    android:layout_alignParentEnd="true"
-                                    android:layout_alignParentRight="true"
+                                    android:layout_marginTop="15dp"
+                                    android:fontFamily="@font/basic"
+                                    android:text="@string/txt_route"
+                                    android:textColor="#000000"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/route_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="39dp"
+                                    android:layout_marginTop="10dp"
+                                    android:background="@drawable/round_white_backround"
+                                    android:gravity="center_vertical"
+                                    android:hint="Select the Route"
+                                    android:padding="@dimen/C4dp"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+
+                            <!--  <LinearLayout
+                                  android:id="@+id/joint_work_lt"
+                                  android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:layout_marginTop="@dimen/C15dp"
+                                  android:orientation="vertical">
+
+                                  <TextView
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:layout_marginTop="15dp"
+                                      android:fontFamily="@font/basic"
+                                      android:text="@string/txt_jointwork"
+                                      android:textColor="#000000"
+                                      android:textStyle="bold" />
+
+                                  <LinearLayout
+                                      android:id="@+id/jointwork_layout"
+                                      android:layout_width="match_parent"
+                                      android:layout_height="wrap_content"
+                                      android:layout_marginTop="@dimen/C15dp"
+                                      android:orientation="horizontal">
+
+                                      <TextView
+
+                                          android:layout_width="match_parent"
+                                          android:layout_height="wrap_content"
+                                          android:layout_marginTop="@dimen/C10dp"
+                                          android:layout_weight="1"
+                                          android:background="@drawable/round_white_backround"
+                                          android:hint="@string/txt_select_jointwork"
+                                          android:padding="@dimen/C10dp" />
+                                      <ImageView
+                                          android:id="@+id/arowimg"
+                                          android:layout_width="wrap_content"
+                                          android:layout_height="wrap_content"
+                                          android:layout_gravity="center"
+                                          android:src="@drawable/arrow_down" />
+
+                                  </LinearLayout>
+                              </LinearLayout>-->
+
+
+                            <LinearLayout
+                                android:id="@+id/jointwork_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C15dp"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
                                     android:orientation="horizontal">
 
-                                    <LinearLayout
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/basic"
+                                        android:text="@string/txt_jointwork"
+                                        android:textColor="#000000"
+                                        android:textStyle="bold" />
 
+                                    <LinearLayout
                                         android:layout_width="23dp"
                                         android:layout_height="23dp"
+                                        android:layout_marginLeft="15dp"
                                         android:background="@drawable/circle">
-
                                         <TextView
                                             android:id="@+id/text_tour_plancount"
                                             android:layout_width="match_parent"
                                             android:layout_height="match_parent"
-                                            android:layout_gravity="center"
-                                            android:gravity="center"
                                             android:maxEms="2"
                                             android:text="0"
+                                            android:textAlignment="center"
                                             android:textColor="@android:color/white"></TextView>
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:orientation="horizontal">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_margin="@dimen/C2dp"
+                                            android:layout_weight="1"
+                                            android:background="@drawable/round_white_backround"
+                                            android:elevation="@dimen/C2dp"
+                                            android:orientation="vertical"
+                                            android:padding="5dp">
+
+                                            <EditText
+                                                android:id="@+id/empidedittext"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:background="@null"
+                                                android:hint="EMP ID"
+                                                android:inputType="text"
+                                                android:padding="5dp"
+                                                android:textSize="13dp" />
+                                        </LinearLayout>
+
+
+                                        <Button
+                                            android:id="@+id/GetEmpId"
+                                            android:layout_width="80dp"
+                                            android:layout_height="37dp"
+                                            android:layout_margin="@dimen/C2dp"
+                                            android:background="@drawable/otherlocations"
+                                            android:padding="@dimen/C5dp"
+                                            android:text="Get"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/C8dp" />
 
                                     </LinearLayout>
 
 
-                                    <ImageView
-                                        android:id="@+id/arowimg"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:src="@drawable/arrow_down"></ImageView>
                                 </LinearLayout>
-                            </RelativeLayout>
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/jointwork_recycler"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/C10dp" />
+                            </LinearLayout>
+
+
+                            <TextView
+                                android:id="@+id/remarkscaption"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="15dp"
+                                android:fontFamily="@font/basic"
+                                android:textColor="#000000"
+                                android:textStyle="bold" />
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/edt_remarks"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/C100dp"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:background="@drawable/round_white_backround"
+                                android:gravity="top"
+                                android:hint="@string/txt_enter_purpose"
+                                android:padding="@dimen/C5dp"
+                                android:textSize="@dimen/C12dp" />
 
                         </LinearLayout>
 
-                    </LinearLayout>
-                    <!--<LinearLayout
-                        android:id="@+id/jointwork_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/C15dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/txt_jointwork"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/C10dp"
-                            android:layout_weight="1"
-                            android:textColor="#000000"
-                            android:hint="@string/txt_select_jointwork"
-                            android:padding="@dimen/C10dp" />
-                        <ImageView
-                            android:id="@+id/arowimg"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/arrow_down" />
 
                     </LinearLayout>
-                </LinearLayout>-->
-
-                    <LinearLayout
-                        android:id="@+id/joint_work_listlt"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/C15dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="15dp"
-                            android:fontFamily="@font/basic"
-                            android:text="@string/txt_jointwork"
-                            android:textColor="#000000"
-                            android:textStyle="bold" />
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/jointwork_recycler"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/C10dp" />
-                    </LinearLayout>
-
-                    <TextView
-                        android:id="@+id/remarkscaption"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="15dp"
-                        android:fontFamily="@font/basic"
-                        android:textColor="#000000"
-                        android:textStyle="bold" />
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/edt_remarks"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/C100dp"
-                        android:layout_marginTop="@dimen/C10dp"
-                        android:background="@drawable/round_white_backround"
-                        android:gravity="top"
-                        android:hint="@string/txt_enter_purpose"
-                        android:padding="@dimen/C5dp"
-                        android:textSize="@dimen/C12dp" />
 
                     <ProgressBar
                         android:id="@+id/progressbar"

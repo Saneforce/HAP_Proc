@@ -94,24 +94,16 @@
                             android:paddingBottom="0dp">
 
                             <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
+                                style="@style/TextStyle"
                                 android:layout_weight="1"
-                                android:text="Today"
-                                android:textFontWeight="900"
-                                android:textSize="@dimen/C13dp"
-                                android:textStyle="bold" />
+                                android:text="Today" />
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:id="@+id/lTDyTx"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="TextView"
                                 android:textAlignment="textEnd"
-                                android:textSize="@dimen/C13dp"
-                                android:textStyle="bold" />
+                                android:layout_weight="1"
+                                android:text="TextView" />
 
                         </LinearLayout>
 
@@ -168,12 +160,10 @@
 
                             <TextView
                                 android:id="@+id/txtMnth"
-                                android:layout_width="wrap_content"
-                                android:layout_height="20dp"
-                                android:layout_gravity="center_vertical"
-                                android:text="Today"
-                                android:textFontWeight="900"
-                                android:textSize="@dimen/C13dp" />
+                                style="@style/TextStyle"
+                                android:text="Today" />
+
+
 
                             <ImageView
                                 android:layout_width="20dp"
@@ -211,6 +201,42 @@
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/Rv_MnRpt"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="5dp"
+                            android:padding="5dp" />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:elevation="1dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="5dp"
+                    app:cardMaxElevation="5dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingLeft="10dp"
+                        android:paddingTop="5dp"
+                        android:paddingRight="10dp"
+                        android:paddingBottom="10dp">
+
+                        <TextView
+                            android:id="@+id/txt_plce"
+                            style="@style/TextStyle"
+                            android:text="GATE DETAILS" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/gate_recycle"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginTop="5dp"

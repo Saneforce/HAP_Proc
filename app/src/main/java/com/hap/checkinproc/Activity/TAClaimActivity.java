@@ -925,10 +925,16 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         }
     }
 
-    private void calOverAllTotal(Double localCov, Double otherExp) {
+    private void calOverAllTotal(Double localCov, Double otherExp, double tTotAmt) {
         Log.v("tTotAmt", String.valueOf(tTotAmt));
 
-        gTotal = localCov + myBrdAmt + drvBrdAmt + otherExp + GrandTotalAllowance + tTotAmt;
+
+        String strldgTotal = lbl_ldg_eligi.getText().toString().substring(lbl_ldg_eligi.getText().toString().indexOf(".") + 1).trim();
+        String separators = ".";
+        int intldgTotal = strldgTotal.lastIndexOf(separators);
+
+
+        gTotal = localCov + myBrdAmt + drvBrdAmt + otherExp + GrandTotalAllowance + Double.valueOf(strldgTotal.substring(0, intldgTotal));
         grandTotal.setText("Rs." + new DecimalFormat("##0.00").format(gTotal));
 
     }
@@ -1096,7 +1102,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         txtTAamt.setText("Rs." + new DecimalFormat("##0.00").format(sumsTotss));
         localCov = sumsTotss;
 
-        calOverAllTotal(localCov, otherExp);
+        calOverAllTotal(localCov, otherExp, tTotAmt);
     }
 
     public void SumOFLCAmount() {
@@ -1113,7 +1119,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         localText.setText("Rs." + new DecimalFormat("##0.00").format(sum));
         localCov = sum;
 
-        calOverAllTotal(localCov, otherExp);
+        calOverAllTotal(localCov, otherExp, tTotAmt);
     }
 
     public void SumOFOTAmount() {
@@ -1131,7 +1137,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         OeText.setText("Rs." + new DecimalFormat("##0.00").format(sumsTot));
 
         otherExp = sumsTot;
-        calOverAllTotal(localCov, otherExp);
+        calOverAllTotal(localCov, otherExp, tTotAmt);
     }
 
     public void SumOFDAAmount() {
@@ -1145,7 +1151,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         if (sDrvBrdAmt.equalsIgnoreCase("")) sDrvBrdAmt = "0.00";
         TotDA = Double.parseDouble(sAmt) + Double.parseDouble(sBrdAmt) + Double.parseDouble(sDrvBrdAmt);
         txt_totDA.setText("Rs." + new DecimalFormat("##0.00").format(TotDA));
-        calOverAllTotal(localCov, otherExp);
+        calOverAllTotal(localCov, otherExp, tTotAmt);
     }
 
     public void SumOFJointLodging() {
@@ -1178,7 +1184,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         int IntValue = (int) tTotAmt;
         Log.v("TOTAL_AMOUNT", String.valueOf(IntValue));
         edt_ldg_bill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue)});
-        calOverAllTotal(localCov, otherExp);
+        calOverAllTotal(localCov, otherExp, tTotAmt);
     }
 
     public void SumWOBLodging() {
@@ -1504,6 +1510,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         }
 
                         if (StrToEnd.equals("0")) {
+                            btn_sub.setVisibility(View.VISIBLE);
+                            buttonSave.setVisibility(View.VISIBLE);
                             StrBus = StrBus.replaceAll("^[\"']+|[\"']+$", "");
                             StrTo = StrTo.replaceAll("^[\"']+|[\"']+$", "");
                             for (int j = 0; j < trvldArray.size(); j++) {
@@ -1704,7 +1712,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                     }
 
-                    calOverAllTotal(localCov, otherExp);
+                    calOverAllTotal(localCov, otherExp, tTotAmt);
                 }
 
                 @Override
@@ -1741,7 +1749,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             Double totlLdgAmt = Double.valueOf(ldraft.get("Total_Ldg_Amount").getAsString());
             Integer noday = Integer.valueOf(ldraft.get("NO_Of_Days").getAsString());
 
-
+            txtLodgUKey.setText(ldraft.get("Ukey").getAsString());
             double elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
             /*            double elibs = elib * noday;*/
 
@@ -1755,7 +1763,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(wobal));
 
             Log.v("ldgWOBBal_______", ldgWOBBal.getText().toString());
-
 
             edt_ldg_bill.setText(ldraft.get("Bill_Amt").getAsString());
             lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(totlLdgAmt));
@@ -1810,9 +1817,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 txtJNDept.setText(jsonObjectAdd.get("Dept").getAsString());
                 txtJNHQ.setText(jsonObjectAdd.get("Sf_Hq").getAsString());
                 txtJNMob.setText(jsonObjectAdd.get("Sf_Mobile").getAsString());
-/*                double jntEli = Integer.valueOf(ldraft.get("Ldg_Amount").getAsString());*//*
+                /*                double jntEli = Integer.valueOf(ldraft.get("Ldg_Amount").getAsString());*//*
                 txtJNMyEli.setText("Rs." + "0.00");*/
-
 
 
                 float sum = jsonObjectAdd.get("Ldg_Amount").getAsFloat();
@@ -2487,8 +2493,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             int intLdgEli = strLdgEli.lastIndexOf(separator4);
 
 
-
-
             JSONObject ldgSave = new JSONObject();
             ldgSave.put("ldg_type", txt_ldg_type.getText().toString());
             ldgSave.put("ldg_type_sty", lodgStyLocation.getText().toString());
@@ -2498,11 +2502,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldgSave.put("noOfDays", txtStyDays.getText().toString());
             ldgSave.put("bil_amt", edt_ldg_bill.getText().toString());
             ldgSave.put("wob_amt", strldgWobBal.substring(0, intMyldg));
-            /*            ldgSave.put("drv_ldg_amt", "0");*/
             ldgSave.put("drv_ldg_amt", strdrvElig.substring(0, intMyDrvElg));
             ldgSave.put("jnt_ldg_amt", strJNEligi.substring(0, intJNEligi));
             ldgSave.put("total_ldg_amt", strLdgEli.substring(0, intLdgEli));
             ldgSave.put("attch_bill", "");
+            ldgSave.put("u_key", txtLodgUKey.getText().toString());
 
             JSONArray ldgArySve = new JSONArray();
             for (int jd = 0; jd < jointLodging.getChildCount(); jd++) {
@@ -2514,12 +2518,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 txtJNHQ = (TextView) jdV.findViewById(R.id.txtJNHQ);
                 txtJNMob = (TextView) jdV.findViewById(R.id.txtJNMob);
                 txtJNMyEli = (TextView) jdV.findViewById(R.id.txtJNMyEli);
-
-
                 String strJNMyEli = txtJNMyEli.getText().toString().substring(txtJNMyEli.getText().toString().indexOf(".") + 1).trim();
                 String separator5 = ".";
                 int intJNMyEli = strJNMyEli.lastIndexOf(separator5);
-
                 JSONObject jsnLdgSve = new JSONObject();
                 jsnLdgSve.put("emp_cde", edt_ldg_JnEmp.getText().toString());
                 jsnLdgSve.put("emp_Name", txtJNName.getText().toString());
@@ -2529,7 +2530,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 jsnLdgSve.put("emp_Mob", txtJNMob.getText().toString());
                 jsnLdgSve.put("emp_ldg_amt", strJNMyEli.substring(0, intJNMyEli));
                 ldgArySve.put(jsnLdgSve);
-
 
                 Log.e("txtStyDaystoString()", edt_ldg_JnEmp.getText().toString());
                 Log.e("txtStyDaystoString()", txtJNName.getText().toString());
@@ -2560,10 +2560,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             trDet.put("ta_total_amount", sumsTotss);
 
             JSONArray trvLoc = new JSONArray();
-
-
             int travelBike = travelDynamicLoaction.getChildCount();
-
 
             Log.v("STRING_TO_END_SUB", StrToEnd);
             if (StrToEnd.equals("0")) {
@@ -2864,7 +2861,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 linImgPrv.setVisibility(View.VISIBLE);
                 viewBilling.setVisibility(View.VISIBLE);
                 stayDays.setVisibility(View.GONE);
-                tTotAmt = 0;
+                /*tTotAmt = 0;*/
                 ttLod = 1;
                 txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
                 lodingView();
@@ -2880,7 +2877,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 viewBilling.setVisibility(View.VISIBLE);
                 stayDays.setVisibility(View.GONE);
                 ttLod = 1;
-                tTotAmt = 0;
+                /*tTotAmt = 0;*/
                 txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
                 ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
                 lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));

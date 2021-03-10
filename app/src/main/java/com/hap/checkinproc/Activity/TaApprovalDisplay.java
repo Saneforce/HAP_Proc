@@ -48,12 +48,13 @@ public class TaApprovalDisplay extends AppCompatActivity {
             txtTL, txtLA, txtLC, txtOE, txtReject, txtEmpId, txtMobile;
     Common_Class common_class;
     Shared_Common_Pref mShared_common_pref;
-    String date = " ", SlStart = "", TotalAmt = "", sfCode = "", STEND = "", SDA = "", SLC = "", SOE = "", stImg = "", endImg = "";
+    String date = " ", SlStart = "", TotalAmt = "", sfCode = "", STEND = "", SDA = "", SLC = "", SOE = "", stImg = "",
+            endImg = "",lodgTotal = "";
     LinearLayout linAccept, linReject;
     AppCompatEditText appCompatEditText;
     JsonArray jsonArray = null, jsonTravDetai = null, lcDraftArray = null, oeDraftArray = null, trvldArray = null, ldArray = null,
             daArray = null;
-    Double brd, ta, ldg, oe, lc, trv_lc;
+    Double ldgTtl,brd, ta, ldg, oe, lc, trv_lc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -235,6 +236,13 @@ public class TaApprovalDisplay extends AppCompatActivity {
     }
 
     public void LAApproval(View v) {
+        if (!ldgTtl.equals("0.0")) {
+            Intent intent = new Intent(getApplicationContext(), LodgingCliamActivity.class);
+            intent.putExtra("lodgAllowance", ldArray.toString());
+            intent.putExtra("lodgAll_Total", lodgTotal);
+            intent.putExtra("date", String.valueOf(getIntent().getSerializableExtra("date")));
+            startActivity(intent);
+        }
     }
 
 
@@ -267,12 +275,9 @@ public class TaApprovalDisplay extends AppCompatActivity {
                     trv_lc = Double.parseDouble(jsonObject.get("trv_lc_amt").getAsString());
 
 
-
-
-
                     txtDA.setText("Rs. " + brd);
                     txtTL.setText("Rs. " + ta);
-                    txtLA.setText("Rs. " + ldg);
+
                     txtLC.setText("Rs. " + lc);
                     txtOE.setText("Rs. " + oe);
                     txtTaAmt.setText("Rs. " + trv_lc);
@@ -398,13 +403,21 @@ public class TaApprovalDisplay extends AppCompatActivity {
                 Log.v("ldArray", ldArray.toString());
                 Log.v("daArray", daArray.toString());
 
+                JsonObject jsLdg = null;
+                for (int z = 0; z < ldArray.size(); z++) {
+                    jsLdg = (JsonObject) ldArray.get(z);
+                    ldgTtl = Double.parseDouble(jsLdg.get("Total_Ldg_Amount").getAsString());
+                    txtLA.setText("Rs." + ldgTtl);
+                    lodgTotal = jsLdg.get("Total_Ldg_Amount").getAsString();
+                }
+
+
                 JsonObject jsonObject = null;
                 for (int i = 0; i < jsonArray.size(); i++) {
                     jsonObject = (JsonObject) jsonArray.get(i);
                     STEND = jsonObject.get("StEndNeed").getAsString();
                     stImg = jsonObject.get("start_Photo").getAsString();
                     endImg = jsonObject.get("End_photo").getAsString();
-
                 }
 
             }
