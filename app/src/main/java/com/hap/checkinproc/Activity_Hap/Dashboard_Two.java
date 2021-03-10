@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivityTwo;
+import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -542,10 +543,16 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 String sDeptType = UserDetails.getString("DeptType", "");
                                 Log.d("DeptType", sDeptType);
 
-                                if (sDeptType.equalsIgnoreCase("1")) {
+                               /* if (sDeptType.equalsIgnoreCase("1")) {
                                     aIntent = new Intent(getApplicationContext(), OrderDashBoard.class);
                                 } else {
                                     aIntent = new Intent(getApplicationContext(), OrderDashBoard.class);
+                                }*/
+
+                                if (sDeptType.equalsIgnoreCase("1")) {
+                                    aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
+                                } else {
+                                    aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
                                 }
                                 startActivity(aIntent);
                                 //((AppCompatActivity) Dashboard_Two.this).finish();

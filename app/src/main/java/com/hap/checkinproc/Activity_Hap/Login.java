@@ -169,12 +169,12 @@ public class Login extends AppCompatActivity {
         eMail = UserDetails.getString("email", "");
         name.setText(eMail);
 
- /* if (!checkPermission()) {
- //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
- requestPermissions();
- //}
- } else {
- }*/
+        if (!checkPermission()) {
+            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            requestPermissions();
+            //}
+        } else {
+        }
 
 
         CameraPermission cameraPermission = new CameraPermission(Login.this, getApplicationContext());
@@ -402,7 +402,6 @@ public class Login extends AppCompatActivity {
                     }
                 });
     }
-
 
 
     @Override
