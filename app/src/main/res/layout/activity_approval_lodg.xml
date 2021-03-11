@@ -20,15 +20,9 @@
             android:orientation="vertical">
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/C8dp"
-                android:layout_marginTop="@dimen/C8dp"
-                android:layout_marginRight="@dimen/C8dp"
-                android:text="Emp Code"
-                android:textAllCaps="true"
-                android:textColor="#000"
-                android:textSize="10sp"></TextView>
+                style="@style/TextStyle"
+                android:text="Emp Code" />
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,28 +66,15 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/C8dp"
-                        android:layout_marginTop="@dimen/C8dp"
-                        android:layout_marginRight="@dimen/C8dp"
-                        android:text="Name"
-                        android:textAllCaps="true"
-                        android:textColor="#000"
-                        android:textSize="10sp" />
+                        style="@style/TextStyle"
+                        android:text="Name" />
 
                     <TextView
                         android:id="@+id/txtJNName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/C8dp"
-                        android:paddingTop="@dimen/C1dp"
-                        android:paddingRight="@dimen/C8dp"
-                        android:paddingBottom="@dimen/C2dp"
-                        android:text=""
-                        android:textAllCaps="false"
-                        android:textSize="11sp"
-                        android:textStyle="bold" />
+                        style="@style/TextStyle"
+                        android:textStyle="bold"
+                        android:text="" />
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -109,27 +90,14 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/C8dp"
-                            android:layout_marginRight="@dimen/C8dp"
-                            android:text="Designation"
-                            android:textAllCaps="true"
-                            android:textColor="#000"
-                            android:textSize="10sp" />
+                            style="@style/TextStyle"
+                            android:text="Designation" />
 
                         <TextView
+                            style="@style/TextStyle"
                             android:id="@+id/txtJNDesig"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="@dimen/C8dp"
-                            android:paddingTop="@dimen/C1dp"
-                            android:paddingRight="@dimen/C8dp"
-                            android:paddingBottom="@dimen/C2dp"
-                            android:text=""
-                            android:textAllCaps="false"
-                            android:textSize="12sp"
                             android:textStyle="bold" />
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -139,28 +107,17 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/C8dp"
-                            android:layout_marginRight="@dimen/C8dp"
+                            style="@style/TextStyle"
                             android:text="Department"
+                            android:layout_width="match_parent"
                             android:textAlignment="textEnd"
-                            android:textAllCaps="true"
-                            android:textColor="#000"
                             android:textSize="10sp" />
 
                         <TextView
+                            style="@style/TextStyle"
                             android:id="@+id/txtJNDept"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="@dimen/C8dp"
-                            android:paddingTop="@dimen/C1dp"
-                            android:paddingRight="@dimen/C8dp"
-                            android:paddingBottom="@dimen/C2dp"
-                            android:text=""
                             android:textAlignment="textEnd"
-                            android:textAllCaps="false"
-                            android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
@@ -178,26 +135,12 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/C8dp"
-                            android:layout_marginRight="@dimen/C8dp"
-                            android:text="HQ"
-                            android:textAllCaps="true"
-                            android:textColor="#000"
-                            android:textSize="10sp" />
+                            style="@style/TextStyle"
+                            android:text="HQ"/>
 
                         <TextView
+                            style="@style/TextStyle"
                             android:id="@+id/txtJNHQ"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="@dimen/C8dp"
-                            android:paddingTop="@dimen/C1dp"
-                            android:paddingRight="@dimen/C8dp"
-                            android:paddingBottom="@dimen/C2dp"
-                            android:text=""
-                            android:textAllCaps="false"
-                            android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
@@ -208,28 +151,16 @@
                         android:orientation="vertical">
 
                         <TextView
+                            style="@style/TextStyle"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/C8dp"
-                            android:layout_marginRight="@dimen/C8dp"
                             android:text="Mobile"
-                            android:textAlignment="textEnd"
-                            android:textAllCaps="true"
-                            android:textColor="#000"
-                            android:textSize="10sp" />
+                            android:textAlignment="textEnd" />
 
                         <TextView
+                            style="@style/TextStyle"
                             android:id="@+id/txtJNMob"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="@dimen/C8dp"
-                            android:paddingTop="@dimen/C1dp"
-                            android:paddingRight="@dimen/C8dp"
-                            android:paddingBottom="@dimen/C2dp"
-                            android:text=""
                             android:textAlignment="textEnd"
-                            android:textAllCaps="false"
-                            android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
@@ -249,23 +180,14 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        style="@style/TextStyle"
                         android:layout_weight="1"
-                        android:text="Lodging Eligible"
-                        android:textAllCaps="true"
-                        android:textColor="#000"
-                        android:textSize="10sp"></TextView>
+                        android:text="Lodging Eligible"></TextView>
 
                     <TextView
+                        style="@style/TextStyle"
                         android:id="@+id/txtJNMyEli"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Rs. 0.00"
-                        android:textAllCaps="false"
-                        android:textColor="@android:color/black"
-                        android:textSize="12sp"
-                        android:textStyle="bold"></TextView>
+                        android:text="Rs. 0.00"></TextView>
 
                 </LinearLayout>
 

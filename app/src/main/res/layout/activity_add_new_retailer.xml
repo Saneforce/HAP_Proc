@@ -73,13 +73,8 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:text="@string/route"
-                                android:textColor="@android:color/black"
-                                android:textSize="13dp"></TextView>
+                                style="@style/TextStyle"
+                                android:text="@string/route" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -88,7 +83,6 @@
                                 android:src="@drawable/mandatory" />
 
                         </LinearLayout>
-
 
                         <LinearLayout
                             android:id="@+id/linear_Retailer"
@@ -100,13 +94,10 @@
 
                             <TextView
                                 android:id="@+id/retailer_type"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/route"
-                                android:padding="5dp"
-                                android:textSize="13dp" />
-                        </LinearLayout>
+                                style="@style/TextStyle"
+                                android:hint="@string/route" />
 
+                        </LinearLayout>
                     </LinearLayout>
 
                     <LinearLayout
@@ -121,13 +112,8 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:text="New Retailer "
-                                android:textColor="@android:color/black"
-                                android:textSize="13dp"></TextView>
+                                style="@style/TextStyle"
+                                android:text="New Retailer " />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -136,7 +122,6 @@
                                 android:src="@drawable/mandatory" />
 
                         </LinearLayout>
-
 
                         <EditText
                             android:id="@+id/edt_new_name"
@@ -156,20 +141,14 @@
                         android:layout_marginTop="10dp"
                         android:orientation="vertical">
 
-
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:text="Address"
-                                android:textColor="@android:color/black"
-                                android:textSize="13dp"></TextView>
+                                style="@style/TextStyle"
+                                android:text="Address" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -178,7 +157,6 @@
                                 android:src="@drawable/mandatory" />
 
                         </LinearLayout>
-
 
                         <EditText
                             android:id="@+id/edt_new_address"
@@ -198,19 +176,14 @@
                         android:layout_marginTop="10dp"
                         android:orientation="vertical">
 
-
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:text="City"
-                                android:textColor="@android:color/black"></TextView>
+                                style="@style/TextStyle"
+                                android:text="City" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -219,7 +192,6 @@
                                 android:src="@drawable/mandatory" />
 
                         </LinearLayout>
-
 
                         <EditText
                             android:id="@+id/edt_new_city"
@@ -239,20 +211,14 @@
                         android:layout_marginTop="10dp"
                         android:orientation="vertical">
 
-
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:text="Phone"
-                                android:textColor="@android:color/black"
-                                android:textSize="13dp"></TextView>
+                                style="@style/TextStyle"
+                                android:text="Phone" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -261,7 +227,6 @@
                                 android:src="@drawable/mandatory" />
 
                         </LinearLayout>
-
 
                         <EditText
                             android:id="@+id/edt_new_phone"
@@ -290,13 +255,8 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:text="Email"
-                                android:textColor="@android:color/black"
-                                android:textSize="13dp"></TextView>
+                                style="@style/TextStyle"
+                                android:text="Email" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -332,14 +292,8 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:text="@string/retailer_class"
-                                android:textColor="@android:color/black"
-                                android:textSize="13dp"></TextView>
-
+                                style="@style/TextStyle"
+                                android:text="@string/retailer_class" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -349,9 +303,7 @@
 
                         </LinearLayout>
 
-
                         <LinearLayout
-
                             android:id="@+id/linear_retailer_class"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -361,11 +313,10 @@
 
                             <TextView
                                 android:id="@+id/txt_retailer_class"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/retailer_class"
-                                android:padding="5dp"
-                                android:textSize="13dp" />
+                                style="@style/TextStyle"
+                                android:hint="@string/retailer_class" />
+                            android:hint="@string/retailer_channel" />
+
                         </LinearLayout>
 
                         <LinearLayout
@@ -374,13 +325,8 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="10dp"
-                                android:layout_marginBottom="10dp"
-                                android:text="@string/retailer_channel"
-                                android:textColor="@android:color/black"
-                                android:textSize="13dp"></TextView>
+                                style="@style/TextStyle"
+                                android:text="@string/retailer_channel" />
 
 
                             <ImageView
@@ -402,21 +348,13 @@
 
                             <TextView
                                 android:id="@+id/txt_retailer_channel"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:hint="@string/retailer_channel"
-                                android:padding="5dp"
-                                android:textSize="13dp" />
+                                style="@style/TextStyle"
+                                android:hint="@string/retailer_channel" />
+
                         </LinearLayout>
-
                     </LinearLayout>
-
-
                 </LinearLayout>
-
             </ScrollView>
-
-
         </LinearLayout>
 
     </LinearLayout>
@@ -426,9 +364,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints">
-
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -441,7 +377,6 @@
                 style="@style/ButtonStyle"
                 android:background="@drawable/button_dgreen"
                 android:text="Save" />
-
 
         </LinearLayout>
 
