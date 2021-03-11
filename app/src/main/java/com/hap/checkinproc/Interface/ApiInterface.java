@@ -323,12 +323,6 @@ public interface ApiInterface {
     Call<Object> GetRouteObjects(@QueryMap Map<String, String> params,
                                  @Field("data") String data);
 
-/*
-
-    @FormUrlEncoded
-    @POST("Db_V13.php?")
-    Call<Object> getModeOfTravel(@QueryMap Map<String, String> params,
-                                 @Field("data") String data);*/
 
     /*Save Devaition Entry*/
     @FormUrlEncoded
@@ -385,9 +379,13 @@ public interface ApiInterface {
 
     @POST("db_new_activity.php?axn=delete/ta_image")
     Call<JsonObject> dltePrvws(@Query("U_key") String keyCode,
-                              @Query("Img_U_key") String HeadTravel,
-                              @Query("Date") String date,
-                              @Query("sfCode") String sfcode);
+                               @Query("Img_U_key") String HeadTravel,
+                               @Query("Date") String date,
+                               @Query("sfCode") String sfcode);
+
+
+    @POST("Db_v300.php?axn=get/GateEntryHome")
+    Call<JsonArray> gteDta(@Query("Sf_code") String sfCode, @Query("TodayDate") String Tdate);
 
 
 }

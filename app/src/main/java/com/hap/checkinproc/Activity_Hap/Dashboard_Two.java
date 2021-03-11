@@ -37,9 +37,13 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Activity.View_All_Status_Activity;
+import com.hap.checkinproc.adapters.DateReportAdapter;
+import com.hap.checkinproc.adapters.GateAdapter;
 import com.hap.checkinproc.adapters.HomeRptRecyler;
 import com.hap.checkinproc.common.TimerService;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import retrofit2.Call;
@@ -80,10 +84,10 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     public static final String modeToKm = "SharedToKmsss";
     public static final String StartedKm = "StartedKMsss";
 
-
+RecyclerView mRecyclerView;
     /*String Mode = "Bus";*/
     Button gateIn_gateOut, gateOut_gateIn;
-
+    GateAdapter gateAdap;
     String dashMdeCnt = "";
 
     @Override
@@ -125,7 +129,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             }
         });
 
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");
+        String plantime = dpln.format(c.getTime());
 
+        gatevalue(plantime);
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
         textColorAnim.setDuration(500);
@@ -156,6 +164,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
         gateIn_gateOut = findViewById(R.id.btn_gate_in);
         gateOut_gateIn = findViewById(R.id.btn_gate_out);
+
+        mRecyclerView = findViewById(R.id.gate_recycle);
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
 
 
         StActivity = findViewById(R.id.StActivity);
@@ -674,5 +687,37 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     protected void onRestart() {
         super.onRestart();
         startService(new Intent(this, TimerService.class));
+    }
+
+
+    public void gatevalue(String Date) {
+
+        Log.v("plantimeplantime", Date);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> Callto = apiInterface.gteDta("MGR5120", "2021-03-02");
+        Callto.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                JsonArray jsonArray = response.body();
+
+                for (int l = 0; l < jsonArray.size(); l++) {
+                    JsonObject  jsonObjectAdd = jsonArray.get(l).getAsJsonObject();
+
+                    Log.v("GATE_DATA", jsonObjectAdd.toString());
+                    gateAdap = new GateAdapter(Dashboard_Two.this, jsonArray);
+
+                    mRecyclerView.setAdapter(gateAdap);
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+
+            }
+        });
+
+
+
     }
 }

@@ -94,16 +94,24 @@
                             android:paddingBottom="0dp">
 
                             <TextView
-                                style="@style/TextStyle"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
                                 android:layout_weight="1"
-                                android:text="Today" />
+                                android:text="Today"
+                                android:textFontWeight="900"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold" />
 
                             <TextView
-                                style="@style/TextStyle"
                                 android:id="@+id/lTDyTx"
-                                android:textAlignment="textEnd"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView" />
+                                android:text="TextView"
+                                android:textAlignment="textEnd"
+                                android:textSize="@dimen/C13dp"
+                                android:textStyle="bold" />
 
                         </LinearLayout>
 
@@ -160,10 +168,12 @@
 
                             <TextView
                                 android:id="@+id/txtMnth"
-                                style="@style/TextStyle"
-                                android:text="Today" />
-
-
+                                android:layout_width="wrap_content"
+                                android:layout_height="20dp"
+                                android:layout_gravity="center_vertical"
+                                android:text="Today"
+                                android:textFontWeight="900"
+                                android:textSize="@dimen/C13dp" />
 
                             <ImageView
                                 android:layout_width="20dp"
@@ -238,7 +248,7 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/gate_recycle"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="@dimen/header_date_width"
                             android:layout_marginTop="5dp"
                             android:padding="5dp" />
 

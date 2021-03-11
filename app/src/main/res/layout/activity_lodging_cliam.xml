@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Activity.LodgingCliamActivity">
 
     <LinearLayout
@@ -15,16 +15,15 @@
         <include layout="@layout/custom_toolbar_help"></include>
 
 
-
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_marginBottom="@dimen/C100dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/C100dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/linear_loadge"
@@ -70,7 +69,8 @@
                                     android:text="+ Add"
                                     android:textAllCaps="false"
                                     android:textColor="#FFF"
-                                    android:textSize="12sp" />
+                                    android:textSize="12sp"
+                                    android:visibility="gone" />
                             </LinearLayout>
                         </LinearLayout>
 
@@ -119,6 +119,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/C8dp"
                                     android:layout_weight="1"
+                                    android:enabled="false"
                                     android:hint="Select the type of Lodging"
                                     android:textSize="@dimen/C13dp" />
 
@@ -160,6 +161,7 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginLeft="@dimen/C5dp"
                                         android:layout_marginRight="@dimen/C8dp"
+                                        android:enabled="false"
                                         android:hint="Enter Stay Location"
                                         android:paddingTop="0dp"
                                         android:textColorHint="#C0C0C0"
@@ -290,8 +292,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_marginBottom="@dimen/C20dp"
-                                    android:orientation="vertical"
-                                    >
+                                    android:orientation="vertical">
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
@@ -300,7 +301,8 @@
                                         android:orientation="horizontal"
                                         android:paddingLeft="@dimen/C8dp"
                                         android:paddingTop="@dimen/C5dp"
-                                        android:paddingRight="@dimen/C8dp">
+                                        android:paddingRight="@dimen/C8dp"
+                                        android:visibility="gone">
 
 
                                         <TextView
@@ -458,10 +460,10 @@
                                     </LinearLayout>
 
                                     <View
+                                        android:id="@+id/bill_view"
                                         android:layout_width="match_parent"
                                         android:layout_height="1dp"
                                         android:layout_margin="@dimen/C10dp"
-                                        android:id="@+id/bill_view"
                                         android:background="@color/grey_300"></View>
 
                                     <LinearLayout
@@ -527,6 +529,7 @@
                                                     android:id="@+id/edt_ldg_bill"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
+                                                    android:enabled="false"
                                                     android:hint="0.00"
                                                     android:inputType="number"
                                                     android:maxLength="5"
@@ -547,10 +550,10 @@
                                                 <ImageView
                                                     android:id="@+id/lodg_attach"
                                                     android:layout_width="@dimen/C40dp"
-                                                    android:visibility="gone"
                                                     android:layout_height="@dimen/C40dp"
                                                     android:padding="@dimen/C2dp"
-                                                    android:src="@drawable/attach_files" />
+                                                    android:src="@drawable/attach_files"
+                                                    android:visibility="gone" />
 
 
                                                 <ImageView
@@ -565,11 +568,11 @@
                                         </LinearLayout>
 
                                         <TextView
-                                            android:visibility="gone"
-                                            android:layout_width="wrap_content"
-                                            android:text=""
                                             android:id="@+id/log_ukey"
-                                            android:layout_height="wrap_content" />
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text=""
+                                            android:visibility="gone" />
 
                                         <LinearLayout
                                             android:layout_width="wrap_content"
@@ -647,6 +650,7 @@
         </ScrollView>
 
     </LinearLayout>
+
     <include layout="@layout/back_arrow"></include>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

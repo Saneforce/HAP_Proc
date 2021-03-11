@@ -183,7 +183,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         lstModalFlash = (LinearLayout) findViewById(R.id.lstMFlash);
         lstFlashMode = (ListView) findViewById(R.id.lstFlashMode);
 
-        preview = (SurfaceView) findViewById(R.id.PREVIEW);
+
         ArrayAdapter simpleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, flashModes);
         lstFlashMode.setAdapter(simpleAdapter);//sets the adapter for listView
 
@@ -245,7 +245,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             public void onClick(View view) {
                 CameraPermission cameraPermission = new CameraPermission(ImageCapture.this, getApplicationContext());
 
-                if(!cameraPermission.checkPermission()){
+                if (!cameraPermission.checkPermission()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         cameraPermission.requestPermission();
                     }
@@ -288,10 +288,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             mCamera.release();
             mCamera = null;
         }
-
         preview = (SurfaceView) findViewById(R.id.PREVIEW);
         mHolder = preview.getHolder();
-        mHolder.addCallback(ImageCapture.this);
+        mHolder.addCallback(this);
         setDefaultCameraId((mCamId == 0) ? "front" : "back");
         mCamera = Camera.open(mCamId);
 
@@ -305,6 +304,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         mCamera.startPreview();
 
         Log.e("mCAmer_id", String.valueOf(mCamId));
+
     }
 
 
@@ -339,10 +339,15 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         vwPreview.setVisibility(View.VISIBLE);
         imgPreview.setImageURI(Uri.fromFile(file));
 
+
+        Log.v("CAMERA_FOCUS_Preview", String.valueOf(mCamId));
+
         if (mCamId == 1) {
             imgPreview.setRotation((float) -90.0);
-        } else {
+        } else if (mCamId == 2) {
             imgPreview.setRotation((float) 90.0);
+        }else{
+            imgPreview.setRotation((float) 270.0);
         }
 
     }
@@ -364,7 +369,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         preview = (SurfaceView) findViewById(R.id.PREVIEW);
         mHolder = preview.getHolder();
         mHolder.addCallback(ImageCapture.this);
-        setDefaultCameraId((mCamId == 1) ? "front" : "back");
+        setDefaultCameraId((mCamId == 0) ? "front" : "back");
         mCamera = Camera.open(mCamId);
         try {
             mCamera.setPreviewDisplay(mHolder);
@@ -592,6 +597,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     private void setDefaultCameraId(String cam) {
         noOfCameras = Camera.getNumberOfCameras();
         int facing = cam.equalsIgnoreCase("front") ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
+        Log.v("CAMERA_FOCUS", String.valueOf(facing));
+
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         for (int i = 0; i < noOfCameras; i++) {
             Camera.getCameraInfo(i, cameraInfo);
@@ -617,14 +624,33 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-        mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
-        mCamera.setDisplayOrientation(90);
         try {
+            // open the camera
+            mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
+            mCamera.setDisplayOrientation(90);
+        } catch (RuntimeException e) {
+            // check for exceptions
+            System.err.println(e);
+            return;
+        }
+        Camera.Parameters param;
+        param = mCamera.getParameters();
+
+        // modify parameter
+        /*        param.setPreviewSize(352, 288);*/
+        mCamera.setParameters(param);
+        try {
+            // The Surface has been created, now tell the camera where to draw
+            // the preview.
             mCamera.setPreviewDisplay(surfaceHolder);
             mCamera.startPreview();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            // check for exceptions
+            System.err.println(e);
+            return;
         }
+
+
     }
 
     @Override
@@ -650,14 +676,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
     }
 
-    Camera.AutoFocusCallback myAutoFocusCallback = new Camera.AutoFocusCallback() {
-
-        @Override
-        public void onAutoFocus(boolean arg0, Camera arg1) {
-            // TODO Auto-generated method stub
-            Log.e("Auto_Focus", "Auto_FOcus");
-        }
-    };
 
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
@@ -667,10 +685,10 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             mCamera = null;
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
-
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
@@ -678,7 +696,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     @Override
     protected void onPause() {
         super.onPause();
-
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
