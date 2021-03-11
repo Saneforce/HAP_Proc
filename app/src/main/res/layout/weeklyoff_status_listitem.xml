@@ -36,15 +36,10 @@
                     >
 
                     <TextView
+                        style="@style/TextStyle"
                         android:id="@+id/txt_wktype"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
                         android:fontFamily="@font/poppins_semibold"
-                        android:text="WeekOff"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"></TextView>
+                        android:text="WeekOff"></TextView>
 
 
                     <LinearLayout
@@ -56,22 +51,18 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            style="@style/TextStyle"
                             android:id="@+id/txt_wkdate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="2020/09/06  "
-                            android:textColor="@android:color/black"
-                            android:textSize="14dp"></TextView>
+                            android:text="2020/09/06"
+                           ></TextView>
 
                         <TextView
+                            style="@style/TextStyle"
                             android:id="@+id/txt_wkday"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_semibold"
                             android:text="Friday"
-                            android:textColor="@android:color/black"
-                            android:textSize="14dp"></TextView>
+                 ></TextView>
                     </LinearLayout>
 
 
@@ -89,14 +80,10 @@
                     android:layout_marginTop="@dimen/C7dp">
 
                     <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
+                        style="@style/TextStyle"
                         android:fontFamily="@font/poppins_semibold"
                         android:text="Week Off"
-                        android:textSize="11dp"></TextView>
+           ></TextView>
 
 
                 </RelativeLayout>
@@ -108,21 +95,15 @@
                     android:layout_marginBottom="@dimen/C7dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        style="@style/TextStyle"
                         android:fontFamily="@font/poppins_semibold"
-                        android:text="Submit on :"
-                        android:textColor="@android:color/black"
-                        android:textSize="13dp"></TextView>
+                        android:text="Submit on :"></TextView>
 
                     <TextView
+                        style="@style/TextStyle"
                         android:id="@+id/txt_submit_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins_semibold"
-                        android:text=" Nov 7 2020 1.54PM"
-                        android:textColor="@android:color/black"
-                        android:textSize="13dp"></TextView>
+                        android:text=" Nov 7 2020 1.54PM"></TextView>
 
 
                 </LinearLayout>

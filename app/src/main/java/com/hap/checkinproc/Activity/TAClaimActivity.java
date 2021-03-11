@@ -122,7 +122,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             lodgJoin, ldgEAra, ldgMyEAra, JNLdgEAra, drvldgEAra, jointLodging, vwBoarding, vwDrvBoarding,
             linAddAllowance, diverAllowanceLinear, LDailyAllowance, LOtherExpense, LLocalConve, LinearOtherAllowance,
             linlocalCon, linBusMode, linBikeMode, linMode, travelDynamicLoaction, linDailyAllowance, linback, lin,
-            linImgPrv;
+            linImgPrv, TotalDays, stayDays;
 
     CardView card_date, TravelBike, crdDynamicLocation, ldg_ara;
 
@@ -147,18 +147,21 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             witOutBill = "", ValCd = "", fullPath = "", filePath = "", editMode = "", allowanceAmt = "", myldgEliAmt = "", myBrdEliAmt = "",
             drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "", finalPath = "",
             attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "", tvEditcnt = "", OeUKey = "",
-            LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "";
+            LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "",
+            tominYear = "", tominMonth = "", tominDay = "";
 
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
-            oePosCnt = 0, lcPosCnt = 0, tvSize = 0, styDate = 0;
+            oePosCnt = 0, lcPosCnt = 0, tvSize = 0, styDate = 0, ttLod = 0;
 
-    int size = 0, lcSize = 0, OeSize = 0;
+    int size = 0, lcSize = 0, OeSize = 0, daysBetween = 0;
 
     Double tofuel = 0.0, ldgEliAmt = 0.0, ldgDrvEligi = 0.0, gTotal = 0.0, TotLdging = 0.0,
             GrandTotalAllowance = 0.0, fAmount = 0.0, doubleAmount = 0.0, myBrdAmt = 0.0, drvBrdAmt = 0.0,
             otherExp = 0.0, localCov = 0.0, sum = 0.0, sumsTotss = 0.0, sumsTot = 0.0;
 
-    double TotDA = 0.0, sTotal = 0.0, sums = 0.0, sumsTa = 0.0;
+    double TotDA = 0.0, sTotal = 0.0, sums = 0.0, sumsTa = 0.0, tTotAmt = 0.0, stayEgTotal = 0.0;
+    float tJointAmt = 0;
+
     Button btn_sub, buttonSave;
 
     ArrayList<SelectionModel> array = new ArrayList<>();
@@ -190,19 +193,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     DatePickerDialog picker;
     Switch ldgNeeded;
     View viw, viewBilling;
-    double tTotAmt = 0.0;
-
-    Integer ttLod = 0;
-    int daysBetween = 0;
-    LinearLayout TotalDays, stayDays;
-
-    String maxDate, minDate;
-    String maxYear, maxMonth, maxDay, minYear, minMonth, minDay;
-    String tominDate, tomaxYear, tomaxMonth, tomaxDay, tominYear, tominMonth, tominDay;
-    double stayEgTotal = 0.0;
-    String sldgAmt = "", sBillAmt = "";
-    float tBalAmt = 0;
-    float tJointAmt = 0;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -610,6 +600,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 linlocalCon.addView(rowView, layoutParams);
                 localText.setVisibility(View.VISIBLE);
+
+
+                Integer localCount = linlocalCon.getChildCount();
+                Log.v("Local_Count", String.valueOf(localCount));
+                Log.v("Local_Count", String.valueOf(linlocalCon.getChildCount()-1));
+
+
 
                 lcPosCnt = linlocalCon.indexOfChild(rowView);
 
