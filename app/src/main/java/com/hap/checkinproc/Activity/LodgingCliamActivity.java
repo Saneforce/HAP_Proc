@@ -218,49 +218,6 @@ public class LodgingCliamActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-
-
-/*
-            JsonObject jsonObjectAdd = null;
-            for (int l = 0; l < jsonAddition.size(); l++) {
-
-
-                Log.e("LOCTAION_LRD", String.valueOf(jsonAddition.size()));
-
-                jsonObjectAdd = (JsonObject) jsonAddition.get(l);
-
-                jointLodging.setVisibility(View.VISIBLE);
-                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-                layoutParams.setMargins(15, 15, 15, 15);
-                View rowView = inflater.inflate(R.layout.activity_loding_layout, null);
-                jointLodging.addView(rowView, layoutParams);
-
-                Integer jfd = jointLodging.indexOfChild(rowView);
-
-                View jdV = jointLodging.getChildAt(jfd);
-                edt_ldg_JnEmp = (EditText) jdV.findViewById(R.id.edt_ldg_JnEmp);
-                txtJNName = (TextView) jdV.findViewById(R.id.txtJNName);
-                txtJNDesig = (TextView) jdV.findViewById(R.id.txtJNDesig);
-                txtJNDept = (TextView) jdV.findViewById(R.id.txtJNDept);
-                txtJNHQ = (TextView) jdV.findViewById(R.id.txtJNHQ);
-                txtJNMob = (TextView) jdV.findViewById(R.id.txtJNMob);
-                txtJNMyEli = (TextView) jdV.findViewById(R.id.txtJNMyEli);
-
-                edt_ldg_JnEmp.setText(jsonObjectAdd.get("Emp_Code").getAsString());
-                txtJNName.setText(jsonObjectAdd.get("Sf_Name").getAsString());
-                txtJNDesig.setText(jsonObjectAdd.get("Desig").getAsString());
-                txtJNDept.setText(jsonObjectAdd.get("Dept").getAsString());
-                txtJNHQ.setText(jsonObjectAdd.get("Sf_Hq").getAsString());
-                txtJNMob.setText(jsonObjectAdd.get("Sf_Mobile").getAsString());
-                float sum = jsonObjectAdd.get("Ldg_Amount").getAsFloat();
-                txtJNMyEli.setText("Rs." + new DecimalFormat("##0.00").format(sum));
-
-            }*/
         }
 
     }
