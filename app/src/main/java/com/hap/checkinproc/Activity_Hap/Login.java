@@ -520,6 +520,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(int requestCode) {
+
         if (eMail.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Invalid Email ID", Toast.LENGTH_LONG).show();
             mProgress.dismiss();

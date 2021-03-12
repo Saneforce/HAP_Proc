@@ -40,8 +40,24 @@ public class LocationServices extends Activity {
                 backReq == PackageManager.PERMISSION_GRANTED;
     }
 
+    public boolean checkPermission1() {
+        int locationReq = ContextCompat.checkSelfPermission(_context, ACCESS_FINE_LOCATION);
+        int coarseReq = ContextCompat.checkSelfPermission(_context, ACCESS_COARSE_LOCATION);
+
+        if ((locationReq == PackageManager.PERMISSION_GRANTED && coarseReq == PackageManager.PERMISSION_GRANTED == true)) {
+            Log.v("KARTHIC_KUMAR", "IF_CONDITION");
+        } else {
+            Log.v("KARTHIC_KUMAR", "ELSE_CONDITION");
+        }
+
+        return locationReq == PackageManager.PERMISSION_GRANTED && coarseReq == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+
+
     public void requestPermission() {
-        ActivityCompat.requestPermissions(activity, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION, ACCESS_BACKGROUND_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
+        ActivityCompat.requestPermissions(activity, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
     }
 
     @Override
