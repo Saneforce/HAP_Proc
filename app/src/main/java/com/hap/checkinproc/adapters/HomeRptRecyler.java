@@ -50,6 +50,7 @@ public class HomeRptRecyler  extends RecyclerView.Adapter<HomeRptRecyler.ViewHol
         JsonObject itm=mArrayList.get(position).getAsJsonObject();
         holder.txtLable.setText(itm.get("name").getAsString());
         holder.txtValue.setText(Html.fromHtml(itm.get("value").getAsString()));
+        Log.d(TAG, "onBindViewHolder: ColorCd "+itm.get("color").getAsString());
         if(!itm.get("color").getAsString().equalsIgnoreCase(""))
         holder.txtValue.setTextColor(Color.parseColor(itm.get("color").getAsString()));
         holder.txtValue.setMovementMethod(LinkMovementMethod.getInstance());

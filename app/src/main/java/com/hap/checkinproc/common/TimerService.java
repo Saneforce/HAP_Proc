@@ -86,7 +86,7 @@ public class TimerService extends Service {
         ViewGroup rootView = cAtivity.getWindow().getDecorView().findViewById(android.R.id.content);
 
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 
 
             LocationServices locationServices = new LocationServices(cAtivity, context);
