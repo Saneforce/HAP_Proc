@@ -43,7 +43,6 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -53,7 +52,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.Block_Information;
 import com.hap.checkinproc.Activity_Hap.MainActivity;
-import com.hap.checkinproc.HAPApp;
+import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
@@ -65,13 +64,12 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.Executor;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.hap.checkinproc.HAPApp.activeActivity;
+import static com.hap.checkinproc.SFA_Activity.HAPApp.activeActivity;
 
 //import android.support.annotation.NonNull;
 //import android.support.v4.app.NotificationCompat;

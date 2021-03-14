@@ -51,17 +51,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
     TextView username;
     TextView lblUserName, lblEmail;
-    Button linApprovals, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift, linTourPlan, linExit, lin_check_in, linHolidayWorking;
-    Button linMyday, linCheckin;
+    Button linMyday, linCheckin, lin_SFA, linApprovals, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift, linTourPlan, linExit, lin_check_in, linHolidayWorking;
     Integer type;
     Common_Class common_class;
     TextView approvalcount;
-
     Shared_Common_Pref shared_common_pref;
     String imageProfile = "";
     ImageView profilePic;
-
-
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
     public static final String visitPurpose = "vstPur";
@@ -84,7 +80,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         lblUserName = (TextView) findViewById(R.id.lblUserName);
         lblEmail = (TextView) findViewById(R.id.lblEmail);
         profilePic = findViewById(R.id.profile_image);
-
+        lin_SFA = findViewById(R.id.lin_SFA);
         Get_MydayPlan(1, "check/mydayplan");
         shared_common_pref = new Shared_Common_Pref(this);
         CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
@@ -182,6 +178,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linTourPlan.setOnClickListener(this);
         linHolidayWorking.setOnClickListener(this);
         linExit.setOnClickListener(this);
+        lin_SFA.setOnClickListener(this);
         getcountdetails();
     }
 
@@ -250,7 +247,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             case R.id.lin_tour_plan:
                 startActivity(new Intent(this, Tp_Month_Select.class));
                 break;
-
+            case R.id.lin_SFA:
+                startActivity(new Intent(this, SFA_Activity.class));
+                break;
             case R.id.lin_holiday_working:
                 AlertDialogBox.showDialog(Dashboard.this, "HAP Check-In", "Are you sure want to Check-in with Hoilday Entry", "YES", "NO", false, new AlertBox() {
                     @Override

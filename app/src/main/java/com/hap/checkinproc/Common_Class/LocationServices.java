@@ -29,8 +29,9 @@ public class LocationServices extends Activity {
         int coarseReq = ContextCompat.checkSelfPermission(_context, ACCESS_COARSE_LOCATION);
         int backReq = ContextCompat.checkSelfPermission(_context, ACCESS_BACKGROUND_LOCATION);
 
-        if ((locationReq == PackageManager.PERMISSION_GRANTED && coarseReq == PackageManager.PERMISSION_GRANTED &&
-                backReq == PackageManager.PERMISSION_GRANTED) == true) {
+        if ((locationReq == PackageManager.PERMISSION_GRANTED &&
+             coarseReq == PackageManager.PERMISSION_GRANTED &&
+             backReq == PackageManager.PERMISSION_GRANTED) == true) {
             Log.v("KARTHIC_KUMAR", "IF_CONDITION");
         } else {
             Log.v("KARTHIC_KUMAR", "ELSE_CONDITION");

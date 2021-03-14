@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.hap.checkinproc.Activity_Hap.Block_Information;
 import com.hap.checkinproc.Common_Class.LocationServices;
-import com.hap.checkinproc.HAPApp;
+import com.hap.checkinproc.SFA_Activity.HAPApp;
 
 import java.util.Timer;
 import java.util.TimerTask;

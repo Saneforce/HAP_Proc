@@ -1,22 +1,29 @@
-package com.hap.checkinproc;
+package com.hap.checkinproc.SFA_Activity;
 
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
 
+import com.hap.checkinproc.SFA_Activity.ApiComponent;
+import com.hap.checkinproc.SFA_Activity.ApiModule;
+import com.hap.checkinproc.SFA_Activity.AppModule;
+import com.hap.checkinproc.SFA_Activity.DaggerApiComponent;
+
 public class HAPApp extends Application {
 
+    private ApiComponent mApiComponent;
     public static Activity activeActivity;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        mApiComponent = DaggerApiComponent.builder()
+                .appModule(new AppModule(this))
+                .apiModule(new ApiModule("https://hap.sanfmcg.com/server/"))
+                .build();
         setupActivityListener();
     }
 
-    /* public Activity getActiveActivity(){
-         return activeActivity;
-     }*/
     private void setupActivityListener() {
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
@@ -54,5 +61,9 @@ public class HAPApp extends Application {
 
     public static Activity getActiveActivity() {
         return activeActivity;
+    }
+
+    public ApiComponent getNetComponent() {
+        return mApiComponent;
     }
 }

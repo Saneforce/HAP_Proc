@@ -511,7 +511,7 @@
                         android:background="@drawable/blue_txt_bg"
                         android:gravity="center"
                         android:padding="@dimen/C5dp"
-                        android:text="Save"
+                        android:text="Reject"
                         android:textAlignment="center"
                         android:textColor="@color/bg_color"
                         android:textSize="18sp"
