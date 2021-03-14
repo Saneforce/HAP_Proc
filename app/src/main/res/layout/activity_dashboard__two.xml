@@ -308,7 +308,8 @@
                         style="@style/ButtonStyle"
                         android:layout_weight="1"
                         android:background="@drawable/button_purple"
-                        android:text="Travel Allowance" />
+                        android:text="Travel Allowance"
+                        android:visibility="gone" />
 
                 </LinearLayout>
 

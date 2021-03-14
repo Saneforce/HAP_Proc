@@ -356,12 +356,12 @@
 
                 <LinearLayout
                     android:id="@+id/lin_alo_view"
-                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C8dp"
                     android:layout_marginRight="@dimen/C8dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
                     <!--Daily Allowance-->
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -1495,10 +1495,10 @@
 
                                     <LinearLayout
                                         android:id="@+id/lin_stay_view"
-                                        android:visibility="gone"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:orientation="vertical">
+                                        android:orientation="vertical"
+                                        android:visibility="gone">
 
                                         <LinearLayout
                                             android:id="@+id/ldgEAra"
@@ -1616,10 +1616,10 @@
                                         </LinearLayout>
 
                                         <View
+                                            android:id="@+id/bill_view"
                                             android:layout_width="match_parent"
                                             android:layout_height="1dp"
                                             android:layout_margin="@dimen/C10dp"
-                                            android:id="@+id/bill_view"
                                             android:background="@color/grey_300"></View>
 
                                         <LinearLayout
@@ -1722,11 +1722,11 @@
                                             </LinearLayout>
 
                                             <TextView
-                                                android:visibility="gone"
-                                                android:layout_width="wrap_content"
-                                                android:text=""
                                                 android:id="@+id/log_ukey"
-                                                android:layout_height="wrap_content" />
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:text=""
+                                                android:visibility="gone" />
 
                                             <LinearLayout
                                                 android:layout_width="wrap_content"
@@ -1860,14 +1860,21 @@
 
                             </LinearLayout>
 
-                            <LinearLayout
-
-                                android:id="@+id/lin_dyn_local_con"
+                            <ScrollView
+                                android:id="@+id/lc_srcoll"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:background="@color/grey_300">
 
-                            </LinearLayout>
+                                <LinearLayout
+                                    android:id="@+id/lin_dyn_local_con"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                </LinearLayout>
+
+                            </ScrollView>
 
                             <LinearLayout
                                 android:id="@+id/lin_total_loca"
@@ -1953,6 +1960,7 @@
 
                                     </LinearLayout>
 
+
                                     <LinearLayout
                                         android:id="@+id/lin_other_allowance"
                                         android:layout_width="wrap_content"
@@ -1970,6 +1978,8 @@
                                             android:textColor="#FFF"
                                             android:textSize="12sp" />
                                     </LinearLayout>
+
+
                                 </RelativeLayout>
                             </LinearLayout>
 
@@ -2098,56 +2108,56 @@
 
     <LinearLayout
 
-        android:background="#ECEAEA"
         android:id="@+id/lin_fare_amount"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/C5dp"
         android:layout_marginRight="@dimen/C5dp"
-        android:layout_width="match_parent"
+        android:background="#ECEAEA"
         android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <View
-            android:background="@color/grey_300"
+            android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_width="match_parent"></View>
+            android:background="@color/grey_300"></View>
 
         <LinearLayout
 
-            android:layout_height="match_parent"
             android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent">
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/C8dp"
-                    android:layout_width="match_parent"
                     app:cardCornerRadius="@dimen/C5dp">
 
                     <LinearLayout
-                        android:layout_height="wrap_content"
                         android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <LinearLayout
-                            android:background="@color/GrandTotal"
-                            android:layout_height="wrap_content"
                             android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/GrandTotal"
                             android:orientation="vertical"
-                            android:paddingBottom="@dimen/C5dp"
                             android:paddingLeft="@dimen/C8dp"
+                            android:paddingTop="@dimen/C8dp"
                             android:paddingRight="@dimen/C8dp"
-                            android:paddingTop="@dimen/C8dp">
+                            android:paddingBottom="@dimen/C5dp">
 
                             <TextView
-                                android:layout_below="@+id/card_fare"
-                                android:layout_height="wrap_content"
                                 android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/card_fare"
                                 android:text="TOTAL "
                                 android:textAlignment="center"
                                 android:textAllCaps="true"
@@ -2159,9 +2169,9 @@
 
                         <TextView
                             android:id="@+id/grand_total"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/C5dp"
-                            android:layout_width="match_parent"
                             android:paddingLeft="@dimen/C10dp"
                             android:paddingRight="@dimen/C10dp"
                             android:text=""
@@ -2177,33 +2187,33 @@
             </LinearLayout>
 
             <LinearLayout
-                android:background="#99ECEAEA"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#99ECEAEA"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imag_back"
-                    android:layout_gravity="center_vertical"
-                    android:layout_height="40dp"
-                    android:layout_margin="@dimen/C5dp"
                     android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_margin="@dimen/C5dp"
                     android:paddingLeft="@dimen/C8dp"
                     android:paddingRight="@dimen/C8dp"
                     android:src="@drawable/back_arrow"></ImageView>
 
                 <Space
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_width="match_parent"></Space>
+                    android:layout_weight="1"></Space>
 
                 <Button
-                    android:background="@drawable/button_blueg"
                     android:id="@+id/save_button"
-                    android:layout_gravity="center_vertical"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/C10dp"
                     android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/C10dp"
+                    android:background="@drawable/button_blueg"
                     android:padding="10dp"
                     android:text="Save"
                     android:textAlignment="center"
@@ -2213,12 +2223,12 @@
                     tools:ignore="RtlCompat" />
 
                 <Button
-                    android:background="@drawable/button_blueg"
                     android:id="@+id/btn_sub"
-                    android:layout_gravity="center_vertical"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/C10dp"
                     android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="@dimen/C10dp"
+                    android:background="@drawable/button_blueg"
                     android:padding="10dp"
                     android:text="Submit for Approval"
                     android:textAlignment="center"
@@ -2235,18 +2245,18 @@
     </LinearLayout>
 
     <LinearLayout
-        android:background="#99ECEAEA"
         android:id="@+id/lin_back"
-        android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#99ECEAEA"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:ignore="MissingConstraints">
 
         <ImageView
             android:id="@+id/imag_backs"
+            android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="@dimen/C5dp"
-            android:layout_width="40dp"
             android:paddingLeft="@dimen/C8dp"
             android:paddingRight="@dimen/C8dp"
             android:src="@drawable/back_arrow"></ImageView>

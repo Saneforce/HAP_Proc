@@ -152,7 +152,34 @@
                     android:text="Holiday Working"
                     app:layout_flexBasisPercent="47%" />
 
+                <Button
+                    android:id="@+id/lin_SFA"
+                    style="@style/ButtonStyle"
+                    android:background="@drawable/g_sign"
+                    android:text="SFA"
+                    app:layout_flexBasisPercent="47%" />
+
             </com.google.android.flexbox.FlexboxLayout>
+
+          <!--  <LinearLayout
+                android:id="@+id/lin_SFA"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/C5dp"
+                android:background="@drawable/g_sign"
+                android:padding="@dimen/C16dp">
+
+                <TextView
+                    android:id="@+id/SFA_Working"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="SFA"
+                    android:textColor="#FFFFFF" />
+
+
+            </LinearLayout>-->
 
             <Button
                 android:id="@+id/lin_exit"

@@ -33,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -219,7 +220,12 @@ public class Common_Class {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
     }
+    public static String GetEkey() {
+        DateFormat dateformet = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Calendar calander = Calendar.getInstance();
+        return "EK" + Shared_Common_Pref.Sf_Code + dateformet.format(calander.getTime()).hashCode();
 
+    }
 
     public void hideKeybaord(View v, Context context) {
         this.context = context;

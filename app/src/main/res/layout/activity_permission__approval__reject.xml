@@ -327,7 +327,7 @@
                             android:background="@drawable/blue_txt_bg"
                             android:fontFamily="@font/alegreya_sans_sc"
                             android:gravity="center"
-                            android:text="Save"
+                            android:text="Reject"
                             android:textAlignment="center"
                             android:textColor="@color/bg_color"
                             android:textSize="18sp"

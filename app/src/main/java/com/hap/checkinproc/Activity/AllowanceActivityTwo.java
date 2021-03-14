@@ -285,10 +285,10 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
 
                 if (EndedEditText.getText().toString().matches("")) {
-                    Toast.makeText(AllowanceActivityTwo.this, "Enter End KM", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AllowanceActivityTwo.this, "Choose End Km", Toast.LENGTH_SHORT).show();
                     return;
                 } else if (EndedImage.matches("")) {
-                    Toast.makeText(AllowanceActivityTwo.this, "Enter End Image", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AllowanceActivityTwo.this, "Choose End photo", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
 

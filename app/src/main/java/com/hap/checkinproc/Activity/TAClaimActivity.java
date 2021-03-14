@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +58,7 @@ import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Activity_Hap.AttachementActivity;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
+import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Activity_Hap.MapZoomIn;
@@ -101,7 +103,7 @@ import retrofit2.Response;
 public class TAClaimActivity extends AppCompatActivity implements Master_Interface,
         OnMapReadyCallback {
 
-
+    SharedPreferences CheckInDetails;
     public static final String mypreference = "mypref";
     public static final String Name = "Allowance";
     public static final String MOT = "ModeOfTravel";
@@ -184,7 +186,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     Map<String, List<EditText>> usersByCountry = new HashMap<String, List<EditText>>();
     Map<String, List<EditText>> userOtherExpense = new HashMap<String, List<EditText>>();
     Map<String, String> AttachmentImg = new HashMap<String, String>();
-
+    public static final String CheckInfo = "CheckInDetail";
     CustomListViewDialog customDialog;
     JSONObject jsonDailyAllowance = new JSONObject();
     Type userType;
@@ -193,6 +195,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     DatePickerDialog picker;
     Switch ldgNeeded;
     View viw, viewBilling;
+    ScrollView mLc;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -309,7 +312,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         TotalDays = findViewById(R.id.total_days);
         stayDays = findViewById(R.id.lin_stay_view);
         txtLodgUKey = findViewById(R.id.log_ukey);
-
+        CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+        mLc = findViewById(R.id.lc_srcoll);
         linImgPrv = findViewById(R.id.lin_img_prv);
         viewBilling = findViewById(R.id.bill_view);
 
@@ -469,6 +473,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             @Override
             public void onClick(View v) {
 
+
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 
@@ -480,6 +485,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 final View rowView = inflater.inflate(R.layout.activity_other_expense, null);
                 LinearOtherAllowance.addView(rowView, layoutParams);
+
 
                 oePosCnt = LinearOtherAllowance.indexOfChild(rowView);
 
@@ -601,14 +607,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 linlocalCon.addView(rowView, layoutParams);
                 localText.setVisibility(View.VISIBLE);
 
-
                 Integer localCount = linlocalCon.getChildCount();
                 Log.v("Local_Count", String.valueOf(localCount));
-                Log.v("Local_Count", String.valueOf(linlocalCon.getChildCount()-1));
-
-
+                Log.v("Local_Count", String.valueOf(linlocalCon.getChildCount() - 1));
 
                 lcPosCnt = linlocalCon.indexOfChild(rowView);
+
+                LayoutTransition transition = new LayoutTransition();
+                linlocalCon.setLayoutTransition(transition);
 
                 View LcchildView = linlocalCon.getChildAt(lcPosCnt);
                 localTotal.setVisibility(View.VISIBLE);
@@ -1041,48 +1047,55 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         SumOFJointLodging();
     }
 
+
     public void onGetEmpDetails(View v) {
         View pv = (View) v.getParent().getParent();
         edt_ldg_JnEmp = pv.findViewById(R.id.edt_ldg_JnEmp);
         String sEmpID = String.valueOf(edt_ldg_JnEmp.getText());
         DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
-        Call<JsonArray> Callto = apiInterface.getDataArrayList("get/EmpByID",
-                UserDetails.getString("Divcode", ""),
-                UserDetails.getString("Sfcode", ""), sEmpID, "", DateTime, null);
-        Callto.enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                JsonArray res = response.body();
-                if (res.size() < 1) {
-                    Toast.makeText(getApplicationContext(), "Emp Code Not Found !", Toast.LENGTH_LONG).show();
-                    return;
+
+        if (edt_ldg_JnEmp.getText().toString().equals("")) {
+
+        } else {
+
+            Call<JsonArray> Callto = apiInterface.getDataArrayList("get/EmpByID",
+                    UserDetails.getString("Divcode", ""),
+                    UserDetails.getString("Sfcode", ""), sEmpID, "", DateTime, null);
+            Callto.enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    JsonArray res = response.body();
+                    if (res.size() < 1) {
+                        Toast.makeText(getApplicationContext(), "Emp Code Not Found !", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    JsonObject EmpDet = res.get(0).getAsJsonObject();
+
+                    txtJNName = pv.findViewById(R.id.txtJNName);
+                    txtJNDesig = pv.findViewById(R.id.txtJNDesig);
+                    txtJNDept = pv.findViewById(R.id.txtJNDept);
+                    txtJNHQ = pv.findViewById(R.id.txtJNHQ);
+                    txtJNMob = pv.findViewById(R.id.txtJNMob);
+                    txtJNMyEli = pv.findViewById(R.id.txtJNMyEli);
+
+                    txtJNName.setText(EmpDet.get("Name").getAsString());
+                    txtJNDesig.setText(EmpDet.get("Desig").getAsString());
+                    txtJNDept.setText(EmpDet.get("DeptName").getAsString());
+                    txtJNHQ.setText(EmpDet.get("HQ").getAsString());
+                    txtJNMob.setText(EmpDet.get("Mob").getAsString());
+                    float sum = EmpDet.get("ldgAllow").getAsFloat();
+                    ldgEmpName = String.valueOf(sum);
+
+                    txtJNMyEli.setText("Rs." + new DecimalFormat("##0.00").format(sum));
+                    SumOFJointLodging();
                 }
-                JsonObject EmpDet = res.get(0).getAsJsonObject();
 
-                txtJNName = pv.findViewById(R.id.txtJNName);
-                txtJNDesig = pv.findViewById(R.id.txtJNDesig);
-                txtJNDept = pv.findViewById(R.id.txtJNDept);
-                txtJNHQ = pv.findViewById(R.id.txtJNHQ);
-                txtJNMob = pv.findViewById(R.id.txtJNMob);
-                txtJNMyEli = pv.findViewById(R.id.txtJNMyEli);
-
-                txtJNName.setText(EmpDet.get("Name").getAsString());
-                txtJNDesig.setText(EmpDet.get("Desig").getAsString());
-                txtJNDept.setText(EmpDet.get("DeptName").getAsString());
-                txtJNHQ.setText(EmpDet.get("HQ").getAsString());
-                txtJNMob.setText(EmpDet.get("Mob").getAsString());
-                float sum = EmpDet.get("ldgAllow").getAsFloat();
-                ldgEmpName = String.valueOf(sum);
-
-                txtJNMyEli.setText("Rs." + new DecimalFormat("##0.00").format(sum));
-                SumOFJointLodging();
-            }
-
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
-                Log.d("Error:", "Some Error" + t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+                    Log.d("Error:", "Some Error" + t.getMessage());
+                }
+            });
+        }
     }
 
     public void SumOFTAAmount() {
@@ -1200,7 +1213,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(tBalAmt));
         }
 
-
     }
 
     /*Toolbar*/
@@ -1241,11 +1253,28 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                /* startActivity(new Intent(getApplicationContext(), Dashboard.class));*/
+                openHome();
             }
         });
     }
+
+
+    public void openHome() {
+        Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+        Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
+        Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
+        Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
+        Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
+
+        if (CheckIn == true) {
+            Intent Dashboard = new Intent(TAClaimActivity.this, Dashboard_Two.class);
+            Dashboard.putExtra("Mode", "CIN");
+            startActivity(Dashboard);
+        } else
+            startActivity(new Intent(getApplicationContext(), Dashboard.class));
+    }
+
 
     /*Choosing Dynamic date*/
     public void dynamicDate() {
@@ -2448,6 +2477,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             jsonData.put("drvBrdAmt", drvBrdAmt);
             jsonData.put("trv_lc_amt", sumsTa);
             jsonData.put("gr_total", gTotal);
+            jsonData.put("edt_remark", editTextRemarks.getText().toString());
 
             /*Daily Allowance*/
             JSONObject daAll = new JSONObject();

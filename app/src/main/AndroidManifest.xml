@@ -24,7 +24,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:name=".HAPApp"
+        android:name=".SFA_Activity.HAPApp"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
@@ -47,6 +47,21 @@
         <activity android:name=".Activity.OEClaimActivity" />
         <activity android:name=".Activity.LocalConvenActivity" />
         <activity android:name=".Activity.DAClaimActivity" />
+
+        <activity android:name=".SFA_Activity.Outet_Report_Details"></activity>
+        <activity android:name=".SFA_Activity.Outlet_Report_View" />
+        <activity android:name=".SFA_Activity.Reports_Outler_Name" />
+        <activity android:name=".SFA_Activity.Order_Category_Select" />
+        <activity android:name=".SFA_Activity.Invoice_History" />
+        <activity android:name=".SFA_Activity.More_Info_Activity" />
+        <activity android:name=".SFA_Activity.Dist_Locations" />
+        <activity android:name=".SFA_Activity.Route_Product_Info" />
+        <activity android:name=".SFA_Activity.Outlet_Info_Activity" />
+        <activity android:name=".SFA_Activity.Dashboard_Route" />
+        <activity android:name=".SFA_Activity.Dashboard_View_Activity" />
+        <activity android:name=".SFA_Activity.SFA_Dashboard" />
+        <activity android:name=".Activity_Hap.SFA_Activity" />
+
         <activity
             android:name=".Activity_Hap.AttachementActivity"
             android:screenOrientation="portrait"

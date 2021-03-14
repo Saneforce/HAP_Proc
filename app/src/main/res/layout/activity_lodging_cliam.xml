@@ -91,14 +91,9 @@
                                 android:paddingRight="@dimen/C8dp">
 
                                 <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:text="Type"
-                                    android:textAllCaps="true"
-                                    android:textColor="#000"
-                                    android:textSize="10sp">
+                                    style="@style/TextStyle"
+                                    android:text="Type" />
 
-                                </TextView>
                             </LinearLayout>
 
                             <LinearLayout
@@ -115,13 +110,9 @@
 
                                 <TextView
                                     android:id="@+id/ldg_typ"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginLeft="@dimen/C8dp"
+                                    style="@style/TextStyle"
                                     android:layout_weight="1"
-                                    android:enabled="false"
-                                    android:hint="Select the type of Lodging"
-                                    android:textSize="@dimen/C13dp" />
+                                    android:hint="Select the type of Lodging" />
 
                                 <ImageView
                                     android:layout_width="@dimen/C20dp"
@@ -145,15 +136,8 @@
                                     android:orientation="vertical">
 
                                     <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginLeft="@dimen/C8dp"
-                                        android:layout_marginTop="@dimen/C5dp"
-                                        android:layout_marginRight="@dimen/C8dp"
-                                        android:text="Stay Location"
-                                        android:textAllCaps="true"
-                                        android:textColor="#000"
-                                        android:textSize="10sp"></TextView>
+                                        style="@style/TextStyle"
+                                        android:text="Stay Location" />
 
                                     <EditText
                                         android:id="@+id/edt_stay_loc"
@@ -198,13 +182,8 @@
                                             android:orientation="vertical">
 
                                             <TextView
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginLeft="@dimen/C10dp"
-                                                android:text="@string/from_date"
-                                                android:textAllCaps="true"
-                                                android:textColor="#000"
-                                                android:textSize="10sp"></TextView>
+                                                style="@style/TextStyle"
+                                                android:text="@string/from_date"></TextView>
 
 
                                             <EditText
@@ -232,13 +211,8 @@
                                             android:orientation="vertical">
 
                                             <TextView
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginLeft="@dimen/C10dp"
-                                                android:text="@string/to_date"
-                                                android:textAllCaps="true"
-                                                android:textColor="#000"
-                                                android:textSize="10sp"></TextView>
+                                                style="@style/TextStyle"
+                                                android:text="@string/to_date" />
 
                                             <EditText
                                                 android:id="@+id/to_picker"
@@ -265,22 +239,13 @@
 
 
                                         <TextView
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginLeft="@dimen/C10dp"
-                                            android:text="No of days : "
-                                            android:textColor="#000"
-                                            android:textSize="8sp"></TextView>
+                                            style="@style/TextStyle"
+                                            android:text="No of days : "></TextView>
 
 
                                         <TextView
                                             android:id="@+id/txt_stay_total"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:text=""
-                                            android:textAllCaps="true"
-                                            android:textColor="#000"
-                                            android:textSize="8sp"></TextView>
+                                            style="@style/TextStyle"></TextView>
 
                                     </LinearLayout>
 
@@ -292,7 +257,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:layout_marginBottom="@dimen/C20dp"
-                                    android:orientation="vertical">
+                                    android:orientation="vertical"
+                                    android:visibility="gone">
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
@@ -301,28 +267,20 @@
                                         android:orientation="horizontal"
                                         android:paddingLeft="@dimen/C8dp"
                                         android:paddingTop="@dimen/C5dp"
-                                        android:paddingRight="@dimen/C8dp"
-                                        android:visibility="gone">
+                                        android:paddingRight="@dimen/C8dp">
 
 
                                         <TextView
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
+                                            style="@style/TextStyle"
                                             android:layout_weight="1"
                                             android:text="Joined Person Details"
-                                            android:textAllCaps="true"
-                                            android:textColor="@color/colorPrimary"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold"></TextView>
+                                            android:textAllCaps="true"></TextView>
 
                                         <TextView
                                             android:id="@+id/txt_joint_add"
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
+                                            style="@style/TextStyle"
                                             android:text="+ Add"
-                                            android:textAllCaps="true"
-                                            android:textColor="@color/colorPrimary"
-                                            android:textSize="12sp"></TextView>
+                                            android:textAllCaps="true"></TextView>
 
                                     </LinearLayout>
 
@@ -360,15 +318,12 @@
                                             android:weightSum="2">
 
                                             <TextView
+                                                style="@style/TextStyle"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginLeft="@dimen/C8dp"
-                                                android:layout_marginRight="@dimen/C8dp"
                                                 android:layout_weight="1"
                                                 android:text="Eligible"
-                                                android:textAllCaps="true"
-                                                android:textColor="#000"
-                                                android:textSize="10sp" />
+                                                android:textAllCaps="true" />
 
                                             <TextView
                                                 android:id="@+id/txtMyEligi"
@@ -405,6 +360,8 @@
                                                 android:textColor="#000"
                                                 android:textSize="10sp" />
 
+                                            <include layout="@layout/back_arrow"></include>
+
                                             <TextView
                                                 android:id="@+id/txtJNEligi"
                                                 android:layout_width="match_parent"
@@ -431,6 +388,7 @@
                                             android:weightSum="2">
 
                                             <TextView
+
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginLeft="@dimen/C8dp"
@@ -650,7 +608,5 @@
         </ScrollView>
 
     </LinearLayout>
-
-    <include layout="@layout/back_arrow"></include>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
