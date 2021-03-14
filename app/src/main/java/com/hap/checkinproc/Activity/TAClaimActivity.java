@@ -617,7 +617,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 linlocalCon.setLayoutTransition(transition);
 
                 View LcchildView = linlocalCon.getChildAt(lcPosCnt);
-                localTotal.setVisibility(View.VISIBLE);
+
                 editTexts = (TextView) (LcchildView.findViewById(R.id.local_enter_mode));
                 linLocalSpinner = (LinearLayout) LcchildView.findViewById(R.id.lin_loc_spiner);
                 lcAttach = (ImageView) (LcchildView.findViewById(R.id.la_attach_iamg));

@@ -1864,7 +1864,7 @@
                                 android:id="@+id/lc_srcoll"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@color/grey_300">
+                          >
 
                                 <LinearLayout
                                     android:id="@+id/lin_dyn_local_con"
