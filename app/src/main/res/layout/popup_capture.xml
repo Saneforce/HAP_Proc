@@ -8,26 +8,14 @@
 
     <TextView
         android:id="@+id/camera"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:text="Camera"
-        android:textColor="#000"
-        android:textSize="15sp" />
+        style="@style/TextStyle"
+        android:text="Camera" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="3dp"
-        android:background="#000" />
+    <include layout="@layout/part_view" />
 
     <TextView
         android:id="@+id/upload"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/C8dp"
-        android:text="Multiple Upload"
-        android:textColor="#000"
-        android:textSize="15sp" />
+        style="@style/TextStyle"
+        android:text="Multiple Upload" />
 
 </LinearLayout>

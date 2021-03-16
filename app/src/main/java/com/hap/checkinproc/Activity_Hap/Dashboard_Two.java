@@ -38,7 +38,6 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Activity.View_All_Status_Activity;
-import com.hap.checkinproc.adapters.DateReportAdapter;
 import com.hap.checkinproc.adapters.GateAdapter;
 import com.hap.checkinproc.adapters.HomeRptRecyler;
 import com.hap.checkinproc.common.TimerService;
@@ -61,7 +60,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
     private RecyclerView recyclerView;
     private HomeRptRecyler mAdapter;
-    String viewMode = "",sSFType="";
+    String viewMode = "", sSFType = "";
     int cModMnth = 1;
     Button viewButton;
     Button StActivity, cardview3, cardview4, cardView5, btnCheckout;
@@ -85,12 +84,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     public static final String modeToKm = "SharedToKmsss";
     public static final String StartedKm = "StartedKMsss";
 
-RecyclerView mRecyclerView;
+    RecyclerView mRecyclerView;
     /*String Mode = "Bus";*/
     Button gateIn_gateOut, gateOut_gateIn;
     GateAdapter gateAdap;
     CardView cardGateDet;
     String dashMdeCnt = "";
+    String datefrmt = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,9 +102,16 @@ RecyclerView mRecyclerView;
 
         mShared_common_pref.save("Dashboard", "one");
 
-        dashMdeCnt = mShared_common_pref.getvalue("MC");
-        sharedpreferences = getSharedPreferences(mypreference,
-                Context.MODE_PRIVATE);
+        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+
+        if (sharedpreferences.contains("SharedMode")) {
+            dashMdeCnt = sharedpreferences.getString("SharedMode", "");
+            Log.e("Privacypolicy_MODE", dashMdeCnt);
+        }
+
+        datefrmt = com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly();
+        Log.v("DATE_FORMAT_ONLY", datefrmt);
+
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -117,7 +124,6 @@ RecyclerView mRecyclerView;
 
         TextView txtErt = findViewById(R.id.toolbar_ert);
         TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
-
         txtErt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +133,6 @@ RecyclerView mRecyclerView;
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
 
@@ -158,12 +163,12 @@ RecyclerView mRecyclerView;
         String sUName = UserDetails.getString("SfName", "");
         txUserName.setText("HI! " + sUName);
         sSFType = UserDetails.getString("Sf_Type", "");
-Log.d("CINDetails",CheckInDetails.toString());
+        Log.d("CINDetails", CheckInDetails.toString());
         cardview3 = findViewById(R.id.cardview3);
         cardview4 = findViewById(R.id.cardview4);
         cardView5 = findViewById(R.id.cardview5);
 
-        cardGateDet=findViewById(R.id.cardGateDet);
+        cardGateDet = findViewById(R.id.cardGateDet);
         gateIn_gateOut = findViewById(R.id.btn_gate_in);
         gateOut_gateIn = findViewById(R.id.btn_gate_out);
 
@@ -184,7 +189,7 @@ Log.d("CINDetails",CheckInDetails.toString());
         gateIn_gateOut.setVisibility(View.GONE);
         gateOut_gateIn.setVisibility(View.GONE);
         cardGateDet.setVisibility(View.GONE);
-        if(Integer.parseInt(CheckInDetails.getString("On_Duty_Flag","0"))>0){
+        if (Integer.parseInt(CheckInDetails.getString("On_Duty_Flag", "0")) > 0) {
             gateIn_gateOut.setVisibility(View.VISIBLE);
             gateOut_gateIn.setVisibility(View.VISIBLE);
             cardGateDet.setVisibility(View.VISIBLE);
@@ -560,7 +565,7 @@ Log.d("CINDetails",CheckInDetails.toString());
                         .setTitle("HAP Check-In")
                         .setMessage(Html.fromHtml("Are you sure to start your Today Activity Now ?"))
                         .setCancelable(false)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Intent aIntent;
@@ -584,7 +589,7 @@ Log.d("CINDetails",CheckInDetails.toString());
                                 //((AppCompatActivity) Dashboard_Two.this).finish();
                             }
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -602,11 +607,14 @@ Log.d("CINDetails",CheckInDetails.toString());
                         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                         Call<JsonArray> Callto = apiInterface.getDataArrayList("get/CLSExp",
                                 UserDetails.getString("Divcode", ""),
-                                UserDetails.getString("Sfcode", ""));
+                                UserDetails.getString("Sfcode", ""), datefrmt);
+
+                        Log.v("DATE_REQUEST", Callto.request().toString());
                         Callto.enqueue(new Callback<JsonArray>() {
                             @Override
                             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                                 //if (PrivacyScreen.equals("True") && dashMdeCnt.equals("1")) {
+                                Log.d("CHECK_OUT_RESPONSE", String.valueOf(response.body()));
 
                                 SharedPreferences.Editor editor = sharedpreferences.edit();
                                 editor.remove(Name);
@@ -634,17 +642,16 @@ Log.d("CINDetails",CheckInDetails.toString());
                                 editor.remove("StoreId");
                                 editor.commit();
 
-
-                                if (response.body().size() > 0) {
+                                if (dashMdeCnt.equals("1")) {
                                     Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
                                     takePhoto.putExtra("Mode", "COUT");
                                     startActivity(takePhoto);
                                 } else {
-
                                     Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
                                     takePhoto.putExtra("Mode", "COUT");
                                     startActivity(takePhoto);
                                 }
+
                             }
 
                             @Override
@@ -668,6 +675,7 @@ Log.d("CINDetails",CheckInDetails.toString());
             startActivity(intent);
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -714,7 +722,7 @@ Log.d("CINDetails",CheckInDetails.toString());
                 JsonArray jsonArray = response.body();
 
                 for (int l = 0; l < jsonArray.size(); l++) {
-                    JsonObject  jsonObjectAdd = jsonArray.get(l).getAsJsonObject();
+                    JsonObject jsonObjectAdd = jsonArray.get(l).getAsJsonObject();
 
                     Log.v("GATE_DATA", jsonObjectAdd.toString());
                     gateAdap = new GateAdapter(Dashboard_Two.this, jsonArray);
@@ -729,7 +737,6 @@ Log.d("CINDetails",CheckInDetails.toString());
 
             }
         });
-
 
 
     }

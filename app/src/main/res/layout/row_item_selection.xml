@@ -17,14 +17,9 @@
             android:focusable="false"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TextStyle"
             android:text="Select the doctor"
-            android:textColor="#000"
-            android:textSize="14sp"
             android:layout_toRightOf="@+id/check"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="12dp"
             android:id="@+id/txt_name"
             />
     </RelativeLayout>

@@ -102,7 +102,7 @@ public class Common_Class {
 
     public static String GetDateOnly() {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat dpln = new SimpleDateFormat("dd-MM-yyyy");
+        SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");
         String plantime = dpln.format(c.getTime());
         return plantime;
     }
@@ -145,20 +145,20 @@ public class Common_Class {
 
     }
 
-    public List<Common_Model> getfilterList(java.util.List<Common_Model> Jointworklistview){
+    public List<Common_Model> getfilterList(java.util.List<Common_Model> Jointworklistview) {
         List<Common_Model> Jointworklistviewsave = new ArrayList<>();
         for (int i = 0; i < Jointworklistview.size(); i++) {
             if (Jointworklistview.get(i).isSelected()) {
                 Log.e("SELECTED", String.valueOf(Jointworklistview.get(i).isSelected()));
-                Jointworklistviewsave.add(new Common_Model(Jointworklistview.get(i).getName() , Jointworklistview.get(i).getId(), true));
+                Jointworklistviewsave.add(new Common_Model(Jointworklistview.get(i).getName(), Jointworklistview.get(i).getId(), true));
             }
 
         }
 
-        return  Jointworklistviewsave;
-    };
+        return Jointworklistviewsave;
+    }
 
-
+    ;
 
 
     public JsonArray FilterGson(final Iterable<JsonObject> SrcArray, String colName, String searchVal) {
@@ -220,6 +220,7 @@ public class Common_Class {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         activity.startActivity(intent);
     }
+
     public static String GetEkey() {
         DateFormat dateformet = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Calendar calander = Calendar.getInstance();
@@ -279,7 +280,7 @@ public class Common_Class {
         return plantime;
     }
 
-    public void GetTP_Result(String name, String values, int Month,int year) {
+    public void GetTP_Result(String name, String values, int Month, int year) {
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
         JSONObject sp = new JSONObject();
@@ -346,7 +347,6 @@ public class Common_Class {
             }
         });
     }
-
 
 
     public static class InputFilterMinMax implements InputFilter {

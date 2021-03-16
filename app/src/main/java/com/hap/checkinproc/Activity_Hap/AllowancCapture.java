@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Camera;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -15,12 +16,14 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity.AllowanceActivityTwo;
+import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.TimerService;
@@ -28,7 +31,6 @@ import com.hap.checkinproc.common.TimerService;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.Callback {
     Button button;
@@ -51,7 +53,6 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allowanc_capture);
         startService(new Intent(this, TimerService.class));
-        StartSelfiCamera();
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
         mShared_common_pref = new Shared_Common_Pref(this);
@@ -82,6 +83,18 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
                 saveImgPreview();
             }
         });
+
+        CameraPermission cameraPermission = new CameraPermission(AllowancCapture.this, getApplicationContext());
+
+        if (!cameraPermission.checkPermission()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                cameraPermission.requestPermission();
+            }
+            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+        } else {
+            Log.v("PERMISSION", "PERMISSION");
+            StartSelfiCamera();
+        }
     }
 
 
@@ -118,8 +131,10 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
 
         if (mCamId == 1) {
             imgPreview.setRotation((float) -90.0);
-        } else {
+        } else if (mCamId == 2) {
             imgPreview.setRotation((float) 90.0);
+        } else {
+            imgPreview.setRotation((float) 270.0);
         }
 
     }
@@ -143,7 +158,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         preview = (SurfaceView) findViewById(R.id.PREVIEW);
         mHolder = preview.getHolder();
         mHolder.addCallback(AllowancCapture.this);
-        setDefaultCameraId("back");
+        setDefaultCameraId();
         mCamera = Camera.open(mCamId);
         try {
             mCamera.setPreviewDisplay(mHolder);
@@ -200,40 +215,31 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     }
 
     private void StartSelfiCamera() {
-
         if (mCamera != null) {
             mCamera.stopPreview();
             mCamera.release();
-            mCamera.autoFocus(new Camera.AutoFocusCallback() {
-                @Override
-                public void onAutoFocus(boolean success, Camera camera) {
-                    camera.cancelAutoFocus();
-                }
-            });
             mCamera = null;
         }
-
         preview = (SurfaceView) findViewById(R.id.PREVIEW);
         mHolder = preview.getHolder();
-        mHolder.addCallback(AllowancCapture.this);
-        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        setDefaultCameraId("back");
+        mHolder.addCallback(this);
+        setDefaultCameraId();
         mCamera = Camera.open(mCamId);
 
         try {
             mCamera.setPreviewDisplay(mHolder);
         } catch (IOException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
             e.printStackTrace();
         }
         setCameraDisplayOrientation();
         mCamera.startPreview();
 
-
         Log.e("mCAmer_id", String.valueOf(mCamId));
     }
 
 
-    private void setDefaultCameraId(String cam) {
+    private void setDefaultCameraId() {
         noOfCameras = Camera.getNumberOfCameras();
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         for (int i = 0; i < noOfCameras; i++) {
@@ -252,7 +258,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         mCamera.startPreview();
         int degrees = 0;
         switch (rotation) {
-            case Surface.ROTATION_90:
+            case Surface.ROTATION_0:
                 degrees = 0;
                 break;
         }
@@ -307,6 +313,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     public void onBackPressed() {
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();

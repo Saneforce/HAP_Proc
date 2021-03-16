@@ -31,14 +31,10 @@
                     android:gravity="center">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:fontFamily="@font/alegreya_sans_sc"
+                        style="@style/TextStyle"
                         android:text="LEAVE CANCEL STATUS"
                         android:textAlignment="center"
-                        android:textColor="@color/color_white"
-                        android:textStyle="bold" />
+                        android:textColor="@color/color_white" />
                 </LinearLayout>
 
                 <LinearLayout
