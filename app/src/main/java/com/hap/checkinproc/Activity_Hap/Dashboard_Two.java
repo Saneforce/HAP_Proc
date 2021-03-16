@@ -21,6 +21,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -59,7 +60,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
     private RecyclerView recyclerView;
     private HomeRptRecyler mAdapter;
-    String viewMode = "";
+    String viewMode = "",sSFType="";
     int cModMnth = 1;
     Button viewButton;
     Button StActivity, cardview3, cardview4, cardView5, btnCheckout;
@@ -87,6 +88,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     /*String Mode = "Bus";*/
     Button gateIn_gateOut, gateOut_gateIn;
     GateAdapter gateAdap;
+    CardView cardGateDet;
     String dashMdeCnt = "";
     String Count;
 
@@ -161,13 +163,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         TextView txUserName = findViewById(R.id.txUserName);
         String sUName = UserDetails.getString("SfName", "");
         txUserName.setText("HI! " + sUName);
-
-
+        sSFType = UserDetails.getString("Sf_Type", "");
+Log.d("CINDetails",CheckInDetails.toString());
         cardview3 = findViewById(R.id.cardview3);
         cardview4 = findViewById(R.id.cardview4);
         cardView5 = findViewById(R.id.cardview5);
 
-
+        cardGateDet=findViewById(R.id.cardGateDet);
         gateIn_gateOut = findViewById(R.id.btn_gate_in);
         gateOut_gateIn = findViewById(R.id.btn_gate_out);
 
@@ -185,12 +187,20 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         StActivity.setOnClickListener(this);
         btnCheckout.setOnClickListener(this);
         gateIn_gateOut.setOnClickListener(this);
+        gateIn_gateOut.setVisibility(View.GONE);
+        gateOut_gateIn.setVisibility(View.GONE);
+        cardGateDet.setVisibility(View.GONE);
+        if(Integer.parseInt(CheckInDetails.getString("On_Duty_Flag","0"))>0){
+            gateIn_gateOut.setVisibility(View.VISIBLE);
+            gateOut_gateIn.setVisibility(View.VISIBLE);
+            cardGateDet.setVisibility(View.VISIBLE);
+        }
         if (getIntent().getExtras() != null) {
             Bundle params = getIntent().getExtras();
             viewMode = params.getString("Mode");
             if (viewMode.equalsIgnoreCase("CIN") || viewMode.equalsIgnoreCase("extended")) {
                 cardview3.setVisibility(View.VISIBLE);
-                cardview4.setVisibility(View.VISIBLE);
+                cardview4.setVisibility(View.GONE);
                 //cardView5.setVisibility(View.VISIBLE);
                 StActivity.setVisibility(View.VISIBLE);
                 btnCheckout.setVisibility(View.VISIBLE);
@@ -208,7 +218,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             StActivity.setVisibility(View.GONE);
             btnCheckout.setVisibility(View.GONE);
         }
-
+        if (sSFType.equals("0"))
+            StActivity.setVisibility(View.GONE);
 
         getNotify();
         getDyReports();

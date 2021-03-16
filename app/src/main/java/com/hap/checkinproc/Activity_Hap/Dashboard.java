@@ -56,7 +56,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     Common_Class common_class;
     TextView approvalcount;
     Shared_Common_Pref shared_common_pref;
-    String imageProfile = "";
+    String imageProfile = "",sSFType="";
     ImageView profilePic;
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
@@ -80,7 +80,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         lblUserName = (TextView) findViewById(R.id.lblUserName);
         lblEmail = (TextView) findViewById(R.id.lblEmail);
         profilePic = findViewById(R.id.profile_image);
-        lin_SFA = findViewById(R.id.lin_SFA);
         Get_MydayPlan(1, "check/mydayplan");
         shared_common_pref = new Shared_Common_Pref(this);
         CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
@@ -103,7 +102,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         String eMail = UserDetails.getString("email", "");
         String sSFName = UserDetails.getString("SfName", "");
-        String sSFType = UserDetails.getString("Sf_Type", "");
+        sSFType = UserDetails.getString("Sf_Type", "");
 
 
         Log.e("DASHBORAD_SF", sSFType);
@@ -140,13 +139,15 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linExtShift.setVisibility(View.GONE);
         if (sSFType.equals("0")) linExtShift.setVisibility(View.VISIBLE);
         linTourPlan = (findViewById(R.id.lin_tour_plan));
+        linTourPlan.setVisibility(View.GONE);
+        if (sSFType.equals("1")) linTourPlan.setVisibility(View.VISIBLE);
         linHolidayWorking = findViewById(R.id.lin_holiday_working);
         linExit = (findViewById(R.id.lin_exit));
         approvalcount = findViewById(R.id.approvalcount);
 
         if (shared_common_pref.getvalue(Shared_Common_Pref.CHECK_COUNT).equals("0")) {
-            //   linApprovals.setVisibility(View.GONE);
-            linApprovals.setVisibility(View.VISIBLE);
+            linApprovals.setVisibility(View.GONE);
+            //linApprovals.setVisibility(View.VISIBLE);
         } else {
             linApprovals.setVisibility(View.VISIBLE);
         }
@@ -178,7 +179,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linTourPlan.setOnClickListener(this);
         linHolidayWorking.setOnClickListener(this);
         linExit.setOnClickListener(this);
-        lin_SFA.setOnClickListener(this);
         getcountdetails();
     }
 
@@ -326,7 +326,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     // Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
-                    if (flag == 1) {
+                    linCheckin.setVisibility(View.VISIBLE);
+                    if (flag == 1 && sSFType.equals("1")) {
                         JSONArray jsoncc = jsonObject.getJSONArray("Checkdayplan");
                         Log.e("LENGTH_Checkin", String.valueOf(jsoncc));
                         Log.e("LENGTH_Checkin", String.valueOf(jsoncc.length()));
