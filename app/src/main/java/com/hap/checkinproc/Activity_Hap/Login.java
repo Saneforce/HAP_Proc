@@ -435,13 +435,13 @@ public class Login extends AppCompatActivity {
                 mLUService = new SANGPSTracker(getApplicationContext());
 
             myReceiver = new LocationReceiver();
- /*if (Utils.requestingLocationUpdates(this)) {
- if (!checkPermission()) {
- requestPermissions();
- } else {
- // mLUService.requestLocationUpdates();
- }
- }*/
+             /*if (Utils.requestingLocationUpdates(this)) {
+             if (!checkPermission()) {
+             requestPermissions();
+             } else {
+             // mLUService.requestLocationUpdates();
+             }
+             }*/
 
 
             // Bind to the service. If the service is in foreground mode, this signals to the service

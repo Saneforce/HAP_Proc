@@ -157,7 +157,7 @@
                     style="@style/ButtonStyle"
                     android:background="@drawable/g_sign"
                     android:text="SFA"
-                    app:layout_flexBasisPercent="47%" />
+                    app:layout_flexBasisPercent="47%" android:visibility="gone" />
 
             </com.google.android.flexbox.FlexboxLayout>
 

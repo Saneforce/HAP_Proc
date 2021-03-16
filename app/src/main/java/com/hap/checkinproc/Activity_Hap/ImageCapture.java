@@ -129,14 +129,14 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     CheckInInf.put("ShiftStart", params.getString("ShiftStart"));
                     CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
                     CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
-                    CheckInInf.put("App_Version", Common_Class.Version_Name);
-                    CheckInInf.put("WrkType", WrkType);
-                    CheckInInf.put("CheckDutyFlag", "0");
-                    CheckInInf.put("On_Duty_Flag", params.getString("On_Duty_Flag"));
-                    CheckInInf.put("PlcID", onDutyPlcID);
-                    CheckInInf.put("PlcNm", onDutyPlcNm);
-                    CheckInInf.put("vstRmks", vstPurpose);
                 }
+                CheckInInf.put("App_Version", Common_Class.Version_Name);
+                CheckInInf.put("WrkType", WrkType);
+                CheckInInf.put("CheckDutyFlag", "0");
+                CheckInInf.put("On_Duty_Flag", WrkType);
+                CheckInInf.put("PlcID", onDutyPlcID);
+                CheckInInf.put("PlcNm", onDutyPlcNm);
+                CheckInInf.put("vstRmks", vstPurpose);
             }
 
             if (mMode.equalsIgnoreCase("extended")) {
@@ -429,14 +429,21 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
             if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty") || mMode.equalsIgnoreCase("holidayentry")) {
                 SharedPreferences.Editor editor = CheckInDetails.edit();
-                editor.putString("Shift_Selected_Id", CheckInInf.getString("Shift_Selected_Id"));
-                editor.putString("Shift_Name", CheckInInf.getString("Shift_Name"));
-                editor.putString("ShiftStart", CheckInInf.getString("ShiftStart"));
-                editor.putString("ShiftEnd", CheckInInf.getString("ShiftEnd"));
-                editor.putString("ShiftCutOff", CheckInInf.getString("ShiftCutOff"));
+                if(mMode.equalsIgnoreCase("CIN")){
+                    editor.putString("Shift_Selected_Id", CheckInInf.getString("Shift_Selected_Id"));
+                    editor.putString("Shift_Name", CheckInInf.getString("Shift_Name"));
+                    editor.putString("ShiftStart", CheckInInf.getString("ShiftStart"));
+                    editor.putString("ShiftEnd", CheckInInf.getString("ShiftEnd"));
+                    editor.putString("ShiftCutOff", CheckInInf.getString("ShiftCutOff"));
+                }
                 if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
                     editor.putString("FTime", CTime);
                 editor.putString("Logintime", CTime);
+
+                if(mMode.equalsIgnoreCase("onduty"))
+                    editor.putString("On_Duty_Flag", "1");
+                else
+                    editor.putString("On_Duty_Flag", "0");
                 editor.putBoolean("CheckIn", true);
                 editor.apply();
 
