@@ -576,8 +576,10 @@ Log.d("CINDetails",CheckInDetails.toString());
                                 if (sDeptType.equalsIgnoreCase("1")) {
                                     aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
                                 } else {
-                                    aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
+                                    aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
                                 }
+
+                                //startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
                                 startActivity(aIntent);
                                 //((AppCompatActivity) Dashboard_Two.this).finish();
                             }
