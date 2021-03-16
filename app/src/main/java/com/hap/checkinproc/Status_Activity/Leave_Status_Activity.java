@@ -22,7 +22,6 @@ import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Activity_Hap.LeaveReasonStatus;
-import com.hap.checkinproc.Activity_Hap.Leave_Dashboard;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -103,7 +102,6 @@ public class Leave_Status_Activity extends AppCompatActivity {
         gson = new Gson();
 
 
-
         AMOD = String.valueOf(getIntent().getSerializableExtra("AMod"));
 
         Log.v("AMODE", AMOD);
@@ -168,6 +166,8 @@ public class Leave_Status_Activity extends AppCompatActivity {
     public void onBackPressed() {
 
     }
+
+
     @Override
     protected void onResume() {
         super.onResume();

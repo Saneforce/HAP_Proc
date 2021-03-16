@@ -23,7 +23,6 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,7 +36,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -353,7 +351,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                     }
                     Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                 } else {
-
+                    Log.v("PERMISSION_CHECK", startEnd);
                     SharedPreferences.Editor ed = sharedpreferences.edit();
                     ed.putString(visitPurpose, purposeofvisitedittext.getText().toString());
                     ed.putString(otherLocation, ondutyedittext.getText().toString());
@@ -367,7 +365,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                     ed.putString("ShareModeIDs", modeId);
                     ed.putString("StoreId", StrToCode);
                     ed.commit();
-
 
                     Intent intent = new Intent(On_Duty_Activity.this, AllowancCapture.class);
                     intent.putExtra("allowance", "three");
@@ -522,6 +519,18 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 Log.e("Image_Draw_able", "Not_Null_Image_View");
             }
         }
+
+
+        attachedImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                intent.putExtra("ImageUrl", imageURI);
+                startActivity(intent);
+
+            }
+        });
 
 
     }
@@ -709,7 +718,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     }
 
 
-
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
@@ -730,8 +738,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 BikeMode.setVisibility(View.GONE);
                 BusMode.setVisibility(View.VISIBLE);
                 ReasonPhoto.setVisibility(View.VISIBLE);
-
-
                 StartKm.setText("");
                 onDutyFrom.setText("");
                 TextToAddress.setText("");
@@ -969,11 +975,12 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(Name, n);
         editor.putString(MOT, Mode);
+        editor.putString("MdeTpID", startEnd);
         editor.commit();
 
-        Log.e("STRCodeSTRCode", STRCode);
+        Log.e("STRCodeSTRCode", startEnd);
         // STRCode = STRCode.replace("^[\"']+|[\"']+$", "");
-        Log.e("STRCodeSTRCode", STRCode);
+
         try {
             JSONObject jj = new JSONObject();
             jj.put("hap_location", strHapLocation);

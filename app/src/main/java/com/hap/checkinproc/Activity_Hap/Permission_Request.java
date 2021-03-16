@@ -205,6 +205,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         });
 
         eText = (EditText) findViewById(R.id.from_time);
+        eText2 = (EditText) findViewById(R.id.to_time);
         eText.setInputType(InputType.TYPE_NULL);
         eText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -240,7 +241,11 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                                         eText.setText(btwnTime);
                                     } else {
                                         eText.setText("");
+
+                                        eText2.setText("");
                                         Toast.makeText(Permission_Request.this, "Please Choose the time between the Shifttime", Toast.LENGTH_SHORT).show();
+
+
                                     }
                                     ToTimeData();
                                 }
@@ -252,56 +257,8 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
             }
         });
 
-        eText2 = (EditText) findViewById(R.id.to_time);
 
         eText2.setInputType(InputType.TYPE_NULL);
-      /*  eText2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar cldr = Calendar.getInstance();
-                int hour = cldr.get(Calendar.HOUR);
-                int minutes = cldr.get(Calendar.MINUTE);
-                // time picker dialog
-                if (!eText.getText().toString().matches("")) {
-
-                    picker = new TimePickerDialog(Permission_Request.this,
-                            new TimePickerDialog.OnTimeSetListener() {
-                                @Override
-                                public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-
-
-                                    Log.e("From_Time_sMinute", String.format("%02d:%02d", sHour, sMinute));
-                                    btwnTime = String.format("%02d:%02d", sHour, sMinute);
-
-                                    toTime(sHour, sMinute);
-                                    toTime = String.valueOf(sHour);
-                                    TTime = "'" + btwnTime + "'";
-                                    TTTIme = btwnTime;
-                                    differ();
-
-                                    String now = btwnTime;
-                                    String start = FTime;
-                                    String end = shiftToDate;
-                                    System.out.println("CHECK_THE_CURRENT_TIME" + "" + now + " between " + start + "-" + end + "?");
-                                    System.out.println("CHECK_THE_CURRENT_TIME" + isHourInInterval(now, start, end));
-                                    Log.e("End_TIME",TTTIme);
-                                    if (isHourInInterval(now, start, end) == true) {
-                                        eText2.setText(btwnTime);
-                                    } else {
-                                        eText2.setText("");
-                                        Toast.makeText(Permission_Request.this, "Please Choose the time Greater than From Time", Toast.LENGTH_SHORT).show();
-                                    }
-
-
-                                }
-                            }, hour, minutes, true);
-                    picker.show();
-                } else {
-                    Toast.makeText(Permission_Request.this, "Please Choose the From Time", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
-
 
         // addingShiftToSpinner();
         shitType = findViewById(R.id.shift_type);
@@ -533,7 +490,10 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                         takenHrs.setText("0");
                         tknHrs = 0;
                     }
+
+
                     differ();
+
                 }
 
 
@@ -824,7 +784,14 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                 Log.e("TOTAL_REPOSNE_PER", String.valueOf(jsonObjecta));
                 TOTime = jsonObjecta.get("Totime").getAsString();
                 if (!StringFromTinme.equals("")) {
-                    eText2.setText(TOTime);
+
+                    Log.v("eText.getText",eText.getText().toString());
+                    if (!eText.getText().toString().equals("")) {
+                        eText2.setText(TOTime);
+                    }else{
+                        eText2.setText("");
+                    }
+
                 }
                 Log.e("SDFDFD", TOTime);
 
@@ -835,6 +802,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();

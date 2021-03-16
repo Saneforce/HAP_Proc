@@ -168,8 +168,8 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.lin_leav_sta:
                 //   common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "0");
+                startActivity(new Intent(Leave_Dashboard.this, Leave_Status_Activity.class));
 
-                common_class.CommonIntentwithFinish(Leave_Status_Activity.class);
                 mShared_common_pref.save("AMod", "0");
                 break;
             case R.id.lin_per_sta:

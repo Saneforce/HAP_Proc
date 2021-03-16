@@ -608,15 +608,19 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 localText.setVisibility(View.VISIBLE);
 
                 Integer localCount = linlocalCon.getChildCount();
-                Log.v("Local_Count", String.valueOf(localCount));
-                Log.v("Local_Count", String.valueOf(linlocalCon.getChildCount() - 1));
+                Log.v("Local_Count1", String.valueOf(localCount));
+                Log.v("Local_Count2", String.valueOf(linlocalCon.getChildCount() - 1));
 
                 lcPosCnt = linlocalCon.indexOfChild(rowView);
+                Log.v("Local_Count3", String.valueOf(lcPosCnt));
+                Log.v("Local_Count4", String.valueOf(lcPosCnt - 1));
 
                 LayoutTransition transition = new LayoutTransition();
                 linlocalCon.setLayoutTransition(transition);
 
+
                 View LcchildView = linlocalCon.getChildAt(lcPosCnt);
+                scroll();
 
                 editTexts = (TextView) (LcchildView.findViewById(R.id.local_enter_mode));
                 linLocalSpinner = (LinearLayout) LcchildView.findViewById(R.id.lin_loc_spiner);
@@ -1710,7 +1714,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     if (oeDraftArray != null || oeDraftArray.size() != 0) OeDraft(oeDraftArray);
                     if (trvldArray != null || trvldArray.size() != 0) trvldLocation(trvldArray);
                     if (ldArray != null || ldArray.size() != 0) {
-                        if (ldgAdd.getText().equals("+ Add")) {
+                      /*  if (ldgAdd.getText().equals("+ Add")) {
                             ldgAdd.setText("- Remove");
                             lodgContvw.setVisibility(View.VISIBLE);
                             lodingDraft(ldArray);
@@ -1718,11 +1722,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         } else {
                             ldgAdd.setText("+ Add");
                             lodgContvw.setVisibility(View.GONE);
-                        }
+                        }*/
+
+                        lodingDraft(ldArray);
+
 
                     } else {
 
-
+                        Log.v("LODGING_ARRAY_ELSE", String.valueOf(ldArray.size()));
                         jointLodging.setVisibility(View.GONE);
                         ldg_cin.setText("");
                         ldg_cout.setText("");
@@ -1758,7 +1765,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldraft = (JsonObject) lodingDraft.get(i);
 
             jsonAddition = ldraft.getAsJsonArray("Additional");
-
+            ldgAdd.setText("- Remove");
             lodgContvw.setVisibility(View.VISIBLE);
             lodgCont.setVisibility(View.VISIBLE);
             ldg_stayloc.setVisibility(View.VISIBLE);
@@ -3394,5 +3401,15 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         }
     }
 
+    public void scroll() {
 
+        mLc.post(new Runnable() {
+            @Override
+            public void run() {
+
+                mLc.fullScroll(View.FOCUS_DOWN);
+
+            }
+        });
+    }
 }

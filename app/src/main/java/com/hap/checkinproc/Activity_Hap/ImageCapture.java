@@ -346,7 +346,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             imgPreview.setRotation((float) -90.0);
         } else if (mCamId == 2) {
             imgPreview.setRotation((float) 90.0);
-        }else{
+        } else {
             imgPreview.setRotation((float) 270.0);
         }
 

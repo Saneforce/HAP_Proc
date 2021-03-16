@@ -37,7 +37,6 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Activity.View_All_Status_Activity;
-import com.hap.checkinproc.adapters.DateReportAdapter;
 import com.hap.checkinproc.adapters.GateAdapter;
 import com.hap.checkinproc.adapters.HomeRptRecyler;
 import com.hap.checkinproc.common.TimerService;
@@ -84,11 +83,12 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     public static final String modeToKm = "SharedToKmsss";
     public static final String StartedKm = "StartedKMsss";
 
-RecyclerView mRecyclerView;
+    RecyclerView mRecyclerView;
     /*String Mode = "Bus";*/
     Button gateIn_gateOut, gateOut_gateIn;
     GateAdapter gateAdap;
     String dashMdeCnt = "";
+    String Count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +100,15 @@ RecyclerView mRecyclerView;
 
         mShared_common_pref.save("Dashboard", "one");
 
+
         dashMdeCnt = mShared_common_pref.getvalue("MC");
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
+
+
+        Count = sharedpreferences.getString("MdeTpID", "");
+
+        Log.v("NAME_ALLOWANCE", Count);
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -549,7 +555,7 @@ RecyclerView mRecyclerView;
                         .setTitle("HAP Check-In")
                         .setMessage(Html.fromHtml("Are you sure to start your Today Activity Now ?"))
                         .setCancelable(false)
-                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Intent aIntent;
@@ -571,7 +577,7 @@ RecyclerView mRecyclerView;
                                 //((AppCompatActivity) Dashboard_Two.this).finish();
                             }
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -622,16 +628,27 @@ RecyclerView mRecyclerView;
                                 editor.commit();
 
 
-                                if (response.body().size() > 0) {
+                                if (Count.equals("1")) {
                                     Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
                                     takePhoto.putExtra("Mode", "COUT");
                                     startActivity(takePhoto);
                                 } else {
-
                                     Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
                                     takePhoto.putExtra("Mode", "COUT");
                                     startActivity(takePhoto);
                                 }
+
+                                /*  if (response.body().size() > 0) {
+                                    Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
+                                    takePhoto.putExtra("Mode", "COUT");
+                                    startActivity(takePhoto);
+                                } else {
+                                    Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
+                                    takePhoto.putExtra("Mode", "COUT");
+                                    startActivity(takePhoto);
+                                }*/
+
+
                             }
 
                             @Override
@@ -655,6 +672,7 @@ RecyclerView mRecyclerView;
             startActivity(intent);
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -701,7 +719,7 @@ RecyclerView mRecyclerView;
                 JsonArray jsonArray = response.body();
 
                 for (int l = 0; l < jsonArray.size(); l++) {
-                    JsonObject  jsonObjectAdd = jsonArray.get(l).getAsJsonObject();
+                    JsonObject jsonObjectAdd = jsonArray.get(l).getAsJsonObject();
 
                     Log.v("GATE_DATA", jsonObjectAdd.toString());
                     gateAdap = new GateAdapter(Dashboard_Two.this, jsonArray);
@@ -716,7 +734,6 @@ RecyclerView mRecyclerView;
 
             }
         });
-
 
 
     }
