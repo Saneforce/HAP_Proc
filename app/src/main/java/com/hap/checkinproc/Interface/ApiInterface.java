@@ -48,6 +48,9 @@ public interface ApiInterface {
     @GET("Db_v300.php?")
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code);
 
+  @GET("Db_v300.php?")
+    Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code,@Query("dte") String date);
+
     /*Locations*/
     @GET("Db_v300.php?")
     Call<List<Location>> location(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code);
@@ -65,6 +68,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v300.php?")
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("sfCode") String Sf_code, @Query("State_Code") String State_code, @Query("desig") String desig, @Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v300.php?")
+    Call<JsonArray> getDayReport(@Query("date") String date, @Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("sfCode") String Sf_code, @Query("State_Code") String State_code, @Query("desig") String desig, @Field("data") String body);
 
     @FormUrlEncoded
     @POST("Db_v300.php?")

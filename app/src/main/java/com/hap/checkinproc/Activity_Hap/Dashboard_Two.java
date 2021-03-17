@@ -60,7 +60,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
     private RecyclerView recyclerView;
     private HomeRptRecyler mAdapter;
-    String viewMode = "",sSFType="";
+    String viewMode = "", sSFType = "";
     int cModMnth = 1;
     Button viewButton;
     Button StActivity, cardview3, cardview4, cardView5, btnCheckout;
@@ -90,7 +90,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     GateAdapter gateAdap;
     CardView cardGateDet;
     String dashMdeCnt = "";
-    String Count;
+    String datefrmt = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,15 +102,16 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
         mShared_common_pref.save("Dashboard", "one");
 
+        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
 
-        dashMdeCnt = mShared_common_pref.getvalue("MC");
-        sharedpreferences = getSharedPreferences(mypreference,
-                Context.MODE_PRIVATE);
+        if (sharedpreferences.contains("SharedMode")) {
+            dashMdeCnt = sharedpreferences.getString("SharedMode", "");
+            Log.e("Privacypolicy_MODE", dashMdeCnt);
+        }
 
+        datefrmt = com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly();
+        Log.v("DATE_FORMAT_ONLY", datefrmt);
 
-        Count = sharedpreferences.getString("MdeTpID", "");
-
-        Log.v("NAME_ALLOWANCE", Count);
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -123,7 +124,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
         TextView txtErt = findViewById(R.id.toolbar_ert);
         TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
-
         txtErt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,7 +133,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
 
@@ -164,12 +163,12 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         String sUName = UserDetails.getString("SfName", "");
         txUserName.setText("HI! " + sUName);
         sSFType = UserDetails.getString("Sf_Type", "");
-Log.d("CINDetails",CheckInDetails.toString());
+        Log.d("CINDetails", CheckInDetails.toString());
         cardview3 = findViewById(R.id.cardview3);
         cardview4 = findViewById(R.id.cardview4);
         cardView5 = findViewById(R.id.cardview5);
 
-        cardGateDet=findViewById(R.id.cardGateDet);
+        cardGateDet = findViewById(R.id.cardGateDet);
         gateIn_gateOut = findViewById(R.id.btn_gate_in);
         gateOut_gateIn = findViewById(R.id.btn_gate_out);
 
@@ -190,7 +189,7 @@ Log.d("CINDetails",CheckInDetails.toString());
         gateIn_gateOut.setVisibility(View.GONE);
         gateOut_gateIn.setVisibility(View.GONE);
         cardGateDet.setVisibility(View.GONE);
-        if(Integer.parseInt(CheckInDetails.getString("On_Duty_Flag","0"))>0){
+        if (Integer.parseInt(CheckInDetails.getString("On_Duty_Flag", "0")) > 0) {
             gateIn_gateOut.setVisibility(View.VISIBLE);
             gateOut_gateIn.setVisibility(View.VISIBLE);
             cardGateDet.setVisibility(View.VISIBLE);
@@ -606,11 +605,14 @@ Log.d("CINDetails",CheckInDetails.toString());
                         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                         Call<JsonArray> Callto = apiInterface.getDataArrayList("get/CLSExp",
                                 UserDetails.getString("Divcode", ""),
-                                UserDetails.getString("Sfcode", ""));
+                                UserDetails.getString("Sfcode", ""), datefrmt);
+
+                        Log.v("DATE_REQUEST", Callto.request().toString());
                         Callto.enqueue(new Callback<JsonArray>() {
                             @Override
                             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                                 //if (PrivacyScreen.equals("True") && dashMdeCnt.equals("1")) {
+                                Log.d("CHECK_OUT_RESPONSE", String.valueOf(response.body()));
 
                                 SharedPreferences.Editor editor = sharedpreferences.edit();
                                 editor.remove(Name);
@@ -638,8 +640,7 @@ Log.d("CINDetails",CheckInDetails.toString());
                                 editor.remove("StoreId");
                                 editor.commit();
 
-
-                                if (Count.equals("1")) {
+                                if (dashMdeCnt.equals("1")) {
                                     Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
                                     takePhoto.putExtra("Mode", "COUT");
                                     startActivity(takePhoto);
@@ -648,17 +649,6 @@ Log.d("CINDetails",CheckInDetails.toString());
                                     takePhoto.putExtra("Mode", "COUT");
                                     startActivity(takePhoto);
                                 }
-
-                                /*  if (response.body().size() > 0) {
-                                    Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
-                                    takePhoto.putExtra("Mode", "COUT");
-                                    startActivity(takePhoto);
-                                } else {
-                                    Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
-                                    takePhoto.putExtra("Mode", "COUT");
-                                    startActivity(takePhoto);
-                                }*/
-
 
                             }
 

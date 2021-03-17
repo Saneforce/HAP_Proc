@@ -19,8 +19,7 @@
             <ImageView
                 android:id="@+id/product_header_image"
                 android:layout_width="@dimen/C50dp"
-                android:layout_height="@dimen/C50dp"
-                />
+                android:layout_height="@dimen/C50dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -30,9 +29,7 @@
 
                 <TextView
                     android:id="@+id/product_header_Name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="SAN Cool"
+                    style="@style/TextStyle"
                     android:textSize="14dp" />
 
                 <LinearLayout
@@ -42,20 +39,12 @@
                     android:orientation="horizontal">
 
                     <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="Rs : "
-                        android:textSize="14dp" />
+                        style="@style/TextStyle"
+                        android:text="Rs : " />
 
                     <TextView
-                        android:id="@+id/product_row_total"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:text="0"
-                        android:textSize="14dp" />
+                        style="@style/TextStyle"
+                        android:id="@+id/product_row_total" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

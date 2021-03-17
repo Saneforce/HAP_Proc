@@ -35,21 +35,15 @@
 
 
             <TextView
+                style="@style/TextStyle"
                 android:id="@+id/edt_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Enter the title"
-                android:padding="@dimen/C5dp"
-                android:textSize="@dimen/C13dp" />
+                android:hint="Enter the title" />
 
 
             <TextView
+                style="@style/TextStyle"
                 android:id="@+id/edt_remarks"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Enter the remarks"
-                android:padding="@dimen/C5dp"
-                android:textSize="@dimen/C13dp" />
+                android:hint="Enter the remarks"/>
 
 
         </LinearLayout>

@@ -272,12 +272,29 @@
 
                     </LinearLayout>
 
+
+                    <TextView
+                        style="@style/TextStyle"
+                        android:text="Remarks"></TextView>
+
+                    <EditText
+                        android:id="@+id/reason_mode"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/C50dp"
+                        android:background="@drawable/textbox_bg"
+                        android:textSize="@dimen/C13dp"
+                        android:elevation="5dp"
+                        android:gravity="start"
+                        android:hint="Reason"
+                        android:padding="@dimen/C10dp"/>
+
                 </LinearLayout>
 
                 <Button
                     android:id="@+id/submit_allowance"
                     style="@style/ButtonStyle"
                     android:layout_weight="1"
+                    android:layout_marginTop="@dimen/C20dp"
                     android:background="@drawable/button_blueg"
                     android:text="@string/txt_submit" />
 

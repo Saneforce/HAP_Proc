@@ -69,7 +69,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     TextView TextModeTravel, TextStartedKm, TextMaxKm, TextToPlace;
     ImageView StartedKmImage, EndedKmImage;
     Button takeEndedPhoto, submitAllowance;
-    EditText EndedEditText, PersonalKmEdit;
+    EditText EndedEditText, PersonalKmEdit, ReasonMode;
     Integer stKM = 0, endKm = 0, personalKM = 0, StratKm = 0, maxKM = 0, TotalKm = 0;
     SharedPreferences CheckInDetails, sharedpreferences, UserDetails;
     Shared_Common_Pref shared_common_pref;
@@ -77,7 +77,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     String Photo_Name = "", imageConvert = "", StartedKm = "", StartedImage = "", CLOSINGKM = "", EndedImage = "",
             CheckInfo = "CheckInDetail", UserInfo = "MyPrefs", MOT = "ModeOfTravel", Name = "Allowance",
             mypreference = "mypref", StrToCode = "", toPlace = "", TOKM = " ", cOUT = "", ImageStart = "",
-            strImg = "", strMod = "", strKm = "", Hq = "";
+            strImg = "", strMod = "", strKm = "", Hq = "", EdtReasn = "";
     LinearLayout linToPlace;
     CustomListViewDialog customDialog;
     Common_Model mCommon_model_spinner;
@@ -102,6 +102,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         PersonalKmEdit = findViewById(R.id.personal_ended_km);
         linToPlace = findViewById(R.id.lin_to);
         TextToPlace = findViewById(R.id.txt_to);
+        ReasonMode = findViewById(R.id.reason_mode);
         shared_common_pref = new Shared_Common_Pref(this);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
@@ -180,6 +181,12 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             if (!CLOSINGKM.equals("")) {
                 EndedEditText.setText(CLOSINGKM);
             }
+        }
+
+
+        if (sharedpreferences.contains("Share_reason")) {
+            EdtReasn = sharedpreferences.getString("Share_reason", "");
+            ReasonMode.setText(EdtReasn);
         }
 
         EndedEditText.addTextChangedListener(new TextWatcher() {
@@ -267,6 +274,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     editor.putString("Share_km", TextStartedKm.getText().toString());
                     editor.putString("Share_Img", ImageStart);
                     editor.putString("Share_to_id", StrToCode);
+                    editor.putString("Share_reason", ReasonMode.getText().toString());
                     editor.commit();
 
                     Intent intent = new Intent(AllowanceActivityTwo.this, AllowancCapture.class);
@@ -340,7 +348,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         try {
             JSONObject jj = new JSONObject();
             jj.put("km", EndedEditText.getText().toString());
-            jj.put("rmk", EndedEditText.getText().toString());
+            jj.put("rmk", ReasonMode.getText().toString());
             jj.put("pkm", personalKM);
             jj.put("mod", "11");
             jj.put("sf", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));

@@ -41,8 +41,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/round_white_backround"
-                        android:orientation="vertical"
-                        android:padding="5dp">
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/order_type"
@@ -54,8 +53,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="5dp">
+                        android:layout_height="wrap_content">
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -76,8 +74,8 @@
                             android:layout_alignParentRight="true">
 
                             <TextView
-                                style="@style/TextStyle"
                                 android:id="@+id/txt_add_retailer"
+                                style="@style/TextStyle"
                                 android:text="Add"
                                 android:textColor="#E65100"></TextView>
 
@@ -89,19 +87,14 @@
                         android:id="@+id/linear_Retailer"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
                         android:background="@drawable/round_white_backround"
-                        android:orientation="vertical"
-                        android:padding="5dp">
+                        android:orientation="vertical">
 
                         <TextView
                             android:id="@+id/retailer_type"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            style="@style/TextStyle"
                             android:hint="@string/retailer"
-                            android:padding="5dp"
-                            android:textSize="13dp" />
+                            android:padding="5dp" />
                     </LinearLayout>
 
                 </LinearLayout>
@@ -111,8 +104,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:orientation="vertical">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -123,23 +115,15 @@
 
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Retailer Channel"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            style="@style/TextStyle"
+                            android:layout_margin="-5dp"
+                            android:text="Retailer Channel"></TextView>
 
                         <TextView
                             android:id="@+id/retailer_channel"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            style="@style/TextStyle"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
-                            android:text="-"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:layout_margin="-5dp"></TextView>
 
                     </RelativeLayout>
 
@@ -152,23 +136,15 @@
 
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Class"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            style="@style/TextStyle"
+                            android:layout_margin="-5dp"
+                            android:text="Class"></TextView>
 
                         <TextView
                             android:id="@+id/txt_class"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            style="@style/TextStyle"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
-                            android:text="-"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:layout_margin="-5dp"></TextView>
 
 
                     </RelativeLayout>
@@ -182,23 +158,14 @@
 
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="SCH Enrollment"
-                            android:textColor="@android:color/black"
-
-                            android:textSize="13dp"></TextView>
+                            style="@style/TextStyle"
+                            android:layout_margin="-5dp"
+                            android:text="SCH Enrollment"></TextView>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            style="@style/TextStyle"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
-                            android:text="-"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:layout_margin="-5dp"></TextView>
 
 
                     </RelativeLayout>
@@ -212,23 +179,15 @@
 
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Potential"
-                            android:textColor="@android:color/black"
 
-                            android:textSize="13dp"></TextView>
+                            style="@style/TextStyle"
+                            android:layout_margin="-5dp"
+                            android:text="Potential"></TextView>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            style="@style/TextStyle"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
-                            android:text="-"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:layout_margin="-5dp"></TextView>
 
 
                     </RelativeLayout>
@@ -242,23 +201,15 @@
 
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Monthly Order Value"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            style="@style/TextStyle"
+                            android:layout_margin="-5dp"
+                            android:text="Monthly Order Value" />
 
                         <TextView
                             android:id="@+id/model_order_vlaue"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            style="@style/TextStyle"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
-                            android:text="-"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:layout_margin="-5dp" />
 
 
                     </RelativeLayout>
@@ -272,23 +223,15 @@
 
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Last Order Amount"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            style="@style/TextStyle"
+                            android:layout_margin="-5dp"
+                            android:text="Last Order Amount" />
 
                         <TextView
                             android:id="@+id/txt_last_order_amount"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            style="@style/TextStyle"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
-                            android:text="-"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:layout_margin="-5dp" />
 
 
                     </RelativeLayout>
@@ -302,24 +245,15 @@
 
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Distributors"
-                            android:textColor="@android:color/black"
-
-                            android:textSize="13dp"></TextView>
+                            style="@style/TextStyle"
+                            android:layout_margin="-5dp"
+                            android:text="Distributors" />
 
                         <TextView
                             android:id="@+id/txt_distributor"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            style="@style/TextStyle"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
-                            android:text="-"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:layout_margin="-5dp" />
 
 
                     </RelativeLayout>
@@ -333,24 +267,16 @@
 
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            style="@style/TextStyle"
+                            android:layout_margin="-5dp"
                             android:text="Last Order Details"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"
                             android:textStyle="bold"></TextView>
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            style="@style/TextStyle"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
-                            android:text="-"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"
-                            android:visibility="gone"></TextView>
+                            android:layout_margin="-5dp"
+                            android:visibility="gone" />
 
 
                     </RelativeLayout>
@@ -375,10 +301,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
                             android:padding="8dp"
                             android:text="Qty"
                             android:textColor="@android:color/white"
@@ -405,23 +328,15 @@
 
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Last Visisted"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            style="@style/TextStyle"
+                            android:layout_margin="-5dp"
+                            android:text="Last Visisted"></TextView>
 
                         <TextView
                             android:id="@+id/txt_last_visited"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            style="@style/TextStyle"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
-                            android:text="-"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:layout_margin="-5dp"></TextView>
 
 
                     </RelativeLayout>
@@ -435,23 +350,15 @@
 
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Remarks"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            style="@style/TextStyle"
+                            android:layout_margin="-5dp"
+                            android:text="Remarks"></TextView>
 
                         <TextView
                             android:id="@+id/txt_remarks"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            style="@style/TextStyle"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
-                            android:text="-"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:layout_margin="-5dp"></TextView>
 
 
                     </RelativeLayout>
@@ -465,23 +372,15 @@
 
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Mobile Number"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            style="@style/TextStyle"
+                            android:layout_margin="-5dp"
+                            android:text="Mobile Number"></TextView>
 
                         <TextView
                             android:id="@+id/txt_mobile"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            style="@style/TextStyle"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
-                            android:text="-"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:layout_margin="-5dp"></TextView>
 
 
                     </RelativeLayout>
@@ -495,23 +394,15 @@
 
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Mobile Number1"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            style="@style/TextStyle"
+                            android:layout_margin="-5dp"
+                            android:text="Mobile Number1"></TextView>
 
                         <TextView
                             android:id="@+id/txt_mobile2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            style="@style/TextStyle"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="15dp"
-                            android:text="-"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"></TextView>
+                            android:layout_margin="-5dp"></TextView>
 
                     </RelativeLayout>
 
@@ -527,30 +418,19 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp">
+                        android:layout_marginTop="10dp">
 
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="5dp"
-                            android:text="Remark"
-                            android:textColor="@android:color/black"
-                            android:textSize="13dp"
-                            android:textStyle="bold"></TextView>
+                            style="@style/TextStyle"
+                            android:text="Remark"></TextView>
 
                         <TextView
                             android:id="@+id/txt_templates"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
+                            style="@style/TextStyle"
                             android:layout_alignParentEnd="true"
-                            android:layout_alignParentRight="true"
                             android:text="Templates"
-                            android:textColor="#E65100"
-                            android:textSize="13dp"></TextView>
+                            android:textColor="#E65100"></TextView>
 
                     </RelativeLayout>
 
@@ -558,9 +438,7 @@
                         android:id="@+id/remarks_week"
                         android:layout_width="match_parent"
                         android:layout_height="100dp"
-                        android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
-                        android:layout_marginRight="15dp"
                         android:background="@drawable/text_bg"
                         android:elevation="5dp"
                         android:gravity="start"
@@ -571,16 +449,12 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/C10dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginLeft="20dp"
-                            android:layout_marginRight="20dp"
-                            android:gravity="center"
                             android:orientation="horizontal"
                             tools:ignore="UselessParent">
 
@@ -593,25 +467,19 @@
                                 android:layout_weight="1"
                                 android:elevation="2dp"
                                 android:orientation="vertical"
-                                android:padding="20dp">
+                                android:padding="@dimen/C20dp">
 
                                 <ImageView
-
-                                    android:layout_width="50dp"
-                                    android:layout_height="50dp"
+                                    android:layout_width="@dimen/C50dp"
+                                    android:layout_height="@dimen/C50dp"
                                     android:layout_gravity="center"
-                                    android:gravity="center"
                                     android:src="@drawable/event_capture"></ImageView>
 
                                 <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
+                                    style="@style/TextStyle"
                                     android:layout_gravity="center"
-                                    android:layout_marginTop="15dp"
-                                    android:gravity="center"
                                     android:text="@string/event_capture"
-                                    android:textAllCaps="true"
-                                    android:textSize="13dp">
+                                    android:textAllCaps="true">
 
                                 </TextView>
                             </LinearLayout>
@@ -624,29 +492,24 @@
                                 android:layout_weight="1"
                                 android:elevation="2dp"
                                 android:orientation="vertical"
-                                android:padding="20dp">
+                                android:padding="@dimen/C20dp">
 
                                 <ImageView
-                                    android:layout_width="50dp"
-                                    android:layout_height="50dp"
+                                    android:layout_width="@dimen/C50dp"
+                                    android:layout_height="@dimen/C50dp"
                                     android:layout_gravity="center"
-                                    android:gravity="center"
                                     android:src="@drawable/order"></ImageView>
 
                                 <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="20dp"
-                                    android:gravity="center"
+                                    style="@style/TextStyle"
+                                    android:layout_gravity="center"
                                     android:text="@string/order"
-                                    android:textAllCaps="true"
-                                    android:textSize="13sp">
+                                    android:textAllCaps="true">
 
                                 </TextView>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
-
 
                 </LinearLayout>
 
@@ -658,22 +521,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintBottom_toBottomOf="parent">
 
 
         <Button
             android:id="@+id/submit_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
+            style="@style/ButtonStyle"
             android:background="@drawable/button_dgreen"
-            android:padding="@dimen/C10dp"
-            android:text="Submit"
-            android:textColor="@android:color/white"
-            android:textSize="13sp"></Button>
-
+            android:text="Submit"></Button>
 
         <include layout="@layout/back_arrow"></include>
     </LinearLayout>

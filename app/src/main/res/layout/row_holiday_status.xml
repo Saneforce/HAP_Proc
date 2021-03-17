@@ -35,53 +35,25 @@
 
                     <TextView
                         android:id="@+id/SfName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:layout_marginEnd="-1dp"
-                        android:layout_marginRight="-1dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:padding="@dimen/C3dp"
-                        android:text="thirumalai"
-
-                        android:textSize="12dp"></TextView>
+                        style="@style/TextStyle" />
 
                 </RelativeLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/C5dp">
 
                     <TextView
                         android:id="@+id/holiday_date"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-
-                        android:text="2020-09-06"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"
-                        android:textStyle="bold"></TextView>
-
+                        style="@style/TextStyle"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/holiday_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/bt_radious"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:padding="@dimen/C3dp"
-                        android:text="Pending"
+                        style="@style/TextStyle" />
 
-                        android:textSize="12dp"></TextView>
-
-                </RelativeLayout>
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -89,194 +61,119 @@
                     android:layout_margin="@dimen/C5dp"
                     android:background="@android:color/black" />
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C10dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="TYPE"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
+                        style="@style/TextStyle"
+                        android:layout_weight="1"
+                        android:text="TYPE" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:text="SHIFT"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
+                        style="@style/TextStyle"
+                        android:text="SHIFT" />
 
-                </RelativeLayout>
+                </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C5dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="Holiday Entry"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"
-                        android:textStyle="bold"></TextView>
+                        style="@style/TextStyle"
+                        android:layout_weight="1"
+                        android:text="Holiday Entry" />
 
                     <TextView
                         android:id="@+id/shift_timing"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:text="14:00 To 15:00"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"
-                        android:textStyle="bold"></TextView>
+                        style="@style/TextStyle"></TextView>
 
-                </RelativeLayout>
+                </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C10dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="IN TIME"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
+                        style="@style/TextStyle"
+                        android:layout_weight="1"
+                        android:text="IN TIME" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:text="OUT TIME"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
+                        style="@style/TextStyle"
+                        android:text="OUT TIME" />
 
-                </RelativeLayout>
+                </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C5dp">
 
                     <TextView
                         android:id="@+id/holiday_in_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="14:00 To 15:00"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"
-                        android:textStyle="bold"></TextView>
+                        style="@style/TextStyle"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/holiday_out_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:text="14:00 To 15:00"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"
-                        android:textStyle="bold"></TextView>
+                        style="@style/TextStyle" />
 
-                </RelativeLayout>
+                </LinearLayout>
 
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C10dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="GEO IN"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
+                        style="@style/TextStyle"
+                        android:layout_weight="1"
+                        android:text="GEO IN" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:text="GEO OUT"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
+                        style="@style/TextStyle"
+                        android:text="GEO OUT" />
 
-                </RelativeLayout>
+                </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C5dp">
 
                     <TextView
                         android:id="@+id/geo_in"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="14:00 To 15:00"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"
-                        android:textStyle="bold"></TextView>
+                        style="@style/TextStyle"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/geo_out"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:text="14:00 To 15:00"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"
-                        android:textStyle="bold"></TextView>
+                        style="@style/TextStyle" />
 
-                </RelativeLayout>
+                </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C10dp"
                     android:layout_marginBottom="@dimen/C10dp">
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="Holiday Entry"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
+                        style="@style/TextStyle"
+                        android:layout_weight="1"
+                        android:text="Holiday Entry" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
                         android:id="@+id/holiday_entry_date"
-                        android:text="04-01-2021"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
+                        style="@style/TextStyle" />
 
-                </RelativeLayout>
+                </LinearLayout>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
     </LinearLayout>

@@ -37,7 +37,7 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity android:name=".Activity.LodgingCliamActivity"></activity>
-        <activity android:name=".Activity_Hap.SearchListData" />
+
         <activity
             android:name=".Activity.PDFActivity"
             android:theme="@style/AppTheme.Dialogs" />
@@ -332,7 +332,10 @@
             android:resource="@drawable/ic_launcher_background" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/black" /> <!-- Notification -->
+            android:resource="@color/black" />
+
+
+        <!-- Notification -->
         <service android:name=".PushNotification.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
