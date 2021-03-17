@@ -60,7 +60,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
     private RecyclerView recyclerView;
     private HomeRptRecyler mAdapter;
-    String viewMode = "", sSFType = "";
+    String viewMode = "", sSFType = "",mPriod="0";
     int cModMnth = 1;
     Button viewButton;
     Button StActivity, cardview3, cardview4, cardView5, btnCheckout;
@@ -87,6 +87,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     RecyclerView mRecyclerView;
     /*String Mode = "Bus";*/
     Button gateIn_gateOut, gateOut_gateIn;
+    ImageView mvPrvMn,mvNxtMn;
     GateAdapter gateAdap;
     CardView cardGateDet;
     String dashMdeCnt = "";
@@ -167,7 +168,28 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         cardview3 = findViewById(R.id.cardview3);
         cardview4 = findViewById(R.id.cardview4);
         cardView5 = findViewById(R.id.cardview5);
+        mPriod="0";
+        mvNxtMn=findViewById(R.id.nxtMn);
+        mvPrvMn=findViewById(R.id.prvMn);
+        mvNxtMn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mPriod=="-1"){
+                    mPriod="0";
+                    getMnthReports(0);
+                }
+            }
+        });
 
+        mvPrvMn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mPriod=="0") {
+                    mPriod = "-1";
+                    getMnthReports(-1);
+                }
+            }
+        });
         cardGateDet = findViewById(R.id.cardGateDet);
         gateIn_gateOut = findViewById(R.id.btn_gate_in);
         gateOut_gateIn = findViewById(R.id.btn_gate_out);
@@ -235,8 +257,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 mOnBackPressedDispatcher.onBackPressed();
             }
         });
-
-
     }
 
     private void getNotify() {
@@ -581,7 +601,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 if (sDeptType.equalsIgnoreCase("1")) {
                                     aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
                                 } else {
-                                    aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
+                                    aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
                                 }
 
                                 //startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
@@ -599,6 +619,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.button3:
                 intent = new Intent(this, View_All_Status_Activity.class);
+                intent.putExtra("Priod", mPriod);
                 break;
             case R.id.btnCheckout:
                 AlertDialogBox.showDialog(Dashboard_Two.this, "HAP Check-In", "Do you want to Checkout?", "Yes", "No", false, new AlertBox() {

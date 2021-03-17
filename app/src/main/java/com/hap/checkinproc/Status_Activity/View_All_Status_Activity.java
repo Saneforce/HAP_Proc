@@ -57,7 +57,9 @@ public class View_All_Status_Activity extends AppCompatActivity {
     Type userType;
     Common_Class common_class;
     Intent i;
-    String AMOD = "0";
+    String AMOD = "0",mMode="0",mStatus="";
+
+
 
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
@@ -96,6 +98,14 @@ public class View_All_Status_Activity extends AppCompatActivity {
             }
         });
 
+        Bundle params = getIntent().getExtras();
+        try {
+            mMode = params.getString("Priod","0");
+            mStatus=params.getString("Status","");
+
+        }catch (Exception e){
+
+        }
 
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
@@ -145,11 +155,11 @@ public class View_All_Status_Activity extends AppCompatActivity {
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "get/AttnStatus");
         QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("Status", "");
-        QueryString.put("Priod","-1" );
+        QueryString.put("Status", mStatus);
+        QueryString.put("Priod",mMode );
         String commonworktype = "[]";
 
-        Call<Object> mCall = apiInterface.Getwe_Status("-1", Shared_Common_Pref.Sf_Code,"get/AttnStatus","","[]");
+        Call<Object> mCall = apiInterface.Getwe_Status(mMode, Shared_Common_Pref.Sf_Code,"get/AttnStatus",mStatus,"[]");
         mCall.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
