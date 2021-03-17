@@ -124,7 +124,7 @@
                                     android:clickable="false"
                                     android:elevation="@dimen/C5dp"
                                     android:focusable="false"
-                                    android:hint="Select the date"
+                                    android:hint="Select from date"
                                     android:inputType="date"
                                     android:padding="@dimen/C10dp"
                                     android:textSize="@dimen/C13dp"
@@ -159,7 +159,7 @@
                                     android:elevation="@dimen/C5dp"
                                     android:textSize="@dimen/C13dp"
                                     android:focusable="false"
-                                    android:hint="Select the date"
+                                    android:hint="Select to date"
                                     android:inputType="date"
                                     android:padding="@dimen/C10dp"
                                     android:textColor="@color/grey_500" />

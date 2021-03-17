@@ -52,6 +52,7 @@
                     <TextView
                         android:id="@+id/wkstatus"
                         style="@style/TextStyle"
+                        android:textColor="@android:color/white"
                         android:layout_alignParentEnd="true"
                         android:background="@drawable/bt_radious" />
 

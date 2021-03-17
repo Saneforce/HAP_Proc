@@ -50,6 +50,7 @@
                         android:layout_weight="1" />
 
                     <TextView
+                        android:textColor="@android:color/white"
                         android:id="@+id/holiday_status"
                         style="@style/TextStyle" />
 

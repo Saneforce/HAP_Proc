@@ -2,9 +2,7 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -12,17 +10,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.google.gson.JsonArray;
+
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -30,6 +26,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -45,7 +42,6 @@ import com.hap.checkinproc.MVP.Master_Sync_View;
 import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.R;
-
 import com.hap.checkinproc.adapters.Joint_Work_Adapter;
 import com.hap.checkinproc.common.TimerService;
 
@@ -84,12 +80,12 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     private Main_Model.presenter presenter;
     Gson gson;
     Type userType;
-    EditText edt_remarks, eText, etext2,empidedittext;
+    EditText edt_remarks, eText, etext2, empidedittext;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     String worktype_id, Worktype_Button = "", distributorid, routename, routeid, Fieldworkflag = "", hqid, shifttypeid, Chilling_Id;
     private TextClock tClock;
-    Button submitbutton,GetEmpId;
+    Button submitbutton, GetEmpId;
     CustomListViewDialog customDialog;
     ImageView backarow;
     ProgressBar progressbar;
@@ -107,7 +103,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     EditText BusFrom, EditRemarks;
     public static final String Name = "Allowance";
     public static final String MOT = "ModeOfTravel";
-    String STRCode = "",DM = "", DriverNeed = "false", DriverMode = "", modeTypeVale = "", mode = "", imageURI = "", modeVal = "", StartedKM = "", FromKm = "", ToKm = "", Fare = "", strDailyAllowance = "", strDriverAllowance = "", StToEnd = "", StrID = "";
+    String STRCode = "", DM = "", DriverNeed = "false", DriverMode = "", modeTypeVale = "", mode = "", imageURI = "", modeVal = "", StartedKM = "", FromKm = "", ToKm = "", Fare = "", strDailyAllowance = "", strDriverAllowance = "", StToEnd = "", StrID = "";
     private ArrayList<String> travelTypeList;
     CheckBox driverAllowance;
     String driverAllowanceBoolean = "";
@@ -118,7 +114,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     List<Common_Model> listOrderType = new ArrayList<>();
     Common_Model mCommon_model_spinner;
     String modeId = "", toId = "", startEnd = "";
-
+    LinearLayout MdeTraval, DailyAll, frmPlace, ToPlace;
     int jcountglobal = 0;
     Joint_Work_Adapter adapter;
 
@@ -165,6 +161,13 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     /*    image = findViewById(R.id.arowimg);
 
         joint_work_Recyclerview = findViewById(R.id.joint_work_listlt);*/
+
+
+        MdeTraval = findViewById(R.id.mode_of_travel);
+        DailyAll = findViewById(R.id.lin_daily);
+        frmPlace = findViewById(R.id.lin_from);
+        ToPlace = findViewById(R.id.lin_to_place);
+
 
         GetEmpId = findViewById(R.id.GetEmpId);
         empidedittext = (EditText) findViewById(R.id.empidedittext);
@@ -227,7 +230,6 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 OrderType();
             }
         });
-
 
 
     }
@@ -346,7 +348,40 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 jointwork_layout.setVisibility(View.VISIBLE);
             } else {
                 jointwork_layout.setVisibility(View.GONE);
+            }
 
+          /*  if (myDataset.get(position).getCheckouttime().indexOf("MD") > -1) {
+                MdeTraval.setVisibility(View.VISIBLE);
+            } else {
+                MdeTraval.setVisibility(View.GONE);
+            }
+            if (myDataset.get(position).getCheckouttime().indexOf("DA") > -1) {
+                DailyAll.setVisibility(View.VISIBLE);
+            } else {
+                DailyAll.setVisibility(View.GONE);
+            }
+            if (myDataset.get(position).getCheckouttime().indexOf("FR") > -1) {
+                frmPlace.setVisibility(View.VISIBLE);
+            } else {
+                frmPlace.setVisibility(View.GONE);
+            }
+            if (myDataset.get(position).getCheckouttime().indexOf("TO") > -1) {
+                ToPlace.setVisibility(View.VISIBLE);
+            } else {
+                ToPlace.setVisibility(View.GONE);
+            }*/
+
+
+            if (myDataset.get(position).getCheckouttime().indexOf("EA") > -1) {
+                DailyAll.setVisibility(View.VISIBLE);
+                MdeTraval.setVisibility(View.VISIBLE);
+                frmPlace.setVisibility(View.VISIBLE);
+                ToPlace.setVisibility(View.VISIBLE);
+            } else {
+                DailyAll.setVisibility(View.GONE);
+                MdeTraval.setVisibility(View.GONE);
+                frmPlace.setVisibility(View.GONE);
+                ToPlace.setVisibility(View.GONE);
             }
 
         } else if (type == 2) {
@@ -696,22 +731,14 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             Toast.makeText(this, "Select The Route", Toast.LENGTH_SHORT).show();
             return false;
         }
-
-
-     /*   if (Shared_Common_Pref.Dept_Type.equals("1") && (eText.getText().toString() == null || eText.getText().toString().isEmpty() || eText.getText().toString().equalsIgnoreCase(""))) {
-            Toast.makeText(this, "Select The From Date", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (Shared_Common_Pref.Dept_Type.equals("1") && (etext2.getText().toString() == null || etext2.getText().toString().isEmpty() || etext2.getText().toString().equalsIgnoreCase(""))) {
-            Toast.makeText(this, "Select The To Date", Toast.LENGTH_SHORT).show();
-            return false;
-        }*/
+        if (Worktype_Button.indexOf("EA") > -1) {
 
         if (TextMode.getText().toString() == null || TextMode.getText().toString().isEmpty() || TextMode.getText().toString().equalsIgnoreCase("")) {
             Toast.makeText(this, "Select The Mode of Travel", Toast.LENGTH_SHORT).show();
             return false;
         }
 
+    }
 
         return true;
     }
@@ -824,9 +851,6 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                         worktype_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("worktype_name")));
 
 
-
-
-
                         modeId = String.valueOf(jsoncc.getJSONObject(0).get("Mot_ID"));
                         STRCode = String.valueOf(jsoncc.getJSONObject(0).get("To_Place_ID"));
                         modeVal = String.valueOf(jsoncc.getJSONObject(0).get("Mode_Travel_Id"));
@@ -868,14 +892,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                         }
 
 
-
-
-
-
-
-
-
-                    if (Shared_Common_Pref.Dept_Type.equals("1")) {
+                        if (Shared_Common_Pref.Dept_Type.equals("1")) {
                             hq_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("TourHQ_Name")));
                             hqid = String.valueOf(jsoncc.getJSONObject(0).get("Hq_Id"));
                             shift_type.setText(String.valueOf(jsoncc.getJSONObject(0).get("Typename")));
@@ -1039,7 +1056,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 modelOfTravel = gson.fromJson(new Gson().toJson(response.body()), userType);
 
 
-                Log.e("RESPONSE_VALUE " , modelOfTravel.toString());
+                Log.e("RESPONSE_VALUE ", modelOfTravel.toString());
 
                 for (int i = 0; i < modelOfTravel.size(); i++) {
                     String id = String.valueOf(modelOfTravel.get(i).getStEndNeed());
@@ -1062,6 +1079,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();

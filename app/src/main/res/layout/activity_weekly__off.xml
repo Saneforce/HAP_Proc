@@ -49,12 +49,8 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="@dimen/C5dp"
-                            android:paddingTop="@dimen/C5dp"
-                            android:text="Date"
-                            android:textSize="@dimen/C13dp" />
+                            style="@style/TextStyle"
+                            android:text="Date" />
 
                         <EditText
                             android:id="@+id/week_off_date"
@@ -79,12 +75,8 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="@dimen/C5dp"
-                            android:paddingTop="@dimen/C10dp"
-                            android:text="Remarks"
-                            android:textSize="@dimen/C13dp" />
+                            style="@style/TextStyle"
+                            android:text="Remarks" />
 
                         <EditText
                             android:id="@+id/remarks_week"
@@ -119,18 +111,10 @@
 
 
         <Button
+            style="@style/ButtonStyle"
             android:id="@+id/weeky_submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/C5dp"
-            android:layout_marginRight="10dp"
             android:background="@drawable/sign_bg"
-            android:gravity="center_vertical"
-            android:text="SUBMIT"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            tools:ignore="RtlCompat" />
+            android:text="SUBMIT" />
 
 
         <include layout="@layout/back_arrow"></include>

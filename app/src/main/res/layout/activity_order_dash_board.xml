@@ -129,13 +129,9 @@
                     android:src="@drawable/order"></ImageView>
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:gravity="center"
-                    android:text="@string/pri_orders"
-                    android:textAllCaps="true"
-                    android:textSize="13dp">
+                    style="@style/TextStyle"
+                    android:layout_gravity="center"
+                    android:text="@string/pri_orders">
 
                 </TextView>
             </LinearLayout>
@@ -145,7 +141,6 @@
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-
                 android:layout_weight="1"
                 android:background="@drawable/text_bg"
                 android:elevation="2dp"
@@ -160,19 +155,17 @@
                     android:src="@drawable/report"></ImageView>
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:gravity="center"
-                    android:text="@string/Rep_orders"
-                    android:textAllCaps="true">
+                    style="@style/TextStyle"
+                    android:layout_gravity="center"
+                    android:text="@string/Rep_orders">
 
                 </TextView>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
-    <include layout="@layout/back_arrow"
+    <include
+        layout="@layout/back_arrow"
         android:visibility="gone"></include>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

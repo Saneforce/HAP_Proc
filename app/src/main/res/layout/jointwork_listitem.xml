@@ -3,24 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="2dp"
-    app:cardElevation="1dp"
-
-    >
+    app:cardElevation="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.3"
-            android:gravity="left"
-            android:padding="10dp"
-            android:text="thirumalaivasan"
-            android:textSize="@dimen/C17dp" />
+            style="@style/TextStyle"
+            android:layout_margin="@dimen/C10dp"
+            android:layout_weight="1" />
 
         <ImageView
             android:id="@+id/checkBox_select"

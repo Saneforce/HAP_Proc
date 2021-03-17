@@ -51,12 +51,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
     TextView username;
     TextView lblUserName, lblEmail;
-    Button linMyday, linCheckin, lin_SFA, linApprovals, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift, linTourPlan, linExit, lin_check_in, linHolidayWorking;
+    Button linMyday, linCheckin, lin_SFA, linApprovals, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift,
+            linTourPlan, linExit, lin_check_in, linHolidayWorking, btnDaEntry;
     Integer type;
     Common_Class common_class;
     TextView approvalcount;
     Shared_Common_Pref shared_common_pref;
-    String imageProfile = "",sSFType="";
+    String imageProfile = "", sSFType = "";
     ImageView profilePic;
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
@@ -88,6 +89,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         type = (shared.getInt("CheckCount", 0));
         common_class = new Common_Class(this);
 
+        btnDaEntry = findViewById(R.id.btn_da_exp_entry);
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
 /*
@@ -179,6 +181,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linTourPlan.setOnClickListener(this);
         linHolidayWorking.setOnClickListener(this);
         linExit.setOnClickListener(this);
+        btnDaEntry.setOnClickListener(this);
         getcountdetails();
     }
 
@@ -237,6 +240,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
             case R.id.lin_approvals:
                 startActivity(new Intent(this, Approvals.class));
+                break;
+
+            case R.id.btn_da_exp_entry:
+                startActivity(new Intent(this, DaExceptionEntry.class));
                 break;
             case R.id.lin_myday_plan:
                 startActivity(new Intent(this, Mydayplan_Activity.class));

@@ -48,22 +48,17 @@
                             android:padding="@dimen/C10dp">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                style="@style/TextStyle"
                                 android:text="Date "
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/C17dp"
-                                android:textStyle="bold"></TextView>
+                                android:textStyle="bold" />
 
                             <TextView
                                 android:id="@+id/txt_date"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/C5dp"
-                                android:text=""
+                                style="@style/TextStyle"
                                 android:textColor="@android:color/white"
-                                android:textSize="@dimen/C15dp"
-                                ></TextView>
+                                android:textSize="@dimen/C15dp" />
 
                         </LinearLayout>
 
@@ -75,8 +70,7 @@
                             android:padding="@dimen/C10dp">
 
                             <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                                style="@style/TextStyle"
                                 android:text="Total"
                                 android:textColor="@android:color/white"
                                 android:textSize="@dimen/C17dp"
@@ -84,13 +78,10 @@
 
                             <TextView
                                 android:id="@+id/txt_amt"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/C5dp"
-                                android:text=""
-                                android:textStyle="bold"
+                                style="@style/TextStyle"
                                 android:textColor="@android:color/white"
-                                android:textSize="@dimen/C20dp"></TextView>
+                                android:textSize="@dimen/C20dp"
+                                android:textStyle="bold"></TextView>
                         </LinearLayout>
 
 
@@ -103,7 +94,6 @@
                         android:padding="@dimen/C5dp">
 
 
-
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -114,41 +104,20 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
                                 android:orientation="horizontal"
                                 android:padding="@dimen/C2dp">
 
                                 <TextView
                                     android:id="@+id/txt_Name"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_marginRight="@dimen/C10dp"
-                                    android:text="sdsad"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="@dimen/C15dp"
-                                    android:textStyle="bold"
-                                    tools:ignore="RtlCompat" />
+                                    style="@style/TextStyle" />
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/C10dp"
-                                    android:fontFamily="@font/basic"
-                                    android:text="-"
-                                    android:textAllCaps="false"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="14sp" />
+                                    style="@style/TextStyle"
+                                    android:text="-" />
 
                                 <TextView
                                     android:id="@+id/txt_emp_id"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:layout_weight="1"
-                                    android:text="sdadsa"
-                                    android:textSize="12sp" />
-
+                                    style="@style/TextStyle" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -187,9 +156,9 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
                             android:orientation="horizontal"
-                            android:padding="@dimen/C2dp">
+                            android:padding="@dimen/C2dp"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="@dimen/C100dp"
@@ -201,15 +170,14 @@
                                 android:textSize="14sp" />
 
 
-
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:visibility="gone"
                             android:orientation="horizontal"
-                            android:padding="@dimen/C2dp">
+                            android:padding="@dimen/C2dp"
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="@dimen/C100dp"
@@ -221,7 +189,6 @@
                                 android:textSize="14sp" />
 
 
-
                         </LinearLayout>
 
                         <LinearLayout
@@ -231,24 +198,14 @@
                             android:padding="@dimen/C2dp">
 
                             <TextView
-
+                                style="@style/TextStyle"
                                 android:layout_width="@dimen/C100dp"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/basic"
-                                android:text="Headquater "
-                                android:textAllCaps="false"
-                                android:textColor="@android:color/black"
-                                android:textSize="14sp" />
+                                android:text="Headquater " />
 
                             <TextView
                                 android:id="@+id/txt_hq"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginRight="@dimen/C10dp"
-                                android:layout_weight="1"
-                                android:text=""
-                                tools:ignore="RtlCompat" />
+                                style="@style/TextStyle"
+                                android:layout_weight="1" />
 
 
                         </LinearLayout>
@@ -260,23 +217,14 @@
                             android:padding="@dimen/C2dp">
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:layout_width="@dimen/C100dp"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/basic"
-                                android:text="Designation "
-                                android:textAllCaps="false"
-                                android:textColor="@android:color/black"
-                                android:textSize="14sp" />
+                                android:text="Designation " />
 
                             <TextView
                                 android:id="@+id/txt_desg"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginRight="@dimen/C10dp"
-                                android:layout_weight="1"
-                                android:text=""
-                                tools:ignore="RtlCompat" />
+                                style="@style/TextStyle"
+                                android:layout_weight="1" />
 
 
                         </LinearLayout>
@@ -288,23 +236,14 @@
                             android:padding="@dimen/C2dp">
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:layout_width="@dimen/C100dp"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/basic"
-                                android:text="Department "
-                                android:textAllCaps="false"
-                                android:textColor="@android:color/black"
-                                android:textSize="14sp" />
+                                android:text="Department " />
 
                             <TextView
                                 android:id="@+id/txt_dep"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginRight="@dimen/C10dp"
-                                android:layout_weight="1"
-                                android:text=""
-                                tools:ignore="RtlCompat" />
+                                style="@style/TextStyle"
+                                android:layout_weight="1" />
 
                         </LinearLayout>
 
@@ -315,24 +254,14 @@
                             android:padding="@dimen/C2dp">
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:layout_width="@dimen/C100dp"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/basic"
-                                android:text="Mobile "
-                                android:textAllCaps="false"
-                                android:textColor="@android:color/black"
-                                android:textSize="14sp" />
+                                android:text="Mobile " />
 
                             <TextView
                                 android:id="@+id/txt_moble"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginRight="@dimen/C10dp"
-                                android:layout_weight="1"
-                                android:baselineAligned="false"
-                                android:text=""
-                                tools:ignore="RtlCompat" />
+                                style="@style/TextStyle"
+                                android:layout_weight="1" />
 
                         </LinearLayout>
 
@@ -343,24 +272,14 @@
                             android:padding="@dimen/C2dp">
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:layout_width="@dimen/C100dp"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/basic"
-                                android:text="Mode of Travel "
-                                android:textAllCaps="false"
-                                android:textColor="@android:color/black"
-                                android:textSize="14sp" />
+                                android:text="Mode of Travel " />
 
                             <TextView
                                 android:id="@+id/txt_mde"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginRight="@dimen/C10dp"
-                                android:layout_weight="1"
-                                android:baselineAligned="false"
-                                android:text=""
-                                tools:ignore="RtlCompat" />
+                                style="@style/TextStyle"
+                                android:layout_weight="1" />
 
                         </LinearLayout>
 
@@ -405,7 +324,8 @@
                         <TextView
                             android:layout_width="@dimen/header_width1"
                             android:layout_height="wrap_content"
-                            android:layout_weight="3.5"                            android:text="Allowance "
+                            android:layout_weight="3.5"
+                            android:text="Allowance "
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/C15dp"
                             android:textStyle="bold"></TextView>
@@ -413,8 +333,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginRight="@dimen/C30dp"
                             android:text="Amount"
-android:layout_marginRight="@dimen/C30dp"
                             android:textColor="@android:color/white"
                             android:textSize="@dimen/C15dp"
                             android:textStyle="bold"></TextView>
@@ -434,24 +354,16 @@ android:layout_marginRight="@dimen/C30dp"
                             android:padding="@dimen/C5dp">
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:layout_width="@dimen/header_width1"
-                                android:layout_height="wrap_content"
                                 android:layout_weight="3"
-                                android:text="Daily Allowance "
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/C13dp"
-                                android:textStyle="bold"></TextView>
+                                android:text="Daily Allowance " />
 
                             <TextView
                                 android:id="@+id/txt_da"
-                                android:layout_width="@dimen/C100dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/C10dp"
-                                android:text=""
+                                style="@style/TextStyle"
                                 android:textAlignment="textStart"
-                                android:textColor="@android:color/holo_blue_light"
-                                android:textSize="@dimen/C13dp"
-                                android:textStyle="bold"></TextView>
+                                android:layout_width="@dimen/C100dp" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -462,24 +374,16 @@ android:layout_marginRight="@dimen/C30dp"
                             android:padding="@dimen/C5dp">
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:layout_width="@dimen/header_width1"
-                                android:layout_height="wrap_content"
                                 android:layout_weight="3"
-                                android:text="Travel Location "
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/C13dp"
-                                android:textStyle="bold"></TextView>
+                                android:text="Travel Location " />
 
                             <TextView
                                 android:id="@+id/txt_tvrl_amt"
-                                android:layout_width="@dimen/C100dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/C10dp"
-                                android:text=""
+                                style="@style/TextStyle"
                                 android:textAlignment="textStart"
-                                android:textColor="@android:color/holo_blue_light"
-                                android:textSize="@dimen/C13dp"
-                                android:textStyle="bold"></TextView>
+                                android:layout_width="@dimen/C100dp"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -490,23 +394,16 @@ android:layout_marginRight="@dimen/C30dp"
                             android:padding="@dimen/C5dp">
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:layout_width="@dimen/header_width1"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"                                android:text="Fuel Allowance"
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/C13dp"
-                                android:textStyle="bold"></TextView>
+                                android:layout_weight="3"
+                                android:text="Fuel Allowance"/>
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:id="@+id/txt_tl"
-                                android:layout_width="@dimen/C100dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/C10dp"
-                                android:text=""
                                 android:textAlignment="textStart"
-                                android:textColor="@android:color/holo_blue_light"
-                                android:textSize="@dimen/C13dp"
-                                android:textStyle="bold"></TextView>
+                                android:layout_width="@dimen/C100dp"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -517,23 +414,16 @@ android:layout_marginRight="@dimen/C30dp"
                             android:padding="@dimen/C5dp">
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:layout_width="@dimen/header_width1"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"                                android:text="Lodging Allowance"
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/C13dp"
-                                android:textStyle="bold"></TextView>
+                                android:layout_weight="3"
+                                android:text="Lodging Allowance"/>
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:id="@+id/txt_la"
-                                android:layout_width="@dimen/C100dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/C10dp"
-                                android:text=""
                                 android:textAlignment="textStart"
-                                android:textColor="@android:color/holo_blue_light"
-                                android:textSize="@dimen/C13dp"
-                                android:textStyle="bold"></TextView>
+                                android:layout_width="@dimen/C100dp"/>
                         </LinearLayout>
 
                         <LinearLayout
@@ -544,24 +434,16 @@ android:layout_marginRight="@dimen/C30dp"
                             android:padding="@dimen/C5dp">
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:layout_width="@dimen/header_width1"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="3"                                android:text="Local Conveyance"
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/C13dp"
-                                android:textStyle="bold"></TextView>
+                                android:layout_weight="3"
+                                android:text="Local Conveyance"/>
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:id="@+id/txt_lc"
-                                android:layout_width="@dimen/C100dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/C10dp"
-                                android:text=""
-                                android:textAlignment="textStart"
-                                android:textColor="@android:color/holo_blue_light"
-                                android:textSize="@dimen/C13dp"
-                                android:layout_gravity="start"
-                                android:textStyle="bold"></TextView>
+                                android:layout_width="@dimen/C100dp"/>
+
                         </LinearLayout>
 
                         <LinearLayout
@@ -572,33 +454,21 @@ android:layout_marginRight="@dimen/C30dp"
                             android:padding="@dimen/C5dp">
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:layout_width="@dimen/header_width1"
-                                android:layout_height="wrap_content"
-                                android:text="Other Expense"
-                                android:textColor="@android:color/black"
-                                android:textSize="@dimen/C13dp"
                                 android:layout_weight="3"
-                                android:textStyle="bold"></TextView>
+                                android:text="Other Expense"/>
 
                             <TextView
+                                style="@style/TextStyle"
                                 android:id="@+id/txt_oe"
-                                android:layout_width="@dimen/C100dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/C10dp"
-                                android:text=""
-                                android:textColor="@android:color/holo_blue_light"
-                                android:textSize="@dimen/C13dp"
-                                android:textStyle="bold"></TextView>
+                                android:layout_width="@dimen/C100dp"/>
                         </LinearLayout>
-
                     </LinearLayout>
-
                 </LinearLayout>
             </ScrollView>
 
-
         </LinearLayout>
-
 
     </LinearLayout>
 

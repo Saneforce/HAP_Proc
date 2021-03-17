@@ -50,6 +50,7 @@
 
 
                     <TextView
+                        android:textColor="@android:color/white"
                         android:id="@+id/leave_status"
                         style="@style/TextStyle"></TextView>
 

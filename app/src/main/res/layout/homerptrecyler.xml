@@ -1,33 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
+
     <LinearLayout
         android:id="@+id/parent_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:paddingBottom="5dp">
+
         <TextView
             android:id="@+id/txtlable"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/C13dp"
-            android:layout_weight="1"
-            android:text="TextView" />
+            style="@style/TextStyle"
+            android:layout_weight="1" />
+
         <TextView
             android:id="@+id/txtval"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="@dimen/C13dp"
-            android:layout_weight="1"
-            android:layout_gravity="right"
-            android:textAlignment="textEnd"
-            android:text="TextView"
-            android:textStyle="bold"
-            android:autoLink="web"
-            tools:ignore="RtlCompat" />
+            style="@style/TextStyle"
+
+            android:autoLink="web" />
     </LinearLayout>
 </LinearLayout>

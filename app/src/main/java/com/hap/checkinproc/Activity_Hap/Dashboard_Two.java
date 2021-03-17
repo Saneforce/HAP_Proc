@@ -208,9 +208,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         StActivity.setOnClickListener(this);
         btnCheckout.setOnClickListener(this);
         gateIn_gateOut.setOnClickListener(this);
-        gateIn_gateOut.setVisibility(View.GONE);
-        gateOut_gateIn.setVisibility(View.GONE);
-        cardGateDet.setVisibility(View.GONE);
+
+        /*      gateIn_gateOut.setVisibility(View.GONE);
+                gateOut_gateIn.setVisibility(View.GONE);
+                cardGateDet.setVisibility(View.GONE);
+        */
         if (Integer.parseInt(CheckInDetails.getString("On_Duty_Flag", "0")) > 0) {
             gateIn_gateOut.setVisibility(View.VISIBLE);
             gateOut_gateIn.setVisibility(View.VISIBLE);

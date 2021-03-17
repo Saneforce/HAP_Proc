@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -33,59 +34,28 @@
                     android:layout_margin="@dimen/C5dp"
                     android:visibility="gone">
 
-
-
-
                     <TextView
                         android:id="@+id/SfName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:layout_marginEnd="-1dp"
-                        android:layout_marginRight="-1dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:padding="@dimen/C3dp"
-                        android:text="thirumalai"
-
-                        android:textSize="12dp"></TextView>
+                        style="@style/TextStyle" />
 
                 </RelativeLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-
                     android:layout_marginRight="@dimen/C10dp"
                     android:layout_marginBottom="@dimen/C5dp">
 
                     <TextView
                         android:id="@+id/ondutydate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="2020-09-06"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"
-                        android:textStyle="bold"></TextView>
-
+                        style="@style/TextStyle"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/os_status"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
+                        style="@style/TextStyle" />
 
-                        android:fontFamily="@font/poppins_semibold"
-                        android:padding="@dimen/C3dp"
-                        android:text="Pending"
-                        android:textColor="@android:color/white"
-                        android:textSize="12dp"></TextView>
-
-                </RelativeLayout>
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -93,38 +63,24 @@
                     android:layout_margin="@dimen/C5dp"
                     android:background="@android:color/black" />
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C10dp"
                     android:layout_marginRight="@dimen/C10dp">
 
                     <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="SHIFT"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
-
+                        style="@style/TextStyle"
+                        android:layout_weight="1"
+                        android:text="SHIFT" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Working Hrs"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
+                        style="@style/TextStyle"
+                        android:text="Working Hrs" />
 
+                </LinearLayout>
 
-                </RelativeLayout>
-
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C5dp"
@@ -133,57 +89,34 @@
 
                     <TextView
                         android:id="@+id/shift_type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="2.42pm to 4.41"
-                        android:textColor="@android:color/black"
-                        android:textSize="13dp"
-                        android:textStyle="bold"></TextView>
+                        style="@style/TextStyle"
+                        android:layout_weight="1"
+                        android:text="2.42pm to 4.41" />
 
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="---"
-                        android:textColor="@android:color/black"
-                        android:textSize="13dp"
-                        android:textStyle="bold"></TextView>
+                        style="@style/TextStyle"
+                        android:text="---" />
 
-                </RelativeLayout>
+                </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="@dimen/C10dp">
 
                     <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="IN TIME"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
+                        style="@style/TextStyle"
+                        android:layout_weight="1"
+                        android:text="IN TIME" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="OUT TIME"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
+                        style="@style/TextStyle"
+                        android:text="OUT TIME" />
 
-                </RelativeLayout>
+                </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C5dp"
@@ -191,60 +124,33 @@
 
                     <TextView
                         android:id="@+id/txt_in_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="11:42:52"
-                        android:textColor="@android:color/black"
-                        android:textSize="13dp"
-                        android:textStyle="bold"></TextView>
+                        style="@style/TextStyle"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/txt_out_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="10:49:52"
-                        android:textColor="@android:color/black"
-                        android:textSize="13dp"
-                        android:textStyle="bold"></TextView>
+                        style="@style/TextStyle" />
 
 
-                </RelativeLayout>
+                </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C10dp"
                     android:layout_marginRight="@dimen/C10dp">
 
                     <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="GEO IN"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
+                        style="@style/TextStyle"
+                        android:layout_weight="1"
+                        android:text="GEO IN" />
 
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="GEO OUT"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
-                </RelativeLayout>
+                        style="@style/TextStyle"
+                        android:text="GEO OUT" />
+                </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C5dp"
@@ -252,31 +158,15 @@
 
                     <TextView
                         android:id="@+id/txt_geo_in_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="11.6480082,79.022340"
-                        android:textColor="@android:color/black"
-                        android:textSize="13dp"
-                        android:textStyle="bold"></TextView>
+                        style="@style/TextStyle"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/txt_geo_out_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="11.6480082,79.022340"
-                        android:textColor="@android:color/black"
-                        android:textSize="13dp"
-                        android:textStyle="bold"></TextView>
-                </RelativeLayout>
+                        style="@style/TextStyle" />
+                </LinearLayout>
 
-
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C10dp"
@@ -285,34 +175,17 @@
 
                     <TextView
                         android:id="@+id/applieddate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Approved: 2020-01-23"
-                        android:textColor="@color/statuscolor"
-                        android:textSize="11dp"></TextView>
-
+                        style="@style/TextStyle"
+                        android:layout_weight="1" />
 
                     <TextView
+                        style="@style/TextStyle"
+                        android:text="Reject: 2020-01-23" />
 
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Reject: 2020-01-23"
-                        android:textColor="@color/statuscolor"
-                        android:textSize="11dp"></TextView>
-
-                </RelativeLayout>
+                </LinearLayout>
             </LinearLayout>
-
 
         </androidx.cardview.widget.CardView>
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>
