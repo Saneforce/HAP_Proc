@@ -59,35 +59,21 @@ EventCaptureActivity extends AppCompatActivity {
 
     Button TakeEventPicture;
     TextView txtRetailerName, txtRoute, txtDistributorName;
-    int count = 0, count1 = 0;
+    int count = 0,countInt = 0;
     ArrayList<EventCapture> eventCapture;
-
     RecyclerView mEventCapture;
     EventCaptureAdapter mEventCaptureAdapter;
     ApiInterface apiInterface;
-
-    String eventListStr;
     EventCapture taskOne = new EventCapture();
     Shared_Common_Pref mShaeShared_common_pref;
-
-    int countInt = 0, idCount = 0;
-    SharedPreferences sp;
+    SharedPreferences sp,sharedPreferences;
     EditText editextTitle, editTextDescrption;
-    String RetailerName, RouteName, DistributorName;
-    SharedPreferences sharedPreferences;
-    String intenValue;
-    String RoomDataBase = "";
-    private AppDatabase mDB;
-
     List<EventCapture> taskList;
-    String locationValue, dateTime, checkInTime, keyEk = "EK", KeyDate, KeyHyp = "-", keyCodeValue, checkOutTime;
-    String EventFileName;
     int eventDbCount = 0;
     EventCapture task;
-
-
-    String RetailerChannel = "", Retailerclass = "", OrderAmount = "", LastVisited = "",
-            Remarks = "", textMobile = "", PhoneNumber = "", selectOrder = "", RetailerNames = "";
+    String RetailerChannel = "", Retailerclass = "", OrderAmount = "", LastVisited = "", Remarks = "", textMobile = "",
+            PhoneNumber = "", selectOrder = "", RetailerNames = "",eventListStr, EventFileName,keyEk = "EK", KeyDate,
+            keyCodeValue,RoomDataBase = "",RetailerName, RouteName, DistributorName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,13 +99,8 @@ EventCaptureActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
 
-        /*  shared_common_pref.save("Event_Capture","Remove");*/
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         mShaeShared_common_pref = new Shared_Common_Pref(this);
-
-        /* mShaeShared_common_pref.save("Event_Capture","Remove");*/
-
-
         DistributorName = mShaeShared_common_pref.getvalue("distributor_name");
         RouteName = mShaeShared_common_pref.getvalue("route_name");
         RetailerName = mShaeShared_common_pref.getvalue("Retailer_name");
@@ -134,7 +115,6 @@ EventCaptureActivity extends AppCompatActivity {
         txtDistributorName = findViewById(R.id.txt_distributor_name);
 
         txtRetailerName.setText(RetailerName);
-
 
         txtRoute.setText(RouteName);
         txtDistributorName.setText(DistributorName);
@@ -162,18 +142,8 @@ EventCaptureActivity extends AppCompatActivity {
         textMobile = intnet.getStringExtra("textMobile");
         PhoneNumber = intnet.getStringExtra("PhoneNumber");
         RetailerNames = intnet.getStringExtra("RetailerName");
-       // selectOrder = intnet.getStringExtra("selectOrder");
+        // selectOrder = intnet.getStringExtra("selectOrder");
 
-        Log.e("EventCount", String.valueOf(eventDbCount));
-        Log.e("EventCount", String.valueOf(RetailerChannel));
-        Log.e("EventCount", String.valueOf(Retailerclass));
-        Log.e("EventCount", String.valueOf(OrderAmount));
-        Log.e("EventCount", String.valueOf(LastVisited));
-        Log.e("EventCount", String.valueOf(Remarks));
-        Log.e("EventCount", String.valueOf(textMobile));
-        Log.e("EventCount", String.valueOf(PhoneNumber));
-        Log.e("EventCount", String.valueOf(RetailerName));
-        Log.e("EventCount", String.valueOf(selectOrder));
 
 
         if (eventDbCount == 1) {
@@ -205,9 +175,6 @@ EventCaptureActivity extends AppCompatActivity {
                 Uri uri = FileProvider.getUriForFile(EventCaptureActivity.this, getApplicationContext().getPackageName() + ".provider", file);
                 m_intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT, uri);
                 startActivityForResult(m_intent, 2);
-
-                Log.e("EVENT_LIST_STR", String.valueOf(EventFileName));
-                Log.e("EVENT_LIST_STR_SHared", String.valueOf(keyCodeValue));
 
             }
         });
@@ -314,14 +281,13 @@ EventCaptureActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(Void aVoid) {
                 super.onPostExecute(aVoid);
-               // Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG).show();
+                // Toast.makeText(getApplicationContext(), "Saved", Toast.LENGTH_LONG).show();
             }
         }
 
         SaveTask st = new SaveTask();
         st.execute();
     }
-
 
 
     /*Call Api Image*/
@@ -411,10 +377,6 @@ EventCaptureActivity extends AppCompatActivity {
                 }
             });
 
-    public void onSuperBackPressed() {
-        super.onBackPressed();
-    }
-
 
     @Override
     public void onBackPressed() {
@@ -466,6 +428,7 @@ EventCaptureActivity extends AppCompatActivity {
         dt.execute();
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();

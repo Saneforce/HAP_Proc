@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import android.Manifest;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -9,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -30,6 +32,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -113,7 +116,6 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
                 int year = cldr.get(Calendar.YEAR);
                 // date picker dialog.
 
-
                 picker1 = new DatePickerDialog(DeviationEntry.this,
                         new DatePickerDialog.OnDateSetListener() {
                             @Override
@@ -125,9 +127,8 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
                         }, year, month, day);
                 Calendar calendarmin = Calendar.getInstance();
                 calendarmin.set(Integer.parseInt(minYear), Integer.parseInt(minMonth) - 1, Integer.parseInt(minDay));
-                picker1.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
+                picker1.getDatePicker().setMaxDate(cldr.getTimeInMillis());
                 picker1.show();
-
             }
 
         });
@@ -149,17 +150,32 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-        try {
-           /* Criteria criteria = new Criteria();
-            String provider = locationManager.getBestProvider(criteria, false);
-            Location location = locationManager.getLastKnownLocation(provider);
-            Currentlocation = " " + (location.getLatitude() + "," + location.getLongitude());
-            Log.e("Location_current", Currentlocation);*/
 
-            locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) this);
-            location = new Location(String.valueOf(locationManager));
-            onLocationChanged(location);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+
+            return;
+        }
+        try {
+            LocationManager enabledManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            if (enabledManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                location = enabledManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                if (location == null) {
+                    Toast.makeText(this, "Please enable GPS", Toast.LENGTH_SHORT).show();
+                } else {
+                    locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) this);
+                    location = new Location(String.valueOf(locationManager));
+                    onLocationChanged(location);
+                }
+            }
+
 
         } catch (SecurityException e) {
             e.printStackTrace();
@@ -423,6 +439,7 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
         Currentlocation = location.getLatitude() + "," + location.getLongitude();
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();

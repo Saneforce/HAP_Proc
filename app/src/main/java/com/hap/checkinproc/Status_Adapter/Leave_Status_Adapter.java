@@ -93,15 +93,13 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
             holder.linearCancel.setVisibility(View.VISIBLE);
 
         } else {
-            holder.linearCancel.setVisibility(View.GONE);
+            holder.linearCancel.setVisibility(View.INVISIBLE);
         }
 
 
         holder.ButtonCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              /*  holder.linearReason.setVisibility(View.VISIBLE);
-                holder.linearCancel.setVisibility(View.GONE);*/
 
                 mLeaveCancelRea.onCancelReason(Leave_Status_ModelsList.get(position).getLeaveId());
 

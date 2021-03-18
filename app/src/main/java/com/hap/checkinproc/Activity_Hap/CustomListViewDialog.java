@@ -54,6 +54,7 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
         setupLayout();
     }
 
+
     private void setupLayout() {
 
     }

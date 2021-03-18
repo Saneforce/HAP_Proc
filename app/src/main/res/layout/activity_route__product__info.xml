@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -87,146 +86,161 @@
             android:orientation="vertical"
             android:weightSum="2">
 
-            <LinearLayout
+            <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <TextView
-                    android:id="@+id/textView1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="10dp"
-                    android:layout_weight="0.8"
-                    android:drawableRight="@drawable/star_icon"
-                    android:gravity="center"
-                    android:text="Category Universe"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textColor="@color/black"
-                    android:textSize="17dp" />
-
-                <Switch
-                    android:id="@+id/cateswitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.2"
-
-                    android:gravity="center"
-                    android:text="YES"></Switch>
-            </LinearLayout>
-
-            <GridView
-                android:id="@+id/category"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:numColumns="4"
-                android:padding="@dimen/C5dp"
-                android:stretchMode="columnWidth" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/ablack"
-                android:outlineAmbientShadowColor="@color/ablack"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <TextView
-                    android:id="@+id/availablitytext"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_margin="5dp"
-                    android:layout_weight="0.8"
-                    android:drawableRight="@drawable/star_icon"
-                    android:gravity="center"
-                    android:text="Hatsun Availability"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textColor="@color/black"
-                    android:textSize="18dp" />
-
-                <Switch
-                    android:id="@+id/availswitch"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1.2"
-                    android:gravity="center"
-                    android:text="YES"></Switch>
-            </LinearLayout>
-
-            <GridView
-                android:id="@+id/availablitygrid"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:numColumns="4"
-                android:padding="@dimen/C5dp"
-                android:stretchMode="columnWidth" />
-
-            <EditText
-                android:id="@+id/reason_availablity"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@drawable/textbox_bg"
-                android:elevation="5dp"
-                android:gravity="start"
-                android:hint="Please Enter Comments"
-                android:textColor="@color/grey_500"
-                android:textSize="@dimen/C13dp"
-                android:visibility="gone" />
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/ablack"
-                android:outlineAmbientShadowColor="@color/ablack"></View>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:weightSum="2">
-
-                <TextView
-                    android:id="@+id/otherbrand"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="35dp"
-                    android:layout_weight="1"
-                    android:text="Other Brand"
-                    android:textColor="@color/black"
-                    android:textSize="17dp" />
+                android:scrollbars="none">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:padding="@dimen/C10dp">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/leave_type"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/textView1"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="10dp"
+                            android:layout_weight="0.8"
+                            android:drawableRight="@drawable/star_icon"
+                            android:gravity="center"
+                            android:text="Category Universe"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="@color/black"
+                            android:textSize="17dp" />
+
+                        <Switch
+                            android:id="@+id/cateswitch"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.2"
+                            android:gravity="center"
+                            android:text="YES"></Switch>
+                    </LinearLayout>
+
+                    <GridView
+                        android:id="@+id/category"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/travel_allowance"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:numColumns="4"
+                        android:padding="@dimen/C5dp"
+                        android:stretchMode="columnWidth" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/ablack"
+                        android:outlineAmbientShadowColor="@color/ablack"></View>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/availablitytext"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="5dp"
+                            android:layout_weight="0.8"
+                            android:drawableRight="@drawable/star_icon"
+                            android:gravity="center"
+                            android:text="Hatsun Availability"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="@color/black"
+                            android:textSize="18dp" />
+
+
+
+                        <Switch
+                            android:id="@+id/availswitch"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1.2"
+                            android:gravity="center"
+                            android:text="YES"></Switch>
+                    </LinearLayout>
+
+                    <GridView
+                        android:id="@+id/availablitygrid"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/travel_allowance"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:numColumns="4"
+                        android:padding="@dimen/C5dp"
+                        android:stretchMode="columnWidth" />
+
+                    <EditText
+                        android:id="@+id/reason_availablity"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_gravity="center"
-                        android:background="@drawable/round_rect_light_grey"
-                        android:drawablePadding="@dimen/C10dp"
-                        android:text="AAvin,hutsun,sona"
-                        android:textColor="@color/black"
-                        android:textSize="17dp" />
+                        android:layout_weight="1"
+                        android:background="@drawable/textbox_bg"
+                        android:elevation="5dp"
+                        android:gravity="start"
+                        android:hint="Please Enter Comments"
+                        android:textColor="@color/grey_500"
+                        android:textSize="@dimen/C13dp"
+                        android:visibility="gone" />
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/ablack"
+                        android:outlineAmbientShadowColor="@color/ablack"></View>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:weightSum="2">
+
+                        <TextView
+                            android:id="@+id/otherbrand"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="35dp"
+                            android:layout_weight="1"
+                            android:text="Other Brand"
+                            android:textColor="@color/black"
+                            android:textSize="17dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:padding="@dimen/C10dp">
+
+                            <TextView
+                                android:id="@+id/leave_type"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:background="@drawable/round_rect_light_grey"
+                                android:drawablePadding="@dimen/C10dp"
+                                android:text="AAvin,hutsun,sona"
+                                android:textColor="@color/black"
+                                android:textSize="17dp" />
+                        </LinearLayout>
+                    </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
+            </ScrollView>
+
+
         </LinearLayout>
 
         <TextView

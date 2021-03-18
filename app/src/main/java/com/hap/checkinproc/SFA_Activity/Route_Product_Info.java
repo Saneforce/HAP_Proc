@@ -119,7 +119,7 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
                     availswitch.setChecked(false);
                     availswitch.setText("NO");
                     availswitch.setTextColor(getResources().getColor(R.color.color_red));
-                    availablitygrid.setVisibility(View.INVISIBLE);
+                    availablitygrid.setVisibility(View.GONE);
                     // reason_availablity.setVisibility(View.VISIBLE);
                 }
                 break;

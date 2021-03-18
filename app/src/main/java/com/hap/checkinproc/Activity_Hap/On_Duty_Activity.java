@@ -45,7 +45,6 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -91,6 +90,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     String SF_code = "", div = "";
     Shared_Common_Pref mShared_common_pref;
 
+
     /*OnDUTY ALlowance*/
 
     CardView ModeTravel, BusCardTo, cardHapLoaction;
@@ -129,7 +129,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
 
     CheckBox driverAllowance;
     LinearLayout linCheckdriver;
-
+    Integer vale = 0;
     String strHapLocation = "", strVisitPurpose = "";
     String imageConvert = "", imageServer = "";
     String DriverNeed = "false", DriverMode = "", strDailyAllowance = "", StrID = "";
@@ -144,10 +144,10 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on__duty_);
-        startService(new Intent(this, TimerService.class));
+        //  startService(new Intent(this, TimerService.class));
         shared_common_pref = new Shared_Common_Pref(this);
         sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-
+        dynamicMode(1);
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
         common_class = new Common_Class(this);
@@ -195,18 +195,17 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getApplicationContext(), Dashboard.class));
-
             }
         });
-
 
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
+                common_class.CommonIntentwithFinish(Dashboard.class);
             }
         });
+
         gson = new Gson();
         haplocationtext = findViewById(R.id.haplocationtext);
         purposeofvisittext = findViewById(R.id.purposeofvisittext);
@@ -248,29 +247,93 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         submitbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (selecthaplocationss.getText().toString().matches("") && flag==0) {
-                    Toast.makeText(On_Duty_Activity.this, "Enter Hap Location", Toast.LENGTH_SHORT).show();
-                } else if (ondutyedittext.getText().toString().matches("") && flag==1) {
-                    Toast.makeText(On_Duty_Activity.this, "Enter your ON-Duty Location", Toast.LENGTH_SHORT).show();
-                } else if (purposeofvisitedittext.getText().toString().matches("")) {
-                    Toast.makeText(On_Duty_Activity.this, "Enter Visit purpose", Toast.LENGTH_SHORT).show();
-                } else if (TextMode.getText().toString().matches("")) {
-                    Toast.makeText(On_Duty_Activity.this, "Enter Mode", Toast.LENGTH_SHORT).show();
-                } else if (!TextMode.getText().toString().matches("")) {
-                    if (startEnd.equals("1")) {
-                        if (StartKm.getText().toString().matches("")) {
-                            Toast.makeText(On_Duty_Activity.this, "Enter Start Km", Toast.LENGTH_SHORT).show();
-                        } else if (attachedImage.getDrawable() == null) {
-                            Toast.makeText(On_Duty_Activity.this, "Enter Attachment", Toast.LENGTH_SHORT).show();
-                        }
+
+                if (flag == 0) {
+                    //haplocation
+
+                    if (selecthaplocationss.getText().toString().matches("")) {
+                        Log.v("HAP_LOACTION", "Enter Hap Location");
+                        Toast.makeText(On_Duty_Activity.this, "Enter Hap Location", Toast.LENGTH_SHORT).show();
+                    } else if (purposeofvisitedittext.getText().toString().matches("")) {
+                        Log.v("HAP_LOACTION", "Enter Visit");
+                        Toast.makeText(On_Duty_Activity.this, "Enter Visit purpose", Toast.LENGTH_SHORT).show();
+                    } else if (TextMode.getText().toString().matches("")) {
+                        Log.v("HAP_LOACTION", startEnd + "Enter Mode");
+                        Toast.makeText(On_Duty_Activity.this, "Enter Mode", Toast.LENGTH_SHORT).show();
                     } else {
-                        submitData();
+                        if (startEnd.equals("0")) {
+                            if (dailyAllowance.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Daily");
+                                Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
+                            } else if (onDutyFrom.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter From");
+                                Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
+                            } else if (imageURI.matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Start");
+                                Toast.makeText(On_Duty_Activity.this, "Choose Start Photo", Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (startEnd.equals("1")) {
+                            if (dailyAllowance.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Daily");
+                                Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
+                            } else if (onDutyFrom.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter From");
+                                Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
+                            } else if (StartKm.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Start km");
+                                Toast.makeText(On_Duty_Activity.this, "Enter Start Km", Toast.LENGTH_SHORT).show();
+                            } else if (imageURI.matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Start");
+                                Toast.makeText(On_Duty_Activity.this, "Choose Start Photo", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            submitData();
+                        }
+
                     }
 
-                } else {
-                    submitData();
-                }
 
+                } else {
+                    //OtherLocation
+                    if (ondutyedittext.getText().toString().matches("")) {
+                        Toast.makeText(On_Duty_Activity.this, "Enter Onduty Location", Toast.LENGTH_SHORT).show();
+                    } else if (purposeofvisitedittext.getText().toString().matches("")) {
+                        Toast.makeText(On_Duty_Activity.this, "Enter Visit purpose", Toast.LENGTH_SHORT).show();
+                    } else if (TextMode.getText().toString().matches("")) {
+                        Toast.makeText(On_Duty_Activity.this, "Enter Mode", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (startEnd.equals("0")) {
+                            if (dailyAllowance.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Daily");
+                                Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
+                            } else if (onDutyFrom.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter From");
+                                Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
+                            } else if (imageURI.matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Start");
+                                Toast.makeText(On_Duty_Activity.this, "Choose Start Photo", Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (startEnd.equals("1")) {
+                            if (dailyAllowance.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Daily");
+                                Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
+                            } else if (onDutyFrom.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter From");
+                                Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
+                            } else if (StartKm.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Start km");
+                                Toast.makeText(On_Duty_Activity.this, "Enter Start Km", Toast.LENGTH_SHORT).show();
+                            } else if (imageURI.matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Start");
+                                Toast.makeText(On_Duty_Activity.this, "Choose Start Photo", Toast.LENGTH_SHORT).show();
+                            }
+
+                        } else {
+                            submitData();
+                        }
+                    }
+                }
 
             }
         });
@@ -324,7 +387,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             public void onClick(View v) {
                 Log.e("MODE_Travel", "MODEL_Travel");
                 modelTravelType.clear();
-                dynamicMode();
+                dynamicMode(0);
             }
         });
         BusCardTo.setOnClickListener(new View.OnClickListener() {
@@ -381,6 +444,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             selecthaplocationss.setText(strHapLocation);
             if (!strHapLocation.matches("")) {
                 flag = 0;
+
                 ondutyedittext.setText("");
                 purposeofvisitedittext.setText("");
                 haplocationtext.setVisibility(View.VISIBLE);
@@ -400,6 +464,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             strVisitPurpose = sharedpreferences.getString(visitPurpose, "");
             if (!strVisitPurpose.matches("")) {
                 flag = 0;
+
                 ondutyedittext.setText("");
                 purposeofvisitedittext.setText(strVisitPurpose);
                 haplocationtext.setVisibility(View.VISIBLE);
@@ -491,6 +556,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 TextMode.setText(modeVal);
                 dailyAllowance.setText(strDailyAllowance);
                 attachedImage.setImageURI(Uri.parse(imageURI));
+                attachedImage.setRotation(90);
 
             } else {
 
@@ -503,6 +569,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 TextMode.setText(modeVal);
                 dailyAllowance.setText(strDailyAllowance);
                 attachedImage.setImageURI(Uri.parse(imageURI));
+                attachedImage.setRotation(90);
 
 
                 if (TextMode.getText().equals("Four Wheeler")) {
@@ -595,7 +662,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    public void dynamicMode() {
+    public void dynamicMode(Integer note) {
 
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "table/list");
@@ -610,7 +677,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-
+                modelTravelType.clear();
                 userType = new TypeToken<ArrayList<ModeOfTravel>>() {
                 }.getType();
                 modelOfTravel = gson.fromJson(new Gson().toJson(response.body()), userType);
@@ -623,13 +690,16 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                     Log.e("LeaveType_Request", id);
                     Log.e("LeaveType_Request", name);
                     modelTravelType.add(Model_Pojo);
-                }
 
-                customDialog = new CustomListViewDialog(On_Duty_Activity.this, modelTravelType, 8);
-                Window window = customDialog.getWindow();
-                window.setGravity(Gravity.CENTER);
-                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
+                }
+                if (note == 0) {
+                    customDialog = new CustomListViewDialog(On_Duty_Activity.this, modelTravelType, 8);
+                    customDialog.setCanceledOnTouchOutside(false);
+                    Window window = customDialog.getWindow();
+                    window.setGravity(Gravity.CENTER);
+                    window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    customDialog.show();
+                }
             }
 
             @Override
@@ -637,6 +707,8 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 Log.d("LeaveTypeList", "Error");
             }
         });
+
+
     }
 
 
@@ -645,6 +717,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         switch (v.getId()) {
             case R.id.otherlocationbutton:
                 flag = 1;
+                Log.v("ON_DUTY_LOCATION", String.valueOf(flag));
                 ondutylocations.setVisibility(View.VISIBLE);
                 purposeofvisittext.setVisibility(View.VISIBLE);
                 closebutton.setVisibility(View.VISIBLE);
@@ -657,10 +730,13 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 selecthaplocationss.setText("");
                 ondutyedittext.setText("");
                 strHapLocation = "";
+
+
                 break;
 
             case R.id.haplocationbutton:
                 flag = 0;
+                Log.v("ON_DUTY_LOCATION", String.valueOf(flag));
                 if (sharedpreferences.contains(hapLocation)) {
                     strHapLocation = sharedpreferences.getString(hapLocation, "");
                     selecthaplocationss.setText("");
@@ -713,6 +789,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 window.setGravity(Gravity.CENTER);
                 window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 customDialog.show();
+
                 Log.e("On_Duty_Mode", "On_Duty_Mode");
                 break;
         }
@@ -1051,6 +1128,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         } catch (Exception e) {
         }
     }
+/*
 
     @Override
     protected void onResume() {
@@ -1087,5 +1165,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         super.onRestart();
         startService(new Intent(this, TimerService.class));
     }
+*/
 
 }

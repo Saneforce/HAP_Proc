@@ -84,7 +84,7 @@
     <string name="to_date">To :</string>
     <string name="allowance">Do you want to submit Allowance?</string>
 
-    <bool name="config_closeDialogWhenTouchOutside">true</bool>
+    <bool name="config_closeDialogWhenTouchOutside">false</bool>
     <string name="title_activity_ta_approval_display">TaApprovalDisplay</string>
     <string name="take_photo">Take Photo</string>
 

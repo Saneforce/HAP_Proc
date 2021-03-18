@@ -644,7 +644,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 editor.remove(MOT);
                                 editor.remove("SharedImage");
                                 editor.remove("Sharedallowance");
-                                editor.remove("SharedMode");
+                                //editor.remove("SharedMode");
                                 editor.remove("StartedKM");
                                 editor.remove("SharedFromKm");
                                 editor.remove("SharedToKm");
@@ -738,7 +738,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
         Log.v("plantimeplantime", Date);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> Callto = apiInterface.gteDta("MGR5120", "2021-03-02");
+        Call<JsonArray> Callto = apiInterface.gteDta(Shared_Common_Pref.Sf_Code, com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly());
         Callto.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {

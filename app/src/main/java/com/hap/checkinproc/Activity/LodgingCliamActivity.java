@@ -35,24 +35,15 @@ import java.text.DecimalFormat;
 
 public class LodgingCliamActivity extends AppCompatActivity {
 
-    LinearLayout linlocalCon, linImgPrv, jointLodging;
-    TextView editTexts, txtLCAmnt, lcUKey;
-    EditText edtLcFare, edt;
-    LinearLayout Dynamicallowance;
-    String LCClaim = "", LcUKey = "";
+    LinearLayout linImgPrv, jointLodging;
+    String LCClaim = "";
     JSONArray jsonArray = null;
-    ImageView imgBck, localImage;
-    TextView txt_date, txt_ldg_type, TxtStartedKm, TxtClosingKm, modeTextView, travelTypeMode,
-            TotalTravelledKm, txtBusFrom, txtBusTo, txtTaClaim, PersonalTextKM, PersonalKiloMeter,
-            txtDailyAllowance, edt_ldg_JnEmp, ldg_cin, ldg_cout, txtJNName, txtJNDesig, txtJNDept, txtJNHQ, txtJNMob,
-            lblHdBill, lblHdBln, ldgWOBBal, ldgAdd, txtJNMyEli, txtMyEligi, txtDrivEligi, lbl_ldg_eligi, txt_totDA,
-            fuelAmount, TextTotalAmount, oeEditext, localText, OeText, grandTotal, txtallamt, txt_BrdAmt,
-            txt_DrvBrdAmt, txtJointAdd, txtJNEligi, txtTAamt, txtDesig, txtDept, txtEmpId, txtName, oeTxtUKey, oeTxtUKeys,
-            lcTxtUKey, lcTxtUKeys, tvTxtUKey, tvTxtUKeys, txtMaxKm, txtDrvrBrod, txtStyDays, txtLodgUKey;
 
+    TextView  txt_ldg_type, edt_ldg_JnEmp, ldg_cin, ldg_cout, txtJNName, txtJNDesig, txtJNDept, txtJNHQ, txtJNMob,
+            lblHdBill, lblHdBln, ldgWOBBal, txtJNMyEli, txtMyEligi, txtDrivEligi, lbl_ldg_eligi, txtJNEligi,
+            txtStyDays, txtLodgUKey;
     EditText edt_ldg_bill, lodgStyLocation;
-
-    ImageView img_lodg_prvw, img_lodg_atta;
+    ImageView imgBck,img_lodg_prvw, img_lodg_atta;
 
     String DateTime = "";
 
@@ -275,6 +266,40 @@ public class LodgingCliamActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
     }
 
 }

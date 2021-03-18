@@ -391,7 +391,7 @@ public interface ApiInterface {
                                @Query("sfCode") String sfcode);
 
 
-    @POST("Db_v300.php?axn=get/GateEntryHome")
+    @POST("Db_V13.php?axn=get/GateEntryHome")
     Call<JsonArray> gteDta(@Query("Sf_code") String sfCode, @Query("TodayDate") String Tdate);
 
 

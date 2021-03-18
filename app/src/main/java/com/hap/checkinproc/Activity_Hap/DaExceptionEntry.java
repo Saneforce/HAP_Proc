@@ -18,6 +18,7 @@ import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -33,6 +34,7 @@ public class DaExceptionEntry extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_da_exception_entry);
+
         getTool();
         MaxMinDate();
         cardDate = findViewById(R.id.choose_date);

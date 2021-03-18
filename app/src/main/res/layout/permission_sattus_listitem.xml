@@ -46,6 +46,7 @@
                         style="@style/TextStyle"
                         android:layout_weight="1" />
                     <TextView
+                        android:textColor="@android:color/white"
                         android:id="@+id/PStatus"
                         style="@style/TextStyle" />
                 </LinearLayout>

@@ -44,8 +44,7 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="android:windowCloseOnTouchOutside">@bool/config_closeDialogWhenTouchOutside
-        </item>
+        <item name="android:windowCloseOnTouchOutside">@bool/config_closeDialogWhenTouchOutside</item>
         <item name="listPreferredItemPaddingLeft">10dip</item>
         <item name="listPreferredItemPaddingRight">10dip</item>
         <item name="listPreferredItemPaddingStart">10dip</item>
