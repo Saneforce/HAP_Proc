@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity_Hap.Approvals;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
@@ -27,6 +28,7 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LeaveCancelReason;
+import com.hap.checkinproc.Model_Class.Approval;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Adapter.Leave_Status_Adapter;
 import com.hap.checkinproc.Status_Model_Class.Leave_Status_Model;
@@ -157,7 +159,7 @@ public class Leave_Status_Activity extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Leave_Status_Activity.super.onBackPressed();
+                    common_class.CommonIntentwithFinish(Approvals.class);
                 }
             });
 

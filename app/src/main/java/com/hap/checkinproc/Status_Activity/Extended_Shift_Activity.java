@@ -140,7 +140,7 @@ public class Extended_Shift_Activity extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Extended_Shift_Activity.super.onBackPressed();
+                    common_class.CommonIntentwithFinish(Approvals.class);
                 }
             });
 

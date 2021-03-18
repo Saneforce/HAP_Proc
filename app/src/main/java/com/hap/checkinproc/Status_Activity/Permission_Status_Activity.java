@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity_Hap.Approvals;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
@@ -143,7 +144,7 @@ public class Permission_Status_Activity extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Permission_Status_Activity.super.onBackPressed();
+                    common_class.CommonIntentwithFinish(Approvals.class);
                 }
             });
 

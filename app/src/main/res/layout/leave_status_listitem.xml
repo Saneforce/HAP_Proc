@@ -17,6 +17,7 @@
             android:layout_margin="@dimen/C5dp"
             android:elevation="@dimen/C5dp"
             app:cardCornerRadius="10dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -48,7 +49,9 @@
 
                     <TextView
                         android:id="@+id/LStatus"
-                        style="@style/TextStyle" />
+                        style="@style/TextStyle"
+                        android:text="dsffdsf"
+                        android:textColor="@android:color/white" />
 
                 </LinearLayout>
 
@@ -120,10 +123,10 @@
                         android:visibility="gone">
 
                         <Button
-                            style="@style/ButtonStyle"
                             android:id="@+id/button_cancel"
+                            style="@style/ButtonStyle"
                             android:background="@drawable/button_red"
-                            android:text="CANCEL"/>
+                            android:text="CANCEL" />
 
                     </LinearLayout>
 
@@ -131,7 +134,8 @@
                         android:id="@+id/linear_reason"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <EditText
                             android:id="@+id/reason_permission"
@@ -147,12 +151,12 @@
                             android:textSize="@dimen/C13dp" />
 
                         <Button
-                            style="@style/TextStyle"
                             android:id="@+id/reason_send"
+                            style="@style/ButtonStyle"
                             android:layout_gravity="center"
-                            android:padding="@dimen/C5dp"
                             android:background="@drawable/button_blueg"
-                            android:text="SEND"/>
+                            android:padding="@dimen/C5dp"
+                            android:text="SEND" />
 
                     </LinearLayout>
                 </LinearLayout>

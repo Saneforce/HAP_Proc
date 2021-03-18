@@ -177,7 +177,7 @@ public class View_All_Status_Activity extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    View_All_Status_Activity.super.onBackPressed();
+                    common_class.CommonIntentwithFinish(Approvals.class);
                 }
             });
 
