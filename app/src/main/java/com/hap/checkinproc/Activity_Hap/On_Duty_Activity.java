@@ -248,9 +248,10 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         submitbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (selecthaplocationss.getText().toString().matches("")) {
+                if (selecthaplocationss.getText().toString().matches("") && flag==0) {
                     Toast.makeText(On_Duty_Activity.this, "Enter Hap Location", Toast.LENGTH_SHORT).show();
+                } else if (ondutyedittext.getText().toString().matches("") && flag==1) {
+                    Toast.makeText(On_Duty_Activity.this, "Enter your ON-Duty Location", Toast.LENGTH_SHORT).show();
                 } else if (purposeofvisitedittext.getText().toString().matches("")) {
                     Toast.makeText(On_Duty_Activity.this, "Enter Visit purpose", Toast.LENGTH_SHORT).show();
                 } else if (TextMode.getText().toString().matches("")) {
