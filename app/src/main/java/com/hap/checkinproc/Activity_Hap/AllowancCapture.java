@@ -133,9 +133,11 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             imgPreview.setRotation((float) -90.0);
         } else if (mCamId == 2) {
             imgPreview.setRotation((float) 90.0);
-        } else {
+        } /*else {
             imgPreview.setRotation((float) 270.0);
         }
+*/
+
 
     }
 

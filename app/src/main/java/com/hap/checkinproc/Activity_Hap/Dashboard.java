@@ -48,7 +48,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     SharedPreferences UserDetails;
     public static final String CheckInDetail = "CheckInDetail";
     public static final String MyPREFERENCES = "MyPrefs";
-
+    public static final String mypreference = "mypref";
     TextView username;
     TextView lblUserName, lblEmail;
     Button linMyday, linCheckin, lin_SFA, linApprovals, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift,
@@ -69,6 +69,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     public static final String StartedKm = "StartedKMsss";
     public static final String StartedImage = "SharedImage";
 
+
+
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
     @Override
@@ -83,7 +85,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         profilePic = findViewById(R.id.profile_image);
         Get_MydayPlan(1, "check/mydayplan");
         shared_common_pref = new Shared_Common_Pref(this);
-        CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
+        CheckInDetails = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         type = (shared.getInt("CheckCount", 0));
@@ -133,8 +135,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linRequstStaus = (findViewById(R.id.lin_request_status));
         linReport = (findViewById(R.id.lin_report));
         linOnDuty = (findViewById(R.id.lin_onduty));
-        linOnDuty.setVisibility(View.GONE);
-        if (sSFType.equals("0")) linOnDuty.setVisibility(View.VISIBLE);
+     /*   linOnDuty.setVisibility(View.GONE);
+        if (sSFType.equals("0")) linOnDuty.setVisibility(View.VISIBLE);*/
         linApprovals = findViewById(R.id.lin_approvals);
         linTaClaim = (findViewById(R.id.lin_ta_claim));
         linExtShift = (findViewById(R.id.lin_extenden_shift));
@@ -273,7 +275,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.lin_onduty:
 
-                SharedPreferences.Editor edd = CheckInDetails.edit();
+               /* SharedPreferences.Editor edd = CheckInDetails.edit();
                 edd.remove(hapLocation);
                 edd.remove(otherLocation);
                 edd.remove(visitPurpose);
@@ -287,8 +289,34 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 edd.remove("SharedDriverss");
                 edd.remove("ShareModeIDs");
                 edd.remove("StoreId");
-
                 edd.commit();
+                */
+
+
+
+                SharedPreferences.Editor editors = CheckInDetails.edit();
+                editors.remove("SharedImage");
+                editors.remove("Sharedallowance");
+                //editor.remove("SharedMode");
+                editors.remove("StartedKM");
+                editors.remove("SharedFromKm");
+                editors.remove("SharedToKm");
+                editors.remove("SharedFare");
+                editors.remove("SharedImages");
+                editors.remove("Closing");
+                editors.remove(hapLocation);
+                editors.remove(otherLocation);
+                editors.remove(visitPurpose);
+                editors.remove(modeTravelId);
+                editors.remove(modeTypeVale);
+                editors.remove(modeFromKm);
+                editors.remove(modeToKm);
+                editors.remove(StartedKm);
+                editors.remove("SharedDailyAllowancess");
+                editors.remove("SharedDriverss");
+                editors.remove("ShareModeIDs");
+                editors.remove("StoreId");
+                editors.commit();
                 startActivity(new Intent(this, On_Duty_Activity.class));
                 break;
             case R.id.lin_exit:

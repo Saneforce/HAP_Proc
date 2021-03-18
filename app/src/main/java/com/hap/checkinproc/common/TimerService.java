@@ -75,6 +75,9 @@ public class TimerService extends Service {
         else
             mTimer = new Timer();   //recreate new
         mTimer.scheduleAtFixedRate(new TimeDisplay(), 0, notify);   //Schedule task
+
+        Intent inten = new Intent(this, TimerService.class);
+        startService(inten);
     }
 
     @Override
@@ -83,6 +86,8 @@ public class TimerService extends Service {
         mTimer.cancel();    //For Cancel Timer
         Log.d("service is ","Destroyed");
     }
+
+
 
 
 
@@ -97,7 +102,6 @@ public class TimerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         onTaskRemoved(intent);
-
 
         return START_STICKY;
     }

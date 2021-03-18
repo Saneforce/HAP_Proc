@@ -621,7 +621,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 editor.remove(MOT);
                                 editor.remove("SharedImage");
                                 editor.remove("Sharedallowance");
-                                editor.remove("SharedMode");
+                                //editor.remove("SharedMode");
                                 editor.remove("StartedKM");
                                 editor.remove("SharedFromKm");
                                 editor.remove("SharedToKm");
