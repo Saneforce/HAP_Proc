@@ -1,43 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
+        <LinearLayout
             android:id="@+id/toolbar3"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
             android:background="@color/colorAccent"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme">
+            android:padding="@dimen/C15dp">
 
 
             <TextView
                 android:id="@+id/textView9"
+                style="@style/TextStyle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="45dp"
-                android:fontFamily="@font/alegreya_sans_sc"
+                android:gravity="center"
                 android:text="@string/Tourplan"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textAppearance="@style/TextAppearance.AppCompat.Large"
                 android:textColor="#FFFFFF"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-        </androidx.appcompat.widget.Toolbar>
+        </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -67,10 +57,8 @@
                         android:padding="5dp">
 
                         <TextView
+                            style="@style/TextStyle"
                             android:id="@+id/tourdate"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="@font/basic"
                             android:text="Time"
                             android:textColor="@color/color_red" />
 
@@ -100,25 +88,17 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="15dp"
-                                    android:fontFamily="@font/basic"
-                                    android:text="@string/txt_worktype"
-                                    android:textColor="#000000"
-                                    android:textStyle="bold" />
+                                    style="@style/TextStyle"
+                                    android:text="@string/txt_worktype" />
 
 
                                 <TextView
+                                    style="@style/TextStyle"
                                     android:id="@+id/worktype_text"
                                     android:layout_width="match_parent"
-                                    android:layout_height="39dp"
-                                    android:layout_marginTop="10dp"
                                     android:background="@drawable/round_white_backround"
-                                    android:gravity="center_vertical"
                                     android:hint="Select the worktype"
-                                    android:padding="@dimen/C4dp"
-                                    android:textSize="13sp" />
+                                    android:padding="@dimen/C8dp"/>
                             </LinearLayout>
 
                             <LinearLayout
@@ -135,25 +115,18 @@
                                     android:orientation="vertical">
 
                                     <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="15dp"
-                                        android:fontFamily="@font/basic"
-                                        android:text="@string/txt_hq"
-                                        android:textColor="#000000"
-                                        android:textStyle="bold" />
+                                        style="@style/TextStyle"
+                                        android:text="@string/txt_hq" />
 
 
                                     <TextView
+                                        style="@style/TextStyle"
                                         android:id="@+id/hq_text"
                                         android:layout_width="match_parent"
-                                        android:layout_height="39dp"
-                                        android:layout_marginTop="10dp"
                                         android:background="@drawable/round_white_backround"
-                                        android:gravity="center_vertical"
                                         android:hint="Select the HQ"
-                                        android:padding="@dimen/C4dp"
-                                        android:textSize="13sp" />
+                                        android:padding="@dimen/C8dp" />
+
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -163,24 +136,17 @@
                                     android:orientation="vertical">
 
                                     <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="15dp"
-                                        android:fontFamily="@font/basic"
-                                        android:text="@string/txt_chillingtext"
-                                        android:textColor="#000000"
-                                        android:textStyle="bold" />
+                                        style="@style/TextStyle"
+                                        android:text="@string/txt_chillingtext"/>
 
                                     <TextView
+                                        style="@style/TextStyle"
                                         android:id="@+id/chilling_text"
                                         android:layout_width="match_parent"
-                                        android:layout_height="39dp"
-                                        android:layout_marginTop="10dp"
                                         android:background="@drawable/round_white_backround"
-                                        android:gravity="center_vertical"
                                         android:hint="Select the Center"
-                                        android:padding="@dimen/C4dp"
-                                        android:textSize="13sp" />
+                                        android:padding="@dimen/C8dp" />
+
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -190,24 +156,16 @@
                                     android:orientation="vertical">
 
                                     <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="15dp"
-                                        android:fontFamily="@font/basic"
-                                        android:text="@string/txt_shifttype"
-                                        android:textColor="#000000"
-                                        android:textStyle="bold" />
+                                        style="@style/TextStyle"
+                                        android:text="@string/txt_shifttype" />
 
                                     <TextView
+                                        style="@style/TextStyle"
                                         android:id="@+id/shift_type"
                                         android:layout_width="match_parent"
-                                        android:layout_height="39dp"
-                                        android:layout_marginTop="10dp"
                                         android:background="@drawable/round_white_backround"
-                                        android:gravity="center_vertical"
                                         android:hint="Select the Shift M/E"
-                                        android:padding="@dimen/C4dp"
-                                        android:textSize="13sp" />
+                                        android:padding="@dimen/C8dp" />
                                 </LinearLayout>
 
                             </LinearLayout>
@@ -221,14 +179,12 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="@font/basic"
-                                    android:text="@string/txt_distributors"
-                                    android:textColor="#000000"
-                                    android:textStyle="bold" />
+                                    style="@style/TextStyle"
+                                    android:text="@string/txt_distributors" />
 
                                 <TextView
+                                    style="@style/TextStyle"
+
                                     android:id="@+id/distributor_text"
                                     android:layout_width="match_parent"
                                     android:layout_height="39dp"
@@ -407,12 +363,10 @@
                             </LinearLayout>
 
 
-
                         </LinearLayout>
 
 
                     </LinearLayout>
-
 
 
                     <LinearLayout
@@ -477,6 +431,7 @@
                                 </LinearLayout>
 
                                 <LinearLayout
+                                    android:id="@+id/lin_daily"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:orientation="vertical">
@@ -548,10 +503,10 @@
                                     android:id="@+id/bus_mode"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    >
+                                    android:orientation="vertical">
 
                                     <LinearLayout
+                                        android:id="@+id/lin_from"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical">
@@ -596,8 +551,8 @@
                                     </LinearLayout>
 
                                     <LinearLayout
-                                        android:layout_width="match_parent"
                                         android:id="@+id/lin_to_place"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical">
 

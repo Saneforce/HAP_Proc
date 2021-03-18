@@ -5,19 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,12 +42,10 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.Joint_Work_Adapter;
 import com.hap.checkinproc.common.TimerService;
 
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -94,7 +89,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     LinearLayout jointwork_layout, joint_work_Recyclerview, hqlayout, shiftypelayout, Procrumentlayout, chillinglayout;
     DatePickerDialog picker;
     Joint_Work_Adapter adapter;
-
+    TextView CurrentDate;
+    Integer count = 0;
     public static final String mypreference = "mypref";
     SharedPreferences sharedpreferences;
 
@@ -139,6 +135,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         shift_type = findViewById(R.id.shift_type);
         shiftypelayout.setOnClickListener(this);
         hqlayout.setOnClickListener(this);
+        CurrentDate = findViewById(R.id.tourdate);
+        CurrentDate.setText(com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly());
 
         chillinglayout.setOnClickListener(this);
         worktypelayout.setOnClickListener(this);
@@ -343,6 +341,12 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
 
             }
 
+            if (myDataset.get(position).getCheckouttime().indexOf("EA") > -1) {
+                count = 1;
+            } else {
+                count = 0;
+            }
+
         } else if (type == 2) {
             routeid = null;
             routename = null;
@@ -497,7 +501,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             return false;
         }
 
-        if ( Worktype_Button.indexOf("D") > -1 && (distributor_text.getText().toString() == null || distributor_text.getText().toString().isEmpty() || distributor_text.getText().toString().equalsIgnoreCase(""))) {
+        if (Worktype_Button.indexOf("D") > -1 && (distributor_text.getText().toString() == null || distributor_text.getText().toString().isEmpty() || distributor_text.getText().toString().equalsIgnoreCase(""))) {
             Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
             return false;
         }
@@ -585,10 +589,17 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                         editors.remove("SharedImage");
                         editors.commit();
 
-                        Intent intent = new Intent(Mydayplan_Activity.this, AllowanceActivity.class);
-                        intent.putExtra("My_Day_Plan", "One");
-                        startActivity(intent);
-                        finish();
+
+                        Log.v("MY_DAY_PLAN", String.valueOf(count));
+
+                        if (count == 1) {
+                            Intent intent = new Intent(Mydayplan_Activity.this, AllowanceActivity.class);
+                            intent.putExtra("My_Day_Plan", "One");
+                            startActivity(intent);
+                            finish();
+                        } else {
+                            common_class.CommonIntentwithFinish(Dashboard.class);
+                        }
 
                         Toast.makeText(Mydayplan_Activity.this, "Day Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
                     }

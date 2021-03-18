@@ -37,7 +37,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -55,7 +54,7 @@ public class QRCodeScanner extends AppCompatActivity {
     private static final int REQUEST_CAMERA_PERMISSION = 201;
     Button btnAction;
     String[] arrSplit;
-    String latlon = "", NameValue = "" ,intentData="";
+    String latlon = "", NameValue = "", intentData = "";
 
     private FusedLocationProviderClient fusedLocationClient;
 
@@ -90,6 +89,8 @@ public class QRCodeScanner extends AppCompatActivity {
                         }
                     }
                 });
+
+        initialiseDetectorsAndSources();
 
     }
 
@@ -156,15 +157,18 @@ public class QRCodeScanner extends AppCompatActivity {
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
+
+
                 if (barcodes.size() != 0) {
+
                     surfaceView.post(new Runnable() {
                         @Override
                         public void run() {
-                            intentData= barcodes.valueAt(0).displayValue.replace("|", ",");
+                            intentData = barcodes.valueAt(0).displayValue.replace("|", ",");
+                          cameraSource.release();
+
                             if (!intentData.equals("")) {
-                                Log.e("INTENT_DATA", intentData);
                                 arrSplit = intentData.split(",");
-                                Log.e("INTENT_SIZE", String.valueOf(arrSplit.length));
                                 if (String.valueOf(arrSplit.length).equals("5")) {
                                     if (arrSplit[3].equals("IN") || arrSplit[3].equals("Out")) {
                                         GateIn(NameValue, arrSplit, 1);
@@ -173,20 +177,18 @@ public class QRCodeScanner extends AppCompatActivity {
                                         Log.e("INTENT_DATA", arrSplit[2]);
                                         Log.e("INTENT_DATA", arrSplit[3]);
                                         Log.e("INTENT_DATA", arrSplit[4]);
-
                                         Toast.makeText(QRCodeScanner.this, "Code is successfull", Toast.LENGTH_SHORT).show();
-                                        finish();
                                     }
+
                                 } else {
                                     Toast.makeText(QRCodeScanner.this, "Provide a Valid Code", Toast.LENGTH_SHORT).show();
-                                    finish();
-                                        /*overridePendingTransition( 0, 0);
-                                        startActivity(getIntent());
-                                        overridePendingTransition(0, 0);*/
+
                                 }
                             }
                         }
                     });
+
+                    QRCodeScanner.this.finish();
                 }
             }
         });
@@ -286,12 +288,10 @@ public class QRCodeScanner extends AppCompatActivity {
     }
 
 
-
-
     @Override
     protected void onResume() {
         super.onResume();
-        initialiseDetectorsAndSources();
+
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }

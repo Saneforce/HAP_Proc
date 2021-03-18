@@ -71,7 +71,6 @@
                                 android:layout_height="200dp"
                                 android:layout_weight="1"
                                 android:text="Name "
-
                                 android:textColor="@color/txt_color_black"
                                 android:textSize="@dimen/C16dp"
                                 android:textStyle="bold" />
@@ -81,7 +80,6 @@
                                 android:layout_height="200dp"
                                 android:layout_weight="1"
                                 android:text="Applied Date "
-
                                 android:textColor="@color/txt_color_black"
                                 android:textSize="@dimen/C16dp"
                                 android:textStyle="bold" />

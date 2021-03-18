@@ -27,30 +27,17 @@
 
 
         <Button
+            style="@style/ButtonStyle"
             android:id="@+id/button_update"
-            android:layout_width="@dimen/header_date_width"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
             android:background="@drawable/button_blueg"
-            android:padding="@dimen/C10dp"
-            android:text="Update"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white" />
+            android:text="Update" />
 
 
         <Button
+            style="@style/ButtonStyle"
             android:id="@+id/button_delete"
-            android:layout_width="@dimen/header_date_width"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
             android:background="@drawable/round_rect_red"
-            android:padding="@dimen/C10dp"
-            android:text="Delete"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"
-    />
+            android:text="Delete" />
 
 
     </LinearLayout>

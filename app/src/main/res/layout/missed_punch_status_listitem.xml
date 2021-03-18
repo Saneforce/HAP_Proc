@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -34,57 +35,27 @@
                     android:layout_margin="@dimen/C5dp"
                     android:visibility="gone">
 
-
-
-
                     <TextView
                         android:id="@+id/SfName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:layout_marginEnd="-1dp"
-                        android:layout_marginRight="-1dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:padding="@dimen/C3dp"
-                        android:text="thirumalai"
-
-                        android:textSize="12dp"></TextView>
+                        style="@style/TextStyle" />
 
                 </RelativeLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/C5dp">
 
                     <TextView
                         android:id="@+id/ondutydate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="2020-09-06"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"
-                        android:textStyle="bold"></TextView>
-
+                        style="@style/TextStyle"
+                        android:layout_weight="1" />
 
                     <TextView
                         android:id="@+id/OStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
+                        style="@style/TextStyle" />
 
-                        android:fontFamily="@font/poppins_semibold"
-                        android:padding="@dimen/C3dp"
-                        android:text="Pending"
-                        android:textColor="@android:color/white"
-                        android:textSize="12dp"></TextView>
-
-                </RelativeLayout>
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -99,162 +70,73 @@
                     android:layout_marginRight="@dimen/C10dp">
 
                     <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="SHIFT / ONDUTY"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
-
+                        style="@style/TextStyle"
+                        android:text="SHIFT / ONDUTY" />
 
                 </RelativeLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C5dp"
+                <TextView
+                    android:id="@+id/type"
+                    style="@style/TextStyle" />
 
-               >
-
-                    <TextView
-                        android:id="@+id/type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="2.42pm to 4.41"
-                        android:textColor="@android:color/black"
-                        android:textSize="13dp"
-                        android:textStyle="bold"></TextView>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C10dp"
-               >
-
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:text="IN TIME"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="OUT TIME"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C5dp"
-              >
-
-                    <TextView
-                        android:id="@+id/txt_in_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="11:42:52"
-                        android:textColor="@android:color/black"
-                        android:textSize="13dp"></TextView>
-
-                    <TextView
-                        android:id="@+id/txt_out_time"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="10:49:52"
-                        android:textColor="@android:color/black"
-                        android:textSize="13dp"></TextView>
-
-
-                </RelativeLayout>
-
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C10dp">
 
                     <TextView
+                        style="@style/TextStyle"
+                        android:layout_weight="1"
+                        android:text="IN TIME" />
 
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="REASON"
-                        android:textColor="@android:color/black"
-                        android:textSize="11dp"></TextView>
-                </RelativeLayout>
+                    <TextView
+                        style="@style/TextStyle"
+                        android:text="OUT TIME" />
 
-                <RelativeLayout
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C5dp">
 
                     <TextView
-                        android:id="@+id/text_reason"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Test"
-                        android:textSize="13dp"></TextView>
-                </RelativeLayout>
+                        android:id="@+id/txt_in_time"
+                        style="@style/TextStyle"
+                        android:layout_weight="1" />
 
+                    <TextView
+                        android:id="@+id/txt_out_time"
+                        style="@style/TextStyle" />
 
-                <RelativeLayout
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:text="REASON" />
+
+                <TextView
+                    android:id="@+id/text_reason"
+                    style="@style/TextStyle" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C10dp"
                     android:layout_marginBottom="@dimen/C10dp">
 
                     <TextView
+                        style="@style/TextStyle"
                         android:id="@+id/applieddate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Approved:2020-01-23"
-                        android:textColor="@color/statuscolor"
-                        android:textSize="11dp"></TextView>
-
-
+                        android:layout_weight="1"/>
                     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Reject 2020-01-23"
-                        android:textColor="@color/statuscolor"
-                        android:textSize="11dp"></TextView>
+                        style="@style/TextStyle"
+                        android:text="Reject 2020-01-23"/>
 
-                </RelativeLayout>
+                </LinearLayout>
             </LinearLayout>
-
 
         </androidx.cardview.widget.CardView>
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

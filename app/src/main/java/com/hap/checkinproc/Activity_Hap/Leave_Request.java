@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -102,9 +103,10 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     List<Common_Model> modelhalfdayType = new ArrayList<>();
     Common_Model Model_Pojo;
     List<MaxMinDate> maxMinDates;
-    String maxDate, minDate;
-    String maxYear, maxMonth, maxDay, minYear, minMonth, minDay;
-    String tominDate, tomaxYear, tomaxMonth, tomaxDay, tominYear, tominMonth, tominDay;
+    String minDate = "";
+    String minYear = "", minMonth = "", minDay = "";
+    String tominYear = "", tominMonth = "", tominDay = "";
+    String frmDte = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,7 +162,8 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         MaxMinDate();
 
         etext2 = (EditText) findViewById(R.id.to_date);
-        etext2.setInputType(InputType.TYPE_NULL);
+        /*   etext2.setInputType(InputType.TYPE_NULL);*/
+
 
         Submit = (Button) findViewById(R.id.submitButton);
 
@@ -200,6 +203,9 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         eText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Log.v("EDIT_TEXT", eText.getText().toString());
+
                 final Calendar cldr = Calendar.getInstance();
                 int day = cldr.get(Calendar.DAY_OF_MONTH);
                 int month = cldr.get(Calendar.MONTH);
@@ -215,6 +221,41 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                                 fromData = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
                                 maxTWoDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
                                 MaxMinDateTo(maxTWoDate);
+                                frmDte = eText.getText().toString();
+                                Log.v("EDITEXT_VALUE_EpTy", frmDte);
+
+                                if (TextUtils.isEmpty(eText.getText().toString())) {
+                                    Log.v("EDITEXT_VALUE", frmDte);
+                                } else {
+                                    Log.v("EDITEXT_VALUE", frmDte);
+                                    etext2.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            final Calendar cldr = Calendar.getInstance();
+
+                                            int day = cldr.get(Calendar.DAY_OF_MONTH);
+                                            int month = cldr.get(Calendar.MONTH);
+                                            int year = cldr.get(Calendar.YEAR);
+                                            // date picker dialog
+                                            picker = new DatePickerDialog(Leave_Request.this,
+                                                    new DatePickerDialog.OnDateSetListener() {
+                                                        @Override
+                                                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                                                            etext2.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                                                            difference();
+                                                            toData = "'" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth + "'";
+                                                        }
+                                                    }, year, month, day);
+                                            Calendar calendarmin = Calendar.getInstance();
+
+                                            calendarmin.set(Integer.parseInt(tominYear), Integer.parseInt(tominMonth) - 1, Integer.parseInt(tominDay));
+                                            picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
+                                            picker.show();
+
+
+                                        }
+                                    });
+                                }
 
 
                             }
@@ -228,33 +269,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             }
         });
 
-        etext2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Calendar cldr = Calendar.getInstance();
-                int day = cldr.get(Calendar.DAY_OF_MONTH);
-                int month = cldr.get(Calendar.MONTH);
-                int year = cldr.get(Calendar.YEAR);
-                // date picker dialog
-                picker = new DatePickerDialog(Leave_Request.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                etext2.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                                difference();
-                                toData = "'" + year + "-" + (monthOfYear + 1) + "-" + dayOfMonth + "'";
-                            }
-                        }, year, month, day);
-                Calendar calendarmin = Calendar.getInstance();
-                calendarmin.set(Integer.parseInt(tominYear), Integer.parseInt(tominMonth) - 1, Integer.parseInt(tominDay));
-                picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
-
-
-                picker.show();
-
-
-            }
-        });
 
         leaveReaming();
         // addingShiftToSpinner();

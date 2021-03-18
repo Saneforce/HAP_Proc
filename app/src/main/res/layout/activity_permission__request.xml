@@ -51,11 +51,9 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="10dp"
-                            android:text="Date of Permission"
-                            android:textSize="@dimen/C13dp" />
+                            style="@style/TextStyle"
+                            android:paddingTop="@dimen/C10dp"
+                            android:text="Date of Permission" />
 
                         <EditText
                             android:id="@+id/permission_date"
@@ -78,25 +76,17 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="10dp"
-                            android:text="Select the Hours"
-                            android:textSize="@dimen/C13dp" />
+                            style="@style/TextStyle"
+                            android:paddingTop="@dimen/C10dp"
+                            android:text="Select the Hours" />
 
                         <TextView
+                            style="@style/TextStyle"
                             android:id="@+id/select_hours"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginRight="8dp"
                             android:background="@drawable/textbox_bg"
-                            android:clickable="false"
-                            android:elevation="5dp"
-                            android:focusable="false"
                             android:hint="Select Hours"
-                            android:padding="@dimen/C8dp"
-                            android:textSize="@dimen/C13dp" />
+                            android:padding="@dimen/C8dp" />
 
 
                     </LinearLayout>
@@ -108,26 +98,17 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            style="@style/TextStyle"
                             android:paddingTop="10dp"
-                            android:text="Shift Time"
-                            android:textSize="@dimen/C13dp" />
+                            android:text="Shift Time" />
 
                         <TextView
+                            style="@style/TextStyle"
                             android:id="@+id/shift_type"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginRight="8dp"
                             android:background="@drawable/textbox_bg"
-                            android:clickable="false"
-                            android:elevation="5dp"
-                            android:focusable="false"
                             android:hint="@string/shit_type"
-                            android:padding="@dimen/C8dp"
-                            android:textSize="@dimen/C13dp" />
-
+                            android:padding="@dimen/C8dp" />
 
                     </LinearLayout>
 
@@ -370,11 +351,8 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/C2dp"
-                            android:text="Reason"
-                            android:textSize="@dimen/C13dp" />
+                            style="@style/TextStyle"
+                            android:text="Reason" />
 
                         <EditText
                             android:id="@+id/reason_permission"
@@ -389,15 +367,11 @@
                             android:textSize="@dimen/C13dp" />
                     </LinearLayout>
 
-
                 </LinearLayout>
-
 
             </ScrollView>
 
-
         </LinearLayout>
-
 
     </LinearLayout>
 
@@ -409,20 +383,10 @@
         tools:ignore="MissingConstraints">
 
         <Button
+            style="@style/ButtonStyle"
             android:id="@+id/btn_submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:background="@drawable/sign_bg"
-            android:gravity="center_vertical"
-            android:text="SUBMIT"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textSize="@dimen/C13dp"
-            android:textStyle="bold"
-            tools:ignore="RtlCompat" />
-
+            android:text="SUBMIT" />
 
         <include layout="@layout/back_arrow"></include>
     </LinearLayout>
