@@ -33,6 +33,7 @@ import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.OrderDashBoard;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Model_Class.DashboardParticulars;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.AdapterForDynamicView;
 import com.hap.checkinproc.adapters.UpcomingFollow;
@@ -52,45 +53,47 @@ import retrofit2.Response;
 
 public class ProcurementDashboardActivity extends AppCompatActivity {
     ApiInterface apiService;
-    ArrayList<ListModel> array_nav=new ArrayList<>();
+    ArrayList<ListModel> array_nav = new ArrayList<>();
     AdapterForNavigation nav_adapt;
     ListView list_nav;
-    ImageView iv_nav,iv_checkout;
+    ImageView iv_nav, iv_checkout;
     SharedPreferences share;
     SharedPreferences shareKey;
     SharedPreferences UserDetails;
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    TextView txt_name,txt_mail,txt_head_name;
-    String sf_code,div;
+    public static final String MyPREFERENCES = "MyPrefs";
+    TextView txt_name, txt_mail, txt_head_name;
+    String sf_code, div;
     ListView list_follow;
-    ArrayList<SelectionModel> array_follow=new ArrayList<>();
+    ArrayList<DashboardParticulars> array_follow = new ArrayList<>();
     UpcomingFollow upcomingFollow;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_procurement_dashboard);
         startService(new Intent(this, TimerService.class));
         apiService = ApiClient.getClient().create(ApiInterface.class);
-        list_nav=findViewById(R.id.list_nav);
-        iv_nav=findViewById(R.id.iv_nav);
-        iv_checkout=findViewById(R.id.iv_checkout);
-        txt_name=findViewById(R.id.txt_name);
-        txt_mail=findViewById(R.id.txt_mail);
-        txt_head_name=findViewById(R.id.txt_head_name);
-        list_follow=findViewById(R.id.list_follow);
-        share=getSharedPreferences("existing",0);
-        SharedPreferences.Editor edit=share.edit();
-        edit.putString("exist","N");
-        edit.putString("fab","1");
+        list_nav = findViewById(R.id.list_nav);
+        iv_nav = findViewById(R.id.iv_nav);
+
+        iv_checkout = findViewById(R.id.iv_checkout);
+        txt_name = findViewById(R.id.txt_name);
+        txt_mail = findViewById(R.id.txt_mail);
+        txt_head_name = findViewById(R.id.txt_head_name);
+        list_follow = findViewById(R.id.list_follow);
+        share = getSharedPreferences("existing", 0);
+        SharedPreferences.Editor edit = share.edit();
+        edit.putString("exist", "N");
+        edit.putString("fab", "1");
         edit.commit();
-        shareKey=getSharedPreferences("key",0);
-        SharedPreferences.Editor edit1=shareKey.edit();
-        edit1.putString("keys","[]");
-        edit1.putString("pk","");
+        shareKey = getSharedPreferences("key", 0);
+        SharedPreferences.Editor edit1 = shareKey.edit();
+        edit1.putString("keys", "[]");
+        edit1.putString("pk", "");
         edit1.commit();
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
-        sf_code=UserDetails.getString("Sfcode","");
-        div=UserDetails.getString("Divcode","");
+        sf_code = UserDetails.getString("Sfcode", "");
+        div = UserDetails.getString("Divcode", "");
         iv_nav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -102,7 +105,7 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                 }
             }
         });
-       ImageView ibtLogout=findViewById(R.id.ibtLogout);
+        ImageView ibtLogout = findViewById(R.id.ibtLogout);
         ibtLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,9 +131,9 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                         .show();
             }
         });
-        txt_name.setText(UserDetails.getString("SfName",""));
-        txt_mail.setText(UserDetails.getString("email",""));
-        txt_head_name.setText(UserDetails.getString("SfName",""));
+        txt_name.setText(UserDetails.getString("SfName", ""));
+        txt_mail.setText(UserDetails.getString("email", ""));
+        txt_head_name.setText(UserDetails.getString("SfName", ""));
         iv_checkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -138,9 +141,7 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
             }
         });
 
-        upcomingFollow=new UpcomingFollow(ProcurementDashboardActivity.this,array_follow);
-        list_follow.setAdapter(upcomingFollow);
-
+        callDashboardParticulars();
         callDynamicmenu();
     }
 
@@ -148,9 +149,10 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
     public void onBackPressed() {
         Toast.makeText(this, "There is no back action", Toast.LENGTH_LONG).show();
     }
-    public class AdapterForNavigation extends BaseAdapter{
+
+    public class AdapterForNavigation extends BaseAdapter {
         Context context;
-        ArrayList<ListModel> arr=new ArrayList<>();
+        ArrayList<ListModel> arr = new ArrayList<>();
 
         public AdapterForNavigation(Context context, ArrayList<ListModel> arr) {
             this.context = context;
@@ -174,9 +176,9 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            view= LayoutInflater.from(context).inflate(R.layout.row_item_dash,viewGroup,false);
-            RelativeLayout lay_row=view.findViewById(R.id.lay_row);
-            TextView txt_name=view.findViewById(R.id.txt_name);
+            view = LayoutInflater.from(context).inflate(R.layout.row_item_dash, viewGroup, false);
+            RelativeLayout lay_row = view.findViewById(R.id.lay_row);
+            TextView txt_name = view.findViewById(R.id.txt_name);
             txt_name.setText(arr.get(i).getFormName());
             lay_row.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -189,10 +191,10 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                         //super.onBackPressed();
                     }
                     //if(arr.get(i).getFormType().equalsIgnoreCase("V")){
-                        Intent ii=new Intent(ProcurementDashboardActivity.this,ViewActivity.class);
-                        ii.putExtra("btn_need",arr.get(i).getTargetForm());
-                        ii.putExtra("frmid",arr.get(i).getFormid());
-                        startActivity(ii);
+                    Intent ii = new Intent(ProcurementDashboardActivity.this, ViewActivity.class);
+                    ii.putExtra("btn_need", arr.get(i).getTargetForm());
+                    ii.putExtra("frmid", arr.get(i).getFormid());
+                    startActivity(ii);
                     //}
                 }
             });
@@ -200,13 +202,65 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
         }
     }
 
-    public void callDynamicmenu(){
-        JSONObject json=new JSONObject();
+    public void callDashboardParticulars() {
+        JSONObject json = new JSONObject();
         try {
             json.put("div", div);
 
-            Log.v("printing_sf_code",json.toString());
-            Call<ResponseBody> approval=apiService.getMenu(json.toString());
+            Log.v("printing_sf_code", json.toString());
+            Call<ResponseBody> approval = apiService.getDasboardParticulars(json.toString());
+
+            approval.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if (response.isSuccessful()) {
+                        Log.v("printing_res_track_dash", response.body().byteStream() + "");
+                        JSONObject jsonObject = null;
+                        String jsonData = null;
+
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            ip = new InputStreamReader(response.body().byteStream());
+                            BufferedReader bf = new BufferedReader(ip);
+
+                            while ((line = bf.readLine()) != null) {
+                                is.append(line);
+                            }
+
+                            Log.v("printing_dashboard_menu", is.toString());
+                            JSONArray js = new JSONArray(is.toString());
+                            for (int i = 0; i < js.length(); i++) {
+                                JSONObject jj = js.getJSONObject(i);
+                                array_follow.add(new DashboardParticulars(jj.getString("Sl_NO"),jj.getString("Particulars"), jj.getString("This_Month"),
+                                        jj.getString("Last_Month"), jj.getString("LPercentage")));
+                            }
+                            upcomingFollow = new UpcomingFollow(ProcurementDashboardActivity.this, array_follow);
+                            list_follow.setAdapter(upcomingFollow);
+
+                        } catch (Exception e) {
+                        }
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                }
+            });
+
+        } catch (Exception e) {
+        }
+    }
+
+    public void callDynamicmenu() {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("div", div);
+
+            Log.v("printing_sf_code", json.toString());
+            Call<ResponseBody> approval = apiService.getMenu(json.toString());
 
             approval.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -227,13 +281,13 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                                 is.append(line);
                             }
 
-                            Log.v("printing_dynamic_menu",is.toString());
-                            JSONArray js=new JSONArray(is.toString());
-                            for(int i=0;i<js.length();i++){
-                                JSONObject jj=js.getJSONObject(i);
-                                array_nav.add(new ListModel(jj.getString("Frm_ID"),jj.getString("Frm_Name"),jj.getString("Frm_Table"),jj.getString("Targt_Frm"),jj.getString("Frm_Type")));
+                            Log.v("printing_dynamic_menu", is.toString());
+                            JSONArray js = new JSONArray(is.toString());
+                            for (int i = 0; i < js.length(); i++) {
+                                JSONObject jj = js.getJSONObject(i);
+                                array_nav.add(new ListModel(jj.getString("Frm_ID"), jj.getString("Frm_Name"), jj.getString("Frm_Table"), jj.getString("Targt_Frm"), jj.getString("Frm_Type")));
                             }
-                            nav_adapt=new AdapterForNavigation(ProcurementDashboardActivity.this,array_nav);
+                            nav_adapt = new AdapterForNavigation(ProcurementDashboardActivity.this, array_nav);
                             list_nav.setAdapter(nav_adapt);
                             nav_adapt.notifyDataSetChanged();
                             //commonFun();
@@ -250,17 +304,18 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                 }
             });
 
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
 
-    public void getTravelMode(){
-        try{
-            JSONObject jj=new JSONObject();
+    public void getTravelMode() {
+        try {
+            JSONObject jj = new JSONObject();
 
-            jj.put("sf",sf_code);
-            jj.put("div",div);
-            Log.v("printing_allow",jj.toString());
-            Call<ResponseBody>  Callto = apiService.getTravelMode(jj.toString());
+            jj.put("sf", sf_code);
+            jj.put("div", div);
+            Log.v("printing_allow", jj.toString());
+            Call<ResponseBody> Callto = apiService.getTravelMode(jj.toString());
             Callto.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -271,23 +326,22 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
                             JSONObject jb = null;
                             String jsonData = null;
                             jsonData = response.body().string();
-                            Log.v("get_mode_Res",jsonData);
-                            JSONArray ja=new JSONArray(jsonData);
-                            if(ja.length()!=0){
-                                JSONObject js_ob=ja.getJSONObject(0);
-                                if(js_ob.getString("MOT").equalsIgnoreCase("12")){
-                                    Intent i=new Intent(ProcurementDashboardActivity.this,AllowanceActivity.class);
+                            Log.v("get_mode_Res", jsonData);
+                            JSONArray ja = new JSONArray(jsonData);
+                            if (ja.length() != 0) {
+                                JSONObject js_ob = ja.getJSONObject(0);
+                                if (js_ob.getString("MOT").equalsIgnoreCase("12")) {
+                                    Intent i = new Intent(ProcurementDashboardActivity.this, AllowanceActivity.class);
                                     startActivity(i);
-                                }
-                                else{
+                                } else {
 
                                 }
-                            }
-                            else{
+                            } else {
 
                             }
-                  }
-                    }catch (Exception e){}
+                        }
+                    } catch (Exception e) {
+                    }
                 }
 
                 @Override
@@ -295,8 +349,10 @@ public class ProcurementDashboardActivity extends AppCompatActivity {
 
                 }
             });
-        }catch(Exception e){}
+        } catch (Exception e) {
+        }
     }
+
     @Override
     protected void onResume() {
         super.onResume();

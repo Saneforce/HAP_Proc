@@ -3,11 +3,11 @@ package com.hap.checkinproc.Activity.Util;
 import java.util.ArrayList;
 
 public class ModelDynamicView {
-    String viewid,value,fieldname,tvalue,ctrl_para,creation_id,slno,upload_sv,mandatory;
+    String viewid,value,fieldname,tvalue,ctrl_para,creation_id,slno,upload_sv,mandatory,Field_Col;
     ArrayList<SelectionModel> a_list=new ArrayList<>();
 
     public ModelDynamicView(String viewid, String value, String fieldname, String tvalue, ArrayList<SelectionModel> a_list,
-                            String ctrl_para, String creation_id, String slno, String upload_sv, String mandatory) {
+                            String ctrl_para, String creation_id, String slno, String upload_sv, String mandatory,String Field_Col) {
         this.viewid = viewid;
         this.value = value;
         this.tvalue = tvalue;
@@ -18,14 +18,23 @@ public class ModelDynamicView {
         this.slno=slno;
         this.upload_sv=upload_sv;
         this.mandatory=mandatory;
+        this.Field_Col=Field_Col;
     }
 
     public String getMandatory() {
         return mandatory;
     }
 
-    public void setMandatory(String mandatory) {
-        this.mandatory = mandatory;
+    public void setMandatory(String Field_Col) {
+        this.mandatory = Field_Col;
+    }
+
+    public String getField_Col() {
+        return Field_Col;
+    }
+
+    public void setField_Col(String Field_Col) {
+        this.mandatory = Field_Col;
     }
 
     public String getSlno() {
