@@ -3,6 +3,7 @@ package com.hap.checkinproc.Activity_Hap;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
 import android.net.Uri;
 import android.os.Build;
@@ -15,7 +16,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -124,11 +124,14 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     }
 
     private void ShowImgPreview() {
-        LinearLayout vwPreview = findViewById(R.id.ImgPreview);
+        RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.VISIBLE);
 
         imgPreview.setImageURI(Uri.fromFile(file));
+        BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
+
+        vwPreview.setBackground(drawableBitmap);
 
         if (mCamId == 1) {
             imgPreview.setRotation((float) -90.0);
@@ -143,10 +146,12 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     }
 
     private void CloseImgPreview() {
-        LinearLayout vwPreview = findViewById(R.id.ImgPreview);
+        RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
+        BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
 
+        vwPreview.setBackground(drawableBitmap);
 
         if (preview != null) {
 
@@ -175,10 +180,13 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
 
 
     private void saveImgPreview() {
-        LinearLayout vwPreview = findViewById(R.id.ImgPreview);
+        RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
         imgPreview.setImageURI(Uri.fromFile(file));
+
+        BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
+        vwPreview.setBackground(drawableBitmap);
 
         if (allowance.equals("One")) {
             SharedPreferences.Editor editor = sharedpreferences.edit();

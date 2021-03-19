@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
@@ -339,6 +340,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         vwPreview.setVisibility(View.VISIBLE);
         imgPreview.setImageURI(Uri.fromFile(file));
 
+        BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
+
+        vwPreview.setBackground(drawableBitmap);
 
         Log.v("CAMERA_FOCUS_Preview", String.valueOf(mCamId));
 
@@ -356,7 +360,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
+        BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
 
+        vwPreview.setBackground(drawableBitmap);
         if (preview != null) {
             preview = null;
             mHolder.removeCallback(ImageCapture.this);
@@ -389,6 +395,10 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
         // imgPreview.setImageURI(Uri.fromFile(file));
+
+        BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
+
+        vwPreview.setBackground(drawableBitmap);
         String filePath = String.valueOf(file);
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         imgPreview.setImageBitmap(bitmap);

@@ -73,7 +73,7 @@ public class NotificationUtils {
 
 
         showSmallNotification(icon, title, message, timeStamp, resultPendingIntent);
-        playNotificationSound();
+    //    playNotificationSound();
 
    /*     if (!TextUtils.isEmpty(imageUrl)) {
 
