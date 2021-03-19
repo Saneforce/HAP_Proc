@@ -75,6 +75,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         btnRtPrv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 CloseImgPreview();
             }
         });
@@ -128,6 +129,8 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.VISIBLE);
 
+        button.setVisibility(View.GONE);
+
         imgPreview.setImageURI(Uri.fromFile(file));
         BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
 
@@ -150,7 +153,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
         BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
-
+        button.setVisibility(View.VISIBLE);
         vwPreview.setBackground(drawableBitmap);
 
         if (preview != null) {
@@ -184,7 +187,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
         imgPreview.setImageURI(Uri.fromFile(file));
-
+        button.setVisibility(View.GONE);
         BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
         vwPreview.setBackground(drawableBitmap);
 

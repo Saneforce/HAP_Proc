@@ -45,6 +45,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -90,6 +91,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     String SF_code = "", div = "";
     Shared_Common_Pref mShared_common_pref;
 
+    String count = "";
 
     /*OnDUTY ALlowance*/
 
@@ -144,7 +146,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on__duty_);
-        //  startService(new Intent(this, TimerService.class));
+        startService(new Intent(this, TimerService.class));
         shared_common_pref = new Shared_Common_Pref(this);
         sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         dynamicMode(1);
@@ -248,12 +250,12 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
 
-                if (flag == 0) {
+                if (!selecthaplocationss.getText().toString().equals("")) {
                     //haplocation
-
+                    Log.v("HAP_LOACTION", "hggh" + selecthaplocationss.getText().toString());
                     if (selecthaplocationss.getText().toString().matches("")) {
                         Log.v("HAP_LOACTION", "Enter Hap Location");
-                        Toast.makeText(On_Duty_Activity.this, "Enter Hap Location", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(On_Duty_Activity.this, "Enter  Location", Toast.LENGTH_SHORT).show();
                     } else if (purposeofvisitedittext.getText().toString().matches("")) {
                         Log.v("HAP_LOACTION", "Enter Visit");
                         Toast.makeText(On_Duty_Activity.this, "Enter Visit purpose", Toast.LENGTH_SHORT).show();
@@ -261,33 +263,40 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                         Log.v("HAP_LOACTION", startEnd + "Enter Mode");
                         Toast.makeText(On_Duty_Activity.this, "Enter Mode", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (startEnd.equals("0")) {
+                        if (startEnd.equals("0") || count.equals("0")) {
+
                             if (dailyAllowance.getText().toString().matches("")) {
                                 Log.v("HAP_LOACTION", startEnd + "Enter Daily");
+                                Log.v("HAP_LOACTION", count + "ssssEnter Daily");
                                 Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
                             } else if (onDutyFrom.getText().toString().matches("")) {
                                 Log.v("HAP_LOACTION", startEnd + "Enter From");
+                                Log.v("HAP_LOACTION", count + "Enter From");
                                 Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
-                            } else if (imageURI.matches("")) {
-                                Log.v("HAP_LOACTION", startEnd + "Enter Start");
-                                Toast.makeText(On_Duty_Activity.this, "Choose Start Photo", Toast.LENGTH_SHORT).show();
+                            } else {
+                                submitData();
                             }
-                        } else if (startEnd.equals("1")) {
+                        } else if (startEnd.equals("1") || count.equals("1")) {
                             if (dailyAllowance.getText().toString().matches("")) {
                                 Log.v("HAP_LOACTION", startEnd + "Enter Daily");
+                                Log.v("HAP_LOACTION", count + "sssEnter Daily");
                                 Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
                             } else if (onDutyFrom.getText().toString().matches("")) {
                                 Log.v("HAP_LOACTION", startEnd + "Enter From");
+                                Log.v("HAP_LOACTION", count + "Enter From");
                                 Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
                             } else if (StartKm.getText().toString().matches("")) {
                                 Log.v("HAP_LOACTION", startEnd + "Enter Start km");
+                                Log.v("HAP_LOACTION", count + "Enter Start km");
                                 Toast.makeText(On_Duty_Activity.this, "Enter Start Km", Toast.LENGTH_SHORT).show();
                             } else if (imageURI.matches("")) {
                                 Log.v("HAP_LOACTION", startEnd + "Enter Start");
                                 Toast.makeText(On_Duty_Activity.this, "Choose Start Photo", Toast.LENGTH_SHORT).show();
+                            } else {
+                                submitData();
                             }
 
-                        } else {
+                        }else {
                             submitData();
                         }
 
@@ -297,44 +306,49 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 } else {
                     //OtherLocation
                     if (ondutyedittext.getText().toString().matches("")) {
-                        Toast.makeText(On_Duty_Activity.this, "Enter Onduty Location", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(On_Duty_Activity.this, "Enter  Location", Toast.LENGTH_SHORT).show();
                     } else if (purposeofvisitedittext.getText().toString().matches("")) {
                         Toast.makeText(On_Duty_Activity.this, "Enter Visit purpose", Toast.LENGTH_SHORT).show();
                     } else if (TextMode.getText().toString().matches("")) {
                         Toast.makeText(On_Duty_Activity.this, "Enter Mode", Toast.LENGTH_SHORT).show();
                     } else {
-                        if (startEnd.equals("0")) {
+                        if (startEnd.equals("0") || count.equals("0")) {
+
                             if (dailyAllowance.getText().toString().matches("")) {
                                 Log.v("HAP_LOACTION", startEnd + "Enter Daily");
+                                Log.v("HAP_LOACTION", count + "ccEnter Daily");
                                 Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
                             } else if (onDutyFrom.getText().toString().matches("")) {
                                 Log.v("HAP_LOACTION", startEnd + "Enter From");
+                                Log.v("HAP_LOACTION", count + "Enter From");
                                 Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
-                            } else if (imageURI.matches("")) {
-                                Log.v("HAP_LOACTION", startEnd + "Enter Start");
-                                Toast.makeText(On_Duty_Activity.this, "Choose Start Photo", Toast.LENGTH_SHORT).show();
+                            } else {
+                                submitData();
                             }
-                        } else if (startEnd.equals("1")) {
+                        } else if (startEnd.equals("1") || count.equals("1")) {
                             if (dailyAllowance.getText().toString().matches("")) {
                                 Log.v("HAP_LOACTION", startEnd + "Enter Daily");
+                                Log.v("HAP_LOACTION", count + "cEnter Daily");
                                 Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
                             } else if (onDutyFrom.getText().toString().matches("")) {
                                 Log.v("HAP_LOACTION", startEnd + "Enter From");
+                                Log.v("HAP_LOACTION", count + "Enter From");
                                 Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
                             } else if (StartKm.getText().toString().matches("")) {
                                 Log.v("HAP_LOACTION", startEnd + "Enter Start km");
+                                Log.v("HAP_LOACTION", count + "Enter Start km");
                                 Toast.makeText(On_Duty_Activity.this, "Enter Start Km", Toast.LENGTH_SHORT).show();
                             } else if (imageURI.matches("")) {
                                 Log.v("HAP_LOACTION", startEnd + "Enter Start");
                                 Toast.makeText(On_Duty_Activity.this, "Choose Start Photo", Toast.LENGTH_SHORT).show();
+                            } else {
+                                submitData();
                             }
-
-                        } else {
+                        }else {
                             submitData();
                         }
                     }
                 }
-
             }
         });
         closebutton.setOnClickListener(this);
@@ -428,6 +442,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                     ed.putString("SharedDriverss", DriverMode);
                     ed.putString("ShareModeIDs", modeId);
                     ed.putString("StoreId", StrToCode);
+                    ed.putString(hapLocation, selecthaplocationss.getText().toString());
                     ed.commit();
 
                     Intent intent = new Intent(On_Duty_Activity.this, AllowancCapture.class);
@@ -441,12 +456,14 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
 
         if (sharedpreferences.contains(hapLocation)) {
             strHapLocation = sharedpreferences.getString(hapLocation, "");
-            selecthaplocationss.setText(strHapLocation);
-            if (!strHapLocation.matches("")) {
-                flag = 0;
+            //
 
+            Log.e("FlagCountFlagCount", strHapLocation);
+            if (!strHapLocation.equals("")) {
+                flag = 0;
+                selecthaplocationss.setText(strHapLocation);
                 ondutyedittext.setText("");
-                purposeofvisitedittext.setText("");
+                /*     purposeofvisitedittext.setText("");*/
                 haplocationtext.setVisibility(View.VISIBLE);
                 purposeofvisittext.setVisibility(View.VISIBLE);
                 submitbutton.setVisibility(View.VISIBLE);
@@ -457,25 +474,36 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 haplocationbutton.setVisibility(View.GONE);
                 otherlocationbutton.setVisibility(View.GONE);
             }
+            /*else{
+                selecthaplocationss.setText(strHapLocation);
+                ondutylocations.setVisibility(View.VISIBLE);
+                purposeofvisittext.setVisibility(View.VISIBLE);
+                closebutton.setVisibility(View.VISIBLE);
+                exitclose.setVisibility(View.GONE);
+                haplocationtext.setVisibility(View.GONE);
+                submitbutton.setVisibility(View.VISIBLE);
+                otherlocationbutton.setVisibility(View.GONE);
+                haplocationbutton.setVisibility(View.GONE);
+                ModeOfTravel.setVisibility(View.VISIBLE);
+            }*/
             Log.e("strHapLocation", strHapLocation);
         }
 
-        if (sharedpreferences.contains(visitPurpose)) {
-            strVisitPurpose = sharedpreferences.getString(visitPurpose, "");
+        if (sharedpreferences.contains(otherLocation)) {
+            strVisitPurpose = sharedpreferences.getString(otherLocation, "");
+            Log.e("FlagCountFlagCount", strVisitPurpose);
             if (!strVisitPurpose.matches("")) {
                 flag = 0;
-
-                ondutyedittext.setText("");
-                purposeofvisitedittext.setText(strVisitPurpose);
-                haplocationtext.setVisibility(View.VISIBLE);
+                ondutyedittext.setText(strVisitPurpose);
+                ondutylocations.setVisibility(View.VISIBLE);
                 purposeofvisittext.setVisibility(View.VISIBLE);
-                submitbutton.setVisibility(View.VISIBLE);
                 closebutton.setVisibility(View.VISIBLE);
                 exitclose.setVisibility(View.GONE);
-                ModeOfTravel.setVisibility(View.VISIBLE);
-                ondutylocations.setVisibility(View.GONE);
-                haplocationbutton.setVisibility(View.GONE);
+                haplocationtext.setVisibility(View.GONE);
+                submitbutton.setVisibility(View.VISIBLE);
                 otherlocationbutton.setVisibility(View.GONE);
+                haplocationbutton.setVisibility(View.GONE);
+                ModeOfTravel.setVisibility(View.VISIBLE);
             }
             Log.e("strHapLocation", strHapLocation);
         }
@@ -506,6 +534,11 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         }
         if (sharedpreferences.contains("SharedDriverAllowancess")) {
             DriverNeed = sharedpreferences.getString("SharedDriverAllowancess", "");
+            Log.e("DriverNeed", DriverNeed);
+        }
+
+        if (sharedpreferences.contains(visitPurpose)) {
+            purposeofvisitedittext.setText(sharedpreferences.getString(visitPurpose, ""));
             Log.e("DriverNeed", DriverNeed);
         }
 
@@ -540,6 +573,38 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             Log.e("Privacypolicy", "StrID" + StrID);
         }
 
+
+     /*   if (sharedpreferences.contains("FlagCount")) {
+
+            Log.e("FlagCountFlagCount", sharedpreferences.getString("FlagCount", ""));
+            count = sharedpreferences.getString("FlagCount", "");
+            if (count.equals("1")) {
+
+                ondutylocations.setVisibility(View.VISIBLE);
+                purposeofvisittext.setVisibility(View.VISIBLE);
+                closebutton.setVisibility(View.VISIBLE);
+                exitclose.setVisibility(View.GONE);
+                submitbutton.setVisibility(View.VISIBLE);
+                otherlocationbutton.setVisibility(View.GONE);
+                haplocationbutton.setVisibility(View.GONE);
+                haplocationtext.setVisibility(View.GONE);
+                ModeOfTravel.setVisibility(View.VISIBLE);
+
+
+            } else {
+                haplocationtext.setVisibility(View.VISIBLE);
+                purposeofvisittext.setVisibility(View.VISIBLE);
+                submitbutton.setVisibility(View.VISIBLE);
+                closebutton.setVisibility(View.VISIBLE);
+                exitclose.setVisibility(View.GONE);
+                ModeOfTravel.setVisibility(View.VISIBLE);
+                ondutylocations.setVisibility(View.GONE);
+                haplocationbutton.setVisibility(View.GONE);
+                otherlocationbutton.setVisibility(View.GONE);
+
+            }
+        }
+*/
 
         if (sharedpreferences.contains(modeTypeVale)) {
             modeVal = sharedpreferences.getString(modeTypeVale, "");
@@ -802,6 +867,8 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         if (type == 8) {
             TextMode.setText(myDataset.get(position).getName());
             startEnd = myDataset.get(position).getId();
+
+            count = myDataset.get(position).getId();
             Log.e("Dash_Mode_Count", startEnd);
             shared_common_pref.save("MC", startEnd);
             modeId = myDataset.get(position).getFlag();
@@ -815,7 +882,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 mode = "11";
                 BikeMode.setVisibility(View.GONE);
                 BusMode.setVisibility(View.VISIBLE);
-                ReasonPhoto.setVisibility(View.VISIBLE);
+                ReasonPhoto.setVisibility(View.GONE);
                 StartKm.setText("");
                 onDutyFrom.setText("");
                 TextToAddress.setText("");
@@ -858,9 +925,9 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
 
 
         } else if (type == 1) {
-            SharedPreferences.Editor editor = sharedpreferences.edit();
+          /*  SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString(hapLocation, myDataset.get(position).getName());
-            editor.commit();
+            editor.commit();*/
 
             selecthaplocationss.setText(myDataset.get(position).getName());
             hapLocid = String.valueOf(myDataset.get(position).getId());
@@ -1128,7 +1195,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         } catch (Exception e) {
         }
     }
-/*
 
     @Override
     protected void onResume() {
@@ -1165,6 +1231,5 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         super.onRestart();
         startService(new Intent(this, TimerService.class));
     }
-*/
 
 }

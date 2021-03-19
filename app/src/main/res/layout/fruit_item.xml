@@ -9,15 +9,17 @@
 
     <TextView
         android:id="@+id/txt_name"
+        android:textSize="@dimen/C15dp"
         style="@style/TextStyle" />
 
     <TextView
         android:id="@+id/txt_phone"
+        android:textSize="@dimen/C15dp"
         style="@style/TextStyle" />
 
     <TextView
         android:id="@+id/txt_address"
+        android:textSize="@dimen/C15dp"
         style="@style/TextStyle" />
-
 
 </LinearLayout>

@@ -269,6 +269,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         btnRtPrv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 CloseImgPreview();
             }
         });
@@ -339,7 +340,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.VISIBLE);
         imgPreview.setImageURI(Uri.fromFile(file));
-
+        button.setVisibility(View.GONE);
         BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
 
         vwPreview.setBackground(drawableBitmap);
@@ -361,7 +362,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
         BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
-
+        button.setVisibility(View.VISIBLE);
         vwPreview.setBackground(drawableBitmap);
         if (preview != null) {
             preview = null;
@@ -395,7 +396,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
         // imgPreview.setImageURI(Uri.fromFile(file));
-
+        button.setVisibility(View.GONE);
         BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
 
         vwPreview.setBackground(drawableBitmap);
