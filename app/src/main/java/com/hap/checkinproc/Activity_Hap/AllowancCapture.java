@@ -15,6 +15,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -123,7 +124,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     }
 
     private void ShowImgPreview() {
-        RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
+        LinearLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.VISIBLE);
 
@@ -142,7 +143,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     }
 
     private void CloseImgPreview() {
-        RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
+        LinearLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
 
@@ -174,7 +175,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
 
 
     private void saveImgPreview() {
-        RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
+        LinearLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
         imgPreview.setImageURI(Uri.fromFile(file));

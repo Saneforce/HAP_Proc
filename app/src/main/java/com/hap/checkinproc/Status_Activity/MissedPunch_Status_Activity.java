@@ -141,7 +141,7 @@ public class MissedPunch_Status_Activity extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    common_class.CommonIntentwithFinish(Approvals.class);
+                    MissedPunch_Status_Activity.super.onBackPressed();
                 }
             });
 

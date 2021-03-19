@@ -70,14 +70,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     public static final String StartedImage = "SharedImage";
 
 
-
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        startService(new Intent(this, TimerService.class));
+     //   startService(new Intent(this, TimerService.class));
 
         username = findViewById(R.id.username);
         lblUserName = (TextView) findViewById(R.id.lblUserName);
@@ -90,7 +89,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         type = (shared.getInt("CheckCount", 0));
         common_class = new Common_Class(this);
-
+        lin_SFA = findViewById(R.id.lin_SFA);
         btnDaEntry = findViewById(R.id.btn_da_exp_entry);
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
@@ -184,6 +183,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linHolidayWorking.setOnClickListener(this);
         linExit.setOnClickListener(this);
         btnDaEntry.setOnClickListener(this);
+        lin_SFA.setOnClickListener(this);
         getcountdetails();
     }
 
@@ -274,25 +274,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 });
                 break;
             case R.id.lin_onduty:
-
-               /* SharedPreferences.Editor edd = CheckInDetails.edit();
-                edd.remove(hapLocation);
-                edd.remove(otherLocation);
-                edd.remove(visitPurpose);
-                edd.remove(modeTravelId);
-                edd.remove(modeTypeVale);
-                edd.remove(modeFromKm);
-                edd.remove(modeToKm);
-                edd.remove(StartedKm);
-                edd.remove(StartedImage);
-                edd.remove("SharedDailyAllowancess");
-                edd.remove("SharedDriverss");
-                edd.remove("ShareModeIDs");
-                edd.remove("StoreId");
-                edd.commit();
-                */
-
-
 
                 SharedPreferences.Editor editors = CheckInDetails.edit();
                 editors.remove("SharedImage");
@@ -475,7 +456,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onResume() {
         super.onResume();
-        startService(new Intent(this, TimerService.class));
+      //  startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
         Get_MydayPlan(1, "check/mydayplan");
     }
@@ -483,12 +464,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onPause() {
         super.onPause();
-        startService(new Intent(this, TimerService.class));
+      //  startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
         Get_MydayPlan(1, "check/mydayplan");
     }
 
-    @Override
+   /* @Override
     protected void onStop() {
         super.onStop();
         startService(new Intent(this, TimerService.class));
@@ -506,5 +487,5 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     protected void onRestart() {
         super.onRestart();
         startService(new Intent(this, TimerService.class));
-    }
+    }*/
 }

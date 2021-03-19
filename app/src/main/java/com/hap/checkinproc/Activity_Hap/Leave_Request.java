@@ -446,9 +446,8 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             /*  float daysBetween = (difference / (1000*60*60*24));*/
             daysBetween = (int) TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
             System.out.println("Number of Days between dates: " + (daysBetween + 1));
-            etext3.setText("" + (daysBetween + 1));
+            if(!etext2.getText().toString().equals("")) etext3.setText("" + (daysBetween + 1));
             if (daysBetween >= 0) {
-
 
             } else {
                 etext2.setText("");

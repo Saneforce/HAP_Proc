@@ -70,7 +70,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue,routeId,emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     Integer routeId1, classId, channelID;
     Shared_Common_Pref shared_common_pref;
-    SharedPreferences CheckInDetails;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

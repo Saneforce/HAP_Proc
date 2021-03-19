@@ -177,7 +177,7 @@ public class QRCodeScanner extends AppCompatActivity {
                                         Log.e("INTENT_DATA", arrSplit[2]);
                                         Log.e("INTENT_DATA", arrSplit[3]);
                                         Log.e("INTENT_DATA", arrSplit[4]);
-                                        Toast.makeText(QRCodeScanner.this, "Code is successfull", Toast.LENGTH_SHORT).show();
+                                       // Toast.makeText(QRCodeScanner.this, "Code is successfull", Toast.LENGTH_SHORT).show();
                                     }
 
                                 } else {
@@ -188,7 +188,7 @@ public class QRCodeScanner extends AppCompatActivity {
                         }
                     });
 
-                    QRCodeScanner.this.finish();
+
                 }
             }
         });
@@ -263,6 +263,7 @@ public class QRCodeScanner extends AppCompatActivity {
                     // locationList=response.body();
                     Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
                     try {
+                        QRCodeScanner.this.finish();
                         // common_class.CommonIntentwithFinish(Onduty_approval.class);
                         JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                    /* if (flag == 1) {
@@ -291,7 +292,6 @@ public class QRCodeScanner extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }

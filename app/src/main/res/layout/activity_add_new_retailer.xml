@@ -12,7 +12,7 @@
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
 
-        <include layout="@layout/custom_toolbar_help"></include>
+        <include layout="@layout/custom_toolbar_help" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -39,16 +39,10 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginBottom="10dp"
+                            style="@style/TextStyle"
                             android:text="@string/head_quater"
-                            android:textColor="@android:color/black"
-                            android:textSize="16dp"
-                            android:visibility="gone"></TextView>
+                            android:textSize="16dp" />
 
                         <LinearLayout
                             android:id="@+id/linear_order"
@@ -280,80 +274,72 @@
 
                     </LinearLayout>
 
+
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
+                        <TextView
+                            style="@style/TextStyle"
+                            android:text="@string/retailer_class" />
 
-                        <LinearLayout
+                        <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:layout_marginTop="12dp"
+                            android:src="@drawable/mandatory" />
 
-                            <TextView
-                                style="@style/TextStyle"
-                                android:text="@string/retailer_class" />
+                    </LinearLayout>
 
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
-                                android:src="@drawable/mandatory" />
+                    <LinearLayout
+                        android:id="@+id/linear_retailer_class"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_white_backround"
+                        android:orientation="vertical"
+                        android:padding="5dp">
 
-                        </LinearLayout>
+                        <TextView
+                            android:id="@+id/txt_retailer_class"
+                            style="@style/TextStyle"
+                            android:hint="@string/retailer_class" />
 
-                        <LinearLayout
-                            android:id="@+id/linear_retailer_class"
-                            android:layout_width="match_parent"
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:text="@string/retailer_channel" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/round_white_backround"
-                            android:orientation="vertical"
-                            android:padding="5dp">
+                            android:layout_marginTop="12dp"
+                            android:src="@drawable/mandatory" />
 
-                            <TextView
-                                android:id="@+id/txt_retailer_class"
-                                style="@style/TextStyle"
-                                android:hint="@string/retailer_class" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linear_retailer_channel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_white_backround"
+                        android:orientation="vertical"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/txt_retailer_channel"
+                            style="@style/TextStyle"
                             android:hint="@string/retailer_channel" />
 
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                style="@style/TextStyle"
-                                android:text="@string/retailer_channel" />
-
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="12dp"
-                                android:src="@drawable/mandatory" />
-
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:id="@+id/linear_retailer_channel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/round_white_backround"
-                            android:orientation="vertical"
-                            android:padding="5dp">
-
-                            <TextView
-                                android:id="@+id/txt_retailer_channel"
-                                style="@style/TextStyle"
-                                android:hint="@string/retailer_channel" />
-
-                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
+
             </ScrollView>
         </LinearLayout>
 
