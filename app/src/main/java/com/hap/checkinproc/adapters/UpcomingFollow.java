@@ -13,15 +13,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hap.checkinproc.Activity.Util.SelectionModel;
+import com.hap.checkinproc.Model_Class.DashboardParticulars;
 import com.hap.checkinproc.R;
 
 import java.util.ArrayList;
 
 public class UpcomingFollow extends BaseAdapter {
     Context context;
-    ArrayList<SelectionModel> array=new ArrayList<>();
+    ArrayList<DashboardParticulars> array = new ArrayList<>();
 
-    public UpcomingFollow(Context context, ArrayList<SelectionModel> array) {
+    public UpcomingFollow(Context context, ArrayList<DashboardParticulars> array) {
         this.context = context;
         this.array = array;
     }
@@ -43,27 +44,21 @@ public class UpcomingFollow extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        view= LayoutInflater.from(context).inflate(R.layout.row_item_follow_up,viewGroup,false);
-        TextView txt_name=view.findViewById(R.id.txt_name);
-        TextView txt_date=view.findViewById(R.id.txt_date);
-        ImageView img_phone=view.findViewById(R.id.img_phone);
-        SelectionModel mm=array.get(i);
-        txt_name.setText(mm.getTxt());
-        txt_date.setText(mm.getValue());
-        img_phone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(TextUtils.isEmpty(mm.getCode()) || mm.getCode().length()<10){
-                    Toast.makeText(context," Invalid phone number ",Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Intent callIntent = new Intent(Intent.ACTION_CALL);
-                    callIntent.setData(Uri.parse("tel:"+mm.getCode()));
-                    context.startActivity(callIntent);
-                }
-            }
-        });
-
+        view = LayoutInflater.from(context).inflate(R.layout.row_item_follow_up, viewGroup, false);
+        TextView txt_name = view.findViewById(R.id.txt_name);
+        TextView txt_this_month = view.findViewById(R.id.txt_this_month);
+        TextView txt_last_month = view.findViewById(R.id.txt_last_month);
+        TextView txt_percentage = view.findViewById(R.id.txt_percentage);
+        DashboardParticulars mm = array.get(i);
+        txt_name.setText(mm.getName());
+        if(mm.getSl_NO().equals("3")){
+            txt_this_month.setText("This Month :" + mm.getThisMonth());
+            txt_last_month.setText("Last Month :" + mm.getLastmonth());
+        }else{
+            txt_this_month.setText("Target :" + mm.getThisMonth());
+            txt_last_month.setText("Achieve :" + mm.getLastmonth());
+        }
+        txt_percentage.setText(mm.getPercentage() + "%");
         return view;
     }
 }

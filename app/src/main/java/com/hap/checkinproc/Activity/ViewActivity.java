@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -71,7 +72,6 @@ import retrofit2.Response;
 
 public class ViewActivity extends AppCompatActivity {
 
-
     String filePathing = "", btnShow = "V", MyPREFERENCES = "MyPrefs", SF_code = "", fab_value = "0", frm_id;
     public static String key = "", header = "";
     SimpleDateFormat sdf, sdf_or;
@@ -79,13 +79,15 @@ public class ViewActivity extends AppCompatActivity {
     DatePickerDialog fromDatePickerDialog;
     TimePickerDialog timePickerDialog;
     ArrayList<ModelDynamicView> array_view = new ArrayList<>();
+    ArrayList<SelectionModel> filterList = new ArrayList<>();
+    ArrayList<SelectionModel> selectedFilter = new ArrayList<>();
     ApiInterface apiService;
     AdapterForDynamicView adp_view;
+    FilterDemoAdapter adpt;
     ProgressDialog progressDialog = null;
     ListView list;
     int pos_upload_file = 0, CAMERA_REQUEST = 12, value = 0;
     Uri outputFileUri;
-    FilterDemoAdapter adpt;
     FloatingActionButton fab;
     RecyclerView relist_view;
     Bundle extra;
@@ -93,7 +95,6 @@ public class ViewActivity extends AppCompatActivity {
     ImageView iv_dwnldmaster_back;
     TextView tool_header;
     Button btn_save;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,6 +144,8 @@ public class ViewActivity extends AppCompatActivity {
                         JSONObject js = new JSONObject();
                         js.put("PK_ID", ViewActivity.key);
                         js.put("FK_ID", "");
+                        js.put("SF", SF_code);
+                        js.put("date", Common_Class.GetDate());
                         jkey1.put(ViewActivity.header, js);
                         jar.put(jkey1);
                         Log.v("printing_shareing23", jar.toString());
@@ -155,6 +158,8 @@ public class ViewActivity extends AppCompatActivity {
                         JSONObject js = new JSONObject();
                         js.put("PK_ID", ViewActivity.key);
                         js.put("FK_ID", shareKey.getString("pk", ""));
+                        js.put("SF", SF_code);
+                        js.put("date", Common_Class.GetDate());
                         jkey1.put(ViewActivity.header, js);
                         jjj.put(jkey1);
                         Log.v("printing_shareing", jjj.toString());
@@ -164,7 +169,6 @@ public class ViewActivity extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                 }
-
                 Intent i = new Intent(ViewActivity.this, ViewActivity.class);
                 i.putExtra("frmid", String.valueOf(value));
                 i.putExtra("btn_need", "0");
@@ -177,13 +181,11 @@ public class ViewActivity extends AppCompatActivity {
         btn_save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (validationOfField()) {
                     SharedPreferences.Editor edit = shareKey.edit();
                     try {
                         JSONArray jjj = new JSONArray(shareKey.getString("keys", ""));
                         if (jjj.length() == 0) {
-
                             JSONObject jkey1 = new JSONObject();
                             JSONArray jar = new JSONArray();
                             JSONObject js = new JSONObject();
@@ -194,8 +196,8 @@ public class ViewActivity extends AppCompatActivity {
                             JSONArray jAA = new JSONArray();
                             for (int i = 0; i < array_view.size(); i++) {
                                 JSONObject jk = new JSONObject();
-                                if (!array_view.get(i).getViewid().equalsIgnoreCase("19")) {
-                                    String col = array_view.get(i).getFieldname().replace(" ", "_");
+                                if (!array_view.get(i).getViewid().equalsIgnoreCase("19") && !array_view.get(i).getViewid().equalsIgnoreCase("22")) {
+                                    String col = array_view.get(i).getField_Col();
                                     jk.put("id", array_view.get(i).getViewid());
                                     if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
                                         Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
@@ -238,8 +240,8 @@ public class ViewActivity extends AppCompatActivity {
                             JSONArray jAA = new JSONArray();
                             for (int i = 0; i < array_view.size(); i++) {
                                 JSONObject jk = new JSONObject();
-                                if (!array_view.get(i).getViewid().equalsIgnoreCase("19")) {
-                                    String col = array_view.get(i).getFieldname().replace(" ", "_");
+                                if (!array_view.get(i).getViewid().equalsIgnoreCase("19") && !array_view.get(i).getViewid().equalsIgnoreCase("22")) {
+                                    String col = array_view.get(i).getField_Col();
                                     jk.put("id", array_view.get(i).getViewid());
                                     if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
                                         Date d = (Date) sdf_or.parse(array_view.get(i).getValue());
@@ -291,16 +293,17 @@ public class ViewActivity extends AppCompatActivity {
 
                 } else {
                     if (array_view.get(i).getViewid().equalsIgnoreCase("4") || array_view.get(i).getViewid().equalsIgnoreCase("5")) {
-                        popupSpinner(0, array_view.get(i).getA_list(), i);
+                        popupSpinner(0, array_view.get(i).getA_list(), i, array_view.get(i).getCreation_id());
                     } else if (array_view.get(i).getViewid().equalsIgnoreCase("8")) {
                         datePick(i, 8);
                     } else if (array_view.get(i).getViewid().equalsIgnoreCase("6") || array_view.get(i).getViewid().equalsIgnoreCase("7")) {
-                        popupSpinner(1, array_view.get(i).getA_list(), i);
+                        popupSpinner(1, array_view.get(i).getA_list(), i, array_view.get(i).getCreation_id());
                     }
                 }
 
             }
         });
+
         AdapterForDynamicView.bindListernerForDateRange(new UpdateUi() {
             @Override
             public void update(int value, int pos) {
@@ -319,7 +322,6 @@ public class ViewActivity extends AppCompatActivity {
                     timePicker(pos, value);
             }
         });
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -352,7 +354,6 @@ public class ViewActivity extends AppCompatActivity {
                     Log.v("picked_image_value_path", fullPath + "");
 
                     filePathing = filePathing + fullPath + ",";
-
                 }
 
                 mm.setValue(filePathing);
@@ -373,11 +374,9 @@ public class ViewActivity extends AppCompatActivity {
                     if (fullPath == null)
                         Toast.makeText(ViewActivity.this, "This file format not supported", Toast.LENGTH_LONG).show();
                     else {
-
                         mm.setValue(filePathing);
                         adp_view.notifyDataSetChanged();
                     }
-
                 }
 
             } else if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
@@ -433,7 +432,7 @@ public class ViewActivity extends AppCompatActivity {
         startActivityForResult(intent, CAMERA_REQUEST);
     }
 
-    public void popupSpinner(int type, final ArrayList<SelectionModel> array_selection, final int pos) {
+    public void popupSpinner(int type, final ArrayList<SelectionModel> array_selection, final int pos, String creationId) {
         final Dialog dialog = new Dialog(ViewActivity.this, R.style.AlertDialogCustom);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.popup_dynamic_view);
@@ -500,6 +499,15 @@ public class ViewActivity extends AppCompatActivity {
                         if (m.isClick()) {
                             array_view.get(pos).setValue(m.getTxt());
                             i = array_selection.size();
+                            if(filterList.size()!=0){
+                                for (int j = 0; j < filterList.size(); j++) {
+                                    if (filterList.get(j).getTxt().equals(creationId)) {
+                                        selectedFilter.add(new SelectionModel(filterList.get(j).getCode(), m.getTxt()));
+                                    }
+                                }
+                                Log.e("ListValues_fil", filterList.toString());
+                                Log.e("ListValues_select", selectedFilter.toString());
+                            }
                             adp_view.notifyDataSetChanged();
                             break;
                         }
@@ -513,6 +521,10 @@ public class ViewActivity extends AppCompatActivity {
                 commonFun();
             }
         });
+    }
+
+    public void filterLogic(){
+
 
     }
 
@@ -552,10 +564,7 @@ public class ViewActivity extends AppCompatActivity {
 
                 adp_view.notifyDataSetChanged();
                 commonFun();
-
-
             }
-
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         fromDatePickerDialog.show();
     }
@@ -617,7 +626,6 @@ public class ViewActivity extends AppCompatActivity {
         }, hour, minute, true);//Yes 24 hour time
         timePickerDialog.setTitle("Select Time");
         timePickerDialog.show();
-
     }
 
     public int spiltTime(String val) {
@@ -659,7 +667,7 @@ public class ViewActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
-                        Log.v("printing_res_track", response.body().byteStream() + "");
+                        Log.v("printing_res_track_dV", response.body().byteStream() + "");
                         JSONObject jsonObject = null;
                         String jsonData = null;
 
@@ -687,25 +695,38 @@ public class ViewActivity extends AppCompatActivity {
                                 } else {
                                     if (share.getString("exist", "").equalsIgnoreCase("E") && share.getString("fab", "").equalsIgnoreCase("1")) {
                                         ArrayList<SelectionModel> arr = new ArrayList<>();
-                                        array_view.add(new ModelDynamicView("19", share.getString("arr", ""), "", share.getString("value", ""), arr, "", "", "0", "", ""));
-
+                                        array_view.add(new ModelDynamicView("19", share.getString("arr", ""), "", share.getString("value", ""), arr, "", "", "0", "", "", ""));
                                     }
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         ArrayList<SelectionModel> arr = new ArrayList<>();
                                         JSONObject json = jsonArray.getJSONObject(i);
                                         JSONArray jarray = json.getJSONArray("input");
+                                        String filterText = json.getString("Filter_Text");
+                                        String filterValue = json.getString("Filter_Value");
+                                        if (!filterText.equals("")) {
+                                            if (filterText.contains(",")) {
+                                                String[] txtArray = filterText.split(",");
+                                                String[] valueArray = filterValue.split(",");
+                                                for (int j = 0; j < txtArray.length; j++) {
+                                                    filterList.add(new SelectionModel(txtArray[j], valueArray[j]));
+                                                }
+                                            } else {
+                                                filterList.add(new SelectionModel(filterText, filterValue));
+                                            }
+                                            Log.e("ListValues_fil", filterList.toString());
+                                        }
 
                                         Log.v("Printing_ctrl_id", json.getString("Control_id"));
                                         if (json.getString("Control_id").equalsIgnoreCase("23")) {
                                             String gettingfield = json.getString("Fld_Src_Field");
-                                            array_view.add(new ModelDynamicView(json.getString("Control_id"), gettingfield, json.getString("Fld_Name"), "", arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "", json.getString("Fld_Mandatory")));
+                                            array_view.add(new ModelDynamicView(json.getString("Control_id"), gettingfield, json.getString("Fld_Name"), "", arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "", json.getString("Fld_Mandatory"), json.getString("Field_Col")));
                                             fab_value = json.getString("type");
                                             btnShow = json.getString("target");
                                             tool_header.setText(json.getString("header"));
                                             header = json.getString("header");
                                         } else if (json.getString("Control_id").equalsIgnoreCase("19")) {
                                             String gettingfield = json.getString("Fld_Src_Field");
-                                            array_view.add(new ModelDynamicView("19", jarray.toString(), "", gettingfield, arr, "", "", json.getString("Target_Form"), "", ""));
+                                            array_view.add(new ModelDynamicView("19", jarray.toString(), "", gettingfield, arr, "", "", json.getString("Target_Form"), "", "", ""));
                                             fab_value = json.getString("type");
                                             btnShow = json.getString("target");
                                             tool_header.setText(json.getString("header"));
@@ -717,14 +738,15 @@ public class ViewActivity extends AppCompatActivity {
                                                     Log.v("json_input_iss", jjss.getString(json.getString("code")));
                                                     arr.add(new SelectionModel(jjss.getString(json.getString("name")), false, jjss.getString(json.getString("code"))));
                                                 }
-
                                             }
                                             fab_value = json.getString("type");
                                             btnShow = json.getString("target");
                                             tool_header.setText(json.getString("header"));
                                             header = json.getString("header");
 
-                                            array_view.add(new ModelDynamicView(json.getString("Control_id"), "", json.getString("Fld_Name"), "", arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "", json.getString("Fld_Mandatory")));
+                                            array_view.add(new ModelDynamicView(json.getString("Control_id"), "", json.getString("Fld_Name"), "",
+                                                    arr, json.getString("Fld_Length"), json.getString("Fld_ID"), json.getString("Frm_ID"), "",
+                                                    json.getString("Fld_Mandatory"), json.getString("Field_Col")));
                                         }
                                     }
 
@@ -771,7 +793,7 @@ public class ViewActivity extends AppCompatActivity {
 
             json.put("data", ja);
 
-            Log.v("printing_sf_code", ja.toString());
+            Log.v("save_printing_sf_code", ja.toString());
             Call<ResponseBody> approval = apiService.saveView(ja.toString());
 
             approval.enqueue(new Callback<ResponseBody>() {
@@ -781,14 +803,12 @@ public class ViewActivity extends AppCompatActivity {
                         Log.v("printing_res_track", response.body().byteStream() + "");
                         JSONObject jsonObject = null;
                         String jsonData = null;
-
                         InputStreamReader ip = null;
                         StringBuilder is = new StringBuilder();
                         String line = null;
                         try {
                             ip = new InputStreamReader(response.body().byteStream());
                             BufferedReader bf = new BufferedReader(ip);
-
                             while ((line = bf.readLine()) != null) {
                                 is.append(line);
                             }
@@ -802,7 +822,6 @@ public class ViewActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             Log.v("Exception_fmcg", e.getMessage());
                         }
-
                     }
                 }
 
@@ -834,7 +853,6 @@ public class ViewActivity extends AppCompatActivity {
     public void commonFun() {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-
     }
 
     public void popupCapture() {
@@ -880,17 +898,16 @@ public class ViewActivity extends AppCompatActivity {
         try {
             json.put("slno", frm_id);
 
-            Log.v("printing_sf_code", json.toString());
+            Log.v("printing_sf_code_LV", json.toString());
             Call<ResponseBody> approval = apiService.getView(json.toString());
 
             approval.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     if (response.isSuccessful()) {
-                        Log.v("printing_res_track", response.body().byteStream() + "");
+                        Log.v("printing_res_track_LV", response.body().byteStream() + "");
                         JSONObject jsonObject = null;
                         String jsonData = null;
-
                         InputStreamReader ip = null;
                         StringBuilder is = new StringBuilder();
                         String line = null;
@@ -902,7 +919,7 @@ public class ViewActivity extends AppCompatActivity {
                                 is.append(line);
                             }
                             // array_view.clear();
-                            Log.v("printing_dynamic_view", is.toString());
+                            Log.v("printing_dynamic_LV", is.toString());
                             JSONArray jsonArray = new JSONArray(is.toString());
 
                             ArrayList<SelectionModel> arr = new ArrayList<>();

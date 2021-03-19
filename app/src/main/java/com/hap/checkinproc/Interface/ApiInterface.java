@@ -48,8 +48,8 @@ public interface ApiInterface {
     @GET("Db_v300.php?")
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code);
 
-  @GET("Db_v300.php?")
-    Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code,@Query("dte") String date);
+    @GET("Db_v300.php?")
+    Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code, @Query("dte") String date);
 
     /*Locations*/
     @GET("Db_v300.php?")
@@ -89,6 +89,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("db_activity.php?axn=get/view")
     Call<ResponseBody> getView(@Field("data") String userData);
+
+    @FormUrlEncoded
+    @POST("db_activity.php?axn=get/dashboard_particulars")
+    Call<ResponseBody> getDasboardParticulars(@Field("data") String userData);
 
     @FormUrlEncoded
     @POST("db_activity.php?axn=get/menu")
