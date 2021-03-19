@@ -223,6 +223,14 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             Remarkscaption.setText("Remarks");
             edt_remarks.setHint("Enter The Remarks");
         }
+
+        distributors_layout.setVisibility(View.GONE);
+        chillinglayout.setVisibility(View.GONE);
+        hqlayout.setVisibility(View.GONE);
+        shiftypelayout.setVisibility(View.GONE);
+        route_layout.setVisibility(View.GONE);
+        jointwork_layout.setVisibility(View.GONE);
+
         CardDailyAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

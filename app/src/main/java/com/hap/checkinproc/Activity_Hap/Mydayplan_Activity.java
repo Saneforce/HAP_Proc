@@ -152,6 +152,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 mOnBackPressedDispatcher.onBackPressed();
             }
         });
+
         if (Shared_Common_Pref.Dept_Type.equals("1")) {
             jointwork_layout.setVisibility(View.GONE);
             distributors_layout.setVisibility(View.GONE);
@@ -167,7 +168,12 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             Remarkscaption.setText("Remarks");
             edt_remarks.setHint("Enter The Remarks");
         }
-
+        distributors_layout.setVisibility(View.GONE);
+        chillinglayout.setVisibility(View.GONE);
+        hqlayout.setVisibility(View.GONE);
+        shiftypelayout.setVisibility(View.GONE);
+        route_layout.setVisibility(View.GONE);
+        jointwork_layout.setVisibility(View.GONE);
         sharedpreferences = getSharedPreferences(mypreference,
                 Context.MODE_PRIVATE);
 
@@ -327,6 +333,24 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 distributor_text.setText("");
                 distributors_layout.setVisibility(View.GONE);
             }
+            if (myDataset.get(position).getCheckouttime().indexOf("C") > -1) {
+                chillinglayout.setVisibility(View.VISIBLE);
+            } else {
+                chilling_text.setText("");
+                chillinglayout.setVisibility(View.GONE);
+            }
+            if (myDataset.get(position).getCheckouttime().indexOf("H") > -1) {
+                hqlayout.setVisibility(View.VISIBLE);
+            } else {
+                hq_text.setText("");
+                hqlayout.setVisibility(View.GONE);
+            }
+            if (myDataset.get(position).getCheckouttime().indexOf("S") > -1) {
+                shiftypelayout.setVisibility(View.VISIBLE);
+            } else {
+                shift_type.setText("");
+                shiftypelayout.setVisibility(View.GONE);
+            }
 
             if (myDataset.get(position).getCheckouttime().indexOf("R") > -1) {
                 route_layout.setVisibility(View.VISIBLE);
@@ -338,7 +362,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 jointwork_layout.setVisibility(View.VISIBLE);
             } else {
                 jointwork_layout.setVisibility(View.GONE);
-
             }
 
             if (myDataset.get(position).getCheckouttime().indexOf("EA") > -1) {

@@ -53,11 +53,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     TextView lblUserName, lblEmail;
     Button linMyday, linCheckin, lin_SFA, linApprovals, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift,
             linTourPlan, linExit, lin_check_in, linHolidayWorking, btnDaEntry;
-    Integer type;
+    Integer type,OTFlg=0;
     Common_Class common_class;
     TextView approvalcount;
     Shared_Common_Pref shared_common_pref;
     String imageProfile = "", sSFType = "";
+
     ImageView profilePic;
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
@@ -106,6 +107,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         String eMail = UserDetails.getString("email", "");
         String sSFName = UserDetails.getString("SfName", "");
         sSFType = UserDetails.getString("Sf_Type", "");
+        OTFlg = UserDetails.getInt("OTFlg", 0);
 
 
         Log.e("DASHBORAD_SF", sSFType);
@@ -140,7 +142,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linTaClaim = (findViewById(R.id.lin_ta_claim));
         linExtShift = (findViewById(R.id.lin_extenden_shift));
         linExtShift.setVisibility(View.GONE);
-        if (sSFType.equals("0")) linExtShift.setVisibility(View.VISIBLE);
+        if (OTFlg==1) linExtShift.setVisibility(View.VISIBLE);
         linTourPlan = (findViewById(R.id.lin_tour_plan));
         linTourPlan.setVisibility(View.GONE);
         if (sSFType.equals("1")) linTourPlan.setVisibility(View.VISIBLE);
