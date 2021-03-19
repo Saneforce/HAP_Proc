@@ -41,7 +41,7 @@ public class Checkin extends AppCompatActivity {
     private JsonArray ShiftItems = new JsonArray();
     private RecyclerView recyclerView;
     private ShiftListItem mAdapter;
-    String ODFlag, onDutyPlcID, onDutyPlcNm, vstPurpose, Check_Flag,onDutyFlag;
+    String ODFlag, onDutyPlcID, onDutyPlcNm, vstPurpose, Check_Flag, onDutyFlag, DutyAlp;
     Intent intent;
 
     @Override
@@ -109,15 +109,16 @@ public class Checkin extends AppCompatActivity {
             onDutyPlcNm = bundle.getString("onDutyPlcNm");
             vstPurpose = bundle.getString("vstPurpose");
             Check_Flag = bundle.getString("Mode");
+            DutyAlp = bundle.getString("onDuty");
             Log.e("CHECKIN_FLAG", Check_Flag);
-            if (onDutyPlcID == null) {
+            if (onDutyPlcID == "0") {
                 SFTID = "0";
                 onDutyPlcID = "";
             }
 
-            if(Check_Flag.equals("holidayentry")){
+            if (Check_Flag.equals("holidayentry")) {
                 onDutyFlag = "1";
-            }else{
+            } else {
                 onDutyFlag = "0";
             }
         }
@@ -142,13 +143,30 @@ public class Checkin extends AppCompatActivity {
         SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         String Scode = (shared.getString("Sfcode", "null"));
         String Dcode = (shared.getString("Divcode", "null"));
-        spinnerValue("get/Shift_timing", Dcode, Scode);
+        if (DutyAlp.equals("abc")) {
+            Intent takePhoto = new Intent(this, ImageCapture.class);
+            takePhoto.putExtra("Mode", Check_Flag);
+            takePhoto.putExtra("ShiftId", SFTID);
+            takePhoto.putExtra("On_Duty_Flag", onDutyFlag);
+            takePhoto.putExtra("ShiftName", CheckInDetails.getString("Shift_Name", ""));
+            takePhoto.putExtra("ShiftStart", CheckInDetails.getString("ShiftStart", ""));
+            takePhoto.putExtra("ShiftEnd", CheckInDetails.getString("ShiftEnd", ""));
+            takePhoto.putExtra("ShiftCutOff", CheckInDetails.getString("ShiftCutOff", ""));
+            takePhoto.putExtra("ODFlag", ODFlag);
+            takePhoto.putExtra("onDutyPlcID", onDutyPlcID);
+            takePhoto.putExtra("onDutyPlcNm", onDutyPlcNm);
+            takePhoto.putExtra("vstPurpose", vstPurpose);
+            startActivity(takePhoto);
+            finish();
+        } else {
+            spinnerValue("get/Shift_timing", Dcode, Scode);
+        }
 
     }
 
     public void SetShitItems() {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mAdapter = new ShiftListItem(ShiftItems, this, Check_Flag,onDutyFlag);
+        mAdapter = new ShiftListItem(ShiftItems, this, Check_Flag, onDutyFlag);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -172,7 +190,9 @@ public class Checkin extends AppCompatActivity {
             }
         });
 
-    }@Override
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         startService(new Intent(this, TimerService.class));
