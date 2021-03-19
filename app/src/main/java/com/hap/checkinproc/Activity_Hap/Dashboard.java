@@ -58,6 +58,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     TextView approvalcount;
     Shared_Common_Pref shared_common_pref;
     String imageProfile = "", sSFType = "";
+    int onDuty;
     ImageView profilePic;
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
@@ -298,7 +299,11 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 editors.remove("ShareModeIDs");
                 editors.remove("StoreId");
                 editors.commit();
-                startActivity(new Intent(this, On_Duty_Activity.class));
+               // startActivity(new Intent(this, On_Duty_Activity.class));
+Intent oDutyInt= new Intent(this,On_Duty_Activity.class);
+oDutyInt.putExtra("Onduty",onDuty);
+startActivity(oDutyInt);
+
                 break;
             case R.id.lin_exit:
                 SharedPreferences.Editor editor = UserDetails.edit();
@@ -342,6 +347,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     // Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
+
+                    Log.v("HAP_ON_DUTY", jsonObject.getString("CheckOnduty"));
+                    onDuty = Integer.parseInt(jsonObject.getString("CheckOnduty"));
                     linCheckin.setVisibility(View.VISIBLE);
                     if (flag == 1 && sSFType.equals("1")) {
                         JSONArray jsoncc = jsonObject.getJSONArray("Checkdayplan");
@@ -456,7 +464,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onResume() {
         super.onResume();
-      //  startService(new Intent(this, TimerService.class));
+        //  startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
         Get_MydayPlan(1, "check/mydayplan");
     }
@@ -464,7 +472,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onPause() {
         super.onPause();
-      //  startService(new Intent(this, TimerService.class));
+        //  startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
         Get_MydayPlan(1, "check/mydayplan");
     }
