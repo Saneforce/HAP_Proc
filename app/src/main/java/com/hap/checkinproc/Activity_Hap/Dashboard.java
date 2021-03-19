@@ -76,7 +76,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-     //   startService(new Intent(this, TimerService.class));
+   startService(new Intent(this, TimerService.class));
 
         username = findViewById(R.id.username);
         lblUserName = (TextView) findViewById(R.id.lblUserName);
@@ -469,7 +469,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         Get_MydayPlan(1, "check/mydayplan");
     }
 
-   /* @Override
+    @Override
     protected void onStop() {
         super.onStop();
         startService(new Intent(this, TimerService.class));
@@ -487,5 +487,5 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     protected void onRestart() {
         super.onRestart();
         startService(new Intent(this, TimerService.class));
-    }*/
+    }
 }
