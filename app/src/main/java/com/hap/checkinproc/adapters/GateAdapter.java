@@ -35,7 +35,7 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        Log.v("GATE_DATA_ADAPTER", String.valueOf(jsonArray.size()));
+        Log.v("GATE_DATA_ADAPTER", String.valueOf(jsonArray));
 
         JsonObject jsonObject = (JsonObject) jsonArray.get(position);
         {
@@ -43,10 +43,10 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.MyViewHolder> 
 
             holder.txtplace.setText(jsonObject.get("HQLoc").getAsString());
             holder.txtdate.setText(jsonObject.get("time").getAsString());
-            //      holder.txtIntime.setText(jsonObject.get("").getAsString());
-            //  holder.txOtTime.setText(jsonObject.get("Otime").getAsString());
+            holder.txtIntime.setText(jsonObject.get("Itime").getAsString());
+            holder.txOtTime.setText(jsonObject.get("Otime").getAsString());
             holder.txtGeoIn.setText(jsonObject.get("latLng").getAsString());
-            // holder.txtGeoOt.setText(jsonObject.get("OlatLng").getAsString());
+            holder.txtGeoOt.setText(jsonObject.get("OlatLng").getAsString());
         }
     }
 

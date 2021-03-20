@@ -54,10 +54,11 @@
                 android:id="@+id/iv_checkout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/check_out"
+                android:src="@drawable/ic_logout"
                 android:layout_centerVertical="true"
                 android:layout_alignParentEnd="true"
                 android:layout_marginRight="5dp"
+                android:visibility="gone"
                 />
 
             <ImageView
@@ -68,7 +69,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:padding="@dimen/C8dp"
-                android:src="@drawable/ic_logout" />
+                android:src="@drawable/check_out" />
 
 
         </RelativeLayout>

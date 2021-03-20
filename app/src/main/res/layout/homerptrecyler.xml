@@ -8,16 +8,16 @@
         android:id="@+id/parent_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="5dp">
+        android:paddingBottom="2dp">
 
         <TextView
             android:id="@+id/txtlable"
-            style="@style/TextStyle"
+            style="@style/DashboardTextStyle"
             android:layout_weight="1" />
 
         <TextView
             android:id="@+id/txtval"
-            style="@style/TextStyle"
+            style="@style/DashboardTextStyle"
 
             android:autoLink="web" />
     </LinearLayout>

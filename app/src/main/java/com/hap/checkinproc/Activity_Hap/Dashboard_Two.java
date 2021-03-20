@@ -36,6 +36,7 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.GateEntryQREvents;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Activity.View_All_Status_Activity;
 import com.hap.checkinproc.adapters.GateAdapter;
@@ -57,7 +58,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     public static final String CheckInDetail = "CheckInDetail";
     public static final String UserDetail = "MyPrefs";
     Shared_Common_Pref mShared_common_pref;
-
+GateEntryQREvents GateEvents;
     private RecyclerView recyclerView;
     private HomeRptRecyler mAdapter;
     String viewMode = "", sSFType = "",mPriod="0";
@@ -86,7 +87,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
     RecyclerView mRecyclerView;
     /*String Mode = "Bus";*/
-    Button gateIn_gateOut, gateOut_gateIn;
+    Button btnGateIn, btnGateOut;
     ImageView mvPrvMn,mvNxtMn;
     GateAdapter gateAdap;
     CardView cardGateDet;
@@ -112,7 +113,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
         datefrmt = com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly();
         Log.v("DATE_FORMAT_ONLY", datefrmt);
-
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -142,6 +142,12 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         String plantime = dpln.format(c.getTime());
 
         gatevalue(plantime);
+        QRCodeScanner.bindEvents(new GateEntryQREvents() {
+            @Override
+            public void RefreshGateEntrys() {
+                gatevalue(plantime);
+            }
+        });
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
         textColorAnim.setDuration(500);
@@ -191,8 +197,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             }
         });
         cardGateDet = findViewById(R.id.cardGateDet);
-        gateIn_gateOut = findViewById(R.id.btn_gate_in);
-        gateOut_gateIn = findViewById(R.id.btn_gate_out);
+        btnGateIn = findViewById(R.id.btn_gate_in);
+        btnGateOut = findViewById(R.id.btn_gate_out);
 
         mRecyclerView = findViewById(R.id.gate_recycle);
         mRecyclerView.setHasFixedSize(true);
@@ -207,15 +213,16 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         cardView5.setOnClickListener(this);
         StActivity.setOnClickListener(this);
         btnCheckout.setOnClickListener(this);
-        gateIn_gateOut.setOnClickListener(this);
+        btnGateIn.setOnClickListener(this);
+        btnGateOut.setOnClickListener(this);
 
-        gateIn_gateOut.setVisibility(View.GONE);
-        gateOut_gateIn.setVisibility(View.GONE);
+        btnGateIn.setVisibility(View.GONE);
+        btnGateOut.setVisibility(View.GONE);
         cardGateDet.setVisibility(View.GONE);
 
         if (Integer.parseInt(CheckInDetails.getString("On_Duty_Flag", "0")) > 0) {
-            gateIn_gateOut.setVisibility(View.VISIBLE);
-            gateOut_gateIn.setVisibility(View.VISIBLE);
+            btnGateIn.setVisibility(View.VISIBLE);
+            btnGateOut.setVisibility(View.VISIBLE);
             cardGateDet.setVisibility(View.VISIBLE);
         }
         if (getIntent().getExtras() != null) {
@@ -573,13 +580,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             case R.id.btn_gate_in:
                 intent = new Intent(this, QRCodeScanner.class);
                 intent.putExtra("Name", "GateIn");
-                startActivity(intent);
+                //startActivity(intent);
                 /*  startActivity(new Intent(this, QRCodeScanner.class));*/
                 break;
             case R.id.btn_gate_out:
                 intent = new Intent(this, QRCodeScanner.class);
                 intent.putExtra("Name", "GateOut");
-                startActivity(intent);
+                //startActivity(intent);
                 /*  startActivity(new Intent(this, QRCodeScanner.class));*/
                 break;
             case R.id.StActivity:
@@ -603,7 +610,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 if (sDeptType.equalsIgnoreCase("1")) {
                                     aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
                                 } else {
-                                    aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
+                                    aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
                                 }
 
                                 //startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
@@ -665,7 +672,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 editor.remove("StoreId");
                                 editor.commit();
 
-                                if (dashMdeCnt.equals("1")) {
+                                //if (dashMdeCnt.equals("1"))
+                                if(response.body().size()>0){
                                     Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
                                     takePhoto.putExtra("Mode", "COUT");
                                     startActivity(takePhoto);
@@ -735,7 +743,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
 
     public void gatevalue(String Date) {
-
         Log.v("plantimeplantime", Date);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonArray> Callto = apiInterface.gteDta(Shared_Common_Pref.Sf_Code, com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly());
@@ -744,15 +751,16 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 JsonArray jsonArray = response.body();
 
-                for (int l = 0; l < jsonArray.size(); l++) {
+                gateAdap = new GateAdapter(Dashboard_Two.this, jsonArray);
+                mRecyclerView.setAdapter(gateAdap);
+               /* for (int l = 0; l < jsonArray.size(); l++) {
                     JsonObject jsonObjectAdd = jsonArray.get(l).getAsJsonObject();
 
                     Log.v("GATE_DATA", jsonObjectAdd.toString());
                     gateAdap = new GateAdapter(Dashboard_Two.this, jsonArray);
 
-                    mRecyclerView.setAdapter(gateAdap);
                 }
-
+*/
             }
 
             @Override

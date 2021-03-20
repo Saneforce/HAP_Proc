@@ -99,6 +99,7 @@ public class Checkin extends AppCompatActivity {
         });
         SharedPreferences CheckInDetails = getSharedPreferences(spCheckIn, MODE_PRIVATE);
         String SFTID = CheckInDetails.getString("Shift_Selected_Id", "");
+        DutyAlp ="";
         intent = getIntent();
 
 

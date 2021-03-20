@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -26,9 +27,12 @@ import com.google.android.gms.vision.barcode.Barcode;
 import com.google.android.gms.vision.barcode.BarcodeDetector;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.GateEntryQREvents;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.TimerService;
 
@@ -52,6 +56,7 @@ public class QRCodeScanner extends AppCompatActivity {
     private BarcodeDetector barcodeDetector;
     private CameraSource cameraSource;
     private static final int REQUEST_CAMERA_PERMISSION = 201;
+    static GateEntryQREvents mGateEntryQREvents;
     Button btnAction;
     String[] arrSplit;
     String latlon = "", NameValue = "", intentData = "";
@@ -63,7 +68,7 @@ public class QRCodeScanner extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_q_r_code_scanner);
         initViews();
-        startService(new Intent(this, TimerService.class));
+        //startService(new Intent(this, TimerService.class));
         NameValue = String.valueOf(getIntent().getSerializableExtra("Name"));
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -95,7 +100,6 @@ public class QRCodeScanner extends AppCompatActivity {
     }
 
     private void initViews() {
-
 
         txtBarcodeValue = findViewById(R.id.txtBarcodeValue);
         surfaceView = findViewById(R.id.surfaceView);
@@ -165,12 +169,12 @@ public class QRCodeScanner extends AppCompatActivity {
                         @Override
                         public void run() {
                             intentData = barcodes.valueAt(0).displayValue.replace("|", ",");
-                          cameraSource.release();
+                            cameraSource.release();
 
                             if (!intentData.equals("")) {
                                 arrSplit = intentData.split(",");
                                 if (String.valueOf(arrSplit.length).equals("5")) {
-                                    if (arrSplit[3].equals("IN") || arrSplit[3].equals("Out")) {
+                                    if ((NameValue.equalsIgnoreCase("gatein") && arrSplit[3].equals("IN")) || (NameValue.equalsIgnoreCase("gateout") && arrSplit[3].equals("Out"))) {
                                         GateIn(NameValue, arrSplit, 1);
                                         Log.e("INTENT_DATA", arrSplit[0]);
                                         Log.e("INTENT_DATA", arrSplit[1]);
@@ -178,10 +182,33 @@ public class QRCodeScanner extends AppCompatActivity {
                                         Log.e("INTENT_DATA", arrSplit[3]);
                                         Log.e("INTENT_DATA", arrSplit[4]);
                                        // Toast.makeText(QRCodeScanner.this, "Code is successfull", Toast.LENGTH_SHORT).show();
-                                    }
+                                    } else {
+                                        AlertDialogBox.showDialog(QRCodeScanner.this, "HAP Check-In", "Provide a Valid QR Code", "OK", "", false, new AlertBox() {
+                                            @Override
+                                            public void PositiveMethod(DialogInterface dialog, int id) {
+                                                dialog.dismiss();
+                                                QRCodeScanner.this.finish();
+                                            }
 
+                                            @Override
+                                            public void NegativeMethod(DialogInterface dialog, int id) {
+
+                                            }
+                                        });
+                                    }
                                 } else {
-                                    Toast.makeText(QRCodeScanner.this, "Provide a Valid Code", Toast.LENGTH_SHORT).show();
+                                    AlertDialogBox.showDialog(QRCodeScanner.this, "HAP Check-In", "Provide a Valid QR Code", "OK", "", false, new AlertBox() {
+                                        @Override
+                                        public void PositiveMethod(DialogInterface dialog, int id) {
+                                            dialog.dismiss();
+                                            QRCodeScanner.this.finish();
+                                        }
+
+                                        @Override
+                                        public void NegativeMethod(DialogInterface dialog, int id) {
+
+                                        }
+                                    });
 
                                 }
                             }
@@ -263,9 +290,26 @@ public class QRCodeScanner extends AppCompatActivity {
                     // locationList=response.body();
                     Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
                     try {
-                        QRCodeScanner.this.finish();
-                        // common_class.CommonIntentwithFinish(Onduty_approval.class);
-                        JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                        //JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+
+                        JsonObject jsonObject = response.body();
+                        String Msg = jsonObject.get("Msg").getAsString();
+                        if (Msg.equalsIgnoreCase(""))
+                            Msg="Submitted Successfully";
+                        AlertDialogBox.showDialog(QRCodeScanner.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
+                            @Override
+                            public void PositiveMethod(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                mGateEntryQREvents.RefreshGateEntrys();
+                                QRCodeScanner.this.finish();
+                            }
+
+                            @Override
+                            public void NegativeMethod(DialogInterface dialog, int id) {
+
+                            }
+                        });
+
                    /* if (flag == 1) {
                         // common_class.ProgressdialogShow(2, "");
                         Toast.makeText(getApplicationContext(), "Holiday  Approved Successfully", Toast.LENGTH_SHORT).show();
@@ -275,7 +319,7 @@ public class QRCodeScanner extends AppCompatActivity {
 
                     }*/
 
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -292,7 +336,7 @@ public class QRCodeScanner extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        startService(new Intent(this, TimerService.class));
+        //startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
@@ -300,28 +344,31 @@ public class QRCodeScanner extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         cameraSource.release();
-        startService(new Intent(this, TimerService.class));
+        //startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        startService(new Intent(this, TimerService.class));
+        //startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        startService(new Intent(this, TimerService.class));
+        //startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        startService(new Intent(this, TimerService.class));
+       // startService(new Intent(this, TimerService.class));
     }
 
+    public static void bindEvents(GateEntryQREvents gateEntryQREvents){
+        mGateEntryQREvents=gateEntryQREvents;
+    }
 }
