@@ -1,25 +1,70 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/C5dp"
+    android:layout_margin="2dp"
     android:background="@drawable/bottom_border"
     android:orientation="vertical"
     app:cardElevation="2dp">
 
-    <TextView
-        android:id="@+id/txt_name"
-        android:textSize="@dimen/C15dp"
-        style="@style/TextStyle" />
+    <LinearLayout
+        android:id="@+id/checkboxLin"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:weightSum="2">
 
-    <TextView
-        android:id="@+id/txt_phone"
-        android:textSize="@dimen/C15dp"
-        style="@style/TextStyle" />
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/Checkboxname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.3"
+            android:gravity="left"
+            android:padding="10dp"
+            android:text="thirumalaivasan"
+            android:textSize="@dimen/C17dp" />
 
-    <TextView
-        android:id="@+id/txt_address"
-        android:textSize="@dimen/C15dp"
-        style="@style/TextStyle" />
+        <CheckBox
+            android:id="@+id/checkBox_select"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/C10dp"
+            android:layout_weight="1.5"
+            android:text="" />
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/linear_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/C4dp"
+        tools:ignore="MissingConstraints">
+
+        <TextView
+            android:id="@+id/txt_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="One"
+            android:textColor="@android:color/black"></TextView>
+
+        <TextView
+            android:id="@+id/txt_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Two"
+            android:textColor="#80000000"
+            android:textSize="12dp"></TextView>
+
+        <TextView
+            android:id="@+id/txt_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Three"
+            android:textColor="#80000000"
+            android:textSize="12dp"></TextView>
+
+    </LinearLayout>
 </LinearLayout>

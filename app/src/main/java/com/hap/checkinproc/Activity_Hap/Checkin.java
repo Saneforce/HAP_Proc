@@ -41,7 +41,7 @@ public class Checkin extends AppCompatActivity {
     private JsonArray ShiftItems = new JsonArray();
     private RecyclerView recyclerView;
     private ShiftListItem mAdapter;
-    String ODFlag, onDutyPlcID, onDutyPlcNm, vstPurpose, Check_Flag, onDutyFlag, DutyAlp;
+    String ODFlag, onDutyPlcID, onDutyPlcNm, vstPurpose, Check_Flag, onDutyFlag, DutyAlp = "";
     Intent intent;
 
     @Override
@@ -99,18 +99,17 @@ public class Checkin extends AppCompatActivity {
         });
         SharedPreferences CheckInDetails = getSharedPreferences(spCheckIn, MODE_PRIVATE);
         String SFTID = CheckInDetails.getString("Shift_Selected_Id", "");
-        DutyAlp ="";
         intent = getIntent();
 
 
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
-            ODFlag = bundle.getString("ODFlag");
-            onDutyPlcID = bundle.getString("onDutyPlcID");
-            onDutyPlcNm = bundle.getString("onDutyPlcNm");
-            vstPurpose = bundle.getString("vstPurpose");
-            Check_Flag = bundle.getString("Mode");
-            DutyAlp = bundle.getString("onDuty");
+            ODFlag = String.valueOf(bundle.getSerializable("ODFlag"));
+            onDutyPlcID = String.valueOf(bundle.getSerializable("onDutyPlcID"));
+            onDutyPlcNm = String.valueOf(bundle.getSerializable("onDutyPlcNm"));
+            vstPurpose = String.valueOf(bundle.getSerializable("vstPurpose"));
+            Check_Flag = String.valueOf(bundle.getSerializable("Mode"));
+            DutyAlp = String.valueOf(bundle.getSerializable("onDuty"));
             Log.e("CHECKIN_FLAG", Check_Flag);
             if (onDutyPlcID == "0") {
                 SFTID = "0";
@@ -123,7 +122,6 @@ public class Checkin extends AppCompatActivity {
                 onDutyFlag = "0";
             }
         }
-
 
         if (SFTID != "") {
             Intent takePhoto = new Intent(this, ImageCapture.class);

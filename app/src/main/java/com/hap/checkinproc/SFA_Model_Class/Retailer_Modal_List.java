@@ -1,5 +1,4 @@
 package com.hap.checkinproc.SFA_Model_Class;
-
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -7,6 +6,23 @@ public class Retailer_Modal_List {
     @SerializedName("id")
     @Expose
     private String id;
+
+    public Retailer_Modal_List(String id, String name, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode) {
+        this.id = id;
+        this.name = name;
+        this.townCode = townCode;
+        this.townName = townName;
+        this.lat = lat;
+        this._long = _long;
+        this.addrs = addrs;
+        this.listedDrAddress1 = listedDrAddress1;
+        this.listedDrSlNo = listedDrSlNo;
+        this.mobileNumber = mobileNumber;
+        this.docCatCode = docCatCode;
+        this.contactPersion = contactPersion;
+        this.docSpecialCode = docSpecialCode;
+    }
+
     @SerializedName("name")
     @Expose
     private String name;

@@ -27,6 +27,7 @@ import com.google.gson.JsonObject;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.New_Outlet_Map_creations;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -76,7 +77,12 @@ public class Common_Class {
         shared_common_pref = new Shared_Common_Pref(context);
 
     }
+    public void CommonIntentwithoutFinish(Class classname) {
+        intent = new Intent(activity, classname);
 
+        activity.startActivity(intent);
+
+    }
 
     public Common_Class(Activity activity) {
         this.activity = activity;
@@ -347,6 +353,8 @@ public class Common_Class {
             }
         });
     }
+
+
 
 
     public static class InputFilterMinMax implements InputFilter {

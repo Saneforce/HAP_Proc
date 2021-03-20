@@ -248,7 +248,7 @@
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/gate_recycle"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/header_date_width"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:padding="5dp" />
 

@@ -34,13 +34,15 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Model_Class.ReatilRouteModel;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.common.TimerService;
+import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -54,32 +56,48 @@ import retrofit2.Response;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class AddNewRetailer extends AppCompatActivity implements Master_Interface {
+    TextView toolHeader;
     CustomListViewDialog customDialog;
+    ImageView imgBack;
+    EditText toolSearch, retailercode;
     Button mSubmit;
     ApiInterface service;
     LinearLayout linReatilerRoute, linReatilerClass, linReatilerChannel;
     TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel;
+    Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
     List<Common_Model> modelRetailDetails = new ArrayList<>();
     Common_Model mCommon_model_spinner;
+    List<ReatilRouteModel> mRetailerDetailsModels;
     Gson gson;
-    EditText addRetailerName, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail;
+    EditText addRetailerName, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail, CurrentLocationsAddress;
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
     JSONObject docMasterObject;
-    String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue,routeId,emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+    String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue;
     Integer routeId1, classId, channelID;
+    String routeId;
     Shared_Common_Pref shared_common_pref;
-
+    SharedPreferences CheckInDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_retailer);
-
+        linReatilerRoute = findViewById(R.id.linear_Retailer);
+        txtRetailerRoute = findViewById(R.id.retailer_type);
+        retailercode = findViewById(R.id.retailercode);
+        CurrentLocationsAddress = findViewById(R.id.CurrentLocationsAddress);
         gson = new Gson();
-        startService(new Intent(this, TimerService.class));
         service = ApiClient.getClient().create(ApiInterface.class);
+        mSubmit = findViewById(R.id.submit_button);
+        CurrentLocationsAddress.setText("" + Shared_Common_Pref.OutletAddress);
+        if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+            mSubmit.setVisibility(View.VISIBLE);
+        } else {
+            Shared_Common_Pref.Outler_AddFlag = "0";
+        }
         shared_common_pref = new Shared_Common_Pref(this);
         getRouteDetails();
         getRetailerClass();
@@ -92,6 +110,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 startActivity(new Intent(getApplicationContext(), Help_Activity.class));
             }
         });
+
 
         TextView txtErt = findViewById(R.id.toolbar_ert);
         TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
@@ -120,8 +139,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                startActivity(new Intent(getApplicationContext(), OrderDashBoard.class));
+                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                if (CheckIn == true) {
+                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                } else
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
             }
         });
         ImageView backView = findViewById(R.id.imag_back);
@@ -140,12 +165,18 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         addRetailerPhone = findViewById(R.id.edt_new_phone);
         addRetailerEmail = findViewById(R.id.edt_new_email);
         addRetailerName.clearFocus();
+        Intent i = getIntent();
+        if (i != null && i.getExtras() != null) {
+            addRetailerName.setText("" + i.getExtras().getString("OutletName"));
+            addRetailerAddress.setText("" + i.getExtras().getString("OutletAddress"));
+            txtRetailerRoute.setText("" + i.getExtras().getString("OutletRoute"));
+            addRetailerPhone.setText("" + i.getExtras().getString("OutletMobile"));
+            retailercode.setText("" + i.getExtras().getString("OutletCode"));
+        }
 
-        mSubmit = findViewById(R.id.submit_button);
         mSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (txtRetailerRoute.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Select route", Toast.LENGTH_SHORT).show();
                 } else if (addRetailerName.getText().toString().matches("")) {
@@ -211,8 +242,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     /*Route Click*/
     public void OnclickRoute() {
-        linReatilerRoute = findViewById(R.id.linear_Retailer);
-        txtRetailerRoute = findViewById(R.id.retailer_type);
+
         linReatilerRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -286,9 +316,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         call.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-
                 JsonArray jsonArray = response.body();
-
                 Log.e("RESPONSE_VALUE", String.valueOf(jsonArray));
                 for (int a = 0; a < jsonArray.size(); a++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(a);
@@ -296,7 +324,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     String id = String.valueOf(jsonObject.get("id"));
                     String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
                     Log.e("RETAILER_CLASS_NAME", retailerClass);
-
                     mCommon_model_spinner = new Common_Model(id, retailerClass, "flag");
                     Log.e("LeaveType_Request", retailerClass);
                     modelRetailChannel.add(mCommon_model_spinner);
@@ -318,7 +345,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         linReatilerChannel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 customDialog = new CustomListViewDialog(AddNewRetailer.this, modelRetailChannel, 10);
                 Window window = customDialog.getWindow();
                 window.setGravity(Gravity.CENTER);
@@ -371,7 +397,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_qulifi", "'samp'");
             reportObject.put("unlisted_class", classId);
             reportObject.put("DrKeyId", "'" + keyCodeValue + "'");
-
             docMasterObject.put("unlisted_doctor_master", reportObject);
 
         } catch (JSONException e) {
@@ -389,16 +414,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
                 JsonObject jsonObject = response.body();
                 Log.e("Add_Retailer_details", String.valueOf(jsonObject));
-
                 String success = String.valueOf(jsonObject.get("success"));
-                Log.e("Add_Retailer_details", success);
-                if (success.equalsIgnoreCase("true")) {
+                if (success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("0")) {
                     startActivity(new Intent(getApplicationContext(), SecondaryOrderActivity.class));
-                } else {
-                    Toast.makeText(AddNewRetailer.this, "Please type data", Toast.LENGTH_SHORT).show();
+                } else if (success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                    Shared_Common_Pref.Outler_AddFlag = "0";
+                    startActivity(new Intent(getApplicationContext(), Dashboard_Route.class));
                 }
             }
 
@@ -436,54 +459,18 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 @Override
                 public void run() {
 
-                    AlertDialogBox.showDialog(AddNewRetailer.this, "", "Do you want to Exit?", "Yes", "NO", false, new AlertBox() {
-                        @Override
-                        public void PositiveMethod(DialogInterface dialog, int id) {
-                            AddNewRetailer.super.onBackPressed();
-                        }
-
-                        @Override
-                        public void NegativeMethod(DialogInterface dialog, int id) {
-                        }
-                    });
+                    finish();
                 }
             });
 
     @Override
     public void onBackPressed() {
 
-    }  @Override
-    protected void onResume() {
-        super.onResume();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    public void onSuperBackPressed() {
+        super.onBackPressed();
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
-    }
 
 }

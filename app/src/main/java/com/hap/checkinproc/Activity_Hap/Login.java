@@ -180,7 +180,7 @@ public class Login extends AppCompatActivity {
         CameraPermission cameraPermission = new CameraPermission(Login.this, getApplicationContext());
 
         if (!cameraPermission.checkPermission()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 cameraPermission.requestPermission();
             }
             Log.v("PERMISSION_NOT", "PERMISSION_NOT");
@@ -679,7 +679,6 @@ public class Login extends AppCompatActivity {
     }
 
     //Location service part
-    //@RequiresApi(api = Build.VERSION_CODES.Q)
     private void requestPermissions() {
         boolean shouldProvideRationale = ActivityCompat.shouldShowRequestPermissionRationale(this,
                 Manifest.permission.ACCESS_FINE_LOCATION);

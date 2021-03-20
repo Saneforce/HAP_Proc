@@ -19,5 +19,6 @@ public interface ApiComponent {
     void inject(Reports_Outler_Name activity);
     void inject(Outlet_Report_View activity);
     void inject(Outet_Report_Details activity);
+    void inject(Dashboard_Route activity);
 
 }

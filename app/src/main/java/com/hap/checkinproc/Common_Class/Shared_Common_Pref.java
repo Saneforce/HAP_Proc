@@ -22,6 +22,11 @@ public class Shared_Common_Pref {
     public static String SF_EMP_ID = "sf_emp_id";
     public static String SF_DESIG = "sf_Designation_Short_Name";
     public static String SF_DEPT = "DeptName";
+
+    public static  Double Outletlat ;
+    public static  Double Outletlong;
+    public static  String OutletAddress;
+    public static  String Outler_AddFlag;
     public static String OutletName="OutletName";
     public static String OutletCode="OutletCode";
 

@@ -47,7 +47,7 @@
             android:background="@color/black">
 
             <TextView
-                android:id="@+id/textView1"
+                android:id="@+id/distributor_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
@@ -67,14 +67,15 @@
             android:weightSum="2">
 
             <TextView
-                android:id="@+id/route"
+                android:id="@+id/route_text"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="0.2"
                 android:drawableRight="@drawable/front_arrow"
                 android:gravity="center"
-                android:text="DAILY"
+                android:hint="Select the Route"
+                android:textColorHint="@color/white"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
                 android:textSize="18dp" />

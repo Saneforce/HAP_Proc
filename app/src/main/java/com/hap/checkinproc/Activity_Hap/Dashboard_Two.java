@@ -58,10 +58,10 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     public static final String CheckInDetail = "CheckInDetail";
     public static final String UserDetail = "MyPrefs";
     Shared_Common_Pref mShared_common_pref;
-GateEntryQREvents GateEvents;
+    GateEntryQREvents GateEvents;
     private RecyclerView recyclerView;
     private HomeRptRecyler mAdapter;
-    String viewMode = "", sSFType = "",mPriod="0";
+    String viewMode = "", sSFType = "", mPriod = "0";
     int cModMnth = 1;
     Button viewButton;
     Button StActivity, cardview3, cardview4, cardView5, btnCheckout;
@@ -88,7 +88,7 @@ GateEntryQREvents GateEvents;
     RecyclerView mRecyclerView;
     /*String Mode = "Bus";*/
     Button btnGateIn, btnGateOut;
-    ImageView mvPrvMn,mvNxtMn;
+    ImageView mvPrvMn, mvNxtMn;
     GateAdapter gateAdap;
     CardView cardGateDet;
     String dashMdeCnt = "";
@@ -174,14 +174,14 @@ GateEntryQREvents GateEvents;
         cardview3 = findViewById(R.id.cardview3);
         cardview4 = findViewById(R.id.cardview4);
         cardView5 = findViewById(R.id.cardview5);
-        mPriod="0";
-        mvNxtMn=findViewById(R.id.nxtMn);
-        mvPrvMn=findViewById(R.id.prvMn);
+        mPriod = "0";
+        mvNxtMn = findViewById(R.id.nxtMn);
+        mvPrvMn = findViewById(R.id.prvMn);
         mvNxtMn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mPriod=="-1"){
-                    mPriod="0";
+                if (mPriod == "-1") {
+                    mPriod = "0";
                     getMnthReports(0);
                 }
             }
@@ -190,7 +190,7 @@ GateEntryQREvents GateEvents;
         mvPrvMn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(mPriod=="0") {
+                if (mPriod == "0") {
                     mPriod = "-1";
                     getMnthReports(-1);
                 }
@@ -204,6 +204,7 @@ GateEntryQREvents GateEvents;
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerView.stopScroll();
 
 
         StActivity = findViewById(R.id.StActivity);
@@ -673,7 +674,7 @@ GateEntryQREvents GateEvents;
                                 editor.commit();
 
                                 //if (dashMdeCnt.equals("1"))
-                                if(response.body().size()>0){
+                                if (response.body().size() > 0) {
                                     Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
                                     takePhoto.putExtra("Mode", "COUT");
                                     startActivity(takePhoto);

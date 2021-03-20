@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -58,7 +59,7 @@ public class Weekly_Off extends AppCompatActivity {
     Gson gson;
     Button weeklySubmit;
     List<MaxMinDate> maxMinDates;
-    String maxYear, maxMonth, maxDay, minYear, minMonth, minDay,maxDate, minDate;
+    String maxYear = "", maxMonth = "", maxDay = "", minYear = "", minMonth = "", minDay = "", maxDate = "", minDate = "";
     Boolean CheckIn;
     ConstraintLayout ConstraintLayout;
 
@@ -152,13 +153,14 @@ public class Weekly_Off extends AppCompatActivity {
                             }
                         }, year, month, day);
                 Calendar calendarmin = Calendar.getInstance();
-                calendarmin.set(Integer.parseInt(minYear), Integer.parseInt(minMonth) - 1, Integer.parseInt(minDay));
-                Calendar calendarmax = Calendar.getInstance();
-                calendarmax.set(Integer.parseInt(maxYear), Integer.parseInt(maxMonth) - 1, Integer.parseInt(maxDay));
-                picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
-                picker.getDatePicker().setMaxDate(calendarmax.getTimeInMillis());
-
-                picker.show();
+                if (!TextUtils.isEmpty(minYear) && !TextUtils.isEmpty(minMonth) && !TextUtils.isEmpty(minDay)) {
+                    calendarmin.set(Integer.parseInt(minYear), Integer.parseInt(minMonth) - 1, Integer.parseInt(minDay));
+                    Calendar calendarmax = Calendar.getInstance();
+                    calendarmax.set(Integer.parseInt(maxYear), Integer.parseInt(maxMonth) - 1, Integer.parseInt(maxDay));
+                    picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
+                    picker.getDatePicker().setMaxDate(calendarmax.getTimeInMillis());
+                    picker.show();
+                }
             }
         });
 
@@ -323,6 +325,7 @@ public class Weekly_Off extends AppCompatActivity {
     public void onBackPressed() {
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
