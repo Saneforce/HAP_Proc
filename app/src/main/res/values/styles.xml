@@ -20,7 +20,7 @@
 
     <style name="RobotoButtonStyle" parent="android:Widget.Button">
         <item name="android:fontFamily">poppins_semibold</item>
-        <item name="android:textSize">@dimen/C13dp</item>
+        <item name="android:textSize">@dimen/C14dp</item>
         <item name="android:padding">16dp</item>
     </style>
 

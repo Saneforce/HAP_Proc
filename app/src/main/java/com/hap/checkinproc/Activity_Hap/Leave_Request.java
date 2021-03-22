@@ -250,6 +250,9 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
                                             calendarmin.set(Integer.parseInt(tominYear), Integer.parseInt(tominMonth) - 1, Integer.parseInt(tominDay));
                                             picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
+                                            calendarmin.add(Calendar.DAY_OF_YEAR, 3);
+                                            Log.d("MAXDay", String.valueOf(calendarmin.get(Calendar.DATE)));
+                                            picker.getDatePicker().setMaxDate(calendarmin.getTimeInMillis());
                                             picker.show();
 
 
@@ -261,7 +264,11 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                             }
                         }, year, month, day);
                 Calendar calendarmin = Calendar.getInstance();
-                calendarmin.set(Integer.parseInt(minYear), Integer.parseInt(minMonth) - 1, Integer.parseInt(minDay));
+                int mnth=Integer.parseInt(minMonth) - 2;
+                int fYr=Integer.parseInt(minYear);
+                if(mnth<0){ mnth=11;fYr=fYr-1;}
+                Log.d("MINMonth", String.valueOf(mnth));
+                calendarmin.set(fYr, mnth, 23);
                 picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
 
                 picker.show();

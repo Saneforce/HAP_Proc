@@ -338,6 +338,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     JsonObject newItem = new JsonObject();
                     newItem.addProperty("name", Itm.get("Status").getAsString());
                     newItem.addProperty("value", Itm.get("StatusCnt").getAsString());
+                    newItem.addProperty("Link", true);
+                    newItem.addProperty("Priod",m);
                     newItem.addProperty("color", Itm.get("StusClr").getAsString().replace(" !important", ""));
                     dyRpt.add(newItem);
                 }
@@ -380,6 +382,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 JsonObject newItem = new JsonObject();
                 newItem.addProperty("name", "Shift");
                 newItem.addProperty("value", fItm.get("SFT_Name").getAsString());
+                newItem.addProperty("Link", false);
                 newItem.addProperty("color", "#333333");
                 dyRpt.add(newItem);
                 newItem = new JsonObject();
@@ -630,6 +633,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             case R.id.button3:
                 intent = new Intent(this, View_All_Status_Activity.class);
                 intent.putExtra("Priod", mPriod);
+                intent.putExtra("Status", "");
+
                 break;
             case R.id.btnCheckout:
                 AlertDialogBox.showDialog(Dashboard_Two.this, "HAP Check-In", "Do you want to Checkout?", "Yes", "No", false, new AlertBox() {
