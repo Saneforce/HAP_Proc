@@ -11,14 +11,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
+
         <include layout="@layout/custom_toolbar_help"></include>
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/view_bg_color">
+
                 <TextView
                     android:id="@+id/headtext"
                     android:layout_width="match_parent"
@@ -86,6 +90,7 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/CurrentLocLin"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"

@@ -53,12 +53,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     TextView lblUserName, lblEmail;
     Button linMyday, linCheckin, lin_SFA, linApprovals, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift,
             linTourPlan, linExit, lin_check_in, linHolidayWorking, btnDaEntry;
-    Integer type,OTFlg=0;
+    Integer type, OTFlg = 0;
     Common_Class common_class;
     TextView approvalcount;
     Shared_Common_Pref shared_common_pref;
     String imageProfile = "", sSFType = "";
-    int onDuty;
+    Integer onDuty;
     ImageView profilePic;
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
@@ -142,7 +142,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linTaClaim = (findViewById(R.id.lin_ta_claim));
         linExtShift = (findViewById(R.id.lin_extenden_shift));
         linExtShift.setVisibility(View.GONE);
-        if (OTFlg==1) linExtShift.setVisibility(View.VISIBLE);
+        if (OTFlg == 1) linExtShift.setVisibility(View.VISIBLE);
         linTourPlan = (findViewById(R.id.lin_tour_plan));
         linTourPlan.setVisibility(View.GONE);
         if (sSFType.equals("1")) linTourPlan.setVisibility(View.VISIBLE);
@@ -300,10 +300,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 editors.remove("ShareModeIDs");
                 editors.remove("StoreId");
                 editors.commit();
-               // startActivity(new Intent(this, On_Duty_Activity.class));
-Intent oDutyInt= new Intent(this,On_Duty_Activity.class);
-oDutyInt.putExtra("Onduty",onDuty);
-startActivity(oDutyInt);
+                // startActivity(new Intent(this, On_Duty_Activity.class));
+                Intent oDutyInt = new Intent(this, On_Duty_Activity.class);
+                oDutyInt.putExtra("Onduty", onDuty);
+                startActivity(oDutyInt);
 
                 break;
             case R.id.lin_exit:
@@ -350,7 +350,7 @@ startActivity(oDutyInt);
                     // Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
 
                     Log.v("HAP_ON_DUTY", jsonObject.getString("CheckOnduty"));
-                    onDuty = Integer.parseInt(jsonObject.getString("CheckOnduty"));
+                    onDuty = Integer.valueOf(jsonObject.getString("CheckOnduty"));
                     linCheckin.setVisibility(View.VISIBLE);
                     if (flag == 1 && sSFType.equals("1")) {
                         JSONArray jsoncc = jsonObject.getJSONArray("Checkdayplan");

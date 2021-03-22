@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
@@ -62,7 +63,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     EditText toolSearch, retailercode;
     Button mSubmit;
     ApiInterface service;
-    LinearLayout linReatilerRoute, linReatilerClass, linReatilerChannel;
+    LinearLayout linReatilerRoute, linReatilerClass, linReatilerChannel, CurrentLocLin;
     TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel;
     Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
@@ -77,9 +78,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     JSONObject docMasterObject;
     String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue;
     Integer routeId1, classId, channelID;
-    String routeId;
+    String routeId, Compititor_Id, Compititor_Name, CatUniverSelectId, AvailUniverSelectId;
     Shared_Common_Pref shared_common_pref;
     SharedPreferences CheckInDetails;
+    Common_Class common_class;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,17 +90,27 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         linReatilerRoute = findViewById(R.id.linear_Retailer);
         txtRetailerRoute = findViewById(R.id.retailer_type);
         retailercode = findViewById(R.id.retailercode);
+        common_class = new Common_Class(this);
+        CurrentLocLin = findViewById(R.id.CurrentLocLin);
         CurrentLocationsAddress = findViewById(R.id.CurrentLocationsAddress);
         gson = new Gson();
+        shared_common_pref = new Shared_Common_Pref(this);
         service = ApiClient.getClient().create(ApiInterface.class);
         mSubmit = findViewById(R.id.submit_button);
-        CurrentLocationsAddress.setText("" + Shared_Common_Pref.OutletAddress);
         if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
             mSubmit.setVisibility(View.VISIBLE);
+            CurrentLocLin.setVisibility(View.VISIBLE);
+            routeId = shared_common_pref.getvalue("RouteSelect");
+            txtRetailerRoute.setText(shared_common_pref.getvalue("RouteName"));
+            CurrentLocationsAddress.setText(""+Shared_Common_Pref.OutletAddress);
+
         } else {
+            CurrentLocLin.setVisibility(View.GONE);
             Shared_Common_Pref.Outler_AddFlag = "0";
         }
-        shared_common_pref = new Shared_Common_Pref(this);
+
+
+
         getRouteDetails();
         getRetailerClass();
         getRetailerChannel();
@@ -110,11 +122,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 startActivity(new Intent(getApplicationContext(), Help_Activity.class));
             }
         });
-
-
         TextView txtErt = findViewById(R.id.toolbar_ert);
         TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
-
         txtErt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,8 +136,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             }
         });
-
-
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
         textColorAnim.setDuration(500);
@@ -167,11 +174,19 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         addRetailerName.clearFocus();
         Intent i = getIntent();
         if (i != null && i.getExtras() != null) {
-            addRetailerName.setText("" + i.getExtras().getString("OutletName"));
-            addRetailerAddress.setText("" + i.getExtras().getString("OutletAddress"));
-            txtRetailerRoute.setText("" + i.getExtras().getString("OutletRoute"));
-            addRetailerPhone.setText("" + i.getExtras().getString("OutletMobile"));
-            retailercode.setText("" + i.getExtras().getString("OutletCode"));
+            if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                Compititor_Id = i.getExtras().getString("Compititor_Id");
+                Compititor_Name = i.getExtras().getString("Compititor_Name");
+                CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
+                AvailUniverSelectId = i.getExtras().getString("AvailUniverSelectId");
+                //The key argument here must match that used in the other activity
+            } else {
+                addRetailerName.setText("" + i.getExtras().getString("OutletName"));
+                addRetailerAddress.setText("" + i.getExtras().getString("OutletAddress"));
+                txtRetailerRoute.setText("" + i.getExtras().getString("OutletRoute"));
+                addRetailerPhone.setText("" + i.getExtras().getString("OutletMobile"));
+                retailercode.setText("" + i.getExtras().getString("OutletCode"));
+            }
         }
 
         mSubmit.setOnClickListener(new View.OnClickListener() {
@@ -357,21 +372,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     /*Add New Retailer*/
     public void addNewRetailers() {
-
-
         DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Calendar calobjw = Calendar.getInstance();
         KeyDate = shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code);
         keyCodeValue = keyEk + KeyHyp + KeyDate + dfw.format(calobjw.getTime()).hashCode();
-
         Log.e("KEY_CODE_HASH", keyCodeValue);
-
-
         JSONObject reportObject = new JSONObject();
-
         docMasterObject = new JSONObject();
-
-
         try {
             reportObject.put("town_code", "'" + routeId + "'");
             reportObject.put("wlkg_sequence", "null");
@@ -380,8 +387,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_doctor_phone", "'" + addRetailerPhone.getText().toString() + "'");
             reportObject.put("unlisted_doctor_cityname", "'" + addRetailerCity.getText().toString() + "'");
             reportObject.put("unlisted_doctor_landmark", "''");
-            reportObject.put("lat", "''");
-            reportObject.put("long", "''");
+            reportObject.put("Compititor_Id", common_class.addquote(Compititor_Id));
+            reportObject.put("Compititor_Name", common_class.addquote(Compititor_Name));
+            reportObject.put("CatUniverSelectId", common_class.addquote(CatUniverSelectId));
+            reportObject.put("AvailUniverSelectId", common_class.addquote(AvailUniverSelectId));
+            reportObject.put("lat", common_class.addquote(String.valueOf(Shared_Common_Pref.Outletlat)));
+            reportObject.put("long", common_class.addquote(String.valueOf(Shared_Common_Pref.Outletlong)));
             reportObject.put("unlisted_doctor_areaname", "''");
             reportObject.put("unlisted_doctor_contactperson", "''");
             reportObject.put("unlisted_doctor_designation", "''");
@@ -398,7 +409,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_class", classId);
             reportObject.put("DrKeyId", "'" + keyCodeValue + "'");
             docMasterObject.put("unlisted_doctor_master", reportObject);
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -436,7 +446,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
-
         if (type == 8) {
             txtRetailerRoute.setText(myDataset.get(position).getName());
             routeId = myDataset.get(position).getId();

@@ -1,7 +1,7 @@
 package com.hap.checkinproc.Model_Class;
 
 public class DashboardParticulars {
-
+    //2021-03-19 00
     String Name, thisMonth, lastmonth, percentage,Sl_NO;
 
     public DashboardParticulars(String Sl_NO, String Name, String thisMonth, String lastmonth, String percentage) {

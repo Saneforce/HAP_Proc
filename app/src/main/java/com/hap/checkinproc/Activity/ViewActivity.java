@@ -41,6 +41,7 @@ import com.hap.checkinproc.Activity.Util.ModelDynamicView;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
 import com.hap.checkinproc.Activity.Util.UpdateUi;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
@@ -965,7 +966,7 @@ public class ViewActivity extends AppCompatActivity {
 
     public void getMulipart(String path, int x) {
         MultipartBody.Part imgg = convertimg("file", path);
-        HashMap<String, RequestBody> values = field("MR0417");
+        HashMap<String, RequestBody> values = field(Shared_Common_Pref.Sf_Code);
         CallApiImage(values, imgg, x);
     }
 

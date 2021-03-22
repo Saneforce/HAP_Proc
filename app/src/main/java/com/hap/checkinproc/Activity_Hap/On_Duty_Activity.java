@@ -140,7 +140,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     private ArrayList<String> travelTypeList;
     String driverAllowanceBoolean = "", StrToCode = "", STRCode = "";
 
-    int OnDutyCount;
+    Integer OnDutyCount=0;
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -226,9 +226,9 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         ModeOfTravel = findViewById(R.id.mode_of_travel);
         cardHapLoaction = findViewById(R.id.card_hap_loaction);
 
-        OnDutyCount = (int) getIntent().getSerializableExtra("Onduty");
+        OnDutyCount = (Integer) getIntent().getSerializableExtra("Onduty");
 
-
+        Log.v("ON_Duty_COUNT", String.valueOf(OnDutyCount));
         TextMode = findViewById(R.id.txt_mode);
         TextToAddress = findViewById(R.id.on_duty_to);
         onDutyFrom = findViewById(R.id.on_duty_from);
@@ -257,7 +257,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             public void onClick(View v) {
 
                 if (OnDutyCount != 0) {
-                    Log.v("sdsadsadsa","dsadsadsa");
+                    Log.v("sdsadsadsa", "dsadsadsa");
                     if (!selecthaplocationss.getText().toString().equals("")) {
                         //haplocation
                         Log.v("HAP_LOACTION", "hggh" + selecthaplocationss.getText().toString());
@@ -267,7 +267,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                         } else if (purposeofvisitedittext.getText().toString().matches("")) {
                             Log.v("HAP_LOACTION", "Enter Visit");
                             Toast.makeText(On_Duty_Activity.this, "Enter Visit purpose", Toast.LENGTH_SHORT).show();
-                        }  else {
+                        } else {
                             submitData();
                         }
                     } else {
@@ -275,7 +275,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                             Toast.makeText(On_Duty_Activity.this, "Enter  Location", Toast.LENGTH_SHORT).show();
                         } else if (purposeofvisitedittext.getText().toString().matches("")) {
                             Toast.makeText(On_Duty_Activity.this, "Enter Visit purpose", Toast.LENGTH_SHORT).show();
-                        }  else {
+                        } else {
                             submitData();
                         }
 
@@ -283,7 +283,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 } else {
 
 
-                    Log.v("sdsadsadsa","123456767");
                     if (!selecthaplocationss.getText().toString().equals("")) {
                         //haplocation
                         Log.v("HAP_LOACTION", "hggh" + selecthaplocationss.getText().toString());

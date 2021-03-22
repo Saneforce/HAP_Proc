@@ -155,7 +155,6 @@ public class Check_in extends FragmentActivity implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
 
-
                 send();
                 try {
                     takePicture();
@@ -166,7 +165,6 @@ public class Check_in extends FragmentActivity implements OnMapReadyCallback {
                 Intent i = new Intent(Check_in.this, Dashboard_Two.class);
 
                 startActivity(i);
-
 
             }
 
