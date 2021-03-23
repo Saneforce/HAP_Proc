@@ -67,7 +67,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
 
     EditText cardDate, edtActual, edtEarly, edtAmt;
     DatePickerDialog picker;
-    String minDate, minYear, minMonth, minDay, fullPath = "", finalPath = "", filePath = "";
+    String minDate, minYear, minMonth, minDay, fullPath = "", finalPath = "", filePath = "",imgUrl="";
     ArrayList<String> travelTypeList;
     Common_Model mCommon_model_spinner;
     List<Common_Model> listOrderType = new ArrayList<>();
@@ -465,9 +465,9 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
                         jsonData = response.body().string();
                         Log.v("request_data_upload", String.valueOf(jsonData));
                         JSONObject js = new JSONObject(jsonData);
-                        if (js.getString("success").equalsIgnoreCase("true")) {
+                        if (js.getBoolean("success")) {
                             Log.v("printing_dynamic_cou", js.getString("url"));
-
+                            imgUrl = js.getString("url");
                         }
                     }
                 } catch (Exception e) {
@@ -514,6 +514,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             json.put("da_actua_time", edtActual.getText().toString());
             json.put("da_early_time", edtEarly.getText().toString());
             json.put("da_amt", edtAmt.getText().toString());
+            json.put("da_img", imgUrl);
         } catch (JSONException e) {
             e.printStackTrace();
         }
