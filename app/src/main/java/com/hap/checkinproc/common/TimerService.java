@@ -120,10 +120,10 @@ public class TimerService extends Service {
 
             if (locationServices.checkPermission() == false) {
                 sMsg = "Higher Version";
-                Log.v("KARTHIC_KUMAR", sMsg);
+                //Log.v("KARTHIC_KUMAR", sMsg);
             } else {
                 /*   sMsg = "PERMISIN IS THERE";*/
-                Log.v("KARTHIC_KUMAR", sMsg);
+                //Log.v("KARTHIC_KUMAR", sMsg);
 
             }
 
@@ -261,11 +261,11 @@ public class TimerService extends Service {
 
             if (locationServices.checkPermission1() == false) {
                 sMsg = "Lower Version";
-                Log.v("KARTHIC_KUMAR", sMsg);
+                //Log.v("KARTHIC_KUMAR", sMsg);
 
             } else {
                    sMsg = "PERMISIN IS THERE";
-                Log.v("KARTHIC_KUMAR", sMsg);
+                //Log.v("KARTHIC_KUMAR", sMsg);
 
             }
 

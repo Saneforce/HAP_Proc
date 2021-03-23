@@ -44,7 +44,9 @@ import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
@@ -71,7 +73,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     ListView lstFlashMode;
     LinearLayout lstModalFlash;
     SeekBar skBarBright;
-
     String imagePath;
     String imageFileName;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
@@ -80,7 +81,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     int mCamId = 0;
     String[] flashModes = {"OFF", "Auto", "ON", "Torch"};
     private File file;
-
     SurfaceView preview;
     SurfaceHolder mHolder;
     private int noOfCameras;
@@ -407,7 +407,14 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Log.e("Image_Capture", Uri.fromFile(file).toString());
         Log.e("Image_Capture", "IAMGE     " + bitmap);
 
-        saveCheckIn();
+        LocationFinder locationFinder=new LocationFinder(this, new LocationEvents() {
+            @Override
+            public void OnLocationRecived(Location location) {
+                Common_Class.location=location;
+
+                saveCheckIn();
+            }
+        });
     }
 
     private void saveCheckIn() {
@@ -420,6 +427,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
             CheckInInf.put("eDate", CDate + " " + CTime);
             CheckInInf.put("eTime", CTime);
+
             double lat = 0, lng = 0;
             if (location != null) {
                 lat = location.getLatitude();
