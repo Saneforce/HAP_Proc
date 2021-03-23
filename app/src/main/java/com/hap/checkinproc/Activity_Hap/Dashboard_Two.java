@@ -204,7 +204,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerView.stopScroll();
+        //mRecyclerView.stopScroll();
 
 
         StActivity = findViewById(R.id.StActivity);
