@@ -108,6 +108,7 @@
                         <ImageView
                             android:id="@+id/img_started_km"
                             android:layout_width="@dimen/C80dp"
+                            android:rotation="90"
                             android:layout_height="@dimen/C80dp"
                             android:layout_marginLeft="@dimen/C20dp"></ImageView>
                     </LinearLayout>
@@ -213,6 +214,7 @@
                         <ImageView
                             android:id="@+id/img_ended_km"
                             android:layout_width="@dimen/C80dp"
+                            android:rotation="90"
                             android:layout_height="@dimen/C80dp"
                             android:layout_marginLeft="@dimen/C20dp"></ImageView>
                     </LinearLayout>

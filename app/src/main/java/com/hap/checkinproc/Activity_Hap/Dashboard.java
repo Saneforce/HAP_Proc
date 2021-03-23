@@ -94,9 +94,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         btnDaEntry = findViewById(R.id.btn_da_exp_entry);
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
-/*
-        editor.putString("url",profile);*/
 
+        /* editor.putString("url",profile);*/
 /*
         ImageView inm= findViewById(R.id.imag);
         Bitmap bitmap = ((BitmapDrawable) inm.getDrawable()).getBitmap();
@@ -131,6 +130,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linMyday.setVisibility(View.GONE);
         if (sSFType.equals("1")) linMyday.setVisibility(View.VISIBLE);
 
+        Log.v("SSFTYPE_DASH_BOARD", sSFType);
 
         linCheckin = findViewById(R.id.lin_check_in);
         linRequstStaus = (findViewById(R.id.lin_request_status));
@@ -362,6 +362,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                             Log.e("LENGTH_FOR_LOOP", String.valueOf(jsoncc.length()));
                             if (jsoncc.getJSONObject(0).getInt("Cnt") < 1) {
                                 Intent intent = new Intent(Dashboard.this, AllowanceActivity.class);
+                                intent.putExtra("My_Day_Plan", "One");
                                 startActivity(intent);
                             } else {
                                 linMyday.setVisibility(View.GONE);
@@ -467,7 +468,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         super.onResume();
         //  startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
-        Get_MydayPlan(1, "check/mydayplan");
+        //Get_MydayPlan(1, "check/mydayplan");
     }
 
     @Override
@@ -475,7 +476,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         super.onPause();
         //  startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
-        Get_MydayPlan(1, "check/mydayplan");
+     //   Get_MydayPlan(1, "check/mydayplan");
     }
 
     @Override
@@ -488,6 +489,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onStart() {
         super.onStart();
+       // Get_MydayPlan(1, "check/mydayplan");
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
@@ -495,6 +497,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onRestart() {
         super.onRestart();
+        Get_MydayPlan(1, "check/mydayplan");
         startService(new Intent(this, TimerService.class));
     }
 }

@@ -376,7 +376,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         preview = (SurfaceView) findViewById(R.id.PREVIEW);
         mHolder = preview.getHolder();
         mHolder.addCallback(ImageCapture.this);
-        setDefaultCameraId((mCamId == 0) ? "front" : "back");
+
+        Log.v("mCamId_VALUE", String.valueOf(mCamId));
+        setDefaultCameraId((mCamId == 1) ? "front" : "back");
         mCamera = Camera.open(mCamId);
         try {
             mCamera.setPreviewDisplay(mHolder);
@@ -388,6 +390,35 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
 
         Log.e("mCAmer_id", String.valueOf(mCamId));
+
+
+
+
+/*
+
+        if (mCamera != null) {
+            mCamera.stopPreview();
+            mCamera.release();
+            mCamera = null;
+        }
+        preview = (SurfaceView) findViewById(R.id.PREVIEW);
+        mHolder = preview.getHolder();
+        mHolder.addCallback(this);
+        setDefaultCameraId((mCamId == 0) ? "front" : "back");
+        mCamera = Camera.open(mCamId);
+
+        try {
+            mCamera.setPreviewDisplay(mHolder);
+        } catch (IOException e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
+            e.printStackTrace();
+        }
+        setCameraDisplayOrientation();
+        mCamera.startPreview();
+
+        Log.e("mCAmer_id", String.valueOf(mCamId));
+*/
+
     }
 
 
@@ -448,7 +479,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
             if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty") || mMode.equalsIgnoreCase("holidayentry")) {
                 SharedPreferences.Editor editor = CheckInDetails.edit();
-                if(mMode.equalsIgnoreCase("CIN")){
+                if (mMode.equalsIgnoreCase("CIN")) {
                     editor.putString("Shift_Selected_Id", CheckInInf.getString("Shift_Selected_Id"));
                     editor.putString("Shift_Name", CheckInInf.getString("Shift_Name"));
                     editor.putString("ShiftStart", CheckInInf.getString("ShiftStart"));
@@ -459,7 +490,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     editor.putString("FTime", CTime);
                 editor.putString("Logintime", CTime);
 
-                if(mMode.equalsIgnoreCase("onduty"))
+                if (mMode.equalsIgnoreCase("onduty"))
                     editor.putString("On_Duty_Flag", "1");
                 else
                     editor.putString("On_Duty_Flag", "0");
