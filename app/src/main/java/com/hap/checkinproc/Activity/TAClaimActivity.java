@@ -90,7 +90,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import id.zelory.compressor.Compressor;
 import okhttp3.MultipartBody;
@@ -153,9 +152,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             tominYear = "", tominMonth = "", tominDay = "";
 
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
-            oePosCnt = 0, lcPosCnt = 0, tvSize = 0, styDate = 0, ttLod = 0;
+            oePosCnt = 0, lcPosCnt = 0, tvSize = 0, ttLod = 0;
 
     int size = 0, lcSize = 0, OeSize = 0, daysBetween = 0;
+    long styDate = 0;
 
     Double tofuel = 0.0, ldgEliAmt = 0.0, ldgDrvEligi = 0.0, gTotal = 0.0, TotLdging = 0.0,
             GrandTotalAllowance = 0.0, fAmount = 0.0, doubleAmount = 0.0, myBrdAmt = 0.0, drvBrdAmt = 0.0,
@@ -414,7 +414,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 String currentDateandTime = sdf.format(new Date());
 
 
-                                ldg_cout.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth + " " + currentDateandTime);
+                                ldg_cout.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                                 difference();
 
                             }
@@ -964,7 +964,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         Log.v("CURRENT_TIME", String.valueOf(currentDateandTime));
 
 
-                        ldg_cin.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth + " " + currentDateandTime);
+                        ldg_cin.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                         MaxMinDateTo(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
                         difference();
 
@@ -2918,7 +2918,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 img_lodg_prvw.setVisibility(View.VISIBLE);
             }
 
-
             ldg_cin.setText("");
             ldg_cout.setText("");
             lodgStyLocation.setText("");
@@ -2927,7 +2926,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             } else {
                 TotalDays.setVisibility(View.VISIBLE);
             }
-
             edt_ldg_bill.setText("");
 
         }
@@ -2980,7 +2978,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 lcAttach.setVisibility(View.GONE);
                 lcPreview.setVisibility(View.GONE);
             }
-
 
         } else if (type == 90) {
 
@@ -3373,23 +3370,33 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         try {
+
             Date dateBefore = myFormat.parse(ldg_cin.getText().toString());
             Date dateAfter = myFormat.parse(ldg_cout.getText().toString());
             long difference = dateAfter.getTime() - dateBefore.getTime();
-            daysBetween = (int) TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
-            System.out.println("Number of Days between dates: " + (daysBetween + 1));
-            stayTotal = String.valueOf(daysBetween + 1);
+
+            long diffSecondss = difference / 1000 % 60;
+            long diffMinutess = difference / (60 * 1000) % 60;
+            long diffHourss = difference / (60 * 60 * 1000) % 24;
+            long diffDayss = difference / (24 * 60 * 60 * 1000);
+            System.out.println("Number of Days between dates: " + "Total hr: " + diffHourss + " Total mins:" + diffMinutess);
+            System.out.println("Number of Days between dates: " + diffDayss + "" + diffHourss + "" + diffMinutess + "" + diffSecondss);
+
+            if (diffDayss == 0) {
+                diffDayss = diffDayss + 1;
+            }
+            stayTotal = String.valueOf(diffDayss);
             if (!stayTotal.equals("")) {
                 TotalDays.setVisibility(View.VISIBLE);
                 txtStyDays.setText(stayTotal);
                 stayDays.setVisibility(View.VISIBLE);
-                styDate = daysBetween + 1;
-                stayEgTotal = styDate * ldgEliAmt;
+                diffDayss = diffDayss + 1;
+                stayEgTotal = diffDayss * ldgEliAmt;
+
                 txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(stayEgTotal));
                 ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(stayEgTotal));
 
                 SumOFLodging();
-
 
             } else {
                 stayDays.setVisibility(View.GONE);

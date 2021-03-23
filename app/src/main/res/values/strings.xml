@@ -25,7 +25,7 @@
     <string name="permission_rationale" translatable="false">Please Grant Location Permission</string>
     <string name="ok" translatable="false">Ok</string>
     <string name="permission_denied_explanation" translatable="false">Permission Denied</string>
-    <string name="settings" translatable="false">string</string>
+    <string name="settings" translatable="false">Settings</string>
     <string name="reason" translatable="false">Reason</string>
     <string name="txt_jointwork" translatable="false">Joint work</string>
     <string name="txt_enter_reason" translatable="false">Enter the Reason</string>

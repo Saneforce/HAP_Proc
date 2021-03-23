@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/re_Layout_imag_preview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
     <FrameLayout
         android:id="@+id/frame_Layout_imag_preview"
         android:layout_width="match_parent"
@@ -18,13 +16,9 @@
                 android:id="@+id/parent_linear_layout"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
-                android:layout_marginTop="@dimen/C20dp"
-                android:layout_marginRight="@dimen/C20dp"
-                android:layout_marginLeft="@dimen/C20dp"
+                android:layout_margin="@dimen/C20dp"
                 android:background="#FFF"
-                android:orientation="horizontal">
-
-            </GridLayout>
+                android:orientation="horizontal"/>
 
         <ImageView
             android:id="@+id/checking"
@@ -38,9 +32,6 @@
             android:scaleType="fitStart"
             android:src="@drawable/close" />
 
-
     </FrameLayout>
 
-
-</ScrollView>
 </RelativeLayout>

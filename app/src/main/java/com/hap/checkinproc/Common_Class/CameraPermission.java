@@ -4,11 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.util.Log;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
+import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
@@ -25,39 +23,20 @@ public class CameraPermission extends Activity {
         this._context = _context;
     }
 
-    public void CameraPermissionMethod() {
-
-        if (!checkPermission()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                //  requestPermissions();
-                requestPermission();
-
-            }
-
-            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
-        } else {
-
-
-            Log.v("PERMISSION", "PERMISSION");
-        }
-    }
-
-
     public boolean checkPermission() {
-        /*int locationReq = ContextCompat.checkSelfPermission(_context, ACCESS_FINE_LOCATION);*/
+        int locationReq = ContextCompat.checkSelfPermission(_context, ACCESS_FINE_LOCATION);
+        int coarseReq = ContextCompat.checkSelfPermission(_context, ACCESS_COARSE_LOCATION);
         int cameraReq = ContextCompat.checkSelfPermission(_context, CAMERA);
         int wrteStReq = ContextCompat.checkSelfPermission(_context, WRITE_EXTERNAL_STORAGE);
         int readStReq = ContextCompat.checkSelfPermission(_context, READ_EXTERNAL_STORAGE);
 
-        return /*locationReq == PackageManager.PERMISSION_GRANTED &&*/ cameraReq == PackageManager.PERMISSION_GRANTED &&
-                wrteStReq == PackageManager.PERMISSION_GRANTED && readStReq == PackageManager.PERMISSION_GRANTED;
+        return locationReq == PackageManager.PERMISSION_GRANTED && cameraReq == PackageManager.PERMISSION_GRANTED &&
+                coarseReq == PackageManager.PERMISSION_GRANTED && wrteStReq == PackageManager.PERMISSION_GRANTED &&
+                readStReq == PackageManager.PERMISSION_GRANTED;
     }
 
     public void requestPermission() {
-
-        ActivityCompat.requestPermissions(activity, new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-       // ActivityCompat.requestPermissions(activity, new String[]{ACCESS_FINE_LOCATION, CAMERA, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-
+        ActivityCompat.requestPermissions(activity, new String[]{CAMERA, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE, ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
     }
 
     @Override
@@ -68,12 +47,13 @@ public class CameraPermission extends Activity {
 
                     boolean locationAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
                     boolean cameraAccepted = grantResults[1] == PackageManager.PERMISSION_GRANTED;
+                    boolean ReadAccepted = grantResults[2] == PackageManager.PERMISSION_GRANTED;
+                    boolean LoactionAccepted = grantResults[3] == PackageManager.PERMISSION_GRANTED;
+                    boolean CorseAccepted = grantResults[4] == PackageManager.PERMISSION_GRANTED;
 
-                    if (locationAccepted && cameraAccepted) {
+                    if (locationAccepted && cameraAccepted && ReadAccepted && LoactionAccepted && CorseAccepted ) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                          /*  if (shouldShowRequestPermissionRationale(ACCESS_FINE_LOCATION)) {
 
-                            }*/
                         }
 
                     }

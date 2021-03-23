@@ -9,13 +9,19 @@
     <TextView
         android:id="@+id/camera"
         style="@style/TextStyle"
+        android:layout_width="match_parent"
+        android:padding="@dimen/C5dp"
+        android:textSize="@dimen/C20dp"
         android:text="Camera" />
 
     <include layout="@layout/part_view" />
 
     <TextView
         android:id="@+id/upload"
+        android:layout_width="match_parent"
         style="@style/TextStyle"
+        android:padding="@dimen/C5dp"
+        android:textSize="@dimen/C20dp"
         android:text="Multiple Upload" />
 
 </LinearLayout>

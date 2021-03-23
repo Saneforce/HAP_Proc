@@ -95,7 +95,7 @@ public class Login extends AppCompatActivity {
     // Tracks the bound state of the service.
     private boolean mBound = false;
     ApiInterface apiInterface;
-
+    CameraPermission cameraPermission;
     Common_Class DT = new Common_Class();
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -169,19 +169,12 @@ public class Login extends AppCompatActivity {
         eMail = UserDetails.getString("email", "");
         name.setText(eMail);
 
-        if (!checkPermission()) {
-            //if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            requestPermissions();
-            //}
-        } else {
-        }
-
-
-        CameraPermission cameraPermission = new CameraPermission(Login.this, getApplicationContext());
+        cameraPermission = new CameraPermission(Login.this, getApplicationContext());
 
         if (!cameraPermission.checkPermission()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 cameraPermission.requestPermission();
+                Log.v("PERMISSION_NOT", "PERMISSION_NOT");
             }
             Log.v("PERMISSION_NOT", "PERMISSION_NOT");
         } else {
@@ -301,7 +294,7 @@ public class Login extends AppCompatActivity {
         if (Login == true || CheckIn == true) {
 
             /*PERMISSION REQUEST*/
-            if (checkPermission()) {
+            if (cameraPermission.checkPermission()) {
                 Intent playIntent = new Intent(this, SANGPSTracker.class);
                 bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
                 startService(playIntent);
@@ -430,7 +423,7 @@ public class Login extends AppCompatActivity {
         startService(inten);*/
         Log.v("LOG_IN_LOCATION", "ONRESUME");
         /*REQUEST PERMISISON*/
-        if (checkPermission()) {
+        if (cameraPermission.checkPermission()) {
             if (mLUService == null)
                 mLUService = new SANGPSTracker(getApplicationContext());
 

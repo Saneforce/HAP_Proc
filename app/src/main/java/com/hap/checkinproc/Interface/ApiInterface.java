@@ -399,4 +399,8 @@ public interface ApiInterface {
     Call<JsonArray> gteDta(@Query("Sf_code") String sfCode, @Query("TodayDate") String Tdate);
 
 
+  @POST("Db_V13.php?axn=get/daExpen")
+    Call<ResponseBody> daExpen(@Query("Sf_code") String sfCode,@Query("data") String daDATA);
+
+
 }
