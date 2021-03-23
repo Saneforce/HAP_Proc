@@ -79,15 +79,17 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     CustomListViewDialog customDialog;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<OutletReport_View_Modal> OutletReport_View_Modal;
-    @Inject
-    Retrofit retrofit;
+
+    String Route_id, Distributor_Id;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard__route);
         recyclerView = findViewById(R.id.leaverecyclerview);
-        ((HAPApp) getApplication()).getNetComponent().inject(this);
+        GetAllDetails();
+        ViewAllOutletOrder();
         presenter = new MasterSync_Implementations(this, new Master_Sync_View());
         presenter.requestDataFromServer();
         shared_common_pref = new Shared_Common_Pref(this);
@@ -114,8 +116,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         common_class = new Common_Class(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
-        GetAllDetails();
-        ViewAllOutletOrder();
+
     }
 
     public void GetAllDetails() {
@@ -141,9 +142,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     @Override
                     public void onIntentClick(int position) {
                         Shared_Common_Pref.Outler_AddFlag = "0";
+                        Log.e("Route_Outlet_Info", Shared_Common_Pref.Outler_AddFlag);
                         Shared_Common_Pref.OutletName = Retailer_Modal_List.get(position).getName().toUpperCase() + "~" + Retailer_Modal_List.get(position).getId();
                         Shared_Common_Pref.OutletCode = Retailer_Modal_List.get(position).getId();
-                        common_class.CommonIntentwithFinish(Route_Product_Info.class);
+                        common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
 
                     }
                 }));
@@ -174,9 +176,17 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 completeview.setVisibility(View.INVISIBLE);
                 pendingview.setVisibility(View.VISIBLE);
                 break;
-
             case R.id.ReachedOutlet:
-                common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
+                if (Distributor_Id == null || Distributor_Id.equals("")) {
+                    Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
+                } else if (Route_id == null || Route_id.equals("")) {
+                    Toast.makeText(this, "Select The Route", Toast.LENGTH_SHORT).show();
+                } else {
+                    shared_common_pref.save("RouteSelect", Route_id);
+                    shared_common_pref.save("RouteName", route_text.getText().toString());
+                    shared_common_pref.save("Distributor_ID", Distributor_Id);
+                    common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
+                }
                 break;
             case R.id.distributor_text:
                 customDialog = new CustomListViewDialog(Dashboard_Route.this, distributor_master, 2);
@@ -214,11 +224,13 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         customDialog.dismiss();
         if (type == 2) {
             route_text.setText("");
+            Distributor_Id = myDataset.get(position).getId();
             distributor_text.setText(myDataset.get(position).getName());
             loadroute(myDataset.get(position).getId());
         } else if (type == 3) {
+            Route_id = myDataset.get(position).getId();
             route_text.setText(myDataset.get(position).getName());
-            OutletFilter(myDataset.get(position).getId());
+           // OutletFilter(myDataset.get(position).getId());
         }
 
     }
@@ -323,7 +335,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     public void ViewAllOutletOrder() {
         DateFormat df = new SimpleDateFormat("yyyy-MM-d");
         Calendar calobj = Calendar.getInstance();
-        ApiInterface service = retrofit.create(ApiInterface.class);
+        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "table/list");
         QueryString.put("divisionCode", Shared_Common_Pref.Div_Code.replace(",", ""));

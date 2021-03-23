@@ -4,15 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SFA_Activity.Dashboard_Route">
-
     <LinearLayout
         android:id="@+id/db1_root"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
         <include layout="@layout/custom_toolbar_help"></include>
-
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -23,7 +20,6 @@
                 android:background="@color/black"
                 android:orientation="horizontal"
                 android:weightSum="2">
-
                 <TextView
                     android:id="@+id/route"
                     android:layout_width="match_parent"
@@ -42,18 +38,34 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/view_bg_color">
+                android:background="@color/view_bg_color"
+                android:orientation="horizontal"
+                android:weightSum="2">
 
                 <TextView
                     android:id="@+id/headtext"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
+                    android:layout_weight="0.5"
                     android:text="Product Info"
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
                     android:textSize="17dp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/Nextadd"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1.5"
+                    android:gravity="start"
+                    android:text="Next"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:visibility="gone" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -76,7 +88,6 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
                 android:textSize="17dp" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -124,10 +135,29 @@
                             android:text="YES"></Switch>
                     </LinearLayout>
 
+                    <LinearLayout
+                        android:id="@+id/reason_categoryLin"
+                        android:layout_width="match_parent"
+                        android:layout_height="65dp"
+                        android:layout_weight="1"
+                        android:padding="@dimen/C5dp"
+                        android:visibility="gone">
+
+                        <EditText
+                            android:id="@+id/reason_category"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/textbox_bg"
+                            android:gravity="start"
+                            android:hint="Please Enter Comments"
+                            android:textColor="@color/grey_500"
+                            android:textSize="@dimen/C13dp" />
+                    </LinearLayout>
+
                     <GridView
                         android:id="@+id/category"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/travel_allowance"
+                        android:layout_height="300dp"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -160,8 +190,6 @@
                             android:textColor="@color/black"
                             android:textSize="18dp" />
 
-
-
                         <Switch
                             android:id="@+id/availswitch"
                             android:layout_width="match_parent"
@@ -174,7 +202,7 @@
                     <GridView
                         android:id="@+id/availablitygrid"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/travel_allowance"
+                        android:layout_height="300dp"
                         android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
@@ -182,19 +210,23 @@
                         android:padding="@dimen/C5dp"
                         android:stretchMode="columnWidth" />
 
-                    <EditText
-                        android:id="@+id/reason_availablity"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="65dp"
                         android:layout_weight="1"
-                        android:background="@drawable/textbox_bg"
-                        android:elevation="5dp"
-                        android:gravity="start"
-                        android:hint="Please Enter Comments"
-                        android:textColor="@color/grey_500"
-                        android:textSize="@dimen/C13dp"
-                        android:visibility="gone" />
+                        android:padding="@dimen/C5dp">
 
+                        <EditText
+                            android:id="@+id/reason_availablity"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/textbox_bg"
+                            android:gravity="start"
+                            android:hint="Please Enter Comments"
+                            android:textColor="@color/grey_500"
+                            android:textSize="@dimen/C13dp"
+                            android:visibility="gone" />
+                    </LinearLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -224,15 +256,14 @@
                             android:layout_weight="1"
                             android:gravity="center"
                             android:padding="@dimen/C10dp">
-
                             <TextView
-                                android:id="@+id/leave_type"
+                                android:id="@+id/Compititorname"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
                                 android:background="@drawable/round_rect_light_grey"
                                 android:drawablePadding="@dimen/C10dp"
-                                android:text="AAvin,hutsun,sona"
+                                android:hint="Select Brand"
                                 android:textColor="@color/black"
                                 android:textSize="17dp" />
                         </LinearLayout>
