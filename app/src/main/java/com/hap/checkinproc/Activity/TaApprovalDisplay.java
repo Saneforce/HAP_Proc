@@ -95,7 +95,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
         txtLA = findViewById(R.id.txt_la);
         txtLC = findViewById(R.id.txt_lc);
         txtOE = findViewById(R.id.txt_oe);
-        txtLA.setText("Rs.0.0");
+        txtLA.setText("Rs. 0.0");
 
         txtDate.setText(String.valueOf(getIntent().getSerializableExtra("date")));
 
@@ -215,7 +215,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
 
     public void FuelApproval(View v) {
 
-        if (!ta.equals("0.0")) {
+        if (!txtTL.getText().equals("Rs. 0.0")) {
             Intent intent = new Intent(getApplicationContext(), FuelAllowance.class);
             intent.putExtra("jsonTravDetai", jsonTravDetai.toString());
             intent.putExtra("start_Photo", stImg);
@@ -274,6 +274,8 @@ public class TaApprovalDisplay extends AppCompatActivity {
                     oe = Double.parseDouble(jsonObject.get("Oe_totalAmt").getAsString());
                     trv_lc = Double.parseDouble(jsonObject.get("trv_lc_amt").getAsString());
 
+
+                    Log.v("txtTLtxtTL", String.valueOf(ta));
 
                     txtDA.setText("Rs. " + brd);
                     txtTL.setText("Rs. " + ta);
