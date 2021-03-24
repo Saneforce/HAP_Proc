@@ -258,6 +258,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         for (int i = 0; i < noOfCameras; i++) {
             Camera.getCameraInfo(i, cameraInfo);
+
             if (cameraInfo.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
                 mCamId = i;
             }
