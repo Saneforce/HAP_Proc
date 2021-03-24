@@ -140,7 +140,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     private ArrayList<String> travelTypeList;
     String driverAllowanceBoolean = "", StrToCode = "", STRCode = "";
 
-    Integer OnDutyCount=0;
+    String OnDutyCount = "", onIntentCOunt = " ";
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -188,6 +188,10 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             }
         });
 
+        /*oDutyInt.putExtra("Onduty", onDuty); */
+
+        onIntentCOunt = String.valueOf(getIntent().getSerializableExtra("Onduty"));
+        Log.v("onIntentCOunt", onIntentCOunt);
 
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
@@ -226,7 +230,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         ModeOfTravel = findViewById(R.id.mode_of_travel);
         cardHapLoaction = findViewById(R.id.card_hap_loaction);
 
-        OnDutyCount = (Integer) getIntent().getSerializableExtra("Onduty");
 
         Log.v("ON_Duty_COUNT", String.valueOf(OnDutyCount));
         TextMode = findViewById(R.id.txt_mode);
@@ -252,11 +255,19 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         cardHapLoaction.setOnClickListener(this);
         otherlocationbutton.setOnClickListener(this);
         haplocationbutton.setOnClickListener(this);
+
+
+        if (sharedpreferences.contains("Onduty")) {
+            OnDutyCount = sharedpreferences.getString("Onduty", "");
+            Log.v("ON_DUTY_COUNT", OnDutyCount);
+        }
+
+
         submitbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if (OnDutyCount != 0) {
+                if (!OnDutyCount.equals("0")) {
                     Log.v("sdsadsadsa", "dsadsadsa");
                     if (!selecthaplocationss.getText().toString().equals("")) {
                         //haplocation
@@ -458,7 +469,8 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 CameraPermission cameraPermission = new CameraPermission(On_Duty_Activity.this, getApplicationContext());
 
                 if (!cameraPermission.checkPermission()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         cameraPermission.requestPermission();
                     }
                     Log.v("PERMISSION_NOT", "PERMISSION_NOT");
@@ -500,7 +512,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         });
 
         Log.v("HAP_ON_DUTY1", String.valueOf(OnDutyCount));
-        if (OnDutyCount != 0) {
+        if (!OnDutyCount.equals("0")) {
             Log.v("HAP_ON_DUTY2", String.valueOf(OnDutyCount));
             lincheck.setVisibility(View.GONE);
         } else {
