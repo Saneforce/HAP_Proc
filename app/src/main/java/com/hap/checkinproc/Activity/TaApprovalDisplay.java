@@ -214,15 +214,15 @@ public class TaApprovalDisplay extends AppCompatActivity {
     }
 
     public void FuelApproval(View v) {
-
-        if (!txtTL.getText().equals("Rs. 0.0")) {
+/*
+        if (!txtTL.getText().equals("Rs. 0.0")) {*/
             Intent intent = new Intent(getApplicationContext(), FuelAllowance.class);
             intent.putExtra("jsonTravDetai", jsonTravDetai.toString());
             intent.putExtra("start_Photo", stImg);
             intent.putExtra("End_photo", endImg);
             intent.putExtra("date", String.valueOf(getIntent().getSerializableExtra("date")));
             startActivity(intent);
-        }
+    /*    }*/
     }
 
     public void LCApproval(View v) {

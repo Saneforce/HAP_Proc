@@ -58,7 +58,7 @@ public class LocationServices extends Activity {
 
 
     public void requestPermission() {
-        ActivityCompat.requestPermissions(activity, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
+        ActivityCompat.requestPermissions(activity, new String[]{ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION,ACCESS_BACKGROUND_LOCATION}, REQUEST_PERMISSIONS_REQUEST_CODE);
     }
 
     @Override

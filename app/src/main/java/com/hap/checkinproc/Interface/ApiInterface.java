@@ -140,7 +140,7 @@ public interface ApiInterface {
                               @Field("data") String data);
 
     @FormUrlEncoded
-    @POST("Db_V13.php")
+    @POST("Db_v300.php")
     Call<Object> GetTPObject1(@Query("AMod") String Amod, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                               @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn,
                               @Field("data") String data);

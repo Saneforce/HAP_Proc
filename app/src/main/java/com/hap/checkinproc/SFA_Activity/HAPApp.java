@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Activity;
 import android.app.Activity;
 import android.app.Application;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.hap.checkinproc.SFA_Activity.ApiComponent;
 import com.hap.checkinproc.SFA_Activity.ApiModule;
@@ -17,6 +18,8 @@ public class HAPApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+
         mApiComponent = DaggerApiComponent.builder()
                 .appModule(new AppModule(this))
                 .apiModule(new ApiModule("https://hap.sanfmcg.com/server/"))
