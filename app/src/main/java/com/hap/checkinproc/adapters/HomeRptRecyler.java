@@ -24,6 +24,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.ImageCapture;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.Status_Activity.View_All_Status_Activity;
 
 public class HomeRptRecyler  extends RecyclerView.Adapter<HomeRptRecyler.ViewHolder>{
     private static final String TAG = "Home Dashboard reports";
@@ -54,6 +55,19 @@ public class HomeRptRecyler  extends RecyclerView.Adapter<HomeRptRecyler.ViewHol
         if(!itm.get("color").getAsString().equalsIgnoreCase(""))
         holder.txtValue.setTextColor(Color.parseColor(itm.get("color").getAsString()));
         holder.txtValue.setMovementMethod(LinkMovementMethod.getInstance());
+        if(itm.get("Link")!=null){
+        if(itm.get("Link").getAsBoolean()==true){
+            holder.parentLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(mContext, View_All_Status_Activity.class);
+                    intent.putExtra("Priod", itm.get("Priod").getAsString());
+                    intent.putExtra("Status", holder.txtLable.getText());
+                    mContext.startActivity(intent);
+                }
+            });
+        }
+        }
         try {
             if (itm.get("type").getAsString().equalsIgnoreCase("geo")) {
                 holder.txtValue.setOnClickListener(new View.OnClickListener() {

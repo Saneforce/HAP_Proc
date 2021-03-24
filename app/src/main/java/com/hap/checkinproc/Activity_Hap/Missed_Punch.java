@@ -262,13 +262,14 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
         //id="Shift";
         //name="date";
         //flag="checkintime";
-        missedDates = myDataset.get(position).getName();
-        missedShift = myDataset.get(position).getId();
+        missedDates = myDataset.get(position).getId();
+        missedShift = myDataset.get(position).getName();
         missedCHeckin = myDataset.get(position).getFlag();
         checkIn.setText(myDataset.get(position).getFlag());
-        shiftType.setText(myDataset.get(position).getId());
-        misseddateselect.setText(myDataset.get(position).getName());
+        shiftType.setText(myDataset.get(position).getName());
+        misseddateselect.setText(myDataset.get(position).getId());
         checkOutTime.setText(myDataset.get(position).getAddress());
+        missedCheckOut=myDataset.get(position).getAddress();
     }
 
     /*Submit Missed punch*/
@@ -347,6 +348,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                Log.d("ErrorSubmit",t.getMessage());
             }
         });
     }

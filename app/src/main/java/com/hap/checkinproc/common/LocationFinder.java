@@ -11,11 +11,12 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.hap.checkinproc.Interface.LocationEvents;
 
 public class LocationFinder {
     /*The desired interval for location updates. Inexact. Updates may be more or less frequent.*/
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
-
+    static LocationEvents mlocEvents;
     /* The fastest rate for active location updates. Updates will never be more frequent than this value. */
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
             UPDATE_INTERVAL_IN_MILLISECONDS / 2;
@@ -39,10 +40,10 @@ public class LocationFinder {
     /* The current location. */
     private Location mLocation;
 
-    public LocationFinder(Context context) {
+    public LocationFinder(Context context,LocationEvents locationEvents) {
         mContext=context;
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
-
+        mlocEvents=locationEvents;
         createLocationRequest();
         getLocation();
     }
@@ -66,6 +67,7 @@ public class LocationFinder {
                         public void onComplete(@NonNull Task<Location> task) {
                             if (task.isSuccessful() && task.getResult() != null) {
                                 location = task.getResult();
+                                mlocEvents.OnLocationRecived(location);
                             } else {
                                 Log.w(TAG, "Failed to get location.");
                             }
