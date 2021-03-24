@@ -100,7 +100,7 @@ public class ViewReportActivity extends AppCompatActivity {
         Intent intent = getIntent();
         productId = intent.getStringExtra("ProductID");
         orderDate = intent.getStringExtra("OrderDate");
-        Log.e("productID1234567,", productId + "    " + orderDate);
+        //Log.e("productID1234567,", productId + "    " + orderDate);
 
         DateRecyclerView = (RecyclerView) findViewById(R.id.date_recycler);
         DateRecyclerView.setHasFixedSize(true);
@@ -137,7 +137,7 @@ public class ViewReportActivity extends AppCompatActivity {
 
                 List<DateResult> mDReportModels = mReportActivities.getData();
 
-                Log.e("MdReportModels", String.valueOf(mDReportModels.size()));
+                //Log.e("MdReportModels", String.valueOf(mDReportModels.size()));
 
                 for (int i = 0; i < mDReportModels.size(); i++) {
                     mArrayList.add(((mDReportModels.get(i).getValue())));
@@ -148,7 +148,7 @@ public class ViewReportActivity extends AppCompatActivity {
                         .sum());
 
 
-                Log.e("TOTAL_SUM", String.valueOf(intSum));
+                //Log.e("TOTAL_SUM", String.valueOf(intSum));
 
 
                 TotalValue.setText(String.valueOf(intSum));
@@ -187,14 +187,14 @@ public class ViewReportActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override

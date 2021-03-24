@@ -144,13 +144,13 @@
             style="@style/ButtonStyle"
             android:layout_weight="1"
             android:background="@drawable/button_blueg"
-            android:text="My Reports" />
+            android:text="My Dashboard" />
 
         <Button
             android:id="@+id/btnExit"
             style="@style/ButtonStyle"
             android:layout_weight="1"
-            android:background="@drawable/button_red"
+            android:background="@drawable/button_check_out"
             android:text="Exit" />
 
 

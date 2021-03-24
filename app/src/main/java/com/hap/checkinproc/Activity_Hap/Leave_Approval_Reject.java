@@ -179,7 +179,7 @@ public class Leave_Approval_Reject extends AppCompatActivity implements View.OnC
         jsonArray.put(jsonObject);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, jsonArray.toString());
-        Log.e("Log_TpQuerySTring", QueryString.toString());
+        //Log.e("Log_TpQuerySTring", QueryString.toString());
         Log.e("Log_Tp_SELECT", jsonArray.toString());
 
         mCall.enqueue(new Callback<JsonObject>() {

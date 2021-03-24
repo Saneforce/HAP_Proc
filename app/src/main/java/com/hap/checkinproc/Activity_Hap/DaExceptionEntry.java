@@ -180,9 +180,9 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         cameraPermission.requestPermission();
                     }
-                    Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                    //Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                 } else {
-                    Log.v("PERMISSION", "PERMISSION");
+                    //Log.v("PERMISSION", "PERMISSION");
                     popupCapture();
 
                 }
@@ -199,7 +199,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 txtTotalAmt.setText("Rs. " + edtAmt.getText().toString() + ".00");
-                Log.v("EDT_AMOUNT", edtAmt.getText().toString());
+                //Log.v("EDT_AMOUNT", edtAmt.getText().toString());
             }
 
             @Override
@@ -269,9 +269,9 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         minYear = separated1[0];
         minMonth = separated1[1];
         minDay = separated1[2];
-        Log.e("Sresdfsd", minYear);
-        Log.e("Sresdfsd", minMonth);
-        Log.e("Sresdfsd", minDay);
+        //Log.e("Sresdfsd", minYear);
+        //Log.e("Sresdfsd", minMonth);
+        //Log.e("Sresdfsd", minDay);
 
     }
 

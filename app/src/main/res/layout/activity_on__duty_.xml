@@ -543,7 +543,6 @@
                         android:background="@drawable/otherlocations"
                         android:text="HAP Locations" />
 
-
                     <Button
                         android:id="@+id/otherlocationbutton"
                         style="@style/ButtonStyle"
@@ -560,13 +559,13 @@
                     <Button
                         android:id="@+id/closebutton"
                         style="@style/ButtonStyle"
-                        android:background="@drawable/button_red"
+                        android:background="@drawable/button_check_out"
                         android:text="Close" />
 
                     <Button
                         android:id="@+id/exitclose"
                         style="@style/ButtonStyle"
-                        android:background="@drawable/button_red"
+                        android:background="@drawable/button_check_out"
                         android:text="Close"
                         android:visibility="gone" />
 

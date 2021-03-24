@@ -114,7 +114,7 @@ public class Ocheck_in extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Location>> call, Response<List<Location>> response) {
                 locationList=response.body();
-                Log.e("azxs", String.valueOf(locationList.size()));
+                //Log.e("azxs", String.valueOf(locationList.size()));
 
                 setSpinner();
 
@@ -206,7 +206,7 @@ public class Ocheck_in extends AppCompatActivity {
         super.onResume();
 
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
@@ -214,21 +214,21 @@ public class Ocheck_in extends AppCompatActivity {
         super.onPause();
 
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override

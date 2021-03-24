@@ -140,9 +140,9 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
 
         shared_common_pref = new Shared_Common_Pref(this);
         gson = new Gson();
-        Log.e("CAT_Details", SF_CODE);
-        Log.e("CAT_Details", DIVISION_CODE);
-        Log.e("CAT_Details", CUTT_OFF_CODE);
+        //Log.e("CAT_Details", SF_CODE);
+        //Log.e("CAT_Details", DIVISION_CODE);
+        //Log.e("CAT_Details", CUTT_OFF_CODE);
 
         SubCategoryHeader();
         currentTime();
@@ -180,7 +180,7 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
             public void onClick(View v) {
 
                 String STR = grandTotal.getText().toString();
-                Log.e("STRVALUE", STR);
+                //Log.e("STRVALUE", STR);
                 if (STR.equals("0")) {
                     Toast.makeText(OrderCategoryActivity.this, "Please choose to cart", Toast.LENGTH_SHORT).show();
                 } else {
@@ -275,9 +275,9 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
 
     /*subCategory header Listview*/
     public void SubCategoryHeader() {
-        Log.e("CAT_Details", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
-        Log.e("CAT_Details", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
-        Log.e("CAT_Details", shared_common_pref.getvalue(Shared_Common_Pref.StateCode));
+        //Log.e("CAT_Details", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+        //Log.e("CAT_Details", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
+        //Log.e("CAT_Details", shared_common_pref.getvalue(Shared_Common_Pref.StateCode));
         long startTime = System.currentTimeMillis();
 
         String tempalteValue = "{\"tableName\":\"category_master\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
@@ -293,18 +293,18 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
                     System.out.println("Total elapsed http request/response time in milliseconds: " + elapsedTime);
 
                     HeaderCat headerCat = response.body();
-                    Log.e("RESPOSNE", headerCat.toString());
+                    //Log.e("RESPOSNE", headerCat.toString());
                     headerNameArrayList = headerCat.getData();
                     HeaderName mHeaderName = new HeaderName();
                     for (int i = 0; i < headerNameArrayList.size(); i++) {
                         String str = headerNameArrayList.get(i).getName();
                         mHeaderName.setName(str);
                         mHeaderNameValue.add(str);
-                        Log.e("HEADER_NAME", String.valueOf(mHeaderNameValue));
+                        //Log.e("HEADER_NAME", String.valueOf(mHeaderNameValue));
                         eventsArrayList = headerNameArrayList.get(i).getProduct();
                         for (int j = 0; j < eventsArrayList.size(); j++) {
                             productUnitId = String.valueOf(eventsArrayList.get(j).getId());
-                            Log.e("Product_code_value", productUnitId);
+                            //Log.e("Product_code_value", productUnitId);
 
                         }
                         childListData(eventsArrayList, headerCat, headerNameArrayList);
@@ -315,7 +315,7 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
 
             @Override
             public void onFailure(Call<HeaderCat> call, Throwable t) {
-                Log.e("RESPOSNE", "response.body().toString()");
+                //Log.e("RESPOSNE", "response.body().toString()");
             }
         });
     }
@@ -332,7 +332,7 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
             seachName = eventsArrayLists.get(j).getName();
             mHeaderNameValue.add(seachName);
 
-            Log.e("PRODUCT_TYPE_VALUE", "PRODUCT_TYPE" + productUnitType);
+            //Log.e("PRODUCT_TYPE_VALUE", "PRODUCT_TYPE" + productUnitType);
             event_list_parent_adapter = new ParentListAdapter(headerCat, headerNameArrayLists, eventsArrayLists, OrderCategoryActivity.this, mHeaderNameValue, modelRetailDetails, new ParentListInterface() {
                 @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
@@ -372,7 +372,7 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
                         Product_Array_List.add(new Product_Array(itemID, productName, productQuantiy, productQuantiy * Integer.parseInt(productCode), Integer.parseInt(productCode), catImage, catName, productUnit));
                         int sum = 0;
 
-                        Log.e("PRODUCT_ARRAY_SIZE", String.valueOf(Product_Array_List));
+                        //Log.e("PRODUCT_ARRAY_SIZE", String.valueOf(Product_Array_List));
                         for (int i = 0; i < Product_Array_List.size(); i++) {
                             sum = sum + Product_Array_List.get(i).getSampleqty();
                             System.out.println(" " + "  " + Product_Array_List.get(i).getProductname() + "Qty" + "  " + Product_Array_List.get(i).getProductqty() + "SampleQty" + "  " + Product_Array_List.get(i).getSampleqty());
@@ -385,7 +385,7 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
                         grandTotal.setText("" + sum);
 
                         item_count.setText("Items:" + Product_Array_List.size());
-                        Log.e("DATA_CHECKING", String.valueOf(Product_Array_List.size()));
+                        //Log.e("DATA_CHECKING", String.valueOf(Product_Array_List.size()));
                     }
 
 
@@ -468,13 +468,13 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
                  /*   modelRetailDetails.clear();
                     RetailerType(productItemId);*/
 
-                    Log.e("OrderCategoryActivity", productSaleUnit + " " + productItemId);
+                    //Log.e("OrderCategoryActivity", productSaleUnit + " " + productItemId);
 
                 }
 
                 @Override
                 public void ProductImage(String ImageUrl) {
-                    Log.e("Image_URl", ImageUrl);
+                    //Log.e("Image_URl", ImageUrl);
                     Intent intent = new Intent(OrderCategoryActivity.this, ProductImageView.class);
                     intent.putExtra("ImageUrl", ImageUrl);
                     startActivity(intent);
@@ -501,8 +501,8 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
 
         String jsonCars = gson.toJson(Product_Array_List);
 
-        Log.e("PRODUCCT_LIST", String.valueOf(Product_Array_List));
-        Log.e("PRODUCCT_LIST", "fg");
+        //Log.e("PRODUCCT_LIST", String.valueOf(Product_Array_List));
+        //Log.e("PRODUCCT_LIST", "fg");
 
         Intent mIntent = new Intent(OrderCategoryActivity.this, ViewCartActivity.class);
         mIntent.putExtra("list_as_string", jsonCars);
@@ -567,9 +567,9 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                Log.e("MAsterSyncView_Result", response.body() + "");
+                //Log.e("MAsterSyncView_Result", response.body() + "");
                 System.out.println("Route_Matser" + response.body().toString());
-                Log.e("TAG", "response 33: " + new Gson().toJson(response.body()));
+                //Log.e("TAG", "response 33: " + new Gson().toJson(response.body()));
 
 
                 userType = new TypeToken<ArrayList<ProductUnitModel>>() {
@@ -579,13 +579,13 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
 
                     ProductModelId = String.valueOf(mProductUnitModel.get(i).getProductCode());
 
-                    Log.e("Inner_id_123456", productItemId);
-                    Log.e("Inner_id", ProductModelId);
+                    //Log.e("Inner_id_123456", productItemId);
+                    //Log.e("Inner_id", ProductModelId);
                     if (productItemId.equals(ProductModelId)) {
                         String name = mProductUnitModel.get(i).getName();
                         mCommon_model_spinner = new Common_Model(ProductModelId, name, "flag");
-                        Log.e("LeaveType_Request", ProductModelId);
-                        Log.e("LeaveType_Request", name);
+                        //Log.e("LeaveType_Request", ProductModelId);
+                        //Log.e("LeaveType_Request", name);
                         modelRetailDetails.add(mCommon_model_spinner);
                     }
 
@@ -613,8 +613,8 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
         if (type == 8) {
 
             productUnitType = myDataset.get(position).getName();
-            Log.e("PRODUCT_TYPE_VALUE_A", productUnitType);
-            Log.e("PRODUCT_TYPE_VALUE_A", String.valueOf(myDataset.size()));
+            //Log.e("PRODUCT_TYPE_VALUE_A", productUnitType);
+            //Log.e("PRODUCT_TYPE_VALUE_A", String.valueOf(myDataset.size()));
             ProductUnitBox productUnitBox = new ProductUnitBox(productUnitType, myDataset.get(position).getId(), 0);
 
 
@@ -627,7 +627,7 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
         super.onResume();
 
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
@@ -635,21 +635,21 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
         super.onPause();
 
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override

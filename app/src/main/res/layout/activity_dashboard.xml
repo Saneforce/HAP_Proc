@@ -47,7 +47,6 @@
             android:textSize="@dimen/C14dp"
             android:textStyle="bold" />
 
-
         <TextView
             android:id="@+id/lblEmail"
             android:layout_width="match_parent"
@@ -81,7 +80,6 @@
                 android:visibility="gone" />
 
             <com.google.android.flexbox.FlexboxLayout
-
                 android:id="@+id/flxlayut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -165,15 +163,11 @@
 
             </com.google.android.flexbox.FlexboxLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/C40dp">
 
-            </LinearLayout>
             <Button
                 android:id="@+id/lin_exit"
                 style="@style/ButtonStyle"
-                android:background="@drawable/button_red"
+                android:background="@drawable/button_check_out"
                 android:text="Exit" />
 
         </LinearLayout>

@@ -53,7 +53,7 @@ public class Travel_Approval_Adapter extends RecyclerView.Adapter<Travel_Approva
             JsonObject jsonObject = (JsonObject) leave_Approval_ModelsList.get(position);
             {
 
-                Log.v("Leave_APPROEV", jsonObject.toString());
+                //Log.v("Leave_APPROEV", jsonObject.toString());
                 holder.textviewname.setText(jsonObject.get("Sf_Name").getAsString());
                 holder.textviewdate.setText(jsonObject.get("id").getAsString());
                 holder.leavedays.setText(jsonObject.get("Total_Amount").getAsString());

@@ -97,7 +97,7 @@ public class Help_Activity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 // locationList=response.body();
-                Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
+                //Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
                 Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
                 userType = new TypeToken<ArrayList<Help_Model>>() {
                 }.getType();
