@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<!--    <color name="colorAccent">#03DAC5</color>-->
+    <!--    <color name="colorAccent">#03DAC5</color>-->
     <color name="colorAccent">#138F9F</color>
 
-<!--    <color name="colorPrimary">#0FFFE7</color>-->
-<!--    <color name="colorPrimaryDark">#1ac0d6</color>-->
+    <!--    <color name="colorPrimary">#0FFFE7</color>-->
+    <!--    <color name="colorPrimaryDark">#1ac0d6</color>-->
 
     <color name="colorPrimary">#1ac0d6</color>
     <color name="colorPrimaryDark">#5593D1</color>
-<!--    <color name="colorPrimaryDark">#3700B3</color>-->
+    <!--    <color name="colorPrimaryDark">#3700B3</color>-->
 
 
-<!-- <color name="colorAccent">#3700B3</color>-->
+    <!-- <color name="colorAccent">#3700B3</color>-->
 
-<!-- <color name="colorPrimary">#3700B3</color>-->
-<!-- <color name="colorPrimaryDark">#3700B3</color>-->
+    <!-- <color name="colorPrimary">#3700B3</color>-->
+    <!-- <color name="colorPrimaryDark">#3700B3</color>-->
 
     <color name="white">#fff</color>
     <color name="awhite">#A8FFFFFF</color>
@@ -34,21 +34,21 @@
     <color name="green">#008000</color>
     <color name="color_red">#E53935</color>
     <color name="lightBlueDark">#FF5593D1</color>
-
-
+    <color name="gate_in">#488F23</color>
     <color name="greyColor">#2C000000</color>
     <color name="subHeader">#9C000000</color>
+    <color name="checkout">#D04736</color>
 
     <color name="subExpHeader">#009688</color>
     <color name="GrandTotal">#4CAF50</color>
 
-   <!--button Colors-->
+    <!--button Colors-->
     <color name="Request">#840013</color>
-   <color name="Reports">#3f48ca</color>
-   <color name="OnDuty">#01a5e4</color>
-   <color name="Approvals">#014143</color>
-   <color name="TAClaim">#a14b9f</color>
-   <color name="Extended">#fd8024</color>
+    <color name="Reports">#3f48ca</color>
+    <color name="OnDuty">#01a5e4</color>
+    <color name="Approvals">#014143</color>
+    <color name="TAClaim">#a14b9f</color>
+    <color name="Extended">#fd8024</color>
 
     <color name="Allbackround">#F5EDEE</color>
     <color name="jointowrk_title_bg_color">#DDDCDC</color>
@@ -89,7 +89,6 @@
     <color name="CheckIn">#009688</color>
 
     <color name="Exit">#d34836</color>
-
 
 
 </resources>

@@ -30,8 +30,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:elevation="@dimen/C5dp">
+                    android:elevation="@dimen/C5dp"
+                    android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/txUserName"
                         android:layout_width="match_parent"
@@ -63,6 +64,7 @@
                         android:textColor="#ff4500"
                         android:textSize="14sp" />
                 </LinearLayout>
+
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -190,7 +192,8 @@
                                     android:layout_width="60dp"
                                     android:layout_height="32dp"
                                     android:layout_gravity="right"
-                                    android:background="@color/colorPrimaryDark"
+                                    android:background="@drawable/button_blue"
+                                    android:elevation="@dimen/C5dp"
                                     android:padding="2dp"
                                     android:text="View All"
                                     android:textColor="#ffffff"
@@ -280,14 +283,14 @@
                         android:id="@+id/btn_gate_in"
                         style="@style/ButtonStyle"
                         android:layout_weight="1"
-                        android:background="@drawable/button_green"
+                        android:background="@drawable/button_gate_in"
                         android:text="Gate In" />
 
                     <Button
                         android:id="@+id/btn_gate_out"
                         style="@style/ButtonStyle"
                         android:layout_weight="1"
-                        android:background="@drawable/button_green"
+                        android:background="@drawable/button_amber"
                         android:text="Gate Out" />
 
                 </LinearLayout>
@@ -302,15 +305,14 @@
                         style="@style/ButtonStyle"
                         android:layout_weight="1"
                         android:background="@drawable/button_amber"
-                        android:text="Leave / permission" />
+                        android:text="Requests &amp; Status" />
 
                     <Button
                         android:id="@+id/cardview4"
                         style="@style/ButtonStyle"
                         android:layout_weight="1"
                         android:background="@drawable/button_purple"
-                        android:text="Travel Allowance"
-                        android:visibility="gone" />
+                        android:text="TA &amp; Claim" />
 
                 </LinearLayout>
 
@@ -333,7 +335,7 @@
                         android:id="@+id/btnCheckout"
                         style="@style/ButtonStyle"
                         android:layout_weight="1"
-                        android:background="@drawable/button_red"
+                        android:background="@drawable/button_check_out"
                         android:text="Check-out" />
 
                 </LinearLayout>

@@ -145,7 +145,6 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         }
 */
 
-
     }
 
     private void CloseImgPreview() {
@@ -180,7 +179,6 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         mCamera.startPreview();
         Log.e("mCAmer_id", String.valueOf(mCamId));
     }
-
 
     private void saveImgPreview() {
         RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
@@ -323,10 +321,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         }
     }
 
-    @Override
-    public void onBackPressed() {
 
-    }
 
     @Override
     protected void onResume() {

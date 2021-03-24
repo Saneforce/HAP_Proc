@@ -3079,7 +3079,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         ldgModes.add(mCommon_model_spinner);
         mCommon_model_spinner = new Common_Model("Joined Stay", "JS");
         ldgModes.add(mCommon_model_spinner);
-        mCommon_model_spinner = new Common_Model("Stay At Relaytive's House", "RS");
+        mCommon_model_spinner = new Common_Model("Stay At Relative's House", "RS");
         ldgModes.add(mCommon_model_spinner);
 
         customDialog = new CustomListViewDialog(TAClaimActivity.this, ldgModes, 9);
