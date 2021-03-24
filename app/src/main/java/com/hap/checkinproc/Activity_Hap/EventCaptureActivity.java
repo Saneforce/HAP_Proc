@@ -53,8 +53,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class
-EventCaptureActivity extends AppCompatActivity {
+public class EventCaptureActivity extends AppCompatActivity {
 
 
     Button TakeEventPicture;
@@ -208,7 +207,6 @@ EventCaptureActivity extends AppCompatActivity {
                     @Override
                     public void onIntentClick(int Name) {
                         Log.e("Delete_Position", String.valueOf(tasks.get(Name)));
-
 
                         AlertDialogBox.showDialog(EventCaptureActivity.this, "", "Are you surely want to delete?", "Yes", "No", false, new AlertBox() {
                             @Override

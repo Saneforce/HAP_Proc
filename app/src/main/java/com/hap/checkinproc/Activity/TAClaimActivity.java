@@ -2697,7 +2697,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 lcModes2.put("u_key", oeTxtUKey.getText().toString());
                 lcModes2.put("exp_type", "OE");
 
-             /*   JSONArray lcModeRef1 = new JSONArray();
+                JSONArray lcModeRef1 = new JSONArray();
                 for (int da = 0; da < newEdt.size(); da++) {
                     JSONObject AditionallLocalConvenyance = new JSONObject();
                     AditionallLocalConvenyance.put("KEY", OEdynamicList.get(da));
@@ -2705,7 +2705,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                     lcModeRef1.put(AditionallLocalConvenyance);
                 }
-                lcModes2.put("ad_exp", lcModeRef1);*/
+                lcModes2.put("ad_exp", lcModeRef1);
                 othrExp.put(lcModes2);
                 Log.v("OE_EXPENSE", lcModes2.toString());
 

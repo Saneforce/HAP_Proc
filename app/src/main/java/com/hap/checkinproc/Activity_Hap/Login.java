@@ -126,6 +126,7 @@ public class Login extends AppCompatActivity {
                 });
 
 
+
 /* mRegistrationBroadcastReceiver = new BroadcastReceiver() {
  @Override
  public void onReceive(Context context, Intent intent) {
@@ -171,14 +172,16 @@ public class Login extends AppCompatActivity {
 
         cameraPermission = new CameraPermission(Login.this, getApplicationContext());
 
-        if (!cameraPermission.checkPermission()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+            if (!cameraPermission.checkPermission()) {
                 cameraPermission.requestPermission();
-                Log.v("PERMISSION_NOT", "PERMISSION_NOT");
             }
-            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!cameraPermission.checkPermission1()) {
+                cameraPermission.requestPermission1();
+            }
         } else {
-            Log.v("PERMISSION", "PERMISSION");
+
         }
 
 
@@ -522,6 +525,7 @@ public class Login extends AppCompatActivity {
         Log.d(TAG, "TWO " + deviceToken);
         //eMail="rdo1@hap.in";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
+        //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "haptest4@hap.in", deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {

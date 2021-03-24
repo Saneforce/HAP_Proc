@@ -25,7 +25,7 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/C50dp">
+                android:layout_marginBottom="@dimen/C100dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -495,13 +495,8 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
+                    style="@style/TextStyle"
                     android:text="@string/reason"
-                    android:textColor="@color/txt_color_black"
-                    android:textSize="@dimen/C16dp"
-                    android:textStyle="bold"
                     android:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatEditText
@@ -517,6 +512,7 @@
                     android:visibility="visible" />
 
                 <TextView
+
                     android:id="@+id/L_rejectsave"
                     android:layout_width="110dp"
                     android:layout_height="wrap_content"
@@ -540,37 +536,24 @@
             android:orientation="horizontal">
 
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <Button
+                style="@style/ButtonStyle"
                 android:layout_weight="1"
                 android:background="@color/GrandTotal"
                 android:onClick="onApproval"
-                android:padding="@dimen/C10dp"
-                android:text="Approve "
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="@dimen/C13dp"
-                android:textStyle="bold"></TextView>
+                android:text="Approve "/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <Button
+                style="@style/ButtonStyle"
                 android:layout_weight="1"
                 android:background="@color/color_red"
                 android:onClick="onReject"
-                android:padding="@dimen/C10dp"
-                android:text="Reject"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="@dimen/C13dp"
-                android:textStyle="bold"></TextView>
+                android:text="Reject"/>
 
 
         </LinearLayout>
 
         <include layout="@layout/back_arrow"></include>
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

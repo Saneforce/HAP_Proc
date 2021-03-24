@@ -58,7 +58,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     TextView approvalcount;
     Shared_Common_Pref shared_common_pref;
     String imageProfile = "", sSFType = "";
-    Integer onDuty;
+    String onDuty ="";
     ImageView profilePic;
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
@@ -69,6 +69,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     public static final String modeToKm = "SharedToKmsss";
     public static final String StartedKm = "StartedKMsss";
     public static final String StartedImage = "SharedImage";
+    SharedPreferences.Editor editors;
+    SharedPreferences sharedpreferences;
 
 
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
@@ -350,7 +352,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     // Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
 
                     Log.v("HAP_ON_DUTY", jsonObject.getString("CheckOnduty"));
-                    onDuty = Integer.valueOf(jsonObject.getString("CheckOnduty"));
+                    onDuty =jsonObject.getString("CheckOnduty");
+
+                    sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+                    editors = sharedpreferences.edit();
+                    editors.putString("Onduty", onDuty);
+                    editors.commit();
+
                     linCheckin.setVisibility(View.VISIBLE);
                     if (flag == 1 && sSFType.equals("1")) {
                         JSONArray jsoncc = jsonObject.getJSONArray("Checkdayplan");

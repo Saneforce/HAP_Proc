@@ -177,9 +177,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-
                 <LinearLayout
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/C10dp">
@@ -188,13 +186,12 @@
                         android:id="@+id/event_capture_list"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="@dimen/C8dp"></androidx.recyclerview.widget.RecyclerView>
-
+                        android:padding="@dimen/C8dp"/>
                 </LinearLayout>
-
             </LinearLayout>
         </ScrollView>
-
     </LinearLayout>
+
     <include layout="@layout/back_arrow"></include>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

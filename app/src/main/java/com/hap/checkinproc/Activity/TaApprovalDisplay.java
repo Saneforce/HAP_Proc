@@ -49,12 +49,12 @@ public class TaApprovalDisplay extends AppCompatActivity {
     Common_Class common_class;
     Shared_Common_Pref mShared_common_pref;
     String date = " ", SlStart = "", TotalAmt = "", sfCode = "", STEND = "", SDA = "", SLC = "", SOE = "", stImg = "",
-            endImg = "",lodgTotal = "";
+            endImg = "", lodgTotal = "";
     LinearLayout linAccept, linReject;
     AppCompatEditText appCompatEditText;
     JsonArray jsonArray = null, jsonTravDetai = null, lcDraftArray = null, oeDraftArray = null, trvldArray = null, ldArray = null,
             daArray = null;
-    Double ldgTtl,brd, ta, ldg, oe, lc, trv_lc;
+    Double ldgTtl, brd, ta, ldg, oe, lc, trv_lc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,7 +95,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
         txtLA = findViewById(R.id.txt_la);
         txtLC = findViewById(R.id.txt_lc);
         txtOE = findViewById(R.id.txt_oe);
-
+        txtLA.setText("Rs. 0.0");
 
         txtDate.setText(String.valueOf(getIntent().getSerializableExtra("date")));
 
@@ -214,15 +214,15 @@ public class TaApprovalDisplay extends AppCompatActivity {
     }
 
     public void FuelApproval(View v) {
-
-        if (!ta.equals("0.0")) {
+/*
+        if (!txtTL.getText().equals("Rs. 0.0")) {*/
             Intent intent = new Intent(getApplicationContext(), FuelAllowance.class);
             intent.putExtra("jsonTravDetai", jsonTravDetai.toString());
             intent.putExtra("start_Photo", stImg);
             intent.putExtra("End_photo", endImg);
             intent.putExtra("date", String.valueOf(getIntent().getSerializableExtra("date")));
             startActivity(intent);
-        }
+    /*    }*/
     }
 
     public void LCApproval(View v) {
@@ -236,7 +236,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
     }
 
     public void LAApproval(View v) {
-        if (!ldgTtl.equals("0.0")) {
+        if (!txtLA.getText().equals("Rs. 0.0")) {
             Intent intent = new Intent(getApplicationContext(), LodgingCliamActivity.class);
             intent.putExtra("lodgAllowance", ldArray.toString());
             intent.putExtra("lodgAll_Total", lodgTotal);
@@ -274,6 +274,8 @@ public class TaApprovalDisplay extends AppCompatActivity {
                     oe = Double.parseDouble(jsonObject.get("Oe_totalAmt").getAsString());
                     trv_lc = Double.parseDouble(jsonObject.get("trv_lc_amt").getAsString());
 
+
+                    Log.v("txtTLtxtTL", String.valueOf(ta));
 
                     txtDA.setText("Rs. " + brd);
                     txtTL.setText("Rs. " + ta);
@@ -407,6 +409,7 @@ public class TaApprovalDisplay extends AppCompatActivity {
                 for (int z = 0; z < ldArray.size(); z++) {
                     jsLdg = (JsonObject) ldArray.get(z);
                     ldgTtl = Double.parseDouble(jsLdg.get("Total_Ldg_Amount").getAsString());
+
                     txtLA.setText("Rs." + ldgTtl);
                     lodgTotal = jsLdg.get("Total_Ldg_Amount").getAsString();
                 }

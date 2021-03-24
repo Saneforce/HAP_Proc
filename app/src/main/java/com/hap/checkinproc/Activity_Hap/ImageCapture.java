@@ -392,36 +392,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         setCameraDisplayOrientation();
         mCamera.startPreview();
 
-
         Log.e("mCAmer_id", String.valueOf(mCamId));
-
-
-
-
-/*
-
-        if (mCamera != null) {
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
-        }
-        preview = (SurfaceView) findViewById(R.id.PREVIEW);
-        mHolder = preview.getHolder();
-        mHolder.addCallback(this);
-        setDefaultCameraId((mCamId == 0) ? "front" : "back");
-        mCamera = Camera.open(mCamId);
-
-        try {
-            mCamera.setPreviewDisplay(mHolder);
-        } catch (IOException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
-            e.printStackTrace();
-        }
-        setCameraDisplayOrientation();
-        mCamera.startPreview();
-
-        Log.e("mCAmer_id", String.valueOf(mCamId));
-*/
 
     }
 

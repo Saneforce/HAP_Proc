@@ -230,7 +230,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         } else if (type == 3) {
             Route_id = myDataset.get(position).getId();
             route_text.setText(myDataset.get(position).getName());
-           // OutletFilter(myDataset.get(position).getId());
+           OutletFilter(myDataset.get(position).getId());
         }
 
     }
@@ -239,7 +239,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         Retailer_Modal_ListFilter.clear();
         for (int i = 0; i < Retailer_Modal_List.size(); i++) {
             if (Retailer_Modal_List.get(i).getTownCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                Log.e("Route_Masterlist", String.valueOf(id) + "STOCKIST" + Route_Masterlist.get(i).getFlag());
+                //Log.e("Route_Masterlist", String.valueOf(id) + "STOCKIST" + Route_Masterlist.get(i).getFlag());
                 Retailer_Modal_ListFilter.add(new Retailer_Modal_List(Retailer_Modal_List.get(i).getId(), Retailer_Modal_List.get(i).getName(), Retailer_Modal_List.get(i).getTownCode(),
                         Retailer_Modal_List.get(i).getTownName(), Retailer_Modal_List.get(i).getLat(), Retailer_Modal_List.get(i).getLong(), Retailer_Modal_List.get(i).getAddrs(),
                         Retailer_Modal_List.get(i).getListedDrAddress1(), Retailer_Modal_List.get(i).getListedDrSlNo(), Retailer_Modal_List.get(i).getMobileNumber(), Retailer_Modal_List.get(i).getDocCatCode(), Retailer_Modal_List.get(i).getContactPersion(), Retailer_Modal_List.get(i).getDocSpecialCode()));

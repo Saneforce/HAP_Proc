@@ -611,6 +611,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                     aIntent = new Intent(getApplicationContext(), OrderDashBoard.class);
                                 }*/
 
+
+
                                 if (sDeptType.equalsIgnoreCase("1")) {
                                     aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
                                 } else {

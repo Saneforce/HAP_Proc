@@ -6,6 +6,7 @@ import android.content.ComponentCallbacks;
 import android.content.ComponentCallbacks2;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -22,6 +23,8 @@ public class HAPApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+
         mApiComponent = DaggerApiComponent.builder()
                 .appModule(new AppModule(this))
                 .apiModule(new ApiModule("https://hap.sanfmcg.com/server/"))
