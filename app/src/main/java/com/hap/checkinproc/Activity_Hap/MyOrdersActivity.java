@@ -163,7 +163,7 @@ public class MyOrdersActivity extends AppCompatActivity {
 
         cacheMenuRes = new ArrayList<>();
         mainMenuAdapter = new ParentMyOrderAdapter(cacheMenuRes, MyOrdersActivity.this);
-        Log.e("JDFODSUFJD", String.valueOf(cacheMenuRes));
+        //Log.e("JDFODSUFJD", String.valueOf(cacheMenuRes));
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MyOrdersActivity.this);
         menuRecycler.setLayoutManager(layoutManager);
         menuRecycler.setItemViewCacheSize(20);
@@ -236,7 +236,7 @@ public class MyOrdersActivity extends AppCompatActivity {
         super.onResume();
 
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
@@ -244,21 +244,21 @@ public class MyOrdersActivity extends AppCompatActivity {
         super.onPause();
 
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override

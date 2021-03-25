@@ -132,8 +132,8 @@ public class Missed_punch_Approval extends AppCompatActivity {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 // locationList=response.body();
-                Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
-                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
+                //Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
+                //Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
 
                 userType = new TypeToken<ArrayList<Missed_Punch_Model>>() {
                 }.getType();
@@ -188,7 +188,7 @@ public class Missed_punch_Approval extends AppCompatActivity {
         super.onResume();
 
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
@@ -196,21 +196,21 @@ public class Missed_punch_Approval extends AppCompatActivity {
         super.onPause();
 
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
+        //Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override

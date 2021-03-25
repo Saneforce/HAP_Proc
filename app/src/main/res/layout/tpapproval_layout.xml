@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -46,10 +44,10 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/blue_txt_bg"
+            android:padding="@dimen/C5dp"
             android:text="View"
             android:textAlignment="center"
             android:textColor="@color/color_white" />
-
 
     </LinearLayout>
 

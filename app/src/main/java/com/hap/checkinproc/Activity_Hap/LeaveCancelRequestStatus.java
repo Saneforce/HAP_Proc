@@ -117,8 +117,8 @@ public class LeaveCancelRequestStatus extends AppCompatActivity {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 // locationList=response.body();
-                Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
-                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
+                //Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
+                //Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
                 userType = new TypeToken<ArrayList<LeaveCancelStatusModel>>() {
                 }.getType();
                 HolidayApproval = gson.fromJson(new Gson().toJson(response.body()), userType);

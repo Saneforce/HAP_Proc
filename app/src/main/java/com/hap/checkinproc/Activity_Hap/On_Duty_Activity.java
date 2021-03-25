@@ -120,6 +120,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     SharedPreferences CheckInDetails;
     String modeId = "";
     /*Shared Prefernce*/
+
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
     public static final String visitPurpose = "vstPur";
@@ -131,7 +132,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
 
     CheckBox driverAllowance;
     LinearLayout linCheckdriver;
-    Integer vale = 0;
     String strHapLocation = "", strVisitPurpose = "";
     String imageConvert = "", imageServer = "";
     String DriverNeed = "false", DriverMode = "", strDailyAllowance = "", StrID = "";
@@ -139,8 +139,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     CardView CardDailyAllowance;
     private ArrayList<String> travelTypeList;
     String driverAllowanceBoolean = "", StrToCode = "", STRCode = "";
-
-    String OnDutyCount = "", onIntentCOunt = " ";
+    String OnDutyCount = "";
 
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -184,14 +183,9 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
 
-        /*oDutyInt.putExtra("Onduty", onDuty); */
-
-        onIntentCOunt = String.valueOf(getIntent().getSerializableExtra("Onduty"));
-        Log.v("onIntentCOunt", onIntentCOunt);
 
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
@@ -251,17 +245,14 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         EditRemarks = findViewById(R.id.edt_rmk);
         SubmitValue = findViewById(R.id.btn_submit);
 
-
         cardHapLoaction.setOnClickListener(this);
         otherlocationbutton.setOnClickListener(this);
         haplocationbutton.setOnClickListener(this);
-
 
         if (sharedpreferences.contains("Onduty")) {
             OnDutyCount = sharedpreferences.getString("Onduty", "");
             Log.v("ON_DUTY_COUNT", OnDutyCount);
         }
-
 
         submitbutton.setOnClickListener(new View.OnClickListener() {
             @Override

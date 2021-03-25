@@ -57,7 +57,7 @@ public class Permission_Status_Adapter extends RecyclerView.Adapter<Permission_S
     @Override
     public void onBindViewHolder(Permission_Status_Adapter.MyViewHolder holder, int position) {
         Permission_Status_Model Permission_Status_Model = Permission_Status_ModelsList.get(position);
-        Log.e("SF_NAME", "" + Permission_Status_Model.getSFNm());
+        //Log.e("SF_NAME", "" + Permission_Status_Model.getSFNm());
         // holder.sf_name.setText(""+Permission_Status_Model.getSFNm());
         holder.permission_date.setText("" + Permission_Status_Model.getPermissiondate());
         holder.Ptime.setText("" + Permission_Status_Model.getFromTime() + " to " + Permission_Status_Model.getToTime());
