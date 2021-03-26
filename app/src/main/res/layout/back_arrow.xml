@@ -21,7 +21,6 @@
             android:paddingRight="@dimen/C8dp"
             android:src="@drawable/back_arrow"></ImageView>
 
-
     </LinearLayout>
 
 

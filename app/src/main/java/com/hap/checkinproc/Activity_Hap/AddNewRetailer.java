@@ -70,7 +70,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     List<Common_Model> modelRetailChannel = new ArrayList<>();
     List<Common_Model> modelRetailDetails = new ArrayList<>();
     Common_Model mCommon_model_spinner;
-    List<ReatilRouteModel> mRetailerDetailsModels;
     Gson gson;
     EditText addRetailerName, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail, CurrentLocationsAddress;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
@@ -146,7 +145,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
                 Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                 if (CheckIn == true) {
                     Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);

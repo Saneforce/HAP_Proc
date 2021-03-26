@@ -74,14 +74,14 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
         searchView.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
-                da.getFilter().filter(s);
+
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                da.getFilter().filter(s.toString());
             }
         });
 
