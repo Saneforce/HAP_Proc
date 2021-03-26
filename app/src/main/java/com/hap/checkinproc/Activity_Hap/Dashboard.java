@@ -58,7 +58,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     TextView approvalcount;
     Shared_Common_Pref shared_common_pref;
     String imageProfile = "", sSFType = "";
-    String onDuty ="";
+    String onDuty = "";
     ImageView profilePic;
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
@@ -126,7 +126,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         //Glide.with(this).load(Uri.parse((UserDetails.getString("url", "")))).into(profilePic);
 
         //profilePic.setImageURI(Uri.parse((UserDetails.getString("url", ""))));
-
 
         linMyday = findViewById(R.id.lin_myday_plan);
         linMyday.setVisibility(View.GONE);
@@ -352,7 +351,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     // Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
 
                     Log.v("HAP_ON_DUTY", jsonObject.getString("CheckOnduty"));
-                    onDuty =jsonObject.getString("CheckOnduty");
+                    onDuty = jsonObject.getString("CheckOnduty");
 
                     sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
                     editors = sharedpreferences.edit();
@@ -484,7 +483,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         super.onPause();
         //  startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
-     //   Get_MydayPlan(1, "check/mydayplan");
+        //   Get_MydayPlan(1, "check/mydayplan");
     }
 
     @Override
@@ -497,7 +496,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onStart() {
         super.onStart();
-       // Get_MydayPlan(1, "check/mydayplan");
+        // Get_MydayPlan(1, "check/mydayplan");
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }

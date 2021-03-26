@@ -148,8 +148,7 @@
                             android:layout_height="@dimen/C40dp"
                             android:layout_marginLeft="@dimen/C2dp"
                             android:padding="@dimen/C2dp"
-                            android:src="@drawable/image_preview"
-                            android:visibility="gone" />
+                            android:src="@drawable/image_preview" />
                     </LinearLayout>
                 </LinearLayout>
 
