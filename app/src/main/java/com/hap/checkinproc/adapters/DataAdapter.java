@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Common_Class.Common_Model;
-import com.hap.checkinproc.Interface.Joint_Work_Listner;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
 
@@ -46,7 +45,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
     @Override
     public void onBindViewHolder(@NonNull FruitViewHolder fruitViewHolder, int i) {
 
-        if(!contactListFiltered.equals("")) {
+        if (!contactListFiltered.equals("")) {
             Common_Model contact = contactListFiltered.get(i);
             fruitViewHolder.mTextName.setText(contact.getName());
             String getAddress = contact.getAddress();
@@ -92,11 +91,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
     @Override
     public int getItemCount() {
-        int siz = 0;
-
-        siz = contactListFiltered.size();
-
-        return siz;
+        return contactListFiltered.size();
     }
 
     @Override
@@ -107,19 +102,20 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
                 String charString = charSequence.toString();
                 Log.e("FIlter_VAlues", charString);
                 if (charString.isEmpty()) {
+                    Log.e("DATA_ADAPTER_VALUE+123", charString);
                     contactListFiltered = contactList;
                 } else {
-                    List<Common_Model> filteredList = new ArrayList<>();
-                    for (Common_Model row : contactList) {
-                        // name match condition. this might differ depending on your requirement
-                        // here we are looking for name or phone number match
-                        if (row.getName().toLowerCase().trim().replaceAll("\\s", "").contains(charString.toLowerCase().trim().replaceAll("\\s", ""))) {
-                            filteredList.add(row);
-                            Log.e("FIlter_Rowvalues", String.valueOf(row.getName().toLowerCase()));
-                        }
+                List<Common_Model> filteredList = new ArrayList<>();
+                for (Common_Model row : contactList) {
+                    // name match condition. this might differ depending on your requirement
+                    // here we are looking for name or phone number match
+                    if (row.getName().toLowerCase().trim().replaceAll("\\s", "").contains(charString.toLowerCase().trim().replaceAll("\\s", ""))) {
+                        filteredList.add(row);
+                        Log.e("DATA_ADAPTER_VALUE", String.valueOf(row.getName().toLowerCase()));
                     }
-                    contactListFiltered = filteredList;
                 }
+                contactListFiltered = filteredList;
+                 }
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = contactListFiltered;
                 return filterResults;
