@@ -94,6 +94,9 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
         return contactListFiltered.size();
     }
 
+
+
+
     @Override
     public Filter getFilter() {
         return new Filter() {
