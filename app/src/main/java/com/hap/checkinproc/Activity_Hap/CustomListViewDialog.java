@@ -65,21 +65,23 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
         no = (Button) findViewById(R.id.no);
         searchView = findViewById(R.id.searchView);
         recyclerView = findViewById(R.id.recycler_view);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.setAdapter(da);
+
         no.setOnClickListener(this);
-        da.notifyDataSetChanged();
+        //da.notifyDataSetChanged();
         searchView.addTextChangedListener(new TextWatcher() {
 
             public void afterTextChanged(Editable s) {
-
+                da.getFilter().filter(s);
             }
 
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                da.getFilter().filter(s);
+
             }
         });
 

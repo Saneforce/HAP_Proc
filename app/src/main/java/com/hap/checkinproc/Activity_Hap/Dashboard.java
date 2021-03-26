@@ -127,7 +127,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         //profilePic.setImageURI(Uri.parse((UserDetails.getString("url", ""))));
 
-
         linMyday = findViewById(R.id.lin_myday_plan);
         linMyday.setVisibility(View.GONE);
         if (sSFType.equals("1")) linMyday.setVisibility(View.VISIBLE);

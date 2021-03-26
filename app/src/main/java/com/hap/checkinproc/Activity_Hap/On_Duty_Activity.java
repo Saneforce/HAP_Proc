@@ -458,13 +458,15 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
 
                 CameraPermission cameraPermission = new CameraPermission(On_Duty_Activity.this, getApplicationContext());
 
-                if (!cameraPermission.checkPermission()) {
 
+                if (!cameraPermission.checkPermission()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         cameraPermission.requestPermission();
+                        Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                     }
                     Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                 } else {
+
                     Log.v("PERMISSION_CHECK", startEnd);
                     SharedPreferences.Editor ed = sharedpreferences.edit();
                     ed.putString(visitPurpose, purposeofvisitedittext.getText().toString());

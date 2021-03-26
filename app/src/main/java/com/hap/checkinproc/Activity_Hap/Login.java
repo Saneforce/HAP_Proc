@@ -172,17 +172,17 @@ public class Login extends AppCompatActivity {
 
         cameraPermission = new CameraPermission(Login.this, getApplicationContext());
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
-            if (!cameraPermission.checkPermission()) {
+        if (!cameraPermission.checkPermission()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 cameraPermission.requestPermission();
+                Log.v("PERMISSION_NOT", "PERMISSION_NOT");
             }
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (!cameraPermission.checkPermission1()) {
-                cameraPermission.requestPermission1();
-            }
+            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
         } else {
-
+            Log.v("PERMISSION", "PERMISSION");
         }
+
+
 
 
         btnLogin.setOnClickListener(new View.OnClickListener() {

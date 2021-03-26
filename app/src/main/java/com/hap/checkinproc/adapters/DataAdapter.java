@@ -45,47 +45,49 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
     @Override
     public void onBindViewHolder(@NonNull FruitViewHolder fruitViewHolder, int i) {
-        Common_Model contact = contactListFiltered.get(i);
-        fruitViewHolder.mTextName.setText(contact.getName());
-        String getAddress = contact.getAddress();
-        String getPhone = contact.getPhone();
-        if (typeName == -1) {
-            Log.e("ADAPTER_SELECTED", String.valueOf(contact.isSelected()));
-            if (contact.isSelected() == true) {
-                fruitViewHolder.checkBox_select.setChecked(true);
-            }
-            fruitViewHolder.Checkboxname.setText(contact.getName());
-            fruitViewHolder.checkboxLin.setVisibility(View.VISIBLE);
-            fruitViewHolder.linear_row.setVisibility(View.GONE);
-        }
-        if (!isNullOrEmpty(getAddress)) {
-            fruitViewHolder.mTextAddress.setText(contact.getAddress());
-            fruitViewHolder.mTextAddress.setVisibility(View.VISIBLE);
-        } else {
-            fruitViewHolder.mTextAddress.setVisibility(View.GONE);
-        }
-        if (!isNullOrEmpty(getPhone)) {
-            fruitViewHolder.mTextPhone.setText(contact.getPhone());
-            fruitViewHolder.mTextPhone.setVisibility(View.VISIBLE);
-        } else {
-            fruitViewHolder.mTextPhone.setVisibility(View.GONE);
-        }
-        fruitViewHolder.checkBox_select.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (fruitViewHolder.checkBox_select.isChecked()) {
-                    contactListFiltered.get(i).setSelected(true);
-                    System.out.println("THIRUMALAIVASAN" + i);
-                    updateUi.OnclickMasterType(contactListFiltered, i, 1);
 
-                } else if (!fruitViewHolder.checkBox_select.isChecked()) {
-                    contactListFiltered.get(i).setSelected(false);
-                    updateUi.OnclickMasterType(contactListFiltered, i, 0);
-
+        if(!contactListFiltered.equals("")) {
+            Common_Model contact = contactListFiltered.get(i);
+            fruitViewHolder.mTextName.setText(contact.getName());
+            String getAddress = contact.getAddress();
+            String getPhone = contact.getPhone();
+            if (typeName == -1) {
+                Log.e("ADAPTER_SELECTED", String.valueOf(contact.isSelected()));
+                if (contact.isSelected() == true) {
+                    fruitViewHolder.checkBox_select.setChecked(true);
                 }
+                fruitViewHolder.Checkboxname.setText(contact.getName());
+                fruitViewHolder.checkboxLin.setVisibility(View.VISIBLE);
+                fruitViewHolder.linear_row.setVisibility(View.GONE);
             }
-        });
+            if (!isNullOrEmpty(getAddress)) {
+                fruitViewHolder.mTextAddress.setText(contact.getAddress());
+                fruitViewHolder.mTextAddress.setVisibility(View.VISIBLE);
+            } else {
+                fruitViewHolder.mTextAddress.setVisibility(View.GONE);
+            }
+            if (!isNullOrEmpty(getPhone)) {
+                fruitViewHolder.mTextPhone.setText(contact.getPhone());
+                fruitViewHolder.mTextPhone.setVisibility(View.VISIBLE);
+            } else {
+                fruitViewHolder.mTextPhone.setVisibility(View.GONE);
+            }
+            fruitViewHolder.checkBox_select.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (fruitViewHolder.checkBox_select.isChecked()) {
+                        contactListFiltered.get(i).setSelected(true);
+                        System.out.println("THIRUMALAIVASAN" + i);
+                        updateUi.OnclickMasterType(contactListFiltered, i, 1);
 
+                    } else if (!fruitViewHolder.checkBox_select.isChecked()) {
+                        contactListFiltered.get(i).setSelected(false);
+                        updateUi.OnclickMasterType(contactListFiltered, i, 0);
+
+                    }
+                }
+            });
+        }
     }
 
     @Override
