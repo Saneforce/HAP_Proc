@@ -42,7 +42,6 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
     int type;
     List<Common_Model> mDataset;
 
-
     public CustomListViewDialog(Activity a, List<Common_Model> wk, int type) {
         super(a);
         this.activity = a;
@@ -54,7 +53,6 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
         setupLayout();
     }
 
-
     private void setupLayout() {
 
     }
@@ -62,16 +60,13 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        /*requestWindowFeature(Window.FEATURE_NO_TITLE);*/
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.custom_dialog_layout);
         no = (Button) findViewById(R.id.no);
         searchView = findViewById(R.id.searchView);
         recyclerView = findViewById(R.id.recycler_view);
-        mLayoutManager = new LinearLayoutManager(activity);
-        recyclerView.setLayoutManager(mLayoutManager);
-
+        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.setAdapter(da);
-
         no.setOnClickListener(this);
         da.notifyDataSetChanged();
         searchView.addTextChangedListener(new TextWatcher() {

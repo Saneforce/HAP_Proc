@@ -228,8 +228,8 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (mLUService == null)
-                    mLUService = new SANGPSTracker(getApplicationContext());
+
+                mLUService = new SANGPSTracker(Login.this);
                 myReceiver = new LocationReceiver();
                 // Bind to the service. If the service is in foreground mode, this signals to the service
                 // that since this activity is in the foreground, the service can exit foreground mode.

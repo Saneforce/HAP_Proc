@@ -154,7 +154,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
         common_class = new Common_Class(this);
-
+        GetfieldforceHq();
         lincheck = findViewById(R.id.lin_mode);
         driverAllowance = findViewById(R.id.da_driver_allowance);
         linCheckdriver = findViewById(R.id.lin_check_driver);
@@ -389,7 +389,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         });
         closebutton.setOnClickListener(this);
         exitclose.setOnClickListener(this);
-        GetfieldforceHq();
 
 
         CardDailyAllowance.setOnClickListener(new View.OnClickListener() {

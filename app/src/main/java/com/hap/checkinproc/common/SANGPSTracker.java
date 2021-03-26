@@ -29,7 +29,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
+
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
@@ -153,9 +153,9 @@ public class SANGPSTracker extends Service {
 
     }
 
-    public SANGPSTracker(Context context) {
-        this.mContext = context;
-        mactivity = new Activity();
+    public SANGPSTracker(Context mContext) {
+        this.mContext = mContext;
+        this.mactivity = new Activity();
     }
 
     @Override
@@ -270,9 +270,9 @@ public class SANGPSTracker extends Service {
      * {@link SecurityException}.
      */
     public void requestLocationUpdates() {
-        Log.i(TAG, "Requesting location updates");
+
         // Utils.setRequestingLocationUpdates(this, true);
-        Intent playIntent = new Intent(this, SANGPSTracker.class);
+        Intent playIntent = new Intent(mContext, SANGPSTracker.class);
        // Log.d("playIntent", String.valueOf(playIntent));
         //startService(playIntent);
         mContext.startService(playIntent);
