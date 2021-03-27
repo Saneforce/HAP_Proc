@@ -350,7 +350,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     // Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
                     onDuty = jsonObject.getString("CheckOnduty");
-
+                    Log.v("ONDUTY_RESPONSE", jsonObject.getString("CheckOnduty"));
                     sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
                     editors = sharedpreferences.edit();
                     editors.putString("Onduty", onDuty);
