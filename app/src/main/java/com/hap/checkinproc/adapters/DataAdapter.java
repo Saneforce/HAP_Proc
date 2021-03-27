@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
@@ -22,10 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolder> implements Filterable {
-    List<Common_Model> contactList;
+
     Master_Interface updateUi;
-    int typeName;
+    private List<Common_Model> contactList;
     private List<Common_Model> contactListFiltered;
+    int typeName;
 
     public DataAdapter(List<Common_Model> myDataset, Context context, int type) {
         contactList = myDataset;
@@ -38,54 +40,27 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
     @Override
     public FruitViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fruit_item, parent, false);
-        FruitViewHolder vh = new FruitViewHolder(v);
-        return vh;
+        return new FruitViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FruitViewHolder fruitViewHolder, int i) {
+    public void onBindViewHolder(FruitViewHolder fruitViewHolder, final int position) {
+        final Common_Model contact = contactListFiltered.get(position);
+        fruitViewHolder.mTextName.setText(contact.getName());
+        String getAddress = contact.getAddress();
+        String getPhone = contact.getPhone();
 
-        if (!contactListFiltered.equals("")) {
-            Common_Model contact = contactListFiltered.get(i);
-            fruitViewHolder.mTextName.setText(contact.getName());
-            String getAddress = contact.getAddress();
-            String getPhone = contact.getPhone();
-            if (typeName == -1) {
-                Log.e("ADAPTER_SELECTED", String.valueOf(contact.isSelected()));
-                if (contact.isSelected() == true) {
-                    fruitViewHolder.checkBox_select.setChecked(true);
-                }
-                fruitViewHolder.Checkboxname.setText(contact.getName());
-                fruitViewHolder.checkboxLin.setVisibility(View.VISIBLE);
-                fruitViewHolder.linear_row.setVisibility(View.GONE);
-            }
-            if (!isNullOrEmpty(getAddress)) {
-                fruitViewHolder.mTextAddress.setText(contact.getAddress());
-                fruitViewHolder.mTextAddress.setVisibility(View.VISIBLE);
-            } else {
-                fruitViewHolder.mTextAddress.setVisibility(View.GONE);
-            }
-            if (!isNullOrEmpty(getPhone)) {
-                fruitViewHolder.mTextPhone.setText(contact.getPhone());
-                fruitViewHolder.mTextPhone.setVisibility(View.VISIBLE);
-            } else {
-                fruitViewHolder.mTextPhone.setVisibility(View.GONE);
-            }
-            fruitViewHolder.checkBox_select.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (fruitViewHolder.checkBox_select.isChecked()) {
-                        contactListFiltered.get(i).setSelected(true);
-                        System.out.println("THIRUMALAIVASAN" + i);
-                        updateUi.OnclickMasterType(contactListFiltered, i, 1);
-
-                    } else if (!fruitViewHolder.checkBox_select.isChecked()) {
-                        contactListFiltered.get(i).setSelected(false);
-                        updateUi.OnclickMasterType(contactListFiltered, i, 0);
-
-                    }
-                }
-            });
+        if (!isNullOrEmpty(getAddress)) {
+            fruitViewHolder.mTextAddress.setText(contact.getAddress());
+            fruitViewHolder.mTextAddress.setVisibility(View.VISIBLE);
+        } else {
+            fruitViewHolder.mTextAddress.setVisibility(View.GONE);
+        }
+        if (!isNullOrEmpty(getPhone)) {
+            fruitViewHolder.mTextPhone.setText(contact.getPhone());
+            fruitViewHolder.mTextPhone.setVisibility(View.VISIBLE);
+        } else {
+            fruitViewHolder.mTextPhone.setVisibility(View.GONE);
         }
     }
 
@@ -100,22 +75,13 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
-                Log.e("FIlter_VAlues", charString);
-                if (charString.isEmpty()) {
-                    Log.e("DATA_ADAPTER_VALUE+123", charString);
-                    contactListFiltered = contactList;
-                } else {
-                List<Common_Model> filteredList = new ArrayList<>();
-                for (Common_Model row : contactList) {
-                    // name match condition. this might differ depending on your requirement
-                    // here we are looking for name or phone number match
-                    if (row.getName().toLowerCase().trim().replaceAll("\\s", "").contains(charString.toLowerCase().trim().replaceAll("\\s", ""))) {
-                        filteredList.add(row);
-                        Log.e("DATA_ADAPTER_VALUE", String.valueOf(row.getName().toLowerCase()));
+                    List<Common_Model> filteredList = new ArrayList<>();
+                    for (Common_Model row : contactList) {
+                        if (row.getName().toLowerCase().trim().replaceAll("\\s", "").contains(charString.toLowerCase().trim().replaceAll("\\s", ""))) {
+                            filteredList.add(row);
+                        }
                     }
-                }
-                contactListFiltered = filteredList;
-                 }
+                    contactListFiltered = filteredList;
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = contactListFiltered;
                 return filterResults;
@@ -124,7 +90,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
             @Override
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 contactListFiltered = (ArrayList<Common_Model>) filterResults.values;
-                Log.e("FILTERED_RESULT", String.valueOf(contactListFiltered.size()));
                 notifyDataSetChanged();
             }
         };
