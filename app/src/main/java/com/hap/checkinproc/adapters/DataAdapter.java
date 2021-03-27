@@ -69,9 +69,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
         return contactListFiltered.size();
     }
 
-
-
-
     @Override
     public Filter getFilter() {
         return new Filter() {
@@ -96,7 +93,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
                 notifyDataSetChanged();
             }
         };
-
     }
 
     public class FruitViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
