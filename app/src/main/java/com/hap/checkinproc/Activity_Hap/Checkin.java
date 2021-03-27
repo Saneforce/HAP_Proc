@@ -41,8 +41,11 @@ public class Checkin extends AppCompatActivity {
     private JsonArray ShiftItems = new JsonArray();
     private RecyclerView recyclerView;
     private ShiftListItem mAdapter;
-    String ODFlag, onDutyPlcID, onDutyPlcNm, vstPurpose, Check_Flag, onDutyFlag, DutyAlp = "";
+    String ODFlag, onDutyPlcID, onDutyPlcNm, vstPurpose, Check_Flag, onDutyFlag, DutyAlp = "", DutyType = "";
     Intent intent;
+    public static final String mypreference = "mypref";
+
+    /*  ShiftDuty*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,11 @@ public class Checkin extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(), Help_Activity.class));
             }
         });
+
+        sharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+        if (sharedPreferences.contains("ShiftDuty")) {
+            DutyAlp = sharedPreferences.getString("ShiftDuty", "");
+        }
 
         TextView txtErt = findViewById(R.id.toolbar_ert);
         TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
@@ -109,7 +117,7 @@ public class Checkin extends AppCompatActivity {
             onDutyPlcNm = String.valueOf(bundle.getSerializable("onDutyPlcNm"));
             vstPurpose = String.valueOf(bundle.getSerializable("vstPurpose"));
             Check_Flag = String.valueOf(bundle.getSerializable("Mode"));
-            DutyAlp = String.valueOf(bundle.getSerializable("onDuty"));
+            DutyType = String.valueOf(bundle.getSerializable("onDuty"));
             Log.e("CHECKIN_FLAG", Check_Flag);
             if (onDutyPlcID == "0") {
                 SFTID = "0";
@@ -142,7 +150,8 @@ public class Checkin extends AppCompatActivity {
         SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         String Scode = (shared.getString("Sfcode", "null"));
         String Dcode = (shared.getString("Divcode", "null"));
-        if (DutyAlp.equals("abc")) {
+        if (!DutyAlp.equals("0")) {
+            Log.v("KARTHIC_DUTY_1","1");
             Intent takePhoto = new Intent(this, ImageCapture.class);
             takePhoto.putExtra("Mode", Check_Flag);
             takePhoto.putExtra("ShiftId", SFTID);
@@ -158,7 +167,27 @@ public class Checkin extends AppCompatActivity {
             startActivity(takePhoto);
             finish();
         } else {
-            spinnerValue("get/Shift_timing", Dcode, Scode);
+            if (DutyType.equals("cba")) {
+                Log.v("KARTHIC_DUTY_1","2");
+                spinnerValue("get/Shift_timing", Dcode, Scode);
+            } else {
+                Log.v("KARTHIC_DUTY_1","3");
+                Intent takePhoto = new Intent(this, ImageCapture.class);
+                takePhoto.putExtra("Mode", Check_Flag);
+                takePhoto.putExtra("ShiftId", SFTID);
+                takePhoto.putExtra("On_Duty_Flag", onDutyFlag);
+                takePhoto.putExtra("ShiftName", CheckInDetails.getString("Shift_Name", ""));
+                takePhoto.putExtra("ShiftStart", CheckInDetails.getString("ShiftStart", ""));
+                takePhoto.putExtra("ShiftEnd", CheckInDetails.getString("ShiftEnd", ""));
+                takePhoto.putExtra("ShiftCutOff", CheckInDetails.getString("ShiftCutOff", ""));
+                takePhoto.putExtra("ODFlag", ODFlag);
+                takePhoto.putExtra("onDutyPlcID", onDutyPlcID);
+                takePhoto.putExtra("onDutyPlcNm", onDutyPlcNm);
+                takePhoto.putExtra("vstPurpose", vstPurpose);
+                startActivity(takePhoto);
+                finish();
+            }
+
         }
 
     }

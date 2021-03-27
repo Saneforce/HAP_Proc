@@ -209,6 +209,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     String CutOFFDt = CheckInDetails.getString("ShiftCutOff", "0");
                     String SftId = CheckInDetails.getString("Shift_Selected_Id", "0");
 
+
                     if (DT.GetCurrDateTime(this).getTime() >= DT.getDate(CutOFFDt).getTime() || SftId == "0") {
                         ETime = "";
                     }
@@ -223,10 +224,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     takePhoto.putExtra("ShiftEnd", CheckInDetails.getString("ShiftEnd", "0"));
                     takePhoto.putExtra("ShiftCutOff", CheckInDetails.getString("ShiftCutOff", "0"));
                     startActivity(takePhoto);
+
                 } else {
                     Intent i = new Intent(this, Checkin.class);
                     startActivity(i);
                 }
+
+
                 break;
 
             case R.id.lin_request_status:
@@ -354,6 +358,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
                     editors = sharedpreferences.edit();
                     editors.putString("Onduty", onDuty);
+                    editors.putString("ShiftDuty",jsonObject.getString("Todaycheckin_Flag"));
                     editors.commit();
 
                     linCheckin.setVisibility(View.VISIBLE);

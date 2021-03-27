@@ -1155,7 +1155,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                     try {
                         if (response.isSuccessful()) {
 
-
                             Log.v("print_upload_file_true", "ggg" + response);
                             JSONObject jb = null;
                             String jsonData = null;
@@ -1200,7 +1199,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onResume() {
         super.onResume();
-
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
@@ -1208,7 +1206,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onPause() {
         super.onPause();
-
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }

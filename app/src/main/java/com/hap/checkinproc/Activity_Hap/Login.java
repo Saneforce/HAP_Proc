@@ -183,8 +183,6 @@ public class Login extends AppCompatActivity {
         }
 
 
-
-
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -525,7 +523,7 @@ public class Login extends AppCompatActivity {
         Log.d(TAG, "TWO " + deviceToken);
         //eMail="haptest4@hap.in";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
-      //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
+        //    Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "haptest4@hap.in", deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
