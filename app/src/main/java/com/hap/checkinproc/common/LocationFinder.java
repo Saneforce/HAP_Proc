@@ -1,19 +1,34 @@
 package com.hap.checkinproc.common;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.IntentSender;
 import android.location.Location;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.hap.checkinproc.Interface.LocationEvents;
 
+import static com.hap.checkinproc.SFA_Activity.HAPApp.activeActivity;
+
 public class LocationFinder {
+
     /*The desired interval for location updates. Inexact. Updates may be more or less frequent.*/
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     static LocationEvents mlocEvents;
@@ -69,6 +84,7 @@ public class LocationFinder {
                                 location = task.getResult();
                                 mlocEvents.OnLocationRecived(location);
                             } else {
+                                ShowLocationWarn();
                                 Log.w(TAG, "Failed to get location.");
                             }
                         }
@@ -77,5 +93,60 @@ public class LocationFinder {
             Log.e(TAG, "Lost location permission." + unlikely);
         }
         return location;
+    }
+
+    public void ShowLocationWarn(){
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(mLocationRequest);
+        builder.setAlwaysShow(true);
+        SettingsClient settingsClient = LocationServices.getSettingsClient(mContext);
+        settingsClient.checkLocationSettings(builder.build())
+                .addOnSuccessListener((Activity) activeActivity, new OnSuccessListener<LocationSettingsResponse>() {
+                    @Override
+                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                        Log.v("LOACTION_SUCCESS","ONSUCCESS");
+                        getLocation();
+                    }
+                })
+//                .addOnSuccessListener((Activity) activeActivity, new OnSuccessListener<LocationSettingsResponse>() {
+//                    @SuppressLint("MissingPermission")
+//                    @Override
+//                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+//                        Log.v("LOACTION_SUCCESS","ONSUCCESS");
+//                        getLocation();
+////  GPS is already enable, callback GPS status through listener
+//                        /*if (onGpsListener != null) {
+//                            onGpsListener.gpsStatus(true);
+//                        }*/
+//                    }
+//                })
+                .addOnFailureListener((Activity) activeActivity, new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        int statusCode = ((ApiException) e).getStatusCode();
+                        switch (statusCode) {
+                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                                try {
+                                    // Show the dialog by calling startResolutionForResult(), and check the
+                                    // result in onActivityResult().
+                                    Log.i(TAG, "PendingIntent INSAP.");
+
+                                    Log.v("LOACTION_SUCCESS","ONFAILURE");
+                                    ResolvableApiException rae = (ResolvableApiException) e;
+                                    rae.startResolutionForResult((Activity) activeActivity, 1000);
+                                } catch (IntentSender.SendIntentException sie) {
+                                    Log.i(TAG, "PendingIntent unable to execute request.");
+                                }
+                                break;
+                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                                String errorMessage = "Location settings are inadequate, and cannot be " +
+                                        "fixed here. Fix in Settings.";
+                                Log.e(TAG, errorMessage);
+                                Toast.makeText(mContext, errorMessage, Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
+
     }
 }

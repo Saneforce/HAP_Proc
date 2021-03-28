@@ -134,6 +134,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
 

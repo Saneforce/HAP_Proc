@@ -1,5 +1,6 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -75,6 +76,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     SeekBar skBarBright;
     String imagePath;
     String imageFileName;
+
+    private ProgressDialog mProgress;
+    public static RelativeLayout vwPreview;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
 
     Camera mCamera;
@@ -358,7 +362,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     private void CloseImgPreview() {
-        RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
+        vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
         BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
@@ -394,11 +398,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
 
     private void saveImgPreview() {
-        RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
+        vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
-        vwPreview.setVisibility(View.GONE);
-        // imgPreview.setImageURI(Uri.fromFile(file));
-        button.setVisibility(View.GONE);
         BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
 
         vwPreview.setBackground(drawableBitmap);
@@ -406,17 +407,42 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         imgPreview.setImageBitmap(bitmap);
 
+        mProgress = new ProgressDialog(this);
+        String titleId = "Submiting";
+        mProgress.setTitle(titleId);
+        mProgress.setMessage("Please Wait...");
+        mProgress.show();
         Log.e("Image_Capture", Uri.fromFile(file).toString());
         Log.e("Image_Capture", "IAMGE     " + bitmap);
-
-        LocationFinder locationFinder=new LocationFinder(this, new LocationEvents() {
+        new LocationFinder(this, new LocationEvents() {
             @Override
             public void OnLocationRecived(Location location) {
                 Common_Class.location=location;
 
+                vwPreview.setVisibility(View.GONE);
+                // imgPreview.setImageURI(Uri.fromFile(file));
+                button.setVisibility(View.GONE);
                 saveCheckIn();
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1000){
+            new LocationFinder(this, new LocationEvents() {
+                @Override
+                public void OnLocationRecived(Location location) {
+                    Common_Class.location=location;
+
+                    ImageCapture.vwPreview.setVisibility(View.GONE);
+                    // imgPreview.setImageURI(Uri.fromFile(file));
+                    button.setVisibility(View.GONE);
+                    saveCheckIn();
+                }
+            });
+        }
     }
 
     private void saveCheckIn() {
@@ -484,6 +510,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
                         if (response.isSuccessful()) {
+                            mProgress.dismiss();
                             JsonObject itm = response.body().getAsJsonObject();
                             String mMessage = "Your Check-In Submitted Successfully";
                             try {
@@ -512,6 +539,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
+                        mProgress.dismiss();
                         Log.d("HAP_receive", "");
                     }
                 });
@@ -529,6 +557,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 modelCall.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        mProgress.dismiss();
                         Log.e("RESPONSE_FROM_SERVER", String.valueOf(response.body().getAsJsonObject()));
                         if (response.isSuccessful()) {
                             JsonObject itm = response.body().getAsJsonObject();
@@ -558,6 +587,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
+                        mProgress.dismiss();
                         Log.d("HAP_receive", "");
                     }
                 });
@@ -570,6 +600,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
+                        mProgress.dismiss();
                         if (response.isSuccessful()) {
                             Log.e("TOTAL_REPOSNEaaa", String.valueOf(response.body()));
 
@@ -606,6 +637,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
+                        mProgress.dismiss();
                         Log.d("HAP_receive", "");
                     }
                 });

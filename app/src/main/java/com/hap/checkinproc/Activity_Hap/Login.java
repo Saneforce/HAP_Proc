@@ -183,6 +183,8 @@ public class Login extends AppCompatActivity {
         }
 
 
+
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -231,11 +233,15 @@ public class Login extends AppCompatActivity {
                 myReceiver = new LocationReceiver();
                 // Bind to the service. If the service is in foreground mode, this signals to the service
                 // that since this activity is in the foreground, the service can exit foreground mode.
-                bindService(new Intent(getApplicationContext(), SANGPSTracker.class), mServiceConection,
-                        Context.BIND_AUTO_CREATE);
-                LocalBroadcastManager.getInstance(getApplication()).registerReceiver(myReceiver,
-                        new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
-                mLUService.requestLocationUpdates();
+
+                Boolean DAMode = CheckInDetails.getBoolean("DAMode", true);
+                if(DAMode==true){
+                    bindService(new Intent(getApplicationContext(), SANGPSTracker.class), mServiceConection,
+                            Context.BIND_AUTO_CREATE);
+                    LocalBroadcastManager.getInstance(getApplication()).registerReceiver(myReceiver,
+                            new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
+                    mLUService.requestLocationUpdates();
+                }
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                 startActivityForResult(signInIntent, RC_SIGN_IN);
 
@@ -246,16 +252,6 @@ public class Login extends AppCompatActivity {
         ReportsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mLUService == null)
-                    mLUService = new SANGPSTracker(getApplicationContext());
- /* if(mTimerService == null)
- mTimerService = new TimerService();
- mTimerService.startTimerService();*/
-
-                /*startService(new Intent(Login.this, TimerService.class));*/
-
-                mLUService.requestLocationUpdates();
-                mProgress.show();
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
                 startActivityForResult(signInIntent, RC_MYREPORTS);
             }
@@ -440,12 +436,14 @@ public class Login extends AppCompatActivity {
 
             // Bind to the service. If the service is in foreground mode, this signals to the service
             // that since this activity is in the foreground, the service can exit foreground mode.
-            bindService(new Intent(this, SANGPSTracker.class), mServiceConection,
-                    Context.BIND_AUTO_CREATE);
-            LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver,
-                    new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
 
-
+            Boolean DAMode = CheckInDetails.getBoolean("DAMode", true);
+            if(DAMode==true) {
+                bindService(new Intent(this, SANGPSTracker.class), mServiceConection,
+                        Context.BIND_AUTO_CREATE);
+                LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver,
+                        new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
+            }
  /* LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
  new IntentFilter(Config.REGISTRATION_COMPLETE));
 
@@ -521,10 +519,9 @@ public class Login extends AppCompatActivity {
             return;
         }
         Log.d(TAG, "TWO " + deviceToken);
-        //eMail="haptest4@hap.in";
-
+        //eMail="rdo1@hap.in";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
-        //    Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
+      //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "haptest4@hap.in", deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
@@ -586,6 +583,7 @@ public class Login extends AppCompatActivity {
                         }
                         String code = response.body().getData().get(0).getSfCode();
                         String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
+                        String empID= response.body().getData().get(0).getSfEmpId();
                         String sName = response.body().getData().get(0).getSfName();
                         String div = response.body().getData().get(0).getDivisionCode();
                         Integer type = response.body().getData().get(0).getCheckCount();
@@ -620,6 +618,7 @@ public class Login extends AppCompatActivity {
                         Log.e("LOGIN_RESPONSE", String.valueOf(response.body().getData().get(0).getSfCode()));
                         editor.putString("Sf_Type", Sf_type);
                         editor.putString("Sfcode", code);
+                        editor.putString("EmpId", empID);
                         editor.putString("SfName", sName);
                         editor.putString("Divcode", div);
                         editor.putInt("CheckCount", type);

@@ -93,7 +93,6 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
                 notifyDataSetChanged();
             }
         };
-
     }
 
     public class FruitViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

@@ -2,8 +2,13 @@ package com.hap.checkinproc.SFA_Activity;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.ComponentCallbacks;
+import android.content.ComponentCallbacks2;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 import com.hap.checkinproc.SFA_Activity.ApiComponent;
 import com.hap.checkinproc.SFA_Activity.ApiModule;
@@ -28,10 +33,12 @@ public class HAPApp extends Application {
     }
 
     private void setupActivityListener() {
+
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 activeActivity = activity;
+
             }
 
             @Override
