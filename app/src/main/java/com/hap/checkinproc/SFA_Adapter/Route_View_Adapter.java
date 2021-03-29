@@ -2,9 +2,11 @@ package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,12 +27,17 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
     int dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textviewname, textviewdate, status, invoice;
+        public TextView textviewname, textviewdate, status, invoice, values, invoicedate;
+        LinearLayout parent_layout;
+
         public MyViewHolder(View view) {
             super(view);
             textviewname = view.findViewById(R.id.retailername);
+            parent_layout = view.findViewById(R.id.parent_layout);
             status = view.findViewById(R.id.status);
             invoice = view.findViewById(R.id.invoice);
+            values = view.findViewById(R.id.values);
+            invoicedate = view.findViewById(R.id.invoicedate);
         }
     }
 
@@ -52,9 +59,25 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
     public void onBindViewHolder(Route_View_Adapter.MyViewHolder holder, int position) {
         Retailer_Modal_List Retailer_Modal_List = Retailer_Modal_Listitem.get(position);
         holder.textviewname.setText("" + Retailer_Modal_List.getName().toUpperCase() + "~" + Retailer_Modal_List.getId());
-        holder.status.setText("Status " + ":" + "Complete".toUpperCase());
-        holder.invoice.setText("Last invoice value " + ":" + Retailer_Modal_List.getDocCatCode());
-        holder.textviewname.setOnClickListener(new View.OnClickListener() {
+        if(Retailer_Modal_List.getStatusname()!=null){
+            holder.status.setText("Status :" + "\t\t"  + Retailer_Modal_List.getStatusname().toUpperCase());
+        }else {
+            holder.status.setText("Status :" + "\t\t"  + "");
+        }
+
+        holder.invoice.setText("Last invoice value :"+ "\t\t"  + Retailer_Modal_List.getInvoiceValues());
+        holder.values.setText("Value :" + "\t\t"  +Retailer_Modal_List.getValuesinv());
+        holder.invoicedate.setText("Last invoice date :" + "\t\t"  + Retailer_Modal_List.getInvoiceDate());
+        if (Retailer_Modal_List.getInvoice_Flag().equals("0")) {
+            holder.parent_layout.setBackgroundResource(R.color.white);
+        } else if (Retailer_Modal_List.getInvoice_Flag().equals("1")) {
+            holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
+        } else {
+            holder.parent_layout.setBackgroundResource(R.color.invoiceordercolor);
+        }
+
+
+        holder.parent_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAdapterOnClick.onIntentClick(position);

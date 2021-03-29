@@ -4,22 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
-import com.hap.checkinproc.Activity_Hap.Tp_Mydayplan;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -27,25 +23,18 @@ import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
-import com.hap.checkinproc.Interface.ViewReport;
 import com.hap.checkinproc.MVP.Main_Model;
 import com.hap.checkinproc.MVP.MasterSync_Implementations;
 import com.hap.checkinproc.MVP.Master_Sync_View;
 import com.hap.checkinproc.Model_Class.Route_Master;
-import com.hap.checkinproc.Model_Class.Tp_View_Master;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Adapter.Dashboard_View_Adapter;
-import com.hap.checkinproc.SFA_Adapter.Outlet_Report_View_Adapter;
 import com.hap.checkinproc.SFA_Adapter.Route_View_Adapter;
-import com.hap.checkinproc.SFA_Model_Class.Dashboard_View_Model;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
-import com.hap.checkinproc.adapters.Leave_Approval_Adapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -54,18 +43,13 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.inject.Inject;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-
-public class Dashboard_Route extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface {
-    List<Retailer_Modal_List> Retailer_Modal_List;
+public class Dashboard_Order_Reports extends AppCompatActivity  implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface {
+    List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
     List<Retailer_Modal_List> Retailer_Modal_ListFilter;
-    List<OutletReport_View_Modal> Retailer_Order_List;
+    List<com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal> Retailer_Order_List;
     Gson gson;
     private RecyclerView recyclerView;
     Type userType;
@@ -85,9 +69,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard__route);
+        setContentView(R.layout.activity_dashboard__order__reports);
         recyclerView = findViewById(R.id.leaverecyclerview);
-        sharedCommonPref = new Shared_Common_Pref(Dashboard_Route.this);
+        sharedCommonPref = new Shared_Common_Pref(Dashboard_Order_Reports.this);
         // GetAllDetails();
         //ViewAllOutletOrder();
         presenter = new MasterSync_Implementations(this, new Master_Sync_View());
@@ -102,7 +86,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         Pendingclick = findViewById(R.id.Pendingclick);
         Alltextview = findViewById(R.id.Alltextview);
         completeview = findViewById(R.id.completeview);
-        ReachedOutlet = findViewById(R.id.ReachedOutlet);
+
         pendingview = findViewById(R.id.pendingview);
         Alltextview.setVisibility(View.VISIBLE);
         completeview.setVisibility(View.INVISIBLE);
@@ -110,7 +94,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         Alltextclick.setOnClickListener(this);
         Completeclick.setOnClickListener(this);
         Pendingclick.setOnClickListener(this);
-        ReachedOutlet.setOnClickListener(this);
+
         distributor_text.setOnClickListener(this);
         route_text.setOnClickListener(this);
         common_class = new Common_Class(this);
@@ -127,7 +111,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         Retailer_Order_List = gson.fromJson(todayorderliost, userType);
 
         int index = 0;
-
+        Log.e("Retailer_Modal_ListSize", String.valueOf(Retailer_Modal_List.size()));
+        Log.e("Retailer_Order_ListSIZE", String.valueOf(Retailer_Order_List.size()));
         if (Retailer_Modal_List != null && Retailer_Modal_List.size() > 0) {
             for (int i = 0; Retailer_Modal_List.size() > i; i++) {
                 if (Retailer_Modal_List.size() == 0) {
@@ -144,7 +129,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 } else {
                     for (int j = 0; Retailer_Order_List.size() > j; j++) {
                         if (Retailer_Modal_List.get(i).getId().equals(Retailer_Order_List.get(j).getOutletCode())) {
-                            //System.out.println("InSIDEIF" + i);
+                            System.out.println("InSIDEIF" + i);
                             Retailer_Modal_List.get(index).setInvoiceDate(Retailer_Order_List.get(j).getOrderDate());
                             Retailer_Modal_List.get(index).setInvoiceValues(String.valueOf(Retailer_Order_List.get(j).getInvoicevalues()));
                             Retailer_Modal_List.get(index).setStatusname(String.valueOf(Retailer_Order_List.get(j).getStatus()));
@@ -156,7 +141,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                             Retailer_Modal_ListFilter.get(index).setInvoice_Flag(String.valueOf(Retailer_Order_List.get(j).getInvoice_Flag()));
                             Retailer_Modal_ListFilter.get(index).setValuesinv(String.valueOf(Retailer_Order_List.get(j).getOrderValue()));
                         } else {
-                         //   System.out.println("InSIDEELSE");
+                            System.out.println("InSIDEELSE");
                             Retailer_Modal_List.get(i).setInvoiceDate("");
                             Retailer_Modal_List.get(i).setInvoiceValues("0.00");
                             Retailer_Modal_List.get(i).setStatusname("PENDING");
@@ -174,17 +159,14 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
             }
         }
-
-
-
         recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
             @Override
             public void onIntentClick(int position) {
                 Shared_Common_Pref.Outler_AddFlag = "0";
                 Log.e("Route_Outlet_Info", Shared_Common_Pref.Outler_AddFlag);
-                Shared_Common_Pref.OutletName = Retailer_Modal_List.get(position).getName().toUpperCase() + "~" + Retailer_Modal_List.get(position).getId();
+                /*Shared_Common_Pref.OutletName = Retailer_Modal_List.get(position).getName().toUpperCase() + "~" + Retailer_Modal_List.get(position).getId();
                 Shared_Common_Pref.OutletCode = Retailer_Modal_List.get(position).getId();
-                common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                common_class.CommonIntentwithoutFinish(Route_Product_Info.class);*/
 
             }
         }));
@@ -213,27 +195,16 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 completeview.setVisibility(View.INVISIBLE);
                 pendingview.setVisibility(View.VISIBLE);
                 break;
-            case R.id.ReachedOutlet:
-                if (Distributor_Id == null || Distributor_Id.equals("")) {
-                    Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
-                } else if (Route_id == null || Route_id.equals("")) {
-                    Toast.makeText(this, "Select The Route", Toast.LENGTH_SHORT).show();
-                } else {
-                    shared_common_pref.save("RouteSelect", Route_id);
-                    shared_common_pref.save("RouteName", route_text.getText().toString());
-                    shared_common_pref.save("Distributor_ID", Distributor_Id);
-                    common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
-                }
-                break;
+
             case R.id.distributor_text:
-                customDialog = new CustomListViewDialog(Dashboard_Route.this, distributor_master, 2);
+                customDialog = new CustomListViewDialog(Dashboard_Order_Reports.this, distributor_master, 2);
                 Window windoww = customDialog.getWindow();
                 windoww.setGravity(Gravity.CENTER);
                 windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 customDialog.show();
                 break;
             case R.id.route_text:
-                customDialog = new CustomListViewDialog(Dashboard_Route.this, FRoute_Master, 3);
+                customDialog = new CustomListViewDialog(Dashboard_Order_Reports.this, FRoute_Master, 3);
                 Window windowww = customDialog.getWindow();
                 windowww.setGravity(Gravity.CENTER);
                 windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -253,7 +224,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
     @Override
     public void setDataToRoute(ArrayList<Route_Master> noticeArrayList) {
-        }
+        Log.e("ROUTE_MASTER", String.valueOf(noticeArrayList.size()));
+    }
 
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
@@ -272,7 +244,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     }
     private void OutletFilter(String id,String flag) {
         Retailer_Modal_ListFilter.clear();
-
+        Log.e("Retailer_Modal_ListSIZE",""+Retailer_Modal_List.size());
         if(flag.equals("1")){
             Retailer_Modal_ListFilter.addAll(Retailer_Modal_List);
         }else {
@@ -309,9 +281,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
     @Override
     public void setDataToRouteObject(Object noticeArrayList, int position) {
-
+        Log.e("Calling Position", String.valueOf(position));
+        Log.e("ROUTE_MASTER_Object", String.valueOf(noticeArrayList));
         if (position == 0) {
-
+            Log.e("SharedprefrenceVALUES", new Gson().toJson(noticeArrayList));
             GetJsonData(new Gson().toJson(noticeArrayList), "0");
         } else if (position == 1) {
             GetJsonData(new Gson().toJson(noticeArrayList), "1");
@@ -343,7 +316,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         FRoute_Master.clear();
         for (int i = 0; i < Route_Masterlist.size(); i++) {
             if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                //Log.e("Route_Masterlist", String.valueOf(id) + "STOCKIST" + Route_Masterlist.get(i).getFlag());
+                Log.e("Route_Masterlist", String.valueOf(id) + "STOCKIST" + Route_Masterlist.get(i).getFlag());
                 FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
             }
 
@@ -364,7 +337,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 if (type.equals("1")) {
                     distributor_master.add(Model_Pojo);
                 } else if (type.equals("2")) {
-                //    Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
+                    Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
                     Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
                     FRoute_Master.add(Model_Pojo);
                     Route_Masterlist.add(Model_Pojo);
@@ -380,34 +353,5 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         }
     }
 
-    public void ViewAllOutletOrder() {
-        DateFormat df = new SimpleDateFormat("yyyy-MM-d");
-        Calendar calobj = Calendar.getInstance();
-        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        Map<String, String> QueryString = new HashMap<>();
-        QueryString.put("axn", "table/list");
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code.replace(",", ""));
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("fromdate", df.format(calobj.getTime()));
-        QueryString.put("todate", df.format(calobj.getTime()));
-        QueryString.put("Outlet_Code", Shared_Common_Pref.OutletCode);
-    //    Log.e("Report_ValuesMap", QueryString.toString());
-        Call<Object> call = service.GetRouteObject(QueryString, "{\"tableName\":\"GetOutletViewReport\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}");
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                //Log.e("MAster_Product_Details", response.body() + "");
-                System.out.println("GetOutletView" + new Gson().toJson(response.body()));
-                userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
-                }.getType();
-                OutletReport_View_Modal = gson.fromJson(new Gson().toJson(response.body()), userType);
-            }
 
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-
-            }
-        });
-
-    }
 }

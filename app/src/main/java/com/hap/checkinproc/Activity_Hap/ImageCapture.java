@@ -412,12 +412,13 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         mProgress.setTitle(titleId);
         mProgress.setMessage("Please Wait...");
         mProgress.show();
+
         Log.e("Image_Capture", Uri.fromFile(file).toString());
         Log.e("Image_Capture", "IAMGE     " + bitmap);
         new LocationFinder(this, new LocationEvents() {
             @Override
             public void OnLocationRecived(Location location) {
-                Common_Class.location=location;
+                Common_Class.location = location;
 
                 vwPreview.setVisibility(View.GONE);
                 // imgPreview.setImageURI(Uri.fromFile(file));
@@ -430,11 +431,11 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==1000){
+        if (requestCode == 1000) {
             new LocationFinder(this, new LocationEvents() {
                 @Override
                 public void OnLocationRecived(Location location) {
-                    Common_Class.location=location;
+                    Common_Class.location = location;
 
                     ImageCapture.vwPreview.setVisibility(View.GONE);
                     // imgPreview.setImageURI(Uri.fromFile(file));
@@ -446,6 +447,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     private void saveCheckIn() {
+
         try {
             // LocationFinder locationFinder=new LocationFinder(this);
 
@@ -477,6 +479,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty") || mMode.equalsIgnoreCase("holidayentry")) {
                 SharedPreferences.Editor editor = CheckInDetails.edit();
                 if (mMode.equalsIgnoreCase("CIN")) {
+
+
                     editor.putString("Shift_Selected_Id", CheckInInf.getString("Shift_Selected_Id"));
                     editor.putString("Shift_Name", CheckInInf.getString("Shift_Name"));
                     editor.putString("ShiftStart", CheckInInf.getString("ShiftStart"));
@@ -505,6 +509,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 Call<JsonObject> modelCall = apiInterface.JsonSave("dcr/save",
                         UserDetails.getString("Divcode", ""),
                         UserDetails.getString("Sfcode", ""), "", "", jsonarray.toString());
+
+
                 modelCall.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

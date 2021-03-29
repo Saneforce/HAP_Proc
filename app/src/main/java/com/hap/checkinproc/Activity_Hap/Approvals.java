@@ -244,7 +244,6 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
             case R.id.lin_tour_plan:
                 startActivity(new Intent(Approvals.this, Tp_Approval.class));
-
                 break;
 
             case R.id.lin_leav_sta:

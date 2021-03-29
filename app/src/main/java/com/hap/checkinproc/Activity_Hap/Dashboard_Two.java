@@ -38,6 +38,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.GateEntryQREvents;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.Status_Activity.View_All_Status_Activity;
 import com.hap.checkinproc.adapters.GateAdapter;
 import com.hap.checkinproc.adapters.HomeRptRecyler;
@@ -64,7 +65,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     String viewMode = "", sSFType = "", mPriod = "0";
     int cModMnth = 1;
     Button viewButton;
-    Button StActivity, cardview3, cardview4, cardView5, btnCheckout;
+    Button StActivity, cardview3, cardview4, cardView5, btnCheckout, btnApprovals;
     String AllowancePrefernce = "";
 
     public static final String mypreference = "mypref";
@@ -175,6 +176,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         cardview3 = findViewById(R.id.cardview3);
         cardview4 = findViewById(R.id.cardview4);
         cardView5 = findViewById(R.id.cardview5);
+        btnApprovals = findViewById(R.id.approvals);
         mPriod = "0";
         mvNxtMn = findViewById(R.id.nxtMn);
         mvPrvMn = findViewById(R.id.prvMn);
@@ -217,7 +219,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         btnCheckout.setOnClickListener(this);
         btnGateIn.setOnClickListener(this);
         btnGateOut.setOnClickListener(this);
-
+        btnApprovals.setOnClickListener(this);
         btnGateIn.setVisibility(View.GONE);
         btnGateOut.setVisibility(View.GONE);
         cardGateDet.setVisibility(View.GONE);
@@ -247,13 +249,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             cardview3.setVisibility(View.GONE);
             cardview4.setVisibility(View.GONE);
             cardView5.setVisibility(View.GONE);
-            StActivity.setVisibility(View.GONE);
+             StActivity.setVisibility(View.GONE);
             btnCheckout.setVisibility(View.GONE);
         }
         if (sSFType.equals("0"))
             StActivity.setVisibility(View.GONE);
 
-        getNotify();
+            getNotify();
         getDyReports();
         getMnthReports(0);
         GetMissedPunch();
@@ -340,7 +342,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     newItem.addProperty("name", Itm.get("Status").getAsString());
                     newItem.addProperty("value", Itm.get("StatusCnt").getAsString());
                     newItem.addProperty("Link", true);
-                    newItem.addProperty("Priod",m);
+                    newItem.addProperty("Priod", m);
                     newItem.addProperty("color", Itm.get("StusClr").getAsString().replace(" !important", ""));
                     dyRpt.add(newItem);
                 }
@@ -582,17 +584,16 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             case R.id.cardview5:
                 intent = new Intent(this, Reports.class);
                 break;
+            case R.id.approvals:
+                intent = new Intent(this, Approvals.class);
+                break;
             case R.id.btn_gate_in:
                 intent = new Intent(this, QRCodeScanner.class);
                 intent.putExtra("Name", "GateIn");
-                //startActivity(intent);
-                /*  startActivity(new Intent(this, QRCodeScanner.class));*/
                 break;
             case R.id.btn_gate_out:
                 intent = new Intent(this, QRCodeScanner.class);
                 intent.putExtra("Name", "GateOut");
-                //startActivity(intent);
-                /*  startActivity(new Intent(this, QRCodeScanner.class));*/
                 break;
             case R.id.StActivity:
                 new AlertDialog.Builder(Dashboard_Two.this)
@@ -606,23 +607,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 String sDeptType = UserDetails.getString("DeptType", "");
                                 Log.d("DeptType", sDeptType);
 
-                               /* if (sDeptType.equalsIgnoreCase("1")) {
-                                    aIntent = new Intent(getApplicationContext(), OrderDashBoard.class);
-                                } else {
-                                    aIntent = new Intent(getApplicationContext(), OrderDashBoard.class);
-                                }*/
-
-
-
                                 if (sDeptType.equalsIgnoreCase("1")) {
                                     aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
                                 } else {
-                                    aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
+                                    Shared_Common_Pref.Sync_Flag = "0";
+                                    aIntent = new Intent(getApplicationContext(), Offline_Sync_Activity.class);
                                 }
-
-                                //startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
                                 startActivity(aIntent);
-                                //((AppCompatActivity) Dashboard_Two.this).finish();
                             }
                         })
                         .setNegativeButton("No", new DialogInterface.OnClickListener() {

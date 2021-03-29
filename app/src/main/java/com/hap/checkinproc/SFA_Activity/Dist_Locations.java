@@ -1,7 +1,9 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,11 +12,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
+import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,7 +49,6 @@ public class Dist_Locations extends AppCompatActivity {
         selectdistributor = findViewById(R.id.selectdistributor);
         distilatitude = findViewById(R.id.distilatitude);
         distilongitude = findViewById(R.id.distilongitude);
-        ((HAPApp) getApplication()).getNetComponent().inject(this);
         gson = new Gson();
         GetDistributorDetails();
         ImageView backView = findViewById(R.id.imag_back);
@@ -53,7 +62,7 @@ public class Dist_Locations extends AppCompatActivity {
     }
 
     private void GetDistributorDetails() {
-        ApiInterface service = retrofit.create(ApiInterface.class);
+        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
         //ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
         String commonworktype = "{\"tableName\":\"vwstockiest_Master_APP\",\"coloumns\":\"[\\\"distributor_code as id\\\", \\\"stockiest_name as name\\\",\\\"town_code\\\",\\\"town_name\\\",\\\"Addr1\\\",\\\"Addr2\\\",\\\"City\\\",\\\"Pincode\\\",\\\"GSTN\\\",\\\"lat\\\",\\\"long\\\",\\\"addrs\\\",\\\"Tcode\\\",\\\"Dis_Cat_Code\\\"]\",\"where\":\"[\\\"isnull(Stockist_Status,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         Map<String, String> QueryString = new HashMap<>();

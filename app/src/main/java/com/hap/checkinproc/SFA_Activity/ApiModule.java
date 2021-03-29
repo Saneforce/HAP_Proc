@@ -20,12 +20,11 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 @Module
-public
 class ApiModule {
 
     String mBaseUrl;
 
-    public ApiModule(String mBaseUrl) {
+    ApiModule(String mBaseUrl) {
         this.mBaseUrl = mBaseUrl;
     }
 

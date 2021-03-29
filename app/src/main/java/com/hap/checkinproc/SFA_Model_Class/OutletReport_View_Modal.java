@@ -4,7 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class OutletReport_View_Modal {
-
+    @SerializedName("No_Of_items")
+    @Expose
+    private String No_Of_items;
     @SerializedName("slno")
     @Expose
     private String slno;
@@ -29,6 +31,62 @@ public class OutletReport_View_Modal {
     @SerializedName("Order_Value")
     @Expose
     private Double orderValue;
+    @SerializedName("Invoice_Flag")
+    @Expose
+    private String Invoice_Flag;
+    @Expose
+    private String invoicevalues;
+
+    @SerializedName("invoicevalues")
+
+    public String getInvoice_Flag() {
+        return Invoice_Flag;
+    }
+
+    public String getInvoicevalues() {
+        return invoicevalues;
+    }
+
+    public String getNo_Of_items() {
+        return No_Of_items;
+    }
+
+    public void setNo_Of_items(String no_Of_items) {
+        No_Of_items = no_Of_items;
+    }
+
+    public void setInvoicevalues(String invoicevalues) {
+        this.invoicevalues = invoicevalues;
+    }
+
+
+    public void setInvoice_Flag(String invoice_Flag) {
+        Invoice_Flag = invoice_Flag;
+    }
+
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
+    }
+
+    @SerializedName("Status")
+    @Expose
+    private String Status;
+
+    public OutletReport_View_Modal(String slno, String orderNo, String stockistCode, String transSlNo, String outletCode, String sfCode, String orderDate, Double orderValue, String status) {
+        this.slno = slno;
+        this.orderNo = orderNo;
+        this.stockistCode = stockistCode;
+        this.transSlNo = transSlNo;
+        this.outletCode = outletCode;
+        this.sfCode = sfCode;
+        this.orderDate = orderDate;
+        this.orderValue = orderValue;
+        Status = status;
+    }
 
     public String getSlno() {
         return slno;
@@ -85,9 +143,11 @@ public class OutletReport_View_Modal {
     public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
     }
+
     public Double getOrderValue() {
         return orderValue;
     }
+
     public void setOrderValue(Double orderValue) {
         this.orderValue = orderValue;
     }

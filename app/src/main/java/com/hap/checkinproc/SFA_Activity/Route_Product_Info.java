@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.Tp_Mydayplan;
@@ -39,11 +40,13 @@ import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.Tp_View_Master;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,7 +66,7 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
     Switch availswitch, cateswitch;
     EditText reason_availablity, reason_category;
     LinearLayout more_info;
-    Shared_Common_Pref shared_common_pref;
+    Shared_Common_Pref sharedCommonPref;
     Common_Class common_class;
     List<Category_Universe_Modal> Category_univ_Modal = new ArrayList<>();
     TextView takeorder, Nextadd, Compititorname;
@@ -73,12 +76,14 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
     List<Common_Model> Compititor_List = new ArrayList<>();
     CustomListViewDialog customDialog;
     String CompIDServer = "";
-
+    Gson gson;
+    Type userType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_route__product__info);
-        shared_common_pref = new Shared_Common_Pref(this);
+        sharedCommonPref = new Shared_Common_Pref(this);
+        gson = new Gson();
         common_class = new Common_Class(this);
         Categorygrid = findViewById(R.id.category);
         takeorder = findViewById(R.id.takeorder);
@@ -101,8 +106,15 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
         availswitch.setOnClickListener(this);
         more_info.setOnClickListener(this);
         Compititorname.setOnClickListener(this);
-        category_universe("1");
-        category_universe("2");
+        //category_universe("1");
+       // category_universe("2");
+
+        String Category_List = sharedCommonPref.getvalue(Shared_Common_Pref.Category_List);
+        String Compititor_List= sharedCommonPref.getvalue(Shared_Common_Pref.Compititor_List);
+        Log.e("CATEGORY_LIST",Category_List);
+        Log.e("Compititor_List",Compititor_List);
+        GetJsonData(Category_List,"1");
+        GetJsonData(Compititor_List,"2");
         if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
             Nextadd.setVisibility(View.VISIBLE);
         } else {
@@ -152,10 +164,31 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
                 common_class.CommonIntentwithFinish(More_Info_Activity.class);
                 break;
             case R.id.takeorder:
-                common_class.CommonIntentwithFinish(Invoice_History.class);
+                common_class.CommonIntentwithoutFinish(Invoice_History.class);
                 break;
             case R.id.Nextadd:
-                boolean checkavail = false;
+
+                StringBuilder CatUniverId = new StringBuilder();
+                for (Category_Universe_Modal ListUniv : Universelistt) {
+                    if (ListUniv.getColorFlag().equals("1")) {
+                        CatUniverId.append("," + ListUniv.getId());
+                    }
+                }
+                StringBuilder AvailCat = new StringBuilder();
+                for (Category_Universe_Modal ListUniv : Availlistt) {
+                    if (ListUniv.getColorFlag().equals("1")) {
+                        AvailCat.append("," + ListUniv.getId());
+                    }
+                }
+
+                Intent intent = new Intent(getBaseContext(), AddNewRetailer.class);
+                intent.putExtra("Compititor_Id", CompIDServer);
+                intent.putExtra("Compititor_Name", Compititorname.getText().toString());
+                intent.putExtra("CatUniverSelectId", CatUniverId.toString());
+                intent.putExtra("AvailUniverSelectId", AvailCat.toString());
+
+                startActivity(intent);
+              /*  boolean checkavail = false;
                 for (Common_Model fil : Compititor_List) {
                     if (fil.isSelected() == true) {
                         checkavail = true;
@@ -164,29 +197,10 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
                 if (checkavail == false) {
                     Toast.makeText(this, "Select The Other Brand", Toast.LENGTH_SHORT).show();
                 } else {
-                    StringBuilder CatUniverId = new StringBuilder();
-                    for (Category_Universe_Modal ListUniv : Universelistt) {
-                        if (ListUniv.getColorFlag().equals("1")) {
-                            CatUniverId.append("," + ListUniv.getId());
-                        }
-                    }
-                    StringBuilder AvailCat = new StringBuilder();
-                    for (Category_Universe_Modal ListUniv : Availlistt) {
-                        if (ListUniv.getColorFlag().equals("1")) {
-                            AvailCat.append("," + ListUniv.getId());
-                        }
-                    }
 
-                    Intent intent = new Intent(getBaseContext(), AddNewRetailer.class);
-                    intent.putExtra("Compititor_Id", CompIDServer);
-                    intent.putExtra("Compititor_Name", Compititorname.getText().toString());
-                    intent.putExtra("CatUniverSelectId", CatUniverId.toString());
-                    intent.putExtra("AvailUniverSelectId", AvailCat.toString());
-
-                    startActivity(intent);
 
                     // common_class.CommonIntentwithFinish(AddNewRetailer.class);
-                }
+                }*/
                 break;
 
             case R.id.Compititorname:
@@ -332,7 +346,8 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
     }
 
 
-    public void category_universe(String flag) {
+
+  /*  public void category_universe(String flag) {
         String commonworktype;
         if (flag.equals("1")) {
             commonworktype = "{\"tableName\":\"category_universe\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
@@ -366,7 +381,7 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
 
             }
         });
-    }
+    }*/
 
     private void GetJsonData(String jsonResponse, String type) {
         try {

@@ -1,0 +1,85 @@
+package com.hap.checkinproc.MVP;
+
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class Offline_SyncView implements Main_Model.GetRoutemastersyncResult {
+
+    String QuerySTring;
+    @Override
+    public void GetRouteResult(Main_Model.GetRoutemastersyncResult.OnFinishedListenerroute onFinishedListener) {
+        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+        Map<String, String> QueryString = new HashMap<>();
+        for (int i = 0; i < 7; i++) {
+            String axnname = "table/list";
+            if (i == 0) {
+                //Outlet_List
+                QuerySTring = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",\\\"town_code\\\",\\\"town_name\\\",\\\"lat\\\",\\\"long\\\",\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",\\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" , \\\"Valuesinv\\\" , \\\"InvoiceDate\\\" ,\\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\"]\",\"where\":\"[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                //commonworktype = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+            } else if (i == 1) {
+                //Distributor_List
+                QuerySTring = "{\"tableName\":\"vwstockiest_Master_APP\",\"coloumns\":\"[\\\"distributor_code as id\\\", \\\"stockiest_name as name\\\",\\\"town_code\\\",\\\"town_name\\\",\\\"Addr1\\\",\\\"Addr2\\\",\\\"City\\\",\\\"Pincode\\\",\\\"GSTN\\\",\\\"lat\\\",\\\"long\\\",\\\"addrs\\\",\\\"Tcode\\\",\\\"Dis_Cat_Code\\\"]\",\"where\":\"[\\\"isnull(Stockist_Status,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+            } else if (i == 2) {
+                //CategorySync
+                QuerySTring = "{\"tableName\":\"category_universe\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+            } else if (i == 3) {
+                //Product Sync
+                QuerySTring = "{\"tableName\":\"getproduct_details\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+
+            }  else if (i == 4) {
+               //GetTodayOrder
+                QuerySTring = "{\"tableName\":\"gettotalorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                QueryString.put("todate", Common_Class.GetDatewothouttime());
+            } else if (i == 5) {
+                //GetTodayOrder
+                QuerySTring = "{\"tableName\":\"GettotalOrderDetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                QueryString.put("todate", Common_Class.GetDatewothouttime());
+            }else {
+                QuerySTring = "{\"tableName\":\"get_compititordetails\"}";
+
+            }
+            int ii = i;
+            Log.e("Print_REquest", QuerySTring);
+            Log.e("SF_DETAILS", Shared_Common_Pref.Div_Code);
+
+            QueryString.put("axn", axnname);
+            QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+            QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+            QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+            QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+            Call<Object> call = service.GetRouteObject(QueryString, QuerySTring);
+            call.enqueue(new Callback<Object>() {
+                @Override
+                public void onResponse(Call<Object> call, Response<Object> response) {
+                    Log.e("MAsterSyncView_Result", response.body() + "");
+                    //System.out.println("Route_Matser" + response.body().toString());
+                    //Log.e("TAG", "response 33: " + new Gson().toJson(response.body()));
+                    //approvalList=response.body();
+                    onFinishedListener.onFinishedrouteObject(response.body(), ii);
+                }
+
+                @Override
+                public void onFailure(Call<Object> call, Throwable t) {
+                    onFinishedListener.onFailure(t);
+                }
+            });
+        }
+
+
+    }
+}
+

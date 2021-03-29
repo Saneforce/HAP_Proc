@@ -69,6 +69,7 @@
             android:background="@color/black"
             android:orientation="horizontal"
             android:weightSum="2">
+
             <TextView
                 android:id="@+id/outlet_name"
                 android:layout_width="match_parent"
@@ -135,7 +136,7 @@
                 android:id="@+id/orderrecyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"
+                android:layout_weight="1"
                 android:padding="@dimen/C10dp" />
 
             <LinearLayout
@@ -144,56 +145,148 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/C10dp"
-                android:layout_weight="2.5"
-                android:background="@color/black"
-                android:orientation="horizontal"
+                android:layout_weight="1"
+                android:orientation="vertical"
                 android:visibility="gone"
                 android:weightSum="3">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:gravity="start"
-                    android:text="TOTAL"
-                    android:textColor="@color/white"
-                    android:textSize="17dp" />
+                    android:layout_height="40dp"
+                    android:layout_weight="0.2"
+                    android:background="@color/black"
+                    android:orientation="horizontal"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="TOTAL"
+                        android:textColor="@color/white"
+                        android:textSize="17dp" />
+
+                    <TextView
+                        android:id="@+id/totalqty"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="45"
+                        android:textColor="@color/white"
+                        android:textSize="17dp" />
+
+                    <TextView
+                        android:id="@+id/totalvalue"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="6789"
+                        android:textColor="@color/white"
+                        android:textSize="17dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linnercashdiscount"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"
+                    android:background="@color/ablack"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="CASH DISCOUNT"
+                        android:textColor="@color/white"
+                        android:textSize="17dp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:padding="@dimen/C10dp">
+
+                        <EditText
+                            android:id="@+id/cashdiscount"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_gravity="center"
+                            android:background="@drawable/order_qty_backround"
+                            android:gravity="center"
+                            android:inputType="number"
+                            android:padding="@dimen/C10dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/black"
+                            android:textSize="17dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linnetamount"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="0.2"
+                    android:background="@color/black"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    android:weightSum="3">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:gravity="start"
+                        android:text="NET AMOUNT"
+                        android:textColor="@color/white"
+                        android:textSize="17dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:gravity="center" />
+
+                    <TextView
+                        android:id="@+id/netamount"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:layout_weight="1"
+                        android:textSize="17dp"
+                        android:textColor="@color/white"
+                        android:gravity="center" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/totalqty"
+                    android:id="@+id/orderbutton"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
+                    android:layout_height="55dp"
+                    android:background="@color/view_bg_color"
                     android:gravity="center"
-                    android:text="45"
+                    android:text="ORDER"
+                    android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="17dp" />
+                    android:textSize="17dp"
+                    android:visibility="gone" />
 
-                <TextView
-                    android:id="@+id/totalvalue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:text="6789"
-                    android:textColor="@color/white"
-                    android:textSize="17dp" />
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/orderbutton"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:background="@color/view_bg_color"
-                android:gravity="center"
-                android:text="ORDER"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                android:textSize="17dp"
-                android:visibility="gone" />
         </LinearLayout>
 
         <TextView

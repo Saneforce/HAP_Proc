@@ -603,7 +603,6 @@ public class Login extends AppCompatActivity {
                         Shared_Common_Pref.Dept_Type = DeptType;
                         Shared_Common_Pref.SF_Type = Sf_type;
 
-
                         Log.e("SF_TYPEVALUE", Sf_type);
                         Log.e("STATECODE", code);
                         Log.e("STATECODE", div);
@@ -628,7 +627,6 @@ public class Login extends AppCompatActivity {
                             editor.putBoolean("Login", true);
                         else
                             editor.putBoolean("Login", false);
-
                         editor.apply();
                         startActivity(intent);
                         try {
@@ -636,7 +634,6 @@ public class Login extends AppCompatActivity {
                         } catch (Exception e) {
 
                         }
-
                     } else {
                         try {
                             mProgress.dismiss();
@@ -646,7 +643,6 @@ public class Login extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Check username and password", Toast.LENGTH_LONG).show();
                     }
                 }
-
             }
 
             @Override
