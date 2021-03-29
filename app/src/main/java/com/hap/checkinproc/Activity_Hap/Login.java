@@ -28,7 +28,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.multidex.BuildConfig;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -56,7 +55,6 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -519,10 +517,7 @@ public class Login extends AppCompatActivity {
             return;
         }
         Log.d(TAG, "TWO " + deviceToken);
-        //eMail="rdo1@hap.in";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
-      //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
-        //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "haptest4@hap.in", deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
@@ -570,14 +565,11 @@ public class Login extends AppCompatActivity {
                         if (requestCode == RC_SIGN_IN) {
                             if (CheckIn == true) {
                                 intent = new Intent(Login.this, Dashboard_Two.class);
-                                // intent = new Intent(Login.this, TAClaimActivity.class);
                                 intent.putExtra("Mode", "CIN");
                             } else {
                                 intent = new Intent(Login.this, Dashboard.class);
-                                // intent = new Intent(Login.this, TAClaimActivity.class);
-                            }
+                                                         }
                         } else {
-                            // intent = new Intent(Login.this, AllowanceActivity.class);
                             intent = new Intent(Login.this, Dashboard_Two.class);
                             intent.putExtra("Mode", "RPT");
                         }

@@ -1,9 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,10 +7,12 @@ import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
 
-import com.google.gson.JsonArray;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.hap.checkinproc.Interface.onPayslipItemClick;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.adapters.GateAdapter;
 import com.hap.checkinproc.adapters.HAPListItem;
 
 import org.apache.commons.net.ftp.FTP;
@@ -42,41 +40,45 @@ public class PayslipFtp extends AppCompatActivity {
 
     SharedPreferences UserDetails;
 
-    String HomePath="/home/hapftp/Payroll",CurrPath="",
-            EmpId="";
-    String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+ "/" ;
+    String HomePath = "/home/hapftp/Payroll", CurrPath = "",
+            EmpId = "";
+    String pdfPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payslip_ftp);
-        CurrPath=HomePath;
+        CurrPath = HomePath;
         getPaySlipFolder("");
 
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
-        EmpId=UserDetails.getString("EmpId","");
+        EmpId = UserDetails.getString("EmpId", "");
         HAPListItem.SetPayOnClickListener(new onPayslipItemClick() {
             @Override
             public void onClick(JSONObject item) {
                 try {
-                    if(item.getString("type").equalsIgnoreCase("dir")){
+                    if (item.getString("type").equalsIgnoreCase("dir")) {
                         getPaySlipFolder(item.getString("name"));
-                    }else
-                    {
-                        ftpDownload(CurrPath+"/"+item.getString("name"),pdfPath+item.getString("name"));
+                    } else {
+                        ftpDownload(CurrPath + "/" + item.getString("name"), pdfPath + item.getString("name"));
+
+
                     }
+                    Log.v("PAY_SLIP_KARTHIC_o",CurrPath);
+                    Log.v("PAY_SLIP_KARTHIC_o",pdfPath);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
     }
-    public void getPaySlipFolder(String mCurrPath)
-    {
-        if(ftpConnect("sf.hap.in","hapftp","VFAY$du3@=9^",21)){
-            CurrPath=CurrPath+((mCurrPath!="")?"/":"")+mCurrPath;
-            lsFiles=ftpGetFilesList(CurrPath);
 
+    public void getPaySlipFolder(String mCurrPath) {
+        if (ftpConnect("sf.hap.in", "hapftp", "VFAY$du3@=9^", 21)) {
+            CurrPath = CurrPath + ((mCurrPath != "") ? "/" : "") + mCurrPath;
+            lsFiles = ftpGetFilesList(CurrPath);
+
+            Log.v("Karthic_Response_JSON", lsFiles.toString());
             listItems = new HAPListItem(lsFiles, this);
             mRecyclerView = findViewById(R.id.fileList);
             mRecyclerView.setHasFixedSize(true);
@@ -87,6 +89,7 @@ public class PayslipFtp extends AppCompatActivity {
             ftpDisconnect();
         }
     }
+
     public boolean ftpConnect(String host, String username, String password,
                               int port) {
         try {
@@ -97,7 +100,7 @@ public class PayslipFtp extends AppCompatActivity {
 
             mFTPClient = new FTPClient();
             mFTPClient.setConnectTimeout(5000);
-            mFTPClient.connect(host,port);
+            mFTPClient.connect(host, port);
             if (FTPReply.isPositiveCompletion(mFTPClient.getReplyCode())) {
                 boolean status = mFTPClient.login(username, password);
                 mFTPClient.setFileType(FTP.BINARY_FILE_TYPE);
@@ -106,11 +109,12 @@ public class PayslipFtp extends AppCompatActivity {
                 return status;
             }
         } catch (Exception e) {
-            Log.d(TAG, "Error: could not connect to host " + host+"\n"+e.getMessage());
+            Log.d(TAG, "Error: could not connect to host " + host + "\n" + e.getMessage());
         }
 
         return false;
     }
+
     public boolean ftpDisconnect() {
         try {
             mFTPClient.logout();
@@ -159,20 +163,20 @@ public class PayslipFtp extends AppCompatActivity {
                 String name = ftpFiles[i].getName();
                 boolean isFile = ftpFiles[i].isFile();
                 if (isFile) {
-                    if(name.indexOf(EmpId+".pdf")>-1){ //"-"+
-                        JSONObject jsonObject=new JSONObject();
-                        jsonObject.put("name",name);
-                        jsonObject.put("type","FILE");
+                    if (name.indexOf(EmpId + ".pdf") > -1) { //"-"+
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("name", name);
+                        jsonObject.put("type", "FILE");
                         fileList.put(jsonObject);
                     }
-                    Log.i(TAG, "File : " + name+"= -"+EmpId+".pdf");
+                    Log.v("KARTHIC_FILE_NAME", "File : " + name + "= -" + EmpId + ".pdf");
                 } else {
-                        JSONObject jsonObject=new JSONObject();
-                        jsonObject.put("name",name);
-                        jsonObject.put("type","DIR");
-                        fileList.put(jsonObject);
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("name", name);
+                    jsonObject.put("type", "DIR");
+                    fileList.put(jsonObject);
 
-                    Log.i(TAG, "Directory : " + name);
+                    Log.v("KARTHIC_FILE_NAME", "Directory : " + name);
                 }
             }
             return fileList;
@@ -243,18 +247,26 @@ public class PayslipFtp extends AppCompatActivity {
      * the destination file to be saved in sdcard
      */
     public boolean ftpDownload(String srcFilePath, String desFilePath) {
+
+        Log.v("PAY_SLIP_KARTHIC_in",CurrPath);
+        Log.v("PAY_SLIP_KARTHIC_in",pdfPath);
+        Log.v("PAY_SLIP_KARTHIC_in",srcFilePath);
+        Log.v("PAY_SLIP_KARTHIC_in",desFilePath);
+
+
         boolean status = false;
         try {
-            if(ftpConnect("sf.hap.in","hapftp","VFAY$du3@=9^",21)){
+            if (ftpConnect("sf.hap.in", "hapftp", "VFAY$du3@=9^", 21)) {
                 FileOutputStream desFileStream = new FileOutputStream(desFilePath);
                 status = mFTPClient.retrieveFile(srcFilePath, desFileStream);
-
+                Log.d("Karthic_Response", pdfPath);
+                Log.d("Karthic_Response", desFilePath);
                 desFileStream.close();
                 ftpDisconnect();
                 return status;
             }
         } catch (Exception e) {
-            Log.d(TAG, "download failed"+e.getMessage());
+            Log.d(TAG, "download failed" + e.getMessage());
         }
 
         return status;
