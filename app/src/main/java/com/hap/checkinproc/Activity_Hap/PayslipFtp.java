@@ -59,11 +59,11 @@ public class PayslipFtp extends AppCompatActivity {
                 try {
                     if (item.getString("type").equalsIgnoreCase("dir")) {
                         getPaySlipFolder(item.getString("name"));
-                    } else {
-                        ftpDownload(CurrPath + "/" + item.getString("name"), pdfPath + item.getString("name"));
+                        } else {
+                            ftpDownload(CurrPath + "/" + item.getString("name"), pdfPath + item.getString("name"));
 
 
-                    }
+                        }
                     Log.v("PAY_SLIP_KARTHIC_o",CurrPath);
                     Log.v("PAY_SLIP_KARTHIC_o",pdfPath);
                 } catch (JSONException e) {
