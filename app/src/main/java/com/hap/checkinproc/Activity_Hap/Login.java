@@ -519,7 +519,7 @@ public class Login extends AppCompatActivity {
             return;
         }
         Log.d(TAG, "TWO " + deviceToken);
-        //eMail="rdo1@hap.in";
+        eMail="anbu@saneforce.com";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
       //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "haptest4@hap.in", deviceToken);
@@ -589,6 +589,8 @@ public class Login extends AppCompatActivity {
                         Integer type = response.body().getData().get(0).getCheckCount();
                         String DeptCd = response.body().getData().get(0).getSFDept();
                         String DeptType = response.body().getData().get(0).getDeptType();
+                        String SFHQ = response.body().getData().get(0).getsFHQ();
+
                         Integer OTFlg = response.body().getData().get(0).getOTFlg();
                         SharedPreferences.Editor editor = UserDetails.edit();
                         Shared_Common_Pref.Sf_Code = code;
@@ -620,6 +622,7 @@ public class Login extends AppCompatActivity {
                         editor.putString("Sfcode", code);
                         editor.putString("EmpId", empID);
                         editor.putString("SfName", sName);
+                        editor.putString("SFHQ", SFHQ);
                         editor.putString("Divcode", div);
                         editor.putInt("CheckCount", type);
                         editor.putString("DeptCd", DeptCd);

@@ -5,17 +5,25 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.google.gson.JsonArray;
+import com.hap.checkinproc.Activity.PdfViewerActivity;
+import com.hap.checkinproc.Interface.onListItemClick;
 import com.hap.checkinproc.Interface.onPayslipItemClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.GateAdapter;
 import com.hap.checkinproc.adapters.HAPListItem;
+import com.hap.checkinproc.adapters.adBackFolders;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -35,10 +43,11 @@ public class PayslipFtp extends AppCompatActivity {
     public static final String UserDetail = "MyPrefs";
     public FTPClient mFTPClient = null;
 
-    RecyclerView mRecyclerView;
-
+    RecyclerView mRecyclerView,mRecylPrvFldr;
+    TextView btnCanteen;
     JSONArray lsFiles;
     HAPListItem listItems;
+    adBackFolders bkFldrItems;
 
     SharedPreferences UserDetails;
 
@@ -51,8 +60,16 @@ public class PayslipFtp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payslip_ftp);
         CurrPath=HomePath;
+        //refreshCurrFolder();
         getPaySlipFolder("");
-
+        btnCanteen=findViewById(R.id.btnCanteen);
+        btnCanteen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent frmCanteen=new Intent(PayslipFtp.this,foodExp.class);
+                startActivity(frmCanteen);
+            }
+        });
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
         EmpId=UserDetails.getString("EmpId","");
         HAPListItem.SetPayOnClickListener(new onPayslipItemClick() {
@@ -63,13 +80,61 @@ public class PayslipFtp extends AppCompatActivity {
                         getPaySlipFolder(item.getString("name"));
                     }else
                     {
-                        ftpDownload(CurrPath+"/"+item.getString("name"),pdfPath+item.getString("name"));
+                       if(ftpDownload(CurrPath+"/"+item.getString("name"),pdfPath+item.getString("name"))){
+                           Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
+                           stat.putExtra("PDF_FILE","local");
+                           stat.putExtra("PDF_ONE", pdfPath+item.getString("name"));
+                           startActivity(stat);
+                       }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         });
+        adBackFolders.SetOnClickListener(new onListItemClick() {
+            @Override
+            public void onItemClick(JSONObject item) {
+                try {
+                    CurrPath=item.getString("path");
+
+                    getPaySlipFolder("");
+                    //refreshCurrFolder();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+    public void refreshCurrFolder(){
+        String[] folders=CurrPath.replace(HomePath,"").split("/");
+        JSONArray FldrItems=new JSONArray();
+        String path=HomePath;
+        for(int il=0;il<folders.length;il++){
+            JSONObject jsonObject=new JSONObject();
+            try {
+                if(!folders[il].equalsIgnoreCase("")){
+                    jsonObject.put("name",folders[il]);
+                    path=path+"/"+folders[il];
+                    jsonObject.put("path",path);
+                    FldrItems.put(jsonObject);
+                }else{
+                    jsonObject.put("name","Pay Slip");
+                    jsonObject.put("path",path);
+                    FldrItems.put(jsonObject);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        bkFldrItems=new adBackFolders(FldrItems,this);
+        mRecylPrvFldr = findViewById(R.id.prvFolder);
+        mRecylPrvFldr.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(RecyclerView.HORIZONTAL);
+        mRecylPrvFldr.setLayoutManager(layoutManager);
+
+        mRecylPrvFldr.setAdapter(bkFldrItems);
     }
     public void getPaySlipFolder(String mCurrPath)
     {
@@ -85,10 +150,10 @@ public class PayslipFtp extends AppCompatActivity {
 
             mRecyclerView.setAdapter(listItems);
             ftpDisconnect();
+            refreshCurrFolder();
         }
     }
-    public boolean ftpConnect(String host, String username, String password,
-                              int port) {
+    public boolean ftpConnect(String host, String username, String password, int port) {
         try {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                     .permitAll()
@@ -249,6 +314,7 @@ public class PayslipFtp extends AppCompatActivity {
                 FileOutputStream desFileStream = new FileOutputStream(desFilePath);
                 status = mFTPClient.retrieveFile(srcFilePath, desFileStream);
 
+                //pdfView.fromStream(desFileStream).load();
                 desFileStream.close();
                 ftpDisconnect();
                 return status;

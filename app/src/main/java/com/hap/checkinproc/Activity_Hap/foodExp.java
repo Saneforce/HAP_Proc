@@ -1,0 +1,72 @@
+package com.hap.checkinproc.Activity_Hap;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.gson.JsonArray;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.R;
+import com.hap.checkinproc.adapters.HAPListItem;
+import com.hap.checkinproc.adapters.adFoodexp;
+
+import org.json.JSONArray;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class foodExp extends AppCompatActivity {
+    public static final String UserDetail = "MyPrefs";
+    SharedPreferences UserDetails;
+    RecyclerView mRecyclerView;
+    TextView txtempid,txtempName,txtHQ;
+
+    adFoodexp lsExp;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_food_exp);
+        UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+        txtempid=findViewById(R.id.empId);
+        txtempName=findViewById(R.id.empName);
+        txtHQ=findViewById(R.id.empHQ);
+        txtempid.setText(UserDetails.getString("EmpId",""));
+        txtempName.setText(UserDetails.getString("SfName",""));
+        txtHQ.setText(UserDetails.getString("SFHQ",""));
+        mRecyclerView = findViewById(R.id.foodExpList);
+        mRecyclerView.setHasFixedSize(true);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(layoutManager);
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/foodexp",
+                UserDetails.getString("Divcode", ""),
+                UserDetails.getString("Sfcode", ""), "", "", null);
+        rptCall.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                JsonArray res = response.body();
+                if (res.size() < 1) {
+                    Toast.makeText(getApplicationContext(), "No Records Today", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                lsExp = new adFoodexp(res, foodExp.this);
+                mRecyclerView.setAdapter(lsExp);
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+
+            }
+        });
+    }
+}

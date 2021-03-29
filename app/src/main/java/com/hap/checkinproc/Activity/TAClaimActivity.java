@@ -2395,6 +2395,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
                 stat.putExtra("PDF_ONE", "https://hap.sanfmcg.com/Travel%20and%20Daily%20Allowance%20Policy%20-%20Domestic%20Travel%20Annexure%20C-1_1%20Feb-21.pdf");
+                stat.putExtra("PDF_FILE", "Web");
                 startActivity(stat);
 
                 dialog.dismiss();
@@ -2406,6 +2407,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             public void onClick(View view) {
                 Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
                 stat.putExtra("PDF_ONE", "https://hap.sanfmcg.com/HAP_ANNEXURE_C.pdf");
+                stat.putExtra("PDF_FILE", "Web");
                 startActivity(stat);
 
                 dialog.dismiss();
