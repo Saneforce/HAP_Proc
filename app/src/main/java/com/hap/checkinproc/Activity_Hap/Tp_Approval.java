@@ -66,8 +66,6 @@ public class Tp_Approval extends AppCompatActivity {
         gson = new Gson();
         gettp_Details();
 
-
-
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +90,6 @@ public class Tp_Approval extends AppCompatActivity {
             }
         });
 
-
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
         textColorAnim.setDuration(500);
@@ -112,7 +109,6 @@ public class Tp_Approval extends AppCompatActivity {
                     startActivity(Dashboard);
                 } else
                     startActivity(new Intent(getApplicationContext(), Dashboard.class));
-
 
             }
         });

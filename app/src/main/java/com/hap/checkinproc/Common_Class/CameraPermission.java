@@ -23,6 +23,7 @@ public class CameraPermission extends Activity {
         this._context = _context;
     }
 
+   
     public boolean checkPermission() {
         int locationReq = ContextCompat.checkSelfPermission(_context, ACCESS_FINE_LOCATION);
         int coarseReq = ContextCompat.checkSelfPermission(_context, ACCESS_COARSE_LOCATION);

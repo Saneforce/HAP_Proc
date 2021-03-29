@@ -31,7 +31,7 @@ public class Shared_Common_Pref {
     public static String OutletCode="OutletCode";
 
     public static String Dept_Type = "Dept_Type";
-
+    public static String Sync_Flag;
     public static final String spNamemas = "SP_MAS_DETAILS";
     public static final String loggedIn = "loggedIn";
     public static final String Password = "Password";
@@ -48,6 +48,16 @@ public class Shared_Common_Pref {
     public static final String Work_date = "workdate";
     public static final String Status = "status";
     public static int TotalCountApproval = 0;
+    public static String TransSlNo;
+    public static String Invoicetoorder;
+
+    public static final String Outlet_List = "Outlet_List";
+    public static final String Distributor_List = "Distributor_List";
+    public static final String Category_List = "Category_List";
+    public static final String Product_List = "Product_List";
+    public static final String GetTodayOrder_List = "GetTodayOrder_List";
+    public static final String TodayOrderDetails_List = "TodayOrderDetails_List";
+    public static final String Compititor_List = "Compititor_List";
 
 
     public Shared_Common_Pref(Activity Ac) {

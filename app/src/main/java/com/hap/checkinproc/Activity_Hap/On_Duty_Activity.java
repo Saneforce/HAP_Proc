@@ -491,6 +491,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             }
         });
 
+        strHapLocation =  selecthaplocationss.getText().toString();
 
         attachedImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -606,13 +607,13 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             }
 
             if (sharedpreferences.contains(modeTravelId)) {
-                ModeTravelType = sharedpreferences.getString(modeTravelId, "");
-                Log.e("Mode_STARTEND", sharedpreferences.getString(modeTravelId, ""));
+                startEnd = sharedpreferences.getString(modeTravelId, "");
+                Log.e("Mode_STARTEND", sharedpreferences.getString(startEnd, ""));
             }
 
             if (sharedpreferences.contains("ShareModeIDs")) {
-                StrID = sharedpreferences.getString("ShareModeIDs", "");
-                Log.e("Privacypolicy", "StrID" + StrID);
+                modeId = sharedpreferences.getString("ShareModeIDs", "");
+                Log.e("Privacypolicy", "StrID" + modeId);
             }
 
             if (sharedpreferences.contains(modeTypeVale)) {
@@ -1126,17 +1127,17 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
 
         try {
             JSONObject jj = new JSONObject();
-            jj.put("hap_location", strHapLocation);
+            jj.put("hap_location", selecthaplocationss.getText().toString());
             jj.put("visit_purpose", purposeofvisitedittext.getText().toString());
             jj.put("other_loaction", ondutyedittext.getText().toString());
             jj.put("mode_allowance", "OnDuty");
             jj.put("km", StartKm.getText().toString());
             jj.put("rmk", StartKm.getText().toString());
             jj.put("mode_name", TextMode.getText().toString());
-            jj.put("mod", StrID);
+            jj.put("mod", modeId);
             jj.put("sf", SF_code);
             jj.put("div", div);
-            jj.put("StEndNeed", ModeTravelType);
+            jj.put("StEndNeed", startEnd);
             jj.put("url", imageServer);
             jj.put("from", onDutyFrom.getText().toString());
             jj.put("to", TextToAddress.getText().toString());
@@ -1153,7 +1154,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         if (response.isSuccessful()) {
-
 
                             Log.v("print_upload_file_true", "ggg" + response);
                             JSONObject jb = null;
@@ -1199,7 +1199,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onResume() {
         super.onResume();
-
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
@@ -1207,7 +1206,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onPause() {
         super.onPause();
-
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }

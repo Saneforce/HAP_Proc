@@ -45,6 +45,8 @@
     <color name="Hap_location">#10B2C7</color>
 
 
+    <color name="greeninvoicecolor">#C5EBC4</color>
+    <color name="invoiceordercolor">#FFD2B5</color>
 
     <!--button Colors-->
     <color name="Request">#840013</color>

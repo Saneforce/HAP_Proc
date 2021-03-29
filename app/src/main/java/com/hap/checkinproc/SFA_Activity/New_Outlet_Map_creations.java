@@ -49,7 +49,6 @@ public class New_Outlet_Map_creations extends FragmentActivity implements OnMapR
     TextView AddressTextview, ReachedOutlet;
     ImageView imag_back;
     Common_Class common_class;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

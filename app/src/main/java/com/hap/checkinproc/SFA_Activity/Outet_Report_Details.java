@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import androidx.activity.OnBackPressedDispatcher;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,9 +13,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,11 +27,20 @@ import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
+import com.hap.checkinproc.Activity_Hap.ViewReportActivity;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.ViewReport;
+import com.hap.checkinproc.Model_Class.DateReport;
+import com.hap.checkinproc.Model_Class.DateResult;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Outlet_Report_ProductDetails_Adapter;
+import com.hap.checkinproc.SFA_Adapter.Outlet_Report_View_Adapter;
+import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Outlet_Report_Product_Details_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
+import com.hap.checkinproc.adapters.DateReportAdapter;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -65,9 +77,7 @@ public class Outet_Report_Details extends AppCompatActivity {
         TotalValue = findViewById(R.id.total_value);
         txtProductId = findViewById(R.id.txt_product_id);
         txtProductDate = findViewById(R.id.txt_order_Date);
-        gson = new Gson();
-        ((HAPApp) getApplication()).getNetComponent().inject(this);
-        TextView txtHelp = findViewById(R.id.toolbar_help);
+        gson = new Gson();TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,7 +151,7 @@ public class Outet_Report_Details extends AppCompatActivity {
 
 
     public void ViewDateReport() {
-        ApiInterface service = retrofit.create(ApiInterface.class);
+        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "table/list");
         QueryString.put("divisionCode", Shared_Common_Pref.Div_Code.replace(",", ""));

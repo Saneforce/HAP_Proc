@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/greeninvoicecolor">
+
+    <LinearLayout
+        android:id="@+id/row_report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="@dimen/header_width1"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txt_order"
+                    android:layout_width="@dimen/header_width1"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginLeft="@dimen/sno"
+                    android:gravity="left"
+                    android:text="OrderID"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/C16dp"></TextView>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="@dimen/header_width2"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/Itemcountinvoice"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/sno1"
+                    android:gravity="center"
+                    android:text="54"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/C16dp"></TextView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/header_width2"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/txt_total"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/sno1"
+                    android:gravity="center"
+                    android:text="Value"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/C16dp"></TextView>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_date"
+                android:layout_width="@dimen/header_width1"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sno"
+                android:text="OrderDate"
+                android:textColor="@color/black"
+                android:textSize="@dimen/C16dp"></TextView>
+
+            <TextView
+                android:id="@+id/Statusinvoice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/sno"
+                android:text="Complete"
+                android:textColor="@color/black"
+                android:textSize="@dimen/C16dp"></TextView>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.4dp"
+            android:background="@color/statuscolor"
+            android:outlineAmbientShadowColor="@color/statuscolor"></View>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

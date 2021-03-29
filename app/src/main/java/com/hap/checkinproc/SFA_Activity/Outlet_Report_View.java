@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -28,12 +29,19 @@ import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
+import com.hap.checkinproc.Activity_Hap.ReportActivity;
+import com.hap.checkinproc.Activity_Hap.ViewReportActivity;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.ViewReport;
+import com.hap.checkinproc.Model_Class.ReportDataList;
+import com.hap.checkinproc.Model_Class.ReportModel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Outlet_Report_View_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
+import com.hap.checkinproc.adapters.ReportViewAdapter;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
@@ -77,7 +85,7 @@ public class Outlet_Report_View extends AppCompatActivity {
         Outlet_Name.setText("" + Shared_Common_Pref.OutletName);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         gson = new Gson();
-        ((HAPApp) getApplication()).getNetComponent().inject(this);
+
         txtHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -211,7 +219,7 @@ public class Outlet_Report_View extends AppCompatActivity {
 
 
     public void ViewDateReport() {
-        ApiInterface service = retrofit.create(ApiInterface.class);
+        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "table/list");
         QueryString.put("divisionCode", Shared_Common_Pref.Div_Code.replace(",", ""));

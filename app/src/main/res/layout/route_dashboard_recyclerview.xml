@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -9,35 +11,71 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
         android:orientation="vertical"
-        android:padding="2dp"
         android:weightSum="4">
 
         <TextView
             android:id="@+id/retailername"
-            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/C10dp"
+            android:text="thirumalai"
             android:textColor="@color/Exit"
-            android:textSize="18dp" />
+            android:textSize="16dp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        android:padding="2dp">
+        android:layout_height="25dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
 
         <TextView
             android:id="@+id/status"
-            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/C10dp"
             android:layout_weight="1"
-            android:textColor="@color/Exit" />
+            android:textSize="@dimen/C12dp"
+            android:text="Pending"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/invoice"
-            style="@style/TextStyle"
-            android:textColor="@color/Exit" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            android:layout_weight="1"
+            android:textSize="@dimen/C12dp"
+            android:text="12345"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <TextView
+            android:id="@+id/values"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/C10dp"
+            android:layout_weight="1"
+            android:textSize="@dimen/C12dp"
+            android:text="Pending"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/invoicedate"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="12345"
+            android:textSize="@dimen/C12dp"
+            android:textColor="@color/black" />
     </LinearLayout>
 
     <View

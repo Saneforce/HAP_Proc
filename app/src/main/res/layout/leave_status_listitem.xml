@@ -50,7 +50,6 @@
                     <TextView
                         android:id="@+id/LStatus"
                         style="@style/TextStyle"
-                        android:text="dsffdsf"
                         android:textColor="@android:color/white" />
 
                 </LinearLayout>

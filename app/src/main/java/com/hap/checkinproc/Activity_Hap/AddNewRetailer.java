@@ -38,6 +38,7 @@ import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.ReatilRouteModel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
+import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -430,7 +431,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     startActivity(new Intent(getApplicationContext(), SecondaryOrderActivity.class));
                 } else if (success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
                     Shared_Common_Pref.Outler_AddFlag = "0";
-                    startActivity(new Intent(getApplicationContext(), Dashboard_Route.class));
+                    Shared_Common_Pref.Sync_Flag = "1";
+                    startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
                 }
             }
 

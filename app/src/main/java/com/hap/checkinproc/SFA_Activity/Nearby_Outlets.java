@@ -1,13 +1,16 @@
 package com.hap.checkinproc.SFA_Activity;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
@@ -20,18 +23,20 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.Dashboard_View_Model;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class Reports_Outler_Name extends AppCompatActivity {
+public class Nearby_Outlets extends AppCompatActivity implements View.OnClickListener {
     String Scode;
     String Dcode;
     String Rf_code;
@@ -40,7 +45,7 @@ public class Reports_Outler_Name extends AppCompatActivity {
     private RecyclerView recyclerView;
     Type userType;
     Common_Class common_class;
-    TextView headtext, textViewname;
+    TextView Createoutlet, latitude, longitude;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
     @Inject
     Retrofit retrofit;
@@ -48,15 +53,19 @@ public class Reports_Outler_Name extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_reports__outler__name);
+        setContentView(R.layout.activity_nearby__outlets);
         shared_common_pref = new Shared_Common_Pref(this);
         recyclerView = findViewById(R.id.outletrecyclerview);
-        headtext = findViewById(R.id.headtext);
-        textViewname = findViewById(R.id.textViewname);
+        Createoutlet = findViewById(R.id.Createoutlet);
+        latitude = findViewById(R.id.latitude);
+        longitude = findViewById(R.id.longitude);
+        latitude.setText("Latitude : " + Shared_Common_Pref.Outletlat);
+        longitude.setText("Latitude : " + Shared_Common_Pref.Outletlong);
         common_class = new Common_Class(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
         GetAllDetails();
+        Createoutlet.setOnClickListener(this);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,26 +89,20 @@ public class Reports_Outler_Name extends AppCompatActivity {
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                Log.e("MAsterSyncView_Result", response.body() + "");
-                Log.e("TAG", "response 33: " + new Gson().toJson(response.body()));
                 userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
                 }.getType();
                 Retailer_Modal_List = gson.fromJson(new Gson().toJson(response.body()), userType);
                 recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_List, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {
                     @Override
                     public void onIntentClick(int position) {
-                        Shared_Common_Pref.OutletCode = Retailer_Modal_List.get(position).getId();
-                        Shared_Common_Pref.OutletName = Retailer_Modal_List.get(position).getName();
-                        Intent intent = new Intent(getApplicationContext(), Outlet_Report_View.class);
-                        startActivity(intent);
-                       /* Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
+                        Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
                         intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_List.get(position).getId()));
                         intent.putExtra("OutletName", Retailer_Modal_List.get(position).getName());
                         intent.putExtra("OutletAddress", Retailer_Modal_List.get(position).getListedDrAddress1());
                         intent.putExtra("OutletMobile", Retailer_Modal_List.get(position).getMobileNumber());
                         intent.putExtra("OutletRoute", Retailer_Modal_List.get(position).getTownName());
                         startActivity(intent);
-*/
+
                     }
                 }));
             }
@@ -109,5 +112,15 @@ public class Reports_Outler_Name extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.Createoutlet:
+                //common_class.
+                break;
+        }
     }
 }

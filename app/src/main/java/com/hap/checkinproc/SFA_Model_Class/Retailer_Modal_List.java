@@ -1,4 +1,5 @@
 package com.hap.checkinproc.SFA_Model_Class;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -6,10 +7,54 @@ public class Retailer_Modal_List {
     @SerializedName("id")
     @Expose
     private String id;
+    public String getStatusname() {
+        return Statusname;
+    }
 
-    public Retailer_Modal_List(String id, String name, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode) {
+    public void setStatusname(String statusname) {
+        Statusname = statusname;
+    }
+
+    public String getValuesinv() {
+        return Valuesinv;
+    }
+
+    public void setValuesinv(String values) {
+        Valuesinv = values;
+    }
+
+    public String getInvoiceValues() {
+        return InvoiceValues;
+    }
+
+    public void setInvoiceValues(String invoiceValues) {
+        InvoiceValues = invoiceValues;
+    }
+
+    public String getInvoiceDate() {
+        return InvoiceDate;
+    }
+
+    public void setInvoiceDate(String invoiceDate) {
+        InvoiceDate = invoiceDate;
+    }
+
+    public String get_long() {
+        return _long;
+    }
+
+    public void set_long(String _long) {
+        this._long = _long;
+    }
+
+
+    public Retailer_Modal_List(String id, String name, String statusname, String Valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode) {
         this.id = id;
         this.name = name;
+        Statusname = statusname;
+        Valuesinv = Valuesinv;
+        InvoiceValues = invoiceValues;
+        InvoiceDate = invoiceDate;
         this.townCode = townCode;
         this.townName = townName;
         this.lat = lat;
@@ -26,6 +71,18 @@ public class Retailer_Modal_List {
     @SerializedName("name")
     @Expose
     private String name;
+    @SerializedName("Statusname")
+    @Expose
+    private String Statusname;
+    @SerializedName("Valuesinv")
+    @Expose
+    private String Valuesinv;
+    @SerializedName("InvoiceValues")
+    @Expose
+    private String InvoiceValues;
+    @SerializedName("InvoiceDate")
+    @Expose
+    private String InvoiceDate;
     @SerializedName("town_code")
     @Expose
     private String townCode;
@@ -59,6 +116,17 @@ public class Retailer_Modal_List {
     @SerializedName("Doc_Special_Code")
     @Expose
     private Integer docSpecialCode;
+    @SerializedName("Invoice_Flag")
+    @Expose
+    private String Invoice_Flag;
+
+    public String getInvoice_Flag() {
+        return Invoice_Flag;
+    }
+
+    public void setInvoice_Flag(String invoice_Flag) {
+        Invoice_Flag = invoice_Flag;
+    }
 
     public String getId() {
         return id;

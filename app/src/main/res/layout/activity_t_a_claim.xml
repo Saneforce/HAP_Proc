@@ -631,7 +631,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/C8dp"
-
                         app:cardCornerRadius="@dimen/C5dp">
 
                         <LinearLayout
@@ -656,7 +655,6 @@
                                     android:textSize="14sp"
                                     android:textStyle="bold" />
 
-
                             </LinearLayout>
 
                             <LinearLayout
@@ -666,9 +664,7 @@
                                 android:layout_margin="@dimen/C8dp"
                                 android:orientation="vertical"
                                 android:padding="@dimen/C5dp"
-                                android:visibility="gone"
-
-                                >
+                                android:visibility="gone">
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"

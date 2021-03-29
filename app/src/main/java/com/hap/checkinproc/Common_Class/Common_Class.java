@@ -137,6 +137,13 @@ public class Common_Class {
         return false;
     }
 
+    public static String GetDatewothouttime() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");
+        String plantime = dpln.format(c.getTime());
+        return plantime;
+    }
+
 
     public void makeCall(int mobilenumber) {
         final int REQUEST_PHONE_CALL = 1;
