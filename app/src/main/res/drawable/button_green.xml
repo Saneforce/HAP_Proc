@@ -1,14 +1,51 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <padding android:left="2dp"
-        android:top="2dp"
-        android:right="2dp"
-        android:bottom="2dp" />
-    <corners android:radius="10dp" />
+    <!-- Bottom 15dp Shadow -->
+    <item>
+        <shape  android:shape="rectangle">
 
-    <gradient
-        android:startColor="#009688"
-        android:endColor="#079588"
-        android:angle="-90" />
-</shape>
+            <!--            Button Shadow Color -->
+            <solid android:color="#2D7871" />
+            <corners android:radius="10dp" />
+
+        </shape>
+    </item>
+
+    <!-- White Top color -->
+    <item android:bottom="7px">
+        <shape  android:shape="rectangle">
+            <padding android:bottom="0dp"
+                android:top="6dp"
+                android:left="20dp"
+                android:right="20dp"/>
+            <!--            Button TOP Color -->
+<!--            <solid android:color="#009688" />-->
+            <corners android:radius="10dp" />
+            <gradient
+                android:startColor="#009688"
+                android:endColor="#009688"
+                android:angle="-90" />
+        </shape>
+    </item>
+</layer-list>
+
+
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<shape xmlns:android="http://schemas.android.com/apk/res/android">-->
+
+<!--    <padding android:left="2dp"-->
+<!--        android:top="2dp"-->
+<!--        android:right="2dp"-->
+<!--        android:bottom="2dp" />-->
+<!--    <corners android:radius="10dp" />-->
+
+<!--    <gradient-->
+<!--        android:startColor="#009688"-->
+<!--        android:endColor="#009688"-->
+<!--        android:angle="-122deg" />-->
+<!--    -->
+<!--</shape>-->
+
+
+

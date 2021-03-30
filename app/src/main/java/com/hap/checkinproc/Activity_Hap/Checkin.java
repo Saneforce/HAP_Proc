@@ -51,24 +51,19 @@ public class Checkin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkin);
-        startService(new Intent(this, TimerService.class));
+
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
-        Check_Flag = "CIN";
-        txtHelp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
-            }
-        });
-
-        sharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        if (sharedPreferences.contains("ShiftDuty")) {
-            DutyAlp = sharedPreferences.getString("ShiftDuty", "");
-        }
-
         TextView txtErt = findViewById(R.id.toolbar_ert);
         TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
+
+        ObjectAnimator textColorAnim;
+        textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
+        textColorAnim.setDuration(500);
+        textColorAnim.setEvaluator(new ArgbEvaluator());
+        textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
+        textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
+        textColorAnim.start();
 
         txtErt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,15 +77,12 @@ public class Checkin extends AppCompatActivity {
 
             }
         });
-
-
-        ObjectAnimator textColorAnim;
-        textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
-        textColorAnim.setDuration(500);
-        textColorAnim.setEvaluator(new ArgbEvaluator());
-        textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
-        textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
-        textColorAnim.start();
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,11 +97,16 @@ public class Checkin extends AppCompatActivity {
 
             }
         });
+
+        Check_Flag = "CIN";
+        sharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+        if (sharedPreferences.contains("ShiftDuty")) {
+            DutyAlp = sharedPreferences.getString("ShiftDuty", "");
+        }
         SharedPreferences CheckInDetails = getSharedPreferences(spCheckIn, MODE_PRIVATE);
         String SFTID = CheckInDetails.getString("Shift_Selected_Id", "");
+
         intent = getIntent();
-
-
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
             ODFlag = String.valueOf(bundle.getSerializable("ODFlag"));
@@ -167,7 +164,7 @@ public class Checkin extends AppCompatActivity {
             startActivity(takePhoto);
             finish();
         } else {
-            if (DutyType.equals("cba")) {
+            if (DutyType.equals("cba") || DutyType.equalsIgnoreCase("")) {
                 Log.v("KARTHIC_DUTY_1","2");
                 spinnerValue("get/Shift_timing", Dcode, Scode);
             } else {

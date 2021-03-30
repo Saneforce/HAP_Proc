@@ -205,11 +205,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 String ETime = CheckInDetails.getString("CINEnd", "");
 
                 if (!ETime.equalsIgnoreCase("")) {
-
                     String CutOFFDt = CheckInDetails.getString("ShiftCutOff", "0");
                     String SftId = CheckInDetails.getString("Shift_Selected_Id", "0");
-
-
                     if (DT.GetCurrDateTime(this).getTime() >= DT.getDate(CutOFFDt).getTime() || SftId == "0") {
                         ETime = "";
                     }
@@ -224,7 +221,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     takePhoto.putExtra("ShiftEnd", CheckInDetails.getString("ShiftEnd", "0"));
                     takePhoto.putExtra("ShiftCutOff", CheckInDetails.getString("ShiftCutOff", "0"));
                     startActivity(takePhoto);
-
                 } else {
                     Intent i = new Intent(this, Checkin.class);
                     startActivity(i);

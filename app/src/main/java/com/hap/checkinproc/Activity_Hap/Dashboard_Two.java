@@ -209,6 +209,12 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         mRecyclerView.setLayoutManager(layoutManager);
         //mRecyclerView.stopScroll();
 
+        if (mShared_common_pref.getvalue(Shared_Common_Pref.CHECK_COUNT).equals("0")) {
+            btnApprovals.setVisibility(View.GONE);
+            //linApprovals.setVisibility(View.VISIBLE);
+        } else {
+            btnApprovals.setVisibility(View.VISIBLE);
+        }
 
         StActivity = findViewById(R.id.StActivity);
         btnCheckout = findViewById(R.id.btnCheckout);
@@ -238,12 +244,14 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 //cardView5.setVisibility(View.VISIBLE);
                 StActivity.setVisibility(View.VISIBLE);
                 btnCheckout.setVisibility(View.VISIBLE);
+                btnApprovals.setVisibility(View.VISIBLE);
             } else {
                 cardview3.setVisibility(View.GONE);
                 cardview4.setVisibility(View.GONE);
                 cardView5.setVisibility(View.GONE);
                 StActivity.setVisibility(View.GONE);
                 btnCheckout.setVisibility(View.GONE);
+                btnApprovals.setVisibility(View.GONE);
             }
         } else {
             cardview3.setVisibility(View.GONE);
@@ -418,7 +426,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 newItem.addProperty("type", "geo");
 
                 dyRpt.add(newItem);
-
 
                 recyclerView = (RecyclerView) findViewById(R.id.Rv_DyRpt);
                 mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this);

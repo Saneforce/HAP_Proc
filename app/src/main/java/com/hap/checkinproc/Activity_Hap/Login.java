@@ -234,7 +234,7 @@ public class Login extends AppCompatActivity {
                 // Bind to the service. If the service is in foreground mode, this signals to the service
                 // that since this activity is in the foreground, the service can exit foreground mode.
 
-                Boolean DAMode = CheckInDetails.getBoolean("DAMode", true);
+                Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
                 if(DAMode==true){
                     bindService(new Intent(getApplicationContext(), SANGPSTracker.class), mServiceConection,
                             Context.BIND_AUTO_CREATE);
@@ -292,10 +292,13 @@ public class Login extends AppCompatActivity {
 
             /*PERMISSION REQUEST*/
             if (cameraPermission.checkPermission()) {
-                Intent playIntent = new Intent(this, SANGPSTracker.class);
-                bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
-                startService(playIntent);
 
+                Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
+                if(DAMode==true) {
+                    Intent playIntent = new Intent(this, SANGPSTracker.class);
+                    bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
+                    startService(playIntent);
+                }
             }
 
             if (Login == true && CheckIn == false) {
@@ -437,7 +440,7 @@ public class Login extends AppCompatActivity {
             // Bind to the service. If the service is in foreground mode, this signals to the service
             // that since this activity is in the foreground, the service can exit foreground mode.
 
-            Boolean DAMode = CheckInDetails.getBoolean("DAMode", true);
+            Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
             if(DAMode==true) {
                 bindService(new Intent(this, SANGPSTracker.class), mServiceConection,
                         Context.BIND_AUTO_CREATE);

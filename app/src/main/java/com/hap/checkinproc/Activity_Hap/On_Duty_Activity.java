@@ -4,13 +4,17 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -31,11 +35,13 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -45,6 +51,8 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.LocationReceiver;
+import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
@@ -90,6 +98,10 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     SharedPreferences UserDetails;
     String SF_code = "", div = "";
     Shared_Common_Pref mShared_common_pref;
+
+    private SANGPSTracker mLUService;
+    private boolean mBound = false;
+    private LocationReceiver myReceiver;
 
     String count = "";
 
@@ -1178,6 +1190,14 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                                 }
                                 extras.putString("vstPurpose", purposeofvisitedittext.getText().toString());
                                 intent.putExtras(extras);
+                                shared_common_pref.save(Shared_Common_Pref.DAMode,true);
+                                mLUService = new SANGPSTracker(On_Duty_Activity.this);
+                                myReceiver = new LocationReceiver();
+                                bindService(new Intent(On_Duty_Activity.this, SANGPSTracker.class), mServiceConection,
+                                        Context.BIND_AUTO_CREATE);
+                                LocalBroadcastManager.getInstance(On_Duty_Activity.this).registerReceiver(myReceiver,
+                                        new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
+                                mLUService.requestLocationUpdates();
                                 startActivity(intent);
 
                             } else
@@ -1230,4 +1250,17 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         startService(new Intent(this, TimerService.class));
     }
 
+    private final ServiceConnection mServiceConection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mLUService = ((SANGPSTracker.LocationBinder) service).getLocationUpdateService(getApplicationContext());
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mLUService = null;
+            mBound = false;
+        }
+    };
 }

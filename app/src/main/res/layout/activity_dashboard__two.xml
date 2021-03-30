@@ -325,7 +325,7 @@
                         android:id="@+id/approvals"
                         style="@style/ButtonStyle"
                         android:layout_weight="1"
-                        android:background="@drawable/button_purple"
+                        android:background="@drawable/button_dgreen"
                         android:text="Approvals" />
 
                 </LinearLayout>
