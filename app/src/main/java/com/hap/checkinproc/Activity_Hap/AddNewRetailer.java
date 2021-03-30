@@ -4,10 +4,10 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -27,18 +27,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
-import com.hap.checkinproc.Model_Class.ReatilRouteModel;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
+import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -102,13 +100,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             CurrentLocLin.setVisibility(View.VISIBLE);
             routeId = shared_common_pref.getvalue("RouteSelect");
             txtRetailerRoute.setText(shared_common_pref.getvalue("RouteName"));
-            CurrentLocationsAddress.setText(""+Shared_Common_Pref.OutletAddress);
+            CurrentLocationsAddress.setText("" + Shared_Common_Pref.OutletAddress);
 
         } else {
             CurrentLocLin.setVisibility(View.GONE);
             Shared_Common_Pref.Outler_AddFlag = "0";
         }
-
 
 
         getRouteDetails();
@@ -211,7 +208,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 } else if (!addRetailerEmail.getText().toString().trim().matches(emailPattern)) {
                     Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
                 } else {
-                    addNewRetailers();
+                    new LocationFinder(getApplication(), new LocationEvents() {
+                        @Override
+                        public void OnLocationRecived(Location location) {
+                            addNewRetailers();
+                        }
+                    });
+
                     Toast.makeText(AddNewRetailer.this, "New Retailer Added successfully", Toast.LENGTH_SHORT).show();
                 }
 
