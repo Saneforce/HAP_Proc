@@ -36,7 +36,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
-        <activity android:name=".Common_Class.ToolBarMethod"></activity>
+        <activity android:name=".Activity_Hap.foodExp"></activity>
         <activity android:name=".Activity_Hap.PayslipFtp" />
         <activity android:name=".Activity_Hap.DaExceptionEntry" />
         <activity android:name=".Activity.LodgingCliamActivity" />
@@ -62,9 +62,6 @@
         <activity android:name=".SFA_Activity.Dashboard_View_Activity" />
         <activity android:name=".SFA_Activity.SFA_Dashboard" />
         <activity android:name=".SFA_Activity.New_Outlet_Map_creations" />
-        <activity android:name=".SFA_Activity.Dashboard_Order_Reports" />
-        <activity android:name=".SFA_Activity.Offline_Sync_Activity" />
-        <activity android:name=".SFA_Activity.Nearby_Outlets" />
         <activity android:name=".Activity_Hap.SFA_Activity" />
         <activity
             android:name=".Activity_Hap.AttachementActivity"
@@ -78,6 +75,9 @@
         <activity
             android:name=".Activity_Hap.MapZoomIn"
             android:theme="@style/AppTheme.Dialogs" />
+        <activity
+            android:name=".Activity_Hap.TravelAllowanceForm"
+            android:theme="@style/AppTheme.Dialog" />
         <activity
             android:name=".Activity_Hap.QRCodeScanner"
             android:screenOrientation="portrait" />
@@ -126,7 +126,9 @@
         <activity
             android:name=".Activity_Hap.OrderDashBoard"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".Activity.ApprovalViewActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity.TAClaimActivity"
             android:screenOrientation="portrait"

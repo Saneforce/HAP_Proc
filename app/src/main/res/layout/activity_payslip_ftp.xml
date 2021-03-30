@@ -5,12 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
     <LinearLayout
+        android:id="@+id/linFldrList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryDark"
         android:orientation="horizontal"
         android:paddingBottom="5dp">
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/AppTitle"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="13dp"
                 android:layout_marginTop="-14dp"
                 android:text="Ver 3.0.0"
                 android:textColor="@color/white"
@@ -42,6 +42,17 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
+        <TextView
+            android:id="@+id/btnCanteen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginTop="@dimen/C5dp"
+            android:layout_marginRight="@dimen/C5dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="Canteen Detail"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
         <ImageView
             android:id="@+id/toolbar_home"
             android:layout_width="@dimen/C30dp"
@@ -54,6 +65,21 @@
             android:src="@drawable/ic_home" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingBottom="3dp"
+        android:layout_marginTop="0.5dp"
+        android:layout_marginBottom="5dp"
+
+        android:background="#009688">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/prvFolder"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fileList"

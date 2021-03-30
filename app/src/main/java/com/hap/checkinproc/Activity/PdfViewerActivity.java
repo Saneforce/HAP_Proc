@@ -14,6 +14,7 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.TimerService;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -23,7 +24,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class PdfViewerActivity extends AppCompatActivity {
 
-    String pdfurl = "";
+    String pdfurl = "",pdfFile="";
     PDFView pdfView;
 
 
@@ -32,9 +33,16 @@ public class PdfViewerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_viewer);
         startService(new Intent(this, TimerService.class));
-        pdfurl = String.valueOf(getIntent().getSerializableExtra("PDF_ONE"));
         pdfView = (PDFView) findViewById(R.id.pdfView);
-        new RetrivePDFfromUrl().execute(pdfurl);
+        pdfurl = String.valueOf(getIntent().getSerializableExtra("PDF_ONE"));
+        pdfFile = String.valueOf(getIntent().getSerializableExtra("PDF_FILE"));
+        Log.v("KARTHIC_URl", pdfurl);
+
+        if (pdfFile.equalsIgnoreCase("local")) {
+            pdfView.fromFile(new File(pdfurl)).load();
+        } else {
+            new RetrivePDFfromUrl().execute(pdfurl);
+        }
 
     }
 

@@ -60,6 +60,9 @@ public class Datum {
     @SerializedName("HOLocation")
     @Expose
     private String hOLocation;
+    @SerializedName("SFHQ")
+    @Expose
+    private String sFHQ;
 
     public String getSfUserName() {
         return sfUserName;
@@ -171,6 +174,14 @@ public class Datum {
 
     public void setSFDept(String sFDept) {
         this.sFDept = sFDept;
+    }
+
+    public String getsFHQ() {
+        return sFHQ;
+    }
+
+    public void setsFHQ(String sFHQ) {
+        this.sFHQ = sFHQ;
     }
 
     public String getDeptType() {

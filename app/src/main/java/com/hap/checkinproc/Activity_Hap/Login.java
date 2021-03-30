@@ -519,7 +519,10 @@ public class Login extends AppCompatActivity {
             return;
         }
         Log.d(TAG, "TWO " + deviceToken);
+        eMail="anbu@saneforce.com";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
+      //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
+        //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "haptest4@hap.in", deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
@@ -567,11 +570,14 @@ public class Login extends AppCompatActivity {
                         if (requestCode == RC_SIGN_IN) {
                             if (CheckIn == true) {
                                 intent = new Intent(Login.this, Dashboard_Two.class);
+                                // intent = new Intent(Login.this, TAClaimActivity.class);
                                 intent.putExtra("Mode", "CIN");
                             } else {
                                 intent = new Intent(Login.this, Dashboard.class);
-                                                         }
+                                // intent = new Intent(Login.this, TAClaimActivity.class);
+                            }
                         } else {
+                            // intent = new Intent(Login.this, AllowanceActivity.class);
                             intent = new Intent(Login.this, Dashboard_Two.class);
                             intent.putExtra("Mode", "RPT");
                         }
@@ -583,6 +589,8 @@ public class Login extends AppCompatActivity {
                         Integer type = response.body().getData().get(0).getCheckCount();
                         String DeptCd = response.body().getData().get(0).getSFDept();
                         String DeptType = response.body().getData().get(0).getDeptType();
+                        String SFHQ = response.body().getData().get(0).getsFHQ();
+
                         Integer OTFlg = response.body().getData().get(0).getOTFlg();
                         SharedPreferences.Editor editor = UserDetails.edit();
                         Shared_Common_Pref.Sf_Code = code;
@@ -603,6 +611,7 @@ public class Login extends AppCompatActivity {
                         Shared_Common_Pref.Dept_Type = DeptType;
                         Shared_Common_Pref.SF_Type = Sf_type;
 
+
                         Log.e("SF_TYPEVALUE", Sf_type);
                         Log.e("STATECODE", code);
                         Log.e("STATECODE", div);
@@ -613,6 +622,7 @@ public class Login extends AppCompatActivity {
                         editor.putString("Sfcode", code);
                         editor.putString("EmpId", empID);
                         editor.putString("SfName", sName);
+                        editor.putString("SFHQ", SFHQ);
                         editor.putString("Divcode", div);
                         editor.putInt("CheckCount", type);
                         editor.putString("DeptCd", DeptCd);
@@ -627,6 +637,7 @@ public class Login extends AppCompatActivity {
                             editor.putBoolean("Login", true);
                         else
                             editor.putBoolean("Login", false);
+
                         editor.apply();
                         startActivity(intent);
                         try {
@@ -634,6 +645,7 @@ public class Login extends AppCompatActivity {
                         } catch (Exception e) {
 
                         }
+
                     } else {
                         try {
                             mProgress.dismiss();
@@ -643,6 +655,7 @@ public class Login extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Check username and password", Toast.LENGTH_LONG).show();
                     }
                 }
+
             }
 
             @Override
