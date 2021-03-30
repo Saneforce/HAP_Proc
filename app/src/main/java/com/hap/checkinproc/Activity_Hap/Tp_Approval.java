@@ -86,7 +86,7 @@ public class Tp_Approval extends AppCompatActivity {
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
 
@@ -112,7 +112,6 @@ public class Tp_Approval extends AppCompatActivity {
 
             }
         });
-
 
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {

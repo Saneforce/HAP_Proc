@@ -106,7 +106,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
 

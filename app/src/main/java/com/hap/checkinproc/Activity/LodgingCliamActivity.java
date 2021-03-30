@@ -24,6 +24,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.hap.checkinproc.Activity_Hap.AttachementActivity;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
+import com.hap.checkinproc.Activity_Hap.PayslipFtp;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.TimerService;
 
@@ -236,7 +237,7 @@ public class LodgingCliamActivity extends AppCompatActivity {
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
 

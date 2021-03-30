@@ -16,9 +16,7 @@
         <include layout="@layout/custom_toolbar_help"></include>
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_marginBottom="@dimen/C50dp"
             android:layout_height="wrap_content">
-
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -28,33 +26,17 @@
                 android:padding="@dimen/C10dp"
                 tools:ignore="MissingConstraints">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:text="Mode of Travels " />
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            style="@style/TextStyle"
-                            android:text="Mode of Travels " />
-
-
-                        <ImageView
-                            android:layout_width="@dimen/C8dp"
-                            android:layout_height="@dimen/C8dp"
-                            android:src="@drawable/mandatory" />
-                    </LinearLayout>
-
-
-                    <LinearLayout
-
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/C5dp"
+                        android:layout_marginBottom="@dimen/C5dp"
                         android:background="@drawable/round_white_backround"
                         android:orientation="vertical">
 
@@ -63,32 +45,11 @@
                             style="@style/TextStyle"
                             android:hint="Mode of Travel" />
 
-                    </LinearLayout>
-
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C10dp"
-                    android:orientation="vertical">
-
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
+                       <TextView
                             style="@style/TextStyle"
                             android:text="Started Km " />
-
-                        <ImageView
-                            android:layout_width="@dimen/C8dp"
-                            android:layout_height="@dimen/C8dp"
-                            android:src="@drawable/mandatory" />
-
-                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -113,7 +74,7 @@
                             android:layout_marginLeft="@dimen/C20dp"></ImageView>
                     </LinearLayout>
 
-                </LinearLayout>
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -300,13 +261,10 @@
                     android:background="@drawable/button_blueg"
                     android:text="@string/txt_submit" />
 
-
             </LinearLayout>
         </ScrollView>
 
-
     </LinearLayout>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -314,9 +272,7 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent">
 
-
         <include layout="@layout/back_arrow"></include>
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

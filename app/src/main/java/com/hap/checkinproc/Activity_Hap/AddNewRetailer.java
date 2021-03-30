@@ -133,7 +133,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
         ObjectAnimator textColorAnim;

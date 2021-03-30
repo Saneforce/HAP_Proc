@@ -183,6 +183,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
 

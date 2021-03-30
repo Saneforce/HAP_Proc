@@ -36,7 +36,8 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
-        <activity android:name=".Activity_Hap.PayslipFtp"></activity>
+        <activity android:name=".Common_Class.ToolBarMethod"></activity>
+        <activity android:name=".Activity_Hap.PayslipFtp" />
         <activity android:name=".Activity_Hap.DaExceptionEntry" />
         <activity android:name=".Activity.LodgingCliamActivity" />
         <activity
@@ -77,9 +78,6 @@
         <activity
             android:name=".Activity_Hap.MapZoomIn"
             android:theme="@style/AppTheme.Dialogs" />
-        <activity
-            android:name=".Activity_Hap.TravelAllowanceForm"
-            android:theme="@style/AppTheme.Dialog" />
         <activity
             android:name=".Activity_Hap.QRCodeScanner"
             android:screenOrientation="portrait" />
@@ -128,9 +126,7 @@
         <activity
             android:name=".Activity_Hap.OrderDashBoard"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity.ApprovalViewActivity"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".Activity.TAClaimActivity"
             android:screenOrientation="portrait"

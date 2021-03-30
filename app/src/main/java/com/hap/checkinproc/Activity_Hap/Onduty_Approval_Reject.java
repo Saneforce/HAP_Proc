@@ -79,7 +79,7 @@ public class Onduty_Approval_Reject extends AppCompatActivity implements View.On
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
 

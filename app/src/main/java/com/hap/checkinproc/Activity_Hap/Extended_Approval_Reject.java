@@ -77,7 +77,7 @@ public class Extended_Approval_Reject extends AppCompatActivity implements View.
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
 
