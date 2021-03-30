@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,10 +34,9 @@ import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 public class Leave_Dashboard extends AppCompatActivity implements View.OnClickListener {
 
     Common_Class common_class;
-    LinearLayout LeaveRequest, PermissionRequest, MissedPunch, WeeklyOff, DeveiationEntry;
+    LinearLayout LeaveRequest, PermissionRequest, MissedPunch, WeeklyOff, DeveiationEntry, MissedMode;
     LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus;
     TextView countLeaveRequest, countPermissionRequest, countMissedPunch, countWeeklyOff;
-    TextView countLeaveStatus, countPermissionStatus, countOnDutyStatus, countMissedStatus, countWeeklyOffStatus, countExtdShift;
     Shared_Common_Pref mShared_common_pref;
 
     @Override
@@ -65,7 +65,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
 
@@ -111,7 +111,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         HolidayEntryStatus = findViewById(R.id.lin_holiday_status);
         DeviationEntryStatus = findViewById(R.id.lin_deviation_status);
         LeaveCancelStatus = findViewById(R.id.lin_leave_cancel_status);
-
+        MissedMode = findViewById(R.id.lin_miss_mode);
 
         /*Request text*/
         countLeaveRequest = findViewById(R.id.txt_leave_req_count);
@@ -134,6 +134,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         HolidayEntryStatus.setOnClickListener(this);
         DeviationEntryStatus.setOnClickListener(this);
         LeaveCancelStatus.setOnClickListener(this);
+        MissedMode.setOnClickListener(this);
 
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
@@ -169,7 +170,6 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
             case R.id.lin_leav_sta:
                 //   common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "0");
                 startActivity(new Intent(Leave_Dashboard.this, Leave_Status_Activity.class));
-
                 mShared_common_pref.save("AMod", "0");
                 break;
             case R.id.lin_per_sta:

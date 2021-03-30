@@ -18,12 +18,7 @@ public class Block_Information extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_block_information);
-
-        Log.v("KARTHIC_BLOCKER", String.valueOf(getIntent().getSerializableExtra("NAME")));
-
         openDateSetting = (Button) findViewById(R.id.openDateTime);
-
-
         openDateSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

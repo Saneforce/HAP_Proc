@@ -223,7 +223,7 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
 

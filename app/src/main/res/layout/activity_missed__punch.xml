@@ -153,6 +153,203 @@
                         android:textSize="@dimen/C13dp" />
 
 
+                    <LinearLayout
+                        android:id="@+id/lin_mode_trav"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_margin="@dimen/C5dp"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:text="Mode of Travels " />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:layout_marginBottom="@dimen/C5dp"
+                            android:background="@drawable/round_white_backround"
+                            android:orientation="vertical"
+                            android:padding="@dimen/C3dp">
+
+                            <TextView
+                                android:id="@+id/txt_mode_travel"
+                                style="@style/TextStyle"
+                                android:hint="Mode of Travel" />
+
+
+                        </LinearLayout>
+                        <TextView
+                            style="@style/TextStyle"
+                            android:text="Started Km " />
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/txt_started_km"
+                                style="@style/TextStyle"
+                                android:layout_width="@dimen/C100dp"
+                                android:background="@drawable/round_white_backround"
+                                android:hint="Started km"
+                                android:padding="@dimen/C5dp" />
+
+                            <ImageView
+                                android:id="@+id/img_started_km"
+                                android:layout_width="@dimen/C80dp"
+                                android:layout_height="@dimen/C80dp"
+                                android:layout_marginLeft="@dimen/C20dp"
+                                android:rotation="90"></ImageView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/TextStyle"
+                                android:text="To Place" />
+
+                            <ImageView
+                                android:layout_width="@dimen/C8dp"
+                                android:layout_height="@dimen/C8dp"
+                                android:src="@drawable/mandatory" />
+
+                        </LinearLayout>
+                        <LinearLayout
+
+                            android:id="@+id/lin_to"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:background="@drawable/round_white_backround"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txt_to"
+                                style="@style/TextStyle" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/TextStyle"
+                                android:text="Closing Km " />
+
+                            <ImageView
+                                android:layout_width="@dimen/C8dp"
+                                android:layout_height="@dimen/C8dp"
+                                android:src="@drawable/mandatory" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <EditText
+                                    android:id="@+id/ended_km"
+                                    android:layout_width="@dimen/C100dp"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/round_white_backround"
+                                    android:hint="Ended km"
+                                    android:inputType="number"
+                                    android:padding="10dp"
+                                    android:textSize="13dp" />
+
+                                <TextView
+                                    android:id="@+id/txt_max"
+                                    style="@style/TextStyle" />
+
+                                <Button
+                                    android:id="@+id/btn_take_photo"
+                                    style="@style/ButtonStyle"
+                                    android:background="@drawable/button_blueg"
+                                    android:text="Take Photo"
+                                    android:textColor="@android:color/white"></Button>
+                            </LinearLayout>
+
+                            <ImageView
+                                android:id="@+id/img_ended_km"
+                                android:layout_width="@dimen/C80dp"
+                                android:layout_height="@dimen/C80dp"
+                                android:layout_marginLeft="@dimen/C20dp"
+                                android:rotation="90"></ImageView>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                style="@style/TextStyle"
+                                android:text="Personal Km" />
+
+                            <ImageView
+                                android:layout_width="@dimen/C8dp"
+                                android:layout_height="@dimen/C8dp"
+                                android:src="@drawable/mandatory"
+                                android:visibility="gone" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C5dp"
+                            android:layout_marginBottom="@dimen/C5dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <EditText
+                                    android:id="@+id/personal_ended_km"
+                                    android:layout_width="@dimen/C100dp"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/round_white_backround"
+                                    android:hint="Ended km"
+                                    android:inputType="number"
+                                    android:padding="10dp"
+                                    android:textSize="13dp" />
+
+                            </LinearLayout>
+                        </LinearLayout>
+                        <TextView
+                            style="@style/TextStyle"
+                            android:text="Remarks"/>
+                        <EditText
+                            android:id="@+id/reason_mode"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/C50dp"
+                            android:background="@drawable/textbox_bg"
+                            android:elevation="5dp"
+                            android:gravity="start"
+                            android:hint="Reason"
+                            android:layout_marginBottom="@dimen/C15dp"
+                            android:padding="@dimen/C10dp"
+                            android:textSize="@dimen/C13dp" />
+                        <Button
+                            android:id="@+id/submit_allowance"
+                            style="@style/ButtonStyle"
+                            android:background="@drawable/button_blueg"
+                            android:text="@string/txt_submit" />
+                    </LinearLayout>
+
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

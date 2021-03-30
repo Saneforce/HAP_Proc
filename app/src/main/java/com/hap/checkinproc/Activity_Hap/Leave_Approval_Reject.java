@@ -78,7 +78,7 @@ public class Leave_Approval_Reject extends AppCompatActivity implements View.OnC
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
 

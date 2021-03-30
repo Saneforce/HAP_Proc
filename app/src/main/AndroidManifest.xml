@@ -36,6 +36,8 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
+
+        <activity android:name=".Common_Class.ToolBarMethod"></activity>
         <activity android:name=".Activity_Hap.foodExp"></activity>
         <activity android:name=".Activity_Hap.PayslipFtp" />
         <activity android:name=".Activity_Hap.DaExceptionEntry" />

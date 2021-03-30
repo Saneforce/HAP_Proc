@@ -75,6 +75,8 @@ public class Checkin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
+
+                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
         txtHelp.setOnClickListener(new View.OnClickListener() {
