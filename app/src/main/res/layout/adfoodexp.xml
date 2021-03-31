@@ -6,10 +6,10 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="135dp"
         android:background="#B1AFAF"
         android:padding="10dp"
-        app:cardCornerRadius="5dp"
+        app:cardCornerRadius="10dp"
         app:cardElevation="2dp"
         app:cardUseCompatPadding="true">
 
@@ -20,52 +20,60 @@
 
             <View
                 android:layout_width="2dp"
-                android:layout_height="40dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/C5dp"
+                android:layout_marginBottom="@dimen/C5dp"
                 android:layout_centerVertical="true"
                 android:background="@color/Extended" />
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/txt_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/basic"
-                    android:text="Date"
-                    android:textAllCaps="false"
-                    android:textColor="#515151"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txt_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/txt_name"
-                    android:fontFamily="@font/basic"
-                    android:text="Name"
-                    android:textAllCaps="false"
-                    android:textColor="#515151"
-                    android:textSize="12sp" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/Amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:text="Rs 0.00"
-                android:textColor="#333333"
-                android:textStyle="bold"
-                android:textSize="15sp" />
-
+        <TextView
+            android:id="@+id/txt_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/basic"
+            android:text="Date"
+            android:textAllCaps="false"
+            android:textColor="#515151"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/Amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            android:text="Rs 0.00"
+            android:textColor="#333333"
+            android:textFontWeight="900"
+            android:textStyle="bold"
+            android:textSize="15sp" />
+    </LinearLayout>
+    <GridView
+        android:id="@+id/grdViewFdet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:horizontalSpacing="6dp"
+        android:numColumns="3"
+        android:verticalSpacing="6dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/C10dp"
+        >
+    </GridView>
+</LinearLayout>
         </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
