@@ -90,7 +90,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginTop="10dp"
-
                         android:text="Shift time" />
 
                     <EditText
@@ -155,7 +154,6 @@
 
                     <LinearLayout
                         android:id="@+id/lin_mode_trav"
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_margin="@dimen/C5dp"
                         android:layout_height="wrap_content"
@@ -328,34 +326,14 @@
 
                             </LinearLayout>
                         </LinearLayout>
-                        <TextView
-                            style="@style/TextStyle"
-                            android:text="Remarks"/>
-                        <EditText
-                            android:id="@+id/reason_mode"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/C50dp"
-                            android:background="@drawable/textbox_bg"
-                            android:elevation="5dp"
-                            android:gravity="start"
-                            android:hint="Reason"
-                            android:layout_marginBottom="@dimen/C15dp"
-                            android:padding="@dimen/C10dp"
-                            android:textSize="@dimen/C13dp" />
-                        <Button
-                            android:id="@+id/submit_allowance"
-                            style="@style/ButtonStyle"
-                            android:background="@drawable/button_blueg"
-                            android:text="@string/txt_submit" />
+
                     </LinearLayout>
 
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/C5dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="@dimen/C10dp"
                         android:text="Reason " />
 
                     <EditText
@@ -364,6 +342,7 @@
                         android:layout_height="@dimen/C100dp"
                         android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginRight="10dp"
+                        android:layout_marginTop="@dimen/C10dp"
                         android:background="@drawable/textbox_bg"
                         android:elevation="@dimen/C5dp"
                         android:gravity="start"

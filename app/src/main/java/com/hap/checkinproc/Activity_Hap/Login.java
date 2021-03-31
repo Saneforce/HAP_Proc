@@ -497,13 +497,11 @@ public class Login extends AppCompatActivity {
  // service.
  unbindService(mServiceConection);
  mBound = false;
-
  }*/
         super.onStop();
      /*   Intent inten = new Intent(this, TimerService.class);
         startService(inten);
 */
-
         Log.v("LOG_IN_LOCATION", "ONSTOP");
 
         if (authStateListener != null) {
@@ -519,7 +517,7 @@ public class Login extends AppCompatActivity {
             return;
         }
         Log.d(TAG, "TWO " + deviceToken);
-        eMail="anbu@saneforce.com";
+       // eMail="anbu@saneforce.com";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
       //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "haptest4@hap.in", deviceToken);

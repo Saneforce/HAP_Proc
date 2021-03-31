@@ -319,27 +319,21 @@ public interface ApiInterface {
     @POST("Db_v300.php?axn=table/list")
     Call<JsonArray> retailerClass(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Field("data") String data);
 
-
     @POST("Db_V13.php?axn=get/precall")
     Call<RetailerViewDetails> retailerViewDetails(@Query("Msl_No") String retailerID, @Query("divisionCode") String divisionCode, @Query("sfCode") String sfCode);
-
 
     @POST("Db_V13.php?axn=GetERTList")
     Call<JsonObject> ERTDetails(@Query("sfCode") String sFCode);
 
-
     /*Devaition Entry*/
     @FormUrlEncoded
     @POST("Db_V13.php?")
-    Call<Object> GetRouteObjects(@QueryMap Map<String, String> params,
-                                 @Field("data") String data);
-
+    Call<Object> GetRouteObjects(@QueryMap Map<String, String> params, @Field("data") String data);
 
     /*Save Devaition Entry*/
     @FormUrlEncoded
     @POST("Db_V13.php?axn=dcr/save")
-    Call<JsonObject> deviationSave(@Query("sf_name") String SfName, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
-                                   @Query("State_Code") String StateCode, @Query("desig") String desig, @Field("data") String data);
+    Call<JsonObject> deviationSave(@Query("sf_name") String SfName, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("State_Code") String StateCode, @Query("desig") String desig, @Field("data") String data);
 
     /*Permission Select Hours*/
     @GET("Db_V13.php?")
@@ -347,10 +341,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("Db_V244.php")
-    Call<Object> getHolidayStatus(@Query("AMod") String Amod, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
-                                  @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn,
-                                  @Field("data") String data);
-
+    Call<Object> getHolidayStatus(@Query("AMod") String Amod, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn, @Field("data") String data);
 
     @POST("Db_v300.php?axn=get/track")
     Call<ResponseBody> getMap(@Query("SF_Code") String SfCode, @Query("Dt") String Date);
@@ -362,11 +353,9 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=get/expensesflist")
     Call<JsonArray> getApprovalDisplay(@Field("data") String data);
 
-
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=save/taapprove")
     Call<JsonObject> taApprove(@Field("data") String body);
-
 
     @Multipart
     @POST("db_new_activity.php?axn=upload/Taimg")
@@ -379,7 +368,6 @@ public interface ApiInterface {
                                @Query("From") String from,
                                @Query("To") String To,
                                @Part MultipartBody.Part file);
-
 
     @POST("db_new_activity.php?axn=get/TA_Image")
     Call<JsonArray> allPreview(@Query("U_key") String keyCode,
@@ -394,13 +382,10 @@ public interface ApiInterface {
                                @Query("Date") String date,
                                @Query("sfCode") String sfcode);
 
-
     @POST("Db_V13.php?axn=get/GateEntryHome")
     Call<JsonArray> gteDta(@Query("Sf_code") String sfCode, @Query("TodayDate") String Tdate);
 
-
   @POST("Db_V13.php?axn=get/daExpen")
     Call<ResponseBody> daExpen(@Query("Sf_code") String sfCode,@Query("data") String daDATA);
-
 
 }
