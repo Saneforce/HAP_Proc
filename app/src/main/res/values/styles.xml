@@ -14,13 +14,13 @@
 
     <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily">@font/poppins_regular</item>
-        <item name="android:textSize">@dimen/C13dp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/dark_grey</item>
     </style>
 
     <style name="RobotoButtonStyle" parent="android:Widget.Button">
         <item name="android:fontFamily">poppins_semibold</item>
-        <item name="android:textSize">@dimen/C14dp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:padding">16dp</item>
     </style>
 
@@ -82,6 +82,14 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_margin">@dimen/C1dp</item>
+        <item name="android:textColor">@android:color/black</item>
+    </style>
+    <style name="DashboardTextStyleBold">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/C1dp</item>
+        <item name="android:fontFamily">poppins_semibold</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
 

@@ -17,8 +17,8 @@
 
         <TextView
             android:id="@+id/txtval"
-            style="@style/DashboardTextStyle"
-
+            style="@style/DashboardTextStyleBold"
+            android:textStyle="bold"
             android:autoLink="web" />
     </LinearLayout>
 </LinearLayout>

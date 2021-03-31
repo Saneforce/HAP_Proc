@@ -80,9 +80,9 @@
         <activity
             android:name=".Activity_Hap.MapZoomIn"
             android:theme="@style/AppTheme.Dialogs" />
-        <activity
-            android:name=".Activity_Hap.TravelAllowanceForm"
-            android:theme="@style/AppTheme.Dialog" />
+<!--        <activity-->
+<!--            android:name=".Activity_Hap.TravelAllowanceForm"-->
+<!--            android:theme="@style/AppTheme.Dialog" />-->
         <activity
             android:name=".Activity_Hap.QRCodeScanner"
             android:screenOrientation="portrait" />
@@ -131,9 +131,9 @@
         <activity
             android:name=".Activity_Hap.OrderDashBoard"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".Activity.ApprovalViewActivity"
-            android:screenOrientation="portrait" />
+<!--        <activity-->
+<!--            android:name=".Activity.ApprovalViewActivity"-->
+<!--            android:screenOrientation="portrait" />-->
         <activity
             android:name=".Activity.TAClaimActivity"
             android:screenOrientation="portrait"

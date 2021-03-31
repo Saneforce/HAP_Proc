@@ -42,12 +42,12 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
     public void onBindViewHolder(ViewAll_Status_Adapter.MyViewHolder holder, int position) {
         View_All_Model View_Status_Model = View_Status_ModelsList.get(position);
         GradientDrawable drawable = (GradientDrawable) holder.wkstatus.getBackground();
-        holder.weekofdate.setText("" + View_Status_ModelsList.get(position).getWrkDate());
-        holder.wkstatus.setText("" + View_Status_ModelsList.get(position).getDayStatus());
+        holder.weekofdate.setText(View_Status_ModelsList.get(position).getWrkDate());
+        holder.wkstatus.setText(View_Status_ModelsList.get(position).getDayStatus());
         // holder.wkstatus.setBackgroundColor(Color.parseColor(Onduty_Status_Model.getStusClr()));
-        holder.shifttime.setText("" + View_Status_ModelsList.get(position).getSFTName());
-        holder.txt_in_time.setText(" " + View_Status_ModelsList.get(position).getAttTm());
-        holder.txt_out_time.setText(" " + View_Status_ModelsList.get(position).getET());
+        holder.shifttime.setText(View_Status_ModelsList.get(position).getSFTName().toString());
+        holder.txt_in_time.setText(View_Status_ModelsList.get(position).getAttTm().toString());
+        holder.txt_out_time.setText(View_Status_ModelsList.get(position).getET().toString());
         holder.wkstatus.setBackgroundResource(R.drawable.bt_radious);
         String color=View_Status_Model.getStusClr().replace("!important", "");
         drawable.setColor(Color.parseColor(color.trim()));

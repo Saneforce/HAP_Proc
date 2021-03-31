@@ -98,19 +98,19 @@
                                 android:layout_marginTop="5dp"
                                 android:layout_weight="1"
                                 android:text="Today"
-                                android:textFontWeight="900"
-                                android:textSize="@dimen/C13dp"
-                                android:textStyle="bold" />
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                style="@style/DashboardTextStyleBold" />
 
                             <TextView
                                 android:id="@+id/lTDyTx"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:text="TextView"
+                                android:text=""
                                 android:textAlignment="textEnd"
-                                android:textSize="@dimen/C13dp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                style="@style/DashboardTextStyleBold" />
 
                         </LinearLayout>
 
@@ -169,11 +169,12 @@
                             <TextView
                                 android:id="@+id/txtMnth"
                                 android:layout_width="wrap_content"
-                                android:layout_height="20dp"
+                                android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
                                 android:text="Today"
                                 android:textFontWeight="900"
-                                android:textSize="@dimen/C13dp" />
+                                android:textSize="13sp"
+                                style="@style/DashboardTextStyleBold" />
 
                             <ImageView
                                 android:id="@+id/nxtMn"
@@ -189,15 +190,17 @@
 
                                 <Button
                                     android:id="@+id/button3"
-                                    android:layout_width="60dp"
-                                    android:layout_height="32dp"
+                                    android:layout_width="80dp"
+                                    android:layout_height="28dp"
                                     android:layout_gravity="right"
-                                    android:background="@drawable/button_blue"
+                                    android:background="@drawable/button_blueg"
                                     android:elevation="@dimen/C5dp"
-                                    android:padding="2dp"
+                                    android:padding="1dp"
                                     android:text="View All"
                                     android:textColor="#ffffff"
-                                    android:textSize="11sp" />
+                                    android:textFontWeight="900"
+                                    android:textSize="12sp"
+                                    />
 
                             </LinearLayout>
 
@@ -308,12 +311,11 @@
                         android:text="Requests &amp; Status" />
 
                     <Button
-                        android:id="@+id/cardview4"
+                        android:id="@+id/btn_da_exp_entry"
                         style="@style/ButtonStyle"
                         android:layout_weight="1"
                         android:background="@drawable/button_purple"
-                        android:text="TA &amp; Claim" />
-
+                        android:text="TA Exception Entry"></Button>
                 </LinearLayout>
 
                 <LinearLayout
