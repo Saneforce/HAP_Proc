@@ -44,11 +44,13 @@ public class DeviationEntryStatus extends AppCompatActivity {
     Common_Class common_class;
     Gson gson;
     Type userType;
+    String AMOD = "0";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.row_deviation_request_status);
+        AMOD = String.valueOf(getIntent().getSerializableExtra("AMod"));
         startService(new Intent(this, TimerService.class));
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -123,7 +125,7 @@ public class DeviationEntryStatus extends AppCompatActivity {
                 userType = new TypeToken<ArrayList<DeviationEntryStatusModel>>() {
                 }.getType();
                 HolidayApproval = gson.fromJson(new Gson().toJson(response.body()), userType);
-               HolidayRecyclerStatus.setAdapter(new DeviationEntryStatusAdapter(HolidayApproval, R.layout.row_deviation_entry_status, getApplicationContext()));
+                HolidayRecyclerStatus.setAdapter(new DeviationEntryStatusAdapter(AMOD, HolidayApproval, R.layout.row_deviation_entry_status, getApplicationContext()));
                 Log.e("TAG_HOLIDAY_REPOSNE", "response Tp_View: " + HolidayApproval);
             }
 

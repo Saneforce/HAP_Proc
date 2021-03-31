@@ -21,22 +21,18 @@ import com.hap.checkinproc.Status_Model_Class.Leave_Status_Model;
 import java.util.List;
 
 public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adapter.MyViewHolder> {
-
     private List<Leave_Status_Model> Leave_Status_ModelsList;
     private int rowLayout;
     private Context context;
-
     LeaveCancelReason mLeaveCancelRea;
     String EditextReason = "";
     String AMod;
-
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView fromdatetodate, leavetype, leavedays, leavereason, applieddate, LStatus, SfName;
         RelativeLayout sf_namelayout;
         LinearLayout linearCancel, linearReason;
         Button ButtonCancel, ReasonSend;
         EditText ReasonEntry;
-
         public MyViewHolder(View view) {
             super(view);
             fromdatetodate = view.findViewById(R.id.fromdatetodate);
@@ -63,19 +59,11 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
         this.context = context;
         this.AMod = AMod;
         this.mLeaveCancelRea = mLeaveCancelRea;
-
-
     }
 
     @Override
     public Leave_Status_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mLeaveCancelRea.onCancelReason(EditextReason);
-            }
-        });
         return new Leave_Status_Adapter.MyViewHolder(view);
     }
 
@@ -93,7 +81,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
             holder.linearCancel.setVisibility(View.VISIBLE);
 
         } else {
-            holder.linearCancel.setVisibility(View.INVISIBLE);
+            holder.linearCancel.setVisibility(View.GONE);
         }
 
 

@@ -4,6 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class HolidayEntryModel {
+    @SerializedName("SFNm")
+    @Expose
+    private String SFNm;
     @SerializedName("Sf_Code")
     @Expose
     private String sfCode;
@@ -52,6 +55,21 @@ public class HolidayEntryModel {
     @SerializedName("Reject_reason")
     @Expose
     private Object rejectReason;
+
+    @SerializedName("LastUpdt_Date")
+    @Expose
+    private String lastUpdtDate;
+    @SerializedName("Created_Date")
+    @Expose
+    private String createdDate;
+
+    public String getLastUpdtDate() {
+        return lastUpdtDate;
+    }
+
+    public void setLastUpdtDate(String lastUpdtDate) {
+        this.lastUpdtDate = lastUpdtDate;
+    }
 
     public String getSfCode() {
         return sfCode;
@@ -105,6 +123,14 @@ public class HolidayEntryModel {
         return startTime;
     }
 
+    public String getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(String createdDate) {
+        this.createdDate = createdDate;
+    }
+
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
@@ -131,6 +157,14 @@ public class HolidayEntryModel {
 
     public void setCheckout(String checkout) {
         this.checkout = checkout;
+    }
+
+    public String getSFNm() {
+        return SFNm;
+    }
+
+    public void setSFNm(String SFNm) {
+        this.SFNm = SFNm;
     }
 
     public Integer getDutyMode() {

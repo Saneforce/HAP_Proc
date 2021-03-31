@@ -16,57 +16,48 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/C7dp"
-            android:layout_marginRight="@dimen/C7dp"
-            android:layout_marginBottom="@dimen/C7dp"
+            android:layout_margin="@dimen/C5dp"
             android:elevation="@dimen/C5dp"
             app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/C10dp"
-                android:layout_marginRight="@dimen/C10dp"
-                android:layout_marginTop="@dimen/C5dp"
+                android:layout_margin="@dimen/C8dp"
                 android:orientation="vertical">
 
-                <RelativeLayout
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
+                    android:layout_height="wrap_content">
 
                     <TextView
-                        style="@style/TextStyle"
                         android:id="@+id/txt_wktype"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="WeekOff"></TextView>
-
+                        style="@style/TextStyleOne"
+                        android:layout_weight="1"
+                        android:padding="@dimen/C7dp"
+                        android:text="-"
+                        android:textColor="@android:color/black"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content">
 
                         <TextView
-                            style="@style/TextStyle"
                             android:id="@+id/txt_wkdate"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="2020/09/06"
-                           ></TextView>
+                            style="@style/TextStyleOne"
+                            android:text="2020/09/06" />
 
                         <TextView
-                            style="@style/TextStyle"
                             android:id="@+id/txt_wkday"
-                            android:fontFamily="@font/poppins_semibold"
-                            android:text="Friday"
-                 ></TextView>
+                            style="@style/TextStyleOne"
+                            android:layout_marginLeft="@dimen/C7dp"
+                            android:text="Friday" />
                     </LinearLayout>
 
-
-                </RelativeLayout>
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -74,42 +65,34 @@
                     android:layout_margin="@dimen/C5dp"
                     android:background="@android:color/black" />
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C7dp">
+                <TextView
+                    style="@style/TextStyleOne"
+                    android:padding="@dimen/C5dp"
+                    android:text="-"
+                    android:textColor="@android:color/black"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
 
-                    <TextView
-                        style="@style/TextStyle"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Week Off"
-           ></TextView>
-
-
-                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="@dimen/C7dp">
+                    android:orientation="horizontal">
 
                     <TextView
-                        style="@style/TextStyle"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Submit on :"></TextView>
+                        style="@style/TextStyleOne"
+                        android:text="Submit on :"
+                        android:textColor="@color/dark_greys" />
 
                     <TextView
-                        style="@style/TextStyle"
                         android:id="@+id/txt_submit_date"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text=" Nov 7 2020 1.54PM"></TextView>
-
+                        style="@style/TextStyleOne"
+                        android:text=" Nov 7 2020 1.54PM"
+                        android:textColor="@color/dark_greys"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
-
             </LinearLayout>
-
 
         </androidx.cardview.widget.CardView>
 

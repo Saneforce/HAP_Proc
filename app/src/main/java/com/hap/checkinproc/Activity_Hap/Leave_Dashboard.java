@@ -34,7 +34,7 @@ import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 public class Leave_Dashboard extends AppCompatActivity implements View.OnClickListener {
 
     Common_Class common_class;
-    LinearLayout LeaveRequest, PermissionRequest, MissedPunch, WeeklyOff, DeveiationEntry, MissedMode;
+    LinearLayout LeaveRequest, PermissionRequest, MissedPunch, WeeklyOff, DeveiationEntry;
     LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus;
     TextView countLeaveRequest, countPermissionRequest, countMissedPunch, countWeeklyOff;
     Shared_Common_Pref mShared_common_pref;
@@ -111,7 +111,6 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         HolidayEntryStatus = findViewById(R.id.lin_holiday_status);
         DeviationEntryStatus = findViewById(R.id.lin_deviation_status);
         LeaveCancelStatus = findViewById(R.id.lin_leave_cancel_status);
-        MissedMode = findViewById(R.id.lin_miss_mode);
 
         /*Request text*/
         countLeaveRequest = findViewById(R.id.txt_leave_req_count);
@@ -134,7 +133,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         HolidayEntryStatus.setOnClickListener(this);
         DeviationEntryStatus.setOnClickListener(this);
         LeaveCancelStatus.setOnClickListener(this);
-        MissedMode.setOnClickListener(this);
+
 
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {

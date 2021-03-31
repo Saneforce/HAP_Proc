@@ -649,9 +649,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                         if (js.getString("success").equalsIgnoreCase("true")) {
                             Photo_Name = js.getString("url");
                             Log.v("printing_dynamic_cou", js.getString("url"));
-
                         }
-
                     }
 
                 } catch (Exception e) {

@@ -104,6 +104,7 @@
 
                         <LinearLayout
                             android:id="@+id/lin_miss_mode"
+                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/C10dp">
@@ -121,11 +122,7 @@
                         </LinearLayout>
 
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="0.5dp"
-                            android:layout_marginTop="@dimen/C3dp"
-                            android:background="@color/grey_400"></View>
+
 
                         <LinearLayout
                             android:id="@+id/lin_miss_punch"

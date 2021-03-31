@@ -44,7 +44,8 @@
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
         <item name="windowActionModeOverlay">true</item>
-        <item name="android:windowCloseOnTouchOutside">@bool/config_closeDialogWhenTouchOutside</item>
+        <item name="android:windowCloseOnTouchOutside">@bool/config_closeDialogWhenTouchOutside
+        </item>
         <item name="listPreferredItemPaddingLeft">10dip</item>
         <item name="listPreferredItemPaddingRight">10dip</item>
         <item name="listPreferredItemPaddingStart">10dip</item>
@@ -77,6 +78,13 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
+    <style name="TextStyleOne">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@android:color/black</item>
+
+
+    </style>
 
     <style name="DashboardTextStyle">
         <item name="android:layout_width">wrap_content</item>
@@ -84,6 +92,7 @@
         <item name="android:layout_margin">@dimen/C1dp</item>
         <item name="android:textColor">@android:color/black</item>
     </style>
+
     <style name="DashboardTextStyleBold">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -96,7 +105,7 @@
     <style name="Theme.AppCompat.Transparent.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">#80000000</item>
-       <item name="colorPrimaryDark">#80000000</item>
+        <item name="colorPrimaryDark">#80000000</item>
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 

@@ -1,9 +1,12 @@
 package com.hap.checkinproc.Status_Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,10 +36,11 @@ public class LeaveCancelStatusAdapter extends RecyclerView.Adapter<LeaveCancelSt
         return new LeaveCancelStatusAdapter.MyViewHolder(view);
     }
 
-    public LeaveCancelStatusAdapter(List<LeaveCancelStatusModel> holiday_status_modelist, int rowLayout, Context context) {
+    public LeaveCancelStatusAdapter(String AMod,List<LeaveCancelStatusModel> holiday_status_modelist, int rowLayout, Context context) {
         this.holiday_status_modelist = holiday_status_modelist;
         this.rowLayout = rowLayout;
         this.context = context;
+        this.AMod = AMod;
     }
 
     @Override
@@ -47,8 +51,37 @@ public class LeaveCancelStatusAdapter extends RecyclerView.Adapter<LeaveCancelSt
         holder.HolidayEntry.setText(holiday_status_modelist.get(position).getLeaveType());
         holder.HolidayReason.setText(holiday_status_modelist.get(position).getReason());
         holder.HolidayApplied.setText(holiday_status_modelist.get(position).getCreatedDate());
-        holder.HolidayReject.setText(holiday_status_modelist.get(position).getLastUpdtDate());
+        if (holiday_status_modelist.get(position).getLeavecancelId() == 1) {
+            if (AMod.equals("1")) {
+                holder.sf_namelayout.setVisibility(View.VISIBLE);
+                holder.SfName.setText(holiday_status_modelist.get(position).getSFNm());
+                holder.SfName.setTextColor(Color.parseColor("#ff3700"));
+            } else {
+                holder.sf_namelayout.setVisibility(View.GONE);
+            }
+            holder.HolidayReject.setText("Reject : " + holiday_status_modelist.get(position).getLastUpdtDate());
+            holder.HolidayStatus.setBackgroundResource(R.drawable.button_red);
+        } else if (holiday_status_modelist.get(position).getLeavecancelId() == 0) {
+            if (AMod.equals("1")) {
+                holder.sf_namelayout.setVisibility(View.VISIBLE);
+                holder.SfName.setText(holiday_status_modelist.get(position).getSFNm());
 
+                holder.SfName.setTextColor(Color.parseColor("#009688"));
+            } else {
+                holder.sf_namelayout.setVisibility(View.GONE);
+            }
+            holder.HolidayReject.setText("Approved : " + holiday_status_modelist.get(position).getLastUpdtDate());
+            holder.HolidayStatus.setBackgroundResource(R.drawable.button_green);
+        } else {
+            if (AMod.equals("1")) {
+                holder.sf_namelayout.setVisibility(View.VISIBLE);
+                holder.SfName.setText(holiday_status_modelist.get(position).getSFNm());
+                holder.SfName.setTextColor(Color.parseColor("#ff9819"));
+            } else {
+                holder.sf_namelayout.setVisibility(View.GONE);
+            }
+            holder.HolidayStatus.setBackgroundResource(R.drawable.button_yellows);
+        }
 
     }
 
@@ -59,8 +92,9 @@ public class LeaveCancelStatusAdapter extends RecyclerView.Adapter<LeaveCancelSt
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView HolidayDate, HolidayStatus, HolidayEntry, HolidayReason, HolidayApplied, HolidayReject, HolidayGeoIN, HolidayGeoOut, HolidayEntryDate;
+        TextView HolidayDate, HolidayStatus, HolidayEntry, HolidayReason, HolidayApplied, HolidayReject, SfName, HolidayEntryDate;
 
+        RelativeLayout sf_namelayout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,11 +102,11 @@ public class LeaveCancelStatusAdapter extends RecyclerView.Adapter<LeaveCancelSt
             HolidayDate = itemView.findViewById(R.id.leave_date);
             HolidayStatus = itemView.findViewById(R.id.leave_status);
             HolidayEntry = itemView.findViewById(R.id.leave_type);
+            sf_namelayout = itemView.findViewById(R.id.sf_namelayout);
             HolidayReason = itemView.findViewById(R.id.leave_reason);
             HolidayApplied = itemView.findViewById(R.id.leave_applied);
             HolidayReject = itemView.findViewById(R.id.leave_rejected);
-
-
+            SfName = itemView.findViewById(R.id.SfName);
         }
     }
 }

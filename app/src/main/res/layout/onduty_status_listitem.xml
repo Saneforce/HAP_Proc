@@ -14,73 +14,57 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/C10dp"
+            android:layout_margin="@dimen/C8dp"
             android:elevation="@dimen/C5dp"
             app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/C10dp"
+                android:layout_margin="@dimen/C12dp"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:id="@+id/sf_namelayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/C5dp"
+                    android:layout_marginLeft="@dimen/C5dp"
                     android:visibility="gone">
-
-
 
 
                     <TextView
                         android:id="@+id/SfName"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        android:layout_marginEnd="-1dp"
-                        android:layout_marginRight="-1dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:padding="@dimen/C3dp"
-                        android:text="thirumalai"
-
-                        android:textSize="12dp"></TextView>
+                        style="@style/TextStyleOne"
+                        android:text="-"
+                        android:textColor="@android:color/black"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
 
                 </RelativeLayout>
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/C5dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/ondutydate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="2020-09-06"
+                        style="@style/TextStyleOne"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:padding="@dimen/C7dp"
                         android:textColor="@android:color/black"
-                        android:textSize="14dp"
-                        android:textStyle="bold"></TextView>
-
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/OStatus"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:padding="@dimen/C3dp"
-                        android:text="Pending"
-                        android:textColor="@android:color/white"
-                        android:textSize="12dp"></TextView>
+                        android:text="-"
+                        style="@style/TextStyleOne"
+                        android:padding="@dimen/C8dp"
+                        android:textColor="@android:color/white" />
 
-                </RelativeLayout>
+                </LinearLayout>
+
 
                 <View
                     android:layout_width="match_parent"
@@ -88,300 +72,207 @@
                     android:layout_margin="@dimen/C5dp"
                     android:background="@android:color/black" />
 
-                <RelativeLayout
+      <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C10dp"
-                    android:layout_marginRight="@dimen/C10dp"
-                    android:layout_marginBottom="@dimen/C10dp">
-
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="TYPE"
-                        android:textColor="@android:color/black"
-                        android:textSize="12dp"></TextView>
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="SHIFT"
-                        android:textColor="@android:color/black"
-                        android:textSize="12dp"></TextView>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/C10dp"
-                    android:layout_marginBottom="@dimen/C10dp">
-
-                    <TextView
-                        android:id="@+id/type"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="2.42pm to 4.41"
-                        android:textColor="@android:color/black"
-                        android:textSize="16dp"
-                        android:textStyle="bold"></TextView>
-
-
-                    <TextView
-                        android:id="@+id/shift"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="2"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"
-                        android:textStyle="bold"></TextView>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="LOCATION"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"></TextView>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C5dp">
-
-                    <TextView
-                        android:id="@+id/odlocation"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginTop="0dp"
-                        android:text="Test Entry"
-                        android:textSize="14dp"
-                        android:textStyle="bold"></TextView>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="PURPOSE OF VISIT"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"></TextView>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C5dp">
-
-                    <TextView
-                        android:id="@+id/POV"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentTop="true"
-                        android:layout_marginTop="0dp"
-                        android:text="purpose of visit"
-                        android:textSize="14dp"
-                        android:textStyle="bold"></TextView>
-                </RelativeLayout>
-
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C10dp"
-                    android:layout_marginRight="@dimen/C10dp"
-                    android:layout_marginBottom="@dimen/C10dp">
-
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="IN TIME"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/C12dp"></TextView>
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="OUT TIME"
-                        android:textColor="@android:color/black"
-                        android:textSize="@dimen/C12dp"></TextView>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/C10dp"
-                    android:layout_marginBottom="@dimen/C10dp">
-
-                    <TextView
-                        android:id="@+id/intime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="2.42pm to 4.41"
-                        android:textColor="@android:color/black"
-                        android:textSize="16dp"
-                        android:textStyle="bold"></TextView>
-
-
-                    <TextView
-                        android:id="@+id/outtime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="2"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"
-                        android:textStyle="bold"></TextView>
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/C10dp"
-                    android:layout_marginBottom="@dimen/C10dp">
-
-                    <TextView
-
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="GEO IN"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"></TextView>
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="GEO OUT"
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"></TextView>
-
-                </RelativeLayout>
+                    android:orientation="vertical"
+                    android:padding="@dimen/C7dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/C10dp"
-                    android:layout_marginBottom="@dimen/C10dp"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="@dimen/C7dp">
 
                     <TextView
-                        android:id="@+id/geoin"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-
+                        style="@style/TextStyleOne"
                         android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="2.42pm to 4.41"
-                        android:textColor="@android:color/black"
-                        android:textSize="16dp"
-                        android:textStyle="bold"></TextView>
-
+                        android:text="Type"
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="11dp" />
 
                     <TextView
-                        android:id="@+id/geoout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="2"
-
-                        android:textColor="@android:color/black"
-                        android:textSize="14dp"
-                        android:textStyle="bold"></TextView>
+                        style="@style/TextStyleOne"
+                        android:text="SHIFT"
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="11dp" />
 
                 </LinearLayout>
 
-                <RelativeLayout
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/type"
+                        style="@style/TextStyleOne"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/shift"
+                        style="@style/TextStyleOne"
+                        android:text="-"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextStyleOne"
+                    android:layout_marginTop="@dimen/C8dp"
+                    android:layout_weight="1"
+                    android:text="LOCATION"
+                    android:textAllCaps="true"
+                    android:textColor="@color/dark_greys"
+                    android:textSize="11dp" />
+
+                <TextView
+                    android:id="@+id/odlocation"
+                    style="@style/TextStyleOne"
+                    android:layout_weight="1"
+                    android:text="-"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    style="@style/TextStyleOne"
+                    android:layout_marginTop="@dimen/C8dp"
+                    android:layout_weight="1"
+                    android:text="PURPOSE OF VISIT"
+                    android:textAllCaps="true"
+                    android:textColor="@color/dark_greys"
+                    android:textSize="11dp" />
+
+
+                <TextView
+                    android:id="@+id/POV"
+                    style="@style/TextStyleOne"
+                    android:layout_weight="1"
+                    android:text="-"
+                    android:textAllCaps="true"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/C10dp">
 
-                    android:layout_marginRight="@dimen/C10dp">
+                    <TextView
+                        style="@style/TextStyleOne"
+                        android:layout_weight="1"
+                        android:text="IN TIME"
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        style="@style/TextStyleOne"
+                        android:text="OUT TIME"
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="11dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/intime"
+                        style="@style/TextStyleOne"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/outtime"
+                        style="@style/TextStyleOne"
+                        android:text="-"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/C10dp">
+
+                    <TextView
+                        style="@style/TextStyleOne"
+                        android:layout_weight="1"
+                        android:text="GEO IN"
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="11dp" />
+
+                    <TextView
+                        style="@style/TextStyleOne"
+                        android:text="GEO OUT"
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="11dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/geoin"
+                        style="@style/TextStyleOne"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/geoout"
+                        style="@style/TextStyleOne"
+                        android:text="-"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/C7dp">
 
                     <TextView
                         android:id="@+id/applieddate"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_alignParentLeft="true"
+                        style="@style/TextStyleOne"
                         android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Approved:2020-01-23"
-                        android:textColor="@color/statuscolor"
-                        android:textSize="14dp"></TextView>
-
+                        android:text="-"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/Papproved"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="Reject 2020-01-23"
-                        android:textColor="@color/statuscolor"
-                        android:textSize="14dp"
-                        android:visibility="gone"></TextView>
+                        style="@style/TextStyleOne"
+                        android:text="-"
+                        android:textAlignment="textEnd"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
 
-                </RelativeLayout>
+                </LinearLayout>
+      </LinearLayout>
+
             </LinearLayout>
 
 

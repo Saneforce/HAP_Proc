@@ -24,6 +24,7 @@
     <color name="bg_color">#F1F1F1</color>
     <color name="txt_color_black">#000000</color>
     <color name="dark_grey">#3E3E3E</color>
+    <color name="dark_greys">#C83E3E3E</color>
     <color name="color_white">#FFFFFF</color>
 
     <color name="grey_300">#E0E0E0</color>

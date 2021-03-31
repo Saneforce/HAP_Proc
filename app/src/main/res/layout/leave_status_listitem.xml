@@ -14,42 +14,56 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/C5dp"
-            android:elevation="@dimen/C5dp"
+            android:layout_margin="@dimen/C8dp"
+            android:elevation="@dimen/C8dp"
+            android:outlineAmbientShadowColor="@color/black"
+            android:outlineSpotShadowColor="@color/black"
+            app:shapeAppearanceOverlay="@color/black"
             app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/C5dp"
+                android:layout_margin="@dimen/C12dp"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:id="@+id/sf_namelayout"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/C5dp"
-                    android:visibility="gone">
+                    android:layout_marginLeft="@dimen/C5dp"
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/SfName"
-                        style="@style/TextStyle" />
+                        style="@style/TextStyleOne"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:textColor="@android:color/black"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
 
                 </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/C5dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/fromdatetodate"
-                        style="@style/TextStyle"
-                        android:layout_weight="1" />
+                        style="@style/TextStyleOne"
+                        android:layout_weight="1"
+                        android:padding="@dimen/C7dp"
+                        android:text="-"
+                        android:textColor="@android:color/black"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
+
 
                     <TextView
                         android:id="@+id/LStatus"
-                        style="@style/TextStyle"
+                        style="@style/TextStyleOne"
+                        android:text="-"
                         android:textColor="@android:color/white" />
 
                 </LinearLayout>
@@ -60,53 +74,96 @@
                     android:layout_margin="@dimen/C5dp"
                     android:background="@android:color/black" />
 
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:padding="@dimen/C7dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C10dp"
-                    android:layout_marginRight="@dimen/C10dp"
-                    android:layout_marginBottom="@dimen/C10dp">
+
+                    android:layout_marginTop="@dimen/C7dp">
 
                     <TextView
-                        style="@style/TextStyle"
+
+                        style="@style/TextStyleOne"
                         android:layout_weight="1"
-                        android:text="Type" />
+                        android:text="Type"
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="11dp" />
 
                     <TextView
-                        style="@style/TextStyle"
-                        android:text="Days" />
+                        style="@style/TextStyleOne"
+                        android:text="Days"
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="11dp" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginRight="@dimen/C10dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/leavetype"
-                        style="@style/TextStyle"
-                        android:layout_weight="1" />
+                        style="@style/TextStyleOne"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/leavedays"
-                        style="@style/TextStyle" />
+                        style="@style/TextStyleOne"
+                        android:text="-"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
                 <TextView
-                    style="@style/TextStyle"
-                    android:text="Reason" />
+                    style="@style/TextStyleOne"
+                    android:layout_marginTop="@dimen/C10dp"
+                    android:text="Reason"
+                    android:textAllCaps="true"
+                    android:textColor="@color/dark_greys"
+                    android:textSize="11dp" />
 
                 <TextView
                     android:id="@+id/leavereason"
-                    style="@style/TextStyle" />
+                    style="@style/TextStyleOne"
+                    android:text="-"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <TextView
-                    android:id="@+id/applieddate"
-                    style="@style/TextStyle" />
+                    <TextView
+                        android:id="@+id/applieddate"
+                        style="@style/TextStyleOne"
+                        android:layout_marginTop="@dimen/C7dp"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
 
+                    <TextView
+                        android:id="@+id/approvedate"
+                        style="@style/TextStyleOne"
+                        android:layout_marginTop="@dimen/C7dp"
+                        android:text="-"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -158,6 +215,8 @@
                             android:text="SEND" />
 
                     </LinearLayout>
+                </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>

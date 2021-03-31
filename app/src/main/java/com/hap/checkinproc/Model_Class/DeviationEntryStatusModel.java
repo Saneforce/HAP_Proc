@@ -4,7 +4,25 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class DeviationEntryStatusModel {
+    public String getSFNm() {
+        return SFNm;
+    }
 
+    public void setSFNm(String SFNm) {
+        this.SFNm = SFNm;
+    }
+
+    public String getdStatus() {
+        return dStatus;
+    }
+
+    public void setdStatus(String dStatus) {
+        this.dStatus = dStatus;
+    }
+
+    @SerializedName("SFNm")
+    @Expose
+    private String SFNm;
     @SerializedName("sf_code")
     @Expose
     private String sfCode;

@@ -428,14 +428,14 @@
 
                         <TextView
                             style="@style/TextStyle"
-                            android:text="Remark"></TextView>
+                            android:text="Remark"/>
 
                         <TextView
                             android:id="@+id/txt_templates"
                             style="@style/TextStyle"
                             android:layout_alignParentEnd="true"
                             android:text="Templates"
-                            android:textColor="#E65100"></TextView>
+                            android:textColor="#E65100"/>
 
                     </RelativeLayout>
 
