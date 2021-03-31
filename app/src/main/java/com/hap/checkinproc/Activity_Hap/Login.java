@@ -234,7 +234,7 @@ public class Login extends AppCompatActivity {
                 // Bind to the service. If the service is in foreground mode, this signals to the service
                 // that since this activity is in the foreground, the service can exit foreground mode.
 
-                Boolean DAMode = CheckInDetails.getBoolean("DAMode", true);
+                Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
                 if(DAMode==true){
                     bindService(new Intent(getApplicationContext(), SANGPSTracker.class), mServiceConection,
                             Context.BIND_AUTO_CREATE);
@@ -292,10 +292,13 @@ public class Login extends AppCompatActivity {
 
             /*PERMISSION REQUEST*/
             if (cameraPermission.checkPermission()) {
-                Intent playIntent = new Intent(this, SANGPSTracker.class);
-                bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
-                startService(playIntent);
 
+                Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
+                if(DAMode==true) {
+                    Intent playIntent = new Intent(this, SANGPSTracker.class);
+                    bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
+                    startService(playIntent);
+                }
             }
 
             if (Login == true && CheckIn == false) {
@@ -437,7 +440,7 @@ public class Login extends AppCompatActivity {
             // Bind to the service. If the service is in foreground mode, this signals to the service
             // that since this activity is in the foreground, the service can exit foreground mode.
 
-            Boolean DAMode = CheckInDetails.getBoolean("DAMode", true);
+            Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
             if(DAMode==true) {
                 bindService(new Intent(this, SANGPSTracker.class), mServiceConection,
                         Context.BIND_AUTO_CREATE);
@@ -497,11 +500,13 @@ public class Login extends AppCompatActivity {
  // service.
  unbindService(mServiceConection);
  mBound = false;
+
  }*/
         super.onStop();
      /*   Intent inten = new Intent(this, TimerService.class);
         startService(inten);
 */
+
         Log.v("LOG_IN_LOCATION", "ONSTOP");
 
         if (authStateListener != null) {
@@ -517,10 +522,8 @@ public class Login extends AppCompatActivity {
             return;
         }
         Log.d(TAG, "TWO " + deviceToken);
-       // eMail="anbu@saneforce.com";
+        //eMail="anbu@saneforce.com";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
-      //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
-        //  Call<Model> modelCall = apiInterface.login("get/GoogleLogin", "haptest4@hap.in", deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
@@ -568,14 +571,11 @@ public class Login extends AppCompatActivity {
                         if (requestCode == RC_SIGN_IN) {
                             if (CheckIn == true) {
                                 intent = new Intent(Login.this, Dashboard_Two.class);
-                                // intent = new Intent(Login.this, TAClaimActivity.class);
                                 intent.putExtra("Mode", "CIN");
                             } else {
                                 intent = new Intent(Login.this, Dashboard.class);
-                                // intent = new Intent(Login.this, TAClaimActivity.class);
                             }
                         } else {
-                            // intent = new Intent(Login.this, AllowanceActivity.class);
                             intent = new Intent(Login.this, Dashboard_Two.class);
                             intent.putExtra("Mode", "RPT");
                         }
@@ -609,7 +609,6 @@ public class Login extends AppCompatActivity {
                         Shared_Common_Pref.Dept_Type = DeptType;
                         Shared_Common_Pref.SF_Type = Sf_type;
 
-
                         Log.e("SF_TYPEVALUE", Sf_type);
                         Log.e("STATECODE", code);
                         Log.e("STATECODE", div);
@@ -635,7 +634,6 @@ public class Login extends AppCompatActivity {
                             editor.putBoolean("Login", true);
                         else
                             editor.putBoolean("Login", false);
-
                         editor.apply();
                         startActivity(intent);
                         try {
@@ -643,7 +641,6 @@ public class Login extends AppCompatActivity {
                         } catch (Exception e) {
 
                         }
-
                     } else {
                         try {
                             mProgress.dismiss();
@@ -653,7 +650,6 @@ public class Login extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Check username and password", Toast.LENGTH_LONG).show();
                     }
                 }
-
             }
 
             @Override

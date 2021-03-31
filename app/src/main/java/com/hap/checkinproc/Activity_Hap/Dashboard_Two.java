@@ -174,7 +174,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         sSFType = UserDetails.getString("Sf_Type", "");
         Log.d("CINDetails", CheckInDetails.toString());
         cardview3 = findViewById(R.id.cardview3);
-        cardview4 = findViewById(R.id.cardview4);
+        cardview4 = findViewById(R.id.btn_da_exp_entry);
         cardView5 = findViewById(R.id.cardview5);
         btnApprovals = findViewById(R.id.approvals);
         mPriod = "0";
@@ -209,6 +209,12 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         mRecyclerView.setLayoutManager(layoutManager);
         //mRecyclerView.stopScroll();
 
+        if (mShared_common_pref.getvalue(Shared_Common_Pref.CHECK_COUNT).equals("0")) {
+            btnApprovals.setVisibility(View.GONE);
+            //linApprovals.setVisibility(View.VISIBLE);
+        } else {
+            btnApprovals.setVisibility(View.VISIBLE);
+        }
 
         StActivity = findViewById(R.id.StActivity);
         btnCheckout = findViewById(R.id.btnCheckout);
@@ -234,16 +240,20 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             viewMode = params.getString("Mode");
             if (viewMode.equalsIgnoreCase("CIN") || viewMode.equalsIgnoreCase("extended")) {
                 cardview3.setVisibility(View.VISIBLE);
-                cardview4.setVisibility(View.GONE);
+                cardview4.setVisibility(View.VISIBLE);
+                if (sSFType.equals("0"))
+                    cardview4.setVisibility(View.GONE);
                 //cardView5.setVisibility(View.VISIBLE);
                 StActivity.setVisibility(View.VISIBLE);
                 btnCheckout.setVisibility(View.VISIBLE);
+                btnApprovals.setVisibility(View.VISIBLE);
             } else {
                 cardview3.setVisibility(View.GONE);
                 cardview4.setVisibility(View.GONE);
                 cardView5.setVisibility(View.GONE);
                 StActivity.setVisibility(View.GONE);
                 btnCheckout.setVisibility(View.GONE);
+                btnApprovals.setVisibility(View.GONE);
             }
         } else {
             cardview3.setVisibility(View.GONE);
@@ -419,7 +429,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
                 dyRpt.add(newItem);
 
-
                 recyclerView = (RecyclerView) findViewById(R.id.Rv_DyRpt);
                 mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this);
 
@@ -578,8 +587,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             case R.id.cardview3:
                 intent = new Intent(this, Leave_Dashboard.class);
                 break;
-            case R.id.cardview4:
-                intent = new Intent(this, TAClaimActivity.class);
+            case R.id.btn_da_exp_entry:
+                intent = new Intent(this, DaExceptionEntry.class);
                 break;
             case R.id.cardview5:
                 intent = new Intent(this, Reports.class);

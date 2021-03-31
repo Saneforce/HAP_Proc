@@ -125,12 +125,7 @@
                     android:text="TA &amp; claim"
                     app:layout_flexBasisPercent="47%" />
 
-                <Button
-                    android:id="@+id/btn_da_exp_entry"
-                    style="@style/ButtonStyle"
-                    android:background="@drawable/button_amber"
-                    android:text="Da Exception Entry"
-                    app:layout_flexBasisPercent="47%"></Button>
+
 
                 <Button
                     android:id="@+id/lin_extenden_shift"
@@ -153,17 +148,12 @@
                     android:text="Holiday Working"
                     app:layout_flexBasisPercent="47%" />
 
-                <Button
-                    android:id="@+id/lin_SFA"
-                    style="@style/ButtonStyle"
-                    android:background="@drawable/g_sign"
-                    android:text="SFA"
-                    android:visibility="gone"
-                    app:layout_flexBasisPercent="47%" />
 
             </com.google.android.flexbox.FlexboxLayout>
 
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/C30dp"></LinearLayout>
             <Button
                 android:id="@+id/lin_exit"
                 style="@style/ButtonStyle"

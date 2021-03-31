@@ -51,8 +51,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     public static final String mypreference = "mypref";
     TextView username;
     TextView lblUserName, lblEmail;
-    Button linMyday, linCheckin, lin_SFA, linApprovals, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift,
-            linTourPlan, linExit, lin_check_in, linHolidayWorking, btnDaEntry;
+    Button linMyday, linCheckin, linApprovals, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift,
+            linTourPlan, linExit, lin_check_in, linHolidayWorking;
     Integer type, OTFlg = 0;
     Common_Class common_class;
     TextView approvalcount;
@@ -92,8 +92,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         type = (shared.getInt("CheckCount", 0));
         common_class = new Common_Class(this);
-        lin_SFA = findViewById(R.id.lin_SFA);
-        btnDaEntry = findViewById(R.id.btn_da_exp_entry);
+
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
 
@@ -185,8 +184,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linTourPlan.setOnClickListener(this);
         linHolidayWorking.setOnClickListener(this);
         linExit.setOnClickListener(this);
-        btnDaEntry.setOnClickListener(this);
-        lin_SFA.setOnClickListener(this);
         getcountdetails();
     }
 
@@ -205,11 +202,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 String ETime = CheckInDetails.getString("CINEnd", "");
 
                 if (!ETime.equalsIgnoreCase("")) {
-
                     String CutOFFDt = CheckInDetails.getString("ShiftCutOff", "0");
                     String SftId = CheckInDetails.getString("Shift_Selected_Id", "0");
-
-
                     if (DT.GetCurrDateTime(this).getTime() >= DT.getDate(CutOFFDt).getTime() || SftId == "0") {
                         ETime = "";
                     }
@@ -224,7 +218,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     takePhoto.putExtra("ShiftEnd", CheckInDetails.getString("ShiftEnd", "0"));
                     takePhoto.putExtra("ShiftCutOff", CheckInDetails.getString("ShiftCutOff", "0"));
                     startActivity(takePhoto);
-
                 } else {
                     Intent i = new Intent(this, Checkin.class);
                     startActivity(i);
@@ -250,10 +243,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             case R.id.lin_approvals:
                 startActivity(new Intent(this, Approvals.class));
                 break;
-
-            case R.id.btn_da_exp_entry:
-                startActivity(new Intent(this, DaExceptionEntry.class));
-                break;
             case R.id.lin_myday_plan:
                 startActivity(new Intent(this, Mydayplan_Activity.class));
 
@@ -262,9 +251,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
             case R.id.lin_tour_plan:
                 startActivity(new Intent(this, Tp_Month_Select.class));
-                break;
-            case R.id.lin_SFA:
-                startActivity(new Intent(this, SFA_Activity.class));
                 break;
             case R.id.lin_holiday_working:
                 AlertDialogBox.showDialog(Dashboard.this, "HAP Check-In", "Are you sure want to Check-in with Hoilday Entry", "YES", "NO", false, new AlertBox() {

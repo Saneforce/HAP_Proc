@@ -167,11 +167,13 @@ public class View_All_Status_Activity extends AppCompatActivity {
                 // locationList=response.body();
                 Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
                 Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
-                common_class.ProgressdialogShow(2, "Onduty Status");
-                userType = new TypeToken<ArrayList<View_All_Model>>() {
-                }.getType();
-                approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
-                recyclerView.setAdapter(new ViewAll_Status_Adapter(approvalList, R.layout.view_all_status_listitem, getApplicationContext(),AMOD));
+                try {
+                    common_class.ProgressdialogShow(2, "Onduty Status");
+                    userType = new TypeToken<ArrayList<View_All_Model>>() {
+                    }.getType();
+                    approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
+                    recyclerView.setAdapter(new ViewAll_Status_Adapter(approvalList, R.layout.view_all_status_listitem, getApplicationContext(), AMOD));
+                }catch (Exception e){}
             }
 
             @Override

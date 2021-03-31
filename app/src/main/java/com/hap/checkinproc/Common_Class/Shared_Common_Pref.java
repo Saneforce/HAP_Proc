@@ -22,7 +22,7 @@ public class Shared_Common_Pref {
     public static String SF_EMP_ID = "sf_emp_id";
     public static String SF_DESIG = "sf_Designation_Short_Name";
     public static String SF_DEPT = "DeptName";
-
+    public static String DAMode="DAMode";
     public static  Double Outletlat ;
     public static  Double Outletlong;
     public static  String OutletAddress;
@@ -78,11 +78,19 @@ public class Shared_Common_Pref {
         editor.putString(key, value);
         editor.commit();
     }
-
+    public void save(String key,Boolean value){
+        editor.putBoolean(key, value);
+        editor.commit();
+    }
     public String getvalue(String key) {
         String text = null;
         text = Common_pref.getString(key, null);
         return text;
+    }
+    public Boolean getBoolValue(String Key){
+        Boolean val=false;
+        val=Common_pref.getBoolean(Key,false);
+        return val;
     }
 
     public void clear_pref(String key) {

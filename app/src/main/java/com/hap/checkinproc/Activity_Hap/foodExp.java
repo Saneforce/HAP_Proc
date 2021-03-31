@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,7 @@ public class foodExp extends AppCompatActivity {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 JsonArray res = response.body();
+                Log.d("Res Data:",res.toString());
                 if (res.size() < 1) {
                     Toast.makeText(getApplicationContext(), "No Records Today", Toast.LENGTH_LONG).show();
                     return;
