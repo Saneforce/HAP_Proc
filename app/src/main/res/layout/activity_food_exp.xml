@@ -185,16 +185,16 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C20dp"
                     android:layout_marginRight="@dimen/C16dp"
-                    android:layout_marginTop="@dimen/C5dp">
+                    android:layout_marginTop="@dimen/C17dp">
                     <TextView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:text="Total Amount"
                         android:textAllCaps="true"
                         android:layout_weight="1"
                         android:textStyle="bold"
+                        style="@style/DashboardTextStyleBold"
                         android:textSize="15sp"
-                        android:layout_marginTop="@dimen/C15dp"
                         />
                     <TextView
                         android:id="@+id/TotAmt"
@@ -203,8 +203,10 @@
                         android:text="Rs. 150.00"
                         android:textSize="15sp"
                         android:textStyle="bold"
-                        android:textColor="@color/colorPrimaryDark"
+                        android:textColor="#009688"
                         android:textFontWeight="900"
+                        android:gravity="center_vertical"
+                        style="@style/DashboardTextStyleBold"
                         android:layout_marginLeft="@dimen/C8dp"
                         android:layout_marginTop="@dimen/C15dp"
                         />
