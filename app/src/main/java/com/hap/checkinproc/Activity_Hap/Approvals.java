@@ -43,7 +43,7 @@ import java.util.Map;
 public class Approvals extends AppCompatActivity implements View.OnClickListener {
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    LinearLayout LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan;
+    LinearLayout LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan ,lin_leavecancel_histry, lin_leaveholidaystatus;
     LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
@@ -64,6 +64,8 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
         Setups = getSharedPreferences(SetupsInfo, Context.MODE_PRIVATE);
+        lin_leavecancel_histry = findViewById(R.id.lin_leavecancel_histry);
+        lin_leaveholidaystatus = findViewById(R.id.lin_leaveholidaystatus);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +165,8 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         MissedStatus.setOnClickListener(this);
         ExtdShift.setOnClickListener(this);
         lin_weekoff.setOnClickListener(this);
+        lin_leavecancel_histry.setOnClickListener(this);
+        lin_leaveholidaystatus.setOnClickListener(this);
         getcountdetails();
     }
 
@@ -269,6 +273,14 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
             case R.id.lin_weekoff:
                 common_class.CommonIntentwithoutFinishputextra(WeekOff_Status_Activity.class, "AMod", "1");
                 break;
+
+            case R.id.lin_leavecancel_histry:
+                common_class.CommonIntentwithoutFinishputextra(LeaveCancelRequestStatus.class, "AMod", "1");
+                break;
+            case R.id.lin_leaveholidaystatus:
+                common_class.CommonIntentwithoutFinishputextra(HolidayEntryStatus.class, "AMod", "1");
+                break;
+
         }
 
 

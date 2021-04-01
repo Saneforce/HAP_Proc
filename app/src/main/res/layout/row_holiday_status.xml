@@ -12,49 +12,61 @@
         android:orientation="vertical"
         tools:ignore="MissingConstraints,UselessLeaf">
 
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/C7dp"
+            android:layout_margin="@dimen/C8dp"
             android:elevation="@dimen/C5dp"
             app:cardCornerRadius="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/C8dp"
-                android:layout_marginRight="@dimen/C8dp"
+                android:layout_margin="@dimen/C12dp"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:id="@+id/sf_namelayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/C5dp"
+                    android:layout_marginLeft="@dimen/C5dp"
                     android:visibility="gone">
+
 
                     <TextView
                         android:id="@+id/SfName"
-                        style="@style/TextStyle" />
+                        style="@style/TextStyleOne"
+                        android:text="-"
+                        android:textColor="@android:color/black"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
 
                 </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/C5dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/holiday_date"
-                        style="@style/TextStyle"
-                        android:layout_weight="1" />
+                        style="@style/TextStyleOne"
+                        android:layout_weight="1"
+                        android:padding="@dimen/C7dp"
+                        android:text="-"
+                        android:textColor="@android:color/black"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:textColor="@android:color/white"
                         android:id="@+id/holiday_status"
-                        style="@style/TextStyle" />
+                        style="@style/TextStyleOne"
+                        android:padding="@dimen/C8dp"
+                        android:text="-"
+                        android:textColor="@android:color/white" />
 
                 </LinearLayout>
+
 
                 <View
                     android:layout_width="match_parent"
@@ -62,35 +74,53 @@
                     android:layout_margin="@dimen/C5dp"
                     android:background="@android:color/black" />
 
+      <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/C7dp">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C10dp">
+                    android:layout_marginTop="@dimen/C7dp">
 
                     <TextView
-                        style="@style/TextStyle"
+                        style="@style/TextStyleOne"
                         android:layout_weight="1"
-                        android:text="TYPE" />
+                        android:text="Type"
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="11dp" />
 
                     <TextView
-                        style="@style/TextStyle"
-                        android:text="SHIFT" />
+                        style="@style/TextStyleOne"
+                        android:text="SHIFT"
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="11dp" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C5dp">
+             >
 
                     <TextView
-                        style="@style/TextStyle"
+                        style="@style/TextStyleOne"
                         android:layout_weight="1"
-                        android:text="Holiday Entry" />
+                        android:text="Holiday Entry"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <TextView
+                        style="@style/TextStyleOne"
                         android:id="@+id/shift_timing"
-                        style="@style/TextStyle"></TextView>
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
@@ -100,32 +130,42 @@
                     android:layout_marginTop="@dimen/C10dp">
 
                     <TextView
-                        style="@style/TextStyle"
+                        style="@style/TextStyleOne"
                         android:layout_weight="1"
-                        android:text="IN TIME" />
+                        android:text="IN TIME"
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="11dp" />
 
                     <TextView
-                        style="@style/TextStyle"
-                        android:text="OUT TIME" />
+                        style="@style/TextStyleOne"
+                        android:text="OUT TIME"
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="11dp" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C5dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/holiday_in_time"
-                        style="@style/TextStyle"
-                        android:layout_weight="1" />
+                        style="@style/TextStyleOne"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/holiday_out_time"
-                        style="@style/TextStyle" />
+                        style="@style/TextStyleOne"
+                        android:text="-"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -133,50 +173,74 @@
                     android:layout_marginTop="@dimen/C10dp">
 
                     <TextView
-                        style="@style/TextStyle"
+                        style="@style/TextStyleOne"
                         android:layout_weight="1"
-                        android:text="GEO IN" />
+                        android:text="GEO IN"
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="11dp" />
 
                     <TextView
-                        style="@style/TextStyle"
-                        android:text="GEO OUT" />
+                        style="@style/TextStyleOne"
+                        android:text="GEO OUT"
+                        android:textAllCaps="true"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="11dp" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C5dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/geo_in"
-                        style="@style/TextStyle"
-                        android:layout_weight="1" />
+                        style="@style/TextStyleOne"
+                        android:layout_weight="1"
+                        android:text="-"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/geo_out"
-                        style="@style/TextStyle" />
+                        style="@style/TextStyleOne"
+                        android:text="-"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C10dp"
-                    android:layout_marginBottom="@dimen/C10dp">
+                    android:layout_marginTop="@dimen/C8dp">
 
                     <TextView
-                        style="@style/TextStyle"
+                        android:id="@+id/applieddate"
+                        style="@style/TextStyleOne"
                         android:layout_weight="1"
-                        android:text="Holiday Entry" />
+                        android:text="Holiday Entry"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/holiday_entry_date"
-                        style="@style/TextStyle" />
-
+                        style="@style/TextStyleOne"
+                        android:id="@+id/deviation_rejected"
+                        android:textColor="@color/dark_greys"
+                        android:textSize="13dp"
+                        android:textStyle="bold" />
                 </LinearLayout>
+
+      </LinearLayout>
+
+
+
             </LinearLayout>
+
+
         </androidx.cardview.widget.CardView>
+
     </LinearLayout>
 
 

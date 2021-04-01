@@ -48,6 +48,7 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
         holder.outtime.setText(extendedShift_status_models.get(position).getETime());
         holder.geoin.setText(extendedShift_status_models.get(position).getCheckin());
         holder.geoout.setText(extendedShift_status_models.get(position).getCheckout());
+        holder.applieddate.setText(extendedShift_status_models.get(position).getSubmissionDate());
         holder.OStatus.setText(Onduty_Status_Model.getEStatus());
         if (Onduty_Status_Model.getWrkType() == 0) {
             holder.OStatus.setBackgroundResource(R.drawable.button_yellows);
@@ -66,7 +67,7 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
-
+            holder.Papproved.setText("Approved : " + extendedShift_status_models.get(position).getApproveddate());
             holder.OStatus.setBackgroundResource(R.drawable.button_green);
         } else {
             if (AMod.equals("1")) {
@@ -76,6 +77,7 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
+            holder.Papproved.setText("Reject : "+extendedShift_status_models.get(position).getApproveddate());
             holder.OStatus.setBackgroundResource(R.drawable.button_red);
         }
     }
@@ -97,14 +99,13 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
             type = (TextView) view.findViewById(R.id.shift_type);
             shift = (TextView) view.findViewById(R.id.shift_type);
             odlocation = (TextView) view.findViewById(R.id.odlocation);
-
             intime = (TextView) view.findViewById(R.id.txt_in_time);
             outtime = (TextView) view.findViewById(R.id.txt_out_time);
             geoin = (TextView) view.findViewById(R.id.txt_geo_in_time);
             OStatus = (TextView) view.findViewById(R.id.os_status);
             geoout = (TextView) view.findViewById(R.id.txt_geo_out_time);
             applieddate = (TextView) view.findViewById(R.id.applieddate);
-            Papproved = (TextView) view.findViewById(R.id.applieddate);
+            Papproved = (TextView) view.findViewById(R.id.Papproved);
             SfName = view.findViewById(R.id.SfName);
             sf_namelayout = view.findViewById(R.id.sf_namelayout);
         }

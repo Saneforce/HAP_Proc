@@ -4,6 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class LeaveCancelStatusModel {
+    @SerializedName("SFNm")
+    @Expose
+    private String SFNm;
     @SerializedName("sf_code")
     @Expose
     private String sfCode;
@@ -116,6 +119,14 @@ public class LeaveCancelStatusModel {
 
     public String getLastUpdtDate() {
         return lastUpdtDate;
+    }
+
+    public String getSFNm() {
+        return SFNm;
+    }
+
+    public void setSFNm(String SFNm) {
+        this.SFNm = SFNm;
     }
 
     public void setLastUpdtDate(String lastUpdtDate) {

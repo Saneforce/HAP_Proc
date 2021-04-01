@@ -44,11 +44,12 @@ public class HolidayEntryStatus extends AppCompatActivity {
     Common_Class common_class;
     Gson gson;
     Type userType;
-
+    String AMOD = "0";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.row_holiday_entry_status);
+        AMOD = String.valueOf(getIntent().getSerializableExtra("AMod"));
         startService(new Intent(this, TimerService.class));
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -123,7 +124,7 @@ public class HolidayEntryStatus extends AppCompatActivity {
                 userType = new TypeToken<ArrayList<HolidayEntryModel>>() {
                 }.getType();
                 HolidayApproval = gson.fromJson(new Gson().toJson(response.body()), userType);
-                HolidayRecyclerStatus.setAdapter(new HolidayStatusAdapter(HolidayApproval, R.layout.row_holiday_status, getApplicationContext()));
+                HolidayRecyclerStatus.setAdapter(new HolidayStatusAdapter(AMOD,HolidayApproval, R.layout.row_holiday_status, getApplicationContext()));
                 Log.e("TAG_HOLIDAY_REPOSNE", "response Tp_View: "+ HolidayApproval);
             }
 

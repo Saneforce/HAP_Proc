@@ -23,6 +23,7 @@ public class MissedPnch_Status_Adapter extends RecyclerView.Adapter<MissedPnch_S
     private Context context;
 
     String AMod;
+
     public MissedPnch_Status_Adapter(List<MissedPunch_Status_Model> onduty_Status_ModelsList, int rowLayout, Context context, String AMod) {
         missedPunchStatusModelList = onduty_Status_ModelsList;
         this.rowLayout = rowLayout;
@@ -45,6 +46,7 @@ public class MissedPnch_Status_Adapter extends RecyclerView.Adapter<MissedPnch_S
         holder.intime.setText("" + missedPunchStatusModelList.get(position).getCheckinTime());
         holder.outtime.setText("" + missedPunchStatusModelList.get(position).getCheckoutTme());
         holder.POV.setText("" + missedPunchStatusModelList.get(position).getReason());
+        holder.applieddate.setText("Applied : " + missedPunchStatusModelList.get(position).getSubmissionDate());
         holder.OStatus.setText(Onduty_Status_Model.getMPStatus());
         if (Onduty_Status_Model.getMissedPunchFlag() == 0) {
             holder.OStatus.setBackgroundResource(R.drawable.button_yellows);
@@ -63,6 +65,7 @@ public class MissedPnch_Status_Adapter extends RecyclerView.Adapter<MissedPnch_S
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
+            holder.Papproved.setText("Approved : " + missedPunchStatusModelList.get(position).getRejectdate());
             holder.OStatus.setBackgroundResource(R.drawable.button_green);
         } else {
 
@@ -73,6 +76,7 @@ public class MissedPnch_Status_Adapter extends RecyclerView.Adapter<MissedPnch_S
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
+            holder.Papproved.setText("Reject : " + missedPunchStatusModelList.get(position).getRejectdate());
             holder.OStatus.setBackgroundResource(R.drawable.button_red);
         }
 
@@ -84,8 +88,9 @@ public class MissedPnch_Status_Adapter extends RecyclerView.Adapter<MissedPnch_S
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView ondutydate, type, shift, odlocation, POV, intime, outtime, geoin, geoout, applieddate, OStatus, Papproved,SfName;
+        public TextView ondutydate, type, shift, odlocation, POV, intime, outtime, geoin, geoout, applieddate, OStatus, Papproved, SfName;
         RelativeLayout sf_namelayout;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             ondutydate = itemView.findViewById(R.id.ondutydate);
@@ -98,7 +103,7 @@ public class MissedPnch_Status_Adapter extends RecyclerView.Adapter<MissedPnch_S
             OStatus = itemView.findViewById(R.id.OStatus);
             geoout = itemView.findViewById(R.id.geoout);
             applieddate = itemView.findViewById(R.id.applieddate);
-            Papproved = itemView.findViewById(R.id.applieddate);
+            Papproved = itemView.findViewById(R.id.Papproved);
             SfName = itemView.findViewById(R.id.SfName);
             sf_namelayout = itemView.findViewById(R.id.sf_namelayout);
         }

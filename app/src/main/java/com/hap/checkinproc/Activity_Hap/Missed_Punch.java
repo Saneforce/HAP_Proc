@@ -105,6 +105,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             strImg = "", strMod = "", strKm = "", Hq = "", EdtReasn = "", SF_code = "", div = "", State_Code = "";
     LinearLayout linToPlace, linMode;
     Common_Model mCommon_model_spinner;
+    Integer count = 0;
     List<Common_Model> modelRetailDetails = new ArrayList<>();
 
     @Override
@@ -233,7 +234,34 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             public void onClick(View v) {
 
                 if (!misseddateselect.getText().toString().matches("") && !reasonMP.getText().toString().matches("")) {
-                    missedPunchSubmit();
+                  if(count ==1){
+                      if (EndedEditText.getText().toString().matches("")) {
+                          Toast.makeText(Missed_Punch.this, "Choose End Km", Toast.LENGTH_SHORT).show();
+                          return;
+                      } else if (EndedImage.matches("")) {
+                          Toast.makeText(Missed_Punch.this, "Choose End photo", Toast.LENGTH_SHORT).show();
+                          return;
+                      } else {
+
+                          try {
+                              stKM = Integer.valueOf(TextStartedKm.getText().toString());
+                          } catch (NumberFormatException ex) { // handle your exception
+
+                          }
+                          endKm = Integer.valueOf(String.valueOf(EndedEditText.getText().toString()));
+
+                          Log.e("START_KM", String.valueOf(stKM));
+                          Log.e("End_KM", String.valueOf(endKm));
+                          if (stKM < endKm) {
+                              missedPunchSubmit();
+                          } else {
+                              Toast.makeText(Missed_Punch.this, "Should be greater then Started Km", Toast.LENGTH_SHORT).show();
+
+                          }
+                      }
+                  }else{
+                      missedPunchSubmit();
+                  }
                 } else if (misseddateselect.getText().toString().matches("")) {
                     Toast.makeText(Missed_Punch.this, "Enter Shite time", Toast.LENGTH_SHORT).show();
                 } else if (reasonMP.getText().toString().matches("")) {
@@ -529,7 +557,11 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             misseddateselect.setText(myDataset.get(position).getId());
             checkOutTime.setText(myDataset.get(position).getAddress());
             missedCheckOut = myDataset.get(position).getAddress();
-            linMode.setVisibility(View.VISIBLE);
+            if (count == 1) {
+                linMode.setVisibility(View.VISIBLE);
+            }else{
+                linMode.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -571,6 +603,17 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             jsonleaveType.put("checkinTime", missedCHeckin);
             jsonleaveType.put("reason", reasonMP.getText().toString());
             jsonleaveTypeS.put("MissedPunchEntry", jsonleaveType);
+            jsonleaveTypeS.put("km", EndedEditText.getText().toString());
+            jsonleaveTypeS.put("pkm", personalKM);
+            jsonleaveTypeS.put("mod", "11");
+            jsonleaveTypeS.put("sf", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+            jsonleaveTypeS.put("div", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
+            jsonleaveTypeS.put("url", Photo_Name);
+            jsonleaveTypeS.put("from", "");
+            jsonleaveTypeS.put("to", TextToPlace.getText().toString());
+            jsonleaveTypeS.put("to_code", StrToCode);
+            jsonleaveTypeS.put("fare", "");
+            jsonleaveTypeS.put("Activity_Date", Common_Class.GetDate());
             jsonArray1.put(jsonleaveTypeS);
 
         } catch (JSONException e) {
