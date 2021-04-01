@@ -96,6 +96,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
 
         if (Leave_Status_ModelsList.get(position).getLeaveActiveFlag() == 0) {
             holder.LStatus.setBackgroundResource(R.drawable.button_green);
+            holder.LStatus.setPadding(20,5,20,0);
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);
                 holder.SfName.setText(Leave_Status_Model.getSFNm());
@@ -106,6 +107,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
 
         } else if (Leave_Status_ModelsList.get(position).getLeaveActiveFlag() == 2) {
             holder.LStatus.setBackgroundResource(R.drawable.button_yellows);
+            holder.LStatus.setPadding(20,5,20,0);
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);
                 holder.SfName.setText(Leave_Status_Model.getSFNm());
@@ -121,6 +123,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
+            holder.LStatus.setPadding(20,5,20,0);
             holder.LStatus.setBackgroundResource(R.drawable.button_red);
         }
     }

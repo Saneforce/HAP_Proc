@@ -55,6 +55,7 @@ public class DeviationEntryStatusAdapter extends RecyclerView.Adapter<DeviationE
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
+            holder.HolidayStatus.setPadding(20,5,20,0);
             holder.HolidayReject.setText("Reject : " + holiday_status_modelist.get(position).getLastUpdtDate());
             holder.HolidayStatus.setBackgroundResource(R.drawable.button_red);
         } else if (holiday_status_modelist.get(position).getDeviActiveFlag() == 0) {
@@ -65,6 +66,7 @@ public class DeviationEntryStatusAdapter extends RecyclerView.Adapter<DeviationE
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
+            holder.HolidayStatus.setPadding(20,5,20,0);
             holder.HolidayReject.setText("Approved : " + holiday_status_modelist.get(position).getLastUpdtDate());
             holder.HolidayStatus.setBackgroundResource(R.drawable.button_green);
         } else {
@@ -75,7 +77,7 @@ public class DeviationEntryStatusAdapter extends RecyclerView.Adapter<DeviationE
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
-
+            holder.HolidayStatus.setPadding(20,5,20,0);
             holder.HolidayStatus.setBackgroundResource(R.drawable.button_yellows);
         }
 

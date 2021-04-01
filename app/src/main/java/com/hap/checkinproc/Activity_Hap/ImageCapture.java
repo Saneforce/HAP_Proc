@@ -477,26 +477,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
 
             if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty") || mMode.equalsIgnoreCase("holidayentry")) {
-                SharedPreferences.Editor editor = CheckInDetails.edit();
-                if (mMode.equalsIgnoreCase("CIN")) {
-
-
-                    editor.putString("Shift_Selected_Id", CheckInInf.getString("Shift_Selected_Id"));
-                    editor.putString("Shift_Name", CheckInInf.getString("Shift_Name"));
-                    editor.putString("ShiftStart", CheckInInf.getString("ShiftStart"));
-                    editor.putString("ShiftEnd", CheckInInf.getString("ShiftEnd"));
-                    editor.putString("ShiftCutOff", CheckInInf.getString("ShiftCutOff"));
-                }
-                if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
-                    editor.putString("FTime", CTime);
-                editor.putString("Logintime", CTime);
-
-                if (mMode.equalsIgnoreCase("onduty"))
-                    editor.putString("On_Duty_Flag", "1");
-                else
-                    editor.putString("On_Duty_Flag", "0");
-                editor.putBoolean("CheckIn", true);
-                editor.apply();
 
                 JSONArray jsonarray = new JSONArray();
                 JSONObject paramObject = new JSONObject();
@@ -515,9 +495,36 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
-                        if (response.isSuccessful()) {
-                            mProgress.dismiss();
+                        if (response.isSuccessful() ) {
+
                             JsonObject itm = response.body().getAsJsonObject();
+
+                            mProgress.dismiss();
+                            if(itm.get("success").getAsString().equalsIgnoreCase("true")) {
+                                SharedPreferences.Editor editor = CheckInDetails.edit();
+                                try {
+                                    if (mMode.equalsIgnoreCase("CIN")) {
+                                        editor.putString("Shift_Selected_Id", CheckInInf.getString("Shift_Selected_Id"));
+                                        editor.putString("Shift_Name", CheckInInf.getString("Shift_Name"));
+                                        editor.putString("ShiftStart", CheckInInf.getString("ShiftStart"));
+                                        editor.putString("ShiftEnd", CheckInInf.getString("ShiftEnd"));
+                                        editor.putString("ShiftCutOff", CheckInInf.getString("ShiftCutOff"));
+                                    }
+                                    if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
+                                        editor.putString("FTime", CTime);
+                                    editor.putString("Logintime", CTime);
+
+                                    if (mMode.equalsIgnoreCase("onduty"))
+                                        editor.putString("On_Duty_Flag", "1");
+                                    else
+                                        editor.putString("On_Duty_Flag", "0");
+                                    editor.putBoolean("CheckIn", true);
+                                    editor.apply();
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                             String mMessage = "Your Check-In Submitted Successfully";
                             try {
                                 mMessage = itm.get("Msg").getAsString();
@@ -527,9 +534,12 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                             AlertDialogBox.showDialog(ImageCapture.this, "HAP Check-In", String.valueOf(Html.fromHtml(mMessage)), "Yes", "", false, new AlertBox() {
                                 @Override
                                 public void PositiveMethod(DialogInterface dialog, int id) {
-                                    Intent Dashboard = new Intent(ImageCapture.this, Dashboard_Two.class);
-                                    Dashboard.putExtra("Mode", "CIN");
-                                    ImageCapture.this.startActivity(Dashboard);
+
+                                    if(itm.get("success").getAsString().equalsIgnoreCase("true")) {
+                                        Intent Dashboard = new Intent(ImageCapture.this, Dashboard_Two.class);
+                                        Dashboard.putExtra("Mode", "CIN");
+                                        ImageCapture.this.startActivity(Dashboard);
+                                    }
 
                                     ((AppCompatActivity) ImageCapture.this).finish();
                                 }

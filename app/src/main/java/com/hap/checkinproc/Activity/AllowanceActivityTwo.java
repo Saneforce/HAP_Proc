@@ -404,6 +404,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 editor.remove("SharedFare");
                                 editor.remove("SharedImages");
                                 editor.remove("Closing");
+                                shared_common_pref.clear_pref(Shared_Common_Pref.DAMode);
                                 Intent takePhoto = new Intent(AllowanceActivityTwo.this, ImageCapture.class);
                                 takePhoto.putExtra("Mode", "COUT");
                                 startActivity(takePhoto);
