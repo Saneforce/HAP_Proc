@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
@@ -19,6 +20,8 @@ import com.hap.checkinproc.adapters.HAPListItem;
 import com.hap.checkinproc.adapters.adFoodexp;
 
 import org.json.JSONArray;
+
+import java.text.DecimalFormat;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,7 +31,7 @@ public class foodExp extends AppCompatActivity {
     public static final String UserDetail = "MyPrefs";
     SharedPreferences UserDetails;
     RecyclerView mRecyclerView;
-    TextView txtempid,txtempName,txtHQ;
+    TextView txtempid,txtempName,txtHQ,txtTot;
 
     adFoodexp lsExp;
     @Override
@@ -36,9 +39,12 @@ public class foodExp extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_exp);
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+
         txtempid=findViewById(R.id.empId);
         txtempName=findViewById(R.id.empName);
         txtHQ=findViewById(R.id.empHQ);
+        txtTot=findViewById(R.id.TotAmt);
+
         txtempid.setText(UserDetails.getString("EmpId",""));
         txtempName.setText(UserDetails.getString("SfName",""));
         txtHQ.setText(UserDetails.getString("SFHQ",""));
@@ -63,6 +69,14 @@ public class foodExp extends AppCompatActivity {
 
                 lsExp = new adFoodexp(res, foodExp.this);
                 mRecyclerView.setAdapter(lsExp);
+                Double amt=0.0;
+                for(int il=0;il<res.size();il++){
+                    JsonObject item=res.get(il).getAsJsonObject();
+                    amt+=item.get("amount").getAsDouble();
+                }
+
+                txtTot.setText("Rs. "+ new DecimalFormat("##0.00").format(amt));
+
             }
 
             @Override

@@ -9,6 +9,6 @@
 
     <gradient
         android:startColor="@color/TAClaim"
-        android:endColor="@color/TAClaim"
-        android:angle="-360" />
+        android:endColor="#7A0277"
+        android:angle="-90" />
 </shape>

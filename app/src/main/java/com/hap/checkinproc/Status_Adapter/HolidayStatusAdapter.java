@@ -53,6 +53,7 @@ public class HolidayStatusAdapter extends RecyclerView.Adapter<HolidayStatusAdap
         holder.HolidayApplied.setText("Holiday Entry : " + holiday_status_modelist.get(position).getSubmissionDate());
         if (holiday_status_modelist.get(position).getDutyMode() == 2) {
             holder.HolidayStatus.setBackgroundResource(R.drawable.button_green);
+            holder.HolidayStatus.setPadding(20,5,20,0);
             holder.HolidayReject.setText("Approved : " + holiday_status_modelist.get(position).getApproveddate());
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);
@@ -64,6 +65,7 @@ public class HolidayStatusAdapter extends RecyclerView.Adapter<HolidayStatusAdap
 
         } else if (holiday_status_modelist.get(position).getDutyMode() == 3) {
             holder.HolidayStatus.setBackgroundResource(R.drawable.button_red);
+            holder.HolidayStatus.setPadding(20,5,20,0);
             holder.HolidayReject.setText("Reject : " + holiday_status_modelist.get(position).getApproveddate());
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);
@@ -80,6 +82,7 @@ public class HolidayStatusAdapter extends RecyclerView.Adapter<HolidayStatusAdap
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
+            holder.HolidayStatus.setPadding(20,5,20,0);
             holder.HolidayStatus.setBackgroundResource(R.drawable.button_yellows);
         }
 

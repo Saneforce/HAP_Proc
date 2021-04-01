@@ -85,6 +85,7 @@
                             style="@style/TextStyle"
                             android:id="@+id/select_hours"
                             android:elevation="5dp"
+                            android:layout_margin="@dimen/C10dp"
                             android:layout_width="match_parent"
                             android:background="@drawable/textbox_bg"
                             android:hint="Select Hours"
@@ -111,6 +112,7 @@
                             android:background="@drawable/textbox_bg"
                             android:hint="@string/shit_type"
                             android:elevation="5dp"
+                            android:layout_margin="@dimen/C10dp"
                             android:padding="@dimen/C8dp" />
 
                     </LinearLayout>
@@ -119,6 +121,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/C10dp"
+                        android:layout_marginLeft="@dimen/C5dp"
                         android:orientation="horizontal"
                         android:weightSum="2">
 
@@ -144,9 +147,8 @@
                                 android:elevation="@dimen/C5dp"
                                 android:focusable="false"
                                 android:layout_margin="@dimen/C1dp"
-                                android:hint="From Time"
+                                android:padding="@dimen/C8dp"                                android:hint="From Time"
                                 android:inputType="time"
-                                android:padding="@dimen/C10dp"
                                 android:textSize="@dimen/C13dp" />
                         </LinearLayout>
 
@@ -175,8 +177,8 @@
                                 android:focusable="false"
                                 android:hint="To Time"
                                 android:inputType="time"
-                                android:padding="@dimen/C10dp"
-                                android:textSize="@dimen/C13dp" />
+                                android:layout_margin="@dimen/C1dp"
+                                android:padding="@dimen/C8dp"                                     android:textSize="@dimen/C13dp" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -362,7 +364,7 @@
                             android:id="@+id/reason_permission"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/C100dp"
-                            android:layout_margin="@dimen/C1dp"
+                            android:layout_margin="@dimen/C10dp"
                             android:background="@drawable/textbox_bg"
                             android:elevation="@dimen/C5dp"
                             android:gravity="start"

@@ -59,6 +59,7 @@ public class LeaveCancelStatusAdapter extends RecyclerView.Adapter<LeaveCancelSt
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
+            holder.HolidayStatus.setPadding(20,5,20,0);
             holder.HolidayReject.setText("Reject : " + holiday_status_modelist.get(position).getLastUpdtDate());
             holder.HolidayStatus.setBackgroundResource(R.drawable.button_red);
         } else if (holiday_status_modelist.get(position).getLeavecancelId() == 0) {
@@ -70,6 +71,7 @@ public class LeaveCancelStatusAdapter extends RecyclerView.Adapter<LeaveCancelSt
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
+            holder.HolidayStatus.setPadding(20,5,20,0);
             holder.HolidayReject.setText("Approved : " + holiday_status_modelist.get(position).getLastUpdtDate());
             holder.HolidayStatus.setBackgroundResource(R.drawable.button_green);
         } else {
@@ -81,6 +83,7 @@ public class LeaveCancelStatusAdapter extends RecyclerView.Adapter<LeaveCancelSt
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
             holder.HolidayStatus.setBackgroundResource(R.drawable.button_yellows);
+            holder.HolidayStatus.setPadding(20,5,20,0);
         }
 
     }

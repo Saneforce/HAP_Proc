@@ -73,6 +73,7 @@ public class Permission_Status_Adapter extends RecyclerView.Adapter<Permission_S
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
             holder.PStatus.setBackgroundResource(R.drawable.button_green);
+            holder.PStatus.setPadding(20,5,20,0);
         } else if (Permission_Status_Model.getApprovalFlag() == 2) {
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);
@@ -82,6 +83,7 @@ public class Permission_Status_Adapter extends RecyclerView.Adapter<Permission_S
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
             holder.PStatus.setBackgroundResource(R.drawable.button_yellows);
+            holder.PStatus.setPadding(20,5,20,0);
         } else {
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);
@@ -91,6 +93,7 @@ public class Permission_Status_Adapter extends RecyclerView.Adapter<Permission_S
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
             holder.PStatus.setBackgroundResource(R.drawable.button_red);
+            holder.PStatus.setPadding(20,5,20,0);
         }
 
         if (Permission_Status_Model.getApprovalFlag() == 1) {

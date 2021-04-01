@@ -92,7 +92,7 @@ public class Onduty_Status_Adapter extends RecyclerView.Adapter<Onduty_Status_Ad
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
-
+            holder.OStatus.setPadding(20,5,20,0);
             holder.OStatus.setBackgroundResource(R.drawable.button_yellows);
         } else if (Onduty_Status_Model.getWrkType() == 2) {
             if (AMod.equals("1")) {
@@ -104,6 +104,7 @@ public class Onduty_Status_Adapter extends RecyclerView.Adapter<Onduty_Status_Ad
             }
             holder.Papproved.setText("Approved:" + Onduty_Status_Model.getApproveddate());
             holder.OStatus.setBackgroundResource(R.drawable.button_green);
+            holder.OStatus.setPadding(20,5,20,0);
         } else {
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);
@@ -114,6 +115,7 @@ public class Onduty_Status_Adapter extends RecyclerView.Adapter<Onduty_Status_Ad
             }
             holder.Papproved.setText("Reject:" + Onduty_Status_Model.getApproveddate());
             holder.OStatus.setBackgroundResource(R.drawable.button_red);
+            holder.OStatus.setPadding(20,5,20,0);
         }
 
     }

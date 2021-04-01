@@ -4,10 +4,12 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
@@ -49,7 +51,8 @@ public class adFoodexp extends RecyclerView.Adapter<adFoodexp.ViewHolder> {
         try {
             itm = mlist.get(position).getAsJsonObject();
             holder.date.setText(itm.get("date").getAsString());
-            holder.name.setText(itm.get("name").getAsString());
+            foodGrid adFdtyp=new foodGrid(itm.get("FoodDet").getAsJsonArray(),mContext);
+            holder.fdGrid.setAdapter(adFdtyp);
             holder.amount.setText("Rs. "+ new DecimalFormat("##0.00").format(Double.valueOf(itm.get("amount").getAsString())));
 
 //            holder.parentLayout.setOnClickListener(new View.OnClickListener() {
@@ -78,14 +81,15 @@ public class adFoodexp extends RecyclerView.Adapter<adFoodexp.ViewHolder> {
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView date,name,amount;
+        TextView date,amount;
+        GridView fdGrid;
         LinearLayout parentLayout;
         //CardView secondarylayout;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             date = itemView.findViewById(R.id.txt_date);
-            name = itemView.findViewById(R.id.txt_name);
+            fdGrid = itemView.findViewById(R.id.grdViewFdet);
             amount = itemView.findViewById(R.id.Amount);
             parentLayout = itemView.findViewById(R.id.parent_layout);
             //secondarylayout=itemView.findViewById(R.id.secondary_layout);
