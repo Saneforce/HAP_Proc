@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -95,7 +96,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
     ImageView StartedKmImage, EndedKmImage;
     Button takeEndedPhoto;
     EditText EndedEditText, PersonalKmEdit;
-    Integer stKM = 0, endKm = 0, personalKM = 0, StratKm = 0, maxKM = 0, TotalKm = 0;
+    Integer stKM = 0, endKm = 0, personalKM = 0, StratKm = 0, maxKM = 0, TotalKm = 0, totalPM = 0;
     SharedPreferences CheckInDetails, sharedpreferences, UserDetails;
     Shared_Common_Pref shared_common_pref;
     ApiInterface apiInterface;
@@ -234,34 +235,34 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             public void onClick(View v) {
 
                 if (!misseddateselect.getText().toString().matches("") && !reasonMP.getText().toString().matches("")) {
-                  if(count ==1){
-                      if (EndedEditText.getText().toString().matches("")) {
-                          Toast.makeText(Missed_Punch.this, "Choose End Km", Toast.LENGTH_SHORT).show();
-                          return;
-                      } else if (EndedImage.matches("")) {
-                          Toast.makeText(Missed_Punch.this, "Choose End photo", Toast.LENGTH_SHORT).show();
-                          return;
-                      } else {
+                    if (count == 1) {
+                        if (EndedEditText.getText().toString().matches("")) {
+                            Toast.makeText(Missed_Punch.this, "Choose End Km", Toast.LENGTH_SHORT).show();
+                            return;
+                        } else if (EndedImage.matches("")) {
+                            Toast.makeText(Missed_Punch.this, "Choose End photo", Toast.LENGTH_SHORT).show();
+                            return;
+                        } else {
 
-                          try {
-                              stKM = Integer.valueOf(TextStartedKm.getText().toString());
-                          } catch (NumberFormatException ex) { // handle your exception
+                            try {
+                                stKM = Integer.valueOf(TextStartedKm.getText().toString());
+                            } catch (NumberFormatException ex) { // handle your exception
 
-                          }
-                          endKm = Integer.valueOf(String.valueOf(EndedEditText.getText().toString()));
+                            }
+                            endKm = Integer.valueOf(String.valueOf(EndedEditText.getText().toString()));
 
-                          Log.e("START_KM", String.valueOf(stKM));
-                          Log.e("End_KM", String.valueOf(endKm));
-                          if (stKM < endKm) {
-                              missedPunchSubmit();
-                          } else {
-                              Toast.makeText(Missed_Punch.this, "Should be greater then Started Km", Toast.LENGTH_SHORT).show();
+                            Log.e("START_KM", String.valueOf(stKM));
+                            Log.e("End_KM", String.valueOf(endKm));
+                            if (stKM < endKm) {
+                                missedPunchSubmit();
+                            } else {
+                                Toast.makeText(Missed_Punch.this, "Should be greater then Started Km", Toast.LENGTH_SHORT).show();
 
-                          }
-                      }
-                  }else{
-                      missedPunchSubmit();
-                  }
+                            }
+                        }
+                    } else {
+                        missedPunchSubmit();
+                    }
                 } else if (misseddateselect.getText().toString().matches("")) {
                     Toast.makeText(Missed_Punch.this, "Enter Shite time", Toast.LENGTH_SHORT).show();
                 } else if (reasonMP.getText().toString().matches("")) {
@@ -408,6 +409,19 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                 });
             }
         }
+
+
+        PersonalKmEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                totalPM = Integer.valueOf((EndedEditText.getText().toString())) - Integer.valueOf((TextStartedKm.getText().toString()));
+                Log.v("TOTAL_KM_INSIDe", String.valueOf(totalPM));
+
+                if (totalPM > 0) {
+                    PersonalKmEdit.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, totalPM)});
+                }
+            }
+        });
 
 
         takeEndedPhoto.setOnClickListener(new View.OnClickListener() {
@@ -557,9 +571,12 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             misseddateselect.setText(myDataset.get(position).getId());
             checkOutTime.setText(myDataset.get(position).getAddress());
             missedCheckOut = myDataset.get(position).getAddress();
+            count = myDataset.get(position).getPho();
+
+
             if (count == 1) {
                 linMode.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 linMode.setVisibility(View.GONE);
             }
         }
@@ -578,8 +595,9 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                 String shift = jsonObject1.optString("name1");
                 String Checkin_Time = jsonObject1.optString("Checkin_Time");
                 String COutTime = jsonObject1.optString("COutTime");
+                String ModeCount = jsonObject1.optString("mode_count");
 
-                Model_Pojo = new Common_Model(shift, date, Checkin_Time, COutTime, "");
+                Model_Pojo = new Common_Model(shift, date, Checkin_Time, COutTime, ModeCount);
                 missed_punch.add(Model_Pojo);
 
             }
@@ -686,84 +704,6 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
         }
     }
 
-
-    /*Submit*/
-/*    public void submitData() {
-
-        Log.e("PERSONAL_KM", PersonalKmEdit.getText().toString());
-
-        if (PersonalKmEdit.getText().toString().equals("")) {
-
-        } else {
-            personalKM = Integer.valueOf(PersonalKmEdit.getText().toString());
-        }
-
-        try {
-            JSONObject jj = new JSONObject();
-            jj.put("km", EndedEditText.getText().toString());
-            jj.put("rmk", reasonMP.getText().toString());
-            jj.put("pkm", personalKM);
-            jj.put("mod", "11");
-            jj.put("sf", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
-            jj.put("div", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
-            jj.put("url", Photo_Name);
-            jj.put("from", "");
-            jj.put("to", TextToPlace.getText().toString());
-            jj.put("to_code", StrToCode);
-            jj.put("fare", "");
-            jj.put("Activity_Date", com.hap.checkinproc.Common_Class.Common_Class.GetDate());
-            //saveAllowance
-            Log.v("printing_allow", jj.toString());
-            Call<ResponseBody> Callto;
-            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-
-            Callto = apiInterface.updateAllowance(jj.toString());
-
-            Callto.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    try {
-                        if (response.isSuccessful()) {
-
-                            Log.v("print_upload_file_true", "ggg" + response);
-                            JSONObject jb = null;
-                            String jsonData = null;
-                            jsonData = response.body().string();
-                            Log.v("response_data", jsonData);
-                            JSONObject js = new JSONObject(jsonData);
-                            if (js.getString("success").equalsIgnoreCase("true")) {
-                                Toast.makeText(Missed_Punch.this, " Submitted successfully ", Toast.LENGTH_SHORT).show();
-
-                                SharedPreferences.Editor editor = sharedpreferences.edit();
-                                editor.remove(Name);
-                                editor.remove(MOT);
-                                editor.remove("SharedImage");
-                                editor.remove("Sharedallowance");
-                                editor.remove("SharedMode");
-                                editor.remove("StartedKM");
-                                editor.remove("SharedFromKm");
-                                editor.remove("SharedToKm");
-                                editor.remove("SharedFare");
-                                editor.remove("SharedImages");
-                                editor.remove("Closing");
-                                Intent takePhoto = new Intent(Missed_Punch.this, ImageCapture.class);
-                                takePhoto.putExtra("Mode", "COUT");
-                                startActivity(takePhoto);
-                            } else
-                                Toast.makeText(Missed_Punch.this, " Cannot submitted the data ", Toast.LENGTH_SHORT).show();
-                        }
-                    } catch (Exception e) {
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-                }
-            });
-        } catch (Exception e) {
-        }
-    }*/
 
     public void BusToValue() {
 

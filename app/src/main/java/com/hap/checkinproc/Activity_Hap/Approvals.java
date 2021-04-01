@@ -44,7 +44,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     LinearLayout LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan ,lin_leavecancel_histry, lin_leaveholidaystatus;
-    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff;
+    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff,linLeaveCancel;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     SharedPreferences Setups;
@@ -66,6 +66,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         Setups = getSharedPreferences(SetupsInfo, Context.MODE_PRIVATE);
         lin_leavecancel_histry = findViewById(R.id.lin_leavecancel_histry);
         lin_leaveholidaystatus = findViewById(R.id.lin_leaveholidaystatus);
+        linLeaveCancel  = findViewById(R.id.lin_leave_cancel);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -167,6 +168,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         lin_weekoff.setOnClickListener(this);
         lin_leavecancel_histry.setOnClickListener(this);
         lin_leaveholidaystatus.setOnClickListener(this);
+        linLeaveCancel.setOnClickListener(this);
         getcountdetails();
     }
 
@@ -219,6 +221,11 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
             case R.id.lin_leave_req:
                 startActivity(new Intent(Approvals.this, Leave_Approval.class));
+                finish();
+                break;
+
+                case R.id.lin_leave_cancel:
+                startActivity(new Intent(Approvals.this, Leave_Cancel_Approval.class));
                 finish();
                 break;
 

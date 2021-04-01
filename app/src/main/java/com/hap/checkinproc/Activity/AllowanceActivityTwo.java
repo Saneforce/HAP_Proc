@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -74,7 +75,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     ImageView StartedKmImage, EndedKmImage;
     Button takeEndedPhoto, submitAllowance;
     EditText EndedEditText, PersonalKmEdit, ReasonMode;
-    Integer stKM = 0, endKm = 0, personalKM = 0, StratKm = 0, maxKM = 0, TotalKm = 0;
+    Integer stKM = 0, endKm = 0, personalKM = 0, StratKm = 0, maxKM = 0, TotalKm = 0, totalPM = 0;
     SharedPreferences CheckInDetails, sharedpreferences, UserDetails;
     Shared_Common_Pref shared_common_pref;
     ApiInterface apiInterface;
@@ -218,16 +219,34 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     }
                     Log.e("STARTED_KM", String.valueOf(endKm));
                     if (stKM < endKm) {
+
                         Log.e("STARTED_KM", "GREATER");
                     } else {
                         Log.e("STARTED_KM", "Not GREATER");
                     }
                 }
+
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
+            }
+        });
+
+
+        PersonalKmEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                if (!EndedEditText.getText().toString().equals("")) {
+                    totalPM = Integer.valueOf((EndedEditText.getText().toString())) - Integer.valueOf((TextStartedKm.getText().toString()));
+                    Log.v("TOTAL_KM_INSIDe", String.valueOf(totalPM));
+
+                    if (totalPM > 0)
+                        PersonalKmEdit.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, totalPM)});
+                }
             }
         });
 
@@ -313,6 +332,8 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
                     Log.e("START_KM", String.valueOf(stKM));
                     Log.e("End_KM", String.valueOf(endKm));
+
+
                     if (stKM < endKm) {
 
                         new LocationFinder(getApplication(), new LocationEvents() {
@@ -341,7 +362,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                 customDialog.show();
             }
         });
-
 
     }
 

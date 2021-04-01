@@ -370,21 +370,11 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent">
 
-
         <Button
-            android:id="@+id/submit_missed"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/C5dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/sign_bg"
-            android:gravity="center_vertical"
+            style="@style/ButtonStyle"
             android:text="SUBMIT"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            tools:ignore="RtlCompat" />
-
+            android:background="@drawable/sign_bg"
+            android:id="@+id/submit_missed"/>
 
         <include layout="@layout/back_arrow"></include>
     </LinearLayout>

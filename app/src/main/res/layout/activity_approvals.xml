@@ -91,7 +91,82 @@
                             </RelativeLayout>
                         </LinearLayout>
 
+
+
                         <include layout="@layout/part_view" />
+
+
+
+
+                        <LinearLayout
+                            android:id="@+id/lin_leave_cancel"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/C10dp"
+                            android:orientation="vertical">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    style="@style/TextStyle"
+                                    android:text="Leave Cancel Status"></TextView>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentRight="true"
+                                    android:orientation="horizontal">
+
+                                    <LinearLayout
+                                        android:layout_width="23dp"
+                                        android:layout_height="23dp"
+                                        android:background="@drawable/circle">
+
+                                        <TextView
+                                            android:id="@+id/txt_leave_cancel_req_count"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:layout_gravity="center"
+                                            android:gravity="center"
+                                            android:maxEms="2"
+                                            android:text="0"
+                                            android:textColor="@android:color/white"></TextView>
+
+                                    </LinearLayout>
+
+                                    <include layout="@layout/image_arrow"></include>
+
+                                </LinearLayout>
+                            </RelativeLayout>
+                        </LinearLayout>
+
+
+
+
+
+                        <include layout="@layout/part_view" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                         <LinearLayout
                             android:id="@+id/lin_per_req"

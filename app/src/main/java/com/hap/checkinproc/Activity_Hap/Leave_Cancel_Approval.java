@@ -1,9 +1,16 @@
-package com.hap.checkinproc.Status_Activity;
+package com.hap.checkinproc.Activity_Hap;
+
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,27 +18,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.Dashboard;
-import com.hap.checkinproc.Activity_Hap.ERT;
-import com.hap.checkinproc.Activity_Hap.Help_Activity;
-import com.hap.checkinproc.Activity_Hap.LeaveReasonStatus;
-import com.hap.checkinproc.Activity_Hap.PayslipFtp;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Interface.LeaveCancelReason;
+import com.hap.checkinproc.Model_Class.Leave_Approval_Model;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.Status_Adapter.Leave_Status_Adapter;
-import com.hap.checkinproc.Status_Model_Class.Leave_Status_Model;
-import com.hap.checkinproc.common.TimerService;
+import com.hap.checkinproc.adapters.Leave_Approval_Adapter;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -41,22 +37,23 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Leave_Status_Activity extends AppCompatActivity {
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
-    List<Leave_Status_Model> approvalList;
+public class Leave_Cancel_Approval extends AppCompatActivity {
+    String Scode;
+    String Dcode;
+    String Rf_code;
+    List<Leave_Approval_Model> approvalList;
     Gson gson;
     private RecyclerView recyclerView;
     Type userType;
     Common_Class common_class;
-    String AMOD = "0";
-    Shared_Common_Pref mShared_common_pref;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_leave__status_);
-        startService(new Intent(this, TimerService.class));
+        setContentView(R.layout.activity_leave__cancel__approval);
+        common_class = new Common_Class(this);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -77,10 +74,10 @@ public class Leave_Status_Activity extends AppCompatActivity {
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
+
             }
         });
-        mShared_common_pref = new Shared_Common_Pref(this);
+
 
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
@@ -92,55 +89,68 @@ public class Leave_Status_Activity extends AppCompatActivity {
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                if (CheckIn == true) {
+                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                } else
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
 
             }
         });
-
-        recyclerView = findViewById(R.id.leavestatus);
-        common_class = new Common_Class(this);
+        recyclerView = findViewById(R.id.leaverecyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
-
-
-        AMOD = String.valueOf(getIntent().getSerializableExtra("AMod"));
-
-        Log.v("AMODE", AMOD);
-        getleavestatus();
-
-
+        getleavedetails();
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
+                common_class.CommonIntentwithFinish(Approvals.class);
+
             }
         });
     }
 
-    public void getleavestatus() {
+    public void getleavedetails() {
         String routemaster = " {\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        common_class.ProgressdialogShow(1, "Leave Status");
-        Call<Object> mCall = apiInterface.GetTPObject1(AMOD, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "GetLeave_Status", routemaster);
+
+        Call<Object> mCall = apiInterface.GetTPObject(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "vwCancelLeave", routemaster);
 
         mCall.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 // locationList=response.body();
-                Log.e("GetCurrentMonth_Values", (response.body().toString()));
+                Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
                 Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
-                common_class.ProgressdialogShow(2, "Leave Status");
-                userType = new TypeToken<ArrayList<Leave_Status_Model>>() {
+
+                userType = new TypeToken<ArrayList<Leave_Approval_Model>>() {
                 }.getType();
                 approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
-                recyclerView.setAdapter(new Leave_Status_Adapter(approvalList, R.layout.leave_status_listitem, getApplicationContext(), AMOD, new LeaveCancelReason() {
-                    @Override
-                    public void onCancelReason(String reason) {
+                Log.e("Leave_Adapter", String.valueOf(approvalList));
 
-                        Intent intent = new Intent(Leave_Status_Activity.this, LeaveReasonStatus.class);
-                        intent.putExtra("LeaveId", reason);
+                recyclerView.setAdapter(new Leave_Approval_Adapter(approvalList, R.layout.leave_approval_layout, getApplicationContext(), new AdapterOnClick() {
+                    @Override
+                    public void onIntentClick(int Name) {
+                        Intent intent = new Intent(Leave_Cancel_Approval.this, Leave_Cancel_Approval_Reject.class);
+                        intent.putExtra("LeaveId", String.valueOf(approvalList.get(Name).getLeaveId()));
+                        intent.putExtra("Username", approvalList.get(Name).getFieldForceName());
+                        intent.putExtra("Emp_Code", approvalList.get(Name).getEmpCode());
+                        intent.putExtra("HQ", approvalList.get(Name).getHQ());
+                        intent.putExtra("Designation", approvalList.get(Name).getDesignation());
+                        intent.putExtra("MobileNumber", approvalList.get(Name).getSFMobile());
+                        intent.putExtra("Reason", approvalList.get(Name).getReason());
+                        intent.putExtra("Leavetype", approvalList.get(Name).getLeaveName());
+                        intent.putExtra("fromdate", approvalList.get(Name).getFromDate());
+                        intent.putExtra("todate", approvalList.get(Name).getToDate());
+                        intent.putExtra("leavedays", String.valueOf(approvalList.get(Name).getLeaveDays()));
+                        intent.putExtra("Sf_Code", approvalList.get(Name).getSfCode());
                         startActivity(intent);
+                        Log.e("Leave_Type", approvalList.get(Name).getLeaveType().toString());
 
                     }
                 }));
@@ -148,7 +158,7 @@ public class Leave_Status_Activity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-                common_class.ProgressdialogShow(2, "Leave Status");
+
             }
         });
 
@@ -158,48 +168,13 @@ public class Leave_Status_Activity extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Leave_Status_Activity.super.onBackPressed();
+                    Leave_Cancel_Approval.super.onBackPressed();
                 }
             });
-
 
     @Override
     public void onBackPressed() {
 
     }
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
-    }
 }

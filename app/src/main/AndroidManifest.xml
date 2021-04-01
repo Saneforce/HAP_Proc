@@ -40,6 +40,8 @@
         <activity android:name=".Common_Class.ToolBarMethod"></activity>
         <activity android:name=".Activity_Hap.foodExp"></activity>
         <activity android:name=".Activity_Hap.PayslipFtp" />
+        <activity android:name=".Activity_Hap.Leave_Cancel_Approval" />
+        <activity android:name=".Activity_Hap.Leave_Cancel_Approval_Reject" />
         <activity android:name=".Activity_Hap.DaExceptionEntry" />
         <activity android:name=".Activity.LodgingCliamActivity" />
         <activity

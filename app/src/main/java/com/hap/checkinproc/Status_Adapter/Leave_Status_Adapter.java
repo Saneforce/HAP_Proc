@@ -27,12 +27,14 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
     LeaveCancelReason mLeaveCancelRea;
     String EditextReason = "";
     String AMod;
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView fromdatetodate, leavetype, leavedays, leavereason, applieddate, LStatus, SfName;
         RelativeLayout sf_namelayout;
         LinearLayout linearCancel, linearReason;
         Button ButtonCancel, ReasonSend;
         EditText ReasonEntry;
+
         public MyViewHolder(View view) {
             super(view);
             fromdatetodate = view.findViewById(R.id.fromdatetodate);
@@ -48,7 +50,6 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
             ButtonCancel = view.findViewById(R.id.button_cancel);
             ReasonSend = view.findViewById(R.id.reason_send);
             ReasonEntry = view.findViewById(R.id.reason_permission);
-
         }
     }
 
@@ -77,6 +78,8 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
         holder.applieddate.setText("Applied: " + Leave_Status_ModelsList.get(position).getCreatedDate());
         holder.LStatus.setText(Leave_Status_ModelsList.get(position).getLStatus());
 
+        Log.v("FLAG_LEAVE", String.valueOf(Leave_Status_ModelsList.get(position).getShowFlag()));
+        Log.v("FLAG_LEAVE_ACTIVE", String.valueOf(Leave_Status_ModelsList.get(position).getLeaveActiveFlag()));
         if (Leave_Status_ModelsList.get(position).getShowFlag() == 1 && Leave_Status_ModelsList.get(position).getLeaveActiveFlag() != 3) {
             holder.linearCancel.setVisibility(View.VISIBLE);
 
@@ -91,6 +94,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
 
                 mLeaveCancelRea.onCancelReason(Leave_Status_ModelsList.get(position).getLeaveId());
 
+                Log.v("ONCLICK_REASON_LEAVE",Leave_Status_ModelsList.get(position).getLeaveId());
             }
         });
 
