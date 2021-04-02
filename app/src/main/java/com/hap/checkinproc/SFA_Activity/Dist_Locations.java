@@ -1,31 +1,59 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
+import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
+import com.hap.checkinproc.Activity_Hap.Mydayplan_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -35,58 +63,172 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class Dist_Locations extends AppCompatActivity {
+import static com.hap.checkinproc.Common_Class.Common_Class.addquote;
+
+public class Dist_Locations extends AppCompatActivity implements View.OnClickListener, Master_Interface {
     LinearLayout selectdistributor;
-    TextView distilatitude, distilongitude;
+    TextView distilatitude, distilongitude, distributor_Name, capturelatlong, submit_button;
     Gson gson;
-    Type userType;
-    @Inject
-    Retrofit retrofit;
+    Common_Model Model_Pojo;
+    List<Common_Model> distributor_master = new ArrayList<>();
+    CustomListViewDialog customDialog;
+    Shared_Common_Pref sharedCommonPref;
+    String Distributor_Id = "";
+    ProgressBar progressbar;
+    Location currentLocation;
+    FusedLocationProviderClient fusedLocationProviderClient;
+    private static final int REQUEST_CODE = 101;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dist__locations);
         selectdistributor = findViewById(R.id.selectdistributor);
+        progressbar = findViewById(R.id.progressbar);
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+        submit_button = findViewById(R.id.submit_button);
         distilatitude = findViewById(R.id.distilatitude);
         distilongitude = findViewById(R.id.distilongitude);
+        capturelatlong = findViewById(R.id.capturelatlong);
+        distributor_Name = findViewById(R.id.distributor_Name);
+        sharedCommonPref = new Shared_Common_Pref(Dist_Locations.this);
+        submit_button.setOnClickListener(this);
+        capturelatlong.setOnClickListener(this);
+
         gson = new Gson();
-        GetDistributorDetails();
+        String outletserializableob = sharedCommonPref.getvalue(Shared_Common_Pref.Distributor_List);
+        GetJsonData(outletserializableob, "1");
+        selectdistributor.setOnClickListener(this);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-
             }
         });
     }
 
-    private void GetDistributorDetails() {
-        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        //ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        String commonworktype = "{\"tableName\":\"vwstockiest_Master_APP\",\"coloumns\":\"[\\\"distributor_code as id\\\", \\\"stockiest_name as name\\\",\\\"town_code\\\",\\\"town_name\\\",\\\"Addr1\\\",\\\"Addr2\\\",\\\"City\\\",\\\"Pincode\\\",\\\"GSTN\\\",\\\"lat\\\",\\\"long\\\",\\\"addrs\\\",\\\"Tcode\\\",\\\"Dis_Cat_Code\\\"]\",\"where\":\"[\\\"isnull(Stockist_Status,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-        Map<String, String> QueryString = new HashMap<>();
-        QueryString.put("axn", "table/list");
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
-        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
-
-        Call<Object> call = service.GetRouteObject(QueryString, commonworktype);
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                Log.e("MAsterSyncView_Result", response.body() + "");
-                Log.e("TAG", "response 33: " + new Gson().toJson(response.body()));
-
-
+    private void GetJsonData(String jsonResponse, String type) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonResponse);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                String id = String.valueOf(jsonObject1.optInt("id"));
+                String name = jsonObject1.optString("name");
+                String flag = jsonObject1.optString("FWFlg");
+                String ETabs = jsonObject1.optString("ETabs");
+                Model_Pojo = new Common_Model(id, name, flag);
+                if (type.equals("1")) {
+                    distributor_master.add(Model_Pojo);
+                }
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
+    @Override
+    public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
+        customDialog.dismiss();
+        if (type == 2) {
+            distributor_Name.setText(myDataset.get(position).getName());
+            Distributor_Id = myDataset.get(position).getId();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.selectdistributor:
+                customDialog = new CustomListViewDialog(Dist_Locations.this, distributor_master, 2);
+                Window windoww = customDialog.getWindow();
+                windoww.setGravity(Gravity.CENTER);
+                windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+                break;
+            case R.id.submit_button:
+                if (distributor_Name.getText().toString().equalsIgnoreCase("")) {
+                    Toast.makeText(this, "Select Distributor", Toast.LENGTH_SHORT).show();
+                } else if (distilatitude.getText().toString().equalsIgnoreCase("")) {
+                    Toast.makeText(this, "Capture The Lat and Long", Toast.LENGTH_SHORT).show();
+                } else {
+                    SaveLatLong();
+                }
+                break;
+            case R.id.capturelatlong:
+                fetchLocation();
+                break;
+        }
+    }
+
+    public void SaveLatLong() {
+        progressbar.setVisibility(View.VISIBLE);
+        Calendar c = Calendar.getInstance();
+        String Dcr_Dste = new SimpleDateFormat("HH:mm a", Locale.ENGLISH).format(new Date());
+        JSONArray jsonarr = new JSONArray();
+        JSONObject jsonarrplan = new JSONObject();
+        try {
+            JSONObject jsonobj = new JSONObject();
+            jsonobj.put("Distributor_Id", addquote(Distributor_Id));
+            jsonobj.put("Latitude", addquote(distilatitude.getText().toString()));
+            jsonobj.put("Longitude", addquote(distilongitude.getText().toString()));
+            jsonobj.put("Created_Date", addquote(Common_Class.GetDate()));
+            jsonarrplan.put("saveDistiLatLong", jsonobj);
+            jsonarr.put(jsonarrplan);
+            Log.d("Distributor_QS", jsonarr.toString());
+            Map<String, String> QueryString = new HashMap<>();
+            QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+            QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+            QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<Object> Callto = apiInterface.Tb_Mydayplan(QueryString, jsonarr.toString());
+            Callto.enqueue(new Callback<Object>() {
+                @Override
+                public void onResponse(Call<Object> call, Response<Object> response) {
+                    Log.e("RESPONSE_FROM_SERVER", response.body().toString());
+                    Log.d("QueryString", String.valueOf(QueryString));
+                    progressbar.setVisibility(View.GONE);
+                    if (response.code() == 200 || response.code() == 201) {
+                        /*common_class.CommonIntentwithFinish(Dashboard.class);*/
+                        Toast.makeText(Dist_Locations.this, "Latitude and Longitude Updated Successfully", Toast.LENGTH_SHORT).show();
+                    }
+
+
+                }
+
+                @Override
+                public void onFailure(Call<Object> call, Throwable t) {
+                    progressbar.setVisibility(View.GONE);
+                    Log.e("Reponse TAG", "onFailure : " + t.toString());
+                }
+            });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void fetchLocation() {
+        progressbar.setVisibility(View.VISIBLE);
+        if (ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
+            return;
+        }
+        Task<Location> task = fusedLocationProviderClient.getLastLocation();
+        task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    currentLocation = location;
+                    distilatitude.setText("" + currentLocation.getLatitude());
+                    distilongitude.setText("" + currentLocation.getLongitude());
+                    //Shared_Common_Pref.OutletAddress = getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude());
+                    progressbar.setVisibility(View.GONE);
+                }
             }
         });
-
     }
 }

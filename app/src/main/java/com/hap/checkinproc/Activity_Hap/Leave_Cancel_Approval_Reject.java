@@ -141,7 +141,7 @@ public class Leave_Cancel_Approval_Reject extends AppCompatActivity implements V
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                common_class.CommonIntentwithFinish(Leave_Approval.class);
+                common_class.CommonIntentwithFinish(Leave_Cancel_Approval.class);
             }
         });
 
@@ -185,7 +185,7 @@ public class Leave_Cancel_Approval_Reject extends AppCompatActivity implements V
                 // locationList=response.body();
                 Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
                 try {
-                    common_class.CommonIntentwithFinish(Leave_Approval.class);
+                    common_class.CommonIntentwithFinish(Leave_Cancel_Approval.class);
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     if (flag == 1) {
                         Toast.makeText(getApplicationContext(), "CancelLeave  Approved Successfully", Toast.LENGTH_SHORT).show();
@@ -241,7 +241,7 @@ public class Leave_Cancel_Approval_Reject extends AppCompatActivity implements V
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Leave_Cancel_Approval_Reject.super.onBackPressed();
+                    common_class.CommonIntentwithFinish(Leave_Cancel_Approval.class);
                 }
             });
 

@@ -18,15 +18,16 @@ import retrofit2.Response;
 public class Offline_SyncView implements Main_Model.GetRoutemastersyncResult {
 
     String QuerySTring;
+
     @Override
     public void GetRouteResult(Main_Model.GetRoutemastersyncResult.OnFinishedListenerroute onFinishedListener) {
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
         Map<String, String> QueryString = new HashMap<>();
-        for (int i = 0; i < 7; i++) {
+        for (int i = 0; i < 9; i++) {
             String axnname = "table/list";
             if (i == 0) {
                 //Outlet_List
-                QuerySTring = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",\\\"town_code\\\",\\\"town_name\\\",\\\"lat\\\",\\\"long\\\",\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",\\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" , \\\"Valuesinv\\\" , \\\"InvoiceDate\\\" ,\\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\"]\",\"where\":\"[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                QuerySTring = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",\\\"town_code\\\",\\\"town_name\\\",\\\"lat\\\",\\\"long\\\",\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",\\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" , \\\"Valuesinv\\\" , \\\"InvoiceDate\\\", \\\"Category_Universe_Id\\\", \\\"Hatsun_AvailablityId\\\",   \\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\"]\",\"where\":\"[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                 //commonworktype = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
             } else if (i == 1) {
                 //Distributor_List
@@ -38,8 +39,8 @@ public class Offline_SyncView implements Main_Model.GetRoutemastersyncResult {
                 //Product Sync
                 QuerySTring = "{\"tableName\":\"getproduct_details\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
 
-            }  else if (i == 4) {
-               //GetTodayOrder
+            } else if (i == 4) {
+                //GetTodayOrder
                 QuerySTring = "{\"tableName\":\"gettotalorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                 QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                 QueryString.put("todate", Common_Class.GetDatewothouttime());
@@ -48,10 +49,15 @@ public class Offline_SyncView implements Main_Model.GetRoutemastersyncResult {
                 QuerySTring = "{\"tableName\":\"GettotalOrderDetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                 QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                 QueryString.put("todate", Common_Class.GetDatewothouttime());
-            }else {
+            } else if (i == 6) {
+                axnname = "Get/dayplanresult";
+                QueryString.put("Date", Common_Class.GetDatewothouttime());
+            } else if (i == 7) {
+                QuerySTring = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+            } else {
                 QuerySTring = "{\"tableName\":\"get_compititordetails\"}";
-
             }
+
             int ii = i;
             Log.e("Print_REquest", QuerySTring);
             Log.e("SF_DETAILS", Shared_Common_Pref.Div_Code);

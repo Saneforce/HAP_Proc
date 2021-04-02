@@ -37,7 +37,6 @@ import com.hap.checkinproc.Model_Class.Tp_View_Master;
 import com.hap.checkinproc.Model_Class.Work_Type_Model;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.Tp_Approval_Adapter;
-import com.hap.checkinproc.common.TimerService;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -54,17 +53,16 @@ public class Tp_Approval extends AppCompatActivity {
     private RecyclerView recyclerView;
     TextView title;
     private Toolbar toolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tp__approval);
-        startService(new Intent(this, TimerService.class));
-
         recyclerView = findViewById(R.id.tprecyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
         gettp_Details();
+
+
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -86,9 +84,10 @@ public class Tp_Approval extends AppCompatActivity {
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
+
             }
         });
+
 
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
@@ -110,8 +109,10 @@ public class Tp_Approval extends AppCompatActivity {
                 } else
                     startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
+
             }
         });
+
 
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
@@ -143,8 +144,34 @@ public class Tp_Approval extends AppCompatActivity {
                 recyclerView.setAdapter(new Tp_Approval_Adapter(Tp_Approval_Model, R.layout.tpapproval_layout, getApplicationContext(), new AdapterOnClick() {
                     @Override
                     public void onIntentClick(int Name) {
-             /*           Intent intent = new Intent(Tp_Approval.this, Tp_Approval_Reject.class);
-                        startActivity(intent);*/
+                        Intent intent = new Intent(Tp_Approval.this, Tp_Approval_Reject.class);
+                        intent.putExtra("Username", Tp_Approval_Model.get(Name).getFieldForceName());
+                        intent.putExtra("Emp_Code", Tp_Approval_Model.get(Name).getEmpCode());
+                        intent.putExtra("HQ", Tp_Approval_Model.get(Name).getHQ());
+                        intent.putExtra("Designation", Tp_Approval_Model.get(Name).getDesignation());
+                        intent.putExtra("MobileNumber", Tp_Approval_Model.get(Name).getSFMobile());
+                        intent.putExtra("Plan_Date", Tp_Approval_Model.get(Name).getStartDate());
+                        intent.putExtra("Work_Type", Tp_Approval_Model.get(Name).getWorktypeName());
+                        intent.putExtra("Route", Tp_Approval_Model.get(Name).getRouteName());
+                        intent.putExtra("Distributor", Tp_Approval_Model.get(Name).getWorkedWithName());
+                        intent.putExtra("Sf_Code", Tp_Approval_Model.get(Name).getSFCode());
+                        intent.putExtra("Remarks", Tp_Approval_Model.get(Name).getRemarks());
+                        intent.putExtra("workedwithname", Tp_Approval_Model.get(Name).getJointWorkName());
+                        intent.putExtra("TPHqname", Tp_Approval_Model.get(Name).getTourHQName());
+                        intent.putExtra("ShiftType", Tp_Approval_Model.get(Name).getTypename());
+                        intent.putExtra("ChillCentreName", Tp_Approval_Model.get(Name).getCCentreName());
+                        intent.putExtra("FromDate", Tp_Approval_Model.get(Name).getFromdate());
+                        intent.putExtra("Worktype_Flag", Tp_Approval_Model.get(Name).getWorktypeFlag());
+                        intent.putExtra("ToDate", Tp_Approval_Model.get(Name).getTodate());
+                        intent.putExtra("DeptType", Tp_Approval_Model.get(Name).getDeptType());
+
+                        intent.putExtra("MOT", Tp_Approval_Model.get(Name).getMOT());
+                        intent.putExtra("DA_Type", Tp_Approval_Model.get(Name).getDA_Type());
+                        intent.putExtra("Da", Tp_Approval_Model.get(Name).getDriver_Allow());
+                        intent.putExtra("From_Place", Tp_Approval_Model.get(Name).getFrom_Place());
+                        intent.putExtra("To_Place", Tp_Approval_Model.get(Name).getTo_Place());
+
+                        startActivity(intent);
                     }
                 }));
             }
@@ -168,38 +195,5 @@ public class Tp_Approval extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
     }
 }

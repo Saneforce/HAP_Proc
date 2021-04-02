@@ -78,6 +78,7 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
     String CompIDServer = "";
     Gson gson;
     Type userType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,18 +108,20 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
         more_info.setOnClickListener(this);
         Compititorname.setOnClickListener(this);
         //category_universe("1");
-       // category_universe("2");
+        // category_universe("2");
 
         String Category_List = sharedCommonPref.getvalue(Shared_Common_Pref.Category_List);
-        String Compititor_List= sharedCommonPref.getvalue(Shared_Common_Pref.Compititor_List);
-        Log.e("CATEGORY_LIST",Category_List);
-        Log.e("Compititor_List",Compititor_List);
-        GetJsonData(Category_List,"1");
-        GetJsonData(Compititor_List,"2");
+        String Compititor_List = sharedCommonPref.getvalue(Shared_Common_Pref.Compititor_List);
+
+        GetJsonData(Category_List, "1");
+        GetJsonData(Compititor_List, "2");
         if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
             Nextadd.setVisibility(View.VISIBLE);
+            takeorder.setVisibility(View.GONE);
         } else {
             Nextadd.setVisibility(View.GONE);
+            takeorder.setVisibility(View.VISIBLE);
+
         }
     }
 
@@ -167,28 +170,7 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
                 common_class.CommonIntentwithoutFinish(Invoice_History.class);
                 break;
             case R.id.Nextadd:
-
-                StringBuilder CatUniverId = new StringBuilder();
-                for (Category_Universe_Modal ListUniv : Universelistt) {
-                    if (ListUniv.getColorFlag().equals("1")) {
-                        CatUniverId.append("," + ListUniv.getId());
-                    }
-                }
-                StringBuilder AvailCat = new StringBuilder();
-                for (Category_Universe_Modal ListUniv : Availlistt) {
-                    if (ListUniv.getColorFlag().equals("1")) {
-                        AvailCat.append("," + ListUniv.getId());
-                    }
-                }
-
-                Intent intent = new Intent(getBaseContext(), AddNewRetailer.class);
-                intent.putExtra("Compititor_Id", CompIDServer);
-                intent.putExtra("Compititor_Name", Compititorname.getText().toString());
-                intent.putExtra("CatUniverSelectId", CatUniverId.toString());
-                intent.putExtra("AvailUniverSelectId", AvailCat.toString());
-
-                startActivity(intent);
-              /*  boolean checkavail = false;
+                boolean checkavail = false;
                 for (Common_Model fil : Compititor_List) {
                     if (fil.isSelected() == true) {
                         checkavail = true;
@@ -197,10 +179,29 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
                 if (checkavail == false) {
                     Toast.makeText(this, "Select The Other Brand", Toast.LENGTH_SHORT).show();
                 } else {
+                    StringBuilder CatUniverId = new StringBuilder();
+                    for (Category_Universe_Modal ListUniv : Universelistt) {
+                        if (ListUniv.getColorFlag().equals("1")) {
+                            CatUniverId.append("," + ListUniv.getId());
+                        }
+                    }
+                    StringBuilder AvailCat = new StringBuilder();
+                    for (Category_Universe_Modal ListUniv : Availlistt) {
+                        if (ListUniv.getColorFlag().equals("1")) {
+                            AvailCat.append("," + ListUniv.getId());
+                        }
+                    }
 
+                    Intent intent = new Intent(getBaseContext(), AddNewRetailer.class);
+                    intent.putExtra("Compititor_Id", CompIDServer);
+                    intent.putExtra("Compititor_Name", Compititorname.getText().toString());
+                    intent.putExtra("CatUniverSelectId", CatUniverId.toString());
+                    intent.putExtra("AvailUniverSelectId", AvailCat.toString());
+
+                    startActivity(intent);
 
                     // common_class.CommonIntentwithFinish(AddNewRetailer.class);
-                }*/
+                }
                 break;
 
             case R.id.Compititorname:
@@ -402,8 +403,29 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
                 }
             }
             if (type.equals("1")) {
+                int index = 0;
+                for (Category_Universe_Modal cuv : Category_univ_Modal) {
+                    System.out.println("Outlet_Avail" + Shared_Common_Pref.OutletAvail);
+                    System.out.println("Outlet_getId" + cuv.getId());
+                    if (String.valueOf(Shared_Common_Pref.OutletAvail).indexOf(cuv.getId()) > -1) {
+                        Category_univ_Modal.get(index).setColorFlag("1");
+                        index++;
+
+                    }
+                }
                 CustomCategoryAdapter customAdapter = new CustomCategoryAdapter(getApplicationContext(), Category_univ_Modal);
                 Categorygrid.setAdapter(customAdapter);
+                int indexx = 0;
+                for (Category_Universe_Modal cuv : Category_univ_Modal) {
+                    System.out.println("Outlet_Avail" + Shared_Common_Pref.OutletUniv);
+                    System.out.println("Outlet_getId" + cuv.getId());
+                    if (String.valueOf(Shared_Common_Pref.OutletUniv).indexOf(cuv.getId()) > -1) {
+                        Category_univ_Modal.get(indexx).setColorFlag("1");
+                        index++;
+
+                    }
+                }
+
                 CustomAdapteravailablity customAdapteravail = new CustomAdapteravailablity(getApplicationContext(), Category_univ_Modal);
                 availablitygrid.setAdapter(customAdapteravail);
             }

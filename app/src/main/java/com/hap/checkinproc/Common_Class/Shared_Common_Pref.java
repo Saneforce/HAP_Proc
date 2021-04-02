@@ -50,7 +50,9 @@ public class Shared_Common_Pref {
     public static int TotalCountApproval = 0;
     public static String TransSlNo;
     public static String Invoicetoorder;
-
+    public static String OutletAvail = "OutletAvail";
+    public static String OutletUniv = "OutletUniv";
+    public static final String Rout_List = "Rout_List";
     public static final String Outlet_List = "Outlet_List";
     public static final String Distributor_List = "Distributor_List";
     public static final String Category_List = "Category_List";
@@ -58,7 +60,7 @@ public class Shared_Common_Pref {
     public static final String GetTodayOrder_List = "GetTodayOrder_List";
     public static final String TodayOrderDetails_List = "TodayOrderDetails_List";
     public static final String Compititor_List = "Compititor_List";
-
+    public static final String Todaydayplanresult = "TodayOrderDetails_List";
 
     public Shared_Common_Pref(Activity Ac) {
         activity = Ac;

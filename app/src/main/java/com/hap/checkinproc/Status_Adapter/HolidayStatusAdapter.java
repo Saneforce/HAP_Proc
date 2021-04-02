@@ -66,7 +66,7 @@ public class HolidayStatusAdapter extends RecyclerView.Adapter<HolidayStatusAdap
         } else if (holiday_status_modelist.get(position).getDutyMode() == 3) {
             holder.HolidayStatus.setBackgroundResource(R.drawable.button_red);
             holder.HolidayStatus.setPadding(20,5,20,0);
-            holder.HolidayReject.setText("Reject : " + holiday_status_modelist.get(position).getApproveddate());
+            holder.HolidayReject.setText("Rejected : " + holiday_status_modelist.get(position).getApproveddate());
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);
                 holder.SfName.setText(holiday_status_modelist.get(position).getSFNm());

@@ -82,7 +82,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
 
     Camera mCamera;
-    int mCamId = 0;
+    int mCamId = 1;
     String[] flashModes = {"OFF", "Auto", "ON", "Torch"};
     private File file;
     SurfaceView preview;
@@ -382,7 +382,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         mHolder.addCallback(ImageCapture.this);
 
         Log.v("mCamId_VALUE", String.valueOf(mCamId));
-        setDefaultCameraId((mCamId == 1) ? "front" : "back");
+        setDefaultCameraId((mCamId == 0) ? "front" : "back");
         mCamera = Camera.open(mCamId);
         try {
             mCamera.setPreviewDisplay(mHolder);
@@ -679,7 +679,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         for (int i = 0; i < noOfCameras; i++) {
             Camera.getCameraInfo(i, cameraInfo);
             if (cameraInfo.facing == facing) {
-                mCamId = i;
+                /*mCamId = i;*/
             }
         }
     }

@@ -59,24 +59,22 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
     public void onBindViewHolder(Route_View_Adapter.MyViewHolder holder, int position) {
         Retailer_Modal_List Retailer_Modal_List = Retailer_Modal_Listitem.get(position);
         holder.textviewname.setText("" + Retailer_Modal_List.getName().toUpperCase() + "~" + Retailer_Modal_List.getId());
-        if(Retailer_Modal_List.getStatusname()!=null){
-            holder.status.setText("Status :" + "\t\t"  + Retailer_Modal_List.getStatusname().toUpperCase());
-        }else {
-            holder.status.setText("Status :" + "\t\t"  + "");
+        if (Retailer_Modal_List.getStatusname() != null) {
+            holder.status.setText("Status :" + "\t\t" + Retailer_Modal_List.getStatusname().toUpperCase());
+        } else {
+            holder.status.setText("Status :" + "\t\t" + "");
         }
 
-        holder.invoice.setText("Last invoice value :"+ "\t\t"  + Retailer_Modal_List.getInvoiceValues());
-        holder.values.setText("Value :" + "\t\t"  +Retailer_Modal_List.getValuesinv());
-        holder.invoicedate.setText("Last invoice date :" + "\t\t"  + Retailer_Modal_List.getInvoiceDate());
+        holder.invoice.setText("Last invoice value :" + "\t\t" + Retailer_Modal_List.getInvoiceValues());
+        holder.values.setText("Value :" + "\t\t" + Retailer_Modal_List.getValuesinv());
+        holder.invoicedate.setText("Last invoice date :" + "\t\t" + Retailer_Modal_List.getInvoiceDate());
         if (Retailer_Modal_List.getInvoice_Flag().equals("0")) {
             holder.parent_layout.setBackgroundResource(R.color.white);
         } else if (Retailer_Modal_List.getInvoice_Flag().equals("1")) {
-            holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
-        } else {
             holder.parent_layout.setBackgroundResource(R.color.invoiceordercolor);
+        } else {
+            holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
         }
-
-
         holder.parent_layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

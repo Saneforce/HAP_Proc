@@ -66,7 +66,11 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
         String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.GetTodayOrder_List);
         userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
         }.getType();
+
         OutletReport_View_Modal = gson.fromJson(OrdersTable, userType);
+        System.out.println("Array_List_Size"+OrdersTable.toString());
+        System.out.println("Array_List_Sizee"+OutletReport_View_Modal.size() );
+        System.out.println("Array_List_Outlet_Code"+Shared_Common_Pref.OutletCode);
         if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
             for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
                 if (filterlist.getOutletCode().equals(Shared_Common_Pref.OutletCode)) {
@@ -80,7 +84,12 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
             public void onIntentClick(int position) {
                 Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
                 Shared_Common_Pref.Invoicetoorder = "1";
-                common_class.CommonIntentwithFinish(Order_Category_Select.class);
+                if (FilterOrderList.get(position).getStatus().equals("ORDER")) {
+                    common_class.CommonIntentwithFinish(Order_Category_Select.class);
+                } else {
+                    common_class.CommonIntentwithFinish(Print_Invoice_Activity.class);
+                }
+
             }
         });
         invoicerecyclerview.setAdapter(mReportViewAdapter);

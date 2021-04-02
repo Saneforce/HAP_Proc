@@ -5,25 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".Activity_Hap.Leave_Approval">
+
         <include layout="@layout/custom_toolbar_help" />
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="38dp"
             android:layout_gravity="center"
             android:layout_margin="5dp"
             app:cardCornerRadius="10dp">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/button_yellow"
                 android:gravity="center">
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -39,532 +42,550 @@
 
         </androidx.cardview.widget.CardView>
 
+
+        <ScrollView
+            android:layout_marginBottom="@dimen/header_width2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/C8dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Name " />
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:id="@+id/name"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Emp Code " />
+
+                        <TextView
+                            android:id="@+id/empcode"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="HQ" />
+
+                        <TextView
+                            android:id="@+id/hq"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Designation "/>
+
+                        <TextView
+                            android:id="@+id/designation"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Mobile " />
+
+                        <TextView
+                            android:id="@+id/mobilenumber"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Plan Date  " />
+
+                        <TextView
+                            android:id="@+id/plandate"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Work Type "/>
+
+                        <TextView
+                            android:id="@+id/worktype"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/routecaption"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Route  " />
+
+                        <TextView
+                            android:id="@+id/route"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:id="@+id/distributorcaption"
+                            android:text="Distributor " />
+
+                        <TextView
+                            android:id="@+id/distributor"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:id="@+id/jointworkcaption"
+                            android:text="Joint Work " />
+
+                        <TextView
+                            android:id="@+id/jointwork"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:id="@+id/tphqcaption"
+                            android:text="TP HQ " />
+
+                        <TextView
+                            android:id="@+id/tphq"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green"/>
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:id="@+id/ChillingCentercaption"
+                            android:text="Chilling Center " />
+
+                        <TextView
+                            android:id="@+id/ChillingCenter"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+
+                            android:text="Shift Type "
+                            android:id="@+id/shifttypecaption"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/shifttype"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/fromdatecaption"
+                            android:text="From Date "
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/fromdate"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/todatecaption"
+                            android:text="To Date "
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/todate"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/captionsremarks"
+                            android:text="Remarks "
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1" />
+
+                        <TextView
+                            android:id="@+id/edt_remarks"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="MOT" />
+
+                        <TextView
+                            android:id="@+id/motravel"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="DA Type" />
+
+                        <TextView
+                            android:id="@+id/daype"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="DA"/>
+
+                        <TextView
+                            android:id="@+id/DAllowance"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="From  Place"/>
+
+                        <TextView
+                            android:id="@+id/Fromplace"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="To  Place" />
+
+                        <TextView
+                            android:id="@+id/Toplace"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content">
+
         <LinearLayout
+            android:id="@+id/rejectonly"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/C60dp"
-            android:background="@color/bg_color"
+            android:layout_weight="1"
             android:orientation="vertical"
-            android:weightSum="3">
+            android:padding="0dp"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:padding="15dp">
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Name "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Emp Code "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="HQ"
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Designation "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Mobile"
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Plan Date "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Work Type "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/routecaption"
-                        android:layout_width="100dp"
-                        android:layout_height="220dp"
-                        android:layout_weight="1"
-                        android:text="Route  "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/distributorcaption"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Distributor "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/jointworkcaption"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Joint Work "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tphqcaption"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="TP HQ "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/ChillingCentercaption"
-                        android:layout_width="100dp"
-                        android:layout_height="220dp"
-                        android:layout_weight="1"
-                        android:text="Chilling Center "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/shifttypecaption"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Shift Type "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/fromdatecaption"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="From Date "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/todatecaption"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="To Date "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/edt_remarks"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Remarks "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="MOT"
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="DA Type"
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="220dp"
-                        android:layout_weight="1"
-                        android:text="Driver Allowance"
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="From  Place"
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="220dp"
-                        android:layout_weight="1"
-                        android:text="To  Place"
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:padding="15dp">
-                    <TextView
-                        android:id="@+id/name"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Name"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/empcode"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Emp Code"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/hq"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="HQ"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/designation"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Designation"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C13dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/mobilenumber"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Mobile Number"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/plandate"
-
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Plan Date"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/worktype"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Work Type"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/route"
-                        android:layout_width="100dp"
-                        android:layout_height="220dp"
-                        android:layout_weight="1"
-                        android:text="Route"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/distributor"
-                        android:layout_width="100dp"
-                        android:layout_height="220dp"
-                        android:layout_weight="1"
-                        android:text="Distributor"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/jointwork"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="JointWork"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-
-                    <TextView
-                        android:id="@+id/tphq"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="TP HQ "
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/ChillingCenter"
-                        android:layout_width="100dp"
-                        android:layout_height="220dp"
-                        android:layout_weight="1"
-                        android:text="Chilling Center "
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/shifttype"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Shift Type"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/fromdate"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="From Date "
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/todate"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="From Date "
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-
-                    <TextView
-                        android:id="@+id/remarks"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Remarks"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/motravel"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="MOT"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/daype"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="datype"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/DAllowance"
-                        android:layout_width="100dp"
-                        android:layout_height="220dp"
-                        android:layout_weight="1"
-                        android:text="Driver Allowance"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/Fromplace"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="From  Place"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                    <TextView
-                        android:id="@+id/Toplace"
-                        android:layout_width="100dp"
-                        android:layout_height="220dp"
-                        android:layout_weight="1"
-                        android:text="To  Place"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/rejectonly"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:orientation="vertical"
-                android:padding="0dp"
-                android:visibility="gone">
+                android:padding="10dp">
 
-                <LinearLayout
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:text="@string/reason"
+                    android:textColor="@color/txt_color_black"
+                    android:textSize="@dimen/C16dp"
+                    android:textStyle="bold"
+                    android:visibility="visible" />
 
-                    android:padding="10dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-
-                        android:gravity="left"
-                        android:text="@string/reason"
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold"
-                        android:visibility="visible" />
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/reason"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/C60dp"
-                        android:layout_marginTop="@dimen/C10dp"
-                        android:background="@drawable/round_white_backround"
-                        android:gravity="top"
-                        android:hint="@string/txt_enter_reason"
-                        android:padding="15dp"
-                        android:textSize="@dimen/C12dp"
-                        android:visibility="visible" />
-
-                    <TextView
-                        android:id="@+id/tp_rejectsave"
-                        android:layout_width="110dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="@dimen/C10dp"
-                        android:background="@drawable/blue_txt_bg"
-                        android:gravity="center"
-                        android:padding="@dimen/C5dp"
-                        android:text="Reject"
-                        android:textAlignment="center"
-                        android:textColor="@color/bg_color"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/Approvereject"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:padding="15dp"
-
-                android:weightSum="4">
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/reason"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/C60dp"
+                    android:layout_marginTop="@dimen/C10dp"
+                    android:background="@drawable/round_white_backround"
+                    android:gravity="top"
+                    android:hint="@string/txt_enter_reason"
+                    android:padding="15dp"
+                    android:textSize="@dimen/C12dp"
+                    android:visibility="visible" />
 
                 <TextView
-                    android:id="@+id/tpapprovebutton"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tp_rejectsave"
+                    android:layout_width="110dp"
                     android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_weight="2"
-                    android:background="@drawable/button_green"
-                    android:gravity="center"
-                    android:padding="@dimen/C5dp"
-                    android:text="Approve"
-                    android:textColor="@color/color_white"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tpreject"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginBottom="3dp"
-                    android:layout_weight="2"
-                    android:background="@drawable/button_amber"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="@dimen/C10dp"
+                    android:background="@drawable/blue_txt_bg"
                     android:gravity="center"
                     android:padding="@dimen/C5dp"
                     android:text="Reject"
-                    android:textColor="@color/color_white"
+                    android:textAlignment="center"
+                    android:textColor="@color/bg_color"
                     android:textSize="18sp"
                     android:textStyle="bold" />
-
             </LinearLayout>
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/Approvereject"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:padding="15dp">
+
+            <TextView
+                android:id="@+id/tpapprovebutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="2"
+                android:background="@drawable/button_green"
+                android:gravity="center"
+                android:padding="@dimen/C5dp"
+                android:text="Approve"
+                android:textColor="@color/color_white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tpreject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_weight="2"
+                android:background="@drawable/button_amber"
+                android:gravity="center"
+                android:padding="@dimen/C5dp"
+                android:text="Reject"
+                android:textColor="@color/color_white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <include layout="@layout/back_arrow"></include>
     </LinearLayout>
-
-    <include layout="@layout/back_arrow"></include>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

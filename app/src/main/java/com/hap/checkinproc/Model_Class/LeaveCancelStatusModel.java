@@ -39,7 +39,7 @@ public class LeaveCancelStatusModel {
     private String toDate;
     @SerializedName("No_of_Days")
     @Expose
-    private Integer noOfDays;
+    private String noOfDays;
     @SerializedName("LStatus")
     @Expose
     private String lStatus;
@@ -141,11 +141,11 @@ public class LeaveCancelStatusModel {
         this.toDate = toDate;
     }
 
-    public Integer getNoOfDays() {
+    public String getNoOfDays() {
         return noOfDays;
     }
 
-    public void setNoOfDays(Integer noOfDays) {
+    public void setNoOfDays(String noOfDays) {
         this.noOfDays = noOfDays;
     }
 

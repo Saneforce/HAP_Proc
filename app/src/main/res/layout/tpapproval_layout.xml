@@ -12,8 +12,7 @@
         android:layout_height="match_parent"
         android:background="@color/bg_color"
         android:orientation="horizontal"
-        android:padding="8dp"
-        android:weightSum="4">
+        android:padding="8dp">
 
 
         <TextView
@@ -30,13 +29,6 @@
             android:layout_weight="1"
             android:text="2020-11-25" />
 
-        <TextView
-            android:id="@+id/leavedays"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="2" />
 
         <TextView
             android:id="@+id/open"

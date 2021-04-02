@@ -112,7 +112,7 @@ public class LeaveCancelRequestStatus extends AppCompatActivity {
     public void getLeaveCancelRequest() {
         String routemaster = " {\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<Object> mCall = apiInterface.getHolidayStatus("0", Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "GetLeaveCancel_Status", routemaster);
+        Call<Object> mCall = apiInterface.getHolidayStatus(AMOD, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "GetLeaveCancel_Status", routemaster);
 
         mCall.enqueue(new Callback<Object>() {
             @Override

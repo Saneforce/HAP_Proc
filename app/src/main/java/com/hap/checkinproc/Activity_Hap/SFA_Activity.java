@@ -23,6 +23,7 @@ import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.Dist_Locations;
 import com.hap.checkinproc.SFA_Activity.Invoice_History;
+import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Order_Category_Select;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
@@ -39,7 +40,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     Common_Class common_class;
     private Main_Model.presenter presenter;
     Shared_Common_Pref sharedCommonPref;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,12 +89,15 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 common_class.CommonIntentwithNEwTask(Reports_Outler_Name.class);
                 break;
             case R.id.SyncButon:
+                sharedCommonPref.Sync_Flag = "0";
                 common_class.CommonIntentwithNEwTask(Offline_Sync_Activity.class);
                 break;
             case R.id.linorders:
                 common_class.CommonIntentwithNEwTask(Dashboard_Order_Reports.class);
                 break;
-
+            case R.id.Lin_Lead:
+                common_class.CommonIntentwithNEwTask(Lead_Activity.class);
+                break;
             case R.id.Logout:
                 AlertDialogBox.showDialog(SFA_Activity.this, "HAP SFA", "Are You Sure Want to Logout?", "OK", "Cancel", false, new AlertBox() {
                     @Override
@@ -104,7 +107,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void NegativeMethod(DialogInterface dialog, int id) {
-
                         dialog.dismiss();
                     }
                 });

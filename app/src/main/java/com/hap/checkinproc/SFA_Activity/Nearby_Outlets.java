@@ -17,7 +17,6 @@ import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
-import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
@@ -31,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,18 +45,20 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     private RecyclerView recyclerView;
     Type userType;
     Common_Class common_class;
-    TextView Createoutlet, latitude, longitude;
+    TextView Createoutlet, latitude, longitude, availableoutlets;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
-    @Inject
-    Retrofit retrofit;
+    List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> ShowRetailer_Modal_List;
     Shared_Common_Pref shared_common_pref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby__outlets);
         shared_common_pref = new Shared_Common_Pref(this);
+
         recyclerView = findViewById(R.id.outletrecyclerview);
         Createoutlet = findViewById(R.id.Createoutlet);
+        availableoutlets = findViewById(R.id.availableoutlets);
         latitude = findViewById(R.id.latitude);
         longitude = findViewById(R.id.longitude);
         latitude.setText("Latitude : " + Shared_Common_Pref.Outletlat);
@@ -64,7 +66,36 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         common_class = new Common_Class(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
-        GetAllDetails();
+        //GetAllDetails();
+
+        gson = new Gson();
+        userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
+        }.getType();
+        String OrdersTable = shared_common_pref.getvalue(Shared_Common_Pref.Outlet_List);
+        Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
+        System.out.println("DISTANCE_CHECKING_Lat" + "---" + Shared_Common_Pref.Outletlat + "----->");
+        System.out.println("DISTANCE_CHECKING_Long" + "---" + Shared_Common_Pref.Outletlong + "----->");
+        ShowRetailer_Modal_List = new ArrayList<>();
+        ShowRetailer_Modal_List.clear();
+        for (Retailer_Modal_List rml : Retailer_Modal_List) {
+            if (rml.getLat() != null && rml.getLat() != "") {
+                System.out.println("DISTANCE_CHECKING" + "---" + rml.getId() + "----->" + String.valueOf(Common_Class.Check_Distance(Common_Class.ParseDouble(rml.getLat()), Common_Class.ParseDouble(rml.getLong()), Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong)));
+                if (Common_Class.Check_Distance(Common_Class.ParseDouble(rml.getLat()), Common_Class.ParseDouble(rml.getLong()), Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong) < 0.5) {
+                    ShowRetailer_Modal_List.add(rml);
+                }
+            }
+        }
+        availableoutlets.setText("Available Outlets:" + "\t" + ShowRetailer_Modal_List.size());
+        recyclerView.setAdapter(new Outlet_Info_Adapter(ShowRetailer_Modal_List, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {
+            @Override
+            public void onIntentClick(int position) {
+                Shared_Common_Pref.Outler_AddFlag = "0";
+                Shared_Common_Pref.OutletName = ShowRetailer_Modal_List.get(position).getName().toUpperCase() ;
+                Shared_Common_Pref.OutletCode = ShowRetailer_Modal_List.get(position).getId();
+                common_class.CommonIntentwithFinish(Route_Product_Info.class);
+                common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+            }
+        }));
         Createoutlet.setOnClickListener(this);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
@@ -76,50 +107,13 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-    private void GetAllDetails() {
-        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        String commonworktype = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",\\\"town_code\\\",\\\"town_name\\\",\\\"lat\\\",\\\"long\\\",\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",\\\"Mobile_Number\\\",\\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\"]\",\"where\":\"[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-        Map<String, String> QueryString = new HashMap<>();
-        QueryString.put("axn", "table/list");
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
-        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
-        Call<Object> call = service.GetRouteObject(QueryString, commonworktype);
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
-                }.getType();
-                Retailer_Modal_List = gson.fromJson(new Gson().toJson(response.body()), userType);
-                recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_List, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {
-                    @Override
-                    public void onIntentClick(int position) {
-                        Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
-                        intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_List.get(position).getId()));
-                        intent.putExtra("OutletName", Retailer_Modal_List.get(position).getName());
-                        intent.putExtra("OutletAddress", Retailer_Modal_List.get(position).getListedDrAddress1());
-                        intent.putExtra("OutletMobile", Retailer_Modal_List.get(position).getMobileNumber());
-                        intent.putExtra("OutletRoute", Retailer_Modal_List.get(position).getTownName());
-                        startActivity(intent);
-
-                    }
-                }));
-            }
-
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-
-            }
-        });
-    }
-
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.Createoutlet:
-                //common_class.
+                Shared_Common_Pref.Outler_AddFlag = "1";
+                common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                 break;
         }
     }

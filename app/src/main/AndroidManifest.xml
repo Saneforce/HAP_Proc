@@ -42,8 +42,13 @@
         <activity android:name=".Activity_Hap.PayslipFtp" />
         <activity android:name=".Activity_Hap.Leave_Cancel_Approval" />
         <activity android:name=".Activity_Hap.Leave_Cancel_Approval_Reject" />
+        <activity android:name=".Activity_Hap.Deviation_Entry_Approval" />
+        <activity android:name=".Activity_Hap.Deviation_Approval_Reject" />
+        <activity android:name=".Activity_Hap.Holiday_Entry_Approval" />
+        <activity android:name=".Activity_Hap.Holiday_Approval_Reject" />
         <activity android:name=".Activity_Hap.DaExceptionEntry" />
         <activity android:name=".Activity.LodgingCliamActivity" />
+      >
         <activity
             android:name=".Activity.PDFActivity"
             android:theme="@style/AppTheme.Dialogs" />
@@ -69,6 +74,8 @@
         <activity android:name=".SFA_Activity.Dashboard_Order_Reports" />
         <activity android:name=".SFA_Activity.Offline_Sync_Activity" />
         <activity android:name=".SFA_Activity.Nearby_Outlets" />
+        <activity android:name=".SFA_Activity.Print_Invoice_Activity" />
+        <activity android:name=".SFA_Activity.Lead_Activity" />
         <activity android:name=".Activity_Hap.SFA_Activity" />
         <activity
             android:name=".Activity_Hap.AttachementActivity"

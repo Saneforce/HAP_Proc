@@ -29,7 +29,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
     String AMod;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView fromdatetodate, leavetype, leavedays, leavereason, applieddate, LStatus, SfName;
+        public TextView fromdatetodate, leavetype, leavedays, leavereason, applieddate, LStatus, SfName,txtApproved;
         RelativeLayout sf_namelayout;
         LinearLayout linearCancel, linearReason;
         Button ButtonCancel, ReasonSend;
@@ -50,6 +50,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
             ButtonCancel = view.findViewById(R.id.button_cancel);
             ReasonSend = view.findViewById(R.id.reason_send);
             ReasonEntry = view.findViewById(R.id.reason_permission);
+            txtApproved = view.findViewById(R.id.approvedate);
         }
     }
 
@@ -108,7 +109,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
             } else {
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
-
+            holder.txtApproved.setText("Appproved : "+Leave_Status_ModelsList.get(position).getLastUpdtDate());
         } else if (Leave_Status_ModelsList.get(position).getLeaveActiveFlag() == 2) {
             holder.LStatus.setBackgroundResource(R.drawable.button_yellows);
             holder.LStatus.setPadding(20,5,20,0);
@@ -128,6 +129,7 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
             holder.LStatus.setPadding(20,5,20,0);
+            holder.txtApproved.setText("Rejected : "+Leave_Status_ModelsList.get(position).getLastUpdtDate());
             holder.LStatus.setBackgroundResource(R.drawable.button_red);
         }
     }

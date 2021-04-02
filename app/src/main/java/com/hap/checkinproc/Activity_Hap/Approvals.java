@@ -44,7 +44,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     LinearLayout LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan ,lin_leavecancel_histry, lin_leaveholidaystatus;
-    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff,linLeaveCancel;
+    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff,linLeaveCancel,lin_DeviationApproval,lin_holidayentryApproval;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     SharedPreferences Setups;
@@ -52,7 +52,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     public static final String UserInfo = "MyPrefs";
     public static final String SetupsInfo = "MySettings";
     TextView countLeaveRequest, extendedcount, countPermissionRequest, countOnDuty, countMissedPunch,
-            countTravelAllowance, countTourPlan;
+            countTravelAllowance, countTourPlan,  txt_holiday_count,txt_deviation_count,txt_leavecancel_count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,6 +151,12 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         countMissedPunch = findViewById(R.id.txt_miss_punch_count);
         countTravelAllowance = findViewById(R.id.txt_trvl_all);
         countTourPlan = findViewById(R.id.txt_tour_plan);
+        txt_holiday_count= findViewById(R.id.txt_holiday_count);
+        txt_deviation_count= findViewById(R.id.txt_deviation_count);
+        txt_leavecancel_count= findViewById(R.id.txt_leave_cancel_req_count);
+
+        lin_holidayentryApproval = findViewById(R.id.lin_holidayentryApproval);
+        lin_DeviationApproval = findViewById(R.id.lin_DeviationApproval);
         /*Status text*/
         /*SetOnClickListner*/
         LeaveRequest.setOnClickListener(this);
@@ -169,6 +175,8 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         lin_leavecancel_histry.setOnClickListener(this);
         lin_leaveholidaystatus.setOnClickListener(this);
         linLeaveCancel.setOnClickListener(this);
+        lin_holidayentryApproval.setOnClickListener(this);
+        lin_DeviationApproval.setOnClickListener(this);
         getcountdetails();
     }
 
@@ -200,7 +208,9 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                     countMissedPunch.setText(jsonObject.getString("vwmissedpunch"));
                     countTourPlan.setText(jsonObject.getString("TountPlanCount"));
                     extendedcount.setText(jsonObject.getString("vwExtended"));
-
+                    txt_holiday_count.setText(jsonObject.getString("HolidayCount"));
+                    txt_deviation_count.setText(jsonObject.getString("DeviationC"));
+                    txt_leavecancel_count.setText(jsonObject.getString("CancelLeave"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -225,6 +235,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 break;
 
                 case R.id.lin_leave_cancel:
+
                 startActivity(new Intent(Approvals.this, Leave_Cancel_Approval.class));
                 finish();
                 break;
@@ -286,6 +297,12 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.lin_leaveholidaystatus:
                 common_class.CommonIntentwithoutFinishputextra(HolidayEntryStatus.class, "AMod", "1");
+                break;
+            case R.id.lin_holidayentryApproval:
+                startActivity(new Intent(Approvals.this, Holiday_Entry_Approval.class));
+                break;
+            case R.id.lin_DeviationApproval:
+                startActivity(new Intent(Approvals.this, Deviation_Entry_Approval.class));
                 break;
 
         }

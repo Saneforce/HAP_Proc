@@ -7,6 +7,7 @@ public class Retailer_Modal_List {
     @SerializedName("id")
     @Expose
     private String id;
+
     public String getStatusname() {
         return Statusname;
     }
@@ -119,6 +120,53 @@ public class Retailer_Modal_List {
     @SerializedName("Invoice_Flag")
     @Expose
     private String Invoice_Flag;
+
+    @SerializedName("Hatsun_AvailablityId")
+    @Expose
+    private String Hatsun_AvailablityId;
+
+    public String getHatsun_AvailablityId() {
+        return Hatsun_AvailablityId;
+    }
+
+    public void setHatsun_AvailablityId(String hatsun_AvailablityId) {
+        Hatsun_AvailablityId = hatsun_AvailablityId;
+    }
+
+    public String getCategory_Universe_Id() {
+        return Category_Universe_Id;
+    }
+
+    public void setCategory_Universe_Id(String category_Universe_Id) {
+        Category_Universe_Id = category_Universe_Id;
+    }
+
+    public Retailer_Modal_List(String id, String name, String statusname, String valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode, String invoice_Flag, String hatsun_AvailablityId, String category_Universe_Id) {
+        this.id = id;
+        this.name = name;
+        Statusname = statusname;
+        Valuesinv = valuesinv;
+        InvoiceValues = invoiceValues;
+        InvoiceDate = invoiceDate;
+        this.townCode = townCode;
+        this.townName = townName;
+        this.lat = lat;
+        this._long = _long;
+        this.addrs = addrs;
+        this.listedDrAddress1 = listedDrAddress1;
+        this.listedDrSlNo = listedDrSlNo;
+        this.mobileNumber = mobileNumber;
+        this.docCatCode = docCatCode;
+        this.contactPersion = contactPersion;
+        this.docSpecialCode = docSpecialCode;
+        Invoice_Flag = invoice_Flag;
+        Hatsun_AvailablityId = hatsun_AvailablityId;
+        Category_Universe_Id = category_Universe_Id;
+    }
+
+    @SerializedName("Category_Universe_Id")
+    @Expose
+    private String Category_Universe_Id;
 
     public String getInvoice_Flag() {
         return Invoice_Flag;

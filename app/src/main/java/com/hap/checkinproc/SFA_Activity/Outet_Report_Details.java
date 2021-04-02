@@ -77,7 +77,9 @@ public class Outet_Report_Details extends AppCompatActivity {
         TotalValue = findViewById(R.id.total_value);
         txtProductId = findViewById(R.id.txt_product_id);
         txtProductDate = findViewById(R.id.txt_order_Date);
-        gson = new Gson();TextView txtHelp = findViewById(R.id.toolbar_help);
+        gson = new Gson();
+        //((MyApplication) getApplication()).getNetComponent().inject(this);
+        TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -48,7 +48,7 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
         holder.outtime.setText(extendedShift_status_models.get(position).getETime());
         holder.geoin.setText(extendedShift_status_models.get(position).getCheckin());
         holder.geoout.setText(extendedShift_status_models.get(position).getCheckout());
-        holder.applieddate.setText(extendedShift_status_models.get(position).getSubmissionDate());
+        holder.applieddate.setText("Applied : "+extendedShift_status_models.get(position).getSubmissionDate());
         holder.OStatus.setText(Onduty_Status_Model.getEStatus());
         if (Onduty_Status_Model.getWrkType() == 0) {
             holder.OStatus.setBackgroundResource(R.drawable.button_yellows);
@@ -80,7 +80,7 @@ public class ExtendedShift_Status_Adapter extends RecyclerView.Adapter<ExtendedS
                 holder.sf_namelayout.setVisibility(View.GONE);
             }
             holder.OStatus.setPadding(20,5,20,0);
-            holder.Papproved.setText("Reject : "+extendedShift_status_models.get(position).getApproveddate());
+            holder.Papproved.setText("Rejected : "+extendedShift_status_models.get(position).getApproveddate());
             holder.OStatus.setBackgroundResource(R.drawable.button_red);
         }
     }

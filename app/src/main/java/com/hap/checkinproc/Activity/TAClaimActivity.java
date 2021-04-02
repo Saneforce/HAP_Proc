@@ -1367,8 +1367,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         int finalC = i;
 
                         Log.e("JsonArray", String.valueOf(jsonArray.size()));
-                        jsonObject = (JsonObject) jsonArray.get(i);
+                        //jsonObject = (JSONObject) jsonArray.get(i);
 
+                        jsonObject = jsonArray.get(i).getAsJsonObject();
                         linDailyAllowance.setVisibility(View.VISIBLE);
 
                         StartedKm = jsonObject.get("Start_Km").getAsString();

@@ -32,7 +32,6 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Tp_Approval_Model;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,18 +43,20 @@ import java.util.Map;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClickListener {
-    TextView name, empcode, hq, mobilenumber, designation, plandate, worktype, route, distributor, remarks, tpapprovebutton, tpreject, tp_rejectsave, edt_remarks, routecaption, distributorcaption, tphqcaption, ChillingCentercaption, shifttypecaption, fromdatecaption, todatecaption, tphq, ChillingCenter, shifttype, fromdate, todate, jointworkcaption, jointwork,motravel,Toplace,Fromplace,DAllowance,daype;
+    TextView name, empcode, hq, mobilenumber, designation, plandate, worktype, route, distributor, textremarks,
+            tpapprovebutton, tpreject, tp_rejectsave, captionsremarks, routecaption, distributorcaption, tphqcaption,
+            ChillingCentercaption, shifttypecaption, fromdatecaption, todatecaption, tphq, ChillingCenter, shifttype,
+            fromdate, todate, jointworkcaption, jointwork,txtMot,txtDaType,txtDa,txtFrom,txtTo;
     String Sf_Code, Tour_plan_Date;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     LinearLayout Approvereject, rejectonly;
     EditText reason;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tp__approval__reject);
-        getToolbar();
-        startService(new Intent(this, TimerService.class));
         shared_common_pref = new Shared_Common_Pref(this);
         common_class = new Common_Class(this);
         name = findViewById(R.id.name);
@@ -71,12 +72,12 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
         tpreject = findViewById(R.id.tpreject);
         jointworkcaption = findViewById(R.id.jointworkcaption);
         jointwork = findViewById(R.id.jointwork);
-        edt_remarks = findViewById(R.id.edt_remarks);
+        captionsremarks = findViewById(R.id.captionsremarks);
         plandate = findViewById(R.id.plandate);
         worktype = findViewById(R.id.worktype);
         route = findViewById(R.id.route);
         distributor = findViewById(R.id.distributor);
-        remarks = findViewById(R.id.remarks);
+        textremarks = findViewById(R.id.edt_remarks);
         tphq = findViewById(R.id.tphq);
         ChillingCenter = findViewById(R.id.ChillingCenter);
         shifttype = findViewById(R.id.shifttype);
@@ -89,11 +90,14 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
         shifttypecaption = findViewById(R.id.shifttypecaption);
         fromdatecaption = findViewById(R.id.fromdatecaption);
         todatecaption = findViewById(R.id.todatecaption);
-        motravel = findViewById(R.id.motravel);
-        daype = findViewById(R.id.daype);
-        DAllowance = findViewById(R.id.DAllowance);
-        Fromplace = findViewById(R.id.Fromplace);
-        Toplace = findViewById(R.id.Toplace);
+
+
+        txtMot = findViewById(R.id.motravel);
+        txtDaType = findViewById(R.id.daype);
+        txtDa = findViewById(R.id.DAllowance);
+        txtFrom = findViewById(R.id.Fromplace);
+        txtTo = findViewById(R.id.Toplace);
+
         tpapprovebutton.setOnClickListener(this);
         tpreject.setOnClickListener(this);
         tp_rejectsave.setOnClickListener(this);
@@ -108,14 +112,19 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
         route.setText(":" + i.getExtras().getString("Route"));
         distributor.setText(":" + i.getExtras().getString("Distributor"));
         Sf_Code = i.getExtras().getString("Sf_Code");
-        remarks.setText(":" + i.getExtras().getString("Remarks"));
+        textremarks.setText(":" + i.getExtras().getString("Remarks"));
         hq.setText(":" + i.getExtras().getString("HQ"));
         jointwork.setText(":" + i.getExtras().getString("workedwithname"));
-        motravel.setText(":" + i.getExtras().getString("motravel"));
-        daype.setText(":" + i.getExtras().getString("daype"));
-        DAllowance.setText(":" + i.getExtras().getString("DAllowance"));
-        Fromplace.setText(":" + i.getExtras().getString("Fromplace"));
-        Toplace.setText(":" + i.getExtras().getString("Toplace"));
+
+        txtMot.setText(":" + i.getExtras().getString("MOT"));
+        txtDaType.setText(":" + i.getExtras().getString("DA_Type"));
+        txtDa.setText(":" + i.getExtras().getString("Da"));
+        txtFrom.setText(":" + i.getExtras().getString("From_Place"));
+        txtTo.setText(":" + i.getExtras().getString("To_Place"));
+
+
+
+
         Log.e("DEP_TYPE", String.valueOf(i.getExtras().getString("DeptType")));
         if (i.getExtras().getString("DeptType").equals("1")) {
             tphq.setText(":" + i.getExtras().getString("TPHqname"));
@@ -139,14 +148,13 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
             distributor.setVisibility(View.GONE);
             routecaption.setVisibility(View.GONE);
             distributorcaption.setVisibility(View.GONE);
-            edt_remarks.setText("Purpose of Visit");
+            captionsremarks.setText("Purpose of Visit");
 
         } else {
             distributor.setVisibility(View.VISIBLE);
             route.setVisibility(View.VISIBLE);
             jointworkcaption.setVisibility(View.VISIBLE);
             jointwork.setVisibility(View.VISIBLE);
-
             tphqcaption.setVisibility(View.GONE);
             ChillingCentercaption.setVisibility(View.GONE);
             shifttypecaption.setVisibility(View.GONE);
@@ -159,7 +167,7 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
             shifttype.setVisibility(View.GONE);
             routecaption.setVisibility(View.VISIBLE);
             distributorcaption.setVisibility(View.VISIBLE);
-            edt_remarks.setText("Remarks");
+            captionsremarks.setText("Remarks");
             if (i.getExtras().getString("Worktype_Flag").equals("N")) {
                 distributor.setVisibility(View.GONE);
                 route.setVisibility(View.GONE);
@@ -168,7 +176,7 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
 
 
 
-        /*TextView txtHelp = findViewById(R.id.toolbar_help);
+        TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,9 +199,31 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
 
             }
         });
-*/
 
 
+        ObjectAnimator textColorAnim;
+        textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
+        textColorAnim.setDuration(500);
+        textColorAnim.setEvaluator(new ArgbEvaluator());
+        textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
+        textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
+        textColorAnim.start();
+
+        imgHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                if (CheckIn == true) {
+                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                } else
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+
+            }
+        });
 
 
         ImageView backView = findViewById(R.id.imag_back);
@@ -209,7 +239,6 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
 
 
     private void SendtpApproval(String Name, int flag) {
-
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "dcr/save");
         QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
@@ -221,7 +250,6 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
         JSONObject sp = new JSONObject();
-
         try {
             sp.put("Sf_Code", Sf_Code);
             if (flag == 2) {
@@ -236,7 +264,6 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
         Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, jsonArray.toString());
         Log.e("Log_TpQuerySTring", QueryString.toString());
         Log.e("Log_Tp_SELECT", jsonArray.toString());
-
         mCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -269,47 +296,6 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
         });
     }
 
-    public void getToolbar() {
-        TextView txtHelp = findViewById(R.id.toolbar_help);
-        ImageView imgHome = findViewById(R.id.toolbar_home);
-        txtHelp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
-            }
-        });
-
-        TextView txtErt = findViewById(R.id.toolbar_ert);
-        TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
-
-        txtErt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), ERT.class));
-            }
-        });
-        txtPlaySlip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
-            }
-        });
-
-
-        ObjectAnimator textColorAnim;
-        textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
-        textColorAnim.setDuration(500);
-        textColorAnim.setEvaluator(new ArgbEvaluator());
-        textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
-        textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
-        textColorAnim.start();
-        imgHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-    }
 
     @Override
     public void onClick(View view) {
@@ -345,39 +331,6 @@ public class Tp_Approval_Reject extends AppCompatActivity implements View.OnClic
     @Override
     public void onBackPressed() {
 
-    }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
     }
 }
 

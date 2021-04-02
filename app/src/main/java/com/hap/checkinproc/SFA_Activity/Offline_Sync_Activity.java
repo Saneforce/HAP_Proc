@@ -28,6 +28,7 @@ public class Offline_Sync_Activity extends AppCompatActivity implements Main_Mod
     Gson gson;
     private ProgressDialog progress;
     Common_Class common_class;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +49,6 @@ public class Offline_Sync_Activity extends AppCompatActivity implements Main_Mod
             @Override
             public void run() {
                 int jumpTime = 0;
-
                 while (jumpTime < totalProgressTime) {
                     try {
                         sleep(200);
@@ -81,41 +81,49 @@ public class Offline_Sync_Activity extends AppCompatActivity implements Main_Mod
 
     @Override
     public void setDataToRouteObject(Object responsebody, int position) {
+        Log.e("Calling Position", String.valueOf(position));
+        // Toast.makeText(this, "Position" + position, Toast.LENGTH_SHORT).show();
         String serializedData = gson.toJson(responsebody);
         if (position == 0) {
             //Outlet_List
-           //System.out.println("GetOutlet_All" + serializedData);
+            System.out.println("GetOutlet_All" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.Outlet_List, serializedData);
         } else if (position == 1) {
             //Distributor_List
-           // System.out.println("Distributor_List" + serializedData);
+            System.out.println("Distributor_List" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.Distributor_List, serializedData);
         } else if (position == 2) {
             //Category_List
-            //System.out.println("Category_List" + serializedData);
+            System.out.println("Category_List" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.Category_List, serializedData);
         } else if (position == 3) {
             //Product_List
-           // System.out.println("Product_List" + serializedData);
+            System.out.println("Product_List" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.Product_List, serializedData);
         } else if (position == 4) {
             //GetTodayOrder_List
-            //System.out.println("GetTodayOrder_List" + serializedData);
+            System.out.println("GetTodayOrder_List" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.GetTodayOrder_List, serializedData);
         } else if (position == 5) {
             //GetTodayOrder_List
-            //System.out.println("GetTodayOrderDetails_List" + serializedData);
+            System.out.println("GetTodayOrderDetails_List" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.TodayOrderDetails_List, serializedData);
-        }
-        else {
+        } else if (position == 6) {
+            System.out.println("Todaydayplanresult" + serializedData);
+            sharedCommonPref.save(Shared_Common_Pref.Todaydayplanresult, serializedData);
+        } else if (position == 7) {
+            System.out.println("Town_List" + serializedData);
+            sharedCommonPref.save(Shared_Common_Pref.Rout_List, serializedData);
+        } else {
             progress.dismiss();
             System.out.println("Compititor_List" + serializedData);
+            System.out.println("Compititor_SYncFlag" + sharedCommonPref.Sync_Flag);
             sharedCommonPref.save(Shared_Common_Pref.Compititor_List, serializedData);
-            if ( sharedCommonPref.Sync_Flag!=null &&sharedCommonPref.Sync_Flag.equals("1")) {
-                common_class.CommonIntentwithFinish( Dashboard_Route.class);
-            } else if ( sharedCommonPref.Sync_Flag!=null && sharedCommonPref.Sync_Flag.equals("2")) {
-                common_class.CommonIntentwithFinish(Invoice_History.class);
-            } else if(sharedCommonPref.Sync_Flag!=null && sharedCommonPref.Sync_Flag.equals("0")) {
+            if (sharedCommonPref.Sync_Flag != null && sharedCommonPref.Sync_Flag.equals("1")) {
+                common_class.CommonIntentwithNEwTask(Dashboard_Route.class);
+            } else if (sharedCommonPref.Sync_Flag != null && sharedCommonPref.Sync_Flag.equals("2")) {
+                startActivity(new Intent(getApplicationContext(), Invoice_History.class));
+            } else if (sharedCommonPref.Sync_Flag != null && sharedCommonPref.Sync_Flag.equals("0")) {
                 common_class.CommonIntentwithFinish(SFA_Activity.class);
             }
         }

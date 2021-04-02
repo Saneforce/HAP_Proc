@@ -77,12 +77,13 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     List<com.hap.checkinproc.SFA_Model_Class.RegularQty_Modal> RegularQty_Modal;
     List<Product_Details_Modal> Product_ModalSetAdapter;
     List<Product_Details_Modal> Getorder_Array_List;
-
     List<Trans_Order_Details_Offline> InvoiceorderDetails_List;
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
     TextView takeorder, ok, back, Out_Let_Name, Category_Nametext, totalqty, totalvalue, orderbutton, netamount;
+    @Inject
+    Retrofit retrofit;
     private RecyclerView recyclerView;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, totalorderbottom, linnetamount, linnercashdiscount;
     public boolean gobackflag = false;
@@ -128,15 +129,15 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         Out_Let_Name.setText(Shared_Common_Pref.OutletName);
         recyclerView = findViewById(R.id.orderrecyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //Category_details();
-        //  Get_Product_Details();
         GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Category_List), "1");
         String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.Product_List);
         userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
         }.getType();
         Product_Modal = gson.fromJson(OrdersTable, userType);
-        // Log.e("Product_ModalBefore", String.valueOf(Product_Modal.size()));
-        Get_regularqty();
+        if (Shared_Common_Pref.Invoicetoorder == null || Shared_Common_Pref.Invoicetoorder.equals("0")) {
+            Get_regularqty();
+        }
+
         if (Shared_Common_Pref.Invoicetoorder != null) {
             if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
                 String orderlist = sharedCommonPref.getvalue(Shared_Common_Pref.TodayOrderDetails_List);
@@ -156,12 +157,27 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     for (int i = 0; Order_Outlet_Filter.size() > i; i++) {
                         if (Product_Modal.get(j).getId().equals(Order_Outlet_Filter.get(i).getId())) {
                             Product_Modal.get(j).setQty(Order_Outlet_Filter.get(i).getQty());
+                            Log.e("SETQTY", String.valueOf(Order_Outlet_Filter.get(i).getQty()));
                             Product_Modal.get(j).setAmount(Order_Outlet_Filter.get(i).getAmount());
                             Product_Modal.get(j).setRegularQty(Order_Outlet_Filter.get(i).getRegularQty());
                         }
                     }
                 }
+                GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Category_List), "2");
+                int jki = 0;
+                Log.e("Category_Before", String.valueOf(Category_Modal.size()));
+                for (Category_Universe_Modal CM : Category_Modal) {
+                    for (Product_Details_Modal PM : Product_Modal) {
+                        Log.e("GETQTY", String.valueOf(PM.getQty()));
+                        Log.e("GETREgular", String.valueOf(PM.getRegularQty()));
+                        if (CM.getId().equals(PM.getProductCatCode()) && (PM.getQty() > 0 || PM.getRegularQty() > 0)) {
+                            Category_Modal.get(jki).setColorFlag("1");
+                            Log.e("Category_Modal_CAT", Category_Modal.get(jki).getColorFlag());
+                        }
+                    }
+                    jki++;
 
+                }
                 FilterProduct("invoice", true);
             } else {
 
@@ -200,63 +216,10 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         });
     }
 
-    public void Category_details() {
-        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        Map<String, String> QueryString = new HashMap<>();
-        QueryString.put("axn", "table/list");
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
-        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
-        Call<Object> call = service.GetRouteObject(QueryString, "{\"tableName\":\"category_universe\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}");
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                //Log.e("MAsterSyncView_Result", response.body() + "");
-               // System.out.println("Route_Matser" + response.body().toString());
-                GetJsonData(new Gson().toJson(response.body()), "1");
-            }
-
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-
-            }
-        });
-    }
-
-    public void Get_Product_Details() {
-        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        Map<String, String> QueryString = new HashMap<>();
-        QueryString.put("axn", "table/list");
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
-        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
-        Call<Object> call = service.GetRouteObject(QueryString, "{\"tableName\":\"getproduct_details\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}");
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                Log.e("MAster_Product_Details", response.body() + "");
-                System.out.println("Product_Details" + new Gson().toJson(response.body()));
-                //GetJsonData(new Gson().toJson(response.body()), "2");
-                userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
-                }.getType();
-                Product_Modal = gson.fromJson(new Gson().toJson(response.body()), userType);
-                Get_regularqty();
-                System.out.println("Product_Details_Size" + Product_Modal.size());
-            }
-
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-
-            }
-        });
-
-    }
-
     private void GetJsonData(String jsonResponse, String type) {
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
+            Category_Modal.clear();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String id = String.valueOf(jsonObject1.optInt("id"));
@@ -267,6 +230,10 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 String colorflag = jsonObject1.optString("colorflag");
                 if (type.equals("1")) {
                     Category_Modal.add(new Category_Universe_Modal(id, name, Division_Code, Cat_Image, sampleQty, colorflag));
+                } else {
+                    Category_Modal.add(new Category_Universe_Modal(id, name, Division_Code, Cat_Image, sampleQty, colorflag));
+
+
                 }
             }
 
@@ -312,7 +279,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     }
 
     private void SaveOrder() {
-
         AlertDialogBox.showDialog(Order_Category_Select.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
             @Override
             public void PositiveMethod(DialogInterface dialog, int id) {
@@ -417,23 +383,20 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
                 Call<JsonObject> responseBodyCall = apiInterface.submitValue(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Convert_Json_toString);
-                //Log.e("Convert_Json_toString", Convert_Json_toString);
+                Log.e("Convert_Json_toString", Convert_Json_toString);
                 responseBodyCall.enqueue(new Callback<JsonObject>() {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         if (response.isSuccessful()) {
                             try {
-                               // Log.e("JSON_VALUES", response.body().toString());
+                                Log.e("JSON_VALUES", response.body().toString());
                                 JSONObject jsonObjects = new JSONObject(response.body().toString());
                                 String san = jsonObjects.getString("success");
                                 Log.e("Success_Message", san);
                                 if (san.equals("true")) {
                                     Toast.makeText(Order_Category_Select.this, "Order Submitted Successfully", Toast.LENGTH_SHORT).show();
-                                   // ViewDateReport();
-                                     Shared_Common_Pref.Sync_Flag = "2";
+                                    Shared_Common_Pref.Sync_Flag = "2";
                                     startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
-
-
                                 }
 
                             } catch (Exception e) {
@@ -444,7 +407,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                     @Override
                     public void onFailure(Call<JsonObject> call, Throwable t) {
-                        //Log.e("SUBMIT_VALUE", "ERROR");
+                        Log.e("SUBMIT_VALUE", "ERROR");
                     }
                 });
 
@@ -471,6 +434,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             }
             orderbutton.setText("ORDER");
         } else {
+            Order_Category_Select.CategoryAdapter customAdapteravail = new Order_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+            categorygrid.setAdapter(customAdapteravail);
             linnercashdiscount.setVisibility(View.VISIBLE);
             linnetamount.setVisibility(View.VISIBLE);
             orderbutton.setText("INVOICE");
@@ -496,8 +461,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             Getorder_Array_List = new ArrayList<>();
             Getorder_Array_List.clear();
             for (Product_Details_Modal pm : Product_Modal) {
-                //System.out.println("Product_getQty" + pm.getQty());
-                //System.out.println("Product_getQty" + pm.getRegularQty());
+                System.out.println("Product_getQty" + pm.getQty());
+                System.out.println("Product_getQty" + pm.getRegularQty());
                 if (pm.getRegularQty() != null) {
                     if (pm.getQty() > 0 || pm.getRegularQty() > 0) {
                         Getorder_Array_List.add(pm);
@@ -628,7 +593,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         public void onBindViewHolder(Prodct_Adapter.MyViewHolder holder, int position) {
             Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
             holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-            holder.Rate.setText("Rate :   " + Product_Details_Modal.getRate());
+            holder.Rate.setText("Rate:   " + Product_Details_Modal.getRate());
             holder.Amount.setText("" + Product_Details_Modal.getAmount());
             if (common_class.isNullOrEmpty(String.valueOf(Product_Details_Modal.getRegularQty()))) {
                 holder.RegularQty.setText("" + 0);
@@ -683,7 +648,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
         @Override
         public int getItemCount() {
-
             return Product_Details_Modalitem.size();
         }
 
@@ -732,37 +696,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
             }
         });
-    }
-
-
-    public void ViewDateReport() {
-        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        Map<String, String> QueryString = new HashMap<>();
-        QueryString.put("axn", "table/list");
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code.replace(",", ""));
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("fromdate", Common_Class.GetDatewothouttime());
-        QueryString.put("todate", Common_Class.GetDatewothouttime());
-        QueryString.put("Outlet_Code", Shared_Common_Pref.OutletCode);
-        Log.e("Report_ValuesMap", QueryString.toString());
-        Call<Object> call = service.GetRouteObject(QueryString, "{\"tableName\":\"gettotalorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}");
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                Log.e("MAster_Product_Details", response.body() + "");
-                System.out.println("GetOutletView" + new Gson().toJson(response.body()));
-                String serializedData = gson.toJson(response.body());
-                System.out.println("GetTodayOrder_All" + serializedData);
-                sharedCommonPref.save(Shared_Common_Pref.GetTodayOrder_List, serializedData);
-                common_class.CommonIntentwithFinish(Invoice_History.class);
-            }
-
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-
-            }
-        });
-
     }
 
     @Override

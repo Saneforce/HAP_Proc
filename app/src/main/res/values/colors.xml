@@ -21,6 +21,7 @@
     <color name="awhite">#A8FFFFFF</color>
     <color name="ablack">#5E1C1C1C</color>
     <color name="black">#1C1C1C</color>
+    <color name="printbackcolor">#D7D7D7</color>
     <color name="bg_color">#F1F1F1</color>
     <color name="txt_color_black">#000000</color>
     <color name="dark_grey">#3E3E3E</color>

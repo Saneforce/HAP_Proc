@@ -6,293 +6,253 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".Activity_Hap.Leave_Approval_Reject">
 
-        <include layout="@layout/custom_toolbar_help"></include>
+    <include layout="@layout/custom_toolbar_help"></include>
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="5dp"
-            app:cardCornerRadius="10dp">
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="5dp"
+        app:cardCornerRadius="10dp">
 
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/button_yellow"
-                android:gravity="center">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/alegreya_sans_sc"
-                    android:gravity="center"
-                    android:padding="10dp"
-                    android:text="LEAVE CANCEL APPROVAL"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-
-        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="-13dp"
-            android:layout_marginBottom="@dimen/C60dp"
-            android:background="@color/bg_color"
+            android:background="@drawable/button_yellow"
+            android:gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/alegreya_sans_sc"
+                android:gravity="center"
+                android:padding="10dp"
+                android:text="LEAVE CANCEL APPROVAL"
+                android:textAlignment="center"
+                android:textColor="@android:color/white"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/C10dp"
             android:orientation="vertical"
-            android:weightSum="3">
+            tools:ignore="MissingConstraints">
+
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:orientation="horizontal"
-                android:padding="10dp"
-                android:weightSum="2">
+                android:layout_height="wrap_content">
 
-                <LinearLayout
+                <TextView
+                    style="@style/TextStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:padding="15dp">
+                    android:text="Name " />
 
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Name "
-
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Emp Code "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="HQ"
-                        android:textColor="@color/txt_color_black"
-
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Designation "
-
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Mobile  "
-
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Reason "
-                        android:textColor="@color/txt_color_black"
-
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Leave Type"
-
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="220dp"
-                        android:layout_weight="1"
-                        android:text="From Date  "
-
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="220dp"
-                        android:layout_weight="1"
-                        android:text="To Date "
-                        android:textColor="@color/txt_color_black"
-
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Leave Days "
-                        android:textColor="@color/txt_color_black"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <LinearLayout
+                <TextView
+                    android:id="@+id/name"
+                    style="@style/TextStyle"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:padding="15dp">
+                    android:textColor="@color/green" />
 
-                    <TextView
-                        android:id="@+id/name"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Name"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/empcode"
-
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Emp Code"
-
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/hq"
-
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="HQ"
-                        android:textColor="@color/green"
-
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/designation"
-
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Designation"
-                        android:textColor="@color/green"
-
-                        android:textSize="@dimen/C13dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-
-                        android:id="@+id/mobilenumber"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="Mobile Number"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/leavereason"
-
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="leave reason"
-                        android:textColor="@color/green"
-
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/leavetype"
-
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/fromdate"
-
-                        android:layout_width="100dp"
-                        android:layout_height="220dp"
-                        android:layout_weight="1"
-                        android:text="fromdate"
-                        android:textColor="@color/green"
-                        android:textSize="@dimen/C16dp"
-
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/todate"
-
-                        android:layout_width="100dp"
-                        android:layout_height="220dp"
-                        android:layout_weight="1"
-                        android:text="todate"
-                        android:textColor="@color/green"
-
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/leavedays"
-                        android:layout_width="100dp"
-                        android:layout_height="200dp"
-                        android:layout_weight="1"
-                        android:text="leavedays"
-                        android:textColor="@color/green"
-
-                        android:textSize="@dimen/C16dp"
-                        android:textStyle="bold" />
-                </LinearLayout>
 
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="Emp Code " />
+
+                <TextView
+                    android:id="@+id/empcode"
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:textColor="@color/green" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="HQ" />
+
+                <TextView
+                    android:id="@+id/hq"
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:textColor="@color/green" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="Designation " />
+
+                <TextView
+                    android:id="@+id/designation"
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:textColor="@color/green" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="Mobile " />
+
+                <TextView
+                    android:id="@+id/mobilenumber"
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:textColor="@color/green" />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="Reason " />
+
+                <TextView
+                    android:id="@+id/leavereason"
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:textColor="@color/green" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="Leave Type" />
+
+                <TextView
+                    android:id="@+id/leavetype"
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:textColor="@color/green" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="From Date  " />
+
+                <TextView
+                    android:id="@+id/fromdate"
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:textColor="@color/green" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="To Date " />
+
+                <TextView
+                    android:id="@+id/todate"
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:textColor="@color/green" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:text="Leave Days " />
+
+                <TextView
+                    android:id="@+id/leavedays"
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:textColor="@color/green" />
+
+            </LinearLayout>
+
+
 
             <LinearLayout
                 android:id="@+id/rejectonly"
@@ -391,9 +351,23 @@
 
             </LinearLayout>
         </LinearLayout>
+
+
+    </ScrollView>
+
     </LinearLayout>
 
-    <include layout="@layout/back_arrow"></include>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent">
 
+
+
+        <include layout="@layout/back_arrow"></include>
+
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -20,7 +20,6 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
@@ -142,19 +141,19 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
         common_class.getintentValues("Monthselection");
         calendarView = this.findViewById(R.id.gridcalander);
         SelectedMonth = Integer.parseInt(common_class.getintentValues("Monthselection"));
-        currentMonth.setText(common_class.GetMonthname(Integer.parseInt(common_class.getintentValues("Monthselection"))) + "   "+ 2021);
+        currentMonth.setText(common_class.GetMonthname(Integer.parseInt(common_class.getintentValues("Monthselection"))) + "   " + 2021);
         Log.e("MONTH_SELECTion", common_class.getintentValues("Monthselection"));
         _calendar = Calendar.getInstance(Locale.getDefault());
-        if(SelectedMonth==12 || SelectedMonth==0){
-            SelectedMonth=0;
+        if (SelectedMonth == 12 || SelectedMonth == 0) {
+            SelectedMonth = 0;
 
             year = _calendar.get(Calendar.YEAR);
-        }else {
+        } else {
             year = _calendar.get(Calendar.YEAR);
         }
 
 
-       // backarow.setOnClickListener(this);
+        // backarow.setOnClickListener(this);
         nDialog = new ProgressDialog(Tp_Calander.this);
         nDialog.setMessage("Loading.......");
         nDialog.setTitle("Tour Plan");
@@ -180,27 +179,24 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
         String Tp_Object = "{\"tableName\":\"vwTourPlan\",\"coloumns\":\"[\\\"date\\\",\\\"remarks\\\",\\\"worktype_code\\\",\\\"worktype_name\\\",\\\"RouteCode\\\",\\\"RouteName\\\",\\\"Worked_with_Code\\\",\\\"Worked_with_Name\\\",\\\"JointWork_Name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<Object> mCall = apiInterface.GettpRespnse(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, String.valueOf(SM), String.valueOf(year), Tp_Object);
-
         mCall.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 // locationList=response.body();
-           /*     Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
-                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
-*/
-
+             /* Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
+                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));*/
                 userType = new TypeToken<ArrayList<Tp_View_Master>>() {
                 }.getType();
                 Tp_View_Master = gson.fromJson(new Gson().toJson(response.body()), userType);
 
-                month=SelectedMonth+1;
-           /*     Log.e("TP_VIEW_LENGTH", String.valueOf(Tp_View_Master.size()));
-*/
+                month = SelectedMonth + 1;
+                /*     Log.e("TP_VIEW_LENGTH", String.valueOf(Tp_View_Master.size()));
+                 */
 
                 adapter = new Tp_Calander.GridCellAdapter(getApplicationContext(), R.id.date, month, year, (ArrayList<com.hap.checkinproc.Model_Class.Tp_View_Master>) Tp_View_Master);
                 adapter.notifyDataSetChanged();
                 calendarView.setAdapter(adapter);
-              /*  Log.e("Work_Type_Model", String.valueOf(response.body().toString()));*/
+                /*  Log.e("Work_Type_Model", String.valueOf(response.body().toString()));*/
                 //Log.e("Tp_View_Master", String.valueOf(Tp_View_Master.size()));
                 nDialog.dismiss();
             }
@@ -245,7 +241,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
 
             case R.id.btnsubmit:
                 int SM = SelectedMonth + 1;
-                common_class.GetTP_Result("TourPlanSubmit", "", SM,year);
+                common_class.GetTP_Result("TourPlanSubmit", "", SM, year);
 
                 break;
         }
@@ -255,8 +251,6 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
     public void update(int value, int pos) {
 
     }
-
-
 
 
     // ///////////////////////////////////////////////////////////////////////////////////////
@@ -489,7 +483,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
                     int month = SelectedMonth + 1;
                     String TourMonth = theyear + "-" + month + "-" + theday;
                     Log.e("Grid_Selected_Date", theday + "-" + themonth + "-" + theyear + day_color[1]);
-                    common_class.CommonIntentwithoutFinishputextratwo(Tp_Mydayplan.class, "TourDate", TourMonth,"TourMonth", String.valueOf(month-1));
+                    common_class.CommonIntentwithoutFinishputextratwo(Tp_Mydayplan.class, "TourDate", TourMonth, "TourMonth", String.valueOf(month - 1));
 
                 }
             });
@@ -517,10 +511,14 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
         public boolean CheckTp_View(int a) {
             boolean bflag = false;
 
-            for (int i = 0; Tp_View_Master.size() > i; i++) {
-                if (a == Tp_View_Master.get(i).getDayofcout()) {
-                    bflag = true;
+            if (Tp_View_Master != null) {
+                Log.v("TP_VIEW_MASTER", String.valueOf(Tp_View_Master.size()));
 
+                for (int i = 0; Tp_View_Master.size() > i; i++) {
+                    if (a == Tp_View_Master.get(i).getDayofcout()) {
+                        bflag = true;
+
+                    }
                 }
             }
             return bflag;

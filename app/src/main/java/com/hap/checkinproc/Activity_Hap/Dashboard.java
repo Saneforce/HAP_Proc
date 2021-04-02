@@ -28,6 +28,7 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
 
@@ -256,7 +257,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 AlertDialogBox.showDialog(Dashboard.this, "HAP Check-In", "Are you sure want to Check-in with Hoilday Entry", "YES", "NO", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
-
                         common_class.CommonIntentwithoutFinishputextra(Checkin.class, "Mode", "holidayentry");
                     }
 
@@ -307,7 +307,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
                 break;
             case R.id.lin_extenden_shift:
-                Get_MydayPlan(2, "ValidateExtended");
+                  Get_MydayPlan(2, "ValidateExtended");
                 break;
             default:
                 break;
@@ -344,7 +344,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
                     editors = sharedpreferences.edit();
                     editors.putString("Onduty", onDuty);
-                    editors.putString("ShiftDuty",jsonObject.getString("Todaycheckin_Flag"));
+                    editors.putString("ShiftDuty", jsonObject.getString("Todaycheckin_Flag"));
                     editors.commit();
 
                     linCheckin.setVisibility(View.VISIBLE);

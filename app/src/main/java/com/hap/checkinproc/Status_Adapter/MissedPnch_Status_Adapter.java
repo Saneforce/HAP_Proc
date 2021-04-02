@@ -48,17 +48,7 @@ public class MissedPnch_Status_Adapter extends RecyclerView.Adapter<MissedPnch_S
         holder.POV.setText("" + missedPunchStatusModelList.get(position).getReason());
         holder.applieddate.setText("Applied : " + missedPunchStatusModelList.get(position).getSubmissionDate());
         holder.OStatus.setText(Onduty_Status_Model.getMPStatus());
-        if (Onduty_Status_Model.getMissedPunchFlag() == 0) {
-            holder.OStatus.setBackgroundResource(R.drawable.button_yellows);
-            holder.OStatus.setPadding(20,5,20,0);
-            if (AMod.equals("1")) {
-                holder.sf_namelayout.setVisibility(View.VISIBLE);
-                holder.SfName.setText(Onduty_Status_Model.getSFNm());
-                holder.SfName.setTextColor(Color.parseColor("#ff9819"));
-            } else {
-                holder.sf_namelayout.setVisibility(View.GONE);
-            }
-        } else if (Onduty_Status_Model.getMissedPunchFlag() == 2) {
+        if (Onduty_Status_Model.getMissedPunchFlag() == 2) {
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);
                 holder.SfName.setText(Onduty_Status_Model.getSFNm());
@@ -68,8 +58,8 @@ public class MissedPnch_Status_Adapter extends RecyclerView.Adapter<MissedPnch_S
             }
             holder.Papproved.setText("Approved : " + missedPunchStatusModelList.get(position).getRejectdate());
             holder.OStatus.setBackgroundResource(R.drawable.button_green);
-            holder.OStatus.setPadding(20,5,20,0);
-        } else {
+            holder.OStatus.setPadding(20, 5, 20, 0);
+        } else if (Onduty_Status_Model.getMissedPunchFlag() == 3) {
 
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);
@@ -80,7 +70,17 @@ public class MissedPnch_Status_Adapter extends RecyclerView.Adapter<MissedPnch_S
             }
             holder.Papproved.setText("Reject : " + missedPunchStatusModelList.get(position).getRejectdate());
             holder.OStatus.setBackgroundResource(R.drawable.button_red);
-            holder.OStatus.setPadding(20,5,20,0);
+            holder.OStatus.setPadding(20, 5, 20, 0);
+        } else {
+            holder.OStatus.setBackgroundResource(R.drawable.button_yellows);
+            holder.OStatus.setPadding(20, 5, 20, 0);
+            if (AMod.equals("1")) {
+                holder.sf_namelayout.setVisibility(View.VISIBLE);
+                holder.SfName.setText(Onduty_Status_Model.getSFNm());
+                holder.SfName.setTextColor(Color.parseColor("#ff9819"));
+            } else {
+                holder.sf_namelayout.setVisibility(View.GONE);
+            }
         }
 
     }

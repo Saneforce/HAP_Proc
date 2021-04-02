@@ -106,7 +106,6 @@
                         android:id="@+id/empId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Sajan"
                         android:layout_weight="1"
                         android:layout_marginLeft="@dimen/C8dp"
                         />
@@ -128,7 +127,6 @@
                         android:id="@+id/empName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Sajan"
                         android:layout_weight="1"
                         android:layout_marginLeft="@dimen/C8dp"
                     />
@@ -151,7 +149,6 @@
                         android:id="@+id/empHQ"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Sajan"
                         android:layout_weight="1"
                         android:layout_marginLeft="@dimen/C8dp"
                         />

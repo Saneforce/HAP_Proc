@@ -1,5 +1,4 @@
 package com.hap.checkinproc.SFA_Activity;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.location.Address;
@@ -39,8 +38,6 @@ import com.hap.checkinproc.R;
 
 import java.util.List;
 import java.util.Locale;
-
-
 public class New_Outlet_Map_creations extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener {
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -143,7 +140,7 @@ public class New_Outlet_Map_creations extends FragmentActivity implements OnMapR
 
             case R.id.ReachedOutlet:
                 Shared_Common_Pref.Outler_AddFlag = "1";
-                common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
                 break;
         }
     }
