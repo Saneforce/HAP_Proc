@@ -103,7 +103,8 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
     String Photo_Name = "", imageConvert = "", StartedKm = "", StartedImage = "", CLOSINGKM = "", EndedImage = "",
             CheckInfo = "CheckInDetail", UserInfo = "MyPrefs", MOT = "ModeOfTravel", Name = "Allowance",
             mypreference = "mypref", StrToCode = "", toPlace = "", TOKM = " ", cOUT = "", ImageStart = "",
-            strImg = "", strMod = "", strKm = "", Hq = "", EdtReasn = "", SF_code = "", div = "", State_Code = "";
+            strImg = "", strMod = "", strKm = "", Hq = "", EdtReasn = "", SF_code = "", div = "", State_Code = "",
+            visbleMOde = "", MissedDate = "";
     LinearLayout linToPlace, linMode;
     Common_Model mCommon_model_spinner;
     Integer count = 0;
@@ -235,7 +236,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             public void onClick(View v) {
 
                 if (!misseddateselect.getText().toString().matches("") && !reasonMP.getText().toString().matches("")) {
-                    if (count == 1) {
+                    if (visbleMOde.equalsIgnoreCase("1")) {
                         if (EndedEditText.getText().toString().matches("")) {
                             Toast.makeText(Missed_Punch.this, "Choose End Km", Toast.LENGTH_SHORT).show();
                             return;
@@ -273,12 +274,24 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
         });
 
         BusToValue();
+        callApi();
 
-        cOUT = String.valueOf(getIntent().getSerializableExtra("Mode"));
-        if (!cOUT.equals("null") && !cOUT.equals("")) {
-            callApi();
+
+        if (sharedpreferences.contains("misseddateselect")) {
+            misseddateselect.setText(sharedpreferences.getString("misseddateselect", ""));
         }
-        Log.v("Text_cOUT", cOUT);
+        if (sharedpreferences.contains("checkIn")) {
+            checkIn.setText(sharedpreferences.getString("checkIn", ""));
+        }
+        if (sharedpreferences.contains("checkOutTime")) {
+            checkOutTime.setText(sharedpreferences.getString("checkOutTime", ""));
+        }
+
+        if (sharedpreferences.contains("shiftType")) {
+            shiftType.setText(sharedpreferences.getString("shiftType", ""));
+        }
+
+
         if (sharedpreferences.contains("Share_to_id")) {
             StrToCode = sharedpreferences.getString("Share_to_id", "");
             Log.v("Text_To_ID", StrToCode);
@@ -331,6 +344,16 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
         if (sharedpreferences.contains("StartedKM")) {
             StartedKm = sharedpreferences.getString("StartedKM", "");
             Log.e("Privacypolicy", "STARTRD      " + StartedKm);
+        }
+
+        if (sharedpreferences.contains("flagCode")) {
+            visbleMOde = sharedpreferences.getString("flagCode", "");
+            if (visbleMOde.equalsIgnoreCase("1")) {
+                linMode.setVisibility(View.VISIBLE);
+            } else {
+                linMode.setVisibility(View.GONE);
+
+            }
         }
 
 
@@ -446,47 +469,21 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                     editor.putString("Share_Img", ImageStart);
                     editor.putString("Share_to_id", StrToCode);
                     editor.putString("Share_reason", reasonMP.getText().toString());
+                    editor.putString("misseddateselect", misseddateselect.getText().toString());
+                    editor.putString("checkIn", checkIn.getText().toString());
+                    editor.putString("checkOutTime", checkOutTime.getText().toString());
+                    editor.putString("shiftType", shiftType.getText().toString());
+                    editor.putString("flagCode", visbleMOde);
+
+
                     editor.commit();
                     Intent intent = new Intent(Missed_Punch.this, AllowancCapture.class);
-                    intent.putExtra("allowance", "Two");
+                    intent.putExtra("allowance", "Missed");
                     startActivity(intent);
                 }
             }
         });
 
-
-/*        submitAllowance.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                if (EndedEditText.getText().toString().matches("")) {
-                    Toast.makeText(Missed_Punch.this, "Choose End Km", Toast.LENGTH_SHORT).show();
-                    return;
-                } else if (EndedImage.matches("")) {
-                    Toast.makeText(Missed_Punch.this, "Choose End photo", Toast.LENGTH_SHORT).show();
-                    return;
-                } else {
-
-                    try {
-                        stKM = Integer.valueOf(TextStartedKm.getText().toString());
-                    } catch (NumberFormatException ex) { // handle your exception
-
-                    }
-                    endKm = Integer.valueOf(String.valueOf(EndedEditText.getText().toString()));
-
-                    Log.e("START_KM", String.valueOf(stKM));
-                    Log.e("End_KM", String.valueOf(endKm));
-                    if (stKM < endKm) {
-                       // submitData();
-                    } else {
-                        Toast.makeText(Missed_Punch.this, "Should be greater then Started Km", Toast.LENGTH_SHORT).show();
-
-                    }
-                }
-
-            }
-        });*/
 
         linToPlace.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -563,6 +560,27 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             Log.e("STRTOCOD", StrToCode);
 
         } else if (type == 1) {
+
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.remove("Closing");
+            editor.remove("Share_to");
+            editor.remove("Share_Mot");
+            editor.remove("Share_km");
+            editor.remove("Share_Img");
+            editor.remove("Share_to_id");
+            editor.remove("Share_reason");
+            editor.remove("misseddateselect");
+            editor.remove("checkIn");
+            editor.remove("checkOutTime");
+            editor.remove("shiftType");
+            editor.remove("flagCode");
+            editor.commit();
+
+
+            EndedEditText.setText("");
+            EndedKmImage.setImageResource(0);
+            PersonalKmEdit.setText("");
+
             missedDates = myDataset.get(position).getId();
             missedShift = myDataset.get(position).getName();
             missedCHeckin = myDataset.get(position).getFlag();
@@ -572,13 +590,15 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             checkOutTime.setText(myDataset.get(position).getAddress());
             missedCheckOut = myDataset.get(position).getAddress();
             count = myDataset.get(position).getPho();
+            visbleMOde = myDataset.get(position).getCont();
 
-
-            if (count == 1) {
+            if (visbleMOde.equalsIgnoreCase("1")) {
                 linMode.setVisibility(View.VISIBLE);
+
             } else {
                 linMode.setVisibility(View.GONE);
             }
+
         }
     }
 
@@ -591,13 +611,17 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             for (int i = 0; i < jsonArray.length(); i++) {
 
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                String date = jsonObject1.optString("name");
+                MissedDate = jsonObject1.optString("name");
                 String shift = jsonObject1.optString("name1");
                 String Checkin_Time = jsonObject1.optString("Checkin_Time");
                 String COutTime = jsonObject1.optString("COutTime");
                 String ModeCount = jsonObject1.optString("mode_count");
 
-                Model_Pojo = new Common_Model(shift, date, Checkin_Time, COutTime, ModeCount);
+               String visbleMOde = jsonObject1.optString("Aflag");
+
+
+                Log.v("visbleMOdevisbleMOde", visbleMOde);
+                Model_Pojo = new Common_Model(shift, MissedDate, Checkin_Time, COutTime, ModeCount,visbleMOde);
                 missed_punch.add(Model_Pojo);
 
             }
@@ -620,29 +644,31 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             jsonleaveType.put("checkouttime", missedCheckOut);
             jsonleaveType.put("checkinTime", missedCHeckin);
             jsonleaveType.put("reason", reasonMP.getText().toString());
+            jsonleaveType.put("km", EndedEditText.getText().toString());
+            jsonleaveType.put("pkm", personalKM);
+            jsonleaveType.put("mod", "11");
+            jsonleaveType.put("sf", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+            jsonleaveType.put("div", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
+            jsonleaveType.put("url", Photo_Name);
+            jsonleaveType.put("from", "");
+            jsonleaveType.put("to", TextToPlace.getText().toString());
+            jsonleaveType.put("to_code", StrToCode);
+            jsonleaveType.put("fare", "");
+            jsonleaveType.put("aflag", visbleMOde);
             jsonleaveTypeS.put("MissedPunchEntry", jsonleaveType);
-            jsonleaveTypeS.put("km", EndedEditText.getText().toString());
-            jsonleaveTypeS.put("pkm", personalKM);
-            jsonleaveTypeS.put("mod", "11");
-            jsonleaveTypeS.put("sf", shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
-            jsonleaveTypeS.put("div", shared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
-            jsonleaveTypeS.put("url", Photo_Name);
-            jsonleaveTypeS.put("from", "");
-            jsonleaveTypeS.put("to", TextToPlace.getText().toString());
-            jsonleaveTypeS.put("to_code", StrToCode);
-            jsonleaveTypeS.put("fare", "");
-            jsonleaveTypeS.put("Activity_Date", Common_Class.GetDate());
             jsonArray1.put(jsonleaveTypeS);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
         String leaveCap1 = jsonArray1.toString();
-        System.out.println("Activity" + leaveCap1);
+        Log.v("Missed_Punch_Data", leaveCap1);
         Log.e("SF_Name", Shared_Common_Pref.Sf_Name);
         Log.e("SF_Name", Shared_Common_Pref.Div_Code);
         Log.e("SF_Name", Shared_Common_Pref.Sf_Code);
         Log.e("SF_Name", Shared_Common_Pref.StateCode);
+
+
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonObject> call = service.SubmitmissedPunch(Shared_Common_Pref.Sf_Name, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "MGR", leaveCap1);
         call.enqueue(new Callback<JsonObject>() {
@@ -794,9 +820,11 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             jj.put("sf", Shared_Common_Pref.Sf_Code);
             jj.put("rSF", Shared_Common_Pref.Sf_Code);
             jj.put("State_Code", Shared_Common_Pref.StateCode);
-            jj.put("Activity_Date", Common_Class.GetDate());
+            jj.put("Activity_Date", MissedDate);
             Log.v("json_obj_ta", jj.toString());
             Call<ResponseBody> Callto = apiInterface.getStartKmDetails(jj.toString());
+
+
             Callto.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

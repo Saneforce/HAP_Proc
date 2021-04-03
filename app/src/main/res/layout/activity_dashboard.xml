@@ -11,19 +11,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/approvalcount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignRight="@id/textView11"
-            android:background="@drawable/newcircle"
-            android:textColor="#FFFCFC"
-            android:textSize="10sp"
-            android:visibility="gone" />
+
+
 <RelativeLayout
     android:layout_marginTop="@dimen/C10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
+
         <ImageView
             android:id="@+id/imag"
             android:layout_width="wrap_content"
@@ -80,6 +75,8 @@
             android:layout_marginBottom="15dp"
             android:orientation="vertical">
 
+
+
             <Button
                 android:id="@+id/lin_myday_plan"
                 style="@style/ButtonStyle"
@@ -124,13 +121,35 @@
                     android:text="On-Duty "
                     app:layout_flexBasisPercent="47%" />
 
-                <Button
-                    android:id="@+id/lin_approvals"
-                    style="@style/ButtonStyle"
-                    android:background="@drawable/button_dgreen"
-                    android:text="Approvals"
-                    android:visibility="gone"
-                    app:layout_flexBasisPercent="47%" />
+
+                <RelativeLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_margin="@dimen/C4dp"
+                    android:layout_height="match_parent"
+                    app:layout_flexBasisPercent="47%">
+
+                    <Button
+                        android:id="@+id/lin_approvals"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@android:color/white"
+                        android:background="@drawable/button_dgreen"
+                        android:text="Approvals"
+                        android:visibility="gone" />
+                    <TextView
+                        android:id="@+id/approvalcount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignEnd="@id/lin_approvals"
+                        android:background="@drawable/newcircle"
+                        android:textColor="@android:color/white"
+                        android:gravity="center"
+                        android:layout_marginTop="-1dp"
+                        android:textSize="10sp" />
+
+                </RelativeLayout>
+
 
                 <Button
                     android:id="@+id/lin_ta_claim"

@@ -369,6 +369,12 @@ public interface ApiInterface {
                                @Query("To") String To,
                                @Part MultipartBody.Part file);
 
+
+    @Multipart
+    @POST("db_new_activity.php?axn=upload/checkinimage")
+    Call<ResponseBody> CheckImage(  @Query("sfCode") String sfcode,
+                               @Part MultipartBody.Part files);
+
     @POST("db_new_activity.php?axn=get/TA_Image")
     Call<JsonArray> allPreview(@Query("U_key") String keyCode,
                                @Query("HeadTravel") String HeadTravel,
