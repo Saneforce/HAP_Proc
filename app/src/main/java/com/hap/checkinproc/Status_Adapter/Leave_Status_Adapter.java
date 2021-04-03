@@ -94,7 +94,6 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
             public void onClick(View v) {
 
                 mLeaveCancelRea.onCancelReason(Leave_Status_ModelsList.get(position).getLeaveId());
-
                 Log.v("ONCLICK_REASON_LEAVE",Leave_Status_ModelsList.get(position).getLeaveId());
             }
         });

@@ -68,6 +68,7 @@ public class PayslipFtp extends AppCompatActivity {
             public void onClick(View v) {
                 Intent frmCanteen=new Intent(PayslipFtp.this,foodExp.class);
                 startActivity(frmCanteen);
+                finish();
             }
         });
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);

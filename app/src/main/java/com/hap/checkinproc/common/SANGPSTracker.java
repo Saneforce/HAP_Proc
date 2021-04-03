@@ -101,7 +101,7 @@ public class SANGPSTracker extends Service {
     /**
      * The desired interval for location updates. Inexact. Updates may be more or less frequent.
      */
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 30000*1;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 120000*1;
 
     /**
      * The fastest rate for active location updates. Updates will never be more frequent

@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.IntentSender;
 import android.location.Location;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -13,24 +15,29 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.hap.checkinproc.Interface.LocationEvents;
 
+import java.util.List;
+
 import static com.hap.checkinproc.SFA_Activity.HAPApp.activeActivity;
 
 public class LocationFinder {
 
     /*The desired interval for location updates. Inexact. Updates may be more or less frequent.*/
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 1000;
     static LocationEvents mlocEvents;
     /* The fastest rate for active location updates. Updates will never be more frequent than this value. */
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS =
@@ -50,7 +57,10 @@ public class LocationFinder {
     /* Provides access to the Fused Location Provider API. */
     private FusedLocationProviderClient mFusedLocationClient;
     private static final String TAG ="Location Finder";
-
+    Runnable runnable=null;
+    Handler handler=null;
+    int running=0;
+    int timeout=30;
     Context mContext;
     /* The current location. */
     private Location mLocation;
@@ -60,7 +70,7 @@ public class LocationFinder {
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         mlocEvents=locationEvents;
         createLocationRequest();
-        getLocation();
+        ShowLocationWarn();
     }
 
     /* Sets the location request parameters. */
@@ -76,25 +86,49 @@ public class LocationFinder {
     {
         location=null;
         try {
-            mFusedLocationClient.getLastLocation()
-                    .addOnCompleteListener(new OnCompleteListener<Location>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Location> task) {
-                            if (task.isSuccessful() && task.getResult() != null) {
-                                location = task.getResult();
-                                mlocEvents.OnLocationRecived(location);
-                            } else {
-                                ShowLocationWarn();
-                                Log.w(TAG, "Failed to get location.");
-                            }
+            mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
+            handler = new Handler(Looper.getMainLooper());
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    running++;
+                    Log.d("MapsActivity","calling Timeout "+running);
+                    if(running>timeout){
+                        Log.d("MapsActivity","Timeout Event Fired");
+                        mlocEvents.OnLocationRecived(null);
+                        if(mFusedLocationClient!=null)
+                        {
+                            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+                            mFusedLocationClient=null;
                         }
-                    });
+                        handler.removeCallbacks(runnable);
+                        return;
+                    }
+                    handler.postDelayed(this, 1000); // Optional, to repeat the task.
+                }
+            };
+            handler.postDelayed(runnable, 1000);
         } catch (SecurityException unlikely) {
             Log.e(TAG, "Lost location permission." + unlikely);
         }
         return location;
     }
+    LocationCallback mLocationCallback = new LocationCallback() {
+        @Override
+        public void onLocationResult(LocationResult locationResult) {
+        List<Location> locationList = locationResult.getLocations();
+        if (locationList.size() > 0) {
+            //The last location in the list is the newest
 
+            Location location = locationList.get(locationList.size() - 1);
+            if(running<timeout) mlocEvents.OnLocationRecived(location);
+            Log.i("MapsActivity", "Location: " + location.getLatitude() + " " + location.getLongitude());
+            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+            mFusedLocationClient=null;
+            handler.removeCallbacks(runnable);
+        }
+        }
+    };
     public void ShowLocationWarn(){
         LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
                 .addLocationRequest(mLocationRequest);
@@ -104,7 +138,7 @@ public class LocationFinder {
                 .addOnSuccessListener((Activity) activeActivity, new OnSuccessListener<LocationSettingsResponse>() {
                     @Override
                     public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                        Log.v("LOACTION_SUCCESS","ONSUCCESS");
+                        //Log.v("LOACTION_SUCCESS","ONSUCCESS");
                         getLocation();
                     }
                 })
@@ -141,7 +175,7 @@ public class LocationFinder {
                             case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
                                 String errorMessage = "Location settings are inadequate, and cannot be " +
                                         "fixed here. Fix in Settings.";
-                                Log.e(TAG, errorMessage);
+                                //Log.e(TAG, errorMessage);
                                 Toast.makeText(mContext, errorMessage, Toast.LENGTH_LONG).show();
                         }
                     }

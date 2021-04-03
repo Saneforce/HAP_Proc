@@ -5,9 +5,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,7 +35,7 @@ public class foodExp extends AppCompatActivity {
     SharedPreferences UserDetails;
     RecyclerView mRecyclerView;
     TextView txtempid,txtempName,txtHQ,txtTot;
-
+    ImageView btMyQR,btHome;
     adFoodexp lsExp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,10 @@ public class foodExp extends AppCompatActivity {
         txtHQ=findViewById(R.id.empHQ);
         txtTot=findViewById(R.id.TotAmt);
 
+        btMyQR=findViewById(R.id.myQR);
+        btHome=findViewById(R.id.toolbar_home);
+
+
         txtempid.setText(UserDetails.getString("EmpId",""));
         txtempName.setText(UserDetails.getString("SfName",""));
         txtHQ.setText(UserDetails.getString("SFHQ",""));
@@ -52,6 +59,15 @@ public class foodExp extends AppCompatActivity {
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
+
+        btMyQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(foodExp.this,CateenToken.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/foodexp",

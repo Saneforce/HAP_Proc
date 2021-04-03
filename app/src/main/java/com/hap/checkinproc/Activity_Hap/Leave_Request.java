@@ -471,7 +471,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (mHalfCheck.isChecked()) {
-                            etext3.setText("" + 0.5);
+                            etext3.setText(String.valueOf(0.5));
                             halfChecked = "1";
                             mShitTiming.setVisibility(View.VISIBLE);
                             mHalfDayType.setVisibility(View.VISIBLE);
@@ -481,7 +481,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
                         } else {
                             halfChecked = "0";
-                            etext3.setText("" + (daysBetween + 1));
+                            etext3.setText(String.valueOf(daysBetween + 1));
                             mShitTiming.setVisibility(View.GONE);
                             mHalfDayType.setVisibility(View.GONE);
                             oneTwo = false;
@@ -567,11 +567,15 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         JSONArray jsonArray1 = new JSONArray();
         try {
 
+            halfChecked = "0";
+            if (mHalfCheck.isChecked()) {
+                halfChecked = "1";
+            }
             jsonleaveType.put("Leave_Type", leavetype_id);
             jsonleaveType.put("From_Date", fromData);
             jsonleaveType.put("To_Date", toData);
-            jsonleaveType.put("Shift", "0");
-            jsonleaveType.put("PChk", 0);
+            jsonleaveType.put("Shift", shiftTypeVal);
+            jsonleaveType.put("PChk", halfChecked);
             //  jsonleaveArrayType.put(jsonleaveType);
             jsonleaveTypeS.put("LeaveFormValidate", jsonleaveType);
             jsonArray1.put(jsonleaveTypeS);
@@ -593,11 +597,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
                 JsonObject jsonObjecta = response.body();
-
-                Log.e("SDFDFD", String.valueOf(jsonObjecta));
                 String Msg = jsonObjecta.get("Msg").getAsString();
-                Log.e("SDFDFDDFF", String.valueOf(Msg.length()));
-
 
                 if (Msg.equalsIgnoreCase("")) {
                     LeaveSubmitTwo();
@@ -627,7 +627,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     public void LeaveSubmitTwo() {
         getReason = "'" + reasonForLeave.getText().toString() + "'";
 
-        String dateDiff = "" + daysDifferce + "";
+        String dateDiff =etext3.getText().toString();
 
 
         if (halfTypeVal == "First Half") {

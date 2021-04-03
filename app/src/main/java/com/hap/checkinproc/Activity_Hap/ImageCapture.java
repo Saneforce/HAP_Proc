@@ -410,7 +410,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         mProgress = new ProgressDialog(this);
         String titleId = "Submiting";
         mProgress.setTitle(titleId);
-        mProgress.setMessage("Please Wait...");
+        mProgress.setMessage("Preparing Please Wait...");
         mProgress.show();
 
         Log.e("Image_Capture", Uri.fromFile(file).toString());
@@ -420,6 +420,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             public void OnLocationRecived(Location location) {
                 Common_Class.location = location;
 
+                mProgress.setMessage("Submiting Please Wait...");
                 vwPreview.setVisibility(View.GONE);
                 // imgPreview.setImageURI(Uri.fromFile(file));
                 button.setVisibility(View.GONE);

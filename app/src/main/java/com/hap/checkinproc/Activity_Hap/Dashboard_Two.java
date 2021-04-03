@@ -67,7 +67,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     Button viewButton;
     Button StActivity, cardview3, cardview4, cardView5, btnCheckout, btnApprovals;
     String AllowancePrefernce = "";
-
+    ImageView btMyQR;
     public static final String mypreference = "mypref";
     public static final String Name = "Allowance";
     public static final String MOT = "ModeOfTravel";
@@ -115,6 +115,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         datefrmt = com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly();
         Log.v("DATE_FORMAT_ONLY", datefrmt);
 
+        btMyQR=findViewById(R.id.myQR);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -139,6 +140,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             }
         });
 
+        btMyQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(Dashboard_Two.this,CateenToken.class);
+                startActivity(intent);
+            }
+        });
         Calendar c = Calendar.getInstance();
         SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");
         String plantime = dpln.format(c.getTime());

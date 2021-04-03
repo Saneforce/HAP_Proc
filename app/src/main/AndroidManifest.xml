@@ -36,9 +36,9 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
-
-        <activity android:name=".Common_Class.ToolBarMethod"></activity>
-        <activity android:name=".Activity_Hap.foodExp"></activity>
+        <activity android:name=".Activity_Hap.CateenToken"></activity>
+        <activity android:name=".Common_Class.ToolBarMethod" />
+        <activity android:name=".Activity_Hap.foodExp" />
         <activity android:name=".Activity_Hap.PayslipFtp" />
         <activity android:name=".Activity_Hap.Leave_Cancel_Approval" />
         <activity android:name=".Activity_Hap.Leave_Cancel_Approval_Reject" />
@@ -48,7 +48,6 @@
         <activity android:name=".Activity_Hap.Holiday_Approval_Reject" />
         <activity android:name=".Activity_Hap.DaExceptionEntry" />
         <activity android:name=".Activity.LodgingCliamActivity" />
-      >
         <activity
             android:name=".Activity.PDFActivity"
             android:theme="@style/AppTheme.Dialogs" />
@@ -88,10 +87,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activity_Hap.MapZoomIn"
-            android:theme="@style/AppTheme.Dialogs" />
-<!--        <activity-->
-<!--            android:name=".Activity_Hap.TravelAllowanceForm"-->
-<!--            android:theme="@style/AppTheme.Dialog" />-->
+            android:theme="@style/AppTheme.Dialogs" /> <!-- <activity -->
+        <!-- android:name=".Activity_Hap.TravelAllowanceForm" -->
+        <!-- android:theme="@style/AppTheme.Dialog" /> -->
         <activity
             android:name=".Activity_Hap.QRCodeScanner"
             android:screenOrientation="portrait" />
@@ -139,10 +137,9 @@
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
             android:name=".Activity_Hap.OrderDashBoard"
-            android:screenOrientation="portrait" />
-<!--        <activity-->
-<!--            android:name=".Activity.ApprovalViewActivity"-->
-<!--            android:screenOrientation="portrait" />-->
+            android:screenOrientation="portrait" /> <!-- <activity -->
+        <!-- android:name=".Activity.ApprovalViewActivity" -->
+        <!-- android:screenOrientation="portrait" /> -->
         <activity
             android:name=".Activity.TAClaimActivity"
             android:screenOrientation="portrait"

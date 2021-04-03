@@ -60,7 +60,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     Shared_Common_Pref shared_common_pref;
     String imageProfile = "", sSFType = "";
     String onDuty = "";
-    ImageView profilePic;
+    ImageView profilePic,btMyQR;
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
     public static final String visitPurpose = "vstPur";
@@ -127,6 +127,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         //profilePic.setImageURI(Uri.parse((UserDetails.getString("url", ""))));
 
+        btMyQR=findViewById(R.id.myQR);
         linMyday = findViewById(R.id.lin_myday_plan);
         linMyday.setVisibility(View.GONE);
         if (sSFType.equals("1")) linMyday.setVisibility(View.VISIBLE);
@@ -157,6 +158,14 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         } else {
             linApprovals.setVisibility(View.VISIBLE);
         }
+
+        btMyQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(Dashboard.this,CateenToken.class);
+                startActivity(intent);
+            }
+        });
         FlexboxLayout flexboxLayout = findViewById(R.id.flxlayut);
         View flxlastChild = null;
         int flg = 0;

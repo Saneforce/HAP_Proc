@@ -24,7 +24,8 @@
                 android:layout_marginTop="@dimen/C5dp"
                 android:layout_marginBottom="@dimen/C5dp"
                 android:layout_centerVertical="true"
-                android:background="@color/Extended" />
+                android:background="@color/Extended"
+                android:visibility="gone"/>
 <LinearLayout
     android:orientation="vertical"
     android:layout_width="match_parent"

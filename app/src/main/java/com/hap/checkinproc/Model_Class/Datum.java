@@ -60,9 +60,18 @@ public class Datum {
     @SerializedName("HOLocation")
     @Expose
     private String hOLocation;
-    @SerializedName("SFHQ")
+    @SerializedName("HQ_Name")
     @Expose
     private String sFHQ;
+    @SerializedName("HQID")
+    @Expose
+    private String sHQID;
+    @SerializedName("HQCode")
+    @Expose
+    private String sHQCode;
+    @SerializedName("THrsPerm")
+    @Expose
+    private int THrsPerm;
 
     public String getSfUserName() {
         return sfUserName;
@@ -176,10 +185,17 @@ public class Datum {
         this.sFDept = sFDept;
     }
 
-    public String getsFHQ() {
-        return sFHQ;
+    public String getHQID() { return sHQID; }
+    public void setHQID(String sFHQ) {
+        this.sHQID = sHQID;
     }
 
+    public String getHQCode() { return sHQCode; }
+    public void setHQCode(String sFHQ) {
+        this.sHQCode = sHQCode;
+    }
+
+    public String getsFHQ() { return sFHQ; }
     public void setsFHQ(String sFHQ) {
         this.sFHQ = sFHQ;
     }
@@ -206,6 +222,13 @@ public class Datum {
 
     public void setHOLocation(String hOLocation) {
         this.hOLocation = hOLocation;
+    }
+    public int getTHrsPerm() {
+        return THrsPerm;
+    }
+
+    public void setTHrsPerm(int mTHrsPerm) {
+        this.THrsPerm = mTHrsPerm;
     }
 
 
