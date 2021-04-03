@@ -135,6 +135,7 @@
 
                 ></ImageView>
                 <ImageView
+                    android:id="@+id/btnProfile"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_alignEnd="@id/imgProf"

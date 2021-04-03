@@ -1,17 +1,21 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
 import android.location.Location;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,6 +42,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.exifinterface.media.ExifInterface;
 
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
@@ -46,6 +51,7 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
+import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.TimerService;
@@ -54,6 +60,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -80,7 +88,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     private ProgressDialog mProgress;
     public static RelativeLayout vwPreview;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
-
+    static OnImagePickListener imagePickListener;
     Camera mCamera;
     int mCamId = 1;
     String[] flashModes = {"OFF", "Auto", "ON", "Torch"};
@@ -118,49 +126,51 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Bundle params = getIntent().getExtras();
         try {
             mMode = params.getString("Mode");
-            CheckInInf.put("Mode", mMode);
-            CheckInInf.put("Divcode", UserDetails.getString("Divcode", ""));
-            CheckInInf.put("sfCode", UserDetails.getString("Sfcode", ""));
-            WrkType = "0";
-            if (mMode.equals("onduty")) {
-                WrkType = "1";
-            }
-            Log.e("Checkin_Mode", mMode);
-            String SftId = params.getString("ShiftId");
-            if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty") || mMode.equalsIgnoreCase("holidayentry")) {
-                if (!(SftId.isEmpty() || SftId.equalsIgnoreCase(""))) {
-                    CheckInInf.put("Shift_Selected_Id", SftId);
-                    CheckInInf.put("Shift_Name", params.getString("ShiftName"));
-                    CheckInInf.put("ShiftStart", params.getString("ShiftStart"));
-                    CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
-                    CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
-                }
-                CheckInInf.put("App_Version", Common_Class.Version_Name);
-                CheckInInf.put("WrkType", WrkType);
-                CheckInInf.put("CheckDutyFlag", "0");
-                CheckInInf.put("On_Duty_Flag", WrkType);
-                CheckInInf.put("PlcID", onDutyPlcID);
-                CheckInInf.put("PlcNm", onDutyPlcNm);
-                CheckInInf.put("vstRmks", vstPurpose);
-            }
 
-            if (mMode.equalsIgnoreCase("extended")) {
-                if (!(SftId.isEmpty() || SftId.equalsIgnoreCase(""))) {
-                    DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                    Calendar calobjw = Calendar.getInstance();
-                    CheckInInf.put("Shift_Selected_Id", SftId);
-                    CheckInInf.put("Shift_Name", params.getString("ShiftName"));
-                    CheckInInf.put("ShiftStart", params.getString("ShiftStart"));
-                    CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
-                    CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
+            if(!mMode.equalsIgnoreCase("PF")) {
+                CheckInInf.put("Mode", mMode);
+                CheckInInf.put("Divcode", UserDetails.getString("Divcode", ""));
+                CheckInInf.put("sfCode", UserDetails.getString("Sfcode", ""));
+                WrkType = "0";
+                if (mMode.equals("onduty")) {
+                    WrkType = "1";
+                }
+                Log.e("Checkin_Mode", mMode);
+                String SftId = params.getString("ShiftId");
+                if (mMode.equalsIgnoreCase("CIN") || mMode.equalsIgnoreCase("onduty") || mMode.equalsIgnoreCase("holidayentry")) {
+                    if (!(SftId.isEmpty() || SftId.equalsIgnoreCase(""))) {
+                        CheckInInf.put("Shift_Selected_Id", SftId);
+                        CheckInInf.put("Shift_Name", params.getString("ShiftName"));
+                        CheckInInf.put("ShiftStart", params.getString("ShiftStart"));
+                        CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
+                        CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
+                    }
                     CheckInInf.put("App_Version", Common_Class.Version_Name);
-                    CheckInInf.put("Ekey", "EK" + UserDetails.getString("Sfcode", "") + dfw.format(calobjw.getTime()).hashCode());
-                    CheckInInf.put("update", "0");
-                    CheckInInf.put("WrkType", "0");
+                    CheckInInf.put("WrkType", WrkType);
                     CheckInInf.put("CheckDutyFlag", "0");
+                    CheckInInf.put("On_Duty_Flag", WrkType);
+                    CheckInInf.put("PlcID", onDutyPlcID);
+                    CheckInInf.put("PlcNm", onDutyPlcNm);
+                    CheckInInf.put("vstRmks", vstPurpose);
+                }
+
+                if (mMode.equalsIgnoreCase("extended")) {
+                    if (!(SftId.isEmpty() || SftId.equalsIgnoreCase(""))) {
+                        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Calendar calobjw = Calendar.getInstance();
+                        CheckInInf.put("Shift_Selected_Id", SftId);
+                        CheckInInf.put("Shift_Name", params.getString("ShiftName"));
+                        CheckInInf.put("ShiftStart", params.getString("ShiftStart"));
+                        CheckInInf.put("ShiftEnd", params.getString("ShiftEnd"));
+                        CheckInInf.put("ShiftCutOff", params.getString("ShiftCutOff"));
+                        CheckInInf.put("App_Version", Common_Class.Version_Name);
+                        CheckInInf.put("Ekey", "EK" + UserDetails.getString("Sfcode", "") + dfw.format(calobjw.getTime()).hashCode());
+                        CheckInInf.put("update", "0");
+                        CheckInInf.put("WrkType", "0");
+                        CheckInInf.put("CheckDutyFlag", "0");
+                    }
                 }
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -194,7 +204,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
         //perform listView item click event
 
-        if (mCamId == 1) {
+        if (mCamId == 0) {
             lstFlashMode.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -257,7 +267,10 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                 } else {
                     Log.v("PERMISSION", "PERMISSION");
+
+                    mCamId=(mCamId == 1) ? 0 : 1;
                     StartSelfiCamera();
+
                 }
 
 
@@ -297,7 +310,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         preview = (SurfaceView) findViewById(R.id.PREVIEW);
         mHolder = preview.getHolder();
         mHolder.addCallback(this);
-        setDefaultCameraId((mCamId == 0) ? "front" : "back");
+        setDefaultCameraId((mCamId == 1) ? "front" : "back");
         mCamera = Camera.open(mCamId);
 
         try {
@@ -312,7 +325,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Log.e("mCAmer_id", String.valueOf(mCamId));
 
     }
-
+    public static void setOnImagePickListener(OnImagePickListener mImagePickListener){
+        imagePickListener=mImagePickListener;
+    }
 
     public void takePicture() {
         long tsLong = System.currentTimeMillis() / 1000;
@@ -325,8 +340,47 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     new Camera.PictureCallback() {
                         @Override
                         public void onPictureTaken(byte[] bytes, Camera camera) {
+                            Bitmap bm=null;
                             try {
-                                save(bytes);
+                                if (bytes != null) {
+                                    int screenWidth = getResources().getDisplayMetrics().widthPixels;
+                                    int screenHeight = getResources().getDisplayMetrics().heightPixels;
+                                    bm = BitmapFactory.decodeByteArray(bytes, 0, (bytes != null) ? bytes.length : 0);
+
+                                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                                        // Notice that width and height are reversed
+                                        Bitmap scaled = Bitmap.createScaledBitmap(bm, screenHeight, screenWidth, true);
+                                        int w = scaled.getWidth();
+                                        int h = scaled.getHeight();
+                                        w=bm.getWidth();
+                                        h=bm.getHeight();
+                                        // Setting post rotate to 90
+                                        Matrix mtx = new Matrix();
+
+                                        int CameraEyeValue = setPhotoOrientation(ImageCapture.this, mCamId); // CameraID = 1 : front 0:back
+                                        if(mCamId==1) { // As Front camera is Mirrored so Fliping the Orientation
+                                            if (CameraEyeValue == 270) {
+                                                mtx.postRotate(90);
+                                            } else if (CameraEyeValue == 90) {
+                                                mtx.postRotate(270);
+                                            }
+                                        }else{
+                                            mtx.postRotate(CameraEyeValue); // CameraEyeValue is default to Display Rotation
+                                        }
+                                        bm=applyMatrix(bm,mtx);
+                                       // bm = Bitmap.createBitmap(bm, 0, 0, w, h, mtx, true);
+                                    }else{// LANDSCAPE MODE
+                                        //No need to reverse width and height
+                                        Bitmap scaled = Bitmap.createScaledBitmap(bm, screenWidth, screenHeight, true);
+                                        bm=scaled;
+                                    }
+                                }
+
+                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                                bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                                byte[] byteArray = stream.toByteArray();
+
+                                save(byteArray);
                                 ShowImgPreview();
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -338,7 +392,46 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         }
         super.onResume();
     }
+    public int setPhotoOrientation(Activity activity, int cameraId) {
+        android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
+        android.hardware.Camera.getCameraInfo(cameraId, info);
+        int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
+        int degrees = 0;
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                degrees = 0;
+                break;
+            case Surface.ROTATION_90:
+                degrees = 90;
+                break;
+            case Surface.ROTATION_180:
+                degrees = 180;
+                break;
+            case Surface.ROTATION_270:
+                degrees = 270;
+                break;
+        }
 
+        int result;
+        // do something for phones running an SDK before lollipop
+        if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
+            result = (info.orientation + degrees) % 360;
+            result = (360 - result) % 360; // compensate the mirror
+        } else { // back-facing
+            result = (info.orientation - degrees + 360) % 360;
+        }
+
+        return result;
+    }
+    public static Bitmap applyMatrix(Bitmap source, Matrix matrix) {
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
+    }
+    private static int exifToDegrees(int exifOrientation) {
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
+        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+        return 0;
+    }
     private void ShowImgPreview() {
         RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
@@ -382,7 +475,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         mHolder.addCallback(ImageCapture.this);
 
         Log.v("mCamId_VALUE", String.valueOf(mCamId));
-        setDefaultCameraId((mCamId == 0) ? "front" : "back");
+        setDefaultCameraId((mCamId == 1) ? "front" : "back");
         mCamera = Camera.open(mCamId);
         try {
             mCamera.setPreviewDisplay(mHolder);
@@ -407,26 +500,31 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         imgPreview.setImageBitmap(bitmap);
 
-        mProgress = new ProgressDialog(this);
-        String titleId = "Submiting";
-        mProgress.setTitle(titleId);
-        mProgress.setMessage("Preparing Please Wait...");
-        mProgress.show();
 
         Log.e("Image_Capture", Uri.fromFile(file).toString());
         Log.e("Image_Capture", "IAMGE     " + bitmap);
-        new LocationFinder(this, new LocationEvents() {
-            @Override
-            public void OnLocationRecived(Location location) {
-                Common_Class.location = location;
+        if(mMode.equalsIgnoreCase("PF")){
+            imagePickListener.OnImagePick(bitmap);
+            finish();
+        }else{
+            mProgress = new ProgressDialog(this);
+            String titleId = "Submiting";
+            mProgress.setTitle(titleId);
+            mProgress.setMessage("Preparing Please Wait...");
+            mProgress.show();
+            new LocationFinder(this, new LocationEvents() {
+                @Override
+                public void OnLocationRecived(Location location) {
+                    Common_Class.location = location;
 
-                mProgress.setMessage("Submiting Please Wait...");
-                vwPreview.setVisibility(View.GONE);
-                // imgPreview.setImageURI(Uri.fromFile(file));
-                button.setVisibility(View.GONE);
-                saveCheckIn();
-            }
-        });
+                    mProgress.setMessage("Submiting Please Wait...");
+                    vwPreview.setVisibility(View.GONE);
+                    // imgPreview.setImageURI(Uri.fromFile(file));
+                    button.setVisibility(View.GONE);
+                    saveCheckIn();
+                }
+            });
+        }
     }
 
     @Override
@@ -436,12 +534,15 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             new LocationFinder(this, new LocationEvents() {
                 @Override
                 public void OnLocationRecived(Location location) {
-                    Common_Class.location = location;
+                    try {
+                        Common_Class.location = location;
 
-                    ImageCapture.vwPreview.setVisibility(View.GONE);
-                    // imgPreview.setImageURI(Uri.fromFile(file));
-                    button.setVisibility(View.GONE);
-                    saveCheckIn();
+                        ImageCapture.vwPreview.setVisibility(View.GONE);
+                        // imgPreview.setImageURI(Uri.fromFile(file));
+                        button.setVisibility(View.GONE);
+                        saveCheckIn();
+                    }
+                    catch (Exception e){}
                 }
             });
         }
@@ -675,12 +776,13 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         noOfCameras = Camera.getNumberOfCameras();
         int facing = cam.equalsIgnoreCase("front") ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
         Log.v("CAMERA_FOCUS", String.valueOf(facing));
+        mCamId = facing;
 
         Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
         for (int i = 0; i < noOfCameras; i++) {
             Camera.getCameraInfo(i, cameraInfo);
             if (cameraInfo.facing == facing) {
-                /*mCamId = i;*/
+                //mCamId = i;
             }
         }
     }
@@ -689,8 +791,12 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(mCamId, info);
         int rotation = getWindowManager().getDefaultDisplay().getRotation();
+        Camera.Parameters parameters = mCamera.getParameters();
+        parameters.setRotation(-rotation);
+        mCamera.setParameters(parameters);
         mCamera.setDisplayOrientation(90);
         mCamera.startPreview();
+
         int degrees = 0;
         switch (rotation) {
             case Surface.ROTATION_0:
@@ -713,6 +819,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Camera.Parameters param;
         param = mCamera.getParameters();
 
+        int rotation = getWindowManager().getDefaultDisplay().getRotation();
+        param.setRotation(-rotation);
         // modify parameter
         /*        param.setPreviewSize(352, 288);*/
         mCamera.setParameters(param);
