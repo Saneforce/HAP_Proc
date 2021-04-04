@@ -17,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -42,6 +43,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.CameraPermission;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -61,7 +63,12 @@ import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 
+import id.zelory.compressor.Compressor;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -90,12 +97,12 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     private int noOfCameras;
 
     JSONObject CheckInInf;
-
+    Shared_Common_Pref mShared_common_pref;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     Common_Class DT = new Common_Class();
 
-    String mMode, WrkType, onDutyPlcID, onDutyPlcNm, vstPurpose;
+    String mMode, WrkType, onDutyPlcID, onDutyPlcNm, vstPurpose,UserInfo = "MyPrefs",imagvalue="";
     com.hap.checkinproc.Common_Class.Common_Class common_class;
 
     public static final String sCheckInDetail = "CheckInDetail";
@@ -109,12 +116,12 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_capture);
         startService(new Intent(this, TimerService.class));
-
+        mShared_common_pref = new Shared_Common_Pref(this);
         CheckInInf = new JSONObject();
         CheckInDetails = getSharedPreferences(sCheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(sUserDetail, Context.MODE_PRIVATE);
         common_class = new com.hap.checkinproc.Common_Class.Common_Class(this);
-
+        UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
         Bundle params = getIntent().getExtras();
         try {
             mMode = params.getString("Mode");
@@ -347,9 +354,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         button.setVisibility(View.GONE);
         BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
 
-        vwPreview.setBackground(drawableBitmap);
 
-        Log.v("CAMERA_FOCUS_Preview", String.valueOf(mCamId));
+        vwPreview.setBackground(drawableBitmap);
 
         if (mCamId == 1) {
             imgPreview.setRotation((float) -90.0);
@@ -414,7 +420,12 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         mProgress.show();
 
         Log.e("Image_Capture", Uri.fromFile(file).toString());
-        Log.e("Image_Capture", "IAMGE     " + bitmap);
+        Log.e("Image_Capture", String.valueOf(file));
+
+        getMulipart(String.valueOf(file));
+
+        Log.v("IMAGE_PREVIEW_FILE", String.valueOf(file));
+        Log.v("IMAGE_PREVIEW_FILE", String.valueOf(Uri.fromFile(file)));
         new LocationFinder(this, new LocationEvents() {
             @Override
             public void OnLocationRecived(Location location) {
@@ -447,6 +458,88 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         }
     }
 
+
+
+
+    public void getMulipart(String path) {
+        MultipartBody.Part imgg = convertimg("file", path);
+
+            Log.v("IMAGE_CAPTURE_DATA_1",imgg.toString());
+        Log.v("IMAGE_CAPTURE_DATA_2",mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+
+        CallApiImage(mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), imgg);
+    }
+
+
+    public MultipartBody.Part convertimg(String tag, String path) {
+        MultipartBody.Part yy = null;
+        Log.v("full_profile", path);
+        try {
+            if (!TextUtils.isEmpty(path)) {
+                File file;
+                file = new File(path);
+                if (path.contains(".png") || path.contains(".jpg") || path.contains(".jpeg"))
+                    file = new Compressor(getApplicationContext()).compressToFile(file);
+                else
+                    file = new File(path);
+                RequestBody requestBody = RequestBody.create(MultipartBody.FORM, file);
+                yy = MultipartBody.Part.createFormData(tag, file.getPath(), requestBody);
+            }
+        } catch (Exception e) {
+        }
+        Log.v("full_profile", yy + "");
+        return yy;
+    }
+
+    public void CallApiImage(String values, MultipartBody.Part imgg) {
+
+
+
+        Call<ResponseBody> Callto;
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Callto = apiInterface.CheckImage(values, imgg);
+
+        Log.v("print_upload_file", Callto.request().toString());
+        Callto.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                Log.v("print_upload_file", "ggg" + response.isSuccessful() + response.body());
+                //uploading.setText("Uploading "+String.valueOf(count)+"/"+String.valueOf(count_check));
+
+                try {
+                    if (response.isSuccessful()) {
+
+                        Log.v("print_upload_file_true", "ggg" + response);
+                        JSONObject jb = null;
+                        String jsonData = null;
+                        jsonData = response.body().string();
+                        Log.v("request_data_upload", String.valueOf(jsonData));
+                        JSONObject js = new JSONObject(jsonData);
+                        if (js.getString("success").equalsIgnoreCase("true")) {
+                            imagvalue = js.getString("url");
+                            Log.v("printing_dynamic_cou", js.getString("url"));
+                        }
+
+                    }
+
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Log.v("print_failure", "ggg" + t.getMessage());
+            }
+        });
+    }
+
+
+
+
+
+
+
+
     private void saveCheckIn() {
 
         try {
@@ -469,8 +562,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             CheckInInf.put("Lattitude", lat);
             CheckInInf.put("Langitude", lng);
 
-            CheckInInf.put("iimgSrc", imagePath);
-            CheckInInf.put("slfy", imageFileName);
+            CheckInInf.put("iimgSrc", imagvalue);
+            CheckInInf.put("slfy", imagvalue);
             CheckInInf.put("Rmks", "");
 
             Log.e("Image_Capture", imagePath);
@@ -496,12 +589,12 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
 
-                        if (response.isSuccessful() ) {
+                        if (response.isSuccessful()) {
 
                             JsonObject itm = response.body().getAsJsonObject();
-
+                            Log.e("RESPONSE_FROM_SERVER", String.valueOf(response.body().getAsJsonObject()));
                             mProgress.dismiss();
-                            if(itm.get("success").getAsString().equalsIgnoreCase("true")) {
+                            if (itm.get("success").getAsString().equalsIgnoreCase("true")) {
                                 SharedPreferences.Editor editor = CheckInDetails.edit();
                                 try {
                                     if (mMode.equalsIgnoreCase("CIN")) {
@@ -536,7 +629,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                                 @Override
                                 public void PositiveMethod(DialogInterface dialog, int id) {
 
-                                    if(itm.get("success").getAsString().equalsIgnoreCase("true")) {
+                                    if (itm.get("success").getAsString().equalsIgnoreCase("true")) {
                                         Intent Dashboard = new Intent(ImageCapture.this, Dashboard_Two.class);
                                         Dashboard.putExtra("Mode", "CIN");
                                         ImageCapture.this.startActivity(Dashboard);

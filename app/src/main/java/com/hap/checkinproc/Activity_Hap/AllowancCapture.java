@@ -214,6 +214,11 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             editor.putString("SharedImages", Uri.fromFile(file).toString());
             editor.commit();
             startActivity(new Intent(AllowancCapture.this, AllowanceActivityTwo.class));
+        }else if(allowance.equalsIgnoreCase("Missed")){
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString("SharedImages", Uri.fromFile(file).toString());
+            editor.commit();
+            startActivity(new Intent(AllowancCapture.this, Missed_Punch.class));
         }
 
     }

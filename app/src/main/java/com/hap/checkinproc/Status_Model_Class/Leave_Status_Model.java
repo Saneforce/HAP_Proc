@@ -45,7 +45,7 @@ public class Leave_Status_Model {
 
     @SerializedName("showflag")
     @Expose
-    private Integer showFlag;
+    private String showFlag;
 
     @SerializedName("Leave_Id")
     @Expose
@@ -164,11 +164,11 @@ public class Leave_Status_Model {
     }
 
 
-    public Integer getShowFlag() {
+    public String getShowFlag() {
         return showFlag;
     }
 
-    public void setShowFlag(Integer showFlag) {
+    public void setShowFlag(String showFlag) {
         this.showFlag = showFlag;
     }
 }
