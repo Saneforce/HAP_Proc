@@ -55,6 +55,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.TimerService;
 
@@ -211,7 +212,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
         //perform listView item click event
 
-        if (mCamId == 0) {
+      //  if (mCamId == 0) {
             lstFlashMode.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -252,7 +253,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 }
             });
 
-        }
+  //      }
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -507,16 +508,22 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Bitmap bitmap = BitmapFactory.decodeFile(filePath);
         imgPreview.setImageBitmap(bitmap);
 
+        Intent mIntent = new Intent(this, FileUploadService.class);
+        mIntent.putExtra("mFilePath", String.valueOf(file));
+        mIntent.putExtra("SF", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+        mIntent.putExtra("FileName", imageFileName);
+        mIntent.putExtra("Mode", (mMode.equalsIgnoreCase("PF")?"PROF":"ATTN"));
+        FileUploadService.enqueueWork(this, mIntent);
+//        getMulipart(String.valueOf(file));
 
         Log.e("Image_Capture", Uri.fromFile(file).toString());
         Log.e("Image_Capture", "IAMGE     " + bitmap);
         if(mMode.equalsIgnoreCase("PF")){
-            imagePickListener.OnImagePick(bitmap);
+            imagePickListener.OnImagePick(bitmap,mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code)+"_"+imageFileName);
             finish();
         }else{
             mProgress = new ProgressDialog(this);
             String titleId = "Submiting";
-            getMulipart(String.valueOf(file));
             mProgress.setTitle(titleId);
             mProgress.setMessage("Preparing Please Wait...");
             mProgress.show();
@@ -556,19 +563,10 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         }
     }
 
-
-
-
     public void getMulipart(String path) {
         MultipartBody.Part imgg = convertimg("file", path);
-
-            Log.v("IMAGE_CAPTURE_DATA_1",imgg.toString());
-        Log.v("IMAGE_CAPTURE_DATA_2",mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
-
         CallApiImage(mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), imgg);
     }
-
-
     public MultipartBody.Part convertimg(String tag, String path) {
         MultipartBody.Part yy = null;
         Log.v("full_profile", path);
@@ -590,9 +588,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     public void CallApiImage(String values, MultipartBody.Part imgg) {
-
-
-
         Call<ResponseBody> Callto;
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Callto = apiInterface.CheckImage(values, imgg);
@@ -606,7 +601,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
                 try {
                     if (response.isSuccessful()) {
-
                         Log.v("print_upload_file_true", "ggg" + response);
                         JSONObject jb = null;
                         String jsonData = null;
@@ -617,7 +611,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                             imagvalue = js.getString("url");
                             Log.v("printing_dynamic_cou", js.getString("url"));
                         }
-
                     }
 
                 } catch (Exception e) {
@@ -630,11 +623,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             }
         });
     }
-
-
-
-
-
 
 
 
@@ -660,11 +648,12 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             CheckInInf.put("Lattitude", lat);
             CheckInInf.put("Langitude", lng);
 
-            CheckInInf.put("iimgSrc", imagvalue);
-            CheckInInf.put("slfy", imagvalue);
-
-            //CheckInInf.put("iimgSrc", imagePath);
-            //CheckInInf.put("slfy", imageFileName);
+            if (mMode.equalsIgnoreCase("holidayentry"))
+                CheckInInf.put("On_Duty_Flag", "1");
+            else
+                CheckInInf.put("On_Duty_Flag", "0");
+            CheckInInf.put("iimgSrc", imagePath);
+            CheckInInf.put("slfy", imageFileName);
             CheckInInf.put("Rmks", "");
 
             Log.e("Image_Capture", imagePath);
@@ -713,6 +702,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                                         editor.putString("On_Duty_Flag", "1");
                                     else
                                         editor.putString("On_Duty_Flag", "0");
+
+
                                     editor.putBoolean("CheckIn", true);
                                     editor.apply();
 

@@ -16,6 +16,7 @@ import java.util.Map;
 
 import javax.xml.transform.Result;
 
+import io.reactivex.Single;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -374,6 +375,11 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=upload/checkinimage")
     Call<ResponseBody> CheckImage(  @Query("sfCode") String sfcode,
                                @Part MultipartBody.Part files);
+
+    @Multipart
+    @POST("db_new_activity.php?axn=upload/checkinimage")
+    Single<ResponseBody> onFileUpload(@Query("sfCode") String sfcode,@Query("FileName") String FileName,@Query("Mode") String Mode,
+                                      @Part MultipartBody.Part file);
 
     @POST("db_new_activity.php?axn=get/TA_Image")
     Call<JsonArray> allPreview(@Query("U_key") String keyCode,

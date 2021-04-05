@@ -262,47 +262,59 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
             case R.id.lin_travel_allow:
                 startActivity(new Intent(Approvals.this, TAApprovalActivity.class));
+                finish();
                 break;
 
             case R.id.lin_tour_plan:
                 startActivity(new Intent(Approvals.this, Tp_Approval.class));
+                finish();
                 break;
 
             case R.id.lin_leav_sta:
                 common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "1");
+                finish();
                 break;
 
             case R.id.lin_per_sta:
                 common_class.CommonIntentwithoutFinishputextra(Permission_Status_Activity.class, "AMod", "1");
+                finish();
                 break;
 
             case R.id.lin_duty_sta:
                 common_class.CommonIntentwithoutFinishputextra(Onduty_Status_Activity.class, "AMod", "1");
+                finish();
                 break;
 
             case R.id.lin_miss_sta:
                 common_class.CommonIntentwithoutFinishputextra(MissedPunch_Status_Activity.class, "AMod", "1");
+                finish();
                 break;
 
             case R.id.lin_ext_shift:
                 common_class.CommonIntentwithoutFinishputextra(Extended_Shift_Activity.class, "AMod", "1");
+                finish();
                 break;
 
             case R.id.lin_weekoff:
                 common_class.CommonIntentwithoutFinishputextra(WeekOff_Status_Activity.class, "AMod", "1");
+                finish();
                 break;
 
             case R.id.lin_leavecancel_histry:
                 common_class.CommonIntentwithoutFinishputextra(LeaveCancelRequestStatus.class, "AMod", "1");
+                finish();
                 break;
             case R.id.lin_leaveholidaystatus:
                 common_class.CommonIntentwithoutFinishputextra(HolidayEntryStatus.class, "AMod", "1");
+                finish();
                 break;
             case R.id.lin_holidayentryApproval:
                 startActivity(new Intent(Approvals.this, Holiday_Entry_Approval.class));
+                finish();
                 break;
             case R.id.lin_DeviationApproval:
                 startActivity(new Intent(Approvals.this, Deviation_Entry_Approval.class));
+                finish();
                 break;
 
         }

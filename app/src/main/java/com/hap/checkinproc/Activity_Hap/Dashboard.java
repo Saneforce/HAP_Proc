@@ -316,13 +316,80 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
                 break;
             case R.id.lin_extenden_shift:
-                  Get_MydayPlan(2, "ValidateExtended");
+                validateExtened( "ValidateExtended");
                 break;
             default:
                 break;
         }
 
     }
+    private void validateExtened( String Name) {
+        Map<String, String> QueryString = new HashMap<>();
+        QueryString.put("axn", Name);
+        QueryString.put("Sf_code", Shared_Common_Pref.Sf_Code);
+        QueryString.put("Date", common_class.GetDate());
+        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+        QueryString.put("desig", "MGR");
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        JSONObject sp = new JSONObject();
+        jsonArray.put(jsonObject);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, jsonArray.toString());
+        mCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                // locationList=response.body();
+                try {
+                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    // Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
+
+                    String success = jsonObject.getString("success");
+                    String Msg = jsonObject.getString("msg");
+                    if (!Msg.equals("")) {
+                        AlertDialogBox.showDialog(Dashboard.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
+                            @Override
+                            public void PositiveMethod(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void NegativeMethod(DialogInterface dialog, int id) {
+
+                            }
+                        });
+                    } else {
+                        AlertDialogBox.showDialog(Dashboard.this, "HAP Check-In", Msg, "YES", "NO", false, new AlertBox() {
+                            @Override
+                            public void PositiveMethod(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                common_class.CommonIntentwithoutFinishputextra(Checkin.class, "Mode", "extended");
+                                /*Intent intent = new Intent(getApplicationContext(), Checkin.class);
+                                Bundle extras = new Bundle();
+                                extras.putString("Extended_Flag", "extended");
+                                startActivity(intent);*/
+                            }
+
+                            @Override
+                            public void NegativeMethod(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                        // Toast.makeText(Dashboard.this, "Send To Checkin", Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
 
     private void Get_MydayPlan(int flag, String Name) {
         Map<String, String> QueryString = new HashMap<>();

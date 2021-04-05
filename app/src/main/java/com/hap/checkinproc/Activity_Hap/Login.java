@@ -592,6 +592,8 @@ public class Login extends AppCompatActivity {
                         String SFHQCode = response.body().getData().get(0).getHQCode();
                         String SFHQLoc = response.body().getData().get(0).getHOLocation();
                         int THrsPerm = response.body().getData().get(0).getTHrsPerm();
+                        String mProfile = response.body().getData().get(0).getProfile();
+                        String mProfPath = response.body().getData().get(0).getProfPath();
 
 
                         Integer OTFlg = response.body().getData().get(0).getOTFlg();
@@ -637,6 +639,9 @@ public class Login extends AppCompatActivity {
                         editor.putString("State_Code", Sf_type);
                         editor.putString("email", eMail);
                         editor.putString("url", String.valueOf(profile));
+                        editor.putString("Profile", String.valueOf(mProfile));
+                        editor.putString("ProfPath", String.valueOf(mProfPath));
+
                         editor.apply();
                         if (requestCode == RC_SIGN_IN || requestCode == 0)
                             editor.putBoolean("Login", true);
