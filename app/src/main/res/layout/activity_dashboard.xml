@@ -12,7 +12,6 @@
         android:orientation="vertical">
 
 
-
 <RelativeLayout
     android:layout_marginTop="@dimen/C10dp"
     android:layout_width="match_parent"
@@ -126,6 +125,8 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_margin="@dimen/C4dp"
+                    android:id="@+id/rel_approval"
+                    android:visibility="gone"
                     android:layout_height="match_parent"
                     app:layout_flexBasisPercent="47%">
 
@@ -136,7 +137,7 @@
                         android:textColor="@android:color/white"
                         android:background="@drawable/button_dgreen"
                         android:text="Approvals"
-                        android:visibility="gone" />
+          />
                     <TextView
                         android:id="@+id/approvalcount"
                         android:layout_width="wrap_content"

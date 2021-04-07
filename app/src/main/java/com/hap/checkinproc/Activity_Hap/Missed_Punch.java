@@ -596,6 +596,8 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                 linMode.setVisibility(View.VISIBLE);
 
             } else {
+
+
                 linMode.setVisibility(View.GONE);
             }
 
