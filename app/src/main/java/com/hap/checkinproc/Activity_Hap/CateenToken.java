@@ -163,7 +163,7 @@ public class CateenToken extends AppCompatActivity {
         protected void onPostExecute(Bitmap result) {
             Log.i("Async-Example", "onPostExecute Called");
             try {
-                save(result);
+                if(result!=null) save(result);
             } catch (IOException e) {
                 e.printStackTrace();
             }

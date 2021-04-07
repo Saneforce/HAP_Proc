@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
+import android.hardware.Camera.Size;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
 import android.location.Location;
@@ -31,6 +32,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -73,6 +75,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 import id.zelory.compressor.Compressor;
 import okhttp3.MultipartBody;
@@ -83,6 +86,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Callback {
+    private static final String TAG = "ImageCapture";
     Button button;
     TextureView textureView;
     ImageView btnFlash;
@@ -92,7 +96,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     SeekBar skBarBright;
     String imagePath;
     String imageFileName;
-
     private ProgressDialog mProgress;
     public static RelativeLayout vwPreview;
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
@@ -307,7 +310,34 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         skBarBright = (SeekBar) findViewById(R.id.skBarBright);
 
     }
-
+    private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
+        final double ASPECT_TOLERANCE = 0.1;
+        double targetRatio = (double) w / h;
+        if (sizes == null) return null;
+        Size optimalSize = null;
+        double minDiff = Double.MAX_VALUE;
+        int targetHeight = h;
+        // Try to find an size match aspect ratio and size
+        for (Size size : sizes) {
+            double ratio = (double) size.width / size.height;
+            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
+            if (Math.abs(size.height - targetHeight) < minDiff) {
+                optimalSize = size;
+                minDiff = Math.abs(size.height - targetHeight);
+            }
+        }
+        // Cannot find the one match the aspect ratio, ignore the requirement
+        if (optimalSize == null) {
+            minDiff = Double.MAX_VALUE;
+            for (Size size : sizes) {
+                if (Math.abs(size.height - targetHeight) < minDiff) {
+                    optimalSize = size;
+                    minDiff = Math.abs(size.height - targetHeight);
+                }
+            }
+        }
+        return optimalSize;
+    }
     private void StartSelfiCamera() {
 
         if (mCamera != null) {
@@ -461,7 +491,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         }
 
     }
-
     private void CloseImgPreview() {
         vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
@@ -496,8 +525,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Log.e("mCAmer_id", String.valueOf(mCamId));
 
     }
-
-
     private void saveImgPreview() {
         vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
@@ -923,7 +950,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     @Override
-    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int format, int width, int height) {
 
         if (surfaceHolder.getSurface() == null) {
             // Return if preview surface does not exist
@@ -935,6 +962,36 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             mCamera.stopPreview();
             try {
                 // Set preview display
+                Camera.Size size = getOptimalPreviewSize(
+                        mCamera.getParameters().getSupportedPreviewSizes(),
+                         height,width);
+
+                if (size != null) {
+
+                    double screenRatio = (double) width / height;
+                    double previewRatio = (double) size.width / size.height;
+
+                    int targetWidth;
+                    int targetHeight;
+                    //the screen ratio should match the preview ratio
+                    if (screenRatio > previewRatio) {
+                        //then, the height must be increased,
+                        targetWidth = width;
+                        targetHeight = (int) (((double) width) / previewRatio);
+                    } else {
+                        //the width must be increased
+                        targetHeight = height;
+                        targetWidth = (int) (((double) height) * previewRatio);
+                    }
+                    Log.i(TAG, "Setting preview size to " + targetWidth + "x" + targetHeight +
+                            ", ratio=" + ((double) targetWidth / targetHeight));
+                    //vwPreview.setLayoutParams(new FrameLayout.LayoutParams(targetWidth, targetHeight));
+
+
+                    Camera.Parameters parameters = mCamera.getParameters();
+                    parameters.setPreviewSize(size.width, size.height);
+                    mCamera.setParameters(parameters);
+                }
                 mCamera.setPreviewDisplay(surfaceHolder);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -988,5 +1045,113 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         super.onRestart();
         startService(new Intent(this, TimerService.class));
     }
+
+
+/*    private Preview mPreview;
+    Camera mCamera;
+    int numberOfCameras;
+    int cameraCurrentlyLocked;
+
+    // The first rear facing camera
+    int defaultCameraId;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Hide the window title.
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // Create a RelativeLayout container that will hold a SurfaceView,
+        // and set it as the content of our activity.
+        mPreview = new Preview(this);
+        setContentView(mPreview);
+
+        // Find the total number of cameras available
+        numberOfCameras = Camera.getNumberOfCameras();
+
+        // Find the ID of the default camera
+        CameraInfo cameraInfo = new CameraInfo();
+        for (int i = 0; i < numberOfCameras; i++) {
+            Camera.getCameraInfo(i, cameraInfo);
+            if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
+                defaultCameraId = i;
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Open the default i.e. the first rear facing camera.
+        mCamera = Camera.open();
+        cameraCurrentlyLocked = defaultCameraId;
+        mPreview.setCamera(mCamera);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Because the Camera object is a shared resource, it's very
+        // important to release it when the activity is paused.
+        if (mCamera != null) {
+            mPreview.setCamera(null);
+            mCamera.release();
+            mCamera = null;
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        // Inflate our menu which can gather user input for switching camera
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.camera_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.switch_cam:
+                // check for availability of multiple cameras
+                if (numberOfCameras == 1) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setMessage(this.getString(R.string.camera_alert))
+                            .setNeutralButton("Close", null);
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                    return true;
+                }
+
+                // OK, we have multiple cameras.
+                // Release this camera -> cameraCurrentlyLocked
+                if (mCamera != null) {
+                    mCamera.stopPreview();
+                    mPreview.setCamera(null);
+                    mCamera.release();
+                    mCamera = null;
+                }
+
+                // Acquire the next camera and request Preview to reconfigure
+                // parameters.
+                mCamera = Camera
+                        .open((cameraCurrentlyLocked + 1) % numberOfCameras);
+                cameraCurrentlyLocked = (cameraCurrentlyLocked + 1)
+                        % numberOfCameras;
+                mPreview.switchCamera(mCamera);
+
+                // Start the preview
+                mCamera.startPreview();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    */
 
 }
