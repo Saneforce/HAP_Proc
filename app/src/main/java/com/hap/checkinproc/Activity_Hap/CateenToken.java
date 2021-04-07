@@ -6,8 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -16,7 +20,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.zxing.WriterException;
+import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -25,9 +37,11 @@ public class CateenToken extends AppCompatActivity {
     public static final String UserDetail = "MyPrefs";
     private static final String TAG = "MYQR";
     SharedPreferences UserDetails;
-    ImageView qrImage;
+    ImageView qrImage,btnProfile,imgProfile;
     TextView txtHQName,txtSFName,txtEmpID,btnCanteen;
 
+    String imagePath;
+    private File file;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +53,8 @@ public class CateenToken extends AppCompatActivity {
 
 
         btnCanteen=findViewById(R.id.btnCanteen);
+        btnProfile=findViewById(R.id.btnProfile);
+        imgProfile=findViewById(R.id.imgProf);
         btnCanteen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,12 +64,37 @@ public class CateenToken extends AppCompatActivity {
             }
         });
 
+        btnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent frmCanteen=new Intent(CateenToken.this,ImageCapture.class);
+                frmCanteen.putExtra("Mode","PF");
+                startActivity(frmCanteen);
+                //finish();
+            }
+        });
+        ImageCapture.setOnImagePickListener(new OnImagePickListener() {
+            @Override
+            public void OnImagePick(Bitmap image,String FileName) {
+                imgProfile.setImageBitmap(image);
+                SharedPreferences.Editor editor = UserDetails.edit();
+                editor.putString("Profile", String.valueOf(FileName));
+                editor.apply();
+            }
+        });
+        imagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/sfProfile.jpg";
+        file = new File(imagePath);
+        try {
+            Uri uri = Uri.fromFile(file);
+            imgProfile.setImageURI(uri);
+        }catch (Exception e){}
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
         String HQCode=UserDetails.getString("SFHQCode","1000");
         String EmpID=UserDetails.getString("EmpId","");
 
         String sHQName=UserDetails.getString("SFHQ","");
         String sSFNm=UserDetails.getString("SfName","");
+
         txtHQName.setText(sHQName);
         txtSFName.setText(sSFNm);
         txtEmpID.setText(EmpID);
@@ -71,8 +112,62 @@ public class CateenToken extends AppCompatActivity {
         try {
             Bitmap bitmap = qrgEncoder.encodeAsBitmap();
             qrImage.setImageBitmap(bitmap);
+
+            String ProfPath=UserDetails.getString("ProfPath","");
+            String URL=UserDetails.getString("Profile","");
+            if(!(ProfPath+URL).equalsIgnoreCase("")){
+                new ImageDownloader().execute(ProfPath+URL);
+            }
         } catch (WriterException e) {
             Log.v(TAG, e.toString());
+        }
+    }
+
+    private void save(Bitmap bm) throws IOException {
+
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+
+        OutputStream outputStream = null;
+        outputStream = new FileOutputStream(file);
+        outputStream.write(byteArray);
+        outputStream.close();
+    }
+    private class ImageDownloader extends AsyncTask<String, Void, Bitmap> {
+
+        @Override
+        protected Bitmap doInBackground(String... URL) {
+
+            String imageURL = URL[0];
+
+            Bitmap bitmap = null;
+            try {
+// Download Image from URL
+                InputStream input = new java.net.URL(imageURL).openStream();
+// Decode Bitmap
+                bitmap = BitmapFactory.decodeStream(input);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return bitmap;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            Log.i("Async-Example", "onPreExecute Called");
+
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            Log.i("Async-Example", "onPostExecute Called");
+            try {
+                save(result);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            imgProfile.setImageBitmap(result);
         }
     }
 }

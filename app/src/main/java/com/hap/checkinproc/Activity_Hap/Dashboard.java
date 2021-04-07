@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +28,7 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
 
@@ -60,7 +60,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     Shared_Common_Pref shared_common_pref;
     String imageProfile = "", sSFType = "";
     String onDuty = "";
-    ImageView profilePic, btMyQR;
+    ImageView profilePic,btMyQR;
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
     public static final String visitPurpose = "vstPur";
@@ -72,7 +72,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     public static final String StartedImage = "SharedImage";
     SharedPreferences.Editor editors;
     SharedPreferences sharedpreferences;
-    RelativeLayout relaApprovals;
 
 
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
@@ -124,12 +123,14 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             Glide.with(this).load(Profile).into(profilePic);
         } catch (Exception e) {
         }
+        //Glide.with(this).load(Uri.parse((UserDetails.getString("url", "")))).into(profilePic);
 
-        btMyQR = findViewById(R.id.myQR);
+        //profilePic.setImageURI(Uri.parse((UserDetails.getString("url", ""))));
+
+        btMyQR=findViewById(R.id.myQR);
         linMyday = findViewById(R.id.lin_myday_plan);
         linMyday.setVisibility(View.GONE);
         if (sSFType.equals("1")) linMyday.setVisibility(View.VISIBLE);
-        relaApprovals = findViewById(R.id.rel_approval);
 
         Log.v("SSFTYPE_DASH_BOARD", sSFType);
 
@@ -152,16 +153,16 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         approvalcount = findViewById(R.id.approvalcount);
 
         if (shared_common_pref.getvalue(Shared_Common_Pref.CHECK_COUNT).equals("0")) {
-            relaApprovals.setVisibility(View.GONE);
+            linApprovals.setVisibility(View.GONE);
             //linApprovals.setVisibility(View.VISIBLE);
         } else {
-            relaApprovals.setVisibility(View.VISIBLE);
+            linApprovals.setVisibility(View.VISIBLE);
         }
 
         btMyQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Dashboard.this, CateenToken.class);
+                Intent intent=new Intent(Dashboard.this,CateenToken.class);
                 startActivity(intent);
             }
         });
@@ -315,13 +316,80 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
                 break;
             case R.id.lin_extenden_shift:
-                Get_MydayPlan(2, "ValidateExtended");
+                validateExtened( "ValidateExtended");
                 break;
             default:
                 break;
         }
 
     }
+    private void validateExtened( String Name) {
+        Map<String, String> QueryString = new HashMap<>();
+        QueryString.put("axn", Name);
+        QueryString.put("Sf_code", Shared_Common_Pref.Sf_Code);
+        QueryString.put("Date", common_class.GetDate());
+        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+        QueryString.put("desig", "MGR");
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        JSONObject sp = new JSONObject();
+        jsonArray.put(jsonObject);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, jsonArray.toString());
+        mCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                // locationList=response.body();
+                try {
+                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    // Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
+
+                    String success = jsonObject.getString("success");
+                    String Msg = jsonObject.getString("msg");
+                    if (!Msg.equals("")) {
+                        AlertDialogBox.showDialog(Dashboard.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
+                            @Override
+                            public void PositiveMethod(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+
+                            @Override
+                            public void NegativeMethod(DialogInterface dialog, int id) {
+
+                            }
+                        });
+                    } else {
+                        AlertDialogBox.showDialog(Dashboard.this, "HAP Check-In", Msg, "YES", "NO", false, new AlertBox() {
+                            @Override
+                            public void PositiveMethod(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                common_class.CommonIntentwithoutFinishputextra(Checkin.class, "Mode", "extended");
+                                /*Intent intent = new Intent(getApplicationContext(), Checkin.class);
+                                Bundle extras = new Bundle();
+                                extras.putString("Extended_Flag", "extended");
+                                startActivity(intent);*/
+                            }
+
+                            @Override
+                            public void NegativeMethod(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                            }
+                        });
+                        // Toast.makeText(Dashboard.this, "Send To Checkin", Toast.LENGTH_SHORT).show();
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
+
 
     private void Get_MydayPlan(int flag, String Name) {
         Map<String, String> QueryString = new HashMap<>();
@@ -422,6 +490,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             }
         });
     }
+
+
 
 
     public void getcountdetails() {

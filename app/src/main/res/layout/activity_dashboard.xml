@@ -12,6 +12,7 @@
         android:orientation="vertical">
 
 
+
 <RelativeLayout
     android:layout_marginTop="@dimen/C10dp"
     android:layout_width="match_parent"
@@ -27,12 +28,11 @@
             android:src="@drawable/clogo" />
         <ImageView
             android:id="@+id/myQR"
-            android:layout_toEndOf="@id/imag"
-            android:layout_below="@id/imag"
-            android:layout_marginLeft="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="15dp"
             android:layout_width="@dimen/C40dp"
             android:layout_height="@dimen/C40dp"
-            android:layout_marginTop="-10dp"
+            android:layout_marginTop="0dp"
             app:tint="@color/colorPrimaryDark"
             android:padding="5dp"
             android:src="@drawable/ic_baseline_qr_code_scanner_24" />
@@ -42,7 +42,6 @@
             android:layout_width="96dp"
             android:layout_height="96dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="-30dp"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:srcCompat="@drawable/profile_img" />
 
@@ -125,8 +124,6 @@
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_margin="@dimen/C4dp"
-                    android:id="@+id/rel_approval"
-                    android:visibility="gone"
                     android:layout_height="match_parent"
                     app:layout_flexBasisPercent="47%">
 
@@ -136,18 +133,31 @@
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
                         android:background="@drawable/button_dgreen"
-                        android:text="Approvals"
-          />
+                        android:text="Approvals" />
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="@dimen/C100dp"
+                        android:layout_height="30dp"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true">
+                        <Space
+                            android:layout_weight="1"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/C10dp"
+                            ></Space>
                     <TextView
                         android:id="@+id/approvalcount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignEnd="@id/lin_approvals"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:background="@drawable/newcircle"
                         android:textColor="@android:color/white"
+                        android:elevation="@dimen/C10dp"
+                        android:textSize="8sp"
+                        android:layout_gravity="right"
+
                         android:gravity="center"
-                        android:layout_marginTop="-1dp"
-                        android:textSize="10sp" />
+                        />
+                    </LinearLayout>
 
                 </RelativeLayout>
 

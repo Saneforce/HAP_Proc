@@ -81,7 +81,8 @@ public class Leave_Status_Adapter extends RecyclerView.Adapter<Leave_Status_Adap
 
         Log.v("FLAG_LEAVE", String.valueOf(Leave_Status_ModelsList.get(position).getShowFlag()));
         Log.v("FLAG_LEAVE_ACTIVE", String.valueOf(Leave_Status_ModelsList.get(position).getLeaveActiveFlag()));
-        if (Leave_Status_ModelsList.get(position).getShowFlag().equalsIgnoreCase("1") && Leave_Status_ModelsList.get(position).getLeaveActiveFlag() != 3) {
+
+        if ((!AMod.equalsIgnoreCase("1")) && Leave_Status_ModelsList.get(position).getShowFlag().equalsIgnoreCase("1") && Leave_Status_ModelsList.get(position).getLeaveActiveFlag() != 3) {
             holder.linearCancel.setVisibility(View.VISIBLE);
 
         } else {

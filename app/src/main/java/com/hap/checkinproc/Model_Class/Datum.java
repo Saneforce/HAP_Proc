@@ -72,6 +72,12 @@ public class Datum {
     @SerializedName("THrsPerm")
     @Expose
     private int THrsPerm;
+    @SerializedName("Profile")
+    @Expose
+    private String mProfile;
+    @SerializedName("ProfPath")
+    @Expose
+    private String mProfPath;
 
     public String getSfUserName() {
         return sfUserName;
@@ -218,6 +224,13 @@ public class Datum {
 
     public String getHOLocation() {
         return hOLocation;
+    }
+
+    public String getProfile() {
+        return mProfile;
+    }
+    public String getProfPath() {
+        return mProfPath;
     }
 
     public void setHOLocation(String hOLocation) {
