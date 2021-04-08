@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,8 +43,9 @@ import retrofit2.Response;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class Permission_Approval_Reject extends Activity implements View.OnClickListener {
-    TextView name, empcode, hq, mobilenumber, designation, Preason, fromtime, applieddate, totime, phours, Papprovebutton, Preject, P_rejectsave;
+    TextView name, empcode, hq, mobilenumber, designation, Preason, fromtime, applieddate, totime, phours;
     String Sf_Code, Tour_plan_Date, Sl_No;
+    Button Papprovebutton, Preject, P_rejectsave;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     LinearLayout Approvereject, rejectonly;
@@ -100,7 +102,6 @@ public class Permission_Approval_Reject extends Activity implements View.OnClick
                     startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
 
-
             }
         });
         name = findViewById(R.id.name);
@@ -124,7 +125,7 @@ public class Permission_Approval_Reject extends Activity implements View.OnClick
         Papprovebutton.setOnClickListener(this);
         Preject.setOnClickListener(this);
         P_rejectsave.setOnClickListener(this);
-       i = getIntent();
+        i = getIntent();
         name.setText(":" + i.getExtras().getString("Username"));
         empcode.setText(":" + i.getExtras().getString("Emp_Code"));
         hq.setText(":" + i.getExtras().getString("HQ"));
@@ -137,7 +138,7 @@ public class Permission_Approval_Reject extends Activity implements View.OnClick
         totime.setText(":" + i.getExtras().getString("totime"));
         Sf_Code = i.getExtras().getString("Sf_Code");
         Sl_No = i.getExtras().getString("Sl_No");
-mobilenumber.setOnClickListener(this);
+        mobilenumber.setOnClickListener(this);
 
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {

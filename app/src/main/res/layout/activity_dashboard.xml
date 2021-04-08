@@ -73,8 +73,6 @@
             android:layout_marginBottom="15dp"
             android:orientation="vertical">
 
-
-
             <Button
                 android:id="@+id/lin_myday_plan"
                 style="@style/ButtonStyle"
@@ -95,6 +93,7 @@
                 app:alignContent="stretch"
                 app:alignItems="stretch"
                 app:flexDirection="row"
+                android:layout_marginBottom="@dimen/C30dp"
                 app:flexWrap="wrap"
                 app:showDivider="middle">
 
@@ -119,14 +118,12 @@
                     android:text="On-Duty "
                     app:layout_flexBasisPercent="47%" />
 
-
                 <RelativeLayout
                     android:orientation="horizontal"
                     android:layout_width="match_parent"
                     android:layout_margin="@dimen/C4dp"
                     android:layout_height="match_parent"
                     app:layout_flexBasisPercent="47%">
-
                     <Button
                         android:id="@+id/lin_approvals"
                         android:layout_width="match_parent"
@@ -143,8 +140,7 @@
                         <Space
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:layout_height="@dimen/C10dp"
-                            ></Space>
+                            android:layout_height="@dimen/C10dp"/>
                     <TextView
                         android:id="@+id/approvalcount"
                         android:layout_width="15dp"
@@ -154,13 +150,10 @@
                         android:elevation="@dimen/C10dp"
                         android:textSize="8sp"
                         android:layout_gravity="right"
-
-                        android:gravity="center"
-                        />
+                        android:gravity="center" />
                     </LinearLayout>
 
                 </RelativeLayout>
-
 
                 <Button
                     android:id="@+id/lin_ta_claim"
@@ -168,8 +161,6 @@
                     android:background="@drawable/button_purple"
                     android:text="TA &amp; claim"
                     app:layout_flexBasisPercent="47%" />
-
-
 
                 <Button
                     android:id="@+id/lin_extenden_shift"
@@ -192,12 +183,8 @@
                     android:text="Holiday Working"
                     app:layout_flexBasisPercent="47%" />
 
-
             </com.google.android.flexbox.FlexboxLayout>
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/C30dp"></LinearLayout>
             <Button
                 android:id="@+id/lin_exit"
                 style="@style/ButtonStyle"
@@ -205,7 +192,6 @@
                 android:text="Exit" />
 
         </LinearLayout>
-
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

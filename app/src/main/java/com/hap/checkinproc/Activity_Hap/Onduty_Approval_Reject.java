@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,14 +45,14 @@ import retrofit2.Response;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class Onduty_Approval_Reject extends AppCompatActivity implements View.OnClickListener {
-    TextView name, applieddate, empcode, hq, mobilenumber, designation, odtype, purposeofvisit, odlocation, geocheckin, geocheckout, checkin, checkout, Oapprovebutton, ODreject, OD_rejectsave;
+    Button Oapprovebutton,ODreject,OD_rejectsave;
+    TextView name, applieddate, empcode, hq, mobilenumber, designation, odtype, purposeofvisit, odlocation, geocheckin, geocheckout, checkin, checkout;
     String Sf_Code, Tour_plan_Date, duty_id;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     LinearLayout Approvereject, rejectonly;
     EditText reason;
     Intent i;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,9 +132,13 @@ public class Onduty_Approval_Reject extends AppCompatActivity implements View.On
         checkin = findViewById(R.id.checkin);
         checkout = findViewById(R.id.checkout);
 
+
         Oapprovebutton.setOnClickListener(this);
         ODreject.setOnClickListener(this);
         OD_rejectsave.setOnClickListener(this);
+
+
+
         mobilenumber.setOnClickListener(this);
         geocheckin.setOnClickListener(this);
         geocheckout.setOnClickListener(this);

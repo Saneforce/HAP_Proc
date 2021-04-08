@@ -1395,14 +1395,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                         JsonObject js = null;
                         for (int l = 0; l < travelDetails.size(); l++) {
-                            js = (JsonObject) travelDetails.get(l);
-                            taAmt = js.get("ta_total_amount").getAsString();
-                            txtTAamt.setText("Rs." + taAmt + ".00");
+                            if (js != null) {
+                                js = (JsonObject) travelDetails.get(l);
+                                taAmt = js.get("ta_total_amount").getAsString();
+                                txtTAamt.setText("Rs." + taAmt + ".00");
+                            }
                         }
 
-
                         Log.v("DRIVER", ClosingKm);
-
                         Glide.with(getApplicationContext())
                                 .load(start_Image.replaceAll("^[\"']+|[\"']+$", ""))
                                 .into(startkmimage);
@@ -1463,7 +1463,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 PersonalKm = PersonalKm.replaceAll("^[\"']+|[\"']+$", "");
                                 Pva = Integer.valueOf(PersonalKm);
                                 totalPersonalKm = totalkm - Pva;
-
                             }
 
 
@@ -1492,8 +1491,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 Double totalAmount = Double.valueOf(strFuelAmount);
                                 tofuel = totalPersonalKm * totalAmount;
                                 TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
-
-
                                 txtMaxKm.setVisibility(View.GONE);
                             }
 
@@ -3404,8 +3401,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 TotalDays.setVisibility(View.VISIBLE);
                 txtStyDays.setText(stayTotal);
                 stayDays.setVisibility(View.VISIBLE);
-                diffDayss = diffDayss + 1;
+              //  diffDayss = diffDayss + 1;
                 stayEgTotal = diffDayss * ldgEliAmt;
+
+                Log.v("LODGING_AMOUNT", ldgEliAmt.toString());
 
                 txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(stayEgTotal));
                 ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(stayEgTotal));

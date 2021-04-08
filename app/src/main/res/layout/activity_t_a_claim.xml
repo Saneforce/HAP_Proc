@@ -367,7 +367,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/C8dp"
-
                         app:cardCornerRadius="@dimen/C5dp">
 
                         <LinearLayout

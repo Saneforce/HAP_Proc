@@ -1,8 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -15,11 +12,15 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -43,11 +44,12 @@ import retrofit2.Response;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class Holiday_Approval_Reject extends AppCompatActivity implements View.OnClickListener {
-    TextView name, applieddate, empcode, hq, mobilenumber,  geocheckin, geocheckout, checkin, checkout, Oapprovebutton, ODreject, OD_rejectsave;
+    TextView name, applieddate, empcode, hq, mobilenumber, geocheckin, geocheckout, checkin, checkout;
     String Sf_Code, Tour_plan_Date, duty_id;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     LinearLayout Approvereject, rejectonly;
+    Button Oapprovebutton, ODreject, OD_rejectsave;
     EditText reason;
     Intent i;
 
@@ -100,7 +102,6 @@ public class Holiday_Approval_Reject extends AppCompatActivity implements View.O
                     startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
 
-
             }
         });
         name = findViewById(R.id.name);
@@ -144,7 +145,8 @@ public class Holiday_Approval_Reject extends AppCompatActivity implements View.O
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                common_class.CommonIntentwithFinish(Holiday_Entry_Approval.class);            }
+                common_class.CommonIntentwithFinish(Holiday_Entry_Approval.class);
+            }
         });
 
     }
@@ -287,7 +289,7 @@ public class Holiday_Approval_Reject extends AppCompatActivity implements View.O
             sp.put("time", Sf_Code);
             sp.put("eDate", Sf_Code);
             sp.put("eTime", Sf_Code);
-                common_class.ProgressdialogShow(1, "Approval for  Holiday Entry");
+            common_class.ProgressdialogShow(1, "Approval for  Holiday Entry");
 
             jsonObject.put(Name, sp);
         } catch (JSONException e) {
@@ -327,7 +329,6 @@ public class Holiday_Approval_Reject extends AppCompatActivity implements View.O
             }
         });
     }
-
 
 
 }

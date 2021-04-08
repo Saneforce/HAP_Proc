@@ -1,8 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -13,11 +10,15 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -40,14 +41,15 @@ import retrofit2.Response;
 
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
-public class Deviation_Approval_Reject extends AppCompatActivity implements View.OnClickListener{
-    TextView name, empcode, hq, mobilenumber, designation, Dreason,deviationtype,deviationdate,  Papprovebutton, Preject, P_rejectsave;
+public class Deviation_Approval_Reject extends AppCompatActivity implements View.OnClickListener {
+    TextView name, empcode, hq, mobilenumber, designation, Dreason, deviationtype, deviationdate;
     String Sf_Code, Tour_plan_Date, deviation_id;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     LinearLayout Approvereject, rejectonly;
     EditText reason;
     Intent i;
+    Button Papprovebutton, Preject, P_rejectsave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
