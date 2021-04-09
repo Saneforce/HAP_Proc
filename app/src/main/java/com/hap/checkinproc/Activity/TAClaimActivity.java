@@ -8,6 +8,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -30,7 +31,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,6 +40,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
@@ -127,7 +130,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             lodgJoin, ldgEAra, ldgMyEAra, JNLdgEAra, drvldgEAra, jointLodging, vwBoarding, vwDrvBoarding,
             linAddAllowance, diverAllowanceLinear, LDailyAllowance, LOtherExpense, LLocalConve, LinearOtherAllowance,
             linlocalCon, linBusMode, linBikeMode, linMode, travelDynamicLoaction, linDailyAllowance, linback, lin,
-            linImgPrv, TotalDays, stayDays;
+            linImgPrv, TotalDays, stayDays, linEarly, linLate, linContinueStay,linCheckOut;
 
     CardView card_date, TravelBike, crdDynamicLocation, ldg_ara;
 
@@ -200,6 +203,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     Switch ldgNeeded;
     View viw, viewBilling;
     ScrollView mLc;
+    CheckBox mChckCont, mChckEarly, mChckLate;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -320,6 +324,46 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         mLc = findViewById(R.id.lc_srcoll);
         linImgPrv = findViewById(R.id.lin_img_prv);
         viewBilling = findViewById(R.id.bill_view);
+        linEarly = findViewById(R.id.lin_early);
+        linLate = findViewById(R.id.lin_late);
+        linContinueStay = findViewById(R.id.lin_indep_sty);
+        linCheckOut = findViewById(R.id.lin_chck_out);
+        mChckCont = findViewById(R.id.chk_cnt_sty);
+        mChckEarly = findViewById(R.id.chk_early);
+        mChckLate = findViewById(R.id.chk_late);
+        mChckCont.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    linCheckOut.setVisibility(View.INVISIBLE);
+                } else {
+                    linCheckOut.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        mChckEarly.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    linEarly.setVisibility(View.VISIBLE);
+                } else {
+                    linEarly.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        mChckLate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    linLate.setVisibility(View.VISIBLE);
+                } else {
+                    linLate.setVisibility(View.GONE);
+                }
+            }
+        });
+
 
         img_lodg_atta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -404,34 +448,26 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             @Override
             public void onClick(View v) {
 
-                final Calendar cldr = Calendar.getInstance();
-                int day = cldr.get(Calendar.DAY_OF_MONTH);
-                int month = cldr.get(Calendar.MONTH);
-                int year = cldr.get(Calendar.YEAR);
-                // date picker dialog
-                picker = new DatePickerDialog(TAClaimActivity.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
-                                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                                String currentDateandTime = sdf.format(new Date());
-
-
-                                ldg_cout.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                                difference();
-
-                            }
-                        }, year, month, day);
-                Calendar calendarmin = Calendar.getInstance();
-                calendarmin.set(Integer.parseInt(tominYear), Integer.parseInt(tominMonth) - 1, Integer.parseInt(tominDay));
-                picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
-
-
-                picker.show();
-
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(TAClaimActivity.this, new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        ldg_cout.setText(selectedHour + ":" + selectedMinute);
+                    }
+                }, hour, minute, true);//Yes 24 hour time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
             }
         });
+
+
+        if (!ldg_cin.getText().toString().equalsIgnoreCase("") && !ldg_cout.getText().toString().equalsIgnoreCase("")) {
+            difference();
+        }
+
 
         edt_ldg_bill.addTextChangedListener(new TextWatcher() {
             @Override
@@ -472,6 +508,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
 
         strGT = grandTotal.getText().toString();
+
 
         LOtherExpense.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -958,31 +995,18 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     }
 
     public void showCldr() {
-        final Calendar cldr = Calendar.getInstance();
-        int day = cldr.get(Calendar.DAY_OF_MONTH);
-        int month = cldr.get(Calendar.MONTH);
-        int year = cldr.get(Calendar.YEAR);
-        // date picker dialog
-        picker = new DatePickerDialog(TAClaimActivity.this,
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
-
-                        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                        String currentDateandTime = sdf.format(new Date());
-
-                        Log.v("CURRENT_TIME", String.valueOf(currentDateandTime));
-
-
-                        ldg_cin.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                        MaxMinDateTo(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                        difference();
-
-                    }
-                }, year, month, day);
-
-        picker.show();
+        Calendar mcurrentTime = Calendar.getInstance();
+        int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+        int minute = mcurrentTime.get(Calendar.MINUTE);
+        TimePickerDialog mTimePicker;
+        mTimePicker = new TimePickerDialog(TAClaimActivity.this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                ldg_cin.setText(selectedHour + ":" + selectedMinute);
+            }
+        }, hour, minute, true);//Yes 24 hour time
+        mTimePicker.setTitle("Select Time");
+        mTimePicker.show();
     }
 
     public void onTADelete(View v) {
@@ -1766,6 +1790,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         }
     }
 
+    @SuppressLint("SetTextI18n")
     public void lodingDraft(JsonArray lodingDraft) {
 
         JsonArray jsonAddition = null;
@@ -1793,8 +1818,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             txtLodgUKey.setText(ldraft.get("Ukey").getAsString());
             double elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
-            /*            double elibs = elib * noday;*/
-
             txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(elibs));
 
             double srtjdgAmt = Integer.valueOf(ldraft.get("Joining_Ldg_Amount").getAsString());
@@ -1803,7 +1826,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             Log.v("ldgWOBBal", String.valueOf(wobal));
             ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(wobal));
-
             Log.v("ldgWOBBal_______", ldgWOBBal.getText().toString());
 
             edt_ldg_bill.setText(ldraft.get("Bill_Amt").getAsString());
@@ -2889,6 +2911,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             viewBilling.setVisibility(View.GONE);
             lblHdBln.setVisibility(View.GONE);
             ldgWOBBal.setVisibility(View.GONE);
+
             if (myldgEliAmt == "") myldgEliAmt = "0.0";
 
             myldgEliAmt = myldgEliAmt.replaceAll("^[\"']+|[\"']+$", "");
@@ -2899,6 +2922,19 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             Log.e("TXT_MY_ELIGIBLE", txtMyEligi.getText().toString().substring(3, 7));
             SumOFJointLodging();
             SumOFLodging();
+
+            mChckCont.setChecked(false);
+            mChckLate.setChecked(false);
+            mChckEarly.setChecked(false);
+
+            if (ValCd == "JS") {
+                linContinueStay.setVisibility(View.GONE);
+            } else if (ValCd == "RS") {
+                linContinueStay.setVisibility(View.GONE);
+            } else {
+                linContinueStay.setVisibility(View.VISIBLE);
+            }
+
             if (ValCd == "JS") {
                 lodgJoin.setVisibility(View.VISIBLE);
                 JNLdgEAra.setVisibility(View.VISIBLE);
@@ -2906,12 +2942,17 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 linImgPrv.setVisibility(View.VISIBLE);
                 viewBilling.setVisibility(View.VISIBLE);
                 stayDays.setVisibility(View.GONE);
+
                 /*tTotAmt = 0;*/
                 ttLod = 1;
+
+
                 txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
                 lodingView();
             }
             if (ValCd != "RS") {
+
+
                 ldg_stayloc.setVisibility(View.VISIBLE);
                 ldg_stayDt.setVisibility(View.VISIBLE);
                 lblHdBill.setVisibility(View.VISIBLE);
@@ -3401,7 +3442,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 TotalDays.setVisibility(View.VISIBLE);
                 txtStyDays.setText(stayTotal);
                 stayDays.setVisibility(View.VISIBLE);
-              //  diffDayss = diffDayss + 1;
+                //  diffDayss = diffDayss + 1;
                 stayEgTotal = diffDayss * ldgEliAmt;
 
                 Log.v("LODGING_AMOUNT", ldgEliAmt.toString());
