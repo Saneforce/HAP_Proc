@@ -36,13 +36,11 @@ public class SFA_Dashboard extends AppCompatActivity  implements View.OnClickLis
         lin_outlettype.setOnClickListener(this);
         lin_productwise.setOnClickListener(this);
         lin_daysummary.setOnClickListener(this);
-
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
-
             }
         });
     }

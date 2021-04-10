@@ -27,19 +27,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import javax.inject.Inject;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class Nearby_Outlets extends AppCompatActivity implements View.OnClickListener {
-    String Scode;
-    String Dcode;
-    String Rf_code;
     List<Dashboard_View_Model> approvalList;
     Gson gson;
     private RecyclerView recyclerView;
@@ -55,7 +44,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nearby__outlets);
         shared_common_pref = new Shared_Common_Pref(this);
-
         recyclerView = findViewById(R.id.outletrecyclerview);
         Createoutlet = findViewById(R.id.Createoutlet);
         availableoutlets = findViewById(R.id.availableoutlets);
@@ -65,9 +53,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         longitude.setText("Latitude : " + Shared_Common_Pref.Outletlong);
         common_class = new Common_Class(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        gson = new Gson();
-        //GetAllDetails();
-
         gson = new Gson();
         userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
         }.getType();
@@ -90,7 +75,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onIntentClick(int position) {
                 Shared_Common_Pref.Outler_AddFlag = "0";
-                Shared_Common_Pref.OutletName = ShowRetailer_Modal_List.get(position).getName().toUpperCase() ;
+                Shared_Common_Pref.OutletName = ShowRetailer_Modal_List.get(position).getName().toUpperCase();
                 Shared_Common_Pref.OutletCode = ShowRetailer_Modal_List.get(position).getId();
                 common_class.CommonIntentwithFinish(Route_Product_Info.class);
                 common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
@@ -107,12 +92,17 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         });
     }
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.Createoutlet:
+                Shared_Common_Pref.OutletAvail = "";
+                Shared_Common_Pref.OutletUniv ="";
                 Shared_Common_Pref.Outler_AddFlag = "1";
+                Shared_Common_Pref.Editoutletflag="0";
+                Shared_Common_Pref.OutletAvail = "";
+                Shared_Common_Pref.OutletUniv = "";
+                Shared_Common_Pref.Outlet_Info_Flag = "0";
                 common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                 break;
         }

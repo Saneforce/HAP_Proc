@@ -31,21 +31,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import javax.inject.Inject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-public class Outlet_Info_Activity extends AppCompatActivity {
+
+public class Outlet_Info_Activity extends AppCompatActivity implements View.OnClickListener {
 
     Gson gson;
     private RecyclerView recyclerView;
     Type userType;
     Common_Class common_class;
-    TextView headtext, textViewname;
+    TextView headtext, textViewname, homebutton;
     List<Retailer_Modal_List> Retailer_Modal_List;
     Shared_Common_Pref shared_common_pref;
     Shared_Common_Pref sharedCommonPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,16 +59,18 @@ public class Outlet_Info_Activity extends AppCompatActivity {
         recyclerView = findViewById(R.id.outletrecyclerview);
         headtext = findViewById(R.id.headtext);
         textViewname = findViewById(R.id.textViewname);
+        homebutton = findViewById(R.id.homebutton);
+        homebutton.setOnClickListener(this);
         common_class = new Common_Class(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
-        ImageView backView = findViewById(R.id.imag_back);
+      /*  ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
-        });
+        });*/
         gson = new Gson();
         userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
         }.getType();
@@ -74,6 +80,10 @@ public class Outlet_Info_Activity extends AppCompatActivity {
             @Override
             public void onIntentClick(int position) {
                 Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
+                Shared_Common_Pref.Outlet_Info_Flag = "1";
+                Shared_Common_Pref.Editoutletflag = "0";
+                Shared_Common_Pref.Outler_AddFlag = "0";
+                Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_List.get(position).getId());
                 intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_List.get(position).getId()));
                 intent.putExtra("OutletName", Retailer_Modal_List.get(position).getName());
                 intent.putExtra("OutletAddress", Retailer_Modal_List.get(position).getListedDrAddress1());
@@ -82,5 +92,14 @@ public class Outlet_Info_Activity extends AppCompatActivity {
                 startActivity(intent);
             }
         }));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.homebutton:
+                finish();
+                break;
+        }
     }
 }

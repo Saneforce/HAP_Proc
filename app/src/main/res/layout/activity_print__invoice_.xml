@@ -253,7 +253,7 @@
                         android:id="@+id/subtotal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="1234"
+                        android:text=""
                         android:textAlignment="viewEnd"
                         android:textColor="@color/black"
                         android:textSize="@dimen/C15dp"></TextView>
@@ -298,18 +298,17 @@
                         android:id="@+id/totalqty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="76"
+                        android:text=""
                         android:textAlignment="viewEnd"
                         android:textColor="@color/black"
                         android:textSize="@dimen/C15dp"></TextView>
                 </RelativeLayout>
 
                 <RelativeLayout
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-
                     <TextView
-
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="Total Free Qty"
@@ -321,7 +320,7 @@
                         android:id="@+id/totalfreeqty"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="76"
+                        android:text=""
                         android:textAlignment="viewEnd"
                         android:textColor="@color/black"
                         android:textSize="@dimen/C15dp"></TextView>
@@ -344,16 +343,14 @@
                         android:id="@+id/gstrate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="76"
+                        android:text=""
                         android:textAlignment="viewEnd"
                         android:textColor="@color/black"
                         android:textSize="@dimen/C15dp"></TextView>
                 </RelativeLayout>
-
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -361,12 +358,11 @@
                         android:textAlignment="textStart"
                         android:textColor="@color/black"
                         android:textSize="@dimen/C15dp"></TextView>
-
                     <TextView
                         android:id="@+id/cashdiscount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="76"
+                        android:text=""
                         android:textAlignment="viewEnd"
                         android:textColor="@color/black"
                         android:textSize="@dimen/C15dp"></TextView>
@@ -394,7 +390,7 @@
                         android:id="@+id/netamount"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="76"
+                        android:text=""
                         android:textAlignment="viewEnd"
                         android:textColor="@color/black"
                         android:textSize="@dimen/C15dp"></TextView>
@@ -405,9 +401,7 @@
                     android:layout_height="0.5dp"
                     android:background="@color/statuscolor"
                     android:outlineAmbientShadowColor="@color/statuscolor"></View>
-
             </LinearLayout>
-
 
         </LinearLayout>
 
@@ -416,14 +410,13 @@
             android:layout_height="50dp"
             android:background="@drawable/button_block"
             android:gravity="center"
-            android:orientation="horizontal">
-
+            android:orientation="horizontal"
+            android:visibility="gone">
             <LinearLayout
                 android:id="@+id/lin_request_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/C5dp"
-
                 android:layout_weight="1"
                 android:background="@drawable/button_block"
                 android:orientation="vertical">
@@ -439,9 +432,7 @@
                     android:textColor="#FFFFFF"
                     android:textSize="18dp" />
 
-
             </LinearLayout>
-
             <LinearLayout
                 android:id="@+id/lin_request_Pending"
                 android:layout_width="match_parent"
@@ -449,7 +440,6 @@
                 android:layout_marginRight="@dimen/C5dp"
                 android:layout_weight="1"
                 android:orientation="vertical">
-
                 <TextView
                     android:id="@+id/Pendingclick"
                     android:layout_width="match_parent"
@@ -460,8 +450,6 @@
                     android:text="EMAIL"
                     android:textColor="#FFFFFF"
                     android:textSize="18dp" />
-
-
             </LinearLayout>
 
             <LinearLayout

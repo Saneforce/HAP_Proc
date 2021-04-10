@@ -290,7 +290,7 @@
                     android:layout_weight="1"
                     android:id="@+id/Lapprovebutton"
                     android:fontFamily="@font/alegreya_sans_sc"
-                    android:background="@drawable/button_green"
+                    android:background="@drawable/button_dgreen"
                     android:textStyle="bold"
                     android:text="Approve" />
 

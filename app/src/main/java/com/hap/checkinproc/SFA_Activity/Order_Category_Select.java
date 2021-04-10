@@ -67,7 +67,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
+import static com.hap.checkinproc.Common_Class.Shared_Common_Pref.DistributorCode;
 import static com.hap.checkinproc.Common_Class.Shared_Common_Pref.OutletName;
+import static com.hap.checkinproc.Common_Class.Shared_Common_Pref.Route_Code;
 
 public class Order_Category_Select extends AppCompatActivity implements View.OnClickListener {
     GridView categorygrid;
@@ -82,8 +84,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     Type userType;
     Gson gson;
     TextView takeorder, ok, back, Out_Let_Name, Category_Nametext, totalqty, totalvalue, orderbutton, netamount;
-    @Inject
-    Retrofit retrofit;
+    /* @Inject
+     Retrofit retrofit;*/
     private RecyclerView recyclerView;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, totalorderbottom, linnetamount, linnercashdiscount;
     public boolean gobackflag = false;
@@ -92,7 +94,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     JSONObject Activity_Report_APP_Object, Activity_Outlet_Report_object, Product_Details_Object,
             eventCapturesObjectArray, pendingBillObjectArray, ComProductObjectArray, Input_Report, Trans_Order_Details_Object;
     JSONArray sendtoserverArray;
-    String Convert_Json_toString;
+    String Convert_Json_toString, Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "";
     Shared_Common_Pref sharedCommonPref;
     EditText cashdiscount;
 
@@ -100,7 +102,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order__category__select);
-        //((MyApplication) getApplication()).getNetComponent().inject(this);
+        //  ((MyApplication) getApplication()).getNetComponent().inject(this);
         sharedCommonPref = new Shared_Common_Pref(Order_Category_Select.this);
         common_class = new Common_Class(this);
         categorygrid = findViewById(R.id.category);
@@ -109,6 +111,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         netamount = findViewById(R.id.netamount);
         ok = findViewById(R.id.ok);
         back = findViewById(R.id.back);
+        GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "6");
         lin_orderrecyclerview = findViewById(R.id.lin_orderrecyclerview);
         totalorderbottom = findViewById(R.id.totalorderbottom);
         cashdiscount = findViewById(R.id.cashdiscount);
@@ -135,18 +138,22 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         }.getType();
         Product_Modal = gson.fromJson(OrdersTable, userType);
         if (Shared_Common_Pref.Invoicetoorder == null || Shared_Common_Pref.Invoicetoorder.equals("0")) {
-            Get_regularqty();
+            //  Get_regularqty();
         }
-
+        Order_Category_Select.CategoryAdapter customAdapteravail = new Order_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+        categorygrid.setAdapter(customAdapteravail);
         if (Shared_Common_Pref.Invoicetoorder != null) {
             if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
+                ok.setText("Edit");
                 String orderlist = sharedCommonPref.getvalue(Shared_Common_Pref.TodayOrderDetails_List);
                 userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
                 }.getType();
                 InvoiceorderDetails_List = gson.fromJson(orderlist, userType);
+                Log.e("ORDER_SL_NUmber", Shared_Common_Pref.TransSlNo);
                 Order_Outlet_Filter = new ArrayList<>();
                 for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
                     if (ivl.getTransSlNo().equals(Shared_Common_Pref.TransSlNo)) {
+                        Log.e("ORDER_SL_Loop", Shared_Common_Pref.TransSlNo);
                         Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
                                 "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(), ivl.getQty(), ivl.getValue()));
                     }
@@ -157,22 +164,26 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     for (int i = 0; Order_Outlet_Filter.size() > i; i++) {
                         if (Product_Modal.get(j).getId().equals(Order_Outlet_Filter.get(i).getId())) {
                             Product_Modal.get(j).setQty(Order_Outlet_Filter.get(i).getQty());
-                            Log.e("SETQTY", String.valueOf(Order_Outlet_Filter.get(i).getQty()));
+                            // Log.e("SETQTY", String.valueOf(Order_Outlet_Filter.get(i).getQty()));
                             Product_Modal.get(j).setAmount(Order_Outlet_Filter.get(i).getAmount());
                             Product_Modal.get(j).setRegularQty(Order_Outlet_Filter.get(i).getRegularQty());
                         }
                     }
                 }
-                GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Category_List), "2");
+                //GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Category_List), "2");
                 int jki = 0;
                 Log.e("Category_Before", String.valueOf(Category_Modal.size()));
                 for (Category_Universe_Modal CM : Category_Modal) {
                     for (Product_Details_Modal PM : Product_Modal) {
-                        Log.e("GETQTY", String.valueOf(PM.getQty()));
-                        Log.e("GETREgular", String.valueOf(PM.getRegularQty()));
-                        if (CM.getId().equals(PM.getProductCatCode()) && (PM.getQty() > 0 || PM.getRegularQty() > 0)) {
-                            Category_Modal.get(jki).setColorFlag("1");
-                            Log.e("Category_Modal_CAT", Category_Modal.get(jki).getColorFlag());
+                        if (PM.getQty() > 0 || PM.getRegularQty() > 0) {
+                          /*  Log.e("GETQTY", String.valueOf(PM.getQty()));
+                            Log.e("GETREgular", String.valueOf(PM.getRegularQty()));
+                            Log.e("Category_Universe_Modal", CM.getId());
+                            Log.e("Product_Details_Modal", String.valueOf(PM.getProductCatCode()));*/
+                            if (CM.getId().equals(String.valueOf(PM.getProductCatCode())) && (PM.getQty() > 0 || PM.getRegularQty() > 0)) {
+                                Category_Modal.get(jki).setColorFlag("1");
+                                Log.e("Category_Modal_CAT", Category_Modal.get(jki).getColorFlag());
+                            }
                         }
                     }
                     jki++;
@@ -180,8 +191,10 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 }
                 FilterProduct("invoice", true);
             } else {
-
+                ok.setText("Ok");
             }
+        } else {
+            ok.setText("OK");
         }
 
         cashdiscount.addTextChangedListener(new TextWatcher() {
@@ -222,21 +235,21 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             Category_Modal.clear();
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                String id = String.valueOf(jsonObject1.optInt("id"));
-                String name = jsonObject1.optString("name");
-                String Division_Code = jsonObject1.optString("Division_Code");
-                String Cat_Image = jsonObject1.optString("Cat_Image");
-                String sampleQty = jsonObject1.optString("sampleQty");
-                String colorflag = jsonObject1.optString("colorflag");
                 if (type.equals("1")) {
+                    String id = String.valueOf(jsonObject1.optInt("id"));
+                    String name = jsonObject1.optString("name");
+                    String Division_Code = jsonObject1.optString("Division_Code");
+                    String Cat_Image = jsonObject1.optString("Cat_Image");
+                    String sampleQty = jsonObject1.optString("sampleQty");
+                    String colorflag = jsonObject1.optString("colorflag");
                     Category_Modal.add(new Category_Universe_Modal(id, name, Division_Code, Cat_Image, sampleQty, colorflag));
                 } else {
-                    Category_Modal.add(new Category_Universe_Modal(id, name, Division_Code, Cat_Image, sampleQty, colorflag));
-
-
+                    Route_Code = jsonObject1.optString("cluster");
+                    Dirtributor_Cod = jsonObject1.optString("stockist");
+                    Worktype_code = jsonObject1.optString("wtype");
+                    Distributor_Name = jsonObject1.optString("StkName");
                 }
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -246,7 +259,18 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.takeorder:
-                FilterProduct("order", false);
+                if (Shared_Common_Pref.Invoicetoorder != null) {
+                    if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
+                        FilterProduct("invoice", true);
+                    } else if (Shared_Common_Pref.Invoicetoorder.equals("2")) {
+                        FilterProduct("invoice", true);
+                    } else {
+                        FilterProduct("order", false);
+                    }
+                } else {
+                    FilterProduct("order", false);
+                }
+
                 break;
             case R.id.ok:
                 lin_gridcategory.setVisibility(View.VISIBLE);
@@ -296,9 +320,11 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
                 Calendar calobj = Calendar.getInstance();
                 String dateTime = df.format(calobj.getTime());
+                String Cash_Discount = (cashdiscount.getText().toString().equals("") || cashdiscount.getText().toString() == null) ? "0" : cashdiscount.getText().toString();
                 try {
-                    dayplan_json_Object.put("Worktype_code", "'41'");
-                    dayplan_json_Object.put("Town_code", "'10'");
+                    dayplan_json_Object.put("Worktype_code", common_class.addquote(Worktype_code));
+                    // dayplan_json_Object.put("Town_code", common_class.addquote(Shared_Common_Pref.Route_Code));
+                    dayplan_json_Object.put("Town_code", common_class.addquote(Route_Code));
                     dayplan_json_Object.put("totalproductitem", common_class.addquote(String.valueOf(Getorder_Array_List.size())));
                     dayplan_json_Object.put("dcr_activity_date", common_class.addquote(dateTime));
                     dayplan_json_Object.put("Daywise_Remarks", "''");
@@ -310,11 +336,11 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     Activity_Report_APP_Object.put("Activity_Report_APP", dayplan_json_Object);
                     Outtlet_Json_Object.put("Doctor_POB", 6);
                     Outtlet_Json_Object.put("Worked_With", "");
-                    Outtlet_Json_Object.put("Doc_Meet_Time", Common_Class.addquote(Common_Class.GetDate()));
-                    Outtlet_Json_Object.put("modified_time", Common_Class.addquote(Common_Class.GetDate()));
+                    Outtlet_Json_Object.put("Doc_Meet_Time", common_class.addquote(Common_Class.GetDate()));
+                    Outtlet_Json_Object.put("modified_time", common_class.addquote(Common_Class.GetDate()));
                     Outtlet_Json_Object.put("net_weight_value", 1.50);
-                    Outtlet_Json_Object.put("stockist_code", "'2625'");
-                    Outtlet_Json_Object.put("stockist_name", "'SRI SARASWATHI AGENCIES'");
+                    Outtlet_Json_Object.put("stockist_code", common_class.addquote(Dirtributor_Cod));
+                    Outtlet_Json_Object.put("stockist_name", common_class.addquote(Distributor_Name));
                     Outtlet_Json_Object.put("superstockistid", "''");
                     Outtlet_Json_Object.put("Discountpercent", "''");
                     Outtlet_Json_Object.put("CheckinTime", "''");
@@ -326,12 +352,15 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     Outtlet_Json_Object.put("Order_No", "''");
                     Outtlet_Json_Object.put("rootTarget", "''");
                     Outtlet_Json_Object.put("orderValue", totalvalue.getText().toString());
+                    Outtlet_Json_Object.put("CashDiscount", Cash_Discount);
+                    Outtlet_Json_Object.put("NetAmount", netamount.getText().toString());
+                    Outtlet_Json_Object.put("Invoice_Flag", common_class.addquote(Shared_Common_Pref.Invoicetoorder));
+                    Outtlet_Json_Object.put("TransSlNo", Shared_Common_Pref.TransSlNo);
                     Outtlet_Json_Object.put("rateMode", "Free");
                     Outtlet_Json_Object.put("discount_price", 0);
                     Outtlet_Json_Object.put("doctor_code", common_class.addquote(Shared_Common_Pref.OutletCode));
                     Outtlet_Json_Object.put("doctor_name", common_class.addquote(Shared_Common_Pref.OutletName));
                     Activity_Outlet_Report_object.put("Activity_Doctor_Report", Outtlet_Json_Object);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -342,7 +371,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         ProductJson_Object.put("product_Name", Getorder_Array_List.get(z).getName());
                         ProductJson_Object.put("product_code", Getorder_Array_List.get(z).getId());
                         ProductJson_Object.put("Product_Rx_Qty", Getorder_Array_List.get(z).getQty());
-                        ProductJson_Object.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
+                        ProductJson_Object.put("Product_RegularQty", Getorder_Array_List.get(z).getQty());
                         ProductJson_Object.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() + Getorder_Array_List.get(z).getRegularQty());
                         ProductJson_Object.put("Product_Sample_Qty", Getorder_Array_List.get(z).getAmount());
                         ProductJson_Object.put("cb_qty", 0);
@@ -351,7 +380,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         ProductJson_Object.put("discount", 0);
                         ProductJson_Object.put("Rate", Getorder_Array_List.get(z).getRate());
                         personarray.put(ProductJson_Object);
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -381,7 +409,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 sendtoserverArray.put(ComProductObjectArray);//8-Compititor_Product
                 Convert_Json_toString = sendtoserverArray.toString();//
                 ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-
                 Call<JsonObject> responseBodyCall = apiInterface.submitValue(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Convert_Json_toString);
                 Log.e("Convert_Json_toString", Convert_Json_toString);
                 responseBodyCall.enqueue(new Callback<JsonObject>() {
@@ -394,9 +421,15 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                 String san = jsonObjects.getString("success");
                                 Log.e("Success_Message", san);
                                 if (san.equals("true")) {
-                                    Toast.makeText(Order_Category_Select.this, "Order Submitted Successfully", Toast.LENGTH_SHORT).show();
+                                    if (Shared_Common_Pref.Invoicetoorder.equals("0")) {
+
+                                        Toast.makeText(Order_Category_Select.this, "Order Submitted Successfully", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(Order_Category_Select.this, "Invoice Submitted Successfully", Toast.LENGTH_SHORT).show();
+                                    }
                                     Shared_Common_Pref.Sync_Flag = "2";
                                     startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
+                                    finish();
                                 }
 
                             } catch (Exception e) {
@@ -466,7 +499,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 if (pm.getRegularQty() != null) {
                     if (pm.getQty() > 0 || pm.getRegularQty() > 0) {
                         Getorder_Array_List.add(pm);
-                        talqty += pm.getQty() + pm.getRegularQty();
+                        // talqty += pm.getQty() + pm.getRegularQty();
+                        talqty += pm.getQty();
                         totalvalues += pm.getAmount();
                     }
                 }
@@ -476,7 +510,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 netamount.setText("");
             } else {
                 netamount.setText("" + totalvalues);
-
             }
             totalqty.setText("" + talqty);
             recyclerView.setAdapter(new Prodct_Adapter(Getorder_Array_List, R.layout.product_order_recyclerview, getApplicationContext(), -1));
@@ -563,7 +596,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty;
             EditText Qty;
-
             public MyViewHolder(View view) {
                 super(view);
                 productname = view.findViewById(R.id.productname);
@@ -609,7 +641,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             }
             if (Product_Details_Modal.getQty() > 0)
                 holder.Qty.setText("" + Product_Details_Modal.getQty());
-            holder.Qty.addTextChangedListener(new TextWatcher() {
+                holder.Qty.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int start,
                                           int before, int count) {

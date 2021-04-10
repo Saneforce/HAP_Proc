@@ -1,4 +1,5 @@
 package com.hap.checkinproc.SFA_Activity;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,13 +36,14 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
 public class Lead_Activity extends AppCompatActivity implements View.OnClickListener, Master_Interface {
     Gson gson;
     private RecyclerView recyclerView;
     Type userType;
     Common_Class common_class;
     TextView route_text, todayoutlets, TotalOutlets, reachedoutlets;
-    List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
+    List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List, Retailer_Modal_ListFilter;
     Shared_Common_Pref sharedCommonPref;
     Common_Model Model_Pojo;
     String Route_id;
@@ -76,26 +78,29 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
         String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List);
         System.out.println("OUTLETLIST" + sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List));
         Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
-        GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "1");
-        GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Rout_List), "2");
+        Retailer_Modal_ListFilter = gson.fromJson(OrdersTable, userType);
+        GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "2");
+        GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Rout_List), "1");
         TotalOutlets.setText("Total Outlets:" + "\t" + Retailer_Modal_List.size());
-        todayoutlets.setText("Today Outlets:" + "\t" + Retailer_Modal_List.size());
-        recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext(), new AdapterOnClick() {
-            @Override
-            public void onIntentClick(int position) {
-
+        int todaycount = 0;
+        for (Retailer_Modal_List lm : Retailer_Modal_List) {
+            if (lm.getLastUpdt_Date() != null && lm.getLastUpdt_Date().equals(Common_Class.GetDatewothouttime())) {
+                todaycount++;
             }
-        }));
+        }
+        todayoutlets.setText("Today Outlets:" + "\t" + todaycount);
+        recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
+        new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();
+        recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
     }
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
-
-            Route_id = myDataset.get(position).getId();
-            route_text.setText(myDataset.get(position).getName());
-
-
+        Route_id = myDataset.get(position).getId();
+        route_text.setText(myDataset.get(position).getName());
+        OutletFilter(myDataset.get(position).getId());
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -136,5 +141,17 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void OutletFilter(String id) {
+        Retailer_Modal_ListFilter.clear();
+        for (int i = 0; i < Retailer_Modal_List.size(); i++) {
+            if (Retailer_Modal_List.get(i).getTownCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
+                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+            }
+        }
+        recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
+        new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();
+        recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
     }
 }

@@ -183,8 +183,6 @@ public class Login extends AppCompatActivity {
         }
 
 
-
-
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -235,7 +233,7 @@ public class Login extends AppCompatActivity {
                 // that since this activity is in the foreground, the service can exit foreground mode.
 
                 Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
-                if(DAMode==true){
+                if (DAMode == true) {
                     bindService(new Intent(getApplicationContext(), SANGPSTracker.class), mServiceConection,
                             Context.BIND_AUTO_CREATE);
                     LocalBroadcastManager.getInstance(getApplication()).registerReceiver(myReceiver,
@@ -294,7 +292,7 @@ public class Login extends AppCompatActivity {
             if (cameraPermission.checkPermission()) {
 
                 Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
-                if(DAMode==true) {
+                if (DAMode == true) {
                     Intent playIntent = new Intent(this, SANGPSTracker.class);
                     bindService(playIntent, mServiceConection, Context.BIND_AUTO_CREATE);
                     startService(playIntent);
@@ -441,7 +439,7 @@ public class Login extends AppCompatActivity {
             // that since this activity is in the foreground, the service can exit foreground mode.
 
             Boolean DAMode = shared_common_pref.getBoolValue(Shared_Common_Pref.DAMode);
-            if(DAMode==true) {
+            if (DAMode == true) {
                 bindService(new Intent(this, SANGPSTracker.class), mServiceConection,
                         Context.BIND_AUTO_CREATE);
                 LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver,
@@ -522,7 +520,7 @@ public class Login extends AppCompatActivity {
             return;
         }
         Log.d(TAG, "TWO " + deviceToken);
-        //eMail="giritharan.d@hap.in";
+        //  eMail="thirumalaivasan786@gmail.com";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
@@ -581,7 +579,7 @@ public class Login extends AppCompatActivity {
                         }
                         String code = response.body().getData().get(0).getSfCode();
                         String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
-                        String empID= response.body().getData().get(0).getSfEmpId();
+                        String empID = response.body().getData().get(0).getSfEmpId();
                         String sName = response.body().getData().get(0).getSfName();
                         String div = response.body().getData().get(0).getDivisionCode();
                         Integer type = response.body().getData().get(0).getCheckCount();

@@ -38,7 +38,6 @@ public class Outlet_Report_ProductDetails_Adapter extends RecyclerView.Adapter<O
         holder.txtQty.setText(" " + mDate.get(position).getQty());
         holder.txtRate.setText(" " + mDate.get(position).getRate());
         holder.txtTotal.setText(" " + mDate.get(position).getValue());
-
     }
 
     @Override

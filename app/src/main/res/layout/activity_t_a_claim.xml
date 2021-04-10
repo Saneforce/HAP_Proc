@@ -59,7 +59,7 @@
                     android:layout_marginLeft="@dimen/C10dp"
                     android:layout_marginRight="@dimen/C5dp"
                     android:orientation="vertical"
-                    android:visibility="gone">
+  >
 
 
                     <LinearLayout
@@ -115,7 +115,7 @@
                             android:layout_weight="1"
                             android:orientation="horizontal"
                             android:padding="@dimen/C2dp"
-                            android:visibility="gone">
+                      android:visibility="gone" >
 
                             <TextView
                                 android:layout_width="@dimen/C70dp"
@@ -199,7 +199,8 @@
                             android:layout_weight="1"
                             android:orientation="horizontal"
                             android:padding="@dimen/C2dp"
-                            android:visibility="gone">
+                            android:visibility="gone"
+                            >
 
                             <TextView
                                 android:layout_width="@dimen/C70dp"
@@ -251,8 +252,7 @@
                     android:layout_marginLeft="@dimen/C3dp"
                     android:layout_marginRight="@dimen/C3dp"
                     android:orientation="vertical"
-                    android:padding="8dp"
-                    android:visibility="gone">
+                    android:padding="8dp">
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/card_date"
@@ -361,6 +361,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C8dp"
+                    android:visibility="gone"
                     android:layout_marginRight="@dimen/C8dp"
                     android:orientation="vertical">
                     <!--Daily Allowance-->
@@ -1228,6 +1229,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:visibility="gone"
                                 android:id="@+id/lodgContvw"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1315,8 +1317,7 @@
                                         <LinearLayout
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:gravity="center"
-                                            android:orientation="horizontal"
+                                            android:layout_margin="@dimen/C5dp"
                                             tools:ignore="UselessParent">
 
 
@@ -1349,9 +1350,9 @@
 
                                             <LinearLayout
                                                 android:id="@+id/lin_chck_out"
+                                                android:layout_marginLeft="@dimen/C5dp"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
-                                                android:layout_margin="5dp"
                                                 android:layout_weight="1"
                                                 android:orientation="vertical">
 
@@ -1410,6 +1411,7 @@
                                     <LinearLayout
                                         android:id="@+id/lin_indep_sty"
                                         android:visibility="gone"
+                                        android:layout_margin="@dimen/C5dp"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical">
@@ -1743,7 +1745,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical"
-                                        android:visibility="gone">
+      >
 
                                         <LinearLayout
                                             android:id="@+id/ldgEAra"

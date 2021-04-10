@@ -27,7 +27,6 @@
                 tools:ignore="MissingConstraints">
 
 
-
                 <TextView
                     style="@style/TextStyle"
                     android:text="Mode of Travels " />
@@ -71,7 +70,7 @@
                             android:layout_width="@dimen/C80dp"
                             android:rotation="90"
                             android:layout_height="@dimen/C80dp"
-                            android:layout_marginLeft="@dimen/C20dp"></ImageView>
+                            android:layout_marginLeft="@dimen/C20dp"/>
                     </LinearLayout>
 
 
@@ -235,7 +234,6 @@
                         </LinearLayout>
 
                     </LinearLayout>
-
 
                     <TextView
                         style="@style/TextStyle"

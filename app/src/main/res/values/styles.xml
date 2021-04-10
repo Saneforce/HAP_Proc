@@ -110,4 +110,15 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+
+    <style name="scrollbar_shape_style">
+        <item name="android:scrollbarAlwaysDrawVerticalTrack">true</item>
+        <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:fadeScrollbars">true</item>
+        <item name="android:scrollbarThumbVertical">@color/colorAccent</item>
+        <item name="android:scrollbarTrackVertical">@color/colorAccent</item>
+        <item name="android:scrollbarSize">2dp</item>
+            </style>
+
 </resources>

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +29,6 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
 
@@ -60,7 +60,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     Shared_Common_Pref shared_common_pref;
     String imageProfile = "", sSFType = "";
     String onDuty = "";
-    ImageView profilePic,btMyQR;
+    ImageView profilePic, btMyQR;
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
     public static final String visitPurpose = "vstPur";
@@ -72,6 +72,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     public static final String StartedImage = "SharedImage";
     SharedPreferences.Editor editors;
     SharedPreferences sharedpreferences;
+    RelativeLayout mRelApproval;
 
 
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
@@ -109,7 +110,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         String sSFName = UserDetails.getString("SfName", "");
         sSFType = UserDetails.getString("Sf_Type", "");
         OTFlg = UserDetails.getInt("OTFlg", 0);
-
+        mRelApproval = findViewById(R.id.rel_app);
 
         Log.e("DASHBORAD_SF", sSFType);
 
@@ -127,7 +128,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         //profilePic.setImageURI(Uri.parse((UserDetails.getString("url", ""))));
 
-        btMyQR=findViewById(R.id.myQR);
+        btMyQR = findViewById(R.id.myQR);
         linMyday = findViewById(R.id.lin_myday_plan);
         linMyday.setVisibility(View.GONE);
         if (sSFType.equals("1")) linMyday.setVisibility(View.VISIBLE);
@@ -153,16 +154,16 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         approvalcount = findViewById(R.id.approvalcount);
 
         if (shared_common_pref.getvalue(Shared_Common_Pref.CHECK_COUNT).equals("0")) {
-            linApprovals.setVisibility(View.GONE);
+            mRelApproval.setVisibility(View.GONE);
             //linApprovals.setVisibility(View.VISIBLE);
         } else {
-            linApprovals.setVisibility(View.VISIBLE);
+            mRelApproval.setVisibility(View.VISIBLE);
         }
 
         btMyQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(Dashboard.this,CateenToken.class);
+                Intent intent = new Intent(Dashboard.this, CateenToken.class);
                 startActivity(intent);
             }
         });
@@ -316,14 +317,15 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
                 break;
             case R.id.lin_extenden_shift:
-                validateExtened( "ValidateExtended");
+                validateExtened("ValidateExtended");
                 break;
             default:
                 break;
         }
 
     }
-    private void validateExtened( String Name) {
+
+    private void validateExtened(String Name) {
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", Name);
         QueryString.put("Sf_code", Shared_Common_Pref.Sf_Code);
@@ -490,8 +492,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             }
         });
     }
-
-
 
 
     public void getcountdetails() {

@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Interface.AdapterOnClick;
@@ -40,15 +41,20 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
 
     @Override
     public void onBindViewHolder(Invoice_History_Adapter.MyViewHolder holder, int position) {
+        if (mDate.get(position).getInvoice_Flag().equals("1")) {
+            holder.Statusinvoice.setText("Status:  PENDING");
+            holder.parent_layout.setBackgroundResource(R.color.white);
+        } else {
+            holder.Statusinvoice.setText("Status:  COMPLETE");
+            holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
+        }
         holder.txtOrderDate.setText("Dt: " + mDate.get(position).getOrderDate());
         holder.txtOrderID.setText(mDate.get(position).getOrderNo());
         holder.txtValue.setText("" + mDate.get(position).getOrderValue());
         holder.Itemcountinvoice.setText("" + mDate.get(position).getNo_Of_items());
-        holder.Statusinvoice.setText("Status:  COMPLETE");
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 mAdapterOnClick.onIntentClick(position);
             }
         });
@@ -62,6 +68,7 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView Statusinvoice, txtOrderDate, txtOrderID, txtValue, Itemcountinvoice;
         LinearLayout linearLayout;
+        ConstraintLayout parent_layout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -70,6 +77,7 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
             txtOrderDate = itemView.findViewById(R.id.txt_date);
             txtValue = itemView.findViewById(R.id.txt_total);
             linearLayout = itemView.findViewById(R.id.row_report);
+            parent_layout = itemView.findViewById(R.id.parent_layout);
             Itemcountinvoice = itemView.findViewById(R.id.Itemcountinvoice);
 
         }

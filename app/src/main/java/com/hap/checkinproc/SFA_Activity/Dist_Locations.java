@@ -78,7 +78,6 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

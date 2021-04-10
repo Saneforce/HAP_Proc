@@ -313,8 +313,9 @@ public interface ApiInterface {
 
 
     @FormUrlEncoded
-    @POST("Db_V13.php?axn=dcr/save")
-    Call<JsonObject> addNewRetailer(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("State_Code") String StateCode, @Query("desig") String desig, @Field("data") String data);
+    @POST("Db_v300.php")
+    Call<JsonObject> addNewRetailer(@QueryMap Map<String, String> params, @Field("data") String body);
+
 
     @FormUrlEncoded
     @POST("Db_v300.php?axn=table/list")

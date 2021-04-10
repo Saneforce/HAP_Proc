@@ -16,8 +16,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/C100dp">
+            android:layout_height="wrap_content">
 
             <ScrollView
                 android:layout_width="match_parent"
@@ -26,7 +25,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clipToPadding="false"
+                    android:layout_margin="@dimen/C5dp"
                     android:orientation="vertical"
                     android:padding="5dp">
 
@@ -35,36 +34,23 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_yellow"
                         android:padding="5dp"
+                        android:layout_marginBottom="@dimen/C10dp"
                         android:text="Deviation Entry"
                         android:textAlignment="center"
-                        android:textAllCaps="false"
                         android:textColor="#FFFFFF"
                         android:textSize="15sp"
                         android:textStyle="bold" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="10dp"
-                            android:text="Deviation"
-                            android:textColor="@color/dark_grey" />
+                            android:textSize="@dimen/C12dp"
+                            style="@style/TextStyle"
+                            android:text="Deviation" />
 
                         <LinearLayout
                             android:id="@+id/lin_deviation_entry"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="10dp"
+                            android:padding="@dimen/C8dp"
                             android:background="@drawable/textbox_bg">
 
                             <TextView
@@ -72,35 +58,26 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Deviation type"
-                                android:padding="@dimen/C10dp"
                                 android:textSize="13sp" />
-
                         </LinearLayout>
-                    </LinearLayout>
-
 
                     <LinearLayout
                         android:id="@+id/misseddatelayout"
                         android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/C5dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="10dp"
-                            android:text="Date"
-                            android:textSize="@dimen/C13dp" />
+                            android:textSize="@dimen/C12dp"
+                            style="@style/TextStyle"
+                            android:text="Date" />
 
                         <EditText
                             android:id="@+id/choose_date"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginLeft="@dimen/C8dp"
-                            android:layout_marginTop="@dimen/C5dp"
-                            android:layout_marginRight="@dimen/C8dp"
+                            android:layout_height="@dimen/C40dp"
+                            android:padding="@dimen/C8dp"
                             android:background="@drawable/textbox_bg"
                             android:clickable="false"
                             android:elevation="5dp"
@@ -111,45 +88,31 @@
 
                     </LinearLayout>
 
-
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:layout_marginTop="@dimen/C5dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="10dp"
-                            android:text="Remarks"
-                            android:textSize="@dimen/C13dp" />
+                            android:textSize="@dimen/C12dp"
+                            style="@style/TextStyle"
+                            android:text="Remarks" />
 
                         <EditText
                             android:id="@+id/remarks"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/C100dp"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="10dp"
+                            android:padding="@dimen/C8dp"
                             android:background="@drawable/textbox_bg"
                             android:elevation="@dimen/C5dp"
                             android:gravity="start"
                             android:hint="Reason"
-                            android:padding="@dimen/C10dp"
                             android:textSize="@dimen/C13dp" />
                     </LinearLayout>
-
-
                 </LinearLayout>
-
             </ScrollView>
-
-
         </LinearLayout>
-
-
     </LinearLayout>
 
     <LinearLayout
@@ -158,21 +121,11 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent">
 
-
         <Button
+            style="@style/ButtonStyle"
             android:id="@+id/deviation_submit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/C5dp"
-            android:layout_marginRight="10dp"
             android:background="@drawable/sign_bg"
-            android:gravity="center_vertical"
-            android:text="SUBMIT"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            tools:ignore="RtlCompat" />
-
+            android:text="SUBMIT" />
 
         <include layout="@layout/back_arrow"></include>
     </LinearLayout>

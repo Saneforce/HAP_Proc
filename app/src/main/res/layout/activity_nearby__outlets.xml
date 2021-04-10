@@ -104,7 +104,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/C60dp"
-                android:padding="@dimen/C10dp" />
+                 />
 
         </LinearLayout>
 
@@ -120,6 +120,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_margin="@dimen/C5dp"
+                android:visibility="gone"
                 android:paddingLeft="@dimen/C8dp"
                 android:paddingRight="@dimen/C8dp"
                 android:src="@drawable/back_arrow"></ImageView>

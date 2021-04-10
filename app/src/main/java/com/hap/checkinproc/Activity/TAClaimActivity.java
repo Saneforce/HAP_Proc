@@ -92,7 +92,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -130,7 +129,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             lodgJoin, ldgEAra, ldgMyEAra, JNLdgEAra, drvldgEAra, jointLodging, vwBoarding, vwDrvBoarding,
             linAddAllowance, diverAllowanceLinear, LDailyAllowance, LOtherExpense, LLocalConve, LinearOtherAllowance,
             linlocalCon, linBusMode, linBikeMode, linMode, travelDynamicLoaction, linDailyAllowance, linback, lin,
-            linImgPrv, TotalDays, stayDays, linEarly, linLate, linContinueStay,linCheckOut;
+            linImgPrv, TotalDays, stayDays, linEarly, linLate, linContinueStay, linCheckOut;
 
     CardView card_date, TravelBike, crdDynamicLocation, ldg_ara;
 
@@ -143,7 +142,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             lcTxtUKey, lcTxtUKeys, tvTxtUKey, tvTxtUKeys, txtMaxKm, txtDrvrBrod, txtStyDays, txtLodgUKey;
 
     EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt, edt1, edt_ldg_JnEmp,
-            edt_ldg_bill, edtLcFare, lodgStyLocation;
+            edt_ldg_bill, edtLcFare, lodgStyLocation, earCheckIn, earCheckOut, latCheckIn, latCheckOut, edtEarBill, edtLateBill;
 
     ImageView deleteButton, previewss, taAttach, lcAttach, oeAttach, lcPreview, oePreview, endkmimage, startkmimage,
             img_lodg_prvw, img_lodg_atta, mapZoomIn, imgBck;
@@ -159,7 +158,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             tominYear = "", tominMonth = "", tominDay = "";
 
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
-            oePosCnt = 0, lcPosCnt = 0, tvSize = 0, ttLod = 0;
+            oePosCnt = 0, lcPosCnt = 0, tvSize = 0, ttLod = 0, cnSty = 0, erlSty = 0, lteSty = 0;
 
     int size = 0, lcSize = 0, OeSize = 0, daysBetween = 0;
     long styDate = 0;
@@ -320,6 +319,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         TotalDays = findViewById(R.id.total_days);
         stayDays = findViewById(R.id.lin_stay_view);
         txtLodgUKey = findViewById(R.id.log_ukey);
+        earCheckIn = findViewById(R.id.early_check_in);
+        earCheckOut = findViewById(R.id.early_check_out);
+        latCheckIn = findViewById(R.id.late_check_in);
+        latCheckOut = findViewById(R.id.late_check_out);
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         mLc = findViewById(R.id.lc_srcoll);
         linImgPrv = findViewById(R.id.lin_img_prv);
@@ -331,12 +334,17 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         mChckCont = findViewById(R.id.chk_cnt_sty);
         mChckEarly = findViewById(R.id.chk_early);
         mChckLate = findViewById(R.id.chk_late);
+        edtEarBill = findViewById(R.id.edt_earl_bil);
+        edtLateBill = findViewById(R.id.lat_lod_bil);
         mChckCont.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     linCheckOut.setVisibility(View.INVISIBLE);
+                    cnSty = 1;
                 } else {
+                    ldg_cout.setText("");
+                    cnSty = 0;
                     linCheckOut.setVisibility(View.VISIBLE);
                 }
             }
@@ -347,7 +355,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     linEarly.setVisibility(View.VISIBLE);
+                    erlSty = 1;
                 } else {
+                    erlSty = 0;
+                    earCheckIn.setText("");
+                    earCheckOut.setText("");
                     linEarly.setVisibility(View.GONE);
                 }
             }
@@ -357,13 +369,16 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
+                    lteSty = 1;
                     linLate.setVisibility(View.VISIBLE);
                 } else {
+                    lteSty = 0;
+                    latCheckIn.setText("");
+                    latCheckOut.setText("");
                     linLate.setVisibility(View.GONE);
                 }
             }
         });
-
 
         img_lodg_atta.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -385,24 +400,19 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         txtLodgUKey.setText(lodUKey);
                     }
                 }
-
             }
         });
 
         img_lodg_prvw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
-
                 Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
                 stat.putExtra("position", txtLodgUKey.getText().toString());
                 stat.putExtra("headTravel", "LOD");
                 stat.putExtra("mode", "Room");
                 stat.putExtra("date", DateTime);
                 startActivity(stat);
-
-
             }
         });
 
@@ -433,40 +443,49 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         ldg_stayDt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCldr();
+                ShowTimePicker("check");
             }
         });
 
         ldg_cin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCldr();
+                ShowTimePicker("Lod_Check_In");
             }
         });
 
         ldg_cout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Calendar mcurrentTime = Calendar.getInstance();
-                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
-                int minute = mcurrentTime.get(Calendar.MINUTE);
-                TimePickerDialog mTimePicker;
-                mTimePicker = new TimePickerDialog(TAClaimActivity.this, new TimePickerDialog.OnTimeSetListener() {
-                    @Override
-                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        ldg_cout.setText(selectedHour + ":" + selectedMinute);
-                    }
-                }, hour, minute, true);//Yes 24 hour time
-                mTimePicker.setTitle("Select Time");
-                mTimePicker.show();
+                ShowTimePicker("Lod_Check_Out");
             }
         });
 
 
-        if (!ldg_cin.getText().toString().equalsIgnoreCase("") && !ldg_cout.getText().toString().equalsIgnoreCase("")) {
-            difference();
-        }
+        earCheckIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowTimePicker("Ear_Check_In");
+            }
+        });
+        earCheckOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowTimePicker("Ear_Check_Out");
+            }
+        });
+        latCheckIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowTimePicker("Lat_Check_In");
+            }
+        });
+        latCheckOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowTimePicker("Lat_Check_Out");
+            }
+        });
 
 
         edt_ldg_bill.addTextChangedListener(new TextWatcher() {
@@ -994,7 +1013,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
     }
 
-    public void showCldr() {
+    public void ShowTimePicker(String str) {
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
@@ -1002,7 +1021,24 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         mTimePicker = new TimePickerDialog(TAClaimActivity.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                ldg_cin.setText(selectedHour + ":" + selectedMinute);
+                if (str.equalsIgnoreCase("Lod_Check_In")) {
+                    ldg_cin.setText(selectedHour + ":" + selectedMinute);
+                } else if (str.equalsIgnoreCase("Lod_Check_Out")) {
+                    ldg_cout.setText(selectedHour + ":" + selectedMinute);
+                } else if (str.equalsIgnoreCase("Ear_Check_In")) {
+                    earCheckIn.setText(selectedHour + ":" + selectedMinute);
+                } else if (str.equalsIgnoreCase("Ear_Check_Out")) {
+                    earCheckOut.setText(selectedHour + ":" + selectedMinute);
+                } else if (str.equalsIgnoreCase("Lat_Check_In")) {
+                    latCheckIn.setText(selectedHour + ":" + selectedMinute);
+                } else if (str.equalsIgnoreCase("Lat_Check_Out")) {
+                    latCheckOut.setText(selectedHour + ":" + selectedMinute);
+                }
+
+                if (!ldg_cin.getText().toString().equalsIgnoreCase("") && !ldg_cout.getText().toString().equalsIgnoreCase("")) {
+                    difference("3");
+                }
+
             }
         }, hour, minute, true);//Yes 24 hour time
         mTimePicker.setTitle("Select Time");
@@ -1773,7 +1809,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         edt_ldg_bill.setText("");
                         txt_ldg_type.setText("");
                         TotalDays.setVisibility(View.GONE);
-                        stayDays.setVisibility(View.GONE);
 
 
                     }
@@ -2568,6 +2603,15 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldgSave.put("elgble", strMyEli.substring(0, intMyEli));
             ldgSave.put("noOfDays", txtStyDays.getText().toString());
             ldgSave.put("bil_amt", edt_ldg_bill.getText().toString());
+            ldgSave.put("con_sty", cnSty);
+            ldgSave.put("Erly_sty", erlSty);
+            ldgSave.put("lte_sty", lteSty);
+            ldgSave.put("Ear_chec_in", earCheckIn.getText().toString());
+            ldgSave.put("Ear_check_out", earCheckOut.getText().toString());
+            ldgSave.put("Ear_bill_amt", edtEarBill.getText().toString());
+            ldgSave.put("lat_chec_in", latCheckIn.getText().toString());
+            ldgSave.put("lat_check_out", latCheckOut.getText().toString());
+            ldgSave.put("lat_bill_amt", edtLateBill.getText().toString());
             ldgSave.put("wob_amt", strldgWobBal.substring(0, intMyldg));
             ldgSave.put("drv_ldg_amt", strdrvElig.substring(0, intMyDrvElg));
             ldgSave.put("jnt_ldg_amt", strJNEligi.substring(0, intJNEligi));
@@ -2597,22 +2641,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 jsnLdgSve.put("emp_Mob", txtJNMob.getText().toString());
                 jsnLdgSve.put("emp_ldg_amt", strJNMyEli.substring(0, intJNMyEli));
                 ldgArySve.put(jsnLdgSve);
-
-                Log.e("txtStyDaystoString()", edt_ldg_JnEmp.getText().toString());
-                Log.e("txtStyDaystoString()", txtJNName.getText().toString());
-                Log.e("txtStyDaystoString()", txtJNDesig.getText().toString());
-                Log.e("txtStyDaystoString()", txtJNDept.getText().toString());
-                Log.e("txtStyDaystoString()", txtJNHQ.getText().toString());
-                Log.e("txtStyDaystoString()", txtJNMob.getText().toString());
             }
 
             ldgSave.put("Loding_Emp", ldgArySve);
-
-            Log.v("LODGING_SAVE", ldgSave.toString());
-
             /*Travel Mode Json*/
-            JSONObject trDet = new JSONObject();
 
+            JSONObject trDet = new JSONObject();
             trDet.put("MOT", StrDaName);
             trDet.put("Start_Km", StartedKm);
             trDet.put("End_Km", ClosingKm);
@@ -2669,10 +2703,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
 
             trDet.put("trv_loca", trvLoc);
-
-
-
-
 
             /*Local Convenyance*/
             JSONArray addExp = new JSONArray();
@@ -2941,7 +2971,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 img_lodg_prvw.setVisibility(View.VISIBLE);
                 linImgPrv.setVisibility(View.VISIBLE);
                 viewBilling.setVisibility(View.VISIBLE);
-                stayDays.setVisibility(View.GONE);
+
 
                 /*tTotAmt = 0;*/
                 ttLod = 1;
@@ -2961,7 +2991,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 ldgWOBBal.setVisibility(View.VISIBLE);
                 linImgPrv.setVisibility(View.VISIBLE);
                 viewBilling.setVisibility(View.VISIBLE);
-                stayDays.setVisibility(View.GONE);
+
                 ttLod = 1;
                 /*tTotAmt = 0;*/
                 txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
@@ -3417,9 +3447,19 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     }
 
 
-    public void difference() {
+    public void difference(String str) {
 
-        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+        stayEgTotal = 1 * ldgEliAmt;
+
+        Log.v("LODING_STY", String.valueOf(stayEgTotal));
+        Log.v("LODING_ELIAMt", String.valueOf(ldgEliAmt));
+
+        txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(stayEgTotal));
+        ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(stayEgTotal));
+
+        SumOFLodging();
+
+      /*  SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         try {
 
@@ -3453,13 +3493,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 SumOFLodging();
 
             } else {
-                stayDays.setVisibility(View.GONE);
                 TotalDays.setVisibility(View.GONE);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
+
     }
 
     public void scroll() {

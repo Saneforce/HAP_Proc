@@ -66,8 +66,8 @@ public class Outet_Report_Details extends AppCompatActivity {
     List<Outlet_Report_Product_Details_Modal> Product_Details_ModalList;
     Type userType;
     Gson gson;
-    @Inject
-    Retrofit retrofit;
+    /*@Inject
+    Retrofit retrofit;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

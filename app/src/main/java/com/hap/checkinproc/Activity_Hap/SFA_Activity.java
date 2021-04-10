@@ -67,6 +67,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         //presenter = new MasterSync_Implementations(this, new Offline_SyncView());
         gson = new Gson();
         // presenter.requestDataFromServer();
+
     }
 
     @Override
@@ -89,7 +90,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 common_class.CommonIntentwithNEwTask(Reports_Outler_Name.class);
                 break;
             case R.id.SyncButon:
-                sharedCommonPref.Sync_Flag = "0";
+                Shared_Common_Pref.Sync_Flag = "10";
                 common_class.CommonIntentwithNEwTask(Offline_Sync_Activity.class);
                 break;
             case R.id.linorders:

@@ -28,6 +28,8 @@ import com.hap.checkinproc.MVP.MasterSync_Implementations;
 import com.hap.checkinproc.MVP.Master_Sync_View;
 import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Adapter.Complete_Order_Adapter;
+import com.hap.checkinproc.SFA_Adapter.Outlet_Orders_Alldays;
 import com.hap.checkinproc.SFA_Adapter.Route_View_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
@@ -35,6 +37,7 @@ import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -43,13 +46,16 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-public class Dashboard_Order_Reports extends AppCompatActivity  implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface {
-    List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
-    List<Retailer_Modal_List> Retailer_Modal_ListFilter;
-    List<com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal> Retailer_Order_List;
+
+public class Dashboard_Order_Reports extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface {
+    List<Outlet_Orders_Alldays> Retailer_Modal_List;
+    List<Outlet_Orders_Alldays> Retailer_Modal_ListFilter;
+    List<Outlet_Orders_Alldays> FilterCompleteList;
+    List<Outlet_Orders_Alldays> Retailer_Order_List;
     Gson gson;
     private RecyclerView recyclerView;
     Type userType;
@@ -63,17 +69,16 @@ public class Dashboard_Order_Reports extends AppCompatActivity  implements Main_
     List<Common_Model> Route_Masterlist = new ArrayList<>();
     CustomListViewDialog customDialog;
     List<Common_Model> FRoute_Master = new ArrayList<>();
-    List<OutletReport_View_Modal> OutletReport_View_Modal;
+
     String Route_id, Distributor_Id;
     Shared_Common_Pref sharedCommonPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard__order__reports);
         recyclerView = findViewById(R.id.leaverecyclerview);
         sharedCommonPref = new Shared_Common_Pref(Dashboard_Order_Reports.this);
-        // GetAllDetails();
-        //ViewAllOutletOrder();
         presenter = new MasterSync_Implementations(this, new Master_Sync_View());
         presenter.requestDataFromServer();
         shared_common_pref = new Shared_Common_Pref(this);
@@ -86,7 +91,6 @@ public class Dashboard_Order_Reports extends AppCompatActivity  implements Main_
         Pendingclick = findViewById(R.id.Pendingclick);
         Alltextview = findViewById(R.id.Alltextview);
         completeview = findViewById(R.id.completeview);
-
         pendingview = findViewById(R.id.pendingview);
         Alltextview.setVisibility(View.VISIBLE);
         completeview.setVisibility(View.INVISIBLE);
@@ -102,64 +106,16 @@ public class Dashboard_Order_Reports extends AppCompatActivity  implements Main_
         gson = new Gson();
         userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
         }.getType();
-        String outletserializableob = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List);
-        Retailer_Modal_ListFilter = gson.fromJson(outletserializableob, userType);
-        Retailer_Modal_List = gson.fromJson(outletserializableob, userType);
-        String todayorderliost = sharedCommonPref.getvalue(Shared_Common_Pref.GetTodayOrder_List);
-        userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
+        String todayorderliost = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_Total_AlldaysOrders);
+        userType = new TypeToken<ArrayList<Outlet_Orders_Alldays>>() {
         }.getType();
         Retailer_Order_List = gson.fromJson(todayorderliost, userType);
-
+        FilterCompleteList = new ArrayList<>();
+        Retailer_Modal_ListFilter = new ArrayList<>();
         int index = 0;
-        Log.e("Retailer_Modal_ListSize", String.valueOf(Retailer_Modal_List.size()));
-        Log.e("Retailer_Order_ListSIZE", String.valueOf(Retailer_Order_List.size()));
-        if (Retailer_Modal_List != null && Retailer_Modal_List.size() > 0) {
-            for (int i = 0; Retailer_Modal_List.size() > i; i++) {
-                if (Retailer_Modal_List.size() == 0) {
-                    Retailer_Modal_List.get(i).setInvoiceDate("");
-                    Retailer_Modal_List.get(i).setInvoiceValues("0.00");
-                    Retailer_Modal_List.get(i).setStatusname("PENDING");
-                    Retailer_Modal_List.get(i).setInvoice_Flag("0");
-                    Retailer_Modal_List.get(i).setValuesinv("0.00");
-                    Retailer_Modal_ListFilter.get(i).setInvoiceDate("");
-                    Retailer_Modal_ListFilter.get(i).setInvoiceValues("0.00");
-                    Retailer_Modal_ListFilter.get(i).setStatusname("PENDING");
-                    Retailer_Modal_ListFilter.get(i).setInvoice_Flag("0");
-                    Retailer_Modal_ListFilter.get(i).setValuesinv("0.00");
-                } else {
-                    for (int j = 0; Retailer_Order_List.size() > j; j++) {
-                        if (Retailer_Modal_List.get(i).getId().equals(Retailer_Order_List.get(j).getOutletCode())) {
-                            System.out.println("InSIDEIF" + i);
-                            Retailer_Modal_List.get(index).setInvoiceDate(Retailer_Order_List.get(j).getOrderDate());
-                            Retailer_Modal_List.get(index).setInvoiceValues(String.valueOf(Retailer_Order_List.get(j).getInvoicevalues()));
-                            Retailer_Modal_List.get(index).setStatusname(String.valueOf(Retailer_Order_List.get(j).getStatus()));
-                            Retailer_Modal_List.get(index).setInvoice_Flag(Retailer_Order_List.get(j).getInvoice_Flag());
-                            Retailer_Modal_List.get(index).setValuesinv("" + Retailer_Order_List.get(j).getOrderValue());
-                            Retailer_Modal_ListFilter.get(index).setInvoiceDate(Retailer_Order_List.get(j).getOrderDate());
-                            Retailer_Modal_ListFilter.get(index).setInvoiceValues(String.valueOf(Retailer_Order_List.get(j).getInvoicevalues()));
-                            Retailer_Modal_ListFilter.get(index).setStatusname(String.valueOf(Retailer_Order_List.get(j).getStatus()));
-                            Retailer_Modal_ListFilter.get(index).setInvoice_Flag(String.valueOf(Retailer_Order_List.get(j).getInvoice_Flag()));
-                            Retailer_Modal_ListFilter.get(index).setValuesinv(String.valueOf(Retailer_Order_List.get(j).getOrderValue()));
-                        } else {
-                            System.out.println("InSIDEELSE");
-                            Retailer_Modal_List.get(i).setInvoiceDate("");
-                            Retailer_Modal_List.get(i).setInvoiceValues("0.00");
-                            Retailer_Modal_List.get(i).setStatusname("PENDING");
-                            Retailer_Modal_List.get(i).setInvoice_Flag("0");
-                            Retailer_Modal_List.get(i).setValuesinv("0.00");
-                            Retailer_Modal_ListFilter.get(i).setInvoiceDate("");
-                            Retailer_Modal_ListFilter.get(i).setInvoiceValues("0.00");
-                            Retailer_Modal_ListFilter.get(i).setStatusname("PENDING");
-                            Retailer_Modal_ListFilter.get(i).setInvoice_Flag("0");
-                            Retailer_Modal_ListFilter.get(i).setValuesinv("0.00");
-                        }
-
-                    }
-                }
-
-            }
-        }
-        recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
+        Retailer_Modal_ListFilter.addAll(Retailer_Order_List);
+        FilterCompleteList.addAll(Retailer_Order_List);
+        recyclerView.setAdapter(new Complete_Order_Adapter(Retailer_Modal_ListFilter, R.layout.complete_orders_recyclerview, getApplicationContext(), new AdapterOnClick() {
             @Override
             public void onIntentClick(int position) {
                 Shared_Common_Pref.Outler_AddFlag = "0";
@@ -173,24 +129,23 @@ public class Dashboard_Order_Reports extends AppCompatActivity  implements Main_
     }
 
 
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.Alltextclick:
-                OutletFilter("t","1");
+                OutletFilter("t", "1");
                 Alltextview.setVisibility(View.VISIBLE);
                 completeview.setVisibility(View.INVISIBLE);
                 pendingview.setVisibility(View.INVISIBLE);
                 break;
             case R.id.Completeclick:
-                OutletFilter("t","2");
+                OutletFilter("t", "2");
                 Alltextview.setVisibility(View.INVISIBLE);
                 completeview.setVisibility(View.VISIBLE);
                 pendingview.setVisibility(View.INVISIBLE);
                 break;
             case R.id.Pendingclick:
-                OutletFilter("t","3");
+                OutletFilter("t", "3");
                 Alltextview.setVisibility(View.INVISIBLE);
                 completeview.setVisibility(View.INVISIBLE);
                 pendingview.setVisibility(View.VISIBLE);
@@ -238,41 +193,23 @@ public class Dashboard_Order_Reports extends AppCompatActivity  implements Main_
         } else if (type == 3) {
             Route_id = myDataset.get(position).getId();
             route_text.setText(myDataset.get(position).getName());
-            OutletFilter(myDataset.get(position).getId(),"0");
+         //   OutletFilter(myDataset.get(position).getId(), "0");
         }
 
     }
-    private void OutletFilter(String id,String flag) {
+
+    private void OutletFilter(String id, String flag) {
         Retailer_Modal_ListFilter.clear();
-        Log.e("Retailer_Modal_ListSIZE",""+Retailer_Modal_List.size());
-        if(flag.equals("1")){
-            Retailer_Modal_ListFilter.addAll(Retailer_Modal_List);
-        }else {
-            for (int i = 0; i < Retailer_Modal_List.size(); i++) {
-                if (flag.equals("0")) {
-                    if (Retailer_Modal_List.get(i).getTownCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-                    }
-                }
-                if (flag.equals("2")) {
-                    if (Retailer_Modal_List.get(i).getInvoice_Flag().equals("1")) {
-                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-                    }
-                }
-                if (flag.equals("3")) {
-                    if (Retailer_Modal_List.get(i).getInvoice_Flag().equals("0")) {
-                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-                    }
-                }
-
+        for (int i = 0; i < FilterCompleteList.size(); i++) {
+            if (FilterCompleteList.get(i).getTerritory_Code().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
+                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
             }
-
         }
-        recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
+        recyclerView.setAdapter(new Complete_Order_Adapter(Retailer_Modal_ListFilter, R.layout.complete_orders_recyclerview, getApplicationContext(), new AdapterOnClick() {
             @Override
             public void onIntentClick(int position) {
-                Shared_Common_Pref.OutletName = Retailer_Modal_ListFilter.get(position).getName().toUpperCase() + "~" + Retailer_Modal_ListFilter.get(position).getId();
-                Shared_Common_Pref.OutletCode = Retailer_Modal_ListFilter.get(position).getId();
+                Shared_Common_Pref.OutletName = Retailer_Modal_ListFilter.get(position).getOutletName().toUpperCase() + "~" + Retailer_Modal_ListFilter.get(position).getOutletCode();
+                Shared_Common_Pref.OutletCode = Retailer_Modal_ListFilter.get(position).getOutletCode();
                 common_class.CommonIntentwithFinish(Route_Product_Info.class);
 
             }
@@ -344,7 +281,6 @@ public class Dashboard_Order_Reports extends AppCompatActivity  implements Main_
                 }
 
             }
-
 
             //spinner.setSelection(adapter.getPosition("select worktype"));
             //            parseJsonData_cluster(clustspin_list);

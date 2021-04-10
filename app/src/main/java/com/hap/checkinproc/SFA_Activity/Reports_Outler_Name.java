@@ -42,15 +42,14 @@ public class Reports_Outler_Name extends AppCompatActivity {
     Common_Class common_class;
     TextView headtext, textViewname;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
-    @Inject
-    Retrofit retrofit;
+
     Shared_Common_Pref shared_common_pref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reports__outler__name);
         shared_common_pref = new Shared_Common_Pref(this);
-        //((MyApplication) getApplication()).getNetComponent().inject(this);
+       // ((MyApplication) getApplication()).getNetComponent().inject(this);
         recyclerView = findViewById(R.id.outletrecyclerview);
         headtext = findViewById(R.id.headtext);
         textViewname = findViewById(R.id.textViewname);
