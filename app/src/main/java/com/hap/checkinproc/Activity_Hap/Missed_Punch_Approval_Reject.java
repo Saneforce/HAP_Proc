@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,13 +43,15 @@ import retrofit2.Response;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class Missed_Punch_Approval_Reject extends AppCompatActivity implements View.OnClickListener {
-    TextView name, empcode, hq, mobilenumber, designation, MPreject, misseddate, applieddate, shiftonduty, MPreason, checkintime, checkouttime, MPapprovebutton, MP_rejectsave;
+    Button MPapprovebutton, MPreject, MP_rejectsave;
+    TextView name, empcode, hq, mobilenumber, designation, misseddate, applieddate, shiftonduty, MPreason, checkintime, checkouttime;
     String Sf_Code, Sl_No;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     LinearLayout Approvereject, rejectonly;
     EditText reason;
     Intent i;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,7 +102,6 @@ public class Missed_Punch_Approval_Reject extends AppCompatActivity implements V
                     startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
 
-
             }
         });
         name = findViewById(R.id.name);
@@ -123,6 +125,7 @@ public class Missed_Punch_Approval_Reject extends AppCompatActivity implements V
         shiftonduty = findViewById(R.id.shiftonduty);
         checkintime = findViewById(R.id.checkintime);
         checkouttime = findViewById(R.id.checkouttime);
+
         MPapprovebutton.setOnClickListener(this);
         MPreject.setOnClickListener(this);
         MP_rejectsave.setOnClickListener(this);
@@ -251,6 +254,7 @@ public class Missed_Punch_Approval_Reject extends AppCompatActivity implements V
     public void onBackPressed() {
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();

@@ -6,10 +6,14 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.MVP.Main_Model;
 import com.hap.checkinproc.MVP.MasterSync_Implementations;
@@ -17,51 +21,94 @@ import com.hap.checkinproc.MVP.Master_Sync_View;
 import com.hap.checkinproc.MVP.Offline_SyncView;
 import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
-public class Offline_Sync_Activity extends AppCompatActivity implements Main_Model.MasterSyncView {
+public class Offline_Sync_Activity extends AppCompatActivity implements View.OnClickListener, Main_Model.MasterSyncView {
     private Main_Model.presenter presenter;
     Shared_Common_Pref sharedCommonPref;
     Type userType;
     Gson gson;
     private ProgressDialog progress;
     Common_Class common_class;
+    TextView Backbuttontextview, lastsuccessync, Sf_UserId, distributornametext, SyncButton, totaloutlets, todayoutlet, invoicevalues, ordervalues;
+    List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offline__sync_);
         sharedCommonPref = new Shared_Common_Pref(Offline_Sync_Activity.this);
+        Backbuttontextview = findViewById(R.id.Backbuttontextview);
+        lastsuccessync = findViewById(R.id.lastsuccessync);
+        distributornametext = findViewById(R.id.distributornametext);
+        SyncButton = findViewById(R.id.SyncButton);
+        Sf_UserId = findViewById(R.id.Sf_UserId);
+        invoicevalues = findViewById(R.id.invoicevalues);
+        ordervalues = findViewById(R.id.ordervalues);
+        totaloutlets = findViewById(R.id.totaloutlets);
+        todayoutlet = findViewById(R.id.todayoutlet);
         presenter = new MasterSync_Implementations(this, new Offline_SyncView());
+        Backbuttontextview.setOnClickListener(this);
         gson = new Gson();
         common_class = new Common_Class(this);
         presenter.requestDataFromServer();
-        progress = new ProgressDialog(this);
-        progress.setMessage("Data Is Syncing ");
-        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progress.setIndeterminate(true);
-        progress.setProgress(0);
-        progress.show();
-        final int totalProgressTime = 100;
-        final Thread t = new Thread() {
-            @Override
-            public void run() {
-                int jumpTime = 0;
-                while (jumpTime < totalProgressTime) {
-                    try {
-                        sleep(200);
-                        jumpTime += 5;
-                        progress.setProgress(jumpTime);
-                    } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }
+        lastsuccessync.setText(Common_Class.GetDateOnly());
+        Sf_UserId.setText(Shared_Common_Pref.Sf_Code);
+       /* if (Shared_Common_Pref.Todaydayplanresult != null) {
+            GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "dayplan");
+        }
+        if (Shared_Common_Pref.TodaySfOrdervalues != null) {
+            GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.TodaySfOrdervalues), "order");
+        }*/
+       /* String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List);
+        Retailer_Modal_List = new ArrayList<>();
+        if (OrdersTable != null && !OrdersTable.equals("Outlet_List")) {
+            Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
+            totaloutlets.setText("" + Retailer_Modal_List.size());
+            int todaycount = 0;
+            for (Retailer_Modal_List lm : Retailer_Modal_List) {
+                if (lm.getLastUpdt_Date().equals(Common_Class.GetDatewothouttime())) {
+                    todaycount++;
                 }
             }
-        };
-        t.start();
+            todayoutlet.setText("" + todaycount);
+        }*/
+        SyncButton.setOnClickListener(this);
+        Log.e("SYNC_FLAG", Shared_Common_Pref.Sync_Flag);
+        if (Shared_Common_Pref.Sync_Flag.equals("0")) {
+            progress = new ProgressDialog(this);
+            progress.setMessage("Data Is Syncing");
+            progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+            progress.setIndeterminate(true);
+            progress.setProgress(0);
+            progress.show();
+            final int totalProgressTime = 100;
+            final Thread t = new Thread() {
+                @Override
+                public void run() {
+                    int jumpTime = 0;
+                    while (jumpTime < totalProgressTime) {
+                        try {
+                            sleep(200);
+                            jumpTime += 5;
+                            progress.setProgress(jumpTime);
+                        } catch (InterruptedException e) {
+                            // TODO Auto-generated catch block
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            };
+            t.start();
+        }
     }
 
     @Override
@@ -76,7 +123,6 @@ public class Offline_Sync_Activity extends AppCompatActivity implements Main_Mod
 
     @Override
     public void setDataToRoute(ArrayList<Route_Master> noticeArrayList) {
-
     }
 
     @Override
@@ -88,6 +134,7 @@ public class Offline_Sync_Activity extends AppCompatActivity implements Main_Mod
             //Outlet_List
             System.out.println("GetOutlet_All" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.Outlet_List, serializedData);
+            System.out.println("OUTLETLIST" + sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List));
         } else if (position == 1) {
             //Distributor_List
             System.out.println("Distributor_List" + serializedData);
@@ -105,17 +152,28 @@ public class Offline_Sync_Activity extends AppCompatActivity implements Main_Mod
             System.out.println("GetTodayOrder_List" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.GetTodayOrder_List, serializedData);
         } else if (position == 5) {
-            //GetTodayOrder_List
+            //GetTodayOrderDetails
             System.out.println("GetTodayOrderDetails_List" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.TodayOrderDetails_List, serializedData);
         } else if (position == 6) {
             System.out.println("Todaydayplanresult" + serializedData);
+            GetJsonData(serializedData, "dayplan");
             sharedCommonPref.save(Shared_Common_Pref.Todaydayplanresult, serializedData);
         } else if (position == 7) {
             System.out.println("Town_List" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.Rout_List, serializedData);
+        } else if (position == 8) {
+            System.out.println("Route_Dashboars_Orders" + serializedData);
+            sharedCommonPref.save(Shared_Common_Pref.Outlet_Total_Orders, serializedData);
+        } else if (position == 9) {
+            System.out.println("Route_Dashboars_AllDays" + serializedData);
+            sharedCommonPref.save(Shared_Common_Pref.Outlet_Total_AlldaysOrders, serializedData);
+        } else if (position == 10) {
+            sharedCommonPref.save(Shared_Common_Pref.TodaySfOrdervalues, serializedData);
+            GetJsonData(serializedData, "order");
         } else {
-            progress.dismiss();
+            if (progress != null)
+                progress.dismiss();
             System.out.println("Compititor_List" + serializedData);
             System.out.println("Compititor_SYncFlag" + sharedCommonPref.Sync_Flag);
             sharedCommonPref.save(Shared_Common_Pref.Compititor_List, serializedData);
@@ -123,6 +181,7 @@ public class Offline_Sync_Activity extends AppCompatActivity implements Main_Mod
                 common_class.CommonIntentwithNEwTask(Dashboard_Route.class);
             } else if (sharedCommonPref.Sync_Flag != null && sharedCommonPref.Sync_Flag.equals("2")) {
                 startActivity(new Intent(getApplicationContext(), Invoice_History.class));
+                finish();
             } else if (sharedCommonPref.Sync_Flag != null && sharedCommonPref.Sync_Flag.equals("0")) {
                 common_class.CommonIntentwithFinish(SFA_Activity.class);
             }
@@ -133,5 +192,41 @@ public class Offline_Sync_Activity extends AppCompatActivity implements Main_Mod
     @Override
     public void onResponseFailure(Throwable throwable) {
 
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.Backbuttontextview:
+                common_class.CommonIntentwithFinish(SFA_Activity.class);
+                break;
+            case R.id.SyncButton:
+                Shared_Common_Pref.Sync_Flag = "0";
+                common_class.CommonIntentwithFinish(Offline_Sync_Activity.class);
+                break;
+        }
+
+
+    }
+
+    private void GetJsonData(String jsonResponse, String Name) {
+        try {
+            JSONArray jsonArray = new JSONArray(jsonResponse);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                if (Name.equals("dayplan")) {
+                    distributornametext.setText(jsonObject1.optString("StkName"));
+                } else {
+                    invoicevalues.setText("" + jsonObject1.optString("Invoicevalues"));
+                    ordervalues.setText("" + jsonObject1.optString("Order_Value"));
+                    todayoutlet.setText("" + jsonObject1.optString("Outlet_Fortheday"));
+                    totaloutlets.setText(""+  jsonObject1.optString("Outlet_Fortheday")+"/"+ jsonObject1.optString("Totaloutlet"));
+                }
+            }
+            //spinner.setSelection(adapter.getPosition("select worktype"));
+            //            parseJsonData_cluster(clustspin_list);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

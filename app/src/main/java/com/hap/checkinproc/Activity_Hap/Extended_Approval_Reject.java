@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,13 +45,14 @@ import retrofit2.Response;
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
 public class Extended_Approval_Reject extends AppCompatActivity implements View.OnClickListener {
-    TextView name, applieddate, empcode, hq, mobilenumber, designation, workinghours, shiftdate, geocheckin, geocheckout, checkin, checkout, Oapprovebutton, ODreject, OD_rejectsave;
+    TextView name, applieddate, empcode, hq, mobilenumber, designation, workinghours, shiftdate, geocheckin, geocheckout, checkin, checkout;
     String Sf_Code, Sl_No;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
     LinearLayout Approvereject, rejectonly;
     EditText reason;
     Intent i;
+    Button Oapprovebutton, ODreject, OD_rejectsave;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -142,7 +144,7 @@ public class Extended_Approval_Reject extends AppCompatActivity implements View.
         geocheckout.setText(" " + i.getExtras().getString("geoout"));
         Sl_No = i.getExtras().getString("Sl_No");
 
-mobilenumber.setOnClickListener(this);
+        mobilenumber.setOnClickListener(this);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override

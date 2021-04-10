@@ -13,22 +13,20 @@
     android:layout_marginBottom="@dimen/C60dp"
     tools:context=".Activity_Hap.Leave_Approval_Reject">
 
-    <include layout="@layout/custom_toolbar_help"></include>
+    <include layout="@layout/custom_toolbar_help"/>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
+        android:layout_height="wrap_content"
         android:layout_margin="5dp"
         app:cardCornerRadius="10dp">
 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
-            android:orientation="vertical"
-            android:weightSum="3">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
@@ -41,358 +39,299 @@
                 android:textColor="@android:color/white"
                 android:textStyle="bold" />
 
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+
+
+      <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:ignore="MissingConstraints">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/bg_color"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/C10dp"
                 android:orientation="vertical"
-                android:weightSum="3">
-
+                tools:ignore="MissingConstraints">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5"
-                    android:orientation="horizontal"
-                    android:padding="5dp"
-                    android:weightSum="2">
-
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    tools:ignore="MissingConstraints">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:padding="15dp">
+                        android:layout_height="wrap_content">
 
                         <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="200dp"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:text="Name "
-
-                            android:textColor="@color/txt_color_black"
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="200dp"
-                            android:layout_weight="1"
-                            android:text="Applied Date "
-
-                            android:textColor="@color/txt_color_black"
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="200dp"
-                            android:layout_weight="1"
-                            android:text="Emp Code "
-                            android:textColor="@color/txt_color_black"
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="200dp"
-                            android:layout_weight="1"
-                            android:text="HQ"
-                            android:textColor="@color/txt_color_black"
-
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="200dp"
-                            android:layout_weight="1"
-                            android:text="Designation "
-
-                            android:textColor="@color/txt_color_black"
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="200dp"
-                            android:layout_weight="1"
-                            android:text="Mobile"
-                            android:textColor="@color/txt_color_black"
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="200dp"
-                            android:layout_weight="1"
-                            android:text="Working Hours"
-                            android:textColor="@color/txt_color_black"
-
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="220dp"
-                            android:layout_weight="1"
-                            android:text="Shift Date"
-
-                            android:textColor="@color/txt_color_black"
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
-
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="220dp"
-                            android:layout_weight="1"
-                            android:text="Geo Check-in "
-                            android:textColor="@color/txt_color_black"
-
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:layout_width="100dp"
-                            android:layout_height="220dp"
-                            android:layout_weight="1"
-                            android:text="Geo Check-out"
-                            android:textColor="@color/txt_color_black"
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:padding="15dp">
+                            android:text="Name " />
 
                         <TextView
                             android:id="@+id/name"
-                            android:layout_width="100dp"
-                            android:layout_height="200dp"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:text="Name"
-                            android:textColor="@color/green"
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
+                            android:textColor="@color/green" />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
                         <TextView
-                            android:id="@+id/applieddate"
-                            android:layout_width="100dp"
-                            android:layout_height="200dp"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:text="applieddate"
-                            android:textColor="@color/green"
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
+                            android:text="Emp Code " />
 
                         <TextView
                             android:id="@+id/empcode"
-
-                            android:layout_width="100dp"
-                            android:layout_height="200dp"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:text="Emp Code"
+                            android:textColor="@color/green" />
 
-                            android:textColor="@color/green"
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="HQ" />
 
                         <TextView
                             android:id="@+id/hq"
-
-                            android:layout_width="100dp"
-                            android:layout_height="200dp"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:text="HQ"
-                            android:textColor="@color/green"
+                            android:textColor="@color/green" />
 
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Designation " />
 
                         <TextView
                             android:id="@+id/designation"
-
-                            android:layout_width="100dp"
-                            android:layout_height="200dp"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:text="Designation"
-                            android:textColor="@color/green"
+                            android:textColor="@color/green" />
 
-                            android:textSize="@dimen/C13dp"
-                            android:textStyle="bold" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
                         <TextView
-
-                            android:id="@+id/mobilenumber"
-                            android:layout_width="100dp"
-                            android:layout_height="200dp"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:text="Mobile Number"
-                            android:textColor="@color/green"
-                            android:textSize="@dimen/C16dp"
+                            android:text="Mobile " />
 
-                            android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/mobilenumber"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Reason " />
+
+                        <TextView
+                            android:id="@+id/Preason"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Applied Date" />
+
+                        <TextView
+                            android:id="@+id/applieddate"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:textColor="@color/green" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Working Hours" />
 
                         <TextView
                             android:id="@+id/workinghours"
-                            android:layout_width="100dp"
-                            android:layout_height="200dp"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:text="Working Hours"
-                            android:textColor="@color/green"
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
+                            android:textColor="@color/green" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Shift Date"/>
 
                         <TextView
                             android:id="@+id/shiftdate"
-
-                            android:layout_width="100dp"
-                            android:layout_height="220dp"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:text="Shift Date"
-                            android:textColor="@color/green"
+                            android:textColor="@color/green" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
-
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Geo Check-in "/>
 
                         <TextView
                             android:id="@+id/geocheckin"
-
-                            android:layout_width="100dp"
-                            android:layout_height="220dp"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:text="87.09884"
+                            android:textColor="@color/green" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
 
-
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
+                        <TextView
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:layout_weight="1"
+                            android:text="Geo Check-Out "/>
 
                         <TextView
                             android:id="@+id/geocheckout"
-                            android:layout_width="100dp"
-                            android:layout_height="220dp"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:text="67.9876"
-                            android:textSize="@dimen/C16dp"
-                            android:textStyle="bold" />
+                            android:textColor="@color/green" />
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/rejectonly"
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:orientation="vertical"
-                    android:padding="0dp"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:padding="10dp">
+                    android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-
-                            android:gravity="left"
-                            android:text="@string/reason"
-                            android:textColor="@color/txt_color_black"
-                            android:textSize="@dimen/C16dp"
+                            style="@style/TextStyle"
                             android:textStyle="bold"
-                            android:visibility="visible" />
+                            android:text="@string/reason" />
 
                         <androidx.appcompat.widget.AppCompatEditText
                             android:id="@+id/reason"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/C60dp"
                             android:layout_marginTop="@dimen/C10dp"
+                            android:layout_marginBottom="@dimen/C10dp"
                             android:background="@drawable/round_white_backround"
-                            android:gravity="top"
+                            android:gravity="start"
                             android:hint="@string/txt_enter_reason"
-                            android:padding="15dp"
+                            android:padding="5dp"
                             android:textSize="@dimen/C12dp"
                             android:visibility="visible" />
 
-                        <TextView
-                            android:id="@+id/OD_rejectsave"
-                            android:layout_width="110dp"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="@dimen/C5dp"
-                            android:background="@drawable/blue_txt_bg"
-                            android:padding="@dimen/C5dp"
-                            android:gravity="center"
-                            android:text="Reject"
-                            android:textAlignment="center"
-                            android:textColor="@color/bg_color"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
+
+                    <Button
+                        style="@style/ButtonStyle"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:layout_width="110dp"
+                        android:id="@+id/OD_rejectsave"
+                        android:fontFamily="@font/alegreya_sans_sc"
+                        android:background="@drawable/blue_txt_bg"
+                        android:textStyle="bold"
+                        android:text="Save" />
+
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/Approvereject"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:padding="15dp"
-                    android:weightSum="4">
+                    android:layout_marginTop="@dimen/C10dp"
+                    android:layout_height="match_parent">
 
-                    <TextView
+
+                    <Button
+                        style="@style/ButtonStyle"
+                        android:layout_weight="1"
                         android:id="@+id/Oapprovebutton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginBottom="3dp"
-                        android:layout_weight="2"
-                        android:background="@drawable/button_green"
-                        android:padding="@dimen/C5dp"
-                        android:gravity="center"
-                        android:text="Approve"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:fontFamily="@font/alegreya_sans_sc"
+                        android:background="@drawable/button_dgreen"
+                        android:textStyle="bold"
+                        android:text="Approve" />
 
-                    <TextView
+                    <Button
                         android:id="@+id/ODreject"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginBottom="3dp"
-                        android:layout_weight="2"
+                        android:layout_weight="1"
+                        style="@style/ButtonStyle"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/alegreya_sans_sc"
                         android:background="@drawable/button_amber"
-                        android:padding="@dimen/C5dp"
+                        android:text="Reject" />
 
-                        android:gravity="center"
-                        android:text="Reject"
-                        android:textColor="@android:color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
 
                 </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
+      </ScrollView>
 
 </LinearLayout>
 
     <include layout="@layout/back_arrow"></include>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

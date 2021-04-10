@@ -73,8 +73,7 @@ public class Outlet_Report_View extends AppCompatActivity {
     List<OutletReport_View_Modal> OutletReport_View_Modal;
     Type userType;
     Gson gson;
-    @Inject
-    Retrofit retrofit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +84,7 @@ public class Outlet_Report_View extends AppCompatActivity {
         Outlet_Name.setText("" + Shared_Common_Pref.OutletName);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         gson = new Gson();
-        //((MyApplication) getApplication()).getNetComponent().inject(this);
+    //    ((MyApplication) getApplication()).getNetComponent().inject(this);
         txtHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

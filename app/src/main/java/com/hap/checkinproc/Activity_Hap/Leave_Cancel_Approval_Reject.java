@@ -1,8 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -15,11 +12,15 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -42,8 +43,9 @@ import retrofit2.Response;
 
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
-public class Leave_Cancel_Approval_Reject extends AppCompatActivity implements View.OnClickListener{
-    TextView name, empcode, hq, mobilenumber, designation, leavereason, leavetype, fromdate, todate, leavedays, tpapprovebutton, Lreject, L_rejectsave;
+public class Leave_Cancel_Approval_Reject extends AppCompatActivity implements View.OnClickListener {
+    TextView name, empcode, hq, mobilenumber, designation, leavereason, leavetype, fromdate, todate, leavedays;
+    Button tpapprovebutton, Lreject, L_rejectsave;
     String Sf_Code, Tour_plan_Date, LeaveId;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
@@ -51,6 +53,7 @@ public class Leave_Cancel_Approval_Reject extends AppCompatActivity implements V
     EditText reason;
     private WebView wv1;
     Intent i;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,7 +133,7 @@ public class Leave_Cancel_Approval_Reject extends AppCompatActivity implements V
         designation.setText(":" + i.getExtras().getString("Designation"));
         mobilenumber.setText(":" + i.getExtras().getString("MobileNumber"));
         leavereason.setText(":" + i.getExtras().getString("Reason"));
-        leavetype.setText(":"+i.getExtras().getString("Leavetype"));
+        leavetype.setText(":" + i.getExtras().getString("Leavetype"));
         fromdate.setText(":" + i.getExtras().getString("fromdate"));
         todate.setText(":" + i.getExtras().getString("todate"));
         leavedays.setText(":" + i.getExtras().getString("leavedays"));
@@ -206,6 +209,7 @@ public class Leave_Cancel_Approval_Reject extends AppCompatActivity implements V
             }
         });
     }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {

@@ -130,14 +130,12 @@ public class New_Outlet_Map_creations extends FragmentActivity implements OnMapR
         }
         return strAdd;
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.imag_back:
                 finish();
                 break;
-
             case R.id.ReachedOutlet:
                 Shared_Common_Pref.Outler_AddFlag = "1";
                 common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);

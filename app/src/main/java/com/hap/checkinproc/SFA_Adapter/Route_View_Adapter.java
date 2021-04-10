@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
         holder.invoice.setText("Last invoice value :" + "\t\t" + Retailer_Modal_List.getInvoiceValues());
         holder.values.setText("Value :" + "\t\t" + Retailer_Modal_List.getValuesinv());
         holder.invoicedate.setText("Last invoice date :" + "\t\t" + Retailer_Modal_List.getInvoiceDate());
+        Log.e("INVOICE_FLAG_Adapter", Retailer_Modal_List.getInvoice_Flag());
         if (Retailer_Modal_List.getInvoice_Flag().equals("0")) {
             holder.parent_layout.setBackgroundResource(R.color.white);
         } else if (Retailer_Modal_List.getInvoice_Flag().equals("1")) {

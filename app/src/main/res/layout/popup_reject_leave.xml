@@ -26,8 +26,7 @@
             android:layout_marginTop="5dp"
             android:background="@null"
             android:hint="Type here"
-            android:id="@+id/edt_feed"
-            />
+            android:id="@+id/edt_feed" />
 
     </RelativeLayout>
 

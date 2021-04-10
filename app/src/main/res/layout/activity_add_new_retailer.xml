@@ -11,18 +11,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
-
         <include layout="@layout/custom_toolbar_help"></include>
-
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/view_bg_color">
-
                 <TextView
                     android:id="@+id/headtext"
                     android:layout_width="match_parent"
@@ -61,6 +57,7 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -89,13 +86,14 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:id="@+id/CurrentLocLin"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:orientation="vertical">
 
                             <LinearLayout
+
+                                android:id="@+id/CurrentLocLin"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal">
@@ -172,6 +170,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/retailercodevisible"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
@@ -198,6 +197,7 @@
                                 android:src="@drawable/mandatory" />
 
                         </LinearLayout>
+
 
                         <EditText
                             android:id="@+id/retailercode"
@@ -537,7 +537,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/C20dp"
             android:layout_marginRight="@dimen/C20dp">
-
 
             <Button
                 android:id="@+id/submit_button"

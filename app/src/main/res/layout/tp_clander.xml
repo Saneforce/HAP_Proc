@@ -16,25 +16,18 @@
         android:orientation="vertical"
         android:padding="10dp">
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_blueg"
-            android:padding="10dp">
-
-
             <TextView
                 android:id="@+id/title"
+                android:padding="@dimen/C7dp"
+                android:background="@drawable/button_blueg"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dip"
                 android:text="November"
                 android:textAlignment="center"
                 android:textColor="@color/color_white"
                 android:textSize="18dip"
-
                 android:textStyle="bold" />
-        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -135,7 +128,7 @@
             android:layout_margin="@dimen/C5dp"
             android:paddingLeft="@dimen/C8dp"
             android:paddingRight="@dimen/C8dp"
-            android:src="@drawable/back_arrow"></ImageView>
+            android:src="@drawable/back_arrow"/>
 
         <Button
             android:id="@+id/btnsubmit"

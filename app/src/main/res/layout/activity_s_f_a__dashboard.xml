@@ -64,21 +64,34 @@
                             android:orientation="vertical">
 
 
-                            <LinearLayout
+                            <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    style="@style/TextStyle"
-                                    android:layout_weight="1"
-                                    android:text="Distributor Wise outlet count" />
-
-                                <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/arrow_right" />
+                                    android:layout_alignParentStart="true"
+                                    android:layout_alignParentLeft="true"
+                                    android:text="Distributor Wise outlet count"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13dp"></TextView>
 
-                            </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentRight="true"
+                                    android:orientation="horizontal">
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/arrow_right"></ImageView>
+                                </LinearLayout>
+                            </RelativeLayout>
 
                         </LinearLayout>
 
@@ -96,21 +109,35 @@
                             android:orientation="vertical">
 
 
-                            <LinearLayout
+                            <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    style="@style/TextStyle"
-                                    android:layout_weight="1"
-                                    android:text="Outlet type wiose outlet count" />
-
-                                <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/arrow_right" />
+                                    android:layout_alignParentStart="true"
+                                    android:layout_alignParentLeft="true"
+                                    android:text="Outlet type wiose outlet count"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13dp"></TextView>
 
-                            </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentRight="true"
+                                    android:orientation="horizontal">
+
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/arrow_right"></ImageView>
+                                </LinearLayout>
+                            </RelativeLayout>
 
                         </LinearLayout>
 
@@ -128,21 +155,36 @@
                             android:orientation="vertical">
 
 
-                            <LinearLayout
+                            <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    style="@style/TextStyle"
-                                    android:layout_weight="1"
-                                    android:text="Product wise outlet count" />
-
-                                <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/arrow_right" />
+                                    android:layout_alignParentStart="true"
+                                    android:layout_alignParentLeft="true"
+                                    android:text="Product wise outlet count"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13dp"></TextView>
 
-                            </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentRight="true"
+                                    android:orientation="horizontal">
+
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/arrow_right"></ImageView>
+                                </LinearLayout>
+
+                            </RelativeLayout>
 
                         </LinearLayout>
 
@@ -150,7 +192,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="0.5dp"
                             android:layout_marginTop="@dimen/C3dp"
-                            android:background="@color/grey_400"></View>
+                            android:background="@color/grey_400"
+                            android:visibility="gone"></View>
 
 
                         <LinearLayout
@@ -161,22 +204,39 @@
                             android:orientation="vertical">
 
 
-                            <LinearLayout
+                            <RelativeLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
+                                android:layout_height="wrap_content"
+                                android:visibility="gone">
 
                                 <TextView
-                                    style="@style/TextStyle"
-                                    android:layout_weight="1"
-                                    android:text="Day Summary" />
-
-                                <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:src="@drawable/arrow_right"></ImageView>
-                            </LinearLayout>
+                                    android:layout_alignParentStart="true"
+                                    android:layout_alignParentLeft="true"
+                                    android:text="Day Summary"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13dp"></TextView>
+
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentLeft="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentRight="true"
+                                    android:orientation="horizontal">
+
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/arrow_right"></ImageView>
+                                </LinearLayout>
+                            </RelativeLayout>
 
                         </LinearLayout>
+
 
                     </LinearLayout>
 

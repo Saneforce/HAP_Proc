@@ -1,13 +1,17 @@
 package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
@@ -23,6 +27,8 @@ public class Lead_Adapter extends RecyclerView.Adapter<Lead_Adapter.MyViewHolder
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView outletname, Outlet_Code, Productcategory, Productnamedate, outletAddress, invoice;
+        LinearLayout parent_layout;
+
         public MyViewHolder(View view) {
             super(view);
             outletname = view.findViewById(R.id.outletname);
@@ -30,15 +36,14 @@ public class Lead_Adapter extends RecyclerView.Adapter<Lead_Adapter.MyViewHolder
             Productcategory = view.findViewById(R.id.Productcategory);
             Productnamedate = view.findViewById(R.id.Productnamedate);
             outletAddress = view.findViewById(R.id.outletAddress);
+            parent_layout = itemView.findViewById(R.id.parent_layout);
         }
     }
 
-
-    public Lead_Adapter(List<Retailer_Modal_List> Retailer_Modal_Listitem, int rowLayout, Context context, AdapterOnClick mAdapterOnClick) {
+    public Lead_Adapter(List<Retailer_Modal_List> Retailer_Modal_Listitem, int rowLayout, Context context) {
         this.Retailer_Modal_Listitem = Retailer_Modal_Listitem;
         this.rowLayout = rowLayout;
         this.context = context;
-        this.mAdapterOnClick = mAdapterOnClick;
     }
 
     @Override
@@ -55,8 +60,12 @@ public class Lead_Adapter extends RecyclerView.Adapter<Lead_Adapter.MyViewHolder
         holder.Productcategory.setText("PRODUCT:" + "\t\t" + "FRESH");
         holder.Productnamedate.setText("" + Retailer_Modal_List.getId());
         holder.outletAddress.setText("" + Retailer_Modal_List.getListedDrAddress1());
+       // Log.e("LastUpdt_Date_Server", Retailer_Modal_List.getName().toUpperCase() + ":" + Retailer_Modal_List.getLastUpdt_Date());
+        //Log.e("LastUpdt_Date_Mobile", Retailer_Modal_List.getName().toUpperCase() + ":" + Common_Class.GetDatewothouttime());
+        if (Retailer_Modal_List.getLastUpdt_Date() != null && Retailer_Modal_List.getLastUpdt_Date().equals(Common_Class.GetDatewothouttime())   ) {
+            holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
+        }
     }
-
     @Override
     public int getItemCount() {
         return Retailer_Modal_Listitem.size();

@@ -6,14 +6,6 @@ import android.content.ComponentCallbacks;
 import android.content.ComponentCallbacks2;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
-
-import com.hap.checkinproc.SFA_Activity.ApiComponent;
-import com.hap.checkinproc.SFA_Activity.ApiModule;
-import com.hap.checkinproc.SFA_Activity.AppModule;
-import com.hap.checkinproc.SFA_Activity.DaggerApiComponent;
 
 public class HAPApp extends Application {
 
@@ -25,10 +17,10 @@ public class HAPApp extends Application {
         super.onCreate();
 
 
-        mApiComponent = DaggerApiComponent.builder()
+      /*  mApiComponent = DaggerApiComponent.builder()
                 .appModule(new AppModule(this))
                 .apiModule(new ApiModule("https://hap.sanfmcg.com/server/"))
-                .build();
+                .build();*/
         setupActivityListener();
     }
 

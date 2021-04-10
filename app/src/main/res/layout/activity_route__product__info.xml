@@ -13,7 +13,6 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,7 +52,18 @@
                     android:textColor="@android:color/white"
                     android:textSize="17dp"
                     android:textStyle="bold" />
-
+                <TextView
+                    android:id="@+id/Editoutlet"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1.5"
+                    android:gravity="start"
+                    android:text="Edit"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/white"
+                    android:textSize="18dp"
+                    android:visibility="gone" />
                 <TextView
                     android:id="@+id/Nextadd"
                     android:layout_width="match_parent"
@@ -76,20 +86,17 @@
             android:background="@color/black"
             android:orientation="horizontal"
             android:weightSum="2">
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:layout_weight="0.2"
-                android:drawableRight="@drawable/front_arrow"
                 android:gravity="center"
-                android:text="More Info"
+                android:text=""
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textColor="@color/white"
                 android:textSize="17dp" />
         </LinearLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -273,7 +280,6 @@
 
 
         </LinearLayout>
-
         <TextView
             android:id="@+id/takeorder"
             android:layout_width="match_parent"
@@ -284,7 +290,5 @@
             android:text="Take Order"
             android:textColor="@color/white"
             android:textSize="17dp" />
-
-
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
