@@ -331,7 +331,7 @@
                         style="@style/ButtonStyle"
                         android:layout_weight="1"
                         android:background="@drawable/button_purple"
-                        android:text="TA Exception Entry"></Button>
+                        android:text="TA &amp; claim"></Button>
                 </LinearLayout>
 
                 <LinearLayout

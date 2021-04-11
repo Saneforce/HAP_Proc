@@ -503,7 +503,8 @@ public class SANGPSTracker extends Service {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        jsonarray.put(paramObject);
+        db.addTrackDetails(paramObject);
+        /*jsonarray.put(paramObject);
         SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -517,10 +518,10 @@ public class SANGPSTracker extends Service {
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-                db.addTrackDetails(paramObject);
+
                 Log.d(TAG, "onFailure Location");
             }
-        });
+        });*/
     }
     private void registerReceiverGPS() {
         if (yourReceiver == null) {

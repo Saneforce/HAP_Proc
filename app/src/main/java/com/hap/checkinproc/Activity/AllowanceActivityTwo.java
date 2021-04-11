@@ -49,6 +49,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.TimerService;
 
@@ -393,8 +394,32 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             //saveAllowance
             Log.v("printing_allow", jj.toString());
             Call<ResponseBody> Callto;
-            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            DatabaseHandler db = new DatabaseHandler(this);
+            JSONArray locations=db.getAllPendingTrackDetails();
+            if(locations.length()>0){
+                try {
+                    SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                    if (UserDetails.getString("Sfcode", "") != "") {
+                        Call<JsonObject> call = apiInterface.JsonSave("save/trackall", "3", UserDetails.getString("Sfcode", ""), "", "", locations.toString());
+                        call.enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                // Get result Repo from response.body()
+                                db.deleteAllTrackDetails();
+                            }
+
+                            @Override
+                            public void onFailure(Call<JsonObject> call, Throwable t) {
+                                Log.d("LocationUpdate", "onFailure Local Location");
+                            }
+                        });
+                    }
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
             Callto = apiInterface.updateAllowance(jj.toString());
 
             Callto.enqueue(new Callback<ResponseBody>() {
@@ -425,6 +450,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 editor.remove("SharedImages");
                                 editor.remove("Closing");
                                 shared_common_pref.clear_pref(Shared_Common_Pref.DAMode);
+
                                 Intent takePhoto = new Intent(AllowanceActivityTwo.this, ImageCapture.class);
                                 takePhoto.putExtra("Mode", "COUT");
                                 startActivity(takePhoto);

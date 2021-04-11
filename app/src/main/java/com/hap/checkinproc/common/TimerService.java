@@ -114,22 +114,12 @@ public class TimerService extends Service {
         Context context = getApplicationContext();
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-
-
             LocationServices locationServices = new LocationServices(cAtivity, context);
-
             if (locationServices.checkPermission() == false) {
                 sMsg = "Higher Version";
-                //Log.v("KARTHIC_KUMAR", sMsg);
             } else {
-                /*   sMsg = "PERMISIN IS THERE";*/
-                //Log.v("KARTHIC_KUMAR", sMsg);
-
             }
-
-
             ViewGroup rootView = cAtivity.getWindow().getDecorView().findViewById(android.R.id.content);
-
             try {
                 RelativeLayout el = rootView.findViewById(42311);
                 if (el.getVisibility() == View.VISIBLE) {
@@ -430,42 +420,6 @@ public class TimerService extends Service {
                     } catch(Exception e){}
 
                     if (context != null) {
-                        DatabaseHandler db = new DatabaseHandler(context);
-                        JSONArray locations=db.getAllPendingTrackDetails();
-                        if(locations.length()>0){
-                            try {
-                                if(UpdtFlag==false) {
-                                    UpdtFlag = true;
-                                    JSONObject loc = locations.getJSONObject(0);
-
-                                    loc.put("DvcID", "");
-                                    JSONArray param = new JSONArray();
-                                    param.put(loc);
-                                    SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-                                    if (UserDetails.getString("Sfcode", "") != "") {
-                                        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                                        Call<JsonObject> call = apiInterface.JsonSave("save/track", "3", UserDetails.getString("Sfcode", ""), "", "", param.toString());
-                                        call.enqueue(new Callback<JsonObject>() {
-                                            @Override
-                                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                                // Get result Repo from response.body()
-                                                db.deleteTrackDetails(loc);
-                                                UpdtFlag=false;
-                                                Log.d(TAG, "Local Location" + String.valueOf(response.body()));
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<JsonObject> call, Throwable t) {
-                                                UpdtFlag=false;
-                                                Log.d(TAG, "onFailure Local Location");
-                                            }
-                                        });
-                                    }
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
                         if (isTimeAutomatic(context) != true ) {
                             if(HAPApp.activeActivity.getClass()!= Block_Information.class){
                                 Intent nwScr = new Intent(context, Block_Information.class);
@@ -485,6 +439,37 @@ public class TimerService extends Service {
                         Date Cdate=Dt.getDate(sDt);
                         if (Cdate.getTime()>=CutOff.getTime()){
                             Log.d("Cutoff","Time REached");
+
+                            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                            DatabaseHandler db = new DatabaseHandler(context);
+                            JSONArray locations=db.getAllPendingTrackDetails();
+
+                            if(locations.length()>0 && UpdtFlag==false){
+                                try {
+                                    UpdtFlag=true;
+                                    SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                                    if (UserDetails.getString("Sfcode", "") != "") {
+                                        Call<JsonObject> call = apiInterface.JsonSave("save/trackall", "3", UserDetails.getString("Sfcode", ""), "", "", locations.toString());
+                                        call.enqueue(new Callback<JsonObject>() {
+                                            @Override
+                                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                                // Get result Repo from response.body()
+                                                db.deleteAllTrackDetails();
+                                                UpdtFlag=false;
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<JsonObject> call, Throwable t) {
+                                                Log.d("LocationUpdate", "onFailure Local Location");
+                                                UpdtFlag=false;
+                                            }
+                                        });
+                                    }
+                                }catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
                             SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
                             SharedPreferences.Editor editor = UserDetails.edit();
                             editor.putBoolean("Login", false);

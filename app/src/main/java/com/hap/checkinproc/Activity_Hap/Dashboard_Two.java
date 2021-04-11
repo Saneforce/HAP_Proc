@@ -594,7 +594,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 intent = new Intent(this, Leave_Dashboard.class);
                 break;
             case R.id.btn_da_exp_entry:
-                intent = new Intent(this, DaExceptionEntry.class);
+                intent = new Intent(this, TAClaimActivity.class);
                 break;
             case R.id.cardview5:
                 intent = new Intent(this, Reports.class);
