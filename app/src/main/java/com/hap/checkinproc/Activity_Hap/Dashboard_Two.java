@@ -249,15 +249,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             if (viewMode.equalsIgnoreCase("CIN") || viewMode.equalsIgnoreCase("extended")) {
                 cardview3.setVisibility(View.VISIBLE);
                 cardview4.setVisibility(View.VISIBLE);
-                if (sSFType.equals("0"))
-                    cardview4.setVisibility(View.GONE);
                 //cardView5.setVisibility(View.VISIBLE);
                 StActivity.setVisibility(View.VISIBLE);
                 btnCheckout.setVisibility(View.VISIBLE);
                 btnApprovals.setVisibility(View.VISIBLE);
             } else {
                 cardview3.setVisibility(View.GONE);
-                cardview4.setVisibility(View.GONE);
+               // cardview4.setVisibility(View.GONE);
                 cardView5.setVisibility(View.GONE);
                 StActivity.setVisibility(View.GONE);
                 btnCheckout.setVisibility(View.GONE);
@@ -265,7 +263,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             }
         } else {
             cardview3.setVisibility(View.GONE);
-            cardview4.setVisibility(View.GONE);
+            //cardview4.setVisibility(View.GONE);
             cardView5.setVisibility(View.GONE);
              StActivity.setVisibility(View.GONE);
             btnCheckout.setVisibility(View.GONE);
@@ -596,7 +594,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 intent = new Intent(this, Leave_Dashboard.class);
                 break;
             case R.id.btn_da_exp_entry:
-                intent = new Intent(this, DaExceptionEntry.class);
+                intent = new Intent(this, TAClaimActivity.class);
                 break;
             case R.id.cardview5:
                 intent = new Intent(this, Reports.class);

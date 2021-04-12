@@ -124,6 +124,7 @@ public class Checkin extends AppCompatActivity {
             }
 
             if (Check_Flag.equals("holidayentry")) {
+                DutyType="holiday";
                 onDutyFlag = "1";
             } else {
                 onDutyFlag = "0";
@@ -145,6 +146,7 @@ public class Checkin extends AppCompatActivity {
             takePhoto.putExtra("vstPurpose", vstPurpose);
             startActivity(takePhoto);
             finish();
+            return;
         }
         SharedPreferences shared = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
         String Scode = (shared.getString("Sfcode", "null"));
@@ -166,7 +168,7 @@ public class Checkin extends AppCompatActivity {
             startActivity(takePhoto);
             finish();
         } else {
-            if (DutyType.equals("cba") || DutyType.equalsIgnoreCase("")) {
+            if (DutyType.equals("cba") || DutyType.equalsIgnoreCase("")|| DutyType.equalsIgnoreCase("holiday")) {
                 Log.v("KARTHIC_DUTY_1","2");
                 spinnerValue("get/Shift_timing", Dcode, Scode);
             } else {

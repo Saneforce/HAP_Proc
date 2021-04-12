@@ -120,6 +120,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
+    // Deleting single TrackDetails
+    public void deleteAllTrackDetails() {
+        try {
+            String selectQuery = "DELETE FROM " + TABLE_Track+" WHERE "+Flag+"=0";
+            SQLiteDatabase db = this.getWritableDatabase();
+            db.rawQuery(selectQuery, null);
+            db.close();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     public JSONArray getAllPendingTrackDetails() {
          // Select All Query
         String selectQuery = "SELECT  * FROM " + TABLE_Track+" WHERE "+Flag+"=0";

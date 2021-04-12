@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,12 +16,15 @@
     <SurfaceView
         android:id="@+id/PREVIEW"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/C40dp"
+        android:layout_marginBottom="@dimen/C40dp"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/ablack"
+        android:background="@color/white"
         android:orientation="horizontal"
         android:padding="10dp">
 
@@ -29,13 +33,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            android:src="@drawable/flip_camera_w" />
+            android:src="@drawable/flip_camera_w"
+            app:tint="@color/colorPrimaryDark" />
 
         <ImageView
             android:id="@+id/button_flash"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
+            app:tint="@color/colorPrimaryDark"
             android:src="@drawable/ic_baseline_offline_bolt_24" />
 
         <Space
@@ -57,7 +63,8 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_brightness" />
+            android:src="@drawable/ic_brightness"
+            app:tint="#FF9800" />
     </LinearLayout>
 
     <RelativeLayout
@@ -67,9 +74,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/C50dp"
             android:orientation="horizontal"
-            android:padding="10dp"
+            android:padding="0dp"
+            android:background="@color/grey_100"
             android:weightSum="1">
 
             <Button
@@ -78,6 +86,10 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
                 android:text="Take Photo"
+                android:padding="2dp"
+                android:layout_margin="0dp"
+                android:background="@color/colorPrimaryDark"
+                android:textColor="#ffffff"
                 android:textAllCaps="false" />
 
         </LinearLayout>
@@ -130,43 +142,53 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"
-        android:visibility="gone">
+        android:visibility="gone"
+        >
 
         <ImageView
             android:id="@+id/imgPreviewImg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.1"
+            android:layout_marginBottom="@dimen/C50dp"
             android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/C50dp"
             android:layout_alignParentBottom="true"
-            android:layout_weight="1"
+            android:background="#ffffff"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btnRtPrv"
-                android:layout_width="match_parent"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/color_red"
-                android:padding="@dimen/C15dp"
+                android:background="@drawable/button_red"
+                android:padding="@dimen/C10dp"
                 android:text="Retry"
                 android:textColor="#ffffff"
-                android:textStyle="bold" />
-
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/C10dp"
+                android:layout_marginTop="@dimen/C5dp"
+                android:layout_marginBottom="@dimen/C5dp"
+                android:layout_marginRight="@dimen/C10dp"/>
+<Space
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"></Space>
             <Button
                 android:id="@+id/btnOkPrv"
-                android:layout_width="match_parent"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@color/green"
-                android:padding="@dimen/C15dp"
+                android:background="@drawable/button_green"
+                android:padding="@dimen/C10dp"
                 android:text="Ok"
                 android:textColor="#ffffff"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginLeft="@dimen/C10dp"
+                android:layout_marginTop="@dimen/C5dp"
+                android:layout_marginBottom="@dimen/C5dp"
+                android:layout_marginRight="@dimen/C10dp"/>
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

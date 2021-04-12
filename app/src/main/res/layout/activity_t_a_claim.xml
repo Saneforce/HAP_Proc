@@ -1440,6 +1440,7 @@
                                                 android:layout_height="wrap_content"
                                                 android:gravity="center"
                                                 android:orientation="horizontal"
+                                                android:background="@color/grey_100"
                                                 tools:ignore="UselessParent">
 
 
@@ -1858,15 +1859,19 @@
 
                                             </LinearLayout>
                                         </LinearLayout>
-
-                                        <View
-                                            android:id="@+id/bill_view"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="1dp"
-                                            android:layout_margin="@dimen/C10dp"
-                                            android:background="@color/grey_300"></View>
-
                                         <LinearLayout
+                                            android:id="@+id/vwldgBillAmt"
+                                            android:orientation="vertical"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+                                            <View
+                                                android:id="@+id/bill_view"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="1dp"
+                                                android:layout_margin="@dimen/C10dp"
+                                                android:background="@color/grey_300"></View>
+
+                                            <LinearLayout
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_margin="@dimen/C8dp"
@@ -2002,7 +2007,7 @@
                                             </LinearLayout>
 
                                         </LinearLayout>
-
+                                        </LinearLayout>
                                         <View
                                             android:layout_width="match_parent"
                                             android:layout_height="1dp"
@@ -2467,7 +2472,7 @@
 
                 <Button
                     android:id="@+id/btn_sub"
-                    android:layout_width="150dp"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="@dimen/C10dp"
