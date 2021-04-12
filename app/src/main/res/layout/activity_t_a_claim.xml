@@ -1400,13 +1400,10 @@
                                                 android:text=""
                                                 android:textAllCaps="true"
                                                 android:textColor="#000"
-                                                android:textSize="8sp"></TextView>
-
+                                                android:textSize="8sp"/>
                                         </LinearLayout>
 
-
                                     </LinearLayout>
-
 
                                     <LinearLayout
                                         android:id="@+id/lin_indep_sty"
@@ -1428,7 +1425,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_margin="@dimen/C2dp"
-                                            android:text="Early Check-n" />
+                                            android:text="Early Check-in" />
 
                                         <LinearLayout
                                             android:id="@+id/lin_early"

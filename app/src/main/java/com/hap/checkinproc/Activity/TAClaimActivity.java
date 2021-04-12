@@ -503,6 +503,21 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 SumWOBLodging();
             }
         });
+        edtEarBill.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                SumWOBLodging();
+            }
+        });
 
 
         strRetriveType = String.valueOf(getIntent().getSerializableExtra("Retrive_Type"));
@@ -542,13 +557,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
                 layoutParams.setMargins(15, 15, 15, 15);
-
                 final View rowView = inflater.inflate(R.layout.activity_other_expense, null);
                 LinearOtherAllowance.addView(rowView, layoutParams);
-
-
                 oePosCnt = LinearOtherAllowance.indexOfChild(rowView);
-
                 View views = LinearOtherAllowance.getChildAt(oePosCnt);
                 otherExpenseLayout.setVisibility(View.VISIBLE);
                 oeEditext = (TextView) (views.findViewById(R.id.other_enter_mode));
@@ -557,7 +568,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 oePreview = (ImageView) (views.findViewById(R.id.img_prvw_oe));
                 oeTxtUKey = (TextView) (views.findViewById(R.id.txt_oe_ukey));
                 OtherExpense = (LinearLayout) views.findViewById(R.id.lin_other_expense_dynamic);
-
                 linOtherSpinner = (LinearLayout) (views.findViewById(R.id.lin_othr_spiner));
 
                 oeAttach.setOnClickListener(new View.OnClickListener() {
@@ -576,7 +586,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             Log.v("PERMISSION", "PERMISSION");
                             popupCapture(99);
                             Integer valuedfd = LinearOtherAllowance.indexOfChild(rowView);
-
                             View view = LinearOtherAllowance.getChildAt(valuedfd);
                             oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
                             oeTxtUKeys = (TextView) (view.findViewById(R.id.txt_oe_ukey));
@@ -599,24 +608,19 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     @Override
                     public void onClick(View v) {
 
-
                         Integer valuedfd = LinearOtherAllowance.indexOfChild(rowView);
                         View view = LinearOtherAllowance.getChildAt(valuedfd);
                         oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
                         oeTxtUKeys = (TextView) (view.findViewById(R.id.txt_oe_ukey));
                         editMode = oeEditext.getText().toString();
-
                         OeUKey = oeTxtUKeys.getText().toString();
-
                         DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
-
                         Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
                         stat.putExtra("position", OeUKey);
                         stat.putExtra("headTravel", "OE");
                         stat.putExtra("mode", editMode);
                         stat.putExtra("date", DateTime);
                         startActivity(stat);
-
                     }
                 });
 
@@ -677,7 +681,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 LayoutTransition transition = new LayoutTransition();
                 linlocalCon.setLayoutTransition(transition);
-
 
                 View LcchildView = linlocalCon.getChildAt(lcPosCnt);
                 scroll();
@@ -1268,7 +1271,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         SumWOBLodging();
         int IntValue = (int) tTotAmt;
         Log.v("TOTAL_AMOUNT", String.valueOf(IntValue));
-        edt_ldg_bill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue)});
+        edt_ldg_bill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue - 1)});
+        edtEarBill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue - 1)});
         calOverAllTotal(localCov, otherExp, tTotAmt);
     }
 
@@ -1276,6 +1280,20 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         String sldgAmt = lbl_ldg_eligi.getText().toString().replaceAll("Rs.", "");
         String sBillAmt = edt_ldg_bill.getText().toString().replaceAll("Rs.", "");
+        String sEarBillAmt = edtEarBill.getText().toString().replaceAll("Rs.", "");
+
+        if (sEarBillAmt.isEmpty()) sEarBillAmt = "0";
+        float tBalAmts = Float.parseFloat(sldgAmt) - Float.parseFloat(sEarBillAmt);
+        witOutBill = String.valueOf(tBalAmts);
+
+        Log.v("TOTAL_LODG_AMT", sldgAmt);
+        Log.v("TOTAL_LODG_BILL", sBillAmt);
+        Log.v("TOTAL_LODG_TOTAL", String.valueOf(tBalAmts));
+
+        if (tBalAmts > 0) {
+            ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(tBalAmts));
+        }
+
         if (sBillAmt.isEmpty()) sBillAmt = "0";
         float tBalAmt = Float.parseFloat(sldgAmt) - Float.parseFloat(sBillAmt);
         witOutBill = String.valueOf(tBalAmt);
@@ -3458,47 +3476,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(stayEgTotal));
 
         SumOFLodging();
-
-      /*  SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        try {
-
-            Date dateBefore = myFormat.parse(ldg_cin.getText().toString());
-            Date dateAfter = myFormat.parse(ldg_cout.getText().toString());
-            long difference = dateAfter.getTime() - dateBefore.getTime();
-
-            long diffSecondss = difference / 1000 % 60;
-            long diffMinutess = difference / (60 * 1000) % 60;
-            long diffHourss = difference / (60 * 60 * 1000) % 24;
-            long diffDayss = difference / (24 * 60 * 60 * 1000);
-            System.out.println("Number of Days between dates: " + "Total hr: " + diffHourss + " Total mins:" + diffMinutess);
-            System.out.println("Number of Days between dates: " + diffDayss + "" + diffHourss + "" + diffMinutess + "" + diffSecondss);
-
-            if (diffDayss == 0) {
-                diffDayss = diffDayss + 1;
-            }
-            stayTotal = String.valueOf(diffDayss);
-            if (!stayTotal.equals("")) {
-                TotalDays.setVisibility(View.VISIBLE);
-                txtStyDays.setText(stayTotal);
-                stayDays.setVisibility(View.VISIBLE);
-                //  diffDayss = diffDayss + 1;
-                stayEgTotal = diffDayss * ldgEliAmt;
-
-                Log.v("LODGING_AMOUNT", ldgEliAmt.toString());
-
-                txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(stayEgTotal));
-                ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(stayEgTotal));
-
-                SumOFLodging();
-
-            } else {
-                TotalDays.setVisibility(View.GONE);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
 
     }
 
