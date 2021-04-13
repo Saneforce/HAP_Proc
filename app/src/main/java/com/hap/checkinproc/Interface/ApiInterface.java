@@ -36,6 +36,9 @@ public interface ApiInterface {
     @GET("Db_v300.php?")
     Call<Model> login(@Query("axn") String axn, @Query("Email") String Email, @Query("DvID") String deveiceId);
 
+    @POST("db_new_activity.php?")
+    Call<Object> GettpWorktypeFields(@QueryMap Map<String, String> params);
+
     /*
         shift time*
         @GET("Db_Native.php?")

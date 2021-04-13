@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:layout_margin="@dimen/C5dp"
+    android:id="@+id/worktypelayout"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tpcaptions"
+            style="@style/TextStyle"
+            android:text="dsfd" />
+
+        <TextView
+            android:id="@+id/tptextview"
+            style="@style/TextStyle"
+            android:layout_width="match_parent"
+            android:background="@drawable/round_white_backround"
+            android:padding="@dimen/C8dp"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/edt_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/round_white_backround"
+            android:padding="@dimen/C8dp"
+            android:visibility="gone" />
+
+
+        <CheckBox
+            android:id="@+id/chck_box"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/Tourplan" />
+
+    </LinearLayout>

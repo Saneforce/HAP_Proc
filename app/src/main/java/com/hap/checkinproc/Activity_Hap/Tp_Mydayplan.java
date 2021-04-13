@@ -1,19 +1,23 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextClock;
 import android.widget.TextView;
@@ -90,11 +94,9 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     ImageView backarow;
     ProgressBar progressbar;
     TextView worktype_text, distributor_text, route_text, text_tour_plancount, hq_text, shift_type, chilling_text, Remarkscaption;
-
     TextView tourdate;
     Common_Model Model_Pojo;
     LinearLayout BusTo, jointwork_layout, joint_work_Recyclerview, hqlayout, shiftypelayout, Procrumentlayout, chillinglayout;
-
     RecyclerView jointwork_recycler;
     ImageView image;
     int joint_flag = 0;
@@ -117,17 +119,28 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     LinearLayout MdeTraval, DailyAll, frmPlace, ToPlace;
     int jcountglobal = 0;
     Joint_Work_Adapter adapter;
+    LinearLayout Dynamictpview;
+    private JSONObject optionsObj;
+    EditText tpEdit;
+
+    List<EditText> tpEdtList = new ArrayList<>();
+    List<EditText> tpEdtLists = new ArrayList<>();
+    Map<String, String> MapString = new HashMap<String, String>();
+    HashMap newmap = new HashMap();
+    JSONArray jsnArValue = null;
+    ArrayList<String> mEdt;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tp__mydayplan);
         startService(new Intent(this, TimerService.class));
-
         progressbar = findViewById(R.id.progressbar);
         shared_common_pref = new Shared_Common_Pref(this);
         common_class = new Common_Class(this);
         edt_remarks = findViewById(R.id.edt_remarks);
+        Dynamictpview = findViewById(R.id.Dynamictpview);
         gson = new Gson();
         tourdate = findViewById(R.id.tourdate);
         Log.e("TOuR_PLAN_DATE", common_class.getintentValues("TourDate"));
@@ -162,13 +175,11 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
         joint_work_Recyclerview = findViewById(R.id.joint_work_listlt);*/
 
-
+        mEdt = new ArrayList<>();
         MdeTraval = findViewById(R.id.mode_of_travel);
         DailyAll = findViewById(R.id.lin_daily);
         frmPlace = findViewById(R.id.lin_from);
         ToPlace = findViewById(R.id.lin_to_place);
-
-
         GetEmpId = findViewById(R.id.GetEmpId);
         empidedittext = (EditText) findViewById(R.id.empidedittext);
         BusTo = findViewById(R.id.lin_to_place);
@@ -179,11 +190,8 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         route_layout.setOnClickListener(this);
         shiftypelayout.setOnClickListener(this);
         hqlayout.setOnClickListener(this);
-
-
         card_Toplace.setOnClickListener(this);
         chillinglayout.setOnClickListener(this);
-
         BusFrom = findViewById(R.id.edt_frm);
         TextMode = findViewById(R.id.txt_mode);
         TextToAddress = findViewById(R.id.edt_to);
@@ -320,8 +328,10 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             Log.e("Button_Access", myDataset.get(position).getCheckouttime());
             Fieldworkflag = myDataset.get(position).getFlag();
             Worktype_Button = myDataset.get(position).getCheckouttime();
+            Log.e("LogWorktype", String.valueOf(myDataset.get(position).getId()));
+            GetTp_Worktype_Fields(myDataset.get(position).getCheckouttime());
             Log.e("FIELD_Dept_Type", Shared_Common_Pref.Dept_Type);
-            if (myDataset.get(position).getCheckouttime().indexOf("D") > -1) {
+           /* if (myDataset.get(position).getCheckouttime().indexOf("D") > -1) {
                 distributors_layout.setVisibility(View.VISIBLE);
             } else {
                 distributor_text.setText("");
@@ -358,7 +368,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 jointwork_layout.setVisibility(View.GONE);
             }
 
-          /*  if (myDataset.get(position).getCheckouttime().indexOf("MD") > -1) {
+          *//*  if (myDataset.get(position).getCheckouttime().indexOf("MD") > -1) {
                 MdeTraval.setVisibility(View.VISIBLE);
             } else {
                 MdeTraval.setVisibility(View.GONE);
@@ -377,7 +387,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 ToPlace.setVisibility(View.VISIBLE);
             } else {
                 ToPlace.setVisibility(View.GONE);
-            }*/
+            }*//*
 
 
             if (myDataset.get(position).getCheckouttime().indexOf("EA") > -1) {
@@ -390,7 +400,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 MdeTraval.setVisibility(View.GONE);
                 frmPlace.setVisibility(View.GONE);
                 ToPlace.setVisibility(View.GONE);
-            }
+            }*/
 
         } else if (type == 2) {
             routeid = null;
@@ -469,6 +479,109 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         switch (view.getId()) {
 
             case R.id.submitbutton:
+                optionsObj = new JSONObject();
+
+               /* optionsObj = new JSONObject();
+                int addExpSize = mEdt.size();
+                Log.v("CHECKING_VALUE", String.valueOf(mEdt.size()));
+                for (int lc = 0; lc < addExpSize; lc++) {
+
+
+
+                    View Views = Dynamictpview.getChildAt(lc);
+                    tpEdit = (EditText) Views.findViewById(R.id.edt_text);
+                    Log.e("EditText_Value", tpEdit.getText().toString());
+                    try {
+                        optionsObj.put(mEdt.get(lc), tpEdit.getText().toString());
+                        Log.v("CHECKING_VALUE", optionsObj.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }*/
+
+                int addExpSize = mEdt.size();
+                Log.v("CHECKING_VALUE", String.valueOf(mEdt.size()));
+                for (int lc = 0; lc < addExpSize; lc++) {
+
+
+                    View Viewss = Dynamictpview.getChildAt(lc);
+                    tpEdit = (EditText) Viewss.findViewById(R.id.edt_text);
+                    Log.e("EditText_Valuessssssssss", tpEdit.getText().toString());
+                    try {
+                        optionsObj.put(mEdt.get(lc), tpEdit.getText().toString());
+                        Log.v("CHECKING_VALUE", optionsObj.toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+
+                Log.v("jsnArValueSize", String.valueOf(jsnArValue.length()));
+                for (int i = 0; i < jsnArValue.length(); i++) {
+                    JSONObject json_oo;
+                    try {
+
+                    json_oo = jsnArValue.getJSONObject(i);
+                    RelativeLayout.LayoutParams relative_Parms = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                    relative_Parms.addRule(RelativeLayout.ALIGN_PARENT_START);
+                    relative_Parms.setMargins(20, -10, 0, 0);
+                    LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                    final View rowView = inflater.inflate(R.layout.tp_dynamic_layout, null);
+                    Dynamictpview.addView(rowView, relative_Parms);
+                    Integer Position = Dynamictpview.indexOfChild(rowView);
+                    View Views = Dynamictpview.getChildAt(Position);
+                    String Exp_Name = json_oo.getString("Fld_Name");
+                    TextView tpHeading = (TextView) Views.findViewById(R.id.tpcaptions);
+                    TextView tpText = (TextView) Views.findViewById(R.id.tptextview);
+                 EditText   tpEdits = (EditText) Views.findViewById(R.id.edt_text);
+                    CheckBox tpCheck = (CheckBox) Views.findViewById(R.id.chck_box);
+
+                        Log.e("EditText_Value", tpEdits.getText().toString());
+                    tpHeading.setText(Exp_Name);
+                    tpText.setHint("Select The " + Exp_Name);
+                    if (json_oo.getString("Control_id").equalsIgnoreCase("7")) {
+                        tpText.setVisibility(View.VISIBLE);
+                        tpEdits.setVisibility(View.GONE);
+                        tpCheck.setVisibility(View.GONE);
+
+                    } else if (json_oo.getString("Control_id").equalsIgnoreCase("17")) {
+                        tpText.setVisibility(View.GONE);
+                        tpEdits.setVisibility(View.VISIBLE);
+                        tpCheck.setVisibility(View.GONE);
+                        tpEdtList.add(tpEdit);
+                        mEdt.add(json_oo.getString("Fld_Name"));
+
+                        optionsObj.put(json_oo.getString("Fld_Name"), tpEdits.getText().toString());
+                        Log.v("CHECKING_VALUE", optionsObj.toString());
+
+                    } else if (json_oo.getString("Control_id").equalsIgnoreCase("1")) {
+                        tpText.setVisibility(View.GONE);
+                        tpEdits.setVisibility(View.GONE);
+                        tpCheck.setVisibility(View.VISIBLE);
+                        tpCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                if (isChecked)
+                                    Toast.makeText(Tp_Mydayplan.this, "Checked", Toast.LENGTH_SHORT).show();
+                                else
+                                    Toast.makeText(Tp_Mydayplan.this, "Not Checked", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    } else {
+                        tpText.setVisibility(View.VISIBLE);
+                        tpEdits.setVisibility(View.GONE);
+                        tpCheck.setVisibility(View.GONE);
+                    }
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                }
+
+
                 if (vali()) {
                     Savejointwork = Jointworklistview;
                     Log.e("Savejointwork_SIZE", String.valueOf(Savejointwork.size()));
@@ -741,12 +854,12 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         }
         if (Worktype_Button.indexOf("EA") > -1) {
 
-        if (TextMode.getText().toString() == null || TextMode.getText().toString().isEmpty() || TextMode.getText().toString().equalsIgnoreCase("")) {
-            Toast.makeText(this, "Select The Mode of Travel", Toast.LENGTH_SHORT).show();
-            return false;
-        }
+            if (TextMode.getText().toString() == null || TextMode.getText().toString().isEmpty() || TextMode.getText().toString().equalsIgnoreCase("")) {
+                Toast.makeText(this, "Select The Mode of Travel", Toast.LENGTH_SHORT).show();
+                return false;
+            }
 
-    }
+        }
 
         return true;
     }
@@ -857,14 +970,11 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                         edt_remarks.setText(String.valueOf(jsoncc.getJSONObject(0).get("remarks")));
                         Fieldworkflag = String.valueOf(jsoncc.getJSONObject(0).get("Worktype_Flag"));
                         worktype_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("worktype_name")));
-
-
                         modeId = String.valueOf(jsoncc.getJSONObject(0).get("Mot_ID"));
                         STRCode = String.valueOf(jsoncc.getJSONObject(0).get("To_Place_ID"));
                         modeVal = String.valueOf(jsoncc.getJSONObject(0).get("Mode_Travel_Id"));
                         if (modeVal.equals("0")) {
                             TextMode.setText(modeTypeVale);
-
                             TextMode.setText(String.valueOf(jsoncc.getJSONObject(0).get("MOT")));
                             BusFrom.setText(String.valueOf(jsoncc.getJSONObject(0).get("From_Place")));
                             TextToAddress.setText(String.valueOf(jsoncc.getJSONObject(0).get("To_Place")));
@@ -1120,5 +1230,91 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     protected void onRestart() {
         super.onRestart();
         startService(new Intent(this, TimerService.class));
+    }
+
+    public void GetTp_Worktype_Fields(String wflag) {
+        Dynamictpview.removeAllViews();
+        Map<String, String> QueryString = new HashMap<>();
+        QueryString.put("axn", "get/worktypefields");
+        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+        QueryString.put("Worktype_Code", wflag);
+        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+        Call<Object> call = service.GettpWorktypeFields(QueryString);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                try {
+                    if (response.isSuccessful()) {
+                        Log.v("print_upload_file_true", "ggg" + response);
+                        String jsonData = null;
+                        //jsonData = response.body();
+                        Log.v("response_data", new Gson().toJson(response.body()));
+                        //array = new ArrayList<>();
+                        // JSONObject js = new JSONObject(jsonData);
+                        jsnArValue = new JSONArray(new Gson().toJson(response.body()));
+                        Log.v("jsnArValueSize", String.valueOf(jsnArValue.length()));
+                        for (int i = 0; i < jsnArValue.length(); i++) {
+                            JSONObject json_oo = jsnArValue.getJSONObject(i);
+                            RelativeLayout.LayoutParams relative_Parms = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                            relative_Parms.addRule(RelativeLayout.ALIGN_PARENT_START);
+                            relative_Parms.setMargins(20, -10, 0, 0);
+                            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            final View rowView = inflater.inflate(R.layout.tp_dynamic_layout, null);
+                            Dynamictpview.addView(rowView, relative_Parms);
+                            Integer Position = Dynamictpview.indexOfChild(rowView);
+                            View Views = Dynamictpview.getChildAt(Position);
+                            String Exp_Name = json_oo.getString("Fld_Name");
+                            TextView tpHeading = (TextView) Views.findViewById(R.id.tpcaptions);
+                            TextView tpText = (TextView) Views.findViewById(R.id.tptextview);
+                            tpEdit = (EditText) Views.findViewById(R.id.edt_text);
+                            CheckBox tpCheck = (CheckBox) Views.findViewById(R.id.chck_box);
+
+                            tpHeading.setText(Exp_Name);
+                            tpText.setHint("Select The " + Exp_Name);
+                            if (json_oo.getString("Control_id").equalsIgnoreCase("7")) {
+                                tpText.setVisibility(View.VISIBLE);
+                                tpEdit.setVisibility(View.GONE);
+                                tpCheck.setVisibility(View.GONE);
+
+                            } else if (json_oo.getString("Control_id").equalsIgnoreCase("17")) {
+                                tpText.setVisibility(View.GONE);
+                                tpEdit.setVisibility(View.VISIBLE);
+                                tpCheck.setVisibility(View.GONE);
+                                tpEdtList.add(tpEdit);
+                                mEdt.add(json_oo.getString("Fld_Name"));
+
+                            } else if (json_oo.getString("Control_id").equalsIgnoreCase("1")) {
+                                tpText.setVisibility(View.GONE);
+                                tpEdit.setVisibility(View.GONE);
+                                tpCheck.setVisibility(View.VISIBLE);
+                                tpCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                    @Override
+                                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                        if (isChecked)
+                                            Toast.makeText(Tp_Mydayplan.this, "Checked", Toast.LENGTH_SHORT).show();
+                                        else
+                                            Toast.makeText(Tp_Mydayplan.this, "Not Checked", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                            } else {
+                                tpText.setVisibility(View.VISIBLE);
+                                tpEdit.setVisibility(View.GONE);
+                                tpCheck.setVisibility(View.GONE);
+                            }
+
+                        }
+                    }
+                } catch (Exception e) {
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+            }
+        });
     }
 }

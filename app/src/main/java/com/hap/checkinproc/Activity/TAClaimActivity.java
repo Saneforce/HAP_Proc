@@ -1294,7 +1294,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         SumWOBLodging();
         int IntValue = (int) tTotAmt;
         //tTotAmt = Double.parseDouble(sMyAmt) + ldgDrvEligi + Float.parseFloat(sJnAmt)+Double.parseDouble(sErlyAmt) +Double.parseDouble(sLateAmt) ;
-
         Log.v("TOTAL_AMOUNT", String.valueOf(IntValue));
         edt_ldg_bill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue - 1)});
         edtEarBill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue - 1)});
@@ -1303,7 +1302,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     public void SumWOBLodging() {
         String sMyAmt = txtMyEligi.getText().toString().replaceAll("Rs.", "");
         String sJnAmt = txtJNEligi.getText().toString().replaceAll("Rs.", "");
-        String sDrivAmt = txtDrivEligi.getText().toString().replaceAll("Rs.", "");
+        String sldgAmt = txtDrivEligi.getText().toString().replaceAll("Rs.", "");
 
         tTotAmt = Double.parseDouble(sMyAmt) + ldgDrvEligi + Float.parseFloat(sJnAmt);
 
@@ -1311,6 +1310,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         String sEarBillAmt = edtEarBill.getText().toString().replaceAll("Rs.", "");
 
         if (sEarBillAmt.isEmpty()) sEarBillAmt = "0";
+
         float tBalAmts = Float.parseFloat(sldgAmt) - Float.parseFloat(sEarBillAmt);
         witOutBill = String.valueOf(tBalAmts);
 
