@@ -228,7 +228,6 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=get/Expensedate")
     Call<JsonArray> getTADate(@Field("data") String userData);
 
-
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/expensedatedetailsnew")
     Call<JsonObject> getTAdateDetails(@Field("data") String userData);
@@ -281,13 +280,11 @@ public interface ApiInterface {
     Call<HeaderCat> SubCategory(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                                 @Query("rSF") String rSF, @Query("State_Code") String StateCode,
                                 @Field("data") String data);
-
     /*submitValue*/
     @FormUrlEncoded
     @POST("Db_v300.php?axn=dcr/save")
     Call<JsonObject> submitValue(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                                  @Field("data") String data);
-
     /*ReportView*/
     @POST("db_v14.php?axn=get/ViewReport")
     Call<ReportDataList> reportValues(@Query("Sf_code") String sFCode, @Query("fromdate") String fromdate, @Query("todate") String todate);
@@ -296,17 +293,13 @@ public interface ApiInterface {
     @POST("db_v14.php?axn=get/ViewReport_Details")
     Call<DateReport> dateReport(@Query("Order_Id") String rsfCode, @Query("Sf_code") String sFCode);
 
-
     /*Retailer Details*/
-
 
     @FormUrlEncoded
     @POST("Db_v300.php?axn=get/FieldForce_HQ")
     Call<Object> getFieldForce_HQ(@Query("divisionCode") String disvisonCode, @Query("sf_code") String sFCode, @Field("data") String data);
 
-
     /*Retailer View Details*/
-
     @POST("Db_v300.php?axn=get/precall")
     Call<RetailerViewDetails> getRetailerDetails(@Query("divisionCode") String divisionCode, @Query("sf_code") String sFCode, @Query("Msl_No") String retailerID);
 
@@ -314,11 +307,9 @@ public interface ApiInterface {
     @POST("Db_v300.php")
     Call<Object> Get_Object(@QueryMap Map<String, String> params, @Field("data") String body);
 
-
     @FormUrlEncoded
     @POST("Db_v300.php")
     Call<JsonObject> addNewRetailer(@QueryMap Map<String, String> params, @Field("data") String body);
-
 
     @FormUrlEncoded
     @POST("Db_v300.php?axn=table/list")

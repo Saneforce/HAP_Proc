@@ -58,8 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C10dp"
                     android:layout_marginRight="@dimen/C5dp"
-                    android:orientation="vertical"
-  >
+                    android:orientation="vertical">
 
 
                     <LinearLayout
@@ -115,7 +114,7 @@
                             android:layout_weight="1"
                             android:orientation="horizontal"
                             android:padding="@dimen/C2dp"
-                      android:visibility="gone" >
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="@dimen/C70dp"
@@ -199,8 +198,7 @@
                             android:layout_weight="1"
                             android:orientation="horizontal"
                             android:padding="@dimen/C2dp"
-                            android:visibility="gone"
-                            >
+                            android:visibility="gone">
 
                             <TextView
                                 android:layout_width="@dimen/C70dp"
@@ -361,9 +359,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C8dp"
-                    android:visibility="gone"
                     android:layout_marginRight="@dimen/C8dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:visibility="gone">
                     <!--Daily Allowance-->
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -1229,11 +1227,11 @@
                             </LinearLayout>
 
                             <LinearLayout
-                                android:visibility="gone"
                                 android:id="@+id/lodgContvw"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical">
+                                android:orientation="vertical"
+                                android:visibility="gone">
 
                                 <TextView
                                     style="@style/TextStyle"
@@ -1350,9 +1348,9 @@
 
                                             <LinearLayout
                                                 android:id="@+id/lin_chck_out"
-                                                android:layout_marginLeft="@dimen/C5dp"
                                                 android:layout_width="wrap_content"
                                                 android:layout_height="wrap_content"
+                                                android:layout_marginLeft="@dimen/C5dp"
                                                 android:layout_weight="1"
                                                 android:orientation="vertical">
 
@@ -1400,18 +1398,18 @@
                                                 android:text=""
                                                 android:textAllCaps="true"
                                                 android:textColor="#000"
-                                                android:textSize="8sp"/>
+                                                android:textSize="8sp" />
                                         </LinearLayout>
 
                                     </LinearLayout>
 
                                     <LinearLayout
                                         android:id="@+id/lin_indep_sty"
-                                        android:visibility="gone"
-                                        android:layout_margin="@dimen/C5dp"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:orientation="vertical">
+                                        android:layout_margin="@dimen/C5dp"
+                                        android:orientation="vertical"
+                                        android:visibility="gone">
 
                                         <CheckBox
                                             android:id="@+id/chk_cnt_sty"
@@ -1429,18 +1427,18 @@
 
                                         <LinearLayout
                                             android:id="@+id/lin_early"
-                                            android:visibility="gone"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:orientation="vertical">
+                                            android:orientation="vertical"
+                                            android:visibility="gone">
 
                                             <LinearLayout
 
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
+                                                android:background="@color/grey_100"
                                                 android:gravity="center"
                                                 android:orientation="horizontal"
-                                                android:background="@color/grey_100"
                                                 tools:ignore="UselessParent">
 
 
@@ -1562,18 +1560,18 @@
 
                                         <LinearLayout
                                             android:id="@+id/lin_late"
-                                            android:visibility="gone"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:orientation="vertical"
+                                            android:visibility="gone"
                                             tools:ignore="UselessParent">
 
                                             <LinearLayout
                                                 android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
                                                 android:gravity="center"
                                                 android:orientation="horizontal"
-                                                tools:ignore="UselessParent"
-                                                android:layout_height="wrap_content">
+                                                tools:ignore="UselessParent">
 
                                                 <LinearLayout
                                                     android:layout_width="wrap_content"
@@ -1742,8 +1740,7 @@
                                         android:id="@+id/lin_stay_view"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:orientation="vertical"
-      >
+                                        android:orientation="vertical">
 
                                         <LinearLayout
                                             android:id="@+id/ldgEAra"
@@ -1859,11 +1856,13 @@
 
                                             </LinearLayout>
                                         </LinearLayout>
+
                                         <LinearLayout
                                             android:id="@+id/vwldgBillAmt"
-                                            android:orientation="vertical"
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content">
+                                            android:layout_height="wrap_content"
+                                            android:orientation="vertical">
+
                                             <View
                                                 android:id="@+id/bill_view"
                                                 android:layout_width="match_parent"
@@ -1872,142 +1871,142 @@
                                                 android:background="@color/grey_300"></View>
 
                                             <LinearLayout
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_margin="@dimen/C8dp"
-                                            android:orientation="horizontal">
-
-                                            <LinearLayout
-                                                android:layout_width="wrap_content"
+                                                android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:layout_weight="1"
-                                                android:gravity="left"
-                                                android:orientation="vertical"
-                                                android:visibility="gone">
-
-                                                <TextView
-                                                    android:layout_width="wrap_content"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_weight="1"
-                                                    android:text="Total"
-                                                    android:textAllCaps="true"
-                                                    android:textColor="#000"
-                                                    android:textSize="10sp" />
-
-                                                <TextView
-                                                    android:layout_width="match_parent"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_marginTop="@dimen/C10dp"
-                                                    android:layout_weight="1"
-                                                    android:text="Rs. 0.00"
-                                                    android:textColor="#000"
-                                                    android:textSize="13sp"
-                                                    android:textStyle="bold" />
-
-                                            </LinearLayout>
-
-
-                                            <LinearLayout
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
+                                                android:layout_margin="@dimen/C8dp"
                                                 android:orientation="horizontal">
 
                                                 <LinearLayout
-                                                    android:layout_width="@dimen/C100dp"
+                                                    android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
-                                                    android:gravity="center"
-                                                    android:orientation="vertical">
+                                                    android:layout_weight="1"
+                                                    android:gravity="left"
+                                                    android:orientation="vertical"
+                                                    android:visibility="gone">
 
                                                     <TextView
-                                                        android:id="@+id/lblHdBill"
-                                                        android:layout_width="match_parent"
+                                                        android:layout_width="wrap_content"
                                                         android:layout_height="wrap_content"
-                                                        android:paddingLeft="@dimen/C5dp"
-                                                        android:text="Bill Amount"
-                                                        android:textAlignment="textStart"
+                                                        android:layout_weight="1"
+                                                        android:text="Total"
                                                         android:textAllCaps="true"
                                                         android:textColor="#000"
                                                         android:textSize="10sp" />
 
-
-                                                    <EditText
-                                                        android:id="@+id/edt_ldg_bill"
+                                                    <TextView
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
-                                                        android:hint="0.00"
-                                                        android:inputType="number"
-                                                        android:maxLength="5"
-                                                        android:textColorHint="#C0C0C0"
-                                                        android:textSize="@dimen/C13dp"
+                                                        android:layout_marginTop="@dimen/C10dp"
+                                                        android:layout_weight="1"
+                                                        android:text="Rs. 0.00"
+                                                        android:textColor="#000"
+                                                        android:textSize="13sp"
                                                         android:textStyle="bold" />
 
                                                 </LinearLayout>
 
 
                                                 <LinearLayout
-                                                    android:id="@+id/lin_img_prv"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
-                                                    android:layout_gravity="bottom"
                                                     android:orientation="horizontal">
 
-                                                    <ImageView
-                                                        android:id="@+id/lodg_attach"
-                                                        android:layout_width="@dimen/C40dp"
-                                                        android:layout_height="@dimen/C40dp"
-                                                        android:padding="@dimen/C2dp"
-                                                        android:src="@drawable/attach_files" />
+                                                    <LinearLayout
+                                                        android:layout_width="@dimen/C100dp"
+                                                        android:layout_height="wrap_content"
+                                                        android:gravity="center"
+                                                        android:orientation="vertical">
+
+                                                        <TextView
+                                                            android:id="@+id/lblHdBill"
+                                                            android:layout_width="match_parent"
+                                                            android:layout_height="wrap_content"
+                                                            android:paddingLeft="@dimen/C5dp"
+                                                            android:text="Bill Amount"
+                                                            android:textAlignment="textStart"
+                                                            android:textAllCaps="true"
+                                                            android:textColor="#000"
+                                                            android:textSize="10sp" />
 
 
-                                                    <ImageView
-                                                        android:id="@+id/lodg_preview"
-                                                        android:layout_width="@dimen/C40dp"
-                                                        android:layout_height="@dimen/C40dp"
-                                                        android:layout_marginLeft="@dimen/C2dp"
-                                                        android:padding="@dimen/C2dp"
-                                                        android:src="@drawable/image_preview" />
+                                                        <EditText
+                                                            android:id="@+id/edt_ldg_bill"
+                                                            android:layout_width="match_parent"
+                                                            android:layout_height="wrap_content"
+                                                            android:hint="0.00"
+                                                            android:inputType="number"
+                                                            android:maxLength="5"
+                                                            android:textColorHint="#C0C0C0"
+                                                            android:textSize="@dimen/C13dp"
+                                                            android:textStyle="bold" />
+
+                                                    </LinearLayout>
+
+                                                    <LinearLayout
+                                                        android:id="@+id/lin_img_prv"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_gravity="bottom"
+                                                        android:orientation="horizontal">
+
+                                                        <ImageView
+                                                            android:id="@+id/lodg_attach"
+                                                            android:layout_width="@dimen/C40dp"
+                                                            android:layout_height="@dimen/C40dp"
+                                                            android:padding="@dimen/C2dp"
+                                                            android:src="@drawable/attach_files" />
+
+
+                                                        <ImageView
+                                                            android:id="@+id/lodg_preview"
+                                                            android:layout_width="@dimen/C40dp"
+                                                            android:layout_height="@dimen/C40dp"
+                                                            android:layout_marginLeft="@dimen/C2dp"
+                                                            android:padding="@dimen/C2dp"
+                                                            android:src="@drawable/image_preview" />
+
+                                                    </LinearLayout>
+                                                </LinearLayout>
+
+                                                <TextView
+                                                    android:id="@+id/log_ukey"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:text=""
+                                                    android:visibility="gone" />
+
+                                                <LinearLayout
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
+                                                    android:gravity="right"
+                                                    android:orientation="vertical">
+
+
+                                                    <TextView
+                                                        android:id="@+id/lblHdBln"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:text="Balance"
+                                                        android:textAllCaps="true"
+                                                        android:textColor="#000"
+                                                        android:textSize="10sp" />
+
+                                                    <TextView
+                                                        android:id="@+id/ldgWOBBal"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_marginTop="@dimen/C10dp"
+                                                        android:text="Rs. 0.00"
+                                                        android:textColor="#000"
+                                                        android:textSize="13sp"
+                                                        android:textStyle="bold" />
 
                                                 </LinearLayout>
-                                            </LinearLayout>
-
-                                            <TextView
-                                                android:id="@+id/log_ukey"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:text=""
-                                                android:visibility="gone" />
-
-                                            <LinearLayout
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:layout_weight="1"
-                                                android:gravity="right"
-                                                android:orientation="vertical">
-
-
-                                                <TextView
-                                                    android:id="@+id/lblHdBln"
-                                                    android:layout_width="wrap_content"
-                                                    android:layout_height="wrap_content"
-                                                    android:text="Balance"
-                                                    android:textAllCaps="true"
-                                                    android:textColor="#000"
-                                                    android:textSize="10sp" />
-
-                                                <TextView
-                                                    android:id="@+id/ldgWOBBal"
-                                                    android:layout_width="wrap_content"
-                                                    android:layout_height="wrap_content"
-                                                    android:layout_marginTop="@dimen/C10dp"
-                                                    android:text="Rs. 0.00"
-                                                    android:textColor="#000"
-                                                    android:textSize="13sp"
-                                                    android:textStyle="bold" />
 
                                             </LinearLayout>
+                                        </LinearLayout>
 
-                                        </LinearLayout>
-                                        </LinearLayout>
                                         <View
                                             android:layout_width="match_parent"
                                             android:layout_height="1dp"

@@ -434,7 +434,6 @@ public class Login extends AppCompatActivity {
              }
              }*/
 
-
             // Bind to the service. If the service is in foreground mode, this signals to the service
             // that since this activity is in the foreground, the service can exit foreground mode.
 
@@ -520,7 +519,7 @@ public class Login extends AppCompatActivity {
             return;
         }
         Log.d(TAG, "TWO " + deviceToken);
-       // eMail="ciadmin@hap.in";
+        eMail="anbu@saneforce.com";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
