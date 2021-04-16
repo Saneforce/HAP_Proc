@@ -155,7 +155,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "", finalPath = "",
             attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "", tvEditcnt = "", OeUKey = "",
             LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "",
-            tominYear = "", tominMonth = "", tominDay = "";
+            tominYear = "", tominMonth = "", sty_date = "", tominDay = "", ConStay = "", ErlyStay = "", LteStay = "", ErlyChecIn = "", ErlyChecOut = "", ErlyAmt = "", LteAmt = "", LteChecIn = "", LteChecOut = "";
 
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
             oePosCnt = 0, lcPosCnt = 0, tvSize = 0, ttLod = 0, cnSty = 0, erlSty = 0, lteSty = 0;
@@ -1270,7 +1270,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     }
 
     public void SumOFDAAmount() {
-
         String sAmt = txtallamt.getText().toString().replaceAll("Rs.", "");
         String sBrdAmt = txt_BrdAmt.getText().toString().replaceAll("Rs.", "");
         String sDrvBrdAmt = txt_DrvBrdAmt.getText().toString().replaceAll("Rs.", "");
@@ -1464,6 +1463,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
+            Log.v("Json_date_fomrat", jj.toString());
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
             Call<JsonObject> call = apiInterface.getTAdateDetails(jj.toString());
             String finalChoosedDate = ChoosedDate;
@@ -1477,7 +1478,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     JsonArray trvldArray = null;
                     JsonArray ldArray = null;
                     JsonArray travelDetails = null;
+                    JsonArray LodingCon = null;
                     JsonObject jsonObjects = response.body();
+
+                    Log.v("JSON_TRAVEL_DETAILS", jsonObjects.toString());
+
 
                     jsonArray = jsonObjects.getAsJsonArray("TodayStart_Details");
                     lcDraftArray = jsonObjects.getAsJsonArray("Additional_ExpenseLC");
@@ -1485,8 +1490,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     trvldArray = jsonObjects.getAsJsonArray("Travelled_Loc");
                     ldArray = jsonObjects.getAsJsonArray("Lodging_Head");
                     travelDetails = jsonObjects.getAsJsonArray("Travelled_Details");
+                    LodingCon = jsonObjects.getAsJsonArray("LodDtlist");
 
-                    Log.v("JSON_LODGING", ldArray.toString());
+
+                    Log.v("JSON_LODGING", LodingCon.toString());
 
                     JsonObject jsonObject = null;
                     for (int i = 0; i < jsonArray.size(); i++) {
@@ -1852,7 +1859,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         if (ldgAdd.getText().equals("+ Add")) {
                             ldgAdd.setText("- Remove");
                             lodgContvw.setVisibility(View.VISIBLE);
-                            lodingDraft(ldArray);
+                            lodingDraft(ldArray, LodingCon);
                         } else {
                             ldgAdd.setText("+ Add");
                             lodgContvw.setVisibility(View.GONE);
@@ -1869,6 +1876,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             earCheckOut.setText("");
                             latCheckIn.setText("");
                             latCheckOut.setText("");
+                            edtEarBill.setText("");
+                            edtLateBill.setText("");
                             mChckCont.setChecked(false);
                             mChckEarly.setChecked(false);
                             mChckLate.setChecked(false);
@@ -1902,10 +1911,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     }
 
     @SuppressLint("SetTextI18n")
-    public void lodingDraft(JsonArray lodingDraft) {
+    public void lodingDraft(JsonArray lodingDraft, JsonArray ContSty) {
 
+        Log.v("Lodging_Details", lodingDraft.toString());
         JsonArray jsonAddition = null;
-        JsonObject ldraft = null;
+        JsonObject ldraft;
         for (int i = 0; i < lodingDraft.size(); i++) {
             ldraft = (JsonObject) lodingDraft.get(i);
 
@@ -1916,12 +1926,39 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldg_stayloc.setVisibility(View.VISIBLE);
             ldg_stayDt.setVisibility(View.VISIBLE);
             lodgJoin.setVisibility(View.VISIBLE);
+            linContinueStay.setVisibility(View.VISIBLE);
 
             ldg_cin.setText(ldraft.get("Stay_Date").getAsString());
             ldg_cout.setText(ldraft.get("To_Date").getAsString());
             lodgStyLocation.setText(ldraft.get("Ldg_Stay_Loc").getAsString());
+            sty_date = ldraft.get("Stay_Date_time").getAsString();
+            Log.v("Lodging_Date", sty_date);
 
-            Log.v("lodgStyLocation", lodgStyLocation.getText().toString());
+            txtDrivEligi.setText(ldraft.get("Driver_Ldg_Amount").getAsString());
+
+            ConStay = ldraft.get("Continuous_Stay").getAsString();
+            ErlyStay = ldraft.get("Early_Checkin").getAsString();
+            LteStay = ldraft.get("Late_Checkout").getAsString();
+
+            ErlyChecIn = ldraft.get("Erly_Check_in").getAsString();
+            ErlyChecOut = ldraft.get("Erly_Check_out").getAsString();
+            ErlyAmt = ldraft.get("Ear_bill_amt").getAsString();
+
+            LteChecIn = ldraft.get("lat_chec_in").getAsString();
+            LteChecOut = ldraft.get("lat_check_out").getAsString();
+            LteAmt = ldraft.get("lat_bill_amt").getAsString();
+
+            earCheckIn.setText(ErlyChecIn);
+            earCheckOut.setText(ErlyChecOut);
+            latCheckIn.setText(LteChecIn);
+            latCheckOut.setText(LteChecOut);
+            edtEarBill.setText(ErlyAmt);
+            edtLateBill.setText(LteAmt);
+
+            if (ConStay.equalsIgnoreCase("1")) mChckCont.setChecked(true);
+            if (ErlyStay.equalsIgnoreCase("1")) mChckEarly.setChecked(true);
+            if (LteStay.equalsIgnoreCase("1")) mChckLate.setChecked(true);
+
 
             stayDays.setVisibility(View.VISIBLE);
             Double totlLdgAmt = Double.valueOf(ldraft.get("Total_Ldg_Amount").getAsString());
@@ -2397,7 +2434,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         fullPath = filepath.getPath(TAClaimActivity.this, item);
                         lodgArrLst.add(fullPath);
 
-
                         getMulipart(lodUKey, fullPath, "LOD", "", "Room", "", "");
 
                     }
@@ -2596,10 +2632,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         if (edtEarBill.getText().toString().equalsIgnoreCase("")) edtEarBill.setText("0");
         if (edtLateBill.getText().toString().equalsIgnoreCase("")) edtLateBill.setText("0");
 
-
         Log.v("Current_date", Common_Class.GetDateOnly());
-
-
         Log.e("COUNTATTACH", attachCountList.toString());
         JSONArray transHead = new JSONArray();
         JSONObject transJson = new JSONObject();
@@ -2657,11 +2690,23 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             String separator4 = ".";
             int intLdgEli = strLdgEli.lastIndexOf(separator4);
 
+            Log.v("sty_datesty_date", sty_date);
+            Log.v("sty_datestycnSty", String.valueOf(cnSty));
+            Log.v("sty_datestyerlSty", String.valueOf(erlSty));
+            Log.v("sty_datestylteSty", String.valueOf(lteSty));
+            Log.v("sty_datestyearCheckIn", earCheckIn.getText().toString());
+            Log.v("sty_datestyearCheckOut", earCheckOut.getText().toString());
+            Log.v("sty_datestyearEarBill", edtEarBill.getText().toString());
+            Log.v("sty_datestylatCheckIn", latCheckIn.getText().toString());
+            Log.v("sty_datestylatCheckOut", latCheckOut.getText().toString());
+            Log.v("sty_datestyedtLateBill", edtLateBill.getText().toString());
+
+
 
             JSONObject ldgSave = new JSONObject();
             ldgSave.put("ldg_type", txt_ldg_type.getText().toString());
             ldgSave.put("ldg_type_sty", lodgStyLocation.getText().toString());
-            ldgSave.put("sty_dte", ldg_cin.getText().toString());
+            ldgSave.put("sty_dte", /*sty_date + " " + */ldg_cin.getText().toString());
             ldgSave.put("to_dte", ldg_cout.getText().toString());
             ldgSave.put("elgble", strMyEli.substring(0, intMyEli));
             ldgSave.put("noOfDays", txtStyDays.getText().toString());
@@ -2846,12 +2891,16 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         /*ImageStore();*/
 
+
         Call<ResponseBody> submit;
         if (responseVal.equals("Save")) {
             submit = apiInterface.saveDailyAllowance(jsonData.toString());
         } else {
             submit = apiInterface.submitOfApp(jsonData.toString());
         }
+
+
+        Log.v("TA_REQUEST", submit.request().toString());
         submit.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
