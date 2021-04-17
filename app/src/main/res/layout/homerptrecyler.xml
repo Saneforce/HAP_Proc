@@ -20,5 +20,11 @@
             style="@style/DashboardTextStyleBold"
             android:textStyle="bold"
             android:autoLink="web" />
+        <ImageView
+
+            android:layout_width="@dimen/C20dp"
+            android:src="@drawable/map"
+            android:layout_margin="@dimen/C1dp"
+            android:layout_height="@dimen/C20dp"/>
     </LinearLayout>
 </LinearLayout>

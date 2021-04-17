@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/custom_toolbar_help"></include>
+        <include layout="@layout/custom_toolbar_help"/>
 
         <ScrollView
             android:layout_width="match_parent"
@@ -762,7 +762,7 @@
 
                         </LinearLayout>
 
-                        <include layout="@layout/part_view" />
+
 
                         <LinearLayout
                             android:id="@+id/lin_tp_histry"
@@ -771,6 +771,8 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/C10dp"
                             android:orientation="vertical">
+
+                            <include layout="@layout/part_view" />
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
