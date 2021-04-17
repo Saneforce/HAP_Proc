@@ -609,7 +609,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 Log.e("Mode_To", sharedpreferences.getString(modeToKm, ""));
             }
             if (sharedpreferences.contains("StoreId")) {
-                STRCode = sharedpreferences.getString("StoreId", "");
+                StrToCode = sharedpreferences.getString("StoreId", "");
                 Log.e("Mode_To", sharedpreferences.getString("StoreId", ""));
 
             }
@@ -934,7 +934,9 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             TextToAddress.setText(myDataset.get(position).getName());
             StrToCode = myDataset.get(position).getId();
             Log.e("StrToCode", StrToCode);
-
+            SharedPreferences.Editor ed = sharedpreferences.edit();
+            ed.putString("StoreId", StrToCode);
+            ed.commit();
 
         } else if (type == 1) {
           /*  SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -1154,7 +1156,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             jj.put("url", imageServer);
             jj.put("from", onDutyFrom.getText().toString());
             jj.put("to", TextToAddress.getText().toString());
-            jj.put("to_code", STRCode);
+            jj.put("to_code", StrToCode);
             jj.put("dailyAllowance", dailyAllowance.getText().toString());
             jj.put("driverAllowance", DriverNeed);
 

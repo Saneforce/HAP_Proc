@@ -1230,8 +1230,7 @@
                                 android:id="@+id/lodgContvw"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                android:visibility="gone">
+                                android:orientation="vertical">
 
                                 <TextView
                                     style="@style/TextStyle"
@@ -1532,6 +1531,7 @@
                                                     android:orientation="horizontal">
 
                                                     <ImageView
+                                                        android:onClick="EarImage"
                                                         android:id="@+id/ear_lod_attach"
                                                         android:layout_width="@dimen/C40dp"
                                                         android:layout_height="@dimen/C40dp"
@@ -1540,6 +1540,7 @@
 
 
                                                     <ImageView
+                                                        android:onClick="EarAttach"
                                                         android:id="@+id/ear_lod__preview"
                                                         android:layout_width="@dimen/C40dp"
                                                         android:layout_height="@dimen/C40dp"
@@ -1662,6 +1663,7 @@
                                                     android:orientation="horizontal">
 
                                                     <ImageView
+                                                        android:onClick="LateImage"
                                                         android:id="@+id/lat_lod_attach"
                                                         android:layout_width="@dimen/C40dp"
                                                         android:layout_height="@dimen/C40dp"
@@ -1670,6 +1672,7 @@
 
 
                                                     <ImageView
+                                                        android:onClick="LateAttach"
                                                         android:id="@+id/lat_lod__preview"
                                                         android:layout_width="@dimen/C40dp"
                                                         android:layout_height="@dimen/C40dp"
@@ -2013,6 +2016,29 @@
                                             android:layout_margin="@dimen/C10dp"
                                             android:background="@color/grey_300"></View>
 
+
+                                        <LinearLayout
+                                            android:id="@+id/linear_con"
+                                            android:visibility="gone"
+                                            android:orientation="vertical"
+                                            android:layout_marginTop="@dimen/C5dp"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content">
+
+                                            <TextView
+                                                android:text="Continue Stay Balance"
+                                                style="@style/TextStyle" />
+
+                                            <LinearLayout
+                                                android:id="@+id/lin_con_sty"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="vertical"
+                                                android:padding="5dp" />
+
+                                        </LinearLayout>
+
+
                                         <LinearLayout
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
@@ -2041,6 +2067,7 @@
                                         </LinearLayout>
 
                                     </LinearLayout>
+
 
                                 </LinearLayout>
                             </LinearLayout>
