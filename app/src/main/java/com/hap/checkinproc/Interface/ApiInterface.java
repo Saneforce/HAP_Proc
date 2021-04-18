@@ -89,6 +89,9 @@ public interface ApiInterface {
     @POST("Db_v300.php?")
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("Priod") int Priod, @Query("divisionCode") String divisionCode, @Query("sfCode") String Sf_code, @Query("rSF") String rSF, @Query("State_Code") String State_code, @Query("desig") String desig, @Field("data") String body);
 
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=save/dynamictp")
+    Call<Object> Tb_Mydayplannew(@QueryMap Map<String, String> params, @Field("data") String body);
 
     @FormUrlEncoded
     @POST("db_activity.php?axn=get/view")

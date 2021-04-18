@@ -376,13 +376,26 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:layout_marginTop="@dimen/C5dp"></LinearLayout>
+                        android:layout_marginTop="@dimen/C5dp">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/dynamicrecyclerview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+
+                            android:padding="@dimen/C10dp" />
+
+
+                    </LinearLayout>
+
+
+
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/C5dp"
-                        android:visibility="gone">
+                        android:visibility="visible">
 
                         <LinearLayout
                             android:layout_width="match_parent"
