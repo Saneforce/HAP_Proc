@@ -206,6 +206,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     SharedPreferences sharedpreferences;
     SharedPreferences.Editor editors;
     JsonArray jsonArray = null;
+    JsonArray jsonExpHead = null;
     JsonArray lcDraftArray = null;
     JsonArray oeDraftArray = null;
     JsonArray trvldArray = null;
@@ -349,6 +350,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         linearConView = findViewById(R.id.linear_con);
         viewContinue = (LinearLayout) findViewById(R.id.lin_con_sty);
 
+
         vwldgBillAmt = findViewById(R.id.vwldgBillAmt);
 
         mChckCont.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -444,11 +446,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 drvldgEAra.setVisibility(View.GONE);
                 if (ldgAdd.getText().equals("+ Add")) {
-                    ldgAdd.setText("- Remove");
+                   /* ldgAdd.setText("- Remove");*/
                     lodgContvw.setVisibility(View.VISIBLE);
                 } else {
-                    ldgAdd.setText("+ Add");
+      /*              ldgAdd.setText("+ Add");*/
                     lodgContvw.setVisibility(View.GONE);
+
+
                     txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(Double.valueOf("0.00")));
                 }
             }
@@ -1300,6 +1304,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     txtJNHQ.setText(EmpDet.get("HQ").getAsString());
                     txtJNMob.setText(EmpDet.get("Mob").getAsString());
                     float sum = EmpDet.get("ldgAllow").getAsFloat();
+                    Log.v("Allowance_Amount", String.valueOf(sum));
                     ldgEmpName = String.valueOf(sum);
 
                     txtJNMyEli.setText("Rs." + new DecimalFormat("##0.00").format(sum));
@@ -1593,12 +1598,23 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     travelDetails = jsonObjects.getAsJsonArray("Travelled_Details");
                     LodingCon = jsonObjects.getAsJsonArray("LodDtlist");
                     StayDate = jsonObjects.getAsJsonArray("Stay_Date_time");
+                    jsonExpHead = jsonObjects.getAsJsonArray("Expense_Head");
+
 
                /*     if (LodingCon.size() != 0) {
                         mChckEarly.setVisibility(View.GONE);
                     }*/
 
-                    Log.v("JSON_LODGING", LodingCon.toString());
+                    Log.v("JSON_LODGING", jsonExpHead.toString());
+
+                    JsonObject jRremarks = null;
+
+                    for (int i = 0; i < jsonExpHead.size(); i++) {
+                        jRremarks = jsonExpHead.get(i).getAsJsonObject();
+                        String strRemarks = jRremarks.get("Reason").getAsString();
+                        editTextRemarks.setText(strRemarks);
+
+                    }
 
                     JsonObject jsonObject = null;
                     for (int i = 0; i < jsonArray.size(); i++) {
@@ -1961,17 +1977,43 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     if (oeDraftArray != null || oeDraftArray.size() != 0) OeDraft(oeDraftArray);
                     if (trvldArray != null || trvldArray.size() != 0) trvldLocation(trvldArray);
 
-                    Log.v("LadArray_Size", String.valueOf(ldArray.size()));
+                    Log.v("LODGING_ARRAY", String.valueOf(ldArray.size()));
                     if (ldArray != null || ldArray.size() != 0) {
-                        ldgAdd.setText("- Remove");
-                        lodgContvw.setVisibility(View.VISIBLE);
-                        lodingDraft(ldArray, LodingCon);
-                        Log.v("LadArray_Size", String.valueOf(ldArray.size()));
-                    } /*else {
-                        Log.v("LadArray_Size", String.valueOf(ldArray.size()));
+                        Log.v("LODGING_ARRAY_IF", String.valueOf(ldArray.size()));
+                        if (ldgAdd.getText().equals("+ Add")) {
+                            /*ldgAdd.setText("- Remove");*/
+                            lodgContvw.setVisibility(View.GONE);
+                            lodingDraft(ldArray, LodingCon);
+                            Log.v("TO_DA_GA_PA", txt_ldg_type.getText().toString());
+                        } else {
+/*
+                            ldgAdd.setText("+ Add");
+*/
+                            lodgContvw.setVisibility(View.VISIBLE);
+                            ldg_cin.setText("");
+                            ldg_cout.setText("");
+                            lodgStyLocation.setText("");
+                            txtMyEligi.setText("Rs." + 0.00);
+                            ldgWOBBal.setText("Rs." + 0.00);
+                            lbl_ldg_eligi.setText("Rs." + 0.00);
+                            edt_ldg_bill.setText("");
+                            txt_ldg_type.setText("");
+                            TotalDays.setVisibility(View.GONE);
+                            earCheckIn.setText("");
+                            earCheckOut.setText("");
+                            latCheckIn.setText("");
+                            latCheckOut.setText("");
+                            edtEarBill.setText("");
+                            edtLateBill.setText("");
+                            mChckCont.setChecked(false);
+                            mChckEarly.setChecked(false);
+                            mChckLate.setChecked(false);
+                        }
+
+                    } else {
+                        //lodgContvw.setVisibility(View.GONE);
+                        Log.v("LODGING_ARRAY_ELSE", String.valueOf(ldArray.size()));
                         jointLodging.setVisibility(View.GONE);
-                        ldgAdd.setText("+ Add");
-                        lodgContvw.setVisibility(View.GONE);
                         ldg_cin.setText("");
                         ldg_cout.setText("");
                         lodgStyLocation.setText("");
@@ -1981,16 +2023,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         edt_ldg_bill.setText("");
                         txt_ldg_type.setText("");
                         TotalDays.setVisibility(View.GONE);
-                        earCheckIn.setText("");
-                        earCheckOut.setText("");
-                        latCheckIn.setText("");
-                        latCheckOut.setText("");
-                        edtEarBill.setText("");
-                        edtLateBill.setText("");
-                        mChckCont.setChecked(false);
-                        mChckEarly.setChecked(false);
-                        mChckLate.setChecked(false);
-                    }*/
+                        lodgContvw.setVisibility(View.GONE);
+                    }
 
                     calOverAllTotal(localCov, otherExp, tTotAmt);
                 }
@@ -2008,6 +2042,26 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     public void lodingDraft(JsonArray lodingDraft, JsonArray ContSty) {
 
         JsonObject eachData;
+
+
+        Log.v("Ta_Loadging_type", txt_ldg_type.getText().toString());
+        Log.v("Ta_Loadging_loc", lodgStyLocation.getText().toString());
+        Log.v("Ta_Loadging_sty_dte", sty_date + " " + ldg_cin.getText().toString());
+        Log.v("Ta_Loadging_to_dte", ldg_cout.getText().toString());
+        Log.v("Ta_Loadging_bil_amt", edt_ldg_bill.getText().toString());
+        Log.v("Ta_Loadging_cnSty", String.valueOf(cnSty));
+        Log.v("Ta_Loadging_erlSty", String.valueOf(erlSty));
+        Log.v("Ta_Loadging_lte_sty", String.valueOf(lteSty));
+
+        Log.v("Ta_Loadging_erChckIn", earCheckIn.getText().toString());
+        Log.v("Ta_Loadging_earCheckOut", earCheckOut.getText().toString());
+        Log.v("Ta_Loadging_Ear_amt", edtEarBill.getText().toString());
+
+        Log.v("Ta_Loadging_lat_in", latCheckIn.getText().toString());
+        Log.v("Ta_Loadging_lat_out", latCheckOut.getText().toString());
+        Log.v("Ta_Loadging_lat_bill", edtLateBill.getText().toString());
+        Log.v("Ta_Loadging_txt", txtLodgUKey.getText().toString());
+
 
         if (ContSty.size() != 0) {
             for (int i = 0; i < ContSty.size(); i++) {
@@ -2033,7 +2087,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldraft = (JsonObject) lodingDraft.get(i);
 
             jsonAddition = ldraft.getAsJsonArray("Additional");
+/*
             ldgAdd.setText("- Remove");
+*/
             lodgContvw.setVisibility(View.VISIBLE);
             lodgCont.setVisibility(View.VISIBLE);
             ldg_stayloc.setVisibility(View.VISIBLE);
@@ -2903,9 +2959,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             int intLdgEli = strLdgEli.lastIndexOf(separator4);
             Log.v("Ta_Loadging_strLdgEli", String.valueOf(strLdgEli));
 
-
-
-
             JSONObject ldgSave = new JSONObject();
             ldgSave.put("ldg_type", txt_ldg_type.getText().toString());
             ldgSave.put("ldg_type_sty", lodgStyLocation.getText().toString());
@@ -2930,11 +2983,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldgSave.put("attch_bill", "");
             ldgSave.put("u_key", txtLodgUKey.getText().toString());
 
-            Log.v("Ta_Loadging_type",txt_ldg_type.getText().toString());
-            Log.v("Ta_Loadging_loc",lodgStyLocation.getText().toString());
-            Log.v("Ta_Loadging_sty_dte",sty_date + " " + ldg_cin.getText().toString());
-            Log.v("Ta_Loadging_to_dte",ldg_cout.getText().toString());
-            Log.v("Ta_Loadging_bil_amt",edt_ldg_bill.getText().toString());
+            Log.v("Ta_Loadging_type", txt_ldg_type.getText().toString());
+            Log.v("Ta_Loadging_loc", lodgStyLocation.getText().toString());
+            Log.v("Ta_Loadging_sty_dte", sty_date + " " + ldg_cin.getText().toString());
+            Log.v("Ta_Loadging_to_dte", ldg_cout.getText().toString());
+            Log.v("Ta_Loadging_bil_amt", edt_ldg_bill.getText().toString());
             Log.v("Ta_Loadging_cnSty", String.valueOf(cnSty));
             Log.v("Ta_Loadging_erlSty", String.valueOf(erlSty));
             Log.v("Ta_Loadging_lte_sty", String.valueOf(lteSty));
@@ -3346,6 +3399,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         }
         if (type == 10) {
+
+
             txt_date.setText(myDataset.get(position).getName());
             Log.d("JSON_VALUE", myDataset.get(position).getId());
             DateTime = myDataset.get(position).getId();

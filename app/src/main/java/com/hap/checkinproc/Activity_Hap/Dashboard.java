@@ -234,7 +234,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     startActivity(i);
                 }
 
-
                 break;
 
             case R.id.lin_request_status:
