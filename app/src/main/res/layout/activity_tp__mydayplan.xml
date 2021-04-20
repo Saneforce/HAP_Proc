@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,14 +17,15 @@
             android:background="@color/colorAccent"
             android:padding="@dimen/C15dp">
 
+
             <TextView
                 android:id="@+id/textView9"
                 style="@style/TextStyle"
                 android:layout_width="match_parent"
                 android:gravity="center"
                 android:text="@string/Tourplan"
-                android:textAllCaps="false"
                 android:textColor="#FFFFFF"
+                android:textSize="18sp"
                 android:textStyle="bold" />
         </LinearLayout>
 
@@ -36,464 +38,645 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="@dimen/C10dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:orientation="vertical"
-                android:visibility="visible">
-
-                <TextView
-                    android:id="@+id/tourdate"
-                    style="@style/TextStyle"
-                    android:text="Time"
-                    android:textColor="@color/color_red" />
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="5dp">
+
+                        <TextView
+                            android:id="@+id/tourdate"
+                            style="@style/TextStyle"
+                            android:text="Time"
+                            android:textColor="@color/color_red" />
+
+
+                    </RelativeLayout>
 
                     <LinearLayout
-                        android:id="@+id/layoutData"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:visibility="visible">
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/C10dp"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:orientation="vertical">
 
                         <LinearLayout
-                            android:id="@+id/worktypelayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                style="@style/TextStyle"
-                                android:text="@string/txt_worktype"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:id="@+id/worktype_text"
-                                style="@style/TextStyle"
-                                android:layout_width="match_parent"
-                                android:background="@drawable/round_white_backround"
-                                android:hint="Select the worktype"
-                                android:padding="@dimen/C8dp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/Procrumentlayout"
+                            android:id="@+id/layoutData"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
                             android:visibility="visible">
 
+
                             <LinearLayout
-                                android:id="@+id/hqlayout"
+                                android:id="@+id/worktypelayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
                                 <TextView
                                     style="@style/TextStyle"
-                                    android:text="@string/txt_hq"
-                                    android:textSize="12sp" />
+                                    android:text="@string/txt_worktype" />
+
 
                                 <TextView
-                                    android:id="@+id/hq_text"
+                                    android:id="@+id/worktype_text"
                                     style="@style/TextStyle"
                                     android:layout_width="match_parent"
                                     android:background="@drawable/round_white_backround"
-                                    android:hint="Select the HQ"
-                                    android:padding="@dimen/C8dp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/chillinglayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    style="@style/TextStyle"
-                                    android:text="@string/txt_chillingtext"
-                                    android:textSize="12sp" />
-
-                                <TextView
-                                    android:id="@+id/chilling_text"
-                                    style="@style/TextStyle"
-                                    android:layout_width="match_parent"
-                                    android:background="@drawable/round_white_backround"
-                                    android:hint="Select the Center"
-                                    android:padding="@dimen/C8dp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/shiftypelayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    style="@style/TextStyle"
-                                    android:text="@string/txt_shifttype"
-                                    android:textSize="12sp" />
-
-                                <TextView
-                                    android:id="@+id/shift_type"
-                                    style="@style/TextStyle"
-                                    android:layout_width="match_parent"
-                                    android:background="@drawable/round_white_backround"
-                                    android:hint="Select the Shift M/E"
+                                    android:hint="Select the worktype"
                                     android:padding="@dimen/C8dp" />
                             </LinearLayout>
 
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/distributors_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                style="@style/TextStyle"
-                                android:text="@string/txt_distributors"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:id="@+id/distributor_text"
-                                style="@style/TextStyle"
-                                android:layout_width="match_parent"
-                                android:background="@drawable/round_white_backround"
-                                android:hint="Select the Distributor"
-                                android:padding="@dimen/C8dp"
-                                android:textSize="13sp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/route_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                style="@style/TextStyle"
-                                android:text="@string/txt_route"
-                                android:textSize="12sp" />
-
-                            <TextView
-                                android:id="@+id/route_text"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/C40dp"
-                                android:background="@drawable/round_white_backround"
-                                android:gravity="center_vertical"
-                                android:hint="Select the Route"
-                                android:padding="@dimen/C4dp"
-                                android:textSize="13sp" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/jointwork_layout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
                             <LinearLayout
+                                android:id="@+id/Procrumentlayout"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_marginTop="@dimen/C10dp"
-                                android:orientation="horizontal">
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <LinearLayout
+                                    android:id="@+id/hqlayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/TextStyle"
+                                        android:text="@string/txt_hq" />
+
+
+                                    <TextView
+                                        android:id="@+id/hq_text"
+                                        style="@style/TextStyle"
+                                        android:layout_width="match_parent"
+                                        android:background="@drawable/round_white_backround"
+                                        android:hint="Select the HQ"
+                                        android:padding="@dimen/C8dp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/chillinglayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/TextStyle"
+                                        android:text="@string/txt_chillingtext" />
+
+                                    <TextView
+                                        android:id="@+id/chilling_text"
+                                        style="@style/TextStyle"
+                                        android:layout_width="match_parent"
+                                        android:background="@drawable/round_white_backround"
+                                        android:hint="Select the Center"
+                                        android:padding="@dimen/C8dp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/shiftypelayout"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/TextStyle"
+                                        android:text="@string/txt_shifttype" />
+
+                                    <TextView
+                                        android:id="@+id/shift_type"
+                                        style="@style/TextStyle"
+                                        android:layout_width="match_parent"
+                                        android:background="@drawable/round_white_backround"
+                                        android:hint="Select the Shift M/E"
+                                        android:padding="@dimen/C8dp" />
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:id="@+id/distributors_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="15dp"
+                                android:orientation="vertical"
+                                android:visibility="gone">
 
                                 <TextView
                                     style="@style/TextStyle"
-                                    android:text="@string/txt_jointwork"
-                                    android:textSize="12sp" />
+                                    android:text="@string/txt_distributors" />
 
                                 <TextView
-                                    android:id="@+id/text_tour_plancount"
-                                    android:layout_width="23dp"
-                                    android:layout_height="23dp"
-                                    android:layout_marginLeft="@dimen/C10dp"
-                                    android:background="@drawable/circle"
-                                    android:maxEms="2"
-                                    android:text="0"
-                                    android:textAlignment="center"
-                                    android:textColor="@android:color/white"></TextView>
+                                    android:id="@+id/distributor_text"
+
+                                    style="@style/TextStyle"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="39dp"
+                                    android:layout_marginTop="10dp"
+                                    android:background="@drawable/round_white_backround"
+                                    android:gravity="center_vertical"
+                                    android:hint="Select the Distributor"
+                                    android:padding="@dimen/C4dp"
+                                    android:textSize="13sp" />
 
                             </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/route_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C15dp"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="15dp"
+                                    android:fontFamily="@font/basic"
+                                    android:text="@string/txt_route"
+                                    android:textColor="#000000"
+                                    android:textStyle="bold" />
+
+                                <TextView
+                                    android:id="@+id/route_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="39dp"
+                                    android:layout_marginTop="10dp"
+                                    android:background="@drawable/round_white_backround"
+                                    android:gravity="center_vertical"
+                                    android:hint="Select the Route"
+                                    android:padding="@dimen/C4dp"
+                                    android:textSize="13sp" />
+                            </LinearLayout>
+
+                            <!--  <LinearLayout
+                                  android:id="@+id/joint_work_lt"
+                                  android:layout_width="match_parent"
+                                  android:layout_height="wrap_content"
+                                  android:layout_marginTop="@dimen/C15dp"
+                                  android:orientation="vertical">
+
+                                  <TextView
+                                      android:layout_width="wrap_content"
+                                      android:layout_height="wrap_content"
+                                      android:layout_marginTop="15dp"
+                                      android:fontFamily="@font/basic"
+                                      android:text="@string/txt_jointwork"
+                                      android:textColor="#000000"
+                                      android:textStyle="bold" />
+
+                                  <LinearLayout
+                                      android:id="@+id/jointwork_layout"
+                                      android:layout_width="match_parent"
+                                      android:layout_height="wrap_content"
+                                      android:layout_marginTop="@dimen/C15dp"
+                                      android:orientation="horizontal">
+
+                                      <TextView
+
+                                          android:layout_width="match_parent"
+                                          android:layout_height="wrap_content"
+                                          android:layout_marginTop="@dimen/C10dp"
+                                          android:layout_weight="1"
+                                          android:background="@drawable/round_white_backround"
+                                          android:hint="@string/txt_select_jointwork"
+                                          android:padding="@dimen/C10dp" />
+                                      <ImageView
+                                          android:id="@+id/arowimg"
+                                          android:layout_width="wrap_content"
+                                          android:layout_height="wrap_content"
+                                          android:layout_gravity="center"
+                                          android:src="@drawable/arrow_down" />
+
+                                  </LinearLayout>
+                              </LinearLayout>-->
+
+
+                            <LinearLayout
+                                android:id="@+id/jointwork_layout"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C15dp"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/basic"
+                                        android:text="@string/txt_jointwork"
+                                        android:textColor="#000000"
+                                        android:textStyle="bold" />
+
+                                    <LinearLayout
+                                        android:layout_width="23dp"
+                                        android:layout_height="23dp"
+                                        android:layout_marginLeft="15dp"
+                                        android:background="@drawable/circle">
+
+                                        <TextView
+                                            android:id="@+id/text_tour_plancount"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:maxEms="2"
+                                            android:text="0"
+                                            android:textAlignment="center"
+                                            android:textColor="@android:color/white"></TextView>
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="5dp"
+                                        android:orientation="horizontal">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_margin="@dimen/C2dp"
+                                            android:layout_weight="1"
+                                            android:background="@drawable/round_white_backround"
+                                            android:elevation="@dimen/C2dp"
+                                            android:orientation="vertical"
+                                            android:padding="5dp">
+
+                                            <EditText
+                                                android:id="@+id/empidedittext"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:background="@null"
+                                                android:hint="EMP ID"
+                                                android:inputType="text"
+                                                android:padding="5dp"
+                                                android:textSize="13dp" />
+                                        </LinearLayout>
+
+
+                                        <Button
+                                            android:id="@+id/GetEmpId"
+                                            android:layout_width="80dp"
+                                            android:layout_height="37dp"
+                                            android:layout_margin="@dimen/C2dp"
+                                            android:background="@drawable/otherlocations"
+                                            android:padding="@dimen/C5dp"
+                                            android:text="Get"
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/C8dp" />
+
+                                    </LinearLayout>
+
+
+                                </LinearLayout>
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/jointwork_recycler"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/C10dp" />
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/Dynamictpview"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_marginTop="@dimen/C5dp">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/dynamicrecyclerview"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+
+                            android:padding="@dimen/C10dp" />
+
+
+                    </LinearLayout>
+
+
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/C5dp"
+                        android:visibility="visible">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_margin="@dimen/C8dp"
+                            android:orientation="vertical">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
                                 <LinearLayout
+                                    android:id="@+id/mode_of_travel"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:orientation="horizontal">
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        android:id="@+id/txt"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="5dp"
+                                        android:fontFamily="@font/basic"
+                                        android:text="Mode of Travel"
+                                        android:textAllCaps="false"
+                                        android:textColor="#000"
+                                        android:textStyle="bold" />
+
+                                    <androidx.cardview.widget.CardView
+                                        android:id="@+id/card_travel_mode"
+                                        android:layout_width="fill_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@+id/txt"
+                                        android:layout_marginTop="6dp"
+                                        android:background="#B1AFAF"
+                                        android:padding="18dp"
+                                        app:cardCornerRadius="5dp"
+                                        app:cardElevation="2dp"
+                                        app:cardUseCompatPadding="true">
+
+                                        <TextView
+                                            android:id="@+id/txt_mode"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_toRightOf="@+id/txt"
+                                            android:fontFamily="@font/basic"
+                                            android:hint="Mode of Travel"
+                                            android:padding="@dimen/C10dp"
+                                            android:textAllCaps="false"
+                                            android:textColor="#515151"
+                                            android:textSize="13sp" />
+
+                                    </androidx.cardview.widget.CardView>
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/lin_daily"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_margin="@dimen/C2dp"
-                                        android:layout_weight="1"
-                                        android:background="@drawable/round_white_backround"
-                                        android:elevation="@dimen/C2dp"
-                                        android:orientation="vertical"
-                                        android:padding="5dp">
+                                        android:orientation="vertical">
 
-                                        <EditText
-                                            android:id="@+id/empidedittext"
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_marginTop="15dp"
+                                            android:fontFamily="@font/basic"
+                                            android:text="Daily Allowance"
+                                            android:textAllCaps="false"
+                                            android:textColor="#000"
+                                            android:textStyle="bold" />
+
+                                        <androidx.cardview.widget.CardView
+                                            android:id="@+id/card_daily_allowance"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:background="@null"
-                                            android:hint="EMP ID"
-                                            android:inputType="text"
-                                            android:padding="5dp"
-                                            android:textSize="13dp" />
+                                            android:layout_below="@+id/txt"
+                                            android:layout_marginTop="6dp"
+                                            android:background="#B1AFAF"
+                                            android:padding="18dp"
+                                            app:cardCornerRadius="5dp"
+                                            app:cardElevation="2dp"
+                                            app:cardUseCompatPadding="true">
+
+                                            <TextView
+                                                android:id="@+id/text_daily_allowance"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_toRightOf="@+id/txt"
+                                                android:fontFamily="@font/basic"
+                                                android:hint="Mode of Allowance"
+                                                android:padding="@dimen/C10dp"
+                                                android:textAllCaps="false"
+                                                android:textColor="#515151"
+                                                android:textSize="13sp" />
+
+                                        </androidx.cardview.widget.CardView>
+
                                     </LinearLayout>
 
-                                    <Button
-                                        android:id="@+id/GetEmpId"
-                                        android:layout_width="80dp"
-                                        android:layout_height="37dp"
-                                        android:layout_margin="@dimen/C2dp"
-                                        android:background="@drawable/otherlocations"
-                                        android:padding="@dimen/C5dp"
-                                        android:text="Get"
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/C8dp" />
-
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/jointwork_recycler"
-                                android:layout_width="match_parent"
-
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/C10dp" />
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/C10dp"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
-                            android:id="@+id/mode_of_travel"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/txt"
-                                style="@style/TextStyle"
-                                android:text="Mode of Travel"
-                                android:textSize="12sp" />
-
-                            <androidx.cardview.widget.CardView
-                                android:id="@+id/card_travel_mode"
-                                android:layout_width="fill_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_below="@+id/txt"
-                                android:layout_marginTop="6dp"
-                                android:background="#B1AFAF"
-                                android:padding="18dp"
-                                app:cardCornerRadius="5dp"
-                                app:cardElevation="2dp"
-                                app:cardUseCompatPadding="true">
-
-                                <TextView
-                                    android:id="@+id/txt_mode"
-                                    style="@style/TextStyle"
-                                    android:layout_width="match_parent"
-                                    android:hint="Mode of Travel"
-                                    android:padding="@dimen/C5dp"
-                                    android:textSize="@dimen/C12dp" />
-
-                            </androidx.cardview.widget.CardView>
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/lin_daily"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/C10dp"
-                            android:orientation="vertical">
-
-                            <TextView
-                                style="@style/TextStyle"
-                                android:text="Daily Allowance"
-                                android:textSize="12sp" />
-
-                            <androidx.cardview.widget.CardView
-                                android:id="@+id/card_daily_allowance"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="#B1AFAF"
-                                android:padding="18dp"
-                                app:cardCornerRadius="5dp"
-                                app:cardElevation="2dp"
-                                app:cardUseCompatPadding="true">
-
-                                <TextView
-                                    android:id="@+id/text_daily_allowance"
-                                    style="@style/TextStyle"
-                                    android:layout_width="match_parent"
-                                    android:hint="Mode of Allowance"
-                                    android:padding="@dimen/C5dp"
-                                    android:textSize="@dimen/C12dp" />
-
-                            </androidx.cardview.widget.CardView>
-
-                            <LinearLayout
-                                android:id="@+id/lin_check_driver"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone">
-
-                                <CheckBox
-                                    android:id="@+id/da_driver_allowance"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C10dp"
-                                    android:text="Chauffer driven">
-
-                                </CheckBox>
-
-                            </LinearLayout>
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/bus_mode"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:id="@+id/lin_from"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/C10dp"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/txt_frm"
-                                    style="@style/TextStyle"
-                                    android:text="From"
-                                    android:textSize="12sp" />
-
-                                <androidx.cardview.widget.CardView
-                                    android:layout_width="fill_parent"
-                                    android:layout_height="wrap_content"
-                                    app:cardCornerRadius="5dp"
-                                    app:cardElevation="2dp"
-                                    app:cardUseCompatPadding="true">
-
-                                    <EditText
-                                        android:id="@+id/edt_frm"
+                                    <LinearLayout
+                                        android:id="@+id/lin_check_driver"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:background="@null"
-                                        android:fontFamily="@font/basic"
-                                        android:hint="From Place"
-                                        android:padding="@dimen/C10dp"
-                                        android:text=""
-                                        android:textAllCaps="false"
-                                        android:textColor="#515151"
-                                        android:textSize="13sp" />
+                                        android:visibility="gone">
 
-                                </androidx.cardview.widget.CardView>
-                            </LinearLayout>
+                                        <CheckBox
+                                            android:id="@+id/da_driver_allowance"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginTop="@dimen/C10dp"
+                                            android:text="Chauffer driven">
 
-                            <LinearLayout
-                                android:id="@+id/lin_to_place"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/C10dp"
-                                android:orientation="vertical">
 
-                                <TextView
-                                    style="@style/TextStyle"
-                                    android:text="To"
-                                    android:textSize="12sp" />
+                                        </CheckBox>
 
-                                <androidx.cardview.widget.CardView
-                                    android:id="@+id/card_Toplace"
-                                    android:layout_width="fill_parent"
+                                    </LinearLayout>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/bus_mode"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    app:cardCornerRadius="5dp"
-                                    app:cardElevation="2dp"
-                                    app:cardUseCompatPadding="true">
+                                    android:orientation="vertical">
 
-                                    <TextView
-                                        android:id="@+id/edt_to"
-                                        style="@style/TextStyle"
+                                    <LinearLayout
+                                        android:id="@+id/lin_from"
                                         android:layout_width="match_parent"
-                                        android:hint="To Place"
-                                        android:padding="@dimen/C5dp"
-                                        android:textSize="@dimen/C12dp" />
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
 
-                                </androidx.cardview.widget.CardView>
+                                        <TextView
+                                            android:id="@+id/txt_frm"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_marginTop="8dp"
+                                            android:fontFamily="@font/basic"
+                                            android:text="From"
+                                            android:textAllCaps="false"
+                                            android:textColor="#000"
+                                            android:textStyle="bold" />
+
+                                        <androidx.cardview.widget.CardView
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@+id/txt_frm"
+                                            android:layout_marginTop="6dp"
+                                            android:background="#B1AFAF"
+                                            android:padding="18dp"
+                                            app:cardCornerRadius="5dp"
+                                            app:cardElevation="2dp"
+                                            app:cardUseCompatPadding="true">
+
+                                            <EditText
+                                                android:id="@+id/edt_frm"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:background="@null"
+                                                android:fontFamily="@font/basic"
+                                                android:hint="From Place"
+                                                android:padding="@dimen/C10dp"
+                                                android:text=""
+                                                android:textAllCaps="false"
+                                                android:textColor="#515151"
+                                                android:textSize="13sp" />
+
+                                        </androidx.cardview.widget.CardView>
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/lin_to_place"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="5dp"
+                                            android:layout_marginTop="8dp"
+                                            android:fontFamily="@font/basic"
+                                            android:text="To"
+                                            android:textAllCaps="false"
+                                            android:textColor="#000"
+                                            android:textStyle="bold" />
+
+                                        <androidx.cardview.widget.CardView
+                                            android:id="@+id/card_Toplace"
+                                            android:layout_width="fill_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@+id/card_to_hq"
+                                            android:layout_marginTop="6dp"
+                                            android:background="#B1AFAF"
+                                            android:padding="18dp"
+                                            app:cardCornerRadius="5dp"
+                                            app:cardElevation="2dp"
+                                            app:cardUseCompatPadding="true">
+
+                                            <TextView
+                                                android:id="@+id/edt_to"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:background="@null"
+                                                android:fontFamily="@font/basic"
+                                                android:hint="To Place"
+                                                android:padding="@dimen/C10dp"
+                                                android:text=""
+                                                android:textAllCaps="false"
+                                                android:textColor="#515151"
+                                                android:textSize="13sp" />
+
+                                        </androidx.cardview.widget.CardView>
+                                    </LinearLayout>
+                                </LinearLayout>
                             </LinearLayout>
+
+                            <TextView
+                                android:id="@+id/remarkscaption"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="15dp"
+                                android:fontFamily="@font/basic"
+                                android:textColor="#000000"
+                                android:textStyle="bold" />
+
+                            <androidx.appcompat.widget.AppCompatEditText
+                                android:id="@+id/edt_remarks"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/C100dp"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:background="@drawable/round_white_backround"
+                                android:gravity="top"
+                                android:hint="@string/txt_enter_purpose"
+                                android:padding="@dimen/C5dp"
+                                android:textSize="@dimen/C12dp" />
                         </LinearLayout>
+
                     </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/remarkscaption"
-                        style="@style/TextStyle"
-                        android:textSize="12sp" />
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/edt_remarks"
+                    <ProgressBar
+                        android:id="@+id/progressbar"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/C100dp"
-                        android:background="@drawable/round_white_backround"
-                        android:gravity="top"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:progress="10"
+                        android:visibility="gone" />
+
+                    <Button
+                        android:id="@+id/submitbutton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/C4dp"
+                        android:layout_marginTop="@dimen/C20dp"
+                        android:layout_marginEnd="@dimen/C4dp"
                         android:layout_marginBottom="@dimen/C10dp"
-                        android:hint="@string/txt_enter_purpose"
-                        android:padding="@dimen/C5dp"
-                        android:textSize="@dimen/C12dp" />
+                        android:background="@color/colorPrimary"
+                        android:backgroundTint="@color/colorPrimary"
+                        android:elevation="@dimen/C4dp"
+                        android:text="@string/txt_submit"
+                        android:textAllCaps="false"
+                        android:textColor="@color/color_white"
+                        app:cornerRadius="@dimen/C4dp">
+
+                    </Button>
                 </LinearLayout>
 
-                <ProgressBar
-                    android:id="@+id/progressbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_gravity="center_vertical"
-                    android:progress="10"
-                    android:visibility="gone" />
 
-                <Button
-                    style="@style/ButtonStyle"
-                    android:id="@+id/submitbutton"
-                    android:background="@drawable/button_blue"
-                    android:text="@string/txt_submit">
-
-                </Button>
             </LinearLayout>
+
         </androidx.core.widget.NestedScrollView>
     </LinearLayout>
 
     <include layout="@layout/back_arrow"></include>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

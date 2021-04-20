@@ -217,7 +217,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                                 eText.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
                                 difference();
-
                                 fromData = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
                                 maxTWoDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
                                 MaxMinDateTo(maxTWoDate);

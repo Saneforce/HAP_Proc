@@ -292,7 +292,6 @@ public class TaApprovalDisplay extends AppCompatActivity {
                     SOE = jsonObject.get("Oe_totalAmt").getAsString();
 
                 }
-
             }
 
             @Override
@@ -300,7 +299,6 @@ public class TaApprovalDisplay extends AppCompatActivity {
 
             }
         });
-
     }
 
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
@@ -313,7 +311,6 @@ public class TaApprovalDisplay extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
     }
 
     public void onApproval(View v) {
@@ -323,7 +320,6 @@ public class TaApprovalDisplay extends AppCompatActivity {
                 SendtpApproval(1);
             }
         });
-
     }
 
     public void onReject(View v) {

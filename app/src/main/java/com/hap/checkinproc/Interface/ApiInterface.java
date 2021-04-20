@@ -36,6 +36,9 @@ public interface ApiInterface {
     @GET("Db_v300.php?")
     Call<Model> login(@Query("axn") String axn, @Query("Email") String Email, @Query("DvID") String deveiceId);
 
+    @POST("db_new_activity.php?")
+    Call<Object> GettpWorktypeFields(@QueryMap Map<String, String> params);
+
     /*
         shift time*
         @GET("Db_Native.php?")
@@ -86,6 +89,9 @@ public interface ApiInterface {
     @POST("Db_v300.php?")
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("Priod") int Priod, @Query("divisionCode") String divisionCode, @Query("sfCode") String Sf_code, @Query("rSF") String rSF, @Query("State_Code") String State_code, @Query("desig") String desig, @Field("data") String body);
 
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=save/dynamictp")
+    Call<Object> Tb_Mydayplannew(@QueryMap Map<String, String> params, @Field("data") String body);
 
     @FormUrlEncoded
     @POST("db_activity.php?axn=get/view")
@@ -223,8 +229,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/Expensedate")
-    Call<JsonArray> getTADate(@Field("data") String userData);
-
+    Call<JsonArray>  getTADate(@Field("data") String userData);
 
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/expensedatedetailsnew")
@@ -278,13 +283,11 @@ public interface ApiInterface {
     Call<HeaderCat> SubCategory(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                                 @Query("rSF") String rSF, @Query("State_Code") String StateCode,
                                 @Field("data") String data);
-
     /*submitValue*/
     @FormUrlEncoded
     @POST("Db_v300.php?axn=dcr/save")
     Call<JsonObject> submitValue(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                                  @Field("data") String data);
-
     /*ReportView*/
     @POST("db_v14.php?axn=get/ViewReport")
     Call<ReportDataList> reportValues(@Query("Sf_code") String sFCode, @Query("fromdate") String fromdate, @Query("todate") String todate);
@@ -293,17 +296,13 @@ public interface ApiInterface {
     @POST("db_v14.php?axn=get/ViewReport_Details")
     Call<DateReport> dateReport(@Query("Order_Id") String rsfCode, @Query("Sf_code") String sFCode);
 
-
     /*Retailer Details*/
-
 
     @FormUrlEncoded
     @POST("Db_v300.php?axn=get/FieldForce_HQ")
     Call<Object> getFieldForce_HQ(@Query("divisionCode") String disvisonCode, @Query("sf_code") String sFCode, @Field("data") String data);
 
-
     /*Retailer View Details*/
-
     @POST("Db_v300.php?axn=get/precall")
     Call<RetailerViewDetails> getRetailerDetails(@Query("divisionCode") String divisionCode, @Query("sf_code") String sFCode, @Query("Msl_No") String retailerID);
 
@@ -311,11 +310,9 @@ public interface ApiInterface {
     @POST("Db_v300.php")
     Call<Object> Get_Object(@QueryMap Map<String, String> params, @Field("data") String body);
 
-
     @FormUrlEncoded
     @POST("Db_v300.php")
     Call<JsonObject> addNewRetailer(@QueryMap Map<String, String> params, @Field("data") String body);
-
 
     @FormUrlEncoded
     @POST("Db_v300.php?axn=table/list")

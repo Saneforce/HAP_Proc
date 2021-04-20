@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,7 +33,7 @@ import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 public class Leave_Dashboard extends AppCompatActivity implements View.OnClickListener {
 
     Common_Class common_class;
-    LinearLayout LeaveRequest, PermissionRequest, MissedPunch, WeeklyOff, DeveiationEntry;
+    LinearLayout LeaveRequest, PermissionRequest, FlightTick, WeeklyOff, DeveiationEntry;
     LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus;
     TextView countLeaveRequest, countPermissionRequest, countMissedPunch, countWeeklyOff;
     Shared_Common_Pref mShared_common_pref;
@@ -97,7 +96,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         /*Request Linear*/
         LeaveRequest = findViewById(R.id.lin_leave_req);
         PermissionRequest = findViewById(R.id.lin_per_req);
-        MissedPunch = findViewById(R.id.lin_miss_punch);
+        FlightTick = findViewById(R.id.lin_fligh_mode);
         WeeklyOff = findViewById(R.id.lin_week_off);
         DeveiationEntry = findViewById(R.id.lin_deviation_entry);
 
@@ -120,7 +119,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         /*Status text*/
         LeaveRequest.setOnClickListener(this);
         PermissionRequest.setOnClickListener(this);
-        MissedPunch.setOnClickListener(this);
+        FlightTick.setOnClickListener(this);
         WeeklyOff.setOnClickListener(this);
         DeveiationEntry.setOnClickListener(this);
         /*Status Linear*/
@@ -156,6 +155,9 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.lin_per_req:
                 startActivity(new Intent(Leave_Dashboard.this, Permission_Request.class));
+                break;
+            case R.id.lin_fligh_mode:
+                startActivity(new Intent(Leave_Dashboard.this, FlightTicketRequest.class));
                 break;
             case R.id.lin_miss_punch:
                 startActivity(new Intent(Leave_Dashboard.this, Missed_Punch.class));

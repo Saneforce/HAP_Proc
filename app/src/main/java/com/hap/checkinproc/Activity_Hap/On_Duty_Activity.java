@@ -41,7 +41,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -504,7 +503,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        strHapLocation =  selecthaplocationss.getText().toString();
+        strHapLocation = selecthaplocationss.getText().toString();
 
         attachedImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -609,7 +608,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 Log.e("Mode_To", sharedpreferences.getString(modeToKm, ""));
             }
             if (sharedpreferences.contains("StoreId")) {
-                STRCode = sharedpreferences.getString("StoreId", "");
+                StrToCode = sharedpreferences.getString("StoreId", "");
                 Log.e("Mode_To", sharedpreferences.getString("StoreId", ""));
 
             }
@@ -717,17 +716,19 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 JsonArray jsonArray = response.body();
-                for (int a = 0; a < jsonArray.size(); a++) {
-                    JsonObject jsonObject = (JsonObject) jsonArray.get(a);
-                    updateMode = true;
-                    String id = String.valueOf(jsonObject.get("id"));
-                    String name = String.valueOf(jsonObject.get("name"));
-                    String townName = String.valueOf(jsonObject.get("ODFlag"));
-                    name = name.replaceAll("^[\"']+|[\"']+$", "");
-                    id = id.replaceAll("^[\"']+|[\"']+$", "");
-                    mCommon_model_spinner = new Common_Model(id, name, "");
-                    Log.v("get/fieldforce_hq", id);
-                    modelRetailDetails.add(mCommon_model_spinner);
+                if (jsonArray.size() != 0) {
+                    for (int a = 0; a < jsonArray.size(); a++) {
+                        JsonObject jsonObject = (JsonObject) jsonArray.get(a);
+                        updateMode = true;
+                        String id = String.valueOf(jsonObject.get("id"));
+                        String name = String.valueOf(jsonObject.get("name"));
+                        String townName = String.valueOf(jsonObject.get("ODFlag"));
+                        name = name.replaceAll("^[\"']+|[\"']+$", "");
+                        id = id.replaceAll("^[\"']+|[\"']+$", "");
+                        mCommon_model_spinner = new Common_Model(id, name, "");
+                        Log.v("get/fieldforce_hq", id);
+                        modelRetailDetails.add(mCommon_model_spinner);
+                    }
                 }
             }
 
@@ -934,15 +935,20 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             TextToAddress.setText(myDataset.get(position).getName());
             StrToCode = myDataset.get(position).getId();
             Log.e("StrToCode", StrToCode);
-
+            SharedPreferences.Editor ed = sharedpreferences.edit();
+            ed.putString("StoreId", StrToCode);
+            ed.commit();
 
         } else if (type == 1) {
-          /*  SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(hapLocation, myDataset.get(position).getName());
-            editor.commit();*/
 
             selecthaplocationss.setText(myDataset.get(position).getName());
             hapLocid = String.valueOf(myDataset.get(position).getId());
+
+            SharedPreferences.Editor editors;
+            editors = sharedpreferences.edit();
+            editors.putString("placeName", myDataset.get(position).getName());
+            editors.putString("placeId", myDataset.get(position).getId());
+            editors.commit();
 
 
         } else if (type == 100) {
@@ -1154,7 +1160,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             jj.put("url", imageServer);
             jj.put("from", onDutyFrom.getText().toString());
             jj.put("to", TextToAddress.getText().toString());
-            jj.put("to_code", STRCode);
+            jj.put("to_code", StrToCode);
             jj.put("dailyAllowance", dailyAllowance.getText().toString());
             jj.put("driverAllowance", DriverNeed);
 
@@ -1191,7 +1197,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                                 }
                                 extras.putString("vstPurpose", purposeofvisitedittext.getText().toString());
                                 intent.putExtras(extras);
-                                shared_common_pref.save(Shared_Common_Pref.DAMode,true);
+                                shared_common_pref.save(Shared_Common_Pref.DAMode, true);
                                 mLUService = new SANGPSTracker(On_Duty_Activity.this);
                                 myReceiver = new LocationReceiver();
                                 bindService(new Intent(On_Duty_Activity.this, SANGPSTracker.class), mServiceConection,

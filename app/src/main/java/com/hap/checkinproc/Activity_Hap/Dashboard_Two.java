@@ -76,7 +76,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     String PrivacyScreen = "", ModeOfTravel = "";
     SharedPreferences sharedpreferences;
 
-
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
     public static final String visitPurpose = "vstPur";
@@ -115,7 +114,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         datefrmt = com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly();
         Log.v("DATE_FORMAT_ONLY", datefrmt);
 
-        btMyQR=findViewById(R.id.myQR);
+        btMyQR = findViewById(R.id.myQR);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -143,7 +142,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         btMyQR.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(Dashboard_Two.this,CateenToken.class);
+                Intent intent = new Intent(Dashboard_Two.this, CateenToken.class);
                 startActivity(intent);
             }
         });
@@ -255,7 +254,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 btnApprovals.setVisibility(View.VISIBLE);
             } else {
                 cardview3.setVisibility(View.GONE);
-               // cardview4.setVisibility(View.GONE);
+                // cardview4.setVisibility(View.GONE);
                 cardView5.setVisibility(View.GONE);
                 StActivity.setVisibility(View.GONE);
                 btnCheckout.setVisibility(View.GONE);
@@ -265,13 +264,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             cardview3.setVisibility(View.GONE);
             //cardview4.setVisibility(View.GONE);
             cardView5.setVisibility(View.GONE);
-             StActivity.setVisibility(View.GONE);
+            StActivity.setVisibility(View.GONE);
             btnCheckout.setVisibility(View.GONE);
         }
         if (sSFType.equals("0"))
             StActivity.setVisibility(View.GONE);
 
-            getNotify();
+        getNotify();
         getDyReports();
         getMnthReports(0);
         GetMissedPunch();
@@ -386,10 +385,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/AttnDySty",
                 UserDetails.getString("Divcode", ""),
                 UserDetails.getString("Sfcode", ""), "", "", null);
+
+        Log.v("View_Request", rptCall.request().toString());
         rptCall.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 JsonArray res = response.body();
+                Log.v("View_Response", res.toString());
                 if (res.size() < 1) {
                     Toast.makeText(getApplicationContext(), "No Records Today", Toast.LENGTH_LONG).show();
                     return;
@@ -409,6 +411,14 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 newItem.addProperty("value", fItm.get("DayStatus").getAsString());
                 newItem.addProperty("color", fItm.get("StaColor").getAsString());
                 dyRpt.add(newItem);
+
+                newItem = new JsonObject();
+                newItem.addProperty("name", "Location");
+                newItem.addProperty("value", fItm.get("HQNm").getAsString());
+                newItem.addProperty("color", fItm.get("StaColor").getAsString());
+                newItem.addProperty("type", "geo");
+                dyRpt.add(newItem);
+                
                 newItem = new JsonObject();
                 newItem.addProperty("name", "Check-In");
                 newItem.addProperty("value", fItm.get("AttTm").getAsString());
@@ -425,29 +435,27 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 newItem.addProperty("name", "Geo In");
                 newItem.addProperty("value", fItm.get("GeoIn").getAsString());
                 newItem.addProperty("color", "#333333");
-                newItem.addProperty("type", "geo");
+                /*newItem.addProperty("type", "geo");*/
                 dyRpt.add(newItem);
+
                 newItem = new JsonObject();
                 newItem.addProperty("name", "Geo Out");
                 newItem.addProperty("value", fItm.get("GeoOut").getAsString());//"<a href=\"https://www.google.com/maps?q="+fItm.get("GeoOut").getAsString()+"\">"+fItm.get("GeoOut").getAsString()+"</a>");
                 newItem.addProperty("color", "#333333");
-                newItem.addProperty("type", "geo");
-
+                /*newItem.addProperty("type", "geo");*/
                 dyRpt.add(newItem);
-
                 recyclerView = (RecyclerView) findViewById(R.id.Rv_DyRpt);
-                mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this);
 
+                Log.v("Lat_Long", fItm.get("lat_long").getAsString());
+                mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this,fItm.get("lat_long").getAsString());
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(mAdapter);
-
             }
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
-
                 Log.d(Tag, String.valueOf(t));
             }
         });
@@ -470,12 +478,10 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 @Override
                 public void run() {
                     Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-
                     Log.d(Tag, String.valueOf(CheckIn));
                     if (CheckIn != true) {
                         Dashboard_Two.super.onBackPressed();
                     }
-                    //
                 }
             });
 
@@ -508,10 +514,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                         mIntent.putExtra("Shift", mItem.get("name1").getAsString());
                                         mIntent.putExtra("CInTm", mItem.get("CInTm").getAsString());
                                         mIntent.putExtra("COutTm", mItem.get("COutTm").getAsString());
-
                                         Dashboard_Two.this.startActivity(mIntent);
-
-                                        //((AppCompatActivity) Dashboard_Two.this).finish();
                                     }
                                 })
                                 .show();
@@ -529,12 +532,10 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                         .setPositiveButton("Weekoff", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialogInterface, int i) {
-
                                                 JsonObject mItem = WKItems.get(0).getAsJsonObject();
                                                 Intent iWeekOff = new Intent(Dashboard_Two.this, Weekly_Off.class);
                                                 iWeekOff.putExtra("EDt", mItem.get("EDt").getAsString());
                                                 Dashboard_Two.this.startActivity(iWeekOff);
-
                                                 ((AppCompatActivity) Dashboard_Two.this).finish();
                                             }
                                         }).setNegativeButton("Others", new DialogInterface.OnClickListener() {

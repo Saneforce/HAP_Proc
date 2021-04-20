@@ -73,8 +73,7 @@
             android:layout_marginTop="-8dp"
             android:padding="@dimen/C5dp"
             android:visibility="gone"
-            android:src="@drawable/attach_files"
-            />
+            android:src="@drawable/attach_files" />
 
         <ImageView
             android:id="@+id/img_prvw_oe"

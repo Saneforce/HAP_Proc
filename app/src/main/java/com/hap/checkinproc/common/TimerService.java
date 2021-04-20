@@ -87,9 +87,12 @@ public class TimerService extends Service {
         Log.d("service is ","Destroyed");
     }
 
-
-
-
+    @Override
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+        Intent inten = new Intent(this, TimerService.class);
+        startService(inten);
+    }
 
     @Override
     public void onStart(Intent intent, int startId) {

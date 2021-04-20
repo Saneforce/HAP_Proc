@@ -237,6 +237,7 @@
                                 android:background="@null"
                                 android:digits="1234567890."
                                 android:fontFamily="@font/basic"
+                                android:maxLength="8"
                                 android:hint="Starting Km"
                                 android:inputType="number"
                                 android:padding="@dimen/C10dp"

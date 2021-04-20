@@ -16,7 +16,6 @@ import android.hardware.Camera.Size;
 import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
 import android.location.Location;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,7 +31,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -65,7 +63,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -74,7 +71,6 @@ import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 
 import id.zelory.compressor.Compressor;
@@ -107,14 +103,14 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     SurfaceView preview;
     SurfaceHolder mHolder;
     private int noOfCameras;
-
+    SharedPreferences sharedpreferences;
     JSONObject CheckInInf;
     Shared_Common_Pref mShared_common_pref;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     Common_Class DT = new Common_Class();
 
-    String mMode, WrkType, onDutyPlcID, onDutyPlcNm, vstPurpose,UserInfo = "MyPrefs",imagvalue="";
+    String mMode, WrkType, onDutyPlcID, onDutyPlcNm, vstPurpose, UserInfo = "MyPrefs", imagvalue = "",mypreference = "mypref",PlaceId="",PlaceName="";
     com.hap.checkinproc.Common_Class.Common_Class common_class;
 
     public static final String sCheckInDetail = "CheckInDetail";
@@ -129,6 +125,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         setContentView(R.layout.activity_image_capture);
         startService(new Intent(this, TimerService.class));
         mShared_common_pref = new Shared_Common_Pref(this);
+        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         CheckInInf = new JSONObject();
         CheckInDetails = getSharedPreferences(sCheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(sUserDetail, Context.MODE_PRIVATE);
@@ -138,7 +135,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         try {
             mMode = params.getString("Mode");
 
-            if(!mMode.equalsIgnoreCase("PF")) {
+            if (!mMode.equalsIgnoreCase("PF")) {
                 CheckInInf.put("Mode", mMode);
                 CheckInInf.put("Divcode", UserDetails.getString("Divcode", ""));
                 CheckInInf.put("sfCode", UserDetails.getString("Sfcode", ""));
@@ -215,48 +212,48 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
         //perform listView item click event
 
-      //  if (mCamId == 0) {
-            lstFlashMode.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    lstModalFlash.setVisibility(View.GONE);
-                    try {
-                        Camera.Parameters params = mCamera.getParameters();
-                        //params.setFlashMode(Parameters.FLASH_MODE_TORCH);
-                        params.set("flash-mode", flashModes[i].toLowerCase());
-                        mCamera.setParameters(params);
+        //  if (mCamId == 0) {
+        lstFlashMode.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                lstModalFlash.setVisibility(View.GONE);
+                try {
+                    Camera.Parameters params = mCamera.getParameters();
+                    //params.setFlashMode(Parameters.FLASH_MODE_TORCH);
+                    params.set("flash-mode", flashModes[i].toLowerCase());
+                    mCamera.setParameters(params);
 
 
-                        Log.e("POSITION", String.valueOf(i));
-                        Log.e("POSITION", String.valueOf(l));
-                        if (i == 0) {
-                            CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-                            try {
-                                String cameraId = cameraManager.getCameraIdList()[0];
-                                cameraManager.setTorchMode(cameraId, false);
-                                Log.e("ON_ITEM_CLICK", "False");
-                            } catch (CameraAccessException e) {
-                            }
-                        } else if (i == 1) {
-
-                        } else if (i == 2) {
-                            CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-                            try {
-                                String cameraId = cameraManager.getCameraIdList()[0];
-                                cameraManager.setTorchMode(cameraId, true);
-                                Log.e("ON_ITEM_CLICK", "TRUE");
-                            } catch (CameraAccessException e) {
-                            }
-                        } else if (i == 4) {
-
+                    Log.e("POSITION", String.valueOf(i));
+                    Log.e("POSITION", String.valueOf(l));
+                    if (i == 0) {
+                        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+                        try {
+                            String cameraId = cameraManager.getCameraIdList()[0];
+                            cameraManager.setTorchMode(cameraId, false);
+                            Log.e("ON_ITEM_CLICK", "False");
+                        } catch (CameraAccessException e) {
                         }
+                    } else if (i == 1) {
 
-                    } catch (Exception e) {
+                    } else if (i == 2) {
+                        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
+                        try {
+                            String cameraId = cameraManager.getCameraIdList()[0];
+                            cameraManager.setTorchMode(cameraId, true);
+                            Log.e("ON_ITEM_CLICK", "TRUE");
+                        } catch (CameraAccessException e) {
+                        }
+                    } else if (i == 4) {
+
                     }
-                }
-            });
 
-  //      }
+                } catch (Exception e) {
+                }
+            }
+        });
+
+        //      }
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -279,7 +276,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 } else {
                     Log.v("PERMISSION", "PERMISSION");
 
-                    mCamId=(mCamId == 1) ? 0 : 1;
+                    mCamId = (mCamId == 1) ? 0 : 1;
                     StartSelfiCamera();
 
                 }
@@ -310,6 +307,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         skBarBright = (SeekBar) findViewById(R.id.skBarBright);
 
     }
+
     private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
         final double ASPECT_TOLERANCE = 0.1;
         double targetRatio = (double) w / h;
@@ -338,6 +336,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         }
         return optimalSize;
     }
+
     private void StartSelfiCamera() {
 
         if (mCamera != null) {
@@ -363,8 +362,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Log.e("mCAmer_id", String.valueOf(mCamId));
 
     }
-    public static void setOnImagePickListener(OnImagePickListener mImagePickListener){
-        imagePickListener=mImagePickListener;
+
+    public static void setOnImagePickListener(OnImagePickListener mImagePickListener) {
+        imagePickListener = mImagePickListener;
     }
 
     public void takePicture() {
@@ -378,7 +378,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     new Camera.PictureCallback() {
                         @Override
                         public void onPictureTaken(byte[] bytes, Camera camera) {
-                            Bitmap bm=null;
+                            Bitmap bm = null;
                             try {
                                 if (bytes != null) {
                                     int screenWidth = getResources().getDisplayMetrics().widthPixels;
@@ -390,27 +390,27 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                                         Bitmap scaled = Bitmap.createScaledBitmap(bm, screenHeight, screenWidth, true);
                                         int w = scaled.getWidth();
                                         int h = scaled.getHeight();
-                                        w=bm.getWidth();
-                                        h=bm.getHeight();
+                                        w = bm.getWidth();
+                                        h = bm.getHeight();
                                         // Setting post rotate to 90
                                         Matrix mtx = new Matrix();
 
                                         int CameraEyeValue = setPhotoOrientation(ImageCapture.this, mCamId); // CameraID = 1 : front 0:back
-                                        if(mCamId==1) { // As Front camera is Mirrored so Fliping the Orientation
+                                        if (mCamId == 1) { // As Front camera is Mirrored so Fliping the Orientation
                                             if (CameraEyeValue == 270) {
                                                 mtx.postRotate(90);
                                             } else if (CameraEyeValue == 90) {
                                                 mtx.postRotate(270);
                                             }
-                                        }else{
+                                        } else {
                                             mtx.postRotate(CameraEyeValue); // CameraEyeValue is default to Display Rotation
                                         }
-                                        bm=applyMatrix(bm,mtx);
-                                       // bm = Bitmap.createBitmap(bm, 0, 0, w, h, mtx, true);
-                                    }else{// LANDSCAPE MODE
+                                        bm = applyMatrix(bm, mtx);
+                                        // bm = Bitmap.createBitmap(bm, 0, 0, w, h, mtx, true);
+                                    } else {// LANDSCAPE MODE
                                         //No need to reverse width and height
                                         Bitmap scaled = Bitmap.createScaledBitmap(bm, screenWidth, screenHeight, true);
-                                        bm=scaled;
+                                        bm = scaled;
                                     }
                                 }
 
@@ -430,6 +430,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         }
         super.onResume();
     }
+
     public int setPhotoOrientation(Activity activity, int cameraId) {
         android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
         android.hardware.Camera.getCameraInfo(cameraId, info);
@@ -461,15 +462,22 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
         return result;
     }
+
     public static Bitmap applyMatrix(Bitmap source, Matrix matrix) {
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
+
     private static int exifToDegrees(int exifOrientation) {
-        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) { return 90; }
-        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {  return 180; }
-        else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {  return 270; }
+        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+            return 270;
+        }
         return 0;
     }
+
     private void ShowImgPreview() {
         RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
@@ -491,6 +499,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         }
 
     }
+
     private void CloseImgPreview() {
         vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
@@ -525,6 +534,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Log.e("mCAmer_id", String.valueOf(mCamId));
 
     }
+
     private void saveImgPreview() {
         vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
@@ -539,16 +549,16 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         mIntent.putExtra("mFilePath", String.valueOf(file));
         mIntent.putExtra("SF", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
         mIntent.putExtra("FileName", imageFileName);
-        mIntent.putExtra("Mode", (mMode.equalsIgnoreCase("PF")?"PROF":"ATTN"));
+        mIntent.putExtra("Mode", (mMode.equalsIgnoreCase("PF") ? "PROF" : "ATTN"));
         FileUploadService.enqueueWork(this, mIntent);
 //        getMulipart(String.valueOf(file));
 
         Log.e("Image_Capture", Uri.fromFile(file).toString());
         Log.e("Image_Capture", "IAMGE     " + bitmap);
-        if(mMode.equalsIgnoreCase("PF")){
-            imagePickListener.OnImagePick(bitmap,mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code)+"_"+imageFileName);
+        if (mMode.equalsIgnoreCase("PF")) {
+            imagePickListener.OnImagePick(bitmap, mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + "_" + imageFileName);
             finish();
-        }else{
+        } else {
             mProgress = new ProgressDialog(this);
             String titleId = "Submiting";
             mProgress.setTitle(titleId);
@@ -583,8 +593,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                         // imgPreview.setImageURI(Uri.fromFile(file));
                         button.setVisibility(View.GONE);
                         saveCheckIn();
+                    } catch (Exception e) {
                     }
-                    catch (Exception e){}
                 }
             });
         }
@@ -594,6 +604,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         MultipartBody.Part imgg = convertimg("file", path);
         CallApiImage(mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), imgg);
     }
+
     public MultipartBody.Part convertimg(String tag, String path) {
         MultipartBody.Part yy = null;
         Log.v("full_profile", path);
@@ -652,11 +663,18 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
 
-
     private void saveCheckIn() {
 
+        if (sharedpreferences.contains("placeName")) {
+            PlaceName = sharedpreferences.getString("placeName", "");
+            Log.e("KARTHIC_PLACE_NAME",  PlaceName);
+        }
+        if (sharedpreferences.contains("placeId")) {
+            PlaceId = sharedpreferences.getString("placeId", "");
+            Log.e("KARTHIC_PLACE_ID", "Checking" + PlaceId);
+        }
+
         try {
-            // LocationFinder locationFinder=new LocationFinder(this);
 
             Location location = Common_Class.location;//locationFinder.getLocation();
             String CTime = DT.GetDateTime(getApplicationContext(), "HH:mm:ss");
@@ -674,6 +692,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             CheckInInf.put("long", lng);
             CheckInInf.put("Lattitude", lat);
             CheckInInf.put("Langitude", lng);
+            CheckInInf.put("PlcNm", PlaceName);
+            CheckInInf.put("PlcID", PlaceId);
 
             if (mMode.equalsIgnoreCase("holidayentry"))
                 CheckInInf.put("On_Duty_Flag", "1");
@@ -693,6 +713,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 JSONObject paramObject = new JSONObject();
                 paramObject.put("TP_Attendance", CheckInInf);
                 Log.e("CHECK_IN_DETAILS", String.valueOf(paramObject));
+
                 jsonarray.put(paramObject);
 
 
@@ -701,6 +722,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                         UserDetails.getString("Divcode", ""),
                         UserDetails.getString("Sfcode", ""), "", "", jsonarray.toString());
 
+                Log.v("PRINT_REQUEST", modelCall.request().toString());
 
                 modelCall.enqueue(new Callback<JsonObject>() {
                     @Override
@@ -964,7 +986,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 // Set preview display
                 Camera.Size size = getOptimalPreviewSize(
                         mCamera.getParameters().getSupportedPreviewSizes(),
-                         height,width);
+                        height, width);
 
                 if (size != null) {
 

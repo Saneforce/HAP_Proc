@@ -151,6 +151,7 @@
                             <EditText
                                 android:id="@+id/ended_km"
                                 android:layout_width="@dimen/C100dp"
+                                android:maxLength="8"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/round_white_backround"
                                 android:hint="Ended km"
