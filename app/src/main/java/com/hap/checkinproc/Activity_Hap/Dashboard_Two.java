@@ -76,7 +76,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     String PrivacyScreen = "", ModeOfTravel = "";
     SharedPreferences sharedpreferences;
 
-
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
     public static final String visitPurpose = "vstPur";
@@ -415,8 +414,9 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
                 newItem = new JsonObject();
                 newItem.addProperty("name", "Location");
-                newItem.addProperty("value", fItm.get("DayStatus").getAsString());
+                newItem.addProperty("value", fItm.get("HQNm").getAsString());
                 newItem.addProperty("color", fItm.get("StaColor").getAsString());
+                newItem.addProperty("type", "geo");
                 dyRpt.add(newItem);
                 
                 newItem = new JsonObject();
@@ -435,16 +435,19 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 newItem.addProperty("name", "Geo In");
                 newItem.addProperty("value", fItm.get("GeoIn").getAsString());
                 newItem.addProperty("color", "#333333");
-                newItem.addProperty("type", "geo");
+                /*newItem.addProperty("type", "geo");*/
                 dyRpt.add(newItem);
+
                 newItem = new JsonObject();
                 newItem.addProperty("name", "Geo Out");
                 newItem.addProperty("value", fItm.get("GeoOut").getAsString());//"<a href=\"https://www.google.com/maps?q="+fItm.get("GeoOut").getAsString()+"\">"+fItm.get("GeoOut").getAsString()+"</a>");
                 newItem.addProperty("color", "#333333");
-                newItem.addProperty("type", "geo");
+                /*newItem.addProperty("type", "geo");*/
                 dyRpt.add(newItem);
                 recyclerView = (RecyclerView) findViewById(R.id.Rv_DyRpt);
-                mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this);
+
+                Log.v("Lat_Long", fItm.get("lat_long").getAsString());
+                mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this,fItm.get("lat_long").getAsString());
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());

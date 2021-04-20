@@ -572,8 +572,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         if (response.isSuccessful()) {
-
-                            Log.v("print_upload_file_true", "ggg" + response);
                             String jsonData = null;
                             jsonData = response.body().string();
                             Log.v("response_data", jsonData);
@@ -590,17 +588,10 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 Hq = json_oo.getString("dailyAllowance");
 
                                 //   TextMaxKm.setText("Maximum km : " + maxKM);
-
                                 StratKm = Integer.valueOf(json_oo.getString("Start_Km"));
-
                                 ImageStart = json_oo.getString("start_Photo");
-
-
                                 StrToCode = json_oo.getString("To_Place_Id");
-
                                 TextToPlace.setText(json_oo.getString("To_Place"));
-
-
                                 TotalKm = StratKm + maxKM;
 
                                 Log.v("START_KM", String.valueOf(StratKm));

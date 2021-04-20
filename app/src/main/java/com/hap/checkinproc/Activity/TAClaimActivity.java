@@ -2172,7 +2172,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 txt_ldg_type.setText("Independent Stay");
                 lodgJoin.setVisibility(View.GONE);
                 TotalDays.setVisibility(View.VISIBLE);
-
             } else {
                 txt_ldg_type.setText("Stay At Relative's House");
             }
@@ -2891,7 +2890,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         if (latCheckIn.getText().toString().equalsIgnoreCase("00:00:00")) latCheckIn.setText("");
         if (latCheckOut.getText().toString().equalsIgnoreCase("00:00:00")) latCheckOut.setText("");
 
-
+        Log.v("Ta_Loadging_type", txt_ldg_type.getText().toString());
         JsonObject ldraft;
         for (int i = 0; i < StayDate.size(); i++) {
             ldraft = (JsonObject) StayDate.get(i);
@@ -2906,7 +2905,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         StrBus = StrBus.replaceAll("^[\"']+|[\"']+$", "");
         StrTo = StrTo.replaceAll("^[\"']+|[\"']+$", "");
         try {
-
             /*Head Json*/
             jsonData.put("SF_Code", SF_code);
             jsonData.put("exp_date", DateTime);
@@ -2933,38 +2931,20 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             /*Lodging Save*/
 
-            String strMyEli = txtMyEligi.getText().toString().substring(txtMyEligi.getText().toString().indexOf(".") + 1).trim();
-            String separator = ".";
-            int intMyEli = strMyEli.lastIndexOf(separator);
 
-            Log.v("Ta_Loadging_strMyEli", String.valueOf(intMyEli));
+            Log.v("Ta_Loadging_elgble", txtMyEligi.getText().toString().replaceAll("Rs.", ""));
+            Log.v("Ta_Loadging_wob_amt", ldgWOBBal.getText().toString().replaceAll("Rs.", ""));
+            Log.v("Ta_Loadging_drv_ldg_amt", txtDrivEligi.getText().toString().replaceAll("Rs.", ""));
+            Log.v("Ta_Loadging_jnt_ldg_amt", txtJNEligi.getText().toString().replaceAll("Rs.", ""));
+            Log.v("Ta_Loadging_ttl_ldg_amt", lbl_ldg_eligi.getText().toString().replaceAll("Rs.", ""));
 
-            String strldgWobBal = ldgWOBBal.getText().toString().substring(ldgWOBBal.getText().toString().indexOf(".") + 1).trim();
-            String separator1 = ".";
-            int intMyldg = strldgWobBal.lastIndexOf(separator1);
-            Log.v("Ta_Loadging_strldgWob", String.valueOf(strldgWobBal));
-
-            String strdrvElig = txtDrivEligi.getText().toString().substring(txtDrivEligi.getText().toString().indexOf(".") + 1).trim();
-            String separator2 = ".";
-            int intMyDrvElg = strdrvElig.lastIndexOf(separator2);
-            Log.v("Ta_Loadging_strdrvElig", String.valueOf(strdrvElig));
-
-            String strJNEligi = txtJNEligi.getText().toString().substring(txtJNEligi.getText().toString().indexOf(".") + 1).trim();
-            String separator3 = ".";
-            int intJNEligi = strJNEligi.lastIndexOf(separator3);
-            Log.v("Ta_Loadging_strJNEligi", String.valueOf(strJNEligi));
-
-            String strLdgEli = lbl_ldg_eligi.getText().toString().substring(lbl_ldg_eligi.getText().toString().indexOf(".") + 1).trim();
-            String separator4 = ".";
-            int intLdgEli = strLdgEli.lastIndexOf(separator4);
-            Log.v("Ta_Loadging_strLdgEli", String.valueOf(strLdgEli));
 
             JSONObject ldgSave = new JSONObject();
             ldgSave.put("ldg_type", txt_ldg_type.getText().toString());
             ldgSave.put("ldg_type_sty", lodgStyLocation.getText().toString());
             ldgSave.put("sty_dte", sty_date + " " + ldg_cin.getText().toString());
             ldgSave.put("to_dte", ldg_cout.getText().toString());
-            ldgSave.put("elgble", strMyEli.substring(0, intMyEli));
+            ldgSave.put("elgble",  txtMyEligi.getText().toString().replaceAll("Rs.", ""));
             ldgSave.put("noOfDays", "");
             ldgSave.put("bil_amt", edt_ldg_bill.getText().toString());
             ldgSave.put("con_sty", cnSty);
@@ -2976,14 +2956,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldgSave.put("lat_chec_in", latCheckIn.getText().toString());
             ldgSave.put("lat_check_out", latCheckOut.getText().toString());
             ldgSave.put("lat_bill_amt", edtLateBill.getText().toString());
-            ldgSave.put("wob_amt", strldgWobBal.substring(0, intMyldg));
-            ldgSave.put("drv_ldg_amt", strdrvElig.substring(0, intMyDrvElg));
-            ldgSave.put("jnt_ldg_amt", strJNEligi.substring(0, intJNEligi));
-            ldgSave.put("total_ldg_amt", strLdgEli.substring(0, intLdgEli));
+            ldgSave.put("wob_amt", ldgWOBBal.getText().toString().replaceAll("Rs.", ""));
+            ldgSave.put("drv_ldg_amt", txtDrivEligi.getText().toString().replaceAll("Rs.", ""));
+            ldgSave.put("jnt_ldg_amt", txtJNEligi.getText().toString().replaceAll("Rs.", ""));
+            ldgSave.put("total_ldg_amt", lbl_ldg_eligi.getText().toString().replaceAll("Rs.", ""));
             ldgSave.put("attch_bill", "");
             ldgSave.put("u_key", txtLodgUKey.getText().toString());
 
-            Log.v("Ta_Loadging_type", txt_ldg_type.getText().toString());
+
             Log.v("Ta_Loadging_loc", lodgStyLocation.getText().toString());
             Log.v("Ta_Loadging_sty_dte", sty_date + " " + ldg_cin.getText().toString());
             Log.v("Ta_Loadging_to_dte", ldg_cout.getText().toString());
@@ -3763,6 +3743,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<ResponseBody> mCall = apiInterface.taImage(ImageUKey, count, HeadTravel, Mode, DateTime, mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), from, To, imgg);
+
         Log.e("SEND_IMAGE_SERVER", mCall.request().toString());
 
         mCall.enqueue(new Callback<ResponseBody>() {

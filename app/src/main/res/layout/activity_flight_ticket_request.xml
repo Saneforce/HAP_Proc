@@ -51,6 +51,7 @@
                             android:textSize="13sp"
                             android:textStyle="bold" />
 
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -81,52 +82,26 @@
                         </LinearLayout>
 
                         <LinearLayout
+                            android:id="@+id/lin_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/C5dp">
-
-                            <TextView
-                                style="@style/TextStyle"
-                                android:text="Name :" />
-
-
-                            <TextView
-                                android:id="@+id/txt_name"
-                                style="@style/TextStyle"
-                                android:layout_weight="1"
-                                android:text="Karthic" />
-
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_marginRight="@dimen/C5dp"
-                            android:layout_marginLeft="@dimen/C5dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:orientation="vertical"
+                            android:visibility="gone">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
+                                android:layout_margin="@dimen/C5dp">
 
                                 <TextView
                                     style="@style/TextStyle"
-                                    android:text="From Place" />
+                                    android:text="Name :" />
 
-                                <EditText
-                                    android:id="@+id/from_place"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/C10dp"
-                                    android:layout_marginLeft="@dimen/C5dp"
-                                    android:background="@drawable/item_border"
-                                    android:focusable="false"
-                                    android:hint="From place"
-                                    android:padding="@dimen/C10dp"
-                                    android:textSize="@dimen/C12dp" />
+
+                                <TextView
+                                    android:id="@+id/txt_name"
+                                    style="@style/TextStyle"
+                                    android:layout_weight="1" />
 
 
                             </LinearLayout>
@@ -134,28 +109,135 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:orientation="vertical">
+                                android:layout_marginLeft="@dimen/C5dp"
+                                android:layout_marginRight="@dimen/C5dp"
+                                android:layout_marginBottom="@dimen/C5dp"
+                                android:orientation="horizontal">
 
-                                <TextView
-                                    style="@style/TextStyle"
-                                    android:text="To Place" />
-
-                                <EditText
-                                    android:id="@+id/to_place"
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginRight="@dimen/C10dp"
-                                    android:layout_marginLeft="@dimen/C5dp"
-                                    android:background="@drawable/item_border"
-                                    android:focusable="false"
-                                    android:hint="To place"
-                                    android:padding="@dimen/C10dp"
-                                    android:textSize="@dimen/C12dp" />
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/TextStyle"
+                                        android:text="From Place" />
+
+                                    <EditText
+                                        android:id="@+id/from_place"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/C5dp"
+                                        android:layout_marginRight="@dimen/C10dp"
+                                        android:background="@drawable/item_border"
+                                        android:hint="From place"
+                                        android:padding="@dimen/C10dp"
+                                        android:textSize="@dimen/C12dp" />
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/TextStyle"
+                                        android:text="To Place" />
+
+                                    <EditText
+                                        android:id="@+id/to_place"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/C5dp"
+                                        android:layout_marginRight="@dimen/C10dp"
+                                        android:background="@drawable/item_border"
+                                        android:hint="To place"
+                                        android:padding="@dimen/C10dp"
+                                        android:textSize="@dimen/C12dp" />
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/C5dp"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical">
+
+                                    <TextView
+                                        style="@style/TextStyle"
+                                        android:text="Depature" />
+
+                                    <EditText
+                                        android:id="@+id/edt_dep"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/C5dp"
+                                        android:layout_marginRight="@dimen/C10dp"
+                                        android:background="@drawable/item_border"
+                                        android:focusable="false"
+                                        android:hint="Depature date"
+                                        android:onClick="DepDtePker"
+                                        android:padding="@dimen/C10dp"
+                                        android:textSize="@dimen/C12dp" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/lin_return"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:orientation="vertical"
+                                    android:visibility="invisible">
+
+                                    <TextView
+                                        style="@style/TextStyle"
+                                        android:text="Return" />
+
+                                    <EditText
+                                        android:id="@+id/edt_return"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/C5dp"
+                                        android:layout_marginRight="@dimen/C10dp"
+                                        android:background="@drawable/item_border"
+                                        android:focusable="false"
+                                        android:hint="Return date"
+                                        android:onClick="RetunDtePker"
+                                        android:padding="@dimen/C10dp"
+                                        android:textSize="@dimen/C12dp" />
+
+                                </LinearLayout>
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/C10dp"
+                                android:layout_marginBottom="@dimen/C10dp">
+
+                                <Button
+                                    style="@style/ButtonStyle"
+                                    android:background="@drawable/button_blue"
+                                    android:text="submit" />
+
                             </LinearLayout>
 
 
                         </LinearLayout>
+
 
                     </LinearLayout>
 
