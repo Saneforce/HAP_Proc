@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase;
 import com.hap.checkinproc.Model_Class.EventCapture;
 import com.hap.checkinproc.Model_Class.EventCaptureDao;
 
-@Database(entities = {EventCapture.class}, version = 1)
+@Database(entities = {EventCapture.class}, version = 1,exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract EventCaptureDao taskDao();
 }
