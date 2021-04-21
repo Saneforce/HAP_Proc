@@ -170,7 +170,7 @@ JSONArray resData;
         sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location="+laty+","+lngy);
         sb.append("&radius=500");
-        sb.append("&keyword=milk | juice");
+        sb.append("&keyword=milk|juice|");
         sb.append("&key="+"AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
         Log.v("Doctor_detail_print",sb.toString());
         //https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&keyword=milk|juice&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU
