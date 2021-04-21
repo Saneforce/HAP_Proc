@@ -412,6 +412,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:clickable="false"
                     android:id="@+id/lin_alo_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1271,6 +1272,7 @@
                                     </TextView>
 
                                     <TextView
+                                        android:visibility="gone"
                                         android:id="@+id/ldg_Add"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
@@ -2180,6 +2182,7 @@
                                         android:layout_alignParentRight="true">
 
                                         <TextView
+                                            android:visibility="gone"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
@@ -2301,6 +2304,7 @@
                                         android:layout_alignParentRight="true">
 
                                         <TextView
+                                            android:visibility="gone"
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_gravity="center"
@@ -2438,7 +2442,6 @@
 
 
     <LinearLayout
-
         android:id="@+id/lin_fare_amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -2538,35 +2541,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"></Space>
 
-                <Button
-                    android:id="@+id/save_button"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/C10dp"
-                    android:background="@drawable/button_blueg"
-                    android:padding="10dp"
-                    android:text="Save"
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    tools:ignore="RtlCompat" />
-
-                <Button
-                    android:id="@+id/btn_sub"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginRight="@dimen/C10dp"
-                    android:background="@drawable/button_blueg"
-                    android:padding="10dp"
-                    android:text="Submit for Approval"
-                    android:textAlignment="center"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:visibility="gone"
-                    tools:ignore="RtlCompat" />
             </LinearLayout>
 
 

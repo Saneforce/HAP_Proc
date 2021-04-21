@@ -97,6 +97,7 @@
 
 
     <ImageView
+        android:id="@+id/oe_delete"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_alignParentRight="true"
