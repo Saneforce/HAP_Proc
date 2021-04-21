@@ -37,7 +37,9 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
-        <activity android:name=".Activity_Hap.FlightTicketRequest"></activity>
+        <activity android:name=".Activity.TAViewStatus"></activity>
+        <activity android:name=".Activity_Hap.ViewTAStatus" />
+        <activity android:name=".Activity_Hap.FlightTicketRequest" />
         <activity android:name=".Activity_Hap.CateenToken" />
         <activity android:name=".Common_Class.ToolBarMethod" />
         <activity android:name=".Activity_Hap.foodExp" />

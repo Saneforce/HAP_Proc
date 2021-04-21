@@ -23,10 +23,12 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.TimerService;
 
 import java.util.Calendar;
 
@@ -76,7 +78,16 @@ public class FlightTicketRequest extends AppCompatActivity {
                 }
             }
         });
-        
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
+
+
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -197,6 +208,55 @@ public class FlightTicketRequest extends AppCompatActivity {
         tominYear = separated1[0];
         tominMonth = separated1[1];
         tominDay = separated1[2];
+    }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    FlightTicketRequest.super.onBackPressed();
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        startService(new Intent(this, TimerService.class));
+        Log.v("LOG_IN_LOCATION", "ONRESTART");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        startService(new Intent(this, TimerService.class));
     }
 
 }

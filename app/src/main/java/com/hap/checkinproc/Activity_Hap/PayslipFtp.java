@@ -225,7 +225,7 @@ public class PayslipFtp extends AppCompatActivity {
                 String name = ftpFiles[i].getName();
                 boolean isFile = ftpFiles[i].isFile();
                 if (isFile) {
-                    if(name.indexOf(EmpId+".pdf")>-1){ //"-"+
+                    if(name.indexOf("-"+EmpId+".pdf")>-1){ //"-"+
                         JSONObject jsonObject=new JSONObject();
                         jsonObject.put("name",name);
                         jsonObject.put("type","FILE");

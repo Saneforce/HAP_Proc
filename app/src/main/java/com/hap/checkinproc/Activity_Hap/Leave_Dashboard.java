@@ -34,7 +34,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
 
     Common_Class common_class;
     LinearLayout LeaveRequest, PermissionRequest, FlightTick, WeeklyOff, DeveiationEntry;
-    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus;
+    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, MissedPunc,ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus;
     TextView countLeaveRequest, countPermissionRequest, countMissedPunch, countWeeklyOff;
     Shared_Common_Pref mShared_common_pref;
 
@@ -110,7 +110,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         HolidayEntryStatus = findViewById(R.id.lin_holiday_status);
         DeviationEntryStatus = findViewById(R.id.lin_deviation_status);
         LeaveCancelStatus = findViewById(R.id.lin_leave_cancel_status);
-
+        MissedPunc = findViewById(R.id.lin_miss_punch);
         /*Request text*/
         countLeaveRequest = findViewById(R.id.txt_leave_req_count);
         countPermissionRequest = findViewById(R.id.txt_per_req_count);
@@ -133,7 +133,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         DeviationEntryStatus.setOnClickListener(this);
         LeaveCancelStatus.setOnClickListener(this);
 
-
+        MissedPunc.setOnClickListener(this);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override

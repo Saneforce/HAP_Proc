@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,7 +25,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -47,8 +45,6 @@ import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -68,11 +64,7 @@ import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Interface.LocationEvents;
-import com.hap.checkinproc.Interface.Master_Interface;
-import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
@@ -99,8 +91,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TAClaimActivity extends AppCompatActivity implements Master_Interface,
-        OnMapReadyCallback {
+public class TAViewStatus extends AppCompatActivity {
     SharedPreferences CheckInDetails;
     public static final String mypreference = "mypref";
     public static final String Name = "Allowance";
@@ -137,8 +128,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt, edt1, edt_ldg_JnEmp,
             edt_ldg_bill, edtLcFare, lodgStyLocation, earCheckIn, earCheckOut, latCheckIn, latCheckOut, edtEarBill, edtLateBill;
 
-    ImageView deleteButton, previewss, taAttach, lcAttach, oeAttach, lcPreview, oePreview, endkmimage, startkmimage,
-            img_lodg_prvw, img_lodg_atta, mapZoomIn, imgBck;
+    ImageView deleteButton, previewss, taAttach, lcAttach, lcDelet, oeAttach, oeDelete, lcPreview, oePreview, endkmimage, startkmimage,
+            img_lodg_prvw, mapZoomIn, imgBck;
 
     String SF_code = "", div = "", State_Code = "", StartedKm = "", ClosingKm = "", ModeOfTravel = "", PersonalKm = "",
             DriverNeed = "", DateForAPi = "", DateTime = "", shortName = "", Exp_Name = "", Id = "", userEnter = "",
@@ -148,7 +139,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "", finalPath = "",
             attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "", tvEditcnt = "", OeUKey = "",
             LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "",
-            lodgEarly = "", lodgLate = "",
+            lodgEarly = "", lodgLate = "", Ta_DATE = "",
             tominYear = "", tominMonth = "", sty_date = "", tominDay = "", ConStay = "", ErlyStay = "", LteStay = "", ErlyChecIn = "", ErlyChecOut = "", ErlyAmt = "", LteAmt = "", LteChecIn = "", LteChecOut = "";
 
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
@@ -164,7 +155,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     double TotDA = 0.0, sTotal = 0.0, sums = 0.0, sumsTa = 0.0, tTotAmt = 0.0, stayEgTotal = 0.0;
     float tJointAmt = 0;
 
-    Button btn_sub, buttonSave;
 
     ArrayList<SelectionModel> array = new ArrayList<>();
     ArrayList<String> DA = new ArrayList<>();
@@ -179,7 +169,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     List<Common_Model> OtherExpenseList = new ArrayList<>();
     List<Common_Model> ldgModes = new ArrayList<>();
     List<Common_Model> modelTravelType = new ArrayList<>();
-    List<ModeOfTravel> modelOfTravel;
+    List<com.hap.checkinproc.Model_Class.ModeOfTravel> modelOfTravel;
     List<EditText> newEdt = new ArrayList<>();
     List<String> listWithoutDuplicates;
 
@@ -209,18 +199,18 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     JsonArray LodingCon = null;
     JsonArray StayDate = null;
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_t_a_claim);
+        setContentView(R.layout.activity_t_a_view_status);
         startService(new Intent(this, TimerService.class));
         mCommon_class = new Common_Class(this);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.route_map);
-        if (mapFragment != null) {
-            mapFragment.getMapAsync(this);
-        }
+
+
+        Ta_DATE = String.valueOf(getIntent().getSerializableExtra("TA_Date"));
+
+        Log.v("TA_DATE", Ta_DATE);
+        displayTravelMode();
         mShared_common_pref = new Shared_Common_Pref(this);
         getToolbar();
         gson = new Gson();
@@ -231,7 +221,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         txt_date = findViewById(R.id.txt_date);
         card_date = findViewById(R.id.card_date);
-        btn_sub = findViewById(R.id.btn_sub);
         linAddAllowance = findViewById(R.id.lin_travel_loaction);
         vwBoarding = findViewById(R.id.vwBoarding);
         vwDrvBoarding = findViewById(R.id.vwDrvBoarding);
@@ -300,11 +289,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         ldgWOBBal = findViewById(R.id.ldgWOBBal);
         edt_ldg_bill = findViewById(R.id.edt_ldg_bill);
         img_lodg_prvw = findViewById(R.id.lodg_preview);
-        img_lodg_atta = findViewById(R.id.lodg_attach);
+
         txtJNEligi = findViewById(R.id.txtJNEligi);
         ldgAdd = findViewById(R.id.ldg_Add);
         mapZoomIn = findViewById(R.id.map_zoom);
-        buttonSave = findViewById(R.id.save_button);
         txtTAamt = findViewById(R.id.txt_trav_loca);
         linback = findViewById(R.id.lin_back);
         imgBck = findViewById(R.id.imag_backs);
@@ -396,28 +384,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
         });
 
-        img_lodg_atta.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
-                if (!cameraPermission.checkPermission()) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        cameraPermission.requestPermission();
-                    }
-                    Log.v("PERMISSION_NOT", "PERMISSION_NOT");
-                } else {
-                    Log.v("PERMISSION", "PERMISSION");
-                    popupCapture(143);
-
-                    if (txtLodgUKey.getText().toString().equals("")) {
-                        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                        Calendar calobjw = Calendar.getInstance();
-                        lodUKey = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
-                        txtLodgUKey.setText(lodUKey);
-                    }
-                }
-            }
-        });
 
         img_lodg_prvw.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -611,17 +577,21 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 otherExpenseLayout.setVisibility(View.VISIBLE);
                 oeEditext = (TextView) (views.findViewById(R.id.other_enter_mode));
                 edtOE = (EditText) (views.findViewById(R.id.oe_fre_amt));
+                edtOE.setEnabled(false);
+                oeDelete = (ImageView) (views.findViewById(R.id.oe_delete));
+                oeDelete.setVisibility(View.GONE);
                 oeAttach = (ImageView) (views.findViewById(R.id.oe_attach_img));
                 oePreview = (ImageView) (views.findViewById(R.id.img_prvw_oe));
                 oeTxtUKey = (TextView) (views.findViewById(R.id.txt_oe_ukey));
                 OtherExpense = (LinearLayout) views.findViewById(R.id.lin_other_expense_dynamic);
                 linOtherSpinner = (LinearLayout) (views.findViewById(R.id.lin_othr_spiner));
-
+                linOtherSpinner.setEnabled(false);
+                oeAttach.setEnabled(false);
                 oeAttach.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+                        CameraPermission cameraPermission = new CameraPermission(TAViewStatus.this, getApplicationContext());
 
                         if (!cameraPermission.checkPermission()) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -631,7 +601,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                         } else {
                             Log.v("PERMISSION", "PERMISSION");
-                            popupCapture(99);
+                            //popupCapture(99);
                             Integer valuedfd = LinearOtherAllowance.indexOfChild(rowView);
                             View view = LinearOtherAllowance.getChildAt(valuedfd);
                             oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
@@ -695,7 +665,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     public void onClick(View v) {
                         OtherExpenseList.clear();
                         Integer valuedf = LinearOtherAllowance.indexOfChild(rowView);
-                        OtherExpenseMode(valuedf);
+                        //  OtherExpenseMode(valuedf);
 
                     }
                 });
@@ -734,10 +704,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 editTexts = (TextView) (LcchildView.findViewById(R.id.local_enter_mode));
                 linLocalSpinner = (LinearLayout) LcchildView.findViewById(R.id.lin_loc_spiner);
+                linOtherSpinner.setEnabled(false);
                 lcAttach = (ImageView) (LcchildView.findViewById(R.id.la_attach_iamg));
+                lcDelet = (ImageView) (LcchildView.findViewById(R.id.delete_lc));
+                lcDelet.setVisibility(View.GONE);
                 lcPreview = (ImageView) (LcchildView.findViewById(R.id.img_prvw_lc));
                 lcTxtUKey = (TextView) (LcchildView.findViewById(R.id.txt_lc_ukey));
                 editLaFare = (EditText) (LcchildView.findViewById(R.id.edt_la_fare));
+                editLaFare.setEnabled(false);
                 editLaFare.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -762,15 +736,16 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     public void onClick(View v) {
                         listOrderType.clear();
                         Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
-                        dynamicModeType(lcPosCntS);
+                        //dynamicModeType(lcPosCntS);
                     }
                 });
 
+                lcAttach.setEnabled(false);
                 lcAttach.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
 
-                        CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+                        CameraPermission cameraPermission = new CameraPermission(TAViewStatus.this, getApplicationContext());
 
                         if (!cameraPermission.checkPermission()) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -781,7 +756,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         } else {
                             Log.v("PERMISSION", "PERMISSION");
 
-                            popupCapture(786);
+                            //popupCapture(786);
 
                             Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
                             View view = linlocalCon.getChildAt(lcPosCntS);
@@ -839,7 +814,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     final View rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
                     travelDynamicLoaction.addView(rowView, layoutParams);
                     deleteButton = findViewById(R.id.delete_button);
-
+                    deleteButton.setVisibility(View.GONE);
                     tvSize = travelDynamicLoaction.indexOfChild(rowView);
                     View tvchildView = travelDynamicLoaction.getChildAt(tvSize);
                     viw.setVisibility(View.VISIBLE);
@@ -850,7 +825,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     taAttach = (ImageView) (tvchildView.findViewById(R.id.image_attach));
                     previewss = (ImageView) (tvchildView.findViewById(R.id.image_preview));
                     tvTxtUKey = (TextView) (tvchildView.findViewById(R.id.txt_tv_ukey));
-
+                    enterFare.setEnabled(false);
                     editText.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -886,7 +861,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             tvTxtUKeys = (TextView) (view.findViewById(R.id.txt_tv_ukey));
                             editMode = editText.getText().toString();
                             TlUKey = tvTxtUKeys.getText().toString();
-
+                            enterFare.setEnabled(false);
                             DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
 
                             Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
@@ -900,12 +875,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         }
                     });
 
-
+                    taAttach.setEnabled(false);
                     taAttach.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
 
-                            CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+                            CameraPermission cameraPermission = new CameraPermission(TAViewStatus.this, getApplicationContext());
 
                             if (!cameraPermission.checkPermission()) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -914,7 +889,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                             } else {
                                 Log.v("PERMISSION", "PERMISSION");
-                                popupCapture(123);
+                                //popupCapture(123);
 
                                 Integer tvSizes = travelDynamicLoaction.indexOfChild(rowView);
                                 View view = travelDynamicLoaction.getChildAt(tvSizes);
@@ -922,7 +897,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 enterFare = (EditText) view.findViewById(R.id.enter_fare);
                                 tvTxtUKeys = (TextView) (view.findViewById(R.id.txt_tv_ukey));
                                 editMode = editText.getText().toString();
-
+                                enterFare.setEnabled(false);
                                 if (tvTxtUKeys.getText().toString().equals("")) {
                                     DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                                     Calendar calobjw = Calendar.getInstance();
@@ -948,8 +923,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     for (int c = 0; c < size; c++) {
                         View views = travelDynamicLoaction.getChildAt(c);
                         deleteButton = views.findViewById(R.id.delete_button);
+                        deleteButton.setVisibility(View.GONE);
                         etrTaFr = (EditText) views.findViewById(R.id.ta_edt_from);
                         etrTaTo = (EditText) views.findViewById(R.id.ta_edt_to);
+                        etrTaFr.setEnabled(false);
+                        etrTaTo.setEnabled(false);
+
                     }
                 }
 
@@ -987,24 +966,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         }
 
-        dynamicDate();
-        btn_sub.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (txt_date.getText().toString().matches("")) {
-                    Toast.makeText(TAClaimActivity.this, "Please choose Date", Toast.LENGTH_SHORT).show();
-                } else {
-                    submitData("SubmitForApp");
-                }
-            }
-        });
-
 
         card_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                customDialog = new CustomListViewDialog(TAClaimActivity.this, modelRetailDetails, 10);
+                customDialog = new CustomListViewDialog(TAViewStatus.this, modelRetailDetails, 10);
                 Window window = customDialog.getWindow();
                 window.setGravity(Gravity.CENTER);
                 window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -1030,28 +996,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         });
 
 
-        buttonSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                new LocationFinder(getApplication(), new LocationEvents() {
-                    @Override
-                    public void OnLocationRecived(Location location) {
-                        submitData("Save");
-                    }
-                });
-
-            }
-        });
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             shouldShowRequestPermissionRationale("true");
         }
     }
 
     public void LateImage(View v) {
-        CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+        CameraPermission cameraPermission = new CameraPermission(TAViewStatus.this, getApplicationContext());
 
         if (!cameraPermission.checkPermission()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -1060,7 +1011,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             Log.v("PERMISSION_NOT", "PERMISSION_NOT");
         } else {
             Log.v("PERMISSION", "PERMISSION");
-            popupCapture(343);
+            //popupCapture(343);
             DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Calendar calobjw = Calendar.getInstance();
             lodgLate = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
@@ -1080,7 +1031,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
 
     public void EarImage(View v) {
-        CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+        CameraPermission cameraPermission = new CameraPermission(TAViewStatus.this, getApplicationContext());
 
         if (!cameraPermission.checkPermission()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -1089,7 +1040,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             Log.v("PERMISSION_NOT", "PERMISSION_NOT");
         } else {
             Log.v("PERMISSION", "PERMISSION");
-            popupCapture(405);
+            //popupCapture(405);
             DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Calendar calobjw = Calendar.getInstance();
             lodgEarly = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
@@ -1152,7 +1103,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
         int minute = mcurrentTime.get(Calendar.MINUTE);
         TimePickerDialog mTimePicker;
-        mTimePicker = new TimePickerDialog(TAClaimActivity.this, new TimePickerDialog.OnTimeSetListener() {
+        mTimePicker = new TimePickerDialog(TAViewStatus.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
 
@@ -1187,36 +1138,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         mTimePicker.show();
     }
 
-    public void onTADelete(View v) {
-        int size = travelDynamicLoaction.getChildCount();
-        travelDynamicLoaction.removeView((View) v.getParent());
-
-        LayoutTransition transition = new LayoutTransition();
-        travelDynamicLoaction.setLayoutTransition(transition);
-
-        if (size == 0) {
-            crdDynamicLocation.setVisibility(View.GONE);
-        }
-
-        if (StrToEnd.equals("0")) {
-            SumOFTAAmount();
-        } else {
-
-        }
-    }
-
-    public void onLCDelete(View v) {
-        linlocalCon.removeView((View) v.getParent());
-
-        LayoutTransition transition = new LayoutTransition();
-        linlocalCon.setLayoutTransition(transition);
-
-        if (linlocalCon.getChildCount() == 0) {
-            localTotal.setVisibility(View.GONE);
-        }
-        SumOFLCAmount();
-
-    }
 
     public void viewStaus(View v) {
         startActivity(new Intent(getApplicationContext(), ViewTAStatus.class));
@@ -1226,17 +1147,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         pdfViewList();
     }
 
-    public void onOEDelete(View v) {
-        LinearOtherAllowance.removeView((View) v.getParent());
-        LayoutTransition transition = new LayoutTransition();
-        LinearOtherAllowance.setLayoutTransition(transition);
-
-        if (LinearOtherAllowance.getChildCount() == 0) {
-            otherExpenseLayout.setVisibility(View.GONE);
-        }
-
-        SumOFOTAmount();
-    }
 
     public void lodingView() {
 
@@ -1253,6 +1163,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         for (int i = 0; i < jointLodging.getChildCount(); i++) {
             View childView = jointLodging.getChildAt(i);
             ImageView deleteLod = (ImageView) childView.findViewById(R.id.ldg_delete);
+            deleteLod.setVisibility(View.GONE);
             if (i == 0) {
                 deleteLod.setVisibility(View.GONE);
             } else {
@@ -1261,10 +1172,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         }
     }
 
-    public void onLodingDelete(View v) {
-        jointLodging.removeView((View) v.getParent());
-        SumOFJointLodging();
-    }
 
     public void onGetEmpDetails(View v) {
         View pv = (View) v.getParent().getParent();
@@ -1340,6 +1247,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         for (int k = 0; k < lcSize; k++) {
             View cv = linlocalCon.getChildAt(k);
             editLaFare = (EditText) (cv.findViewById(R.id.edt_la_fare));
+            editLaFare.setEnabled(false);
             String str = editLaFare.getText().toString();
             if (str.matches("")) str = "0";
             sum = sum + Double.parseDouble(str);
@@ -1357,6 +1265,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         for (int k = 0; k < OeSize; k++) {
             View cv = LinearOtherAllowance.getChildAt(k);
             edtOE = (EditText) (cv.findViewById(R.id.oe_fre_amt));
+            edtOE.setEnabled(false);
             String strs = edtOE.getText().toString();
             if (strs.matches("")) strs = "0";
             sumsTot = sumsTot + Double.parseDouble(strs);
@@ -1486,59 +1395,24 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
 
         if (CheckIn == true) {
-            Intent Dashboard = new Intent(TAClaimActivity.this, Dashboard_Two.class);
+            Intent Dashboard = new Intent(TAViewStatus.this, Dashboard_Two.class);
             Dashboard.putExtra("Mode", "CIN");
             startActivity(Dashboard);
         } else
             startActivity(new Intent(getApplicationContext(), Dashboard.class));
     }
 
-    /*Choosing Dynamic date*/
-    public void dynamicDate() {
-
-        JSONObject jj = new JSONObject();
-        try {
-            jj.put("sfCode", SF_code);
-            jj.put("divisionCode", div);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> call = apiInterface.getTADate(jj.toString());
-        call.enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                JsonArray jsonArray = response.body();
-                for (int a = 0; a < jsonArray.size(); a++) {
-                    JsonObject jsonObject = (JsonObject) jsonArray.get(a);
-                    String id = String.valueOf(jsonObject.get("id"));
-                    String name = String.valueOf(jsonObject.get("Datewithname"));
-                    Log.e("getTADate", name);
-                    name = name.replaceAll("^[\"']+|[\"']+$", "");
-                    mCommon_model_spinner = new Common_Model(id, name, "");
-                    modelRetailDetails.add(mCommon_model_spinner);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
-            }
-        });
-    }
 
     /*Display Mode of travel View based on the choosed Date*/
-    public void displayTravelMode(String ChoosedDate) {
-        viewContinue.removeAllViews();
+    public void displayTravelMode() {
+
 
         try {
-
-            ChoosedDate = ChoosedDate.replaceAll("^[\"']+|[\"']+$", "");
-
             JSONObject jj = new JSONObject();
             try {
-                jj.put("sfCode", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
-                jj.put("divisionCode", mShared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
-                jj.put("Selectdate", ChoosedDate);
+                jj.put("sfCode", Shared_Common_Pref.Sf_Code);
+                jj.put("divisionCode", Shared_Common_Pref.Div_Code);
+                jj.put("Selectdate", Ta_DATE);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -1546,7 +1420,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             Log.v("Json_date_fomrat", jj.toString());
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
             Call<JsonObject> call = apiInterface.getTAdateDetails(jj.toString());
-            String finalChoosedDate = ChoosedDate;
+
             call.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -1715,13 +1589,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 txtMaxKm.setVisibility(View.GONE);
                             }
 
-                            btn_sub.setVisibility(View.VISIBLE);
-                            buttonSave.setVisibility(View.VISIBLE);
 
                         } else {
 
-                            btn_sub.setVisibility(View.GONE);
-                            buttonSave.setVisibility(View.GONE);
+
                         }
 
                         txtDailyAllowance.setText(StrDailyAllowance + " - " + StrTo);
@@ -1770,8 +1641,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         }
 
                         if (StrToEnd.equals("0")) {
-                            btn_sub.setVisibility(View.VISIBLE);
-                            buttonSave.setVisibility(View.VISIBLE);
                             StrBus = StrBus.replaceAll("^[\"']+|[\"']+$", "");
                             StrTo = StrTo.replaceAll("^[\"']+|[\"']+$", "");
                             for (int j = 0; j < trvldArray.size(); j++) {
@@ -1797,6 +1666,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                                 LinearLayout lad = (LinearLayout) tvchildView.findViewById(R.id.linear_row_ad);
                                 editText = (TextView) tvchildView.findViewById(R.id.enter_mode);
+                                editText.setEnabled(false);
                                 enterFrom = tvchildView.findViewById(R.id.enter_from);
                                 enterTo = tvchildView.findViewById(R.id.enter_to);
                                 enterFare = tvchildView.findViewById(R.id.enter_fare);
@@ -1821,6 +1691,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 Log.v("Travel_Location", editMode);
 
                                 deleteButton = tvchildView.findViewById(R.id.delete_button);
+                                deleteButton.setVisibility(View.GONE);
                                 taAttach = (ImageView) tvchildView.findViewById(R.id.image_attach);
                                 previewss = (ImageView) tvchildView.findViewById(R.id.image_preview);
                                 enterFare.addTextChangedListener(new TextWatcher() {
@@ -1842,7 +1713,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     @Override
                                     public void onClick(View v) {
 
-                                        CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+                                        CameraPermission cameraPermission = new CameraPermission(TAViewStatus.this, getApplicationContext());
 
                                         if (!cameraPermission.checkPermission()) {
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -1851,7 +1722,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                             Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                                         } else {
                                             Log.v("PERMISSION", "PERMISSION");
-                                            popupCapture(123);
+                                            //popupCapture(123);
 
                                             Integer tvSizes = travelDynamicLoaction.indexOfChild(rowView);
                                             View view = travelDynamicLoaction.getChildAt(tvSizes);
@@ -1859,7 +1730,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                             enterFare = (EditText) view.findViewById(R.id.enter_fare);
                                             tvTxtUKeys = (TextView) (view.findViewById(R.id.txt_tv_ukey));
                                             editMode = editText.getText().toString();
-
+                                            enterFare.setEnabled(false);
                                             Log.v("Travel_Location_imagw", editMode);
 
                                             if (tvTxtUKeys.getText().toString().equals("")) {
@@ -1887,7 +1758,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                         editMode = editText.getText().toString();
                                         TlUKey = tvTxtUKeys.getText().toString();
                                         Log.v("Travel_Location_preview", editMode);
-
+                                        enterFare.setEnabled(false);
                                         DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
                                         Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
                                         stat.putExtra("position", TlUKey);
@@ -1903,7 +1774,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     deleteButton.setVisibility(View.GONE);
                                     lad.setOnClickListener(null);
                                     editText.setOnClickListener(null);
-                                    editText.setClickable(false);
+                                    editText.setEnabled(false);
                                     enterFrom.setEnabled(false);
                                     if (tldraftJson.get("To_P").getAsString().equals("")) {
 
@@ -2034,7 +1905,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             for (int i = 0; i < ContSty.size(); i++) {
                 eachData = (JsonObject) ContSty.get(i);
 
-                TextView customOptionsName = new TextView(TAClaimActivity.this);
+                TextView customOptionsName = new TextView(TAViewStatus.this);
                 customOptionsName.setPadding(0, 15, 0, 15);
                 customOptionsName.setText("");
                 customOptionsName.setText(eachData.get("fdt").getAsString());
@@ -2164,12 +2035,15 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 View jdV = jointLodging.getChildAt(jfd);
                 edt_ldg_JnEmp = (EditText) jdV.findViewById(R.id.edt_ldg_JnEmp);
+                edt_ldg_JnEmp.setEnabled(false);
                 txtJNName = (TextView) jdV.findViewById(R.id.txtJNName);
                 txtJNDesig = (TextView) jdV.findViewById(R.id.txtJNDesig);
                 txtJNDept = (TextView) jdV.findViewById(R.id.txtJNDept);
                 txtJNHQ = (TextView) jdV.findViewById(R.id.txtJNHQ);
                 txtJNMob = (TextView) jdV.findViewById(R.id.txtJNMob);
                 txtJNMyEli = (TextView) jdV.findViewById(R.id.txtJNMyEli);
+                ImageView delte = jdV.findViewById(R.id.ldg_delete);
+                delte.setVisibility(View.GONE);
 
                 edt_ldg_JnEmp.setText(jsonObjectAdd.get("Emp_Code").getAsString());
                 txtJNName.setText(jsonObjectAdd.get("Sf_Name").getAsString());
@@ -2221,8 +2095,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             localTotal.setVisibility(View.VISIBLE);
             editTexts = (TextView) (LcchildView.findViewById(R.id.local_enter_mode));
             editLaFare = (EditText) (LcchildView.findViewById(R.id.edt_la_fare));
+            editLaFare.setEnabled(false);
             linLocalSpinner = (LinearLayout) LcchildView.findViewById(R.id.lin_loc_spiner);
             lcAttach = (ImageView) (LcchildView.findViewById(R.id.la_attach_iamg));
+            lcDelet = (ImageView) (LcchildView.findViewById(R.id.delete_lc));
+            lcDelet.setVisibility(View.GONE);
             lcPreview = (ImageView) (LcchildView.findViewById(R.id.img_prvw_lc));
 
             editTexts.setText(expCode);
@@ -2264,14 +2141,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 public void onClick(View v) {
                     listOrderType.clear();
                     Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
-                    dynamicModeType(lcPosCntS);
+                    // dynamicModeType(lcPosCntS);
                 }
             });
 
             lcAttach.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+                    CameraPermission cameraPermission = new CameraPermission(TAViewStatus.this, getApplicationContext());
                     if (!cameraPermission.checkPermission()) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 
@@ -2281,7 +2158,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     } else {
                         Log.v("PERMISSION", "PERMISSION");
 
-                        popupCapture(786);
+                        //popupCapture(786);
 
                         Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
                         View view = linlocalCon.getChildAt(lcPosCntS);
@@ -2362,7 +2239,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             otherExpenseLayout.setVisibility(View.VISIBLE);
             oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
             edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
+            edtOE.setEnabled(false);
             oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
+            oeDelete = (ImageView) (childView.findViewById(R.id.oe_delete));
+            oeDelete.setVisibility(View.GONE);
             oePreview = (ImageView) (childView.findViewById(R.id.img_prvw_oe));
             linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
             oeTxtUKey = (TextView) (childView.findViewById(R.id.txt_oe_ukey));
@@ -2387,7 +2267,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 public void onClick(View v) {
 
 
-                    CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
+                    CameraPermission cameraPermission = new CameraPermission(TAViewStatus.this, getApplicationContext());
                     if (!cameraPermission.checkPermission()) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                             cameraPermission.requestPermission();
@@ -2395,7 +2275,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                     } else {
                         Log.v("PERMISSION", "PERMISSION");
-                        popupCapture(99);
+                        //popupCapture(99);
 
                         Integer valuedfd = LinearOtherAllowance.indexOfChild(rowView);
                         View view = LinearOtherAllowance.getChildAt(valuedfd);
@@ -2467,7 +2347,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                     OtherExpenseList.clear();
                     Integer valuedf = LinearOtherAllowance.indexOfChild(rowView);
-                    OtherExpenseMode(valuedf);
+                    //   OtherExpenseMode(valuedf);
 
                 }
             });
@@ -2508,9 +2388,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                     View views = travelDynamicLoaction.getChildAt(i);
                     deleteButton = views.findViewById(R.id.delete_button);
+                    deleteButton.setVisibility(View.GONE);
                     etrTaFr = (EditText) views.findViewById(R.id.ta_edt_from);
                     etrTaTo = (EditText) views.findViewById(R.id.ta_edt_to);
-
+                    etrTaFr.setEnabled(false);
+                    etrTaTo.setEnabled(false);
                     if (!tldraftJson.get("From_P").getAsString().isEmpty() && !tldraftJson.get("From_P").getAsString().equals("")) {
                         etrTaFr.setText(tldraftJson.get("From_P").getAsString());
                     }
@@ -2540,6 +2422,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_START);
             layoutparams_3.setMargins(20, -10, 0, 0);
             edt1 = new EditText(getApplicationContext());
+            edt1.setEnabled(false);
             edt1.setLayoutParams(layoutparams_3);
             edt1.setText(edtValueb.replaceAll("^[\"']+|[\"']+$", ""));
             edt1.setTextSize(13);
@@ -2573,7 +2456,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             Uri uri = item.getUri();
                             // display your images
                             ImageFilePath filepath = new ImageFilePath();
-                            fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                            fullPath = filepath.getPath(TAViewStatus.this, mClipData.getItemAt(i).getUri());
                             lodgArrLst.add(fullPath);
 
 
@@ -2583,7 +2466,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     } else if (data.getData() != null) {
                         Uri item = data.getData();
                         ImageFilePath filepath = new ImageFilePath();
-                        fullPath = filepath.getPath(TAClaimActivity.this, item);
+                        fullPath = filepath.getPath(TAViewStatus.this, item);
                         lodgArrLst.add(fullPath);
 
                         getMulipart(lodUKey, fullPath, "LOD", "", "Room", "", "");
@@ -2600,7 +2483,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         Uri uri = item.getUri();
                         // display your images
                         ImageFilePath filepath = new ImageFilePath();
-                        fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                        fullPath = filepath.getPath(TAViewStatus.this, mClipData.getItemAt(i).getUri());
 
                         getMulipart(TlUKey, fullPath, "TL", "", editMode, "", "");
 
@@ -2608,7 +2491,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 } else if (data.getData() != null) {
                     Uri item = data.getData();
                     ImageFilePath filepath = new ImageFilePath();
-                    fullPath = filepath.getPath(TAClaimActivity.this, item);
+                    fullPath = filepath.getPath(TAViewStatus.this, item);
 
 
                     getMulipart(TlUKey, fullPath, "TL", "", editMode, "", "");
@@ -2625,7 +2508,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             ClipData.Item item = mClipData.getItemAt(i);
                             Uri uri = item.getUri();
                             ImageFilePath filepath = new ImageFilePath();
-                            fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                            fullPath = filepath.getPath(TAViewStatus.this, mClipData.getItemAt(i).getUri());
 
                             getMulipart(OeUKey, fullPath, "OE", "", editMode, "", "");
 
@@ -2635,7 +2518,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                         Uri item = data.getData();
                         ImageFilePath filepath = new ImageFilePath();
-                        fullPath = filepath.getPath(TAClaimActivity.this, item);
+                        fullPath = filepath.getPath(TAViewStatus.this, item);
                         getMulipart(OeUKey, fullPath, "OE", "", editMode, "", "");
 
                     }
@@ -2651,7 +2534,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             Uri uri = item.getUri();
                             // display your images
                             ImageFilePath filepath = new ImageFilePath();
-                            fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                            fullPath = filepath.getPath(TAViewStatus.this, mClipData.getItemAt(i).getUri());
 
                             getMulipart(LcUKey, fullPath, "LC", "", editMode, "", "");
 
@@ -2660,7 +2543,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                         Uri item = data.getData();
                         ImageFilePath filepath = new ImageFilePath();
-                        fullPath = filepath.getPath(TAClaimActivity.this, item);
+                        fullPath = filepath.getPath(TAViewStatus.this, item);
 
                         getMulipart(LcUKey, fullPath, "LC", "", editMode, "", "");
 
@@ -2677,7 +2560,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             Uri uri = item.getUri();
                             // display your images
                             ImageFilePath filepath = new ImageFilePath();
-                            fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                            fullPath = filepath.getPath(TAViewStatus.this, mClipData.getItemAt(i).getUri());
 
                             getMulipart(lodgLate, fullPath, "LOD", "", "LateMode", "", "");
 
@@ -2686,7 +2569,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                         Uri item = data.getData();
                         ImageFilePath filepath = new ImageFilePath();
-                        fullPath = filepath.getPath(TAClaimActivity.this, item);
+                        fullPath = filepath.getPath(TAViewStatus.this, item);
 
                         getMulipart(lodgLate, fullPath, "LOD", "", "LateMode", "", "");
 
@@ -2703,7 +2586,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             Uri uri = item.getUri();
                             // display your images
                             ImageFilePath filepath = new ImageFilePath();
-                            fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
+                            fullPath = filepath.getPath(TAViewStatus.this, mClipData.getItemAt(i).getUri());
 
                             getMulipart(lodgEarly, fullPath, "LOD", "", "EarlyMode", "", "");
 
@@ -2712,7 +2595,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                         Uri item = data.getData();
                         ImageFilePath filepath = new ImageFilePath();
-                        fullPath = filepath.getPath(TAClaimActivity.this, item);
+                        fullPath = filepath.getPath(TAViewStatus.this, item);
 
                         getMulipart(lodgEarly, fullPath, "LOD", "", "EarlyMode", "", "");
 
@@ -2775,7 +2658,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     }
 
     public void pdfViewList() {
-        dialog = new Dialog(TAClaimActivity.this, R.style.AlertDialogCustom);
+        dialog = new Dialog(TAViewStatus.this, R.style.AlertDialogCustom);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.row_pdf_viewer_list);
         dialog.show();
@@ -2809,7 +2692,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     }
 
     public void popupCapture(Integer attachName) {
-        dialog = new Dialog(TAClaimActivity.this, R.style.AlertDialogCustom);
+        dialog = new Dialog(TAViewStatus.this, R.style.AlertDialogCustom);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialog.setContentView(R.layout.popup_capture);
         dialog.show();
@@ -2842,306 +2725,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     public void captureFile(Integer positionC) {
         dialog.dismiss();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        outputFileUri = FileProvider.getUriForFile(TAClaimActivity.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), Shared_Common_Pref.Sf_Code + "_" + System.currentTimeMillis() + ".jpeg"));
+        outputFileUri = FileProvider.getUriForFile(TAViewStatus.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), Shared_Common_Pref.Sf_Code + "_" + System.currentTimeMillis() + ".jpeg"));
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivityForResult(intent, positionC);
 
     }
 
-    public void submitData(String responseVal) {
-        if (edtEarBill.getText().toString().equalsIgnoreCase("")) edtEarBill.setText("0");
-        if (edtLateBill.getText().toString().equalsIgnoreCase("")) edtLateBill.setText("0");
-        if (earCheckIn.getText().toString().equalsIgnoreCase("00:00:00")) earCheckIn.setText("");
-        if (earCheckOut.getText().toString().equalsIgnoreCase("00:00:00")) earCheckOut.setText("");
-        if (latCheckIn.getText().toString().equalsIgnoreCase("00:00:00")) latCheckIn.setText("");
-        if (latCheckOut.getText().toString().equalsIgnoreCase("00:00:00")) latCheckOut.setText("");
-
-        Log.v("Ta_Loadging_type", txt_ldg_type.getText().toString());
-        JsonObject ldraft;
-        for (int i = 0; i < StayDate.size(); i++) {
-            ldraft = (JsonObject) StayDate.get(i);
-            sty_date = ldraft.get("Stay_Date_time").getAsString();
-        }
-
-        Log.e("COUNTATTACH", DateTime);
-        JSONArray transHead = new JSONArray();
-        JSONObject transJson = new JSONObject();
-        JSONObject jsonData = new JSONObject();
-        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
-        StrBus = StrBus.replaceAll("^[\"']+|[\"']+$", "");
-        StrTo = StrTo.replaceAll("^[\"']+|[\"']+$", "");
-        try {
-            /*Head Json*/
-            jsonData.put("SF_Code", SF_code);
-            jsonData.put("exp_date", DateTime);
-            jsonData.put("da_mode", StrDailyAllowance);
-            jsonData.put("al_type", "");
-            jsonData.put("from_place", StrBus);
-            jsonData.put("to_place", StrTo);
-            jsonData.put("al_amount", "0");
-            jsonData.put("da_amount", TotDA);
-            jsonData.put("lc_amount", sum);
-            jsonData.put("oe_amount", sumsTot);
-            jsonData.put("total_ldg_amt", totLodgAmt);
-            jsonData.put("ta_total_amount", tofuel);
-            jsonData.put("drvBrdAmt", drvBrdAmt);
-            jsonData.put("trv_lc_amt", sumsTa);
-            jsonData.put("gr_total", gTotal);
-            jsonData.put("edt_remark", editTextRemarks.getText().toString());
-
-            /*Daily Allowance*/
-            JSONObject daAll = new JSONObject();
-            daAll.put("all_name", txtDailyAllowance.getText());
-            daAll.put("brd_amt", myBrdAmt);
-            daAll.put("drvBrdAmt", drvBrdAmt);
-
-            /*Lodging Save*/
-
-
-            Log.v("Ta_Loadging_elgble", txtMyEligi.getText().toString().replaceAll("Rs.", ""));
-            Log.v("Ta_Loadging_wob_amt", ldgWOBBal.getText().toString().replaceAll("Rs.", ""));
-            Log.v("Ta_Loadging_drv_ldg_amt", txtDrivEligi.getText().toString().replaceAll("Rs.", ""));
-            Log.v("Ta_Loadging_jnt_ldg_amt", txtJNEligi.getText().toString().replaceAll("Rs.", ""));
-            Log.v("Ta_Loadging_ttl_ldg_amt", lbl_ldg_eligi.getText().toString().replaceAll("Rs.", ""));
-
-
-            JSONObject ldgSave = new JSONObject();
-            ldgSave.put("ldg_type", txt_ldg_type.getText().toString());
-            ldgSave.put("ldg_type_sty", lodgStyLocation.getText().toString());
-            ldgSave.put("sty_dte", sty_date + " " + ldg_cin.getText().toString());
-            ldgSave.put("to_dte", ldg_cout.getText().toString());
-            ldgSave.put("elgble", txtMyEligi.getText().toString().replaceAll("Rs.", ""));
-            ldgSave.put("noOfDays", "");
-            ldgSave.put("bil_amt", edt_ldg_bill.getText().toString());
-            ldgSave.put("con_sty", cnSty);
-            ldgSave.put("Erly_sty", erlSty);
-            ldgSave.put("lte_sty", lteSty);
-            ldgSave.put("Ear_chec_in", earCheckIn.getText().toString());
-            ldgSave.put("Ear_check_out", earCheckOut.getText().toString());
-            ldgSave.put("Ear_bill_amt", edtEarBill.getText().toString());
-            ldgSave.put("lat_chec_in", latCheckIn.getText().toString());
-            ldgSave.put("lat_check_out", latCheckOut.getText().toString());
-            ldgSave.put("lat_bill_amt", edtLateBill.getText().toString());
-            ldgSave.put("wob_amt", ldgWOBBal.getText().toString().replaceAll("Rs.", ""));
-            ldgSave.put("drv_ldg_amt", txtDrivEligi.getText().toString().replaceAll("Rs.", ""));
-            ldgSave.put("jnt_ldg_amt", txtJNEligi.getText().toString().replaceAll("Rs.", ""));
-            ldgSave.put("total_ldg_amt", lbl_ldg_eligi.getText().toString().replaceAll("Rs.", ""));
-            ldgSave.put("attch_bill", "");
-            ldgSave.put("u_key", txtLodgUKey.getText().toString());
-
-
-            Log.v("Ta_Loadging_loc", lodgStyLocation.getText().toString());
-            Log.v("Ta_Loadging_sty_dte", sty_date + " " + ldg_cin.getText().toString());
-            Log.v("Ta_Loadging_to_dte", ldg_cout.getText().toString());
-            Log.v("Ta_Loadging_bil_amt", edt_ldg_bill.getText().toString());
-            Log.v("Ta_Loadging_cnSty", String.valueOf(cnSty));
-            Log.v("Ta_Loadging_erlSty", String.valueOf(erlSty));
-            Log.v("Ta_Loadging_lte_sty", String.valueOf(lteSty));
-
-            Log.v("Ta_Loadging_erChckIn", earCheckIn.getText().toString());
-            Log.v("Ta_Loadging_earCheckOut", earCheckOut.getText().toString());
-            Log.v("Ta_Loadging_Ear_amt", edtEarBill.getText().toString());
-
-            Log.v("Ta_Loadging_lat_in", latCheckIn.getText().toString());
-            Log.v("Ta_Loadging_lat_out", latCheckOut.getText().toString());
-            Log.v("Ta_Loadging_lat_bill", edtLateBill.getText().toString());
-            Log.v("Ta_Loadging_txt", txtLodgUKey.getText().toString());
-
-            JSONArray ldgArySve = new JSONArray();
-            for (int jd = 0; jd < jointLodging.getChildCount(); jd++) {
-                View jdV = jointLodging.getChildAt(jd);
-                edt_ldg_JnEmp = (EditText) jdV.findViewById(R.id.edt_ldg_JnEmp);
-                txtJNName = (TextView) jdV.findViewById(R.id.txtJNName);
-                txtJNDesig = (TextView) jdV.findViewById(R.id.txtJNDesig);
-                txtJNDept = (TextView) jdV.findViewById(R.id.txtJNDept);
-                txtJNHQ = (TextView) jdV.findViewById(R.id.txtJNHQ);
-                txtJNMob = (TextView) jdV.findViewById(R.id.txtJNMob);
-                txtJNMyEli = (TextView) jdV.findViewById(R.id.txtJNMyEli);
-                String strJNMyEli = txtJNMyEli.getText().toString().substring(txtJNMyEli.getText().toString().indexOf(".") + 1).trim();
-                String separator5 = ".";
-                int intJNMyEli = strJNMyEli.lastIndexOf(separator5);
-                JSONObject jsnLdgSve = new JSONObject();
-                jsnLdgSve.put("emp_cde", edt_ldg_JnEmp.getText().toString());
-                jsnLdgSve.put("emp_Name", txtJNName.getText().toString());
-                jsnLdgSve.put("emp_Desig", txtJNDesig.getText().toString());
-                jsnLdgSve.put("emp_Dept", txtJNDept.getText().toString());
-                jsnLdgSve.put("emp_HQ", txtJNHQ.getText().toString());
-                jsnLdgSve.put("emp_Mob", txtJNMob.getText().toString());
-                jsnLdgSve.put("emp_ldg_amt", strJNMyEli.substring(0, intJNMyEli));
-                ldgArySve.put(jsnLdgSve);
-            }
-            ldgSave.put("Loding_Emp", ldgArySve);
-
-            Log.v("Lodging_Save", ldgSave.toString());
-            /*Travel Mode Json*/
-
-            JSONObject trDet = new JSONObject();
-            trDet.put("MOT", StrDaName);
-            trDet.put("Start_Km", StartedKm);
-            trDet.put("End_Km", ClosingKm);
-            trDet.put("Tr_km", totalkm);
-            trDet.put("Pr_km", PersonalKm);
-            trDet.put("total_claim", totalPersonalKm);
-            trDet.put("fuel_cha", strFuelAmount);
-            trDet.put("fuel_amt", tofuel);
-            trDet.put("st_km_img", "");
-            trDet.put("ed_km_img", "");
-            trDet.put("fuel_amount", strFuelAmount);
-            trDet.put("ta_total_amount", sumsTotss);
-            JSONArray trvLoc = new JSONArray();
-            int travelBike = travelDynamicLoaction.getChildCount();
-
-            Log.v("STRING_TO_END_SUB", StrToEnd);
-            if (StrToEnd.equals("0")) {
-                Log.v("TRAVEl_LOCATION", "1");
-                for (int i = 0; i < travelBike; i++) {
-                    JSONObject jsonTrLoc = new JSONObject();
-                    View views = travelDynamicLoaction.getChildAt(i);
-                    editText = views.findViewById(R.id.enter_mode);
-                    enterFrom = views.findViewById(R.id.enter_from);
-                    enterTo = views.findViewById(R.id.enter_to);
-                    enterFare = views.findViewById(R.id.enter_fare);
-                    deleteButton = views.findViewById(R.id.delete_button);
-                    tvTxtUKeys = views.findViewById(R.id.txt_tv_ukey);
-                    jsonTrLoc.put("mode", editText.getText().toString());
-                    jsonTrLoc.put("from", enterFrom.getText().toString());
-                    jsonTrLoc.put("to", enterTo.getText().toString());
-                    jsonTrLoc.put("fare", enterFare.getText().toString());
-                    jsonTrLoc.put("u_key", tvTxtUKeys.getText().toString());
-                    jsonTrLoc.put("attach_count", AttachmentImg.get(editMode));
-                    trvLoc.put(jsonTrLoc);
-                }
-
-            } else {
-                Log.v("TRAVEl_LOCATION", "0");
-                for (int i = 0; i < travelBike; i++) {
-                    JSONObject jsonTrLoc = new JSONObject();
-                    View views = travelDynamicLoaction.getChildAt(i);
-                    etrTaFr = (EditText) views.findViewById(R.id.ta_edt_from);
-                    etrTaTo = (EditText) views.findViewById(R.id.ta_edt_to);
-                    jsonTrLoc.put("from", etrTaFr.getText().toString());
-                    jsonTrLoc.put("to", etrTaTo.getText().toString());
-                    trvLoc.put(jsonTrLoc);
-                }
-            }
-            trDet.put("trv_loca", trvLoc);
-            /*Local Convenyance*/
-            JSONArray addExp = new JSONArray();
-            int addExpSize = linlocalCon.getChildCount();
-
-            for (int lc = 0; lc < addExpSize; lc++) {
-                View view = linlocalCon.getChildAt(lc);
-                editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
-                editLaFare = (EditText) (view.findViewById(R.id.edt_la_fare));
-                Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
-                lcTxtUKeys = (TextView) (view.findViewById(R.id.txt_lc_ukey));
-                editMode = editTexts.getText().toString();
-                newEdt = usersByCountry.get(editMode);
-
-                JSONObject lcMode = new JSONObject();
-                lcMode.put("type", editMode);
-                lcMode.put("attach_count", AttachmentImg.get(editMode));
-                lcMode.put("total_amount", editLaFare.getText().toString());
-                lcMode.put("u_key", lcTxtUKeys.getText().toString());
-                lcMode.put("exp_type", "LC");
-
-                JSONArray lcModeRef = new JSONArray();
-                Log.e("ADD_SIZE", String.valueOf(newEdt.size()));
-
-                for (int da = 0; da < newEdt.size(); da++) {
-
-                    JSONObject AditionallLocalConvenyance = new JSONObject();
-                    AditionallLocalConvenyance.put("KEY", dynamicLabelList.get(da));
-                    AditionallLocalConvenyance.put("VALUE", newEdt.get(da).getText().toString());
-                    lcModeRef.put(AditionallLocalConvenyance);
-                }
-
-                lcMode.put("ad_exp", lcModeRef);
-                addExp.put(lcMode);
-            }
-
-            /*Other Expensive*/
-            JSONArray othrExp = new JSONArray();
-            int addOtherExp = LinearOtherAllowance.getChildCount();
-
-            for (int OC = 0; OC < addOtherExp; OC++) {
-                View view = LinearOtherAllowance.getChildAt(OC);
-                oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
-                edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
-                OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
-                editMode = oeEditext.getText().toString();
-                oeTxtUKey = (TextView) (view.findViewById(R.id.txt_oe_ukey));
-
-                newEdt = userOtherExpense.get(editMode);
-                JSONObject lcModes2 = new JSONObject();
-                lcModes2.put("type", editMode);
-                lcModes2.put("attach_count", AttachmentImg.get(editMode));
-                lcModes2.put("total_amount", edtOE.getText().toString());
-                lcModes2.put("u_key", oeTxtUKey.getText().toString());
-                lcModes2.put("exp_type", "OE");
-
-                JSONArray lcModeRef1 = new JSONArray();
-                for (int da = 0; da < newEdt.size(); da++) {
-                    JSONObject AditionallLocalConvenyance = new JSONObject();
-                    AditionallLocalConvenyance.put("KEY", OEdynamicList.get(da));
-                    AditionallLocalConvenyance.put("VALUE", newEdt.get(da).getText().toString());
-
-                    lcModeRef1.put(AditionallLocalConvenyance);
-                }
-                lcModes2.put("ad_exp", lcModeRef1);
-                othrExp.put(lcModes2);
-                Log.v("OE_EXPENSE", lcModes2.toString());
-
-            }
-
-            jsonData.put("Add_Exp", addExp);
-            jsonData.put("Other_Exp", othrExp);
-            jsonData.put("Trv_details", trDet);
-            jsonData.put("Lodg_details", ldgSave);
-            jsonData.put("Da_Claim", daAll);
-
-            transHead.put(jsonData);
-
-            Log.e("TOTAL_JSON", transHead.toString());
-            Log.e("TOTAL_JSON_HHHH", jsonData.toString());
-
-        } catch (Exception e) {
-            Log.e("TOTAL_JSON_OUT", e.toString());
-        }
-
-        /*ImageStore();*/
-
-
-        Call<ResponseBody> submit;
-        if (responseVal.equals("Save")) {
-            submit = apiInterface.saveDailyAllowance(jsonData.toString());
-        } else {
-            submit = apiInterface.submitOfApp(jsonData.toString());
-        }
-
-
-        Log.v("TA_REQUEST", submit.request().toString());
-        submit.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                Log.v("TA_Response", response.body().toString());
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
-                if (responseVal.equals("Save")) {
-                    Toast.makeText(TAClaimActivity.this, "Saved Successfully ", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-        });
-
-    }
 
     public void getMulipart(String count, String path, String x, String imageKEY, String mode, String from, String to) {
         Log.v("PATH_IMAGE", path);
@@ -3238,7 +2828,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         }
     }
 
-    @Override
+  /*  @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
         if (type == 9) {
@@ -3307,7 +2897,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 viewBilling.setVisibility(View.VISIBLE);
 
 
-                /*tTotAmt = 0;*/
+                *//*tTotAmt = 0;*//*
                 ttLod = 1;
 
 
@@ -3327,7 +2917,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 viewBilling.setVisibility(View.VISIBLE);
 
                 ttLod = 1;
-                /*tTotAmt = 0;*/
+                *//*tTotAmt = 0;*//*
                 txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
                 ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
                 lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
@@ -3445,7 +3035,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
-    }
+    }*/
 
     public void localCon(Integer countPosition) {
 
@@ -3478,7 +3068,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     }
                 }
 
-                customDialog = new CustomListViewDialog(TAClaimActivity.this, modelTravelType, 8);
+                customDialog = new CustomListViewDialog(TAViewStatus.this, modelTravelType, 8);
                 Window window = customDialog.getWindow();
                 window.setGravity(Gravity.CENTER);
                 window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -3501,7 +3091,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         mCommon_model_spinner = new Common_Model("Stay At Relative's House", "RS");
         ldgModes.add(mCommon_model_spinner);
 
-        customDialog = new CustomListViewDialog(TAClaimActivity.this, ldgModes, 9);
+        customDialog = new CustomListViewDialog(TAViewStatus.this, ldgModes, 9);
         Window window = customDialog.getWindow();
         window.setGravity(Gravity.CENTER);
         window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -3515,7 +3105,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             mCommon_model_spinner = new Common_Model(name, name, "", "", poisition);
             listOrderType.add(mCommon_model_spinner);
         }
-        customDialog = new CustomListViewDialog(TAClaimActivity.this, listOrderType, 80);
+        customDialog = new CustomListViewDialog(TAViewStatus.this, listOrderType, 80);
         Window window = customDialog.getWindow();
         window.setGravity(Gravity.CENTER);
         window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -3528,7 +3118,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             mCommon_model_spinner = new Common_Model(name, name, "", "", poisition);
             OtherExpenseList.add(mCommon_model_spinner);
         }
-        customDialog = new CustomListViewDialog(TAClaimActivity.this, OtherExpenseList, 90);
+        customDialog = new CustomListViewDialog(TAViewStatus.this, OtherExpenseList, 90);
         Window window = customDialog.getWindow();
         window.setGravity(Gravity.CENTER);
         window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -3577,6 +3167,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                         layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_START);
                                         layoutparams_3.setMargins(20, -10, 0, 0);
                                         edt = new EditText(getApplicationContext());
+                                        edt.setEnabled(false);
                                         edt.setLayoutParams(layoutparams_3);
                                         edt.setHint(dynamicLabel);
                                         edt.setId(12345);
@@ -3659,6 +3250,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                         for (int da = 0; da < OEdynamicList.size(); da++) {
                                             edt.setHint(OEdynamicList.get(da));
                                         }
+                                        edt.setEnabled(false);
                                         edt.setId(12345);
                                         edt.setTextSize(13);
                                         edt.setTextColor(R.color.grey_500);
@@ -3692,7 +3284,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    TAClaimActivity.super.onBackPressed();
+                    TAViewStatus.super.onBackPressed();
                 }
             });
 
