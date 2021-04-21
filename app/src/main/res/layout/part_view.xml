@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_marginTop="@dimen/C3dp"
-        android:background="@android:color/black"
+        android:background="@color/grey_400"
         tools:ignore="MissingConstraints"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

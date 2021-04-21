@@ -625,6 +625,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                 Log.v("visbleMOdevisbleMOde", visbleMOde);
                 Model_Pojo = new Common_Model(shift, MissedDate, Checkin_Time, COutTime, ModeCount,visbleMOde);
                 missed_punch.add(Model_Pojo);
+                if(missedDates!=null){
                 if(missedDates.equalsIgnoreCase(Model_Pojo.getId())){
                     SharedPreferences.Editor editor = sharedpreferences.edit();
                     editor.remove("Closing");
@@ -665,6 +666,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
 
                         linMode.setVisibility(View.GONE);
                     }
+                }
                 }
             }
 
@@ -857,12 +859,14 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
     public void callApi() {
 
         try {
+            if(missedDates==null) return;
             JSONObject jj = new JSONObject();
+
             jj.put("div", Shared_Common_Pref.Div_Code);
             jj.put("sf", Shared_Common_Pref.Sf_Code);
             jj.put("rSF", Shared_Common_Pref.Sf_Code);
             jj.put("State_Code", Shared_Common_Pref.StateCode);
-            jj.put("Activity_Date", MissedDate);
+            jj.put("Activity_Date", missedDates);
             Log.v("json_obj_ta", jj.toString());
             Call<ResponseBody> Callto = apiInterface.getStartKmDetails(jj.toString());
 

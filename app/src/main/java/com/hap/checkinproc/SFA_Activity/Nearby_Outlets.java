@@ -162,18 +162,18 @@ JSONArray resData;
         lngy=Shared_Common_Pref.Outletlong;
         map.setMyLocationEnabled(true);
         map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(laty, lngy)));
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
         getExploreDr();
     }
 
     public void getExploreDr(){
         sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location="+laty+","+lngy);
-        sb.append("&radius=5000");
-        sb.append("&types=[milk,juice]");
-        sb.append("&sensor=true");
+        sb.append("&radius=500");
+        sb.append("&keyword=milk | juice");
         sb.append("&key="+"AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
         Log.v("Doctor_detail_print",sb.toString());
-
+        //https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&keyword=milk|juice&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU
         new findDrDetail().execute();
     }
     class findDrDetail extends AsyncTask<Void,Void,Void> {

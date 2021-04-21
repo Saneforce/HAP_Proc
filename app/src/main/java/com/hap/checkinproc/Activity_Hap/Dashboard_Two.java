@@ -412,13 +412,14 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 newItem.addProperty("color", fItm.get("StaColor").getAsString());
                 dyRpt.add(newItem);
 
-                newItem = new JsonObject();
-                newItem.addProperty("name", "Location");
-                newItem.addProperty("value", fItm.get("HQNm").getAsString());
-                newItem.addProperty("color", fItm.get("StaColor").getAsString());
-                newItem.addProperty("type", "geo");
-                dyRpt.add(newItem);
-                
+                if(!fItm.get("HQNm").getAsString().equalsIgnoreCase("")) {
+                    newItem = new JsonObject();
+                    newItem.addProperty("name", "Location");
+                    newItem.addProperty("value", fItm.get("HQNm").getAsString());
+                    newItem.addProperty("color", fItm.get("StaColor").getAsString());
+                    newItem.addProperty("type", "geo");
+                    dyRpt.add(newItem);
+                }
                 newItem = new JsonObject();
                 newItem.addProperty("name", "Check-In");
                 newItem.addProperty("value", fItm.get("AttTm").getAsString());
@@ -726,6 +727,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
+
+        GetMissedPunch();
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }

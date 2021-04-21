@@ -23,7 +23,7 @@ public class Permission_Status_Adapter extends RecyclerView.Adapter<Permission_S
     String AMod;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView sf_name, permission_date, Ptime, Preason, Papplieddate, PStatus, Papproved, SfName;
+        public TextView sf_name, permission_date, Ptime, Preason, Papplieddate, PStatus, Papproved, SfName,txtHours;
         RelativeLayout sf_namelayout;
 
         public MyViewHolder(View view) {
@@ -36,6 +36,7 @@ public class Permission_Status_Adapter extends RecyclerView.Adapter<Permission_S
             PStatus = view.findViewById(R.id.PStatus);
             Papproved = view.findViewById(R.id.Papproved);
             SfName = view.findViewById(R.id.SfName);
+            txtHours=view.findViewById(R.id.leavedays);
             sf_namelayout = view.findViewById(R.id.sf_namelayout);
         }
     }
@@ -64,6 +65,7 @@ public class Permission_Status_Adapter extends RecyclerView.Adapter<Permission_S
         holder.Preason.setText(Permission_Status_Model.getReason());
         holder.Papplieddate.setText("Applied: " + Permission_Status_Model.getCreatedDate());
         holder.PStatus.setText(Permission_Status_Model.getPStatus());
+        holder.txtHours.setText(Permission_Status_Model.getNoofHours());
         if (Permission_Status_Model.getApprovalFlag() == 0) {
             if (AMod.equals("1")) {
                 holder.sf_namelayout.setVisibility(View.VISIBLE);

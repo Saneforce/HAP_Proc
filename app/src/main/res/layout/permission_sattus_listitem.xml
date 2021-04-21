@@ -96,7 +96,7 @@
 
                         <TextView
                             style="@style/TextStyleOne"
-                            android:text="Days"
+                            android:text="Hours"
                             android:textAllCaps="true"
                             android:textColor="@color/dark_greys"
                             android:textSize="11dp" />
