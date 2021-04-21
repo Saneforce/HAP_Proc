@@ -294,7 +294,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             //Get_MydayPlan(common_class.getintentValues("TourDate"));
         } else {
             GetJsonData(new Gson().toJson(noticeArrayList), "6");
-            common_class.ProgressdialogShow(2, "Day plan");
+            common_class.ProgressdialogShow(1, "Day plan");
             Get_MydayPlan(com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly());
         }
 
@@ -665,37 +665,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 return false;
             }
         }
-
-
-      /*  if (Shared_Common_Pref.Dept_Type.equals("1") && Worktype_Button.indexOf("H") > -1 && (hq_text.getText().toString() == null || hq_text.getText().toString().isEmpty() || hq_text.getText().toString().equalsIgnoreCase(""))) {
-            Toast.makeText(this, "Select The Head Quarters", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (Shared_Common_Pref.Dept_Type.equals("1") && Worktype_Button.indexOf("C") > -1 && (chilling_text.getText().toString() == null || chilling_text.getText().toString().isEmpty() || chilling_text.getText().toString().equalsIgnoreCase(""))) {
-            Toast.makeText(this, "Select The Chilling Center", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (Shared_Common_Pref.Dept_Type.equals("1") && Worktype_Button.indexOf("S") > -1 && (shift_type.getText().toString() == null || shift_type.getText().toString().isEmpty() || shift_type.getText().toString().equalsIgnoreCase(""))) {
-            Toast.makeText(this, "Select The Shift M/E", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (Worktype_Button.indexOf("D") > -1 && (distributor_text.getText().toString() == null || distributor_text.getText().toString().isEmpty() || distributor_text.getText().toString().equalsIgnoreCase(""))) {
-            Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (Worktype_Button.indexOf("R") > -1 && (route_text.getText().toString() == null || route_text.getText().toString().isEmpty() || route_text.getText().toString().equalsIgnoreCase(""))) {
-            Toast.makeText(this, "Select The Route", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-        if (Worktype_Button.indexOf("EA") > -1) {
-
-            if (TextMode.getText().toString() == null || TextMode.getText().toString().isEmpty() || TextMode.getText().toString().equalsIgnoreCase("")) {
-                Toast.makeText(this, "Select The Mode of Travel", Toast.LENGTH_SHORT).show();
-                return false;
-            }
-
-        }*/
-
         return true;
     }
 
@@ -911,24 +880,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                             submitbutton.setVisibility(View.GONE);
                         }
                        /* Worktype_Button = String.valueOf(jsoncc.getJSONObject(0).get("Button_Access"));
-                        if (String.valueOf(jsoncc.getJSONObject(0).get("Button_Access")).indexOf("R") > -1) {
-                            route_layout.setVisibility(View.VISIBLE);
-                            routename = String.valueOf(jsoncc.getJSONObject(0).get("RouteName"));
-                            route_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("RouteName")));
-                            routeid = String.valueOf(jsoncc.getJSONObject(0).get("RouteCode"));
-                        } else {
-                            route_text.setText("");
-                            route_layout.setVisibility(View.GONE);
-                        }
-                        if (String.valueOf(jsoncc.getJSONObject(0).get("Button_Access")).indexOf("D") > -1) {
-                            distributors_layout.setVisibility(View.VISIBLE);
-                            distributorid = String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Code"));
-                            loadroute(String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Code")));
-                            distributor_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("Worked_with_Name")));
-                        } else {
-                            distributor_text.setText("");
-                            distributors_layout.setVisibility(View.GONE);
-                        }
+
 
                         if (String.valueOf(jsoncc.getJSONObject(0).get("Button_Access")).indexOf("J") > -1) {
                             jointwork_layout.setVisibility(View.VISIBLE);
@@ -1214,6 +1166,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 holder.edittextid.setText(SEttextvalues);
                 if (dynamicarray.get(position).getControl_id().equals("1")) {
                     holder.edittextid.setInputType(InputType.TYPE_CLASS_TEXT);
+                } else if (dynamicarray.get(position).getControl_id().equals("2")) {
+                    holder.edittextid.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 } else if (dynamicarray.get(position).getControl_id().equals("3")) {
                     holder.edittextid.setInputType(InputType.TYPE_CLASS_NUMBER);
                 } else if (dynamicarray.get(position).getControl_id().equals("18")) {
@@ -1354,6 +1308,5 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         DatePickerDialog.show();
     }
-
 
 }

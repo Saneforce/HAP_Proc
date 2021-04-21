@@ -1,6 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -294,7 +295,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             //Get_MydayPlan(common_class.getintentValues("TourDate"));
         } else {
             GetJsonData(new Gson().toJson(noticeArrayList), "6");
-            common_class.ProgressdialogShow(2, "Day plan");
+            common_class.ProgressdialogShow(1, "Tour plan PJP");
             Get_MydayPlan(common_class.getintentValues("TourDate"));
         }
 
@@ -1095,7 +1096,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     }
 
     public void GetTp_Worktype_Fields(String wflag) {
-
+        common_class.ProgressdialogShow(1, "Tour plan PJP");
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "get/worktypefields");
         QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
@@ -1110,6 +1111,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             public void onResponse(Call<Object> call, Response<Object> response) {
                 try {
                     if (response.isSuccessful()) {
+                        common_class.ProgressdialogShow(2, "Tour plan PJP");
                         Log.v("print_upload_file_true", "ggg" + response);
                         String jsonData = null;
                         Tp_dynamicArraylist.clear();
@@ -1158,7 +1160,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-
+                common_class.ProgressdialogShow(2, "Tour plan PJP");
             }
         });
     }
@@ -1204,13 +1206,15 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             holder.tpcaptions.setText(dynamicarray.get(position).getFld_Name());
             String titlecaptions = dynamicarray.get(position).getFld_Name();
             String SEttextvalues = dynamicarray.get(position).getFilter_Value();
-            if (dynamicarray.get(position).getControl_id().equals("1") || dynamicarray.get(position).getControl_id().equals("3") || dynamicarray.get(position).getControl_id().equals("18") || dynamicarray.get(position).getControl_id().equals("24") || dynamicarray.get(position).getControl_id().equals("24")) {
+            if (dynamicarray.get(position).getControl_id().equals("1") ||dynamicarray.get(position).getControl_id().equals("2")||    dynamicarray.get(position).getControl_id().equals("3") || dynamicarray.get(position).getControl_id().equals("18") || dynamicarray.get(position).getControl_id().equals("24") || dynamicarray.get(position).getControl_id().equals("24")) {
                 holder.edittextid.setHint("" + titlecaptions);
                 holder.edittextid.setVisibility(View.VISIBLE);
                 holder.edittextid.setText(SEttextvalues);
                 if (dynamicarray.get(position).getControl_id().equals("1")) {
                     holder.edittextid.setInputType(InputType.TYPE_CLASS_TEXT);
-                } else if (dynamicarray.get(position).getControl_id().equals("3")) {
+                }else if (dynamicarray.get(position).getControl_id().equals("2")) {
+                    holder.edittextid.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+                }  else if (dynamicarray.get(position).getControl_id().equals("3")) {
                     holder.edittextid.setInputType(InputType.TYPE_CLASS_NUMBER);
                 } else if (dynamicarray.get(position).getControl_id().equals("18")) {
                     holder.edittextid.setInputType(InputType.TYPE_CLASS_PHONE);

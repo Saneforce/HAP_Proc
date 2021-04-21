@@ -247,6 +247,6 @@
 
 
     </LinearLayout>
-
+    <include layout="@layout/back_arrow"></include>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
