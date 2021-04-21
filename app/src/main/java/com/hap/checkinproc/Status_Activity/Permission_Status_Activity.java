@@ -144,7 +144,7 @@ public class Permission_Status_Activity extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Permission_Status_Activity.super.onBackPressed();
+                   finish();
                 }
             });
 

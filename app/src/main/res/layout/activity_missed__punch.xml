@@ -71,18 +71,6 @@
                     </LinearLayout>
 
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:visibility="gone">
-
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="41dp"
-                            android:background="@drawable/button_yellow" />
-
-                    </RelativeLayout>
 
 
                     <TextView
@@ -263,6 +251,7 @@
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/round_white_backround"
                                     android:hint="Ended km"
+                                    android:maxLength="8"
                                     android:inputType="number"
                                     android:padding="10dp"
                                     android:textSize="13dp" />

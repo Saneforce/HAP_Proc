@@ -139,7 +139,7 @@ public class WeekOff_Status_Activity extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    WeekOff_Status_Activity.super.onBackPressed();
+                 finish();
                 }
             });
 

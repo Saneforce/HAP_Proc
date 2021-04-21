@@ -142,7 +142,7 @@ public class DeviationEntryStatus extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    DeviationEntryStatus.super.onBackPressed();
+                  finish();
                 }
             });
 

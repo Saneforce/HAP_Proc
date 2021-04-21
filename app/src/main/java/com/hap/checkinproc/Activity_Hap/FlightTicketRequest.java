@@ -214,7 +214,7 @@ public class FlightTicketRequest extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    FlightTicketRequest.super.onBackPressed();
+                   finish();
                 }
             });
 

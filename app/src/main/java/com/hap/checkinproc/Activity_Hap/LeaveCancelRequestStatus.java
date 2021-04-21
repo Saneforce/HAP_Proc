@@ -22,10 +22,8 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Model_Class.HolidayEntryModel;
 import com.hap.checkinproc.Model_Class.LeaveCancelStatusModel;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.Status_Adapter.HolidayStatusAdapter;
 import com.hap.checkinproc.Status_Adapter.LeaveCancelStatusAdapter;
 import com.hap.checkinproc.common.TimerService;
 
@@ -123,8 +121,8 @@ public class LeaveCancelRequestStatus extends AppCompatActivity {
                 userType = new TypeToken<ArrayList<LeaveCancelStatusModel>>() {
                 }.getType();
                 HolidayApproval = gson.fromJson(new Gson().toJson(response.body()), userType);
-                HolidayRecyclerStatus.setAdapter(new LeaveCancelStatusAdapter(AMOD,HolidayApproval, R.layout.row_leave_cancel_status, getApplicationContext()));
-                Log.e("TAG_HOLIDAY_REPOSNE", "response Tp_View: "+ HolidayApproval);
+                HolidayRecyclerStatus.setAdapter(new LeaveCancelStatusAdapter(AMOD, HolidayApproval, R.layout.row_leave_cancel_status, getApplicationContext()));
+                Log.e("TAG_HOLIDAY_REPOSNE", "response Tp_View: " + HolidayApproval);
             }
 
             @Override
@@ -139,7 +137,7 @@ public class LeaveCancelRequestStatus extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    LeaveCancelRequestStatus.super.onBackPressed();
+                    finish();
                 }
             });
 

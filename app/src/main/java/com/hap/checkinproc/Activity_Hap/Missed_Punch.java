@@ -83,7 +83,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
     Gson gson1;
     List<MissedPunch> leavetypelist;
     Type userType;
-    String missedDates, missedShift, missedCHeckin, missedCheckOut;
+    String missedDates, missedShift, missedCHeckin, missedCheckOut, missedMode = "";
     Button missedSubmit;
     List<Common_Model> missed_punch = new ArrayList<>();
     Common_Model Model_Pojo;
@@ -219,6 +219,14 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             missedShift = params.getString("Shift");
             missedCHeckin = params.getString("CInTm");
             missedCheckOut = params.getString("COutTm");
+            visbleMOde = params.getString("Aflag");
+
+            if (visbleMOde.equalsIgnoreCase("1")) {
+                linMode.setVisibility(View.VISIBLE);
+            } else {
+                linMode.setVisibility(View.GONE);
+            }
+
 
             checkIn.setText(missedCHeckin);
             shiftType.setText(missedShift);
@@ -353,6 +361,17 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             } else {
                 linMode.setVisibility(View.GONE);
 
+            }
+        }
+
+        if (!misseddateselect.getText().toString().equalsIgnoreCase("")) {
+            if (visbleMOde.equalsIgnoreCase("1")) {
+                linMode.setVisibility(View.VISIBLE);
+
+            } else {
+
+
+                linMode.setVisibility(View.GONE);
             }
         }
 
@@ -619,11 +638,11 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                 String COutTime = jsonObject1.optString("COutTime");
                 String ModeCount = jsonObject1.optString("mode_count");
 
-               String visbleMOde = jsonObject1.optString("Aflag");
+                String visbleMOde = jsonObject1.optString("Aflag");
 
 
                 Log.v("visbleMOdevisbleMOde", visbleMOde);
-                Model_Pojo = new Common_Model(shift, MissedDate, Checkin_Time, COutTime, ModeCount,visbleMOde);
+                Model_Pojo = new Common_Model(shift, MissedDate, Checkin_Time, COutTime, ModeCount, visbleMOde);
                 missed_punch.add(Model_Pojo);
                 if(missedDates!=null){
                 if(missedDates.equalsIgnoreCase(Model_Pojo.getId())){
@@ -749,7 +768,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Missed_Punch.super.onBackPressed();
+                    finish();
                 }
             });
 
@@ -877,10 +896,10 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                     try {
                         if (response.isSuccessful()) {
 
-                            Log.v("print_upload_file_true", "ggg" + response);
+                            Log.v("print_upload_file_true", "ggg" + response.body());
                             String jsonData = null;
                             jsonData = response.body().string();
-                            Log.v("response_data", jsonData);
+                            Log.v("response_data", jsonData.toString());
                             JSONObject js = new JSONObject(jsonData);
                             JSONArray jsnArValue = js.getJSONArray("StartDetails");
                             for (int i = 0; i < jsnArValue.length(); i++) {
