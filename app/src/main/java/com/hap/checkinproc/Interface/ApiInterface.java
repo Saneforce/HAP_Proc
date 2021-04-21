@@ -348,6 +348,9 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=get/expenseapprovallist")
     Call<JsonArray> getApprovalList(@Query("SF_Code") String SF_Code);
 
+    @POST("db_new_activity.php?axn=get/expensesubdatestatus")
+    Call<JsonArray> getTaViewStatus(@Query("SF_Code") String SF_Code);
+
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/expensesflist")
     Call<JsonArray> getApprovalDisplay(@Field("data") String data);

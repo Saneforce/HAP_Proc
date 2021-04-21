@@ -109,6 +109,7 @@
 
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C10dp"
@@ -300,6 +301,7 @@
 
 
                 <LinearLayout
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C3dp"
@@ -415,8 +417,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/C8dp"
                     android:layout_marginRight="@dimen/C8dp"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:orientation="vertical">
                     <!--Daily Allowance-->
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
@@ -1283,6 +1284,7 @@
 
                             <LinearLayout
                                 android:id="@+id/lodgContvw"
+                                android:visibility="gone"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
