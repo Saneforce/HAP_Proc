@@ -210,8 +210,6 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
 
         shiftType = (EditText) findViewById(R.id.missed_shift);
         checkIn = (EditText) findViewById(R.id.missed_checkin);
-        leaveTypeMethod();
-
         reasonMP = (EditText) findViewById(R.id.reason_missed);
 
         Bundle params = getIntent().getExtras();
@@ -227,6 +225,8 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             misseddateselect.setText(missedDates);
             checkOutTime.setText(missedCheckOut);
         }
+        leaveTypeMethod();
+
         Log.d(Tag, String.valueOf(params));
 
 
@@ -625,7 +625,47 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                 Log.v("visbleMOdevisbleMOde", visbleMOde);
                 Model_Pojo = new Common_Model(shift, MissedDate, Checkin_Time, COutTime, ModeCount,visbleMOde);
                 missed_punch.add(Model_Pojo);
+                if(missedDates.equalsIgnoreCase(Model_Pojo.getId())){
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.remove("Closing");
+                    editor.remove("Share_to");
+                    editor.remove("Share_Mot");
+                    editor.remove("Share_km");
+                    editor.remove("Share_Img");
+                    editor.remove("Share_to_id");
+                    editor.remove("Share_reason");
+                    editor.remove("misseddateselect");
+                    editor.remove("checkIn");
+                    editor.remove("checkOutTime");
+                    editor.remove("shiftType");
+                    editor.remove("flagCode");
+                    editor.commit();
 
+
+                    EndedEditText.setText("");
+                    EndedKmImage.setImageResource(0);
+                    PersonalKmEdit.setText("");
+
+                    missedDates = Model_Pojo.getId();
+                    missedShift = Model_Pojo.getName();
+                    missedCHeckin = Model_Pojo.getFlag();
+                    checkIn.setText(Model_Pojo.getFlag());
+                    shiftType.setText(Model_Pojo.getName());
+                    misseddateselect.setText(Model_Pojo.getId());
+                    checkOutTime.setText(Model_Pojo.getAddress());
+                    missedCheckOut = Model_Pojo.getAddress();
+                    count = Model_Pojo.getPho();
+                    visbleMOde = Model_Pojo.getCont();
+
+                    if (visbleMOde.equalsIgnoreCase("1")) {
+                        linMode.setVisibility(View.VISIBLE);
+
+                    } else {
+
+
+                        linMode.setVisibility(View.GONE);
+                    }
+                }
             }
 
 
