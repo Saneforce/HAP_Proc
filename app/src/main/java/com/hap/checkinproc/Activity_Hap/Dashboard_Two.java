@@ -514,6 +514,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                         mIntent.putExtra("Shift", mItem.get("name1").getAsString());
                                         mIntent.putExtra("CInTm", mItem.get("CInTm").getAsString());
                                         mIntent.putExtra("COutTm", mItem.get("COutTm").getAsString());
+                                        mIntent.putExtra("Aflag", mItem.get("Aflag").getAsString());
                                         Dashboard_Two.this.startActivity(mIntent);
                                     }
                                 })

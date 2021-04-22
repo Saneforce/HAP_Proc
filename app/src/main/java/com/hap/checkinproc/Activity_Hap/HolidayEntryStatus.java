@@ -22,12 +22,9 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Interface.LeaveCancelReason;
 import com.hap.checkinproc.Model_Class.HolidayEntryModel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.Status_Adapter.HolidayStatusAdapter;
-import com.hap.checkinproc.Status_Adapter.Leave_Status_Adapter;
-import com.hap.checkinproc.Status_Model_Class.Leave_Status_Model;
 import com.hap.checkinproc.common.TimerService;
 
 import java.lang.reflect.Type;
@@ -45,6 +42,7 @@ public class HolidayEntryStatus extends AppCompatActivity {
     Gson gson;
     Type userType;
     String AMOD = "0";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,8 +122,8 @@ public class HolidayEntryStatus extends AppCompatActivity {
                 userType = new TypeToken<ArrayList<HolidayEntryModel>>() {
                 }.getType();
                 HolidayApproval = gson.fromJson(new Gson().toJson(response.body()), userType);
-                HolidayRecyclerStatus.setAdapter(new HolidayStatusAdapter(AMOD,HolidayApproval, R.layout.row_holiday_status, getApplicationContext()));
-                Log.e("TAG_HOLIDAY_REPOSNE", "response Tp_View: "+ HolidayApproval);
+                HolidayRecyclerStatus.setAdapter(new HolidayStatusAdapter(AMOD, HolidayApproval, R.layout.row_holiday_status, getApplicationContext()));
+                Log.e("TAG_HOLIDAY_REPOSNE", "response Tp_View: " + HolidayApproval);
             }
 
             @Override
@@ -141,7 +139,7 @@ public class HolidayEntryStatus extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    HolidayEntryStatus.super.onBackPressed();
+                    finish();
                 }
             });
 
@@ -150,6 +148,7 @@ public class HolidayEntryStatus extends AppCompatActivity {
     public void onBackPressed() {
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();

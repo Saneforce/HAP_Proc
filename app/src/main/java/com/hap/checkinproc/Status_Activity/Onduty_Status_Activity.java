@@ -137,7 +137,7 @@ public class Onduty_Status_Activity extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Onduty_Status_Activity.super.onBackPressed();
+                 finish();
                 }
             });
 

@@ -158,7 +158,7 @@ public class Leave_Status_Activity extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Leave_Status_Activity.super.onBackPressed();
+                    finish();
                 }
             });
 

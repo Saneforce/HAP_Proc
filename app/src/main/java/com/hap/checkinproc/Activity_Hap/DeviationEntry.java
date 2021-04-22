@@ -422,7 +422,7 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    DeviationEntry.super.onBackPressed();
+              finish();
                 }
             });
 

@@ -653,7 +653,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Permission_Request.super.onBackPressed();
+                  finish();
                 }
             });
 

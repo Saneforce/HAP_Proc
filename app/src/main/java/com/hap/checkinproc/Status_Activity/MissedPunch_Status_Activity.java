@@ -142,7 +142,7 @@ public class MissedPunch_Status_Activity extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    MissedPunch_Status_Activity.super.onBackPressed();
+                  finish();
                 }
             });
 

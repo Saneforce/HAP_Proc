@@ -727,7 +727,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Leave_Request.super.onBackPressed();
+                  finish();
                 }
             });
 

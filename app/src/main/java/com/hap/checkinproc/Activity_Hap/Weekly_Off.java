@@ -317,7 +317,7 @@ public class Weekly_Off extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Weekly_Off.super.onBackPressed();
+                   finish();
                 }
             });
 

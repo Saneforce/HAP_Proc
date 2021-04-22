@@ -1131,8 +1131,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     }
 
     public void submitData() {
-
-
+        
         String n = "True";
         String Mode = TextMode.getText().toString();
         SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -1140,10 +1139,8 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         editor.putString(MOT, Mode);
         editor.putString("MdeTpID", startEnd);
         editor.commit();
-
         Log.e("STRCodeSTRCode", startEnd);
         // STRCode = STRCode.replace("^[\"']+|[\"']+$", "");
-
         try {
             JSONObject jj = new JSONObject();
             jj.put("hap_location", selecthaplocationss.getText().toString());
