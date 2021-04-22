@@ -34,7 +34,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
 
     Common_Class common_class;
     LinearLayout LeaveRequest, PermissionRequest, FlightTick, WeeklyOff, DeveiationEntry;
-    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, MissedPunc,ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus;
+    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, MissedPunc, ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus;
     TextView countLeaveRequest, countPermissionRequest, countMissedPunch, countWeeklyOff;
     Shared_Common_Pref mShared_common_pref;
 
@@ -213,7 +213,17 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Leave_Dashboard.super.onBackPressed();
+                    SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                    Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                    if (CheckIn == true) {
+                        Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                        Dashboard.putExtra("Mode", "CIN");
+                        startActivity(Dashboard);
+                        finish();
+
+                    } else
+                        startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                    finish();
                 }
             });
 

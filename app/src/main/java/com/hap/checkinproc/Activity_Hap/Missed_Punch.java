@@ -644,48 +644,48 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                 Log.v("visbleMOdevisbleMOde", visbleMOde);
                 Model_Pojo = new Common_Model(shift, MissedDate, Checkin_Time, COutTime, ModeCount, visbleMOde);
                 missed_punch.add(Model_Pojo);
-                if(missedDates!=null){
-                if(missedDates.equalsIgnoreCase(Model_Pojo.getId())){
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
-                    editor.remove("Closing");
-                    editor.remove("Share_to");
-                    editor.remove("Share_Mot");
-                    editor.remove("Share_km");
-                    editor.remove("Share_Img");
-                    editor.remove("Share_to_id");
-                    editor.remove("Share_reason");
-                    editor.remove("misseddateselect");
-                    editor.remove("checkIn");
-                    editor.remove("checkOutTime");
-                    editor.remove("shiftType");
-                    editor.remove("flagCode");
-                    editor.commit();
+                if (missedDates != null) {
+                    if (missedDates.equalsIgnoreCase(Model_Pojo.getId())) {
+                        SharedPreferences.Editor editor = sharedpreferences.edit();
+                        editor.remove("Closing");
+                        editor.remove("Share_to");
+                        editor.remove("Share_Mot");
+                        editor.remove("Share_km");
+                        editor.remove("Share_Img");
+                        editor.remove("Share_to_id");
+                        editor.remove("Share_reason");
+                        editor.remove("misseddateselect");
+                        editor.remove("checkIn");
+                        editor.remove("checkOutTime");
+                        editor.remove("shiftType");
+                        editor.remove("flagCode");
+                        editor.commit();
 
 
-                    EndedEditText.setText("");
-                    EndedKmImage.setImageResource(0);
-                    PersonalKmEdit.setText("");
+                        EndedEditText.setText("");
+                        EndedKmImage.setImageResource(0);
+                        PersonalKmEdit.setText("");
 
-                    missedDates = Model_Pojo.getId();
-                    missedShift = Model_Pojo.getName();
-                    missedCHeckin = Model_Pojo.getFlag();
-                    checkIn.setText(Model_Pojo.getFlag());
-                    shiftType.setText(Model_Pojo.getName());
-                    misseddateselect.setText(Model_Pojo.getId());
-                    checkOutTime.setText(Model_Pojo.getAddress());
-                    missedCheckOut = Model_Pojo.getAddress();
-                    count = Model_Pojo.getPho();
-                    visbleMOde = Model_Pojo.getCont();
+                        missedDates = Model_Pojo.getId();
+                        missedShift = Model_Pojo.getName();
+                        missedCHeckin = Model_Pojo.getFlag();
+                        checkIn.setText(Model_Pojo.getFlag());
+                        shiftType.setText(Model_Pojo.getName());
+                        misseddateselect.setText(Model_Pojo.getId());
+                        checkOutTime.setText(Model_Pojo.getAddress());
+                        missedCheckOut = Model_Pojo.getAddress();
+                        count = Model_Pojo.getPho();
+                        visbleMOde = Model_Pojo.getCont();
 
-                    if (visbleMOde.equalsIgnoreCase("1")) {
-                        linMode.setVisibility(View.VISIBLE);
+                        if (visbleMOde.equalsIgnoreCase("1")) {
+                            linMode.setVisibility(View.VISIBLE);
 
-                    } else {
+                        } else {
 
 
-                        linMode.setVisibility(View.GONE);
+                            linMode.setVisibility(View.GONE);
+                        }
                     }
-                }
                 }
             }
 
@@ -697,13 +697,14 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
 
     public void missedPunchSubmit() {
 
+
         JSONObject jsonleaveType = new JSONObject();
         JSONObject jsonleaveTypeS = new JSONObject();
         JSONArray jsonArray1 = new JSONArray();
         try {
 
-            jsonleaveType.put("missed_date", missedDates);
-            jsonleaveType.put("Shift_Name", missedShift);
+            jsonleaveType.put("missed_date", misseddateselect.getText().toString());
+            jsonleaveType.put("Shift_Name", shiftType.getText().toString());
             jsonleaveType.put("checkouttime", missedCheckOut);
             jsonleaveType.put("checkinTime", missedCHeckin);
             jsonleaveType.put("reason", reasonMP.getText().toString());
@@ -734,6 +735,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
 
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonObject> call = service.SubmitmissedPunch(Shared_Common_Pref.Sf_Name, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "MGR", leaveCap1);
+        Log.e("TOTAL_REQUEST", call.request().toString());
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -768,6 +770,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
+                    startActivity(new Intent(Missed_Punch.this, Leave_Dashboard.class));
                     finish();
                 }
             });
@@ -878,7 +881,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
     public void callApi() {
 
         try {
-            if(missedDates==null) return;
+            if (missedDates == null) return;
             JSONObject jj = new JSONObject();
 
             jj.put("div", Shared_Common_Pref.Div_Code);
