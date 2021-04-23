@@ -223,144 +223,6 @@
                                     android:textSize="13sp" />
                             </LinearLayout>
 
-                            <!--  <LinearLayout
-                                  android:id="@+id/joint_work_lt"
-                                  android:layout_width="match_parent"
-                                  android:layout_height="wrap_content"
-                                  android:layout_marginTop="@dimen/C15dp"
-                                  android:orientation="vertical">
-
-                                  <TextView
-                                      android:layout_width="wrap_content"
-                                      android:layout_height="wrap_content"
-                                      android:layout_marginTop="15dp"
-                                      android:fontFamily="@font/basic"
-                                      android:text="@string/txt_jointwork"
-                                      android:textColor="#000000"
-                                      android:textStyle="bold" />
-
-                                  <LinearLayout
-                                      android:id="@+id/jointwork_layout"
-                                      android:layout_width="match_parent"
-                                      android:layout_height="wrap_content"
-                                      android:layout_marginTop="@dimen/C15dp"
-                                      android:orientation="horizontal">
-
-                                      <TextView
-
-                                          android:layout_width="match_parent"
-                                          android:layout_height="wrap_content"
-                                          android:layout_marginTop="@dimen/C10dp"
-                                          android:layout_weight="1"
-                                          android:background="@drawable/round_white_backround"
-                                          android:hint="@string/txt_select_jointwork"
-                                          android:padding="@dimen/C10dp" />
-                                      <ImageView
-                                          android:id="@+id/arowimg"
-                                          android:layout_width="wrap_content"
-                                          android:layout_height="wrap_content"
-                                          android:layout_gravity="center"
-                                          android:src="@drawable/arrow_down" />
-
-                                  </LinearLayout>
-                              </LinearLayout>-->
-
-
-                            <LinearLayout
-                                android:id="@+id/jointwork_layout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/C15dp"
-                                android:orientation="vertical"
-                                android:visibility="gone">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:orientation="horizontal">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/basic"
-                                        android:text="@string/txt_jointwork"
-                                        android:textColor="#000000"
-                                        android:textStyle="bold" />
-
-                                    <LinearLayout
-                                        android:layout_width="23dp"
-                                        android:layout_height="23dp"
-                                        android:layout_marginLeft="15dp"
-                                        android:background="@drawable/circle">
-
-                                        <TextView
-                                            android:id="@+id/text_tour_plancount"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="match_parent"
-                                            android:maxEms="2"
-                                            android:text="0"
-                                            android:textAlignment="center"
-                                            android:textColor="@android:color/white"></TextView>
-                                    </LinearLayout>
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical">
-
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="5dp"
-                                        android:orientation="horizontal">
-
-                                        <LinearLayout
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_margin="@dimen/C2dp"
-                                            android:layout_weight="1"
-                                            android:background="@drawable/round_white_backround"
-                                            android:elevation="@dimen/C2dp"
-                                            android:orientation="vertical"
-                                            android:padding="5dp">
-
-                                            <EditText
-                                                android:id="@+id/empidedittext"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:background="@null"
-                                                android:hint="EMP ID"
-                                                android:inputType="text"
-                                                android:padding="5dp"
-                                                android:textSize="13dp" />
-                                        </LinearLayout>
-
-
-                                        <Button
-                                            android:id="@+id/GetEmpId"
-                                            android:layout_width="80dp"
-                                            android:layout_height="37dp"
-                                            android:layout_margin="@dimen/C2dp"
-                                            android:background="@drawable/otherlocations"
-                                            android:padding="@dimen/C5dp"
-                                            android:text="Get"
-                                            android:textColor="@color/white"
-                                            android:textSize="@dimen/C8dp" />
-
-                                    </LinearLayout>
-
-
-                                </LinearLayout>
-
-                                <androidx.recyclerview.widget.RecyclerView
-                                    android:id="@+id/jointwork_recycler"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/C10dp" />
-                            </LinearLayout>
-
 
                         </LinearLayout>
 
@@ -371,18 +233,112 @@
                         android:id="@+id/Dynamictpview"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:layout_marginTop="@dimen/C5dp">
+                        android:orientation="vertical">
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/dynamicrecyclerview"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-
-                            android:padding="@dimen/C10dp" />
+                            android:padding="@dimen/C5dp" />
 
 
                     </LinearLayout>
 
+
+
+                    <LinearLayout
+                        android:id="@+id/jointwork_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/C5dp"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:orientation="horizontal">
+                            <TextView
+                                style="@style/TextStyle"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/txt_jointwork"
+                                android:textColor="#000000" />
+
+                            <LinearLayout
+                                android:layout_width="23dp"
+                                android:layout_height="23dp"
+                                android:layout_marginLeft="15dp"
+                                android:background="@drawable/circle">
+
+                                <TextView
+                                    android:id="@+id/text_tour_plancount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:maxEms="2"
+                                    android:text="0"
+                                    android:textAlignment="center"
+                                    android:textColor="@android:color/white"></TextView>
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:orientation="vertical">
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:orientation="horizontal">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/C2dp"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/round_white_backround"
+                                    android:elevation="@dimen/C2dp"
+                                    android:orientation="vertical"
+                                    android:padding="5dp">
+                                    <EditText
+                                        android:id="@+id/empidedittext"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@null"
+                                        android:hint="EMP ID"
+                                        android:inputType="text"
+                                        android:padding="5dp"
+                                        android:textSize="13dp" />
+                                </LinearLayout>
+
+
+                                <Button
+                                    android:id="@+id/GetEmpId"
+                                    android:layout_width="80dp"
+                                    android:layout_height="37dp"
+                                    android:layout_margin="@dimen/C2dp"
+                                    android:background="@drawable/otherlocations"
+                                    android:padding="@dimen/C5dp"
+                                    android:text="Get"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/C8dp" />
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/jointwork_recycler"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/C5dp" />
+                        />
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"

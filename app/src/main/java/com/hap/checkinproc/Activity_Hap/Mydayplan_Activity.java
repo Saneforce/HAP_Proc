@@ -178,7 +178,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         presenter = new MasterSync_Implementations(this, new Master_Sync_View());
         presenter.requestDataFromServer();
         jointwork_layout = findViewById(R.id.jointwork_layout);
-        jointwork_layout = findViewById(R.id.jointwork_layout);
         jointwork_recycler = findViewById(R.id.jointwork_recycler);
         jointwork_recycler.setLayoutManager(new LinearLayoutManager(this));
     /*    image = findViewById(R.id.arowimg);
@@ -221,29 +220,14 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 dynamicMode();
             }
         });
-        if (Shared_Common_Pref.Dept_Type.equals("1")) {
-            jointwork_layout.setVisibility(View.GONE);
-            distributors_layout.setVisibility(View.GONE);
-            route_layout.setVisibility(View.GONE);
-            Procrumentlayout.setVisibility(View.VISIBLE);
-            edt_remarks.setHint("Enter the Purpose of Visit");
-            Remarkscaption.setText("Visiting Purpose");
-        } else {
 
-            jointwork_layout.setVisibility(View.VISIBLE);
-            distributors_layout.setVisibility(View.VISIBLE);
-            route_layout.setVisibility(View.VISIBLE);
-            Procrumentlayout.setVisibility(View.GONE);
-            Remarkscaption.setText("Remarks");
-            edt_remarks.setHint("Enter The Remarks");
-        }
 
         distributors_layout.setVisibility(View.GONE);
         chillinglayout.setVisibility(View.GONE);
         hqlayout.setVisibility(View.GONE);
         shiftypelayout.setVisibility(View.GONE);
         route_layout.setVisibility(View.GONE);
-        jointwork_layout.setVisibility(View.GONE);
+
 
         CardDailyAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -336,6 +320,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             Fieldworkflag = myDataset.get(position).getFlag();
             Worktype_Button = myDataset.get(position).getCheckouttime();
             Log.e("LogWorktype", String.valueOf(myDataset.get(position).getId()));
+            jointwork_layout.setVisibility(View.GONE);
             GetTp_Worktype_Fields(Worktype_Button);
             Log.e("FIELD_Dept_Type", Shared_Common_Pref.Dept_Type);
         } else if (type == 7) {
@@ -449,7 +434,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                                 ProductJson_Object.put("Fld_Src_Name", dynamicarray.get(z).getFld_Src_Name());
                                 ProductJson_Object.put("Fld_Src_Field", dynamicarray.get(z).getFld_Src_Field());
                                 ProductJson_Object.put("Fld_Length", dynamicarray.get(z).getFld_Length());
-                                ProductJson_Object.put("Fld_Symbol", String.valueOf(dynamicarray.get(z).getFld_Symbol()));
+                                ProductJson_Object.put("Fld_Symbol",dynamicarray.get(z).getFld_Symbol());
                                 ProductJson_Object.put("Fld_Mandatory", dynamicarray.get(z).getFld_Mandatory());
                                 ProductJson_Object.put("Active_flag", dynamicarray.get(z).getActive_flag());
                                 ProductJson_Object.put("Control_id", dynamicarray.get(z).getControl_id());
@@ -457,6 +442,13 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                                 ProductJson_Object.put("Filter_Text", dynamicarray.get(z).getFilter_Text());
                                 ProductJson_Object.put("Filter_Value", dynamicarray.get(z).getFilter_Value());
                                 ProductJson_Object.put("Field_Col", dynamicarray.get(z).getField_Col());
+                                if(dynamicarray.get(z).getFld_Symbol().equals("D")){
+                                    jsonobj.put("Worked_with_Code", dynamicarray.get(z).getFilter_Text());
+                                    jsonobj.put("Worked_with_Name",dynamicarray.get(z).getFilter_Value());
+                                }else if(dynamicarray.get(z).getFld_Symbol().equals("R")){
+                                    jsonobj.put("RouteCode", dynamicarray.get(z).getFilter_Text());
+                                    jsonobj.put("RouteName",dynamicarray.get(z).getFilter_Value());
+                                }
                                 personarray.put(ProductJson_Object);
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -465,7 +457,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                         jsonarrplan.put("Tp_Dayplan", jsonobj);
                         jsonarrplan.put("Tp_DynamicValues", personarray);
                         jsonarr.put(jsonarrplan);
-
                         Log.e("Mydayplan_Object", jsonarr.toString());
                         Map<String, String> QueryString = new HashMap<>();
                         QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
@@ -474,9 +465,9 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                         QueryString.put("desig", "MGR");
                         QueryString.put("axn", "save/dayplandynamic");
                         Log.e("QueryString", String.valueOf(QueryString));
-                        Log.e("QueryString_SF", Shared_Common_Pref.Sf_Code);
+                    /*    Log.e("QueryString_SF", Shared_Common_Pref.Sf_Code);
                         Log.e("QueryString_DV", Shared_Common_Pref.Div_Code);
-                        Log.e("QueryString_Sc", Shared_Common_Pref.StateCode);
+                        Log.e("QueryString_Sc", Shared_Common_Pref.StateCode);*/
                         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                         Call<Object> Callto = apiInterface.Tb_Mydayplannew(QueryString, jsonarr.toString());
                         Callto.enqueue(new Callback<Object>() {
@@ -511,19 +502,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     }
                 }
                 break;
-            case R.id.jointwork_layout:
- /*   if (joint_flag == 0) {
-             joint_flag = 1;
-             //image.setImageResource(R.drawable.arrow_up);
-             joint_work_Recyclerview.setVisibility(View.VISIBLE);
-             Log.e("JOINTWORK_UP", "1");
-         } else {
-             Log.e("JOINTWORK_DOWN", "2");
-            // image.setImageResource(R.drawable.arrow_down);
-             joint_flag = 0;
-             joint_work_Recyclerview.setVisibility(View.GONE);
-         }*/
-                break;
             case R.id.worktypelayout:
                 customDialog = new CustomListViewDialog(Mydayplan_Activity.this, worktypelist, -1);
                 Window window = customDialog.getWindow();
@@ -532,77 +510,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 customDialog.show();
                 Log.e("Work_Type_List", String.valueOf(worktypelist));
                 break;
-            case R.id.distributors_layout:
-                customDialog = new CustomListViewDialog(Mydayplan_Activity.this, distributor_master, 2);
-                Window windoww = customDialog.getWindow();
-                windoww.setGravity(Gravity.CENTER);
-                windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
-
-                break;
-            case R.id.route_layout:
-                customDialog = new CustomListViewDialog(Mydayplan_Activity.this, FRoute_Master, 3);
-                Window windowww = customDialog.getWindow();
-                windowww.setGravity(Gravity.CENTER);
-                windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
-
-                break;
-
-            case R.id.hqlayout:
-                customDialog = new CustomListViewDialog(Mydayplan_Activity.this, getfieldforcehqlist, 4);
-                Window windowhq = customDialog.getWindow();
-                windowhq.setGravity(Gravity.CENTER);
-                windowhq.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
-
-                break;
-
-            case R.id.shiftypelayout:
-                customDialog = new CustomListViewDialog(Mydayplan_Activity.this, Shift_Typelist, 5);
-                Window windowstype = customDialog.getWindow();
-                windowstype.setGravity(Gravity.CENTER);
-                windowstype.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
-                break;
-        /*    case R.id.from_date:
-                final Calendar cldr = Calendar.getInstance();
-                int day = cldr.get(Calendar.DAY_OF_MONTH);
-                int month = cldr.get(Calendar.MONTH);
-                int year = cldr.get(Calendar.YEAR);
-                // date picker dialog
-                picker = new DatePickerDialog(Tp_Mydayplan.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                eText.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                                //difference();
-                            }
-                        }, year, month, day);
-                Calendar calendarmin = Calendar.getInstance();
-                // calendarmin.set(Integer.parseInt(minYear), Integer.parseInt(minMonth) - 1, Integer.parseInt(minDay));
-                //picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
-                picker.show();
-                break;
-
-            case R.id.to_date:
-
-                final Calendar cldrr = Calendar.getInstance();
-                int dayy = cldrr.get(Calendar.DAY_OF_MONTH);
-                int monthh = cldrr.get(Calendar.MONTH);
-                int yearr = cldrr.get(Calendar.YEAR);
-                // date picker dialog
-                picker = new DatePickerDialog(Tp_Mydayplan.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                etext2.setText(dayOfMonth + "-" + (monthOfYear + 1) + "-" + year);
-                            }
-                        }, yearr, monthh, dayy);
-                picker.show();
-                break;
-*/
-
             case R.id.chillinglayout:
                 customDialog = new CustomListViewDialog(Mydayplan_Activity.this, ChillingCenter_List, 6);
                 Window chillwindow = customDialog.getWindow();
@@ -618,14 +525,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     GetEmpList();
                 }
                 break;
-
-         /*   case R.id.card_from:
-                customDialog = new CustomListViewDialog(Tp_Mydayplan.this, getfieldforcehqlist, 7);
-                Window chillwindoww = customDialog.getWindow();
-                chillwindoww.setGravity(Gravity.CENTER);
-                chillwindoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
-                break;*/
 
             case R.id.card_Toplace:
                 customDialog = new CustomListViewDialog(Mydayplan_Activity.this, getfieldforcehqlist, 102);
@@ -661,10 +560,20 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     public boolean vali() {
         for (int i = 0; i < dynamicarray.size(); i++) {
             if (dynamicarray.get(i).getFilter_Value() != null && dynamicarray.get(i).getFilter_Value().equals("") && dynamicarray.get(i).getFld_Mandatory().equals("1")) {
-                Toast.makeText(this, "Required Field" + dynamicarray.get(i).getFld_Name(), Toast.LENGTH_SHORT).show();
-                return false;
+                if (dynamicarray.get(i).getFld_Symbol().equals("JW")) {
+                    if (Jointworklistview.size() == 0) {
+                        Toast.makeText(this, "Required Field" + "\t\t" + dynamicarray.get(i).getFld_Name(), Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+                } else {
+                    Toast.makeText(this, "Required Field" + "\t\t" + dynamicarray.get(i).getFld_Name(), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
             }
         }
+
+
+
         return true;
     }
 
@@ -739,8 +648,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 }));
 
             }
-            //spinner.setSelection(adapter.getPosition("select worktype"));
-//            parseJsonData_cluster(clustspin_list);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -779,6 +687,29 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                         STRCode = String.valueOf(jsoncc.getJSONObject(0).get("To_Place_ID"));
                         modeVal = String.valueOf(jsoncc.getJSONObject(0).get("Mode_Travel_Id"));
                         Worktype_Button=String.valueOf(jsoncc.getJSONObject(0).get("Button_Access"));
+                        String Jointworkcode = String.valueOf(jsoncc.getJSONObject(0).get("JointworkCode"));
+                        String JointWork_Name = String.valueOf(jsoncc.getJSONObject(0).get("JointWork_Name"));
+                        String[] arrOfStr = Jointworkcode.split(",");
+                        String[] arrOfname = JointWork_Name.split(",");
+                        //Model_Pojo = new Common_Model(arrOfStr.get("Sf_Name").getAsString() + "-" + EmpDet.get("sf_Designation_Short_Name").getAsString(), EmpDet.get("Sf_Code").getAsString(), false);
+                        for (int ik = 0; arrOfStr.length > ik; ik++) {
+                            Model_Pojo = new Common_Model(arrOfname[ik], arrOfStr[ik], false);
+                            Jointworklistview.add(Model_Pojo);
+                        }
+
+                        if (Jointworklistview.size() > 0) {
+                            jointwork_layout.setVisibility(View.VISIBLE);
+                            text_tour_plancount.setText(String.valueOf(arrOfStr.length));
+                            adapter = new Joint_Work_Adapter(Jointworklistview, R.layout.jointwork_listitem, getApplicationContext(), "10", new Joint_Work_Listner() {
+                                @Override
+                                public void onIntentClick(int position, boolean flag) {
+                                    Jointworklistview.remove(position);
+                                    text_tour_plancount.setText(String.valueOf(Jointworklistview.size()));
+                                    adapter.notifyDataSetChanged();
+                                }
+                            });
+                            jointwork_recycler.setAdapter(adapter);
+                        }
                         if (modeVal.equals("0")) {
                             TextMode.setText(modeTypeVale);
                             TextMode.setText(String.valueOf(jsoncc.getJSONObject(0).get("MOT")));
@@ -795,14 +726,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                             } else {
                                 BusTo.setVisibility(View.VISIBLE);
                             }
-
                             dailyAllowance.setText(String.valueOf(jsoncc.getJSONObject(0).get("DA_Type")));
-
                         }
-
-                        Log.e("TP_VALUE", StrID);
-                        Log.e("TP_VALUE", STRCode);
-                        Log.e("TP_VALUE", modeVal);
                         if (String.valueOf(jsoncc.getJSONObject(0).get("Driver_Allow")).equals("1")) {
                             linCheckdriver.setVisibility(View.VISIBLE);
                             driverAllowance.setChecked(true);
@@ -812,10 +737,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                         }
 
                         Tp_dynamicArraylist.clear();
-                        //jsonData = response.body();
                         Log.e("response_data", "thiru" + jsonObject.getJSONArray("DynamicViews"));
-                        //array = new ArrayList<>();
-                        // JSONObject js = new JSONObject(jsonData);
                         JSONArray jsnArValue = jsonObject.getJSONArray("DynamicViews");
                         Log.v("AfterTpresponse", jsnArValue.toString());
                         for (int i = 0; i < jsnArValue.length(); i++) {
@@ -827,7 +749,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                                 JSONArray jarray = json_oo.getJSONArray("inputs");
                                 a_listt.clear();
                                 String[] txtArray = json_oo.getString("Fld_Src_Field").split(",");
-                                // Toast.makeText(Tp_Mydayplan.this, "Fld_Src_Field", Toast.LENGTH_SHORT).show();
                                 if (jarray != null && jarray.length() > 0) {
                                     for (int m = 0; m < jarray.length(); m++) {
                                         JSONObject jjss = jarray.getJSONObject(m);
@@ -839,7 +760,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
 
                             }
 
-                            Log.e("THIRUMALAI", String.valueOf(a_listt.size()));
                             Tp_dynamicArraylist.add(new Tp_Dynamic_Modal(json_oo.getString("Fld_ID"), json_oo.getString("Fld_Name"), "", json_oo.getString("Fld_Type"), json_oo.getString("Fld_Src_Name"), json_oo.getString("Fld_Src_Field"), json_oo.getInt("Fld_Length"), json_oo.getString("Fld_Symbol"), json_oo.getString("Fld_Mandatory"), json_oo.getString("Active_flag"), json_oo.getString("Control_id"), json_oo.getString("Target_Form"), json_oo.getString("Filter_Text"), json_oo.getString("Filter_Value"), json_oo.getString("Field_Col"), a_listt));
                         }
 
@@ -849,64 +769,9 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                         //new Tp_Mydayplan.DynamicViewAdapter(Tp_dynamicArraylist, R.layout.tp_dynamic_layout, getApplicationContext(), 0).notifyDataSetChanged();
                         dynamicrecyclerview.setItemViewCacheSize(jsnArValue.length());
 
-                        /*if (Shared_Common_Pref.Dept_Type.equals("1")) {
-                            hq_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("TourHQ_Name")));
-                            hqid = String.valueOf(jsoncc.getJSONObject(0).get("Hq_Id"));
-                            shift_type.setText(String.valueOf(jsoncc.getJSONObject(0).get("Typename")));
-                            shifttypeid = String.valueOf(jsoncc.getJSONObject(0).get("SHift_Type_Id"));
-                            chilling_text.setText(String.valueOf(jsoncc.getJSONObject(0).get("CCentre_Name")));
-                            Chilling_Id = String.valueOf(jsoncc.getJSONObject(0).get("Chilling_Id"));
-                            if (String.valueOf(jsoncc.getJSONObject(0).get("Button_Access")).indexOf("C") > -1) {
-                                chillinglayout.setVisibility(View.VISIBLE);
-                            } else {
-                                chilling_text.setText("");
-                                chillinglayout.setVisibility(View.GONE);
-                            }
-                            if (String.valueOf(jsoncc.getJSONObject(0).get("Button_Access")).indexOf("H") > -1) {
-                                hqlayout.setVisibility(View.VISIBLE);
-                            } else {
-                                hq_text.setText("");
-                                hqlayout.setVisibility(View.GONE);
-                            }
-                            if (String.valueOf(jsoncc.getJSONObject(0).get("Button_Access")).indexOf("S") > -1) {
-                                shiftypelayout.setVisibility(View.VISIBLE);
-                            } else {
-                                shift_type.setText("");
-                                shiftypelayout.setVisibility(View.GONE);
-                            }
-                        }
-*/
                         if (String.valueOf(jsoncc.getJSONObject(0).get("submit_status")).equals("3")) {
                             submitbutton.setVisibility(View.GONE);
                         }
-                       /* Worktype_Button = String.valueOf(jsoncc.getJSONObject(0).get("Button_Access"));
-
-
-                        if (String.valueOf(jsoncc.getJSONObject(0).get("Button_Access")).indexOf("J") > -1) {
-                            jointwork_layout.setVisibility(View.VISIBLE);
-                            String Jointworkcode = String.valueOf(jsoncc.getJSONObject(0).get("JointworkCode"));
-                            String JointWork_Name = String.valueOf(jsoncc.getJSONObject(0).get("JointWork_Name"));
-                            String[] arrOfStr = Jointworkcode.split(",");
-                            String[] arrOfname = JointWork_Name.split(",");
-                            //Model_Pojo = new Common_Model(arrOfStr.get("Sf_Name").getAsString() + "-" + EmpDet.get("sf_Designation_Short_Name").getAsString(), EmpDet.get("Sf_Code").getAsString(), false);
-                            for (int i = 0; arrOfStr.length > i; i++) {
-                                Model_Pojo = new Common_Model(arrOfname[i], arrOfStr[i], false);
-                                Jointworklistview.add(Model_Pojo);
-                            }
-                            text_tour_plancount.setText(String.valueOf(arrOfStr.length));
-                            adapter = new Joint_Work_Adapter(Jointworklistview, R.layout.jointwork_listitem, getApplicationContext(), "10", new Joint_Work_Listner() {
-                                @Override
-                                public void onIntentClick(int position, boolean flag) {
-                                    Jointworklistview.remove(position);
-                                    text_tour_plancount.setText(String.valueOf(Jointworklistview.size()));
-                                    adapter.notifyDataSetChanged();
-                                }
-                            });
-                            jointwork_recycler.setAdapter(adapter);
-                        } else {
-                            jointwork_layout.setVisibility(View.GONE);
-                        }*/
-
 
                     } else {
                         Toast.makeText(Mydayplan_Activity.this, "Tour Plan not Done", Toast.LENGTH_SHORT).show();
@@ -1085,6 +950,10 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                                 JSONArray jarray = json_oo.getJSONArray("inputs");
                                 a_listt.clear();
                                 String[] txtArray = json_oo.getString("Fld_Src_Field").split(",");
+                                if (json_oo.getString("Fld_Symbol").equals("JW")) {
+                                    jointwork_layout.setVisibility(View.VISIBLE);
+                                    Log.e("JOINT_WORK", json_oo.getString("Fld_Symbol"));
+                                }
                                 // Toast.makeText(Tp_Mydayplan.this, "Fld_Src_Field", Toast.LENGTH_SHORT).show();
                                 if (jarray != null && jarray.length() > 0) {
                                     for (int m = 0; m < jarray.length(); m++) {
@@ -1125,13 +994,11 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         private Context context;
         AdapterOnClick mAdapterOnClick;
         private int Categorycolor;
-
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView tpcaptions, Textspinnerview;
             EditText edittextid;
             RadioGroup radiogroup;
             LinearLayout worktypelayout;
-
             public MyViewHolder(View view) {
                 super(view);
                 tpcaptions = view.findViewById(R.id.tpcaptions);
@@ -1157,107 +1024,108 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
 
         @Override
         public void onBindViewHolder(Mydayplan_Activity.DynamicViewAdapter.MyViewHolder holder, int position) {
-            holder.tpcaptions.setText(dynamicarray.get(position).getFld_Name());
-            String titlecaptions = dynamicarray.get(position).getFld_Name();
-            String SEttextvalues = dynamicarray.get(position).getFilter_Value();
-            if (dynamicarray.get(position).getControl_id().equals("1") || dynamicarray.get(position).getControl_id().equals("3") || dynamicarray.get(position).getControl_id().equals("18") || dynamicarray.get(position).getControl_id().equals("24") || dynamicarray.get(position).getControl_id().equals("24")) {
-                holder.edittextid.setHint("" + titlecaptions);
-                holder.edittextid.setVisibility(View.VISIBLE);
-                holder.edittextid.setText(SEttextvalues);
-                if (dynamicarray.get(position).getControl_id().equals("1")) {
-                    holder.edittextid.setInputType(InputType.TYPE_CLASS_TEXT);
-                } else if (dynamicarray.get(position).getControl_id().equals("2")) {
-                    holder.edittextid.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
-                } else if (dynamicarray.get(position).getControl_id().equals("3")) {
-                    holder.edittextid.setInputType(InputType.TYPE_CLASS_NUMBER);
-                } else if (dynamicarray.get(position).getControl_id().equals("18")) {
-                    holder.edittextid.setInputType(InputType.TYPE_CLASS_PHONE);
-                } else if (dynamicarray.get(position).getControl_id().equals("24")) {
-                    holder.edittextid.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
-                } else {
-                    holder.edittextid.setInputType(InputType.TYPE_CLASS_TEXT);
+            if (!dynamicarray.get(position).getFld_Symbol().equals("JW")) {
+                holder.tpcaptions.setVisibility(View.VISIBLE);
+                holder.tpcaptions.setText(dynamicarray.get(position).getFld_Name());
+                String titlecaptions = dynamicarray.get(position).getFld_Name();
+                String SEttextvalues = dynamicarray.get(position).getFilter_Value();
+                if (dynamicarray.get(position).getControl_id().equals("1") || dynamicarray.get(position).getControl_id().equals("3") || dynamicarray.get(position).getControl_id().equals("18") || dynamicarray.get(position).getControl_id().equals("24") || dynamicarray.get(position).getControl_id().equals("24")) {
+                    holder.edittextid.setHint("" + titlecaptions);
+                    holder.edittextid.setVisibility(View.VISIBLE);
+                    holder.edittextid.setText(SEttextvalues);
+                    if (dynamicarray.get(position).getControl_id().equals("1")) {
+                        holder.edittextid.setInputType(InputType.TYPE_CLASS_TEXT);
+                    } else if (dynamicarray.get(position).getControl_id().equals("3")) {
+                        holder.edittextid.setInputType(InputType.TYPE_CLASS_NUMBER);
+                    } else if (dynamicarray.get(position).getControl_id().equals("18")) {
+                        holder.edittextid.setInputType(InputType.TYPE_CLASS_PHONE);
+                    } else if (dynamicarray.get(position).getControl_id().equals("24")) {
+                        holder.edittextid.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
+                    } else {
+                        holder.edittextid.setInputType(InputType.TYPE_CLASS_TEXT);
+                    }
+                    // Log.e("THIRUMALAIVASAN", String.valueOf(dynamicarray.get(position).getFld_Length()));
+                    int maxLength = dynamicarray.get(position).getFld_Length();
+                    InputFilter[] FilterArray = new InputFilter[1];
+                    FilterArray[0] = new InputFilter.LengthFilter(maxLength);
+                    holder.edittextid.setFilters(FilterArray);
+                    holder.edittextid.addTextChangedListener(new TextWatcher() {
+                        @Override
+                        public void onTextChanged(CharSequence charSequence, int start,
+                                                  int before, int count) {
+                            if (!charSequence.toString().equals("")) {
+                                dynamicarray.get(position).setFilter_Value(charSequence.toString());
+                            } else {
+                                dynamicarray.get(position).setFilter_Value("");
+                            }
+                        }
+
+                        @Override
+                        public void beforeTextChanged(CharSequence s, int start,
+                                                      int count, int after) {
+
+                        }
+
+                        @Override
+                        public void afterTextChanged(Editable s) {
+                            if (!s.toString().equals("")) {
+                                dynamicarray.get(position).setFilter_Value(s.toString());
+                            } else {
+                                dynamicarray.get(position).setFilter_Value("");
+                            }
+                        }
+                    });
+                } else if (dynamicarray.get(position).getControl_id().equals("7") || dynamicarray.get(position).getControl_id().equals("8") || dynamicarray.get(position).getControl_id().equals("11")) {
+                    holder.Textspinnerview.setHint("Select The " + titlecaptions);
+                    holder.Textspinnerview.setText(SEttextvalues);
+                    holder.Textspinnerview.setVisibility(View.VISIBLE);
+                    holder.edittextid.setVisibility(View.GONE);
+                } else if (dynamicarray.get(position).getControl_id().equals("10")) {
+                    Log.e("ROute_Size", String.valueOf(dynamicarray.get(position).getA_list().size()));
+                    holder.radiogroup.setVisibility(View.VISIBLE);
+                    holder.edittextid.setVisibility(View.GONE);
+                    //Toast.makeText(context, String.valueOf(dynamicarray.get(position).getA_list().size()), Toast.LENGTH_SHORT).show();
+                    for (int ii = 0; ii < dynamicarray.get(position).getA_list().size(); ii++) {
+                        RadioButton rbn = new RadioButton(getApplicationContext());
+                        rbn.setId(ii);
+                        rbn.setText("" + dynamicarray.get(position).getA_list().get(ii).getName());
+                        if (dynamicarray.get(position).getA_list().get(ii).isSelected() || (dynamicarray.get(position).getFilter_Text() != null && dynamicarray.get(position).getFilter_Text() != "" && dynamicarray.get(position).getFilter_Text().equals(dynamicarray.get(position).getA_list().get(ii).getId()))) {
+                            rbn.setChecked(true);
+                        }
+                        holder.radiogroup.addView(rbn);
+                    }
+
+                    holder.radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                        public void onCheckedChanged(RadioGroup group, int checkedId) {
+                            // This will get the radiobutton that has changed in its check state
+                            RadioButton checkedRadioButton = (RadioButton) group.findViewById(checkedId);
+                            // This puts the value (true/false) into the variable
+                            boolean isChecked = checkedRadioButton.isChecked();
+                            // If the radiobutton that has changed in check state is now checked...
+                            if (isChecked) {
+                                dynamicarray.get(position).setFilter_Value(dynamicarray.get(position).getA_list().get(checkedId).getName());
+                                dynamicarray.get(position).setFilter_Text(dynamicarray.get(position).getA_list().get(checkedId).getId());
+                                dynamicarray.get(position).getA_list().get(checkedId).setSelected(true);
+
+                            }
+                        }
+                    });
+
                 }
-                // Log.e("THIRUMALAIVASAN", String.valueOf(dynamicarray.get(position).getFld_Length()));
-                int maxLength = dynamicarray.get(position).getFld_Length();
-                InputFilter[] FilterArray = new InputFilter[1];
-                FilterArray[0] = new InputFilter.LengthFilter(maxLength);
-                holder.edittextid.setFilters(FilterArray);
-                holder.edittextid.addTextChangedListener(new TextWatcher() {
+                holder.Textspinnerview.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onTextChanged(CharSequence charSequence, int start,
-                                              int before, int count) {
-                        if (!charSequence.toString().equals("")) {
-                            dynamicarray.get(position).setFilter_Value(charSequence.toString());
-                        } else {
-                            dynamicarray.get(position).setFilter_Value("");
-                        }
-                    }
-
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start,
-                                                  int count, int after) {
-
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        if (!s.toString().equals("")) {
-                            dynamicarray.get(position).setFilter_Value(s.toString());
-                        } else {
-                            dynamicarray.get(position).setFilter_Value("");
-                        }
-                    }
-                });
-            } else if (dynamicarray.get(position).getControl_id().equals("7") || dynamicarray.get(position).getControl_id().equals("8") || dynamicarray.get(position).getControl_id().equals("11")) {
-                holder.Textspinnerview.setHint("Select The " + titlecaptions);
-                holder.Textspinnerview.setText(SEttextvalues);
-                holder.Textspinnerview.setVisibility(View.VISIBLE);
-                holder.edittextid.setVisibility(View.GONE);
-            } else if (dynamicarray.get(position).getControl_id().equals("10")) {
-                Log.e("ROute_Size", String.valueOf(dynamicarray.get(position).getA_list().size()));
-                holder.radiogroup.setVisibility(View.VISIBLE);
-                holder.edittextid.setVisibility(View.GONE);
-                //Toast.makeText(context, String.valueOf(dynamicarray.get(position).getA_list().size()), Toast.LENGTH_SHORT).show();
-                for (int ii = 0; ii < dynamicarray.get(position).getA_list().size(); ii++) {
-                    RadioButton rbn = new RadioButton(getApplicationContext());
-                    rbn.setId(ii);
-                    rbn.setText("" + dynamicarray.get(position).getA_list().get(ii).getName());
-                    if (dynamicarray.get(position).getA_list().get(ii).isSelected() || (dynamicarray.get(position).getFilter_Text() != null && dynamicarray.get(position).getFilter_Text() != "" && dynamicarray.get(position).getFilter_Text().equals(dynamicarray.get(position).getA_list().get(ii).getId()))) {
-                        rbn.setChecked(true);
-                    }
-                    holder.radiogroup.addView(rbn);
-                }
-
-                holder.radiogroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-                    public void onCheckedChanged(RadioGroup group, int checkedId) {
-                        // This will get the radiobutton that has changed in its check state
-                        RadioButton checkedRadioButton = (RadioButton) group.findViewById(checkedId);
-                        // This puts the value (true/false) into the variable
-                        boolean isChecked = checkedRadioButton.isChecked();
-                        // If the radiobutton that has changed in check state is now checked...
-                        if (isChecked) {
-                            dynamicarray.get(position).setFilter_Value(dynamicarray.get(position).getA_list().get(checkedId).getName());
-                            dynamicarray.get(position).setFilter_Text(dynamicarray.get(position).getA_list().get(checkedId).getId());
-                            dynamicarray.get(position).getA_list().get(checkedId).setSelected(true);
-
-                        }
+                    public void onClick(View v) {
+                        //Log.e("GOOGLE", dynamicarray.get(position).getA_list().toString());
+                        if (dynamicarray.get(position).getControl_id().equals("11")) {
+                            timePicker(position, dynamicarray.get(position).getA_list());
+                        } else if (dynamicarray.get(position).getControl_id().equals("8")) {
+                            datePicker(position, dynamicarray.get(position).getA_list());
+                        } else
+                            openspinnerbox(position, dynamicarray.get(position).getA_list());
                     }
                 });
 
             }
-            holder.Textspinnerview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //Log.e("GOOGLE", dynamicarray.get(position).getA_list().toString());
-                    if (dynamicarray.get(position).getControl_id().equals("11")) {
-                        timePicker(position, dynamicarray.get(position).getA_list());
-                    } else if (dynamicarray.get(position).getControl_id().equals("8")) {
-                        datePicker(position, dynamicarray.get(position).getA_list());
-                    } else
-                        openspinnerbox(position, dynamicarray.get(position).getA_list());
-                }
-            });
-
         }
 
         @Override
@@ -1308,5 +1176,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
         DatePickerDialog.show();
     }
+
 
 }

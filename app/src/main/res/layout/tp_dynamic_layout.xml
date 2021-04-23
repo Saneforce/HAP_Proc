@@ -13,6 +13,7 @@
         android:orientation="vertical">
         <TextView
             android:id="@+id/tpcaptions"
+            android:visibility="gone"
             style="@style/TextStyle" />
 
         <TextView

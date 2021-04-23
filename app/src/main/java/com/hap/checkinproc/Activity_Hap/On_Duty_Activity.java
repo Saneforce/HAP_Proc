@@ -270,7 +270,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
 
-                if (!OnDutyCount.equals("0")) {
+             /*   if (!OnDutyCount.equals("0")) {
                     Log.v("sdsadsadsa", "dsadsadsa");
                     if (!selecthaplocationss.getText().toString().equals("")) {
                         //haplocation
@@ -296,7 +296,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                     }
                 } else {
 
-
+*/
                     if (!selecthaplocationss.getText().toString().equals("")) {
                         //haplocation
                         Log.v("HAP_LOACTION", "hggh" + selecthaplocationss.getText().toString());
@@ -396,12 +396,11 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                             }
                         }
                     }
-                }
+             /*   }*/
             }
         });
         closebutton.setOnClickListener(this);
         exitclose.setOnClickListener(this);
-
 
         CardDailyAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -410,7 +409,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 OrderType();
             }
         });
-
 
         driverAllowance.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -516,11 +514,11 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             }
         });
 
-        Log.v("HAP_ON_DUTY1", String.valueOf(OnDutyCount));
+/*        Log.v("HAP_ON_DUTY1", String.valueOf(OnDutyCount));
         if (!OnDutyCount.equals("0")) {
             Log.v("HAP_ON_DUTY2", String.valueOf(OnDutyCount));
             lincheck.setVisibility(View.GONE);
-        } else {
+        } else {*/
             lincheck.setVisibility(View.VISIBLE);
             Log.v("HAP_ON_DUTY3", "CHECJ" + OnDutyCount);
             if (sharedpreferences.contains(hapLocation)) {
@@ -532,7 +530,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                     flag = 0;
                     selecthaplocationss.setText(strHapLocation);
                     ondutyedittext.setText("");
-                    /*     purposeofvisitedittext.setText("");*/
+                         purposeofvisitedittext.setText("");
                     haplocationtext.setVisibility(View.VISIBLE);
                     purposeofvisittext.setVisibility(View.VISIBLE);
                     submitbutton.setVisibility(View.VISIBLE);
@@ -677,7 +675,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
 
         }
 
-    }
+/*    }*/
 
 
     /* Order Types*/
