@@ -569,29 +569,30 @@
                                 </LinearLayout>
                             </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/remarkscaption"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="15dp"
-                                android:fontFamily="@font/basic"
-                                android:textColor="#000000"
-                                android:textStyle="bold" />
 
-                            <androidx.appcompat.widget.AppCompatEditText
-                                android:id="@+id/edt_remarks"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/C100dp"
-                                android:layout_marginTop="@dimen/C10dp"
-                                android:background="@drawable/round_white_backround"
-                                android:gravity="top"
-                                android:hint="@string/txt_enter_purpose"
-                                android:padding="@dimen/C5dp"
-                                android:textSize="@dimen/C12dp" />
                         </LinearLayout>
 
                     </LinearLayout>
+                    <TextView
+                        android:id="@+id/remarkscaption"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:text="Remarks"
+                        android:fontFamily="@font/basic"
+                        android:textColor="#000000"
+                        android:textStyle="bold" />
 
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/edt_remarks"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/C100dp"
+                        android:layout_marginTop="@dimen/C10dp"
+                        android:background="@drawable/round_white_backround"
+                        android:gravity="top"
+                        android:hint="Enter the Remarks"
+                        android:padding="@dimen/C5dp"
+                        android:textSize="@dimen/C12dp" />
                     <ProgressBar
                         android:id="@+id/progressbar"
                         android:layout_width="match_parent"

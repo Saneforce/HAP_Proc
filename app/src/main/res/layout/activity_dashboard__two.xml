@@ -54,9 +54,9 @@
                         android:id="@+id/myQR"
                         android:layout_toEndOf="@id/imag"
                         android:layout_below="@id/imag"
-                        android:layout_width="@dimen/C40dp"
-                        android:layout_height="@dimen/C40dp"
-                        android:layout_marginTop="0dp"
+                        android:layout_width="@dimen/C30dp"
+                        android:layout_height="@dimen/C30dp"
+                        android:layout_marginTop="@dimen/C5dp"
                         app:tint="@color/colorPrimaryDark"
                         android:padding="5dp"
                         android:src="@drawable/ic_baseline_qr_code_scanner_24" />

@@ -691,24 +691,27 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                         String JointWork_Name = String.valueOf(jsoncc.getJSONObject(0).get("JointWork_Name"));
                         String[] arrOfStr = Jointworkcode.split(",");
                         String[] arrOfname = JointWork_Name.split(",");
-                        //Model_Pojo = new Common_Model(arrOfStr.get("Sf_Name").getAsString() + "-" + EmpDet.get("sf_Designation_Short_Name").getAsString(), EmpDet.get("Sf_Code").getAsString(), false);
-                        for (int ik = 0; arrOfStr.length > ik; ik++) {
-                            Model_Pojo = new Common_Model(arrOfname[ik], arrOfStr[ik], false);
-                            Jointworklistview.add(Model_Pojo);
-                        }
 
-                        if (Jointworklistview.size() > 0) {
-                            jointwork_layout.setVisibility(View.VISIBLE);
-                            text_tour_plancount.setText(String.valueOf(arrOfStr.length));
-                            adapter = new Joint_Work_Adapter(Jointworklistview, R.layout.jointwork_listitem, getApplicationContext(), "10", new Joint_Work_Listner() {
-                                @Override
-                                public void onIntentClick(int position, boolean flag) {
-                                    Jointworklistview.remove(position);
-                                    text_tour_plancount.setText(String.valueOf(Jointworklistview.size()));
-                                    adapter.notifyDataSetChanged();
-                                }
-                            });
-                            jointwork_recycler.setAdapter(adapter);
+                        if(!Jointworkcode.equals("")) {
+                            //Model_Pojo = new Common_Model(arrOfStr.get("Sf_Name").getAsString() + "-" + EmpDet.get("sf_Designation_Short_Name").getAsString(), EmpDet.get("Sf_Code").getAsString(), false);
+                            for (int ik = 0; arrOfStr.length > ik; ik++) {
+                                Model_Pojo = new Common_Model(arrOfname[ik], arrOfStr[ik], false);
+                                Jointworklistview.add(Model_Pojo);
+                            }
+
+                            if (Jointworklistview.size() > 0) {
+                                jointwork_layout.setVisibility(View.VISIBLE);
+                                text_tour_plancount.setText(String.valueOf(arrOfStr.length));
+                                adapter = new Joint_Work_Adapter(Jointworklistview, R.layout.jointwork_listitem, getApplicationContext(), "10", new Joint_Work_Listner() {
+                                    @Override
+                                    public void onIntentClick(int position, boolean flag) {
+                                        Jointworklistview.remove(position);
+                                        text_tour_plancount.setText(String.valueOf(Jointworklistview.size()));
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
+                                jointwork_recycler.setAdapter(adapter);
+                            }
                         }
                         if (modeVal.equals("0")) {
                             TextMode.setText(modeTypeVale);
