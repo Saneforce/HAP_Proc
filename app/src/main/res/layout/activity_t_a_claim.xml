@@ -1477,7 +1477,8 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_margin="@dimen/C2dp"
-                                            android:text="Early Check-in" />
+                                            android:text="Early Check-in"
+                                            android:visibility="gone"/>
 
                                         <LinearLayout
                                             android:id="@+id/lin_early"
@@ -1612,7 +1613,8 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_margin="@dimen/C2dp"
-                                            android:text="Late Check-Out" />
+                                            android:text="Late Check-Out"
+                                            android:visibility="gone"/>
 
                                         <LinearLayout
                                             android:id="@+id/lin_late"

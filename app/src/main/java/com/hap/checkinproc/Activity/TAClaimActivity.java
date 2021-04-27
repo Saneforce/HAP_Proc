@@ -2038,8 +2038,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 customOptionsName.setText("");
                 customOptionsName.setText(eachData.get("fdt").getAsString());
                 viewContinue.addView(customOptionsName);
-                mChckEarly.setVisibility(View.VISIBLE);
-                linearConView.setVisibility(View.VISIBLE);
+               // mChckEarly.setVisibility(View.VISIBLE);
+               // linearConView.setVisibility(View.VISIBLE);
             }
         } else {
             mChckEarly.setVisibility(View.GONE);
@@ -2093,8 +2093,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             edtLateBill.setText(LteAmt);
 
             if (ConStay.equalsIgnoreCase("1")) mChckCont.setChecked(true);
-            if (ErlyStay.equalsIgnoreCase("1")) mChckEarly.setChecked(true);
-            if (LteStay.equalsIgnoreCase("1")) mChckLate.setChecked(true);
+            //if (ErlyStay.equalsIgnoreCase("1")) mChckEarly.setChecked(true);
+            //if (LteStay.equalsIgnoreCase("1")) mChckLate.setChecked(true);
 
 
             if (mChckCont.isChecked()) {
@@ -3258,7 +3258,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             if (LodingCon.size() != 0) {
                 mChckEarly.setVisibility(View.GONE);
             } else {
-                mChckEarly.setVisibility(View.VISIBLE);
+              //  mChckEarly.setVisibility(View.VISIBLE);
             }
 
 

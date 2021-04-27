@@ -80,6 +80,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     Common_Model Model_Pojo;
     List<Common_Model> getfieldforcehqlist = new ArrayList<>();
     TextView selecthaplocationss;
+    CheckBox chkHlyDyFlg;
     CustomListViewDialog customDialog;
     String hapLocid;
     Gson gson;
@@ -169,6 +170,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         lincheck = findViewById(R.id.lin_mode);
         driverAllowance = findViewById(R.id.da_driver_allowance);
         linCheckdriver = findViewById(R.id.lin_check_driver);
+        chkHlyDyFlg=findViewById(R.id.chkHlyDyFlg);
         SF_code = UserDetails.getString("Sfcode", "");
         div = UserDetails.getString("Divcode", "");
         dailyAllowance = findViewById(R.id.text_daily_allowance);
@@ -1190,6 +1192,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                                     extras.putString("onDutyPlcID", hapLocid);
                                     extras.putString("onDuty", "cba");
                                 }
+                                extras.putString("HolidayFlag",(chkHlyDyFlg.isChecked())?"1":"0");
                                 extras.putString("vstPurpose", purposeofvisitedittext.getText().toString());
                                 intent.putExtras(extras);
                                 shared_common_pref.save(Shared_Common_Pref.DAMode, true);

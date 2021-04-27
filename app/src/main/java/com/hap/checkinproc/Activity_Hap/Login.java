@@ -520,7 +520,7 @@ public class Login extends AppCompatActivity {
         }
         Log.d(TAG, "TWO " + deviceToken);
 
-      //  eMail="thirumalaivasan786@gmail.com";
+        //eMail="giritharan.d@hap.in";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override

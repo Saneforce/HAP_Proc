@@ -233,7 +233,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     Intent i = new Intent(this, Checkin.class);
                     startActivity(i);
                 }
-
                 break;
 
             case R.id.lin_request_status:
@@ -255,8 +254,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.lin_myday_plan:
                 startActivity(new Intent(this, Mydayplan_Activity.class));
+                break;
 
-                //common_class.CommonIntentwithFinish(Mydayplan_Activity.class);
+            case R.id.lin_RecheckIn:
+                startActivity(new Intent(this, AllowanceActivity.class));
                 break;
 
             case R.id.lin_tour_plan:

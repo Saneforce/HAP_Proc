@@ -110,6 +110,7 @@ public class Checkin extends AppCompatActivity {
 
         intent = getIntent();
         Bundle bundle = intent.getExtras();
+        onDutyFlag = "0";
         if (bundle != null) {
             ODFlag = String.valueOf(bundle.getSerializable("ODFlag"));
             onDutyPlcID = String.valueOf(bundle.getSerializable("onDutyPlcID"));
@@ -117,6 +118,7 @@ public class Checkin extends AppCompatActivity {
             vstPurpose = String.valueOf(bundle.getSerializable("vstPurpose"));
             Check_Flag = String.valueOf(bundle.getSerializable("Mode"));
             DutyType = String.valueOf(bundle.getSerializable("onDuty"));
+            onDutyFlag = String.valueOf(bundle.getSerializable("HolidayFlag"));
             Log.e("CHECKIN_FLAG", Check_Flag);
             if (onDutyPlcID == "0") {
                 SFTID = "0";
@@ -126,8 +128,6 @@ public class Checkin extends AppCompatActivity {
             if (Check_Flag.equals("holidayentry")) {
                 DutyType="holiday";
                 onDutyFlag = "1";
-            } else {
-                onDutyFlag = "0";
             }
         }
 

@@ -78,6 +78,12 @@
                 android:text="Check-In"
                 android:visibility="gone" />
 
+            <Button
+                android:id="@+id/lin_RecheckIn"
+                style="@style/ButtonStyle"
+                android:background="@drawable/button_orange"
+                android:text="Re-Call"
+                android:visibility="gone" />
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/flxlayut"
                 android:layout_width="match_parent"
