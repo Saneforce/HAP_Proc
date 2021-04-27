@@ -140,7 +140,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     ImageView deleteButton, previewss, taAttach, lcAttach, oeAttach, lcPreview, oePreview, endkmimage, startkmimage,
             img_lodg_prvw, img_lodg_atta, mapZoomIn, imgBck;
 
-    String  SF_code = "", div = "", State_Code = "", StartedKm = "", ClosingKm = "", ModeOfTravel = "", PersonalKm = "",
+    String SF_code = "", div = "", State_Code = "", StartedKm = "", ClosingKm = "", ModeOfTravel = "", PersonalKm = "",
             DriverNeed = "", DateForAPi = "", DateTime = "", shortName = "", Exp_Name = "", Id = "", userEnter = "",
             attachment = "", maxAllowonce = "", strRetriveType = "", StrToEnd = "", StrBus = "", StrTo = "", StrDaName = "",
             OEdynamicLabel = "", strFuelAmount = "", StrModeValue = "", dynamicLabel = "", StrDailyAllowance = "", ldgEmpName = "",
@@ -2720,10 +2720,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
         } else if (requestCode == 143 && resultCode == Activity.RESULT_OK) {
 
-            finalPath = "/storage/emulated/0";
-            filePath = outputFileUri.getPath();
-            filePath = filePath.substring(1);
-            filePath = finalPath + filePath.substring(filePath.indexOf("/"));
+
+
+
 
             getMulipart(lodUKey, filePath, "LOD", "", "Room", "", "");
 
@@ -2842,6 +2841,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         dialog.dismiss();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         outputFileUri = FileProvider.getUriForFile(TAClaimActivity.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), Shared_Common_Pref.Sf_Code + "_" + System.currentTimeMillis() + ".jpeg"));
+        Log.v("FILE_PATH", String.valueOf(outputFileUri));
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivityForResult(intent, positionC);

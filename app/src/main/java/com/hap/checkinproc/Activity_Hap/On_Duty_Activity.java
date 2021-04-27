@@ -101,7 +101,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     private SANGPSTracker mLUService;
     private boolean mBound = false;
     private LocationReceiver myReceiver;
-
+    String checking = "";
     String count = "";
 
     /*OnDUTY ALlowance*/
@@ -297,106 +297,106 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 } else {
 
 */
-                    if (!selecthaplocationss.getText().toString().equals("")) {
-                        //haplocation
-                        Log.v("HAP_LOACTION", "hggh" + selecthaplocationss.getText().toString());
-                        if (selecthaplocationss.getText().toString().matches("")) {
-                            Log.v("HAP_LOACTION", "Enter Hap Location");
-                            Toast.makeText(On_Duty_Activity.this, "Enter  Location", Toast.LENGTH_SHORT).show();
-                        } else if (purposeofvisitedittext.getText().toString().matches("")) {
-                            Log.v("HAP_LOACTION", "Enter Visit");
-                            Toast.makeText(On_Duty_Activity.this, "Enter Visit purpose", Toast.LENGTH_SHORT).show();
-                        } else if (TextMode.getText().toString().matches("")) {
-                            Log.v("HAP_LOACTION", startEnd + "Enter Mode");
-                            Toast.makeText(On_Duty_Activity.this, "Enter Mode", Toast.LENGTH_SHORT).show();
-                        } else {
-                            if (startEnd.equals("0") || count.equals("0")) {
+                if (!selecthaplocationss.getText().toString().equals("")) {
+                    //haplocation
+                    Log.v("HAP_LOACTION", "hggh" + selecthaplocationss.getText().toString());
+                    if (selecthaplocationss.getText().toString().matches("")) {
+                        Log.v("HAP_LOACTION", "Enter Hap Location");
+                        Toast.makeText(On_Duty_Activity.this, "Enter  Location", Toast.LENGTH_SHORT).show();
+                    } else if (purposeofvisitedittext.getText().toString().matches("")) {
+                        Log.v("HAP_LOACTION", "Enter Visit");
+                        Toast.makeText(On_Duty_Activity.this, "Enter Visit purpose", Toast.LENGTH_SHORT).show();
+                    } else if (TextMode.getText().toString().matches("")) {
+                        Log.v("HAP_LOACTION", startEnd + "Enter Mode");
+                        Toast.makeText(On_Duty_Activity.this, "Enter Mode", Toast.LENGTH_SHORT).show();
+                    } else {
+                        if (startEnd.equals("0") || count.equals("0")) {
 
-                                if (dailyAllowance.getText().toString().matches("")) {
-                                    Log.v("HAP_LOACTION", startEnd + "Enter Daily");
-                                    Log.v("HAP_LOACTION", count + "ssssEnter Daily");
-                                    Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
-                                } else if (onDutyFrom.getText().toString().matches("")) {
-                                    Log.v("HAP_LOACTION", startEnd + "Enter From");
-                                    Log.v("HAP_LOACTION", count + "Enter From");
-                                    Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    submitData();
-                                }
-                            } else if (startEnd.equals("1") || count.equals("1")) {
-                                if (dailyAllowance.getText().toString().matches("")) {
-                                    Log.v("HAP_LOACTION", startEnd + "Enter Daily");
-                                    Log.v("HAP_LOACTION", count + "sssEnter Daily");
-                                    Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
-                                } else if (onDutyFrom.getText().toString().matches("")) {
-                                    Log.v("HAP_LOACTION", startEnd + "Enter From");
-                                    Log.v("HAP_LOACTION", count + "Enter From");
-                                    Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
-                                } else if (StartKm.getText().toString().matches("")) {
-                                    Log.v("HAP_LOACTION", startEnd + "Enter Start km");
-                                    Log.v("HAP_LOACTION", count + "Enter Start km");
-                                    Toast.makeText(On_Duty_Activity.this, "Enter Start Km", Toast.LENGTH_SHORT).show();
-                                } else if (imageURI.matches("")) {
-                                    Log.v("HAP_LOACTION", startEnd + "Enter Start");
-                                    Toast.makeText(On_Duty_Activity.this, "Choose Start Photo", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    submitData();
-                                }
-
+                            if (dailyAllowance.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Daily");
+                                Log.v("HAP_LOACTION", count + "ssssEnter Daily");
+                                Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
+                            } else if (onDutyFrom.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter From");
+                                Log.v("HAP_LOACTION", count + "Enter From");
+                                Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
+                            } else {
+                                submitData();
+                            }
+                        } else if (startEnd.equals("1") || count.equals("1")) {
+                            if (dailyAllowance.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Daily");
+                                Log.v("HAP_LOACTION", count + "sssEnter Daily");
+                                Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
+                            } else if (onDutyFrom.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter From");
+                                Log.v("HAP_LOACTION", count + "Enter From");
+                                Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
+                            } else if (StartKm.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Start km");
+                                Log.v("HAP_LOACTION", count + "Enter Start km");
+                                Toast.makeText(On_Duty_Activity.this, "Enter Start Km", Toast.LENGTH_SHORT).show();
+                            } else if (imageURI.matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Start");
+                                Toast.makeText(On_Duty_Activity.this, "Choose Start Photo", Toast.LENGTH_SHORT).show();
                             } else {
                                 submitData();
                             }
 
+                        } else {
+                            submitData();
                         }
 
+                    }
 
+
+                } else {
+                    //OtherLocation
+                    if (ondutyedittext.getText().toString().matches("")) {
+                        Toast.makeText(On_Duty_Activity.this, "Enter  Location", Toast.LENGTH_SHORT).show();
+                    } else if (purposeofvisitedittext.getText().toString().matches("")) {
+                        Toast.makeText(On_Duty_Activity.this, "Enter Visit purpose", Toast.LENGTH_SHORT).show();
+                    } else if (TextMode.getText().toString().matches("")) {
+                        Toast.makeText(On_Duty_Activity.this, "Enter Mode", Toast.LENGTH_SHORT).show();
                     } else {
-                        //OtherLocation
-                        if (ondutyedittext.getText().toString().matches("")) {
-                            Toast.makeText(On_Duty_Activity.this, "Enter  Location", Toast.LENGTH_SHORT).show();
-                        } else if (purposeofvisitedittext.getText().toString().matches("")) {
-                            Toast.makeText(On_Duty_Activity.this, "Enter Visit purpose", Toast.LENGTH_SHORT).show();
-                        } else if (TextMode.getText().toString().matches("")) {
-                            Toast.makeText(On_Duty_Activity.this, "Enter Mode", Toast.LENGTH_SHORT).show();
-                        } else {
-                            if (startEnd.equals("0") || count.equals("0")) {
+                        if (startEnd.equals("0") || count.equals("0")) {
 
-                                if (dailyAllowance.getText().toString().matches("")) {
-                                    Log.v("HAP_LOACTION", startEnd + "Enter Daily");
-                                    Log.v("HAP_LOACTION", count + "ccEnter Daily");
-                                    Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
-                                } else if (onDutyFrom.getText().toString().matches("")) {
-                                    Log.v("HAP_LOACTION", startEnd + "Enter From");
-                                    Log.v("HAP_LOACTION", count + "Enter From");
-                                    Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    submitData();
-                                }
-                            } else if (startEnd.equals("1") || count.equals("1")) {
-                                if (dailyAllowance.getText().toString().matches("")) {
-                                    Log.v("HAP_LOACTION", startEnd + "Enter Daily");
-                                    Log.v("HAP_LOACTION", count + "cEnter Daily");
-                                    Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
-                                } else if (onDutyFrom.getText().toString().matches("")) {
-                                    Log.v("HAP_LOACTION", startEnd + "Enter From");
-                                    Log.v("HAP_LOACTION", count + "Enter From");
-                                    Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
-                                } else if (StartKm.getText().toString().matches("")) {
-                                    Log.v("HAP_LOACTION", startEnd + "Enter Start km");
-                                    Log.v("HAP_LOACTION", count + "Enter Start km");
-                                    Toast.makeText(On_Duty_Activity.this, "Enter Start Km", Toast.LENGTH_SHORT).show();
-                                } else if (imageURI.matches("")) {
-                                    Log.v("HAP_LOACTION", startEnd + "Enter Start");
-                                    Toast.makeText(On_Duty_Activity.this, "Choose Start Photo", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    submitData();
-                                }
+                            if (dailyAllowance.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Daily");
+                                Log.v("HAP_LOACTION", count + "ccEnter Daily");
+                                Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
+                            } else if (onDutyFrom.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter From");
+                                Log.v("HAP_LOACTION", count + "Enter From");
+                                Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
                             } else {
                                 submitData();
                             }
+                        } else if (startEnd.equals("1") || count.equals("1")) {
+                            if (dailyAllowance.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Daily");
+                                Log.v("HAP_LOACTION", count + "cEnter Daily");
+                                Toast.makeText(On_Duty_Activity.this, "Enter Daily Allowance", Toast.LENGTH_SHORT).show();
+                            } else if (onDutyFrom.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter From");
+                                Log.v("HAP_LOACTION", count + "Enter From");
+                                Toast.makeText(On_Duty_Activity.this, "Enter From", Toast.LENGTH_SHORT).show();
+                            } else if (StartKm.getText().toString().matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Start km");
+                                Log.v("HAP_LOACTION", count + "Enter Start km");
+                                Toast.makeText(On_Duty_Activity.this, "Enter Start Km", Toast.LENGTH_SHORT).show();
+                            } else if (imageURI.matches("")) {
+                                Log.v("HAP_LOACTION", startEnd + "Enter Start");
+                                Toast.makeText(On_Duty_Activity.this, "Choose Start Photo", Toast.LENGTH_SHORT).show();
+                            } else {
+                                submitData();
+                            }
+                        } else {
+                            submitData();
                         }
                     }
-             /*   }*/
+                }
+                /*   }*/
             }
         });
         closebutton.setOnClickListener(this);
@@ -519,163 +519,163 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             Log.v("HAP_ON_DUTY2", String.valueOf(OnDutyCount));
             lincheck.setVisibility(View.GONE);
         } else {*/
-            lincheck.setVisibility(View.VISIBLE);
-            Log.v("HAP_ON_DUTY3", "CHECJ" + OnDutyCount);
-            if (sharedpreferences.contains(hapLocation)) {
-                strHapLocation = sharedpreferences.getString(hapLocation, "");
-                //
+        lincheck.setVisibility(View.VISIBLE);
+        Log.v("HAP_ON_DUTY3", "CHECJ" + OnDutyCount);
+        if (sharedpreferences.contains(hapLocation)) {
+            strHapLocation = sharedpreferences.getString(hapLocation, "");
+            //
 
-                Log.e("FlagCountFlagCount", strHapLocation);
-                if (!strHapLocation.equals("")) {
-                    flag = 0;
-                    selecthaplocationss.setText(strHapLocation);
-                    ondutyedittext.setText("");
-                         purposeofvisitedittext.setText("");
-                    haplocationtext.setVisibility(View.VISIBLE);
-                    purposeofvisittext.setVisibility(View.VISIBLE);
-                    submitbutton.setVisibility(View.VISIBLE);
-                    closebutton.setVisibility(View.VISIBLE);
-                    exitclose.setVisibility(View.GONE);
-                    ModeOfTravel.setVisibility(View.VISIBLE);
-                    ondutylocations.setVisibility(View.GONE);
-                    haplocationbutton.setVisibility(View.GONE);
-                    otherlocationbutton.setVisibility(View.GONE);
-                }
-                Log.e("strHapLocation", strHapLocation);
+            Log.e("FlagCountFlagCount", strHapLocation);
+            if (!strHapLocation.equals("")) {
+                flag = 0;
+                selecthaplocationss.setText(strHapLocation);
+                ondutyedittext.setText("");
+                purposeofvisitedittext.setText("");
+                haplocationtext.setVisibility(View.VISIBLE);
+                purposeofvisittext.setVisibility(View.VISIBLE);
+                submitbutton.setVisibility(View.VISIBLE);
+                closebutton.setVisibility(View.VISIBLE);
+                exitclose.setVisibility(View.GONE);
+                ModeOfTravel.setVisibility(View.VISIBLE);
+                ondutylocations.setVisibility(View.GONE);
+                haplocationbutton.setVisibility(View.GONE);
+                otherlocationbutton.setVisibility(View.GONE);
             }
+            Log.e("strHapLocation", strHapLocation);
+        }
 
-            if (sharedpreferences.contains(otherLocation)) {
-                strVisitPurpose = sharedpreferences.getString(otherLocation, "");
-                Log.e("FlagCountFlagCount", strVisitPurpose);
-                if (!strVisitPurpose.matches("")) {
-                    flag = 0;
-                    ondutyedittext.setText(strVisitPurpose);
-                    ondutylocations.setVisibility(View.VISIBLE);
-                    purposeofvisittext.setVisibility(View.VISIBLE);
-                    closebutton.setVisibility(View.VISIBLE);
-                    exitclose.setVisibility(View.GONE);
-                    haplocationtext.setVisibility(View.GONE);
-                    submitbutton.setVisibility(View.VISIBLE);
-                    otherlocationbutton.setVisibility(View.GONE);
-                    haplocationbutton.setVisibility(View.GONE);
-                    ModeOfTravel.setVisibility(View.VISIBLE);
-                }
-                Log.e("strHapLocation", strHapLocation);
+        if (sharedpreferences.contains(otherLocation)) {
+            strVisitPurpose = sharedpreferences.getString(otherLocation, "");
+            Log.e("FlagCountFlagCount", strVisitPurpose);
+            if (!strVisitPurpose.matches("")) {
+                flag = 0;
+                ondutyedittext.setText(strVisitPurpose);
+                ondutylocations.setVisibility(View.VISIBLE);
+                purposeofvisittext.setVisibility(View.VISIBLE);
+                closebutton.setVisibility(View.VISIBLE);
+                exitclose.setVisibility(View.GONE);
+                haplocationtext.setVisibility(View.GONE);
+                submitbutton.setVisibility(View.VISIBLE);
+                otherlocationbutton.setVisibility(View.GONE);
+                haplocationbutton.setVisibility(View.GONE);
+                ModeOfTravel.setVisibility(View.VISIBLE);
             }
+            Log.e("strHapLocation", strHapLocation);
+        }
 
-            if (sharedpreferences.contains("SharedImage")) {
-                imageURI = sharedpreferences.getString("SharedImage", "");
-                Log.e("Privacypolicy", "Checking" + imageURI);
+        if (sharedpreferences.contains("SharedImage")) {
+            imageURI = sharedpreferences.getString("SharedImage", "");
+            Log.e("Privacypolicy", "Checking" + imageURI);
 
-                imageConvert = imageURI.substring(7);
-                Log.e("COnvert", imageURI.substring(7));
-                Log.e("COnvert", imageConvert);
-                getMulipart(imageConvert, 0);
+            imageConvert = imageURI.substring(7);
+            Log.e("COnvert", imageURI.substring(7));
+            Log.e("COnvert", imageConvert);
+            getMulipart(imageConvert, 0);
 
-                Log.e("IMAGE_URI", imageURI);
+            Log.e("IMAGE_URI", imageURI);
+        }
+
+        if (sharedpreferences.contains("SharedDailyAllowancess")) {
+            strDailyAllowance = sharedpreferences.getString("SharedDailyAllowancess", "");
+            Log.e("strDailyAllowance", "Checking" + strDailyAllowance);
+
+
+            if (strDailyAllowance.equals("HQ")) {
+                linearBus.setVisibility(View.GONE);
+            } else {
+                linearBus.setVisibility(View.VISIBLE);
             }
+        }
+        if (sharedpreferences.contains("SharedDriverAllowancess")) {
+            DriverNeed = sharedpreferences.getString("SharedDriverAllowancess", "");
+            Log.e("DriverNeed", DriverNeed);
+        }
 
-            if (sharedpreferences.contains("SharedDailyAllowancess")) {
-                strDailyAllowance = sharedpreferences.getString("SharedDailyAllowancess", "");
-                Log.e("strDailyAllowance", "Checking" + strDailyAllowance);
+        if (sharedpreferences.contains(visitPurpose)) {
+            purposeofvisitedittext.setText(sharedpreferences.getString(visitPurpose, ""));
+            Log.e("DriverNeed", DriverNeed);
+        }
 
+        if (sharedpreferences.contains(modeFromKm)) {
+            FromKm = sharedpreferences.getString(modeFromKm, "");
+            Log.e("Mode_FROm", sharedpreferences.getString(modeFromKm, ""));
+        }
 
-                if (strDailyAllowance.equals("HQ")) {
-                    linearBus.setVisibility(View.GONE);
-                } else {
-                    linearBus.setVisibility(View.VISIBLE);
-                }
-            }
-            if (sharedpreferences.contains("SharedDriverAllowancess")) {
-                DriverNeed = sharedpreferences.getString("SharedDriverAllowancess", "");
-                Log.e("DriverNeed", DriverNeed);
-            }
-
-            if (sharedpreferences.contains(visitPurpose)) {
-                purposeofvisitedittext.setText(sharedpreferences.getString(visitPurpose, ""));
-                Log.e("DriverNeed", DriverNeed);
-            }
-
-            if (sharedpreferences.contains(modeFromKm)) {
-                FromKm = sharedpreferences.getString(modeFromKm, "");
-                Log.e("Mode_FROm", sharedpreferences.getString(modeFromKm, ""));
-            }
-
-            if (sharedpreferences.contains(modeToKm)) {
-                ToKm = sharedpreferences.getString(modeToKm, "");
-                Log.e("Mode_To", sharedpreferences.getString(modeToKm, ""));
-            }
-            if (sharedpreferences.contains("StoreId")) {
-                StrToCode = sharedpreferences.getString("StoreId", "");
-                Log.e("Mode_To", sharedpreferences.getString("StoreId", ""));
-
-            }
-
-            if (sharedpreferences.contains(StartedKm)) {
-                StartedKM = sharedpreferences.getString(StartedKm, "");
-                Log.e("Mode_END", sharedpreferences.getString(StartedKm, ""));
-            }
-
-            if (sharedpreferences.contains(modeTravelId)) {
-                startEnd = sharedpreferences.getString(modeTravelId, "");
-                Log.e("Mode_STARTEND", sharedpreferences.getString(startEnd, ""));
-            }
-
-            if (sharedpreferences.contains("ShareModeIDs")) {
-                modeId = sharedpreferences.getString("ShareModeIDs", "");
-                Log.e("Privacypolicy", "StrID" + modeId);
-            }
-
-            if (sharedpreferences.contains(modeTypeVale)) {
-                modeVal = sharedpreferences.getString(modeTypeVale, "");
-                Log.e("Mode_TYPE", sharedpreferences.getString(modeTypeVale, ""));
-
-                if (ModeTravelType.equals("0")) {
-
-                    BusMode.setVisibility(View.VISIBLE);
-                    BikeMode.setVisibility(View.GONE);
-                    ReasonPhoto.setVisibility(View.VISIBLE);
-                    StartKm.setText(StartedKM);
-                    onDutyFrom.setText(FromKm);
-                    TextToAddress.setText(ToKm);
-                    TextMode.setText(modeVal);
-                    dailyAllowance.setText(strDailyAllowance);
-                    attachedImage.setImageURI(Uri.parse(imageURI));
-                    attachedImage.setRotation(90);
-
-                } else {
-
-                    BusMode.setVisibility(View.VISIBLE);
-                    BikeMode.setVisibility(View.VISIBLE);
-                    ReasonPhoto.setVisibility(View.VISIBLE);
-                    StartKm.setText(StartedKM);
-                    onDutyFrom.setText(FromKm);
-                    TextToAddress.setText(ToKm);
-                    TextMode.setText(modeVal);
-                    dailyAllowance.setText(strDailyAllowance);
-                    attachedImage.setImageURI(Uri.parse(imageURI));
-                    attachedImage.setRotation(90);
-
-
-                    if (TextMode.getText().equals("Four Wheeler")) {
-                        linCheckdriver.setVisibility(View.VISIBLE);
-                        if (DriverNeed.equals("true")) {
-                            driverAllowance.setChecked(true);
-                        } else {
-                            driverAllowance.setChecked(false);
-                        }
-                    }
-                }
-                if (attachedImage.getDrawable() == null) {
-                    Log.e("Image_Draw_able", "Null_Image_View");
-                } else {
-                    Log.e("Image_Draw_able", "Not_Null_Image_View");
-                }
-            }
+        if (sharedpreferences.contains(modeToKm)) {
+            ToKm = sharedpreferences.getString(modeToKm, "");
+            Log.e("Mode_To", sharedpreferences.getString(modeToKm, ""));
+        }
+        if (sharedpreferences.contains("StoreId")) {
+            StrToCode = sharedpreferences.getString("StoreId", "");
+            Log.e("Mode_To", sharedpreferences.getString("StoreId", ""));
 
         }
 
-/*    }*/
+        if (sharedpreferences.contains(StartedKm)) {
+            StartedKM = sharedpreferences.getString(StartedKm, "");
+            Log.e("Mode_END", sharedpreferences.getString(StartedKm, ""));
+        }
+
+        if (sharedpreferences.contains(modeTravelId)) {
+            startEnd = sharedpreferences.getString(modeTravelId, "");
+            Log.e("Mode_STARTEND", sharedpreferences.getString(startEnd, ""));
+        }
+
+        if (sharedpreferences.contains("ShareModeIDs")) {
+            modeId = sharedpreferences.getString("ShareModeIDs", "");
+            Log.e("Privacypolicy", "StrID" + modeId);
+        }
+
+        if (sharedpreferences.contains(modeTypeVale)) {
+            modeVal = sharedpreferences.getString(modeTypeVale, "");
+            Log.e("Mode_TYPE", sharedpreferences.getString(modeTypeVale, ""));
+
+            if (ModeTravelType.equals("0")) {
+
+                BusMode.setVisibility(View.VISIBLE);
+                BikeMode.setVisibility(View.GONE);
+                ReasonPhoto.setVisibility(View.VISIBLE);
+                StartKm.setText(StartedKM);
+                onDutyFrom.setText(FromKm);
+                TextToAddress.setText(ToKm);
+                TextMode.setText(modeVal);
+                dailyAllowance.setText(strDailyAllowance);
+                attachedImage.setImageURI(Uri.parse(imageURI));
+                attachedImage.setRotation(90);
+
+            } else {
+
+                BusMode.setVisibility(View.VISIBLE);
+                BikeMode.setVisibility(View.VISIBLE);
+                ReasonPhoto.setVisibility(View.VISIBLE);
+                StartKm.setText(StartedKM);
+                onDutyFrom.setText(FromKm);
+                TextToAddress.setText(ToKm);
+                TextMode.setText(modeVal);
+                dailyAllowance.setText(strDailyAllowance);
+                attachedImage.setImageURI(Uri.parse(imageURI));
+                attachedImage.setRotation(90);
+
+
+                if (TextMode.getText().equals("Four Wheeler")) {
+                    linCheckdriver.setVisibility(View.VISIBLE);
+                    if (DriverNeed.equals("true")) {
+                        driverAllowance.setChecked(true);
+                    } else {
+                        driverAllowance.setChecked(false);
+                    }
+                }
+            }
+            if (attachedImage.getDrawable() == null) {
+                Log.e("Image_Draw_able", "Null_Image_View");
+            } else {
+                Log.e("Image_Draw_able", "Not_Null_Image_View");
+            }
+        }
+
+    }
+
+    /*    }*/
 
 
     /* Order Types*/
@@ -1129,7 +1129,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     }
 
     public void submitData() {
-        
+
         String n = "True";
         String Mode = TextMode.getText().toString();
         SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -1223,6 +1223,8 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         super.onResume();
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
+        checking = String.valueOf(getIntent().getSerializableExtra("CHECKING"));
+        Log.v("CHECKING_DATA", checking);
     }
 
     @Override
