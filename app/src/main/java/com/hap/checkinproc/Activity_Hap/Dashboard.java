@@ -266,7 +266,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
 
             case R.id.lin_tour_plan:
+                Shared_Common_Pref.Tp_Approvalflag = "0";
                 startActivity(new Intent(this, Tp_Month_Select.class));
+
                 break;
             case R.id.lin_holiday_working:
                 AlertDialogBox.showDialog(Dashboard.this, "HAP Check-In", "Are you sure want to Check-in with Hoilday Entry", "YES", "NO", false, new AlertBox() {

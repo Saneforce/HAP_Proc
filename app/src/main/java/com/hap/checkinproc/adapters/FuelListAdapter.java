@@ -1,7 +1,6 @@
 package com.hap.checkinproc.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Interface.FuelModeOfTravel;
 import com.hap.checkinproc.R;
 import com.squareup.picasso.Picasso;
 
@@ -22,14 +20,10 @@ import java.text.DecimalFormat;
 public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyViewHolder> {
     Context context;
     JsonArray jsonArray;
-    FuelModeOfTravel fuelModeOfTravel;
-    Double str = 0.0;
-    Double val =0.0;
 
-    public FuelListAdapter(Context context, JsonArray jsonArray, FuelModeOfTravel fuelModeOfTravel) {
+    public FuelListAdapter(Context context, JsonArray jsonArray) {
         this.context = context;
         this.jsonArray = jsonArray;
-        this.fuelModeOfTravel = fuelModeOfTravel;
     }
 
 
@@ -37,7 +31,6 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_ta_fuel_allowance, parent, false);
-         fuelModeOfTravel.onIntentClick(val);
         return new FuelListAdapter.MyViewHolder(view);
     }
 
@@ -74,12 +67,6 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
             String qz = String.valueOf(q * z);
 
             holder.TextTotalAmount.setText("Rs. " + qz);
-
-            val = val + (q*z);
-
-            Log.v("TOTAL_FUEL_ALLOWANCE", String.valueOf(val));
-
-            fuelModeOfTravel.onIntentClick(val);
         }
 
 

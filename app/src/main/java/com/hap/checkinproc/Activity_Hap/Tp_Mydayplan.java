@@ -80,7 +80,6 @@ import retrofit2.Response;
 import static com.hap.checkinproc.Common_Class.Common_Class.addquote;
 
 public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface {
-    Spinner worktypespinner, worktypedistributor, worktyperoute;
     List<Common_Model> worktypelist = new ArrayList<>();
     List<Common_Model> Route_Masterlist = new ArrayList<>();
     List<Common_Model> FRoute_Master = new ArrayList<>();
@@ -92,37 +91,30 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     List<Common_Model> Jointworklistview = new ArrayList<>();
     List<Common_Model> Savejointwork = new ArrayList<>();
     private Main_Model.presenter presenter;
-
     DatePickerDialog DatePickerDialog;
     TimePickerDialog timePickerDialog;
     ArrayList<Tp_Dynamic_Modal> Tp_dynamicArraylist = new ArrayList<>();
     Gson gson;
     Type userType;
-    EditText edt_remarks, eText, etext2, empidedittext;
+    EditText edt_remarks, empidedittext;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    String worktype_id, Worktype_Button = "", distributorid, routename, routeid, Fieldworkflag = "", hqid, shifttypeid, Chilling_Id;
-    private TextClock tClock;
+    String worktype_id, Worktype_Button = "", Fieldworkflag = "", hqid, shifttypeid, Chilling_Id;
     Button submitbutton, GetEmpId;
     CustomListViewDialog customDialog;
-    ImageView backarow;
     ProgressBar progressbar;
-    TextView worktype_text, distributor_text, route_text, text_tour_plancount, hq_text, shift_type, chilling_text, Remarkscaption;
+    TextView worktype_text, Sf_name, distributor_text, route_text, text_tour_plancount, hq_text, shift_type, chilling_text, Remarkscaption;
     TextView tourdate;
     Common_Model Model_Pojo;
-    LinearLayout BusTo, jointwork_layout, joint_work_Recyclerview, hqlayout, shiftypelayout, Procrumentlayout, chillinglayout;
+    LinearLayout BusTo, jointwork_layout, hqlayout, shiftypelayout, Procrumentlayout, chillinglayout;
     RecyclerView jointwork_recycler;
-    ImageView image;
-    int joint_flag = 0;
-    DatePickerDialog picker;
     CardView ModeTravel, card_Toplace, CardDailyAllowance, card_from;
-    EditText BusFrom, EditRemarks;
+    EditText BusFrom, reason;
     public static final String Name = "Allowance";
     public static final String MOT = "ModeOfTravel";
     String STRCode = "", DM = "", DriverNeed = "false", DriverMode = "", modeTypeVale = "", mode = "", imageURI = "", modeVal = "", StartedKM = "", FromKm = "", ToKm = "", Fare = "", strDailyAllowance = "", strDriverAllowance = "", StToEnd = "", StrID = "";
     private ArrayList<String> travelTypeList;
     CheckBox driverAllowance;
-    String driverAllowanceBoolean = "";
     List<ModeOfTravel> modelOfTravel;
     List<Common_Model> modelTravelType = new ArrayList<>();
     TextView TextMode, TextToAddress, dailyAllowance;
@@ -130,13 +122,15 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     List<Common_Model> listOrderType = new ArrayList<>();
     Common_Model mCommon_model_spinner;
     String modeId = "", toId = "", startEnd = "";
-    LinearLayout MdeTraval, DailyAll, frmPlace, ToPlace;
+    LinearLayout MdeTraval, DailyAll, frmPlace, ToPlace, Approvereject, rejectonly;
     int jcountglobal = 0;
     Joint_Work_Adapter adapter;
     LinearLayout Dynamictpview;
     RecyclerView dynamicrecyclerview;
     ArrayList<Tp_Dynamic_Modal> dynamicarray = new ArrayList<>();
     DynamicViewAdapter dynamicadapter;
+    Button tpapprovebutton, tp_rejectsave, tpreject;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,6 +139,13 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         progressbar = findViewById(R.id.progressbar);
         shared_common_pref = new Shared_Common_Pref(this);
         common_class = new Common_Class(this);
+        Approvereject = findViewById(R.id.Approvereject);
+        rejectonly = findViewById(R.id.rejectonly);
+        tp_rejectsave = findViewById(R.id.tp_rejectsave);
+        tpreject = findViewById(R.id.tpreject);
+        Sf_name = findViewById(R.id.Sf_name);
+        tpapprovebutton = findViewById(R.id.tpapprovebutton);
+        reason = findViewById(R.id.reason);
         edt_remarks = findViewById(R.id.edt_remarks);
         Dynamictpview = findViewById(R.id.Dynamictpview);
         dynamicrecyclerview = findViewById(R.id.dynamicrecyclerview);
@@ -185,14 +186,10 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         empidedittext = (EditText) findViewById(R.id.empidedittext);
         BusTo = findViewById(R.id.lin_to_place);
         GetEmpId.setOnClickListener(this);
+        tpapprovebutton.setOnClickListener(this);
         submitbutton.setOnClickListener(this);
         worktypelayout.setOnClickListener(this);
-        distributors_layout.setOnClickListener(this);
-        route_layout.setOnClickListener(this);
-        shiftypelayout.setOnClickListener(this);
-        hqlayout.setOnClickListener(this);
         card_Toplace.setOnClickListener(this);
-        chillinglayout.setOnClickListener(this);
         BusFrom = findViewById(R.id.edt_frm);
         TextMode = findViewById(R.id.txt_mode);
         TextToAddress = findViewById(R.id.edt_to);
@@ -201,6 +198,20 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         driverAllowance = findViewById(R.id.da_driver_allowance);
         linCheckdriver = findViewById(R.id.lin_check_driver);
         ImageView backView = findViewById(R.id.imag_back);
+        tpreject.setOnClickListener(this);
+        tp_rejectsave.setOnClickListener(this);
+        if (Shared_Common_Pref.Tp_Approvalflag.equals("0")) {
+            submitbutton.setText("Submit");
+            submitbutton.setVisibility(View.VISIBLE);
+            Sf_name.setVisibility(View.GONE);
+            Approvereject.setVisibility(View.GONE);
+        } else {
+            submitbutton.setText("Edit");
+            submitbutton.setVisibility(View.GONE);
+            Sf_name.setText("" + Shared_Common_Pref.Tp_Sf_name);
+            Sf_name.setVisibility(View.VISIBLE);
+            Approvereject.setVisibility(View.VISIBLE);
+        }
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,12 +226,6 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             }
         });
 
-
-        distributors_layout.setVisibility(View.GONE);
-        chillinglayout.setVisibility(View.GONE);
-        hqlayout.setVisibility(View.GONE);
-        shiftypelayout.setVisibility(View.GONE);
-        route_layout.setVisibility(View.GONE);
         CardDailyAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -228,10 +233,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 OrderType();
             }
         });
-
-
     }
-
 
     @Override
     public void showProgress() {
@@ -354,116 +356,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         switch (view.getId()) {
             case R.id.submitbutton:
                 if (vali()) {
-                    Savejointwork = Jointworklistview;
-                    Log.e("Savejointwork_SIZE", String.valueOf(Savejointwork.size()));
-                    String jointwork = "";
-                    String jointworkname = "";
-                    for (int ii = 0; ii < Savejointwork.size(); ii++) {
-                        if (ii != 0) {
-                            jointwork = jointwork.concat(",");
-                            jointworkname = jointworkname.concat(",");
-                        }
-                        Log.e("JOINT_WORK_SELECT_NAME", Savejointwork.get(ii).getName());
-                        jointwork = jointwork.concat(Savejointwork.get(ii).getId());
-                        jointworkname = jointworkname.concat(Savejointwork.get(ii).getName());
-                    }
-                    Log.e("JOINT_WORK", jointwork);
-                    common_class.ProgressdialogShow(1, "Tour  plan");
-                    Calendar c = Calendar.getInstance();
-                    String Dcr_Dste = new SimpleDateFormat("HH:mm a", Locale.ENGLISH).format(new Date());
-                    JSONArray jsonarr = new JSONArray();
-                    JSONObject jsonarrplan = new JSONObject();
-                    String remarks = edt_remarks.getText().toString();
-                    try {
-                        JSONObject jsonobj = new JSONObject();
-                        jsonobj.put("worktype_code", addquote(worktype_id));
-                        jsonobj.put("Tour_Date", addquote(tourdate.getText().toString()));
-                        jsonobj.put("worktype_name", addquote(worktype_text.getText().toString()));
-                        jsonobj.put("Ekey", Common_Class.GetEkey());
-                        jsonobj.put("objective", addquote(remarks));
-                        jsonobj.put("Flag", addquote(Fieldworkflag));
-                        jsonobj.put("Button_Access", Worktype_Button);
-                        jsonobj.put("MOT", addquote(TextMode.getText().toString()));
-                        jsonobj.put("DA_Type", addquote(dailyAllowance.getText().toString()));
-                        jsonobj.put("Driver_Allow", addquote((driverAllowance.isChecked()) ? "1" : "0"));
-                        jsonobj.put("From_Place", addquote(BusFrom.getText().toString()));
-                        jsonobj.put("To_Place", addquote(TextToAddress.getText().toString()));
-                        jsonobj.put("MOT_ID", addquote(modeId));
-                        jsonobj.put("To_Place_ID", addquote(toId));
-                        jsonobj.put("Mode_Travel_ID", addquote(startEnd));
-                        jsonobj.put("worked_with", addquote(jointworkname));
-                        jsonobj.put("jointWorkCode", addquote(jointwork));
-                        JSONArray personarray = new JSONArray();
-                        JSONObject ProductJson_Object;
-                        for (int z = 0; z < dynamicarray.size(); z++) {
-                            ProductJson_Object = new JSONObject();
-                            try {
-                                ProductJson_Object.put("Fld_ID", dynamicarray.get(z).getFld_ID());
-                                ProductJson_Object.put("Fld_Name", dynamicarray.get(z).getFld_Name());
-                                ProductJson_Object.put("Fld_Type", dynamicarray.get(z).getFld_Type());
-                                ProductJson_Object.put("Fld_Src_Name", dynamicarray.get(z).getFld_Src_Name());
-                                ProductJson_Object.put("Fld_Src_Field", dynamicarray.get(z).getFld_Src_Field());
-                                ProductJson_Object.put("Fld_Length", dynamicarray.get(z).getFld_Length());
-                                ProductJson_Object.put("Fld_Symbol", dynamicarray.get(z).getFld_Symbol());
-                                ProductJson_Object.put("Fld_Mandatory", dynamicarray.get(z).getFld_Mandatory());
-                                ProductJson_Object.put("Active_flag", dynamicarray.get(z).getActive_flag());
-                                ProductJson_Object.put("Control_id", dynamicarray.get(z).getControl_id());
-                                ProductJson_Object.put("Target_Form", dynamicarray.get(z).getTarget_Form());
-                                ProductJson_Object.put("Filter_Text", dynamicarray.get(z).getFilter_Text());
-                                ProductJson_Object.put("Filter_Value", dynamicarray.get(z).getFilter_Value());
-                                ProductJson_Object.put("Field_Col", dynamicarray.get(z).getField_Col());
-
-                                if(dynamicarray.get(z).getFld_Symbol().equals("D")){
-                                    jsonobj.put("Worked_with_Code", dynamicarray.get(z).getFilter_Text());
-                                    jsonobj.put("Worked_with_Name",dynamicarray.get(z).getFilter_Value());
-                                }else if(dynamicarray.get(z).getFld_Symbol().equals("R")){
-                                    jsonobj.put("RouteCode", dynamicarray.get(z).getFilter_Text());
-                                    jsonobj.put("RouteName",dynamicarray.get(z).getFilter_Value());
-                                }
-                                personarray.put(ProductJson_Object);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        jsonarrplan.put("Tour_Plan", jsonobj);
-                        jsonarrplan.put("Tp_DynamicValues", personarray);
-                        jsonarr.put(jsonarrplan);
-                        Log.e("Mydayplan_Object", jsonarr.toString());
-                        Map<String, String> QueryString = new HashMap<>();
-                        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-                        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-                        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
-                        QueryString.put("desig", "MGR");
-                        Log.e("QueryString", String.valueOf(QueryString));
-                        Log.e("QueryString_SF", Shared_Common_Pref.Sf_Code);
-                        Log.e("QueryString_DV", Shared_Common_Pref.Div_Code);
-                        Log.e("QueryString_Sc", Shared_Common_Pref.StateCode);
-                        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                        Call<Object> Callto = apiInterface.Tb_Mydayplannew(QueryString, jsonarr.toString());
-                        Callto.enqueue(new Callback<Object>() {
-                            @Override
-                            public void onResponse(Call<Object> call, Response<Object> response) {
-                                Log.e("RESPONSE_FROM_SERVER", response.body().toString());
-                                common_class.ProgressdialogShow(2, "Tour  plan");
-                                if (response.code() == 200 || response.code() == 201) {
-                                    common_class.GetTP_Result("TourPlanSubmit", "", common_class.getintentValues("SubmitMonth"), common_class.getintentValues("TourYear"));
-                                    common_class.CommonIntentwithoutFinishputextra(Tp_Calander.class, "Monthselection", String.valueOf(common_class.getintentValues("TourMonth")));
-                                    Toast.makeText(Tp_Mydayplan.this, "Tour Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
-                                }
-
-                            }
-
-                            @Override
-                            public void onFailure(Call<Object> call, Throwable t) {
-                                common_class.ProgressdialogShow(2, "Tour  plan");
-                                Log.e("Reponse TAG", "onFailure : " + t.toString());
-                            }
-                        });
-
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    Tp_Submit("0");
                 }
                 break;
             case R.id.worktypelayout:
@@ -488,7 +381,6 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                     GetEmpList();
                 }
                 break;
-
             case R.id.card_Toplace:
                 customDialog = new CustomListViewDialog(Tp_Mydayplan.this, getfieldforcehqlist, 102);
                 Window chillwindowww = customDialog.getWindow();
@@ -496,7 +388,147 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 chillwindowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 customDialog.show();
                 break;
+            case R.id.tpapprovebutton:
+                Tp_Submit("1");
 
+
+                break;
+            case R.id.tpreject:
+                rejectonly.setVisibility(View.VISIBLE);
+                Approvereject.setVisibility(View.INVISIBLE);
+                break;
+            case R.id.tp_rejectsave:
+                if (reason.getText().toString().equalsIgnoreCase("")) {
+                    Toast.makeText(this, "Enter The Reason", Toast.LENGTH_SHORT).show();
+                } else {
+                    SendtpApproval("NTPApprovalR", 2);
+                }
+                break;
+        }
+    }
+
+    private void Tp_Submit(String Submit_Flag) {
+        Savejointwork = Jointworklistview;
+        Log.e("Savejointwork_SIZE", String.valueOf(Savejointwork.size()));
+        String jointwork = "";
+        String jointworkname = "";
+        for (int ii = 0; ii < Savejointwork.size(); ii++) {
+            if (ii != 0) {
+                jointwork = jointwork.concat(",");
+                jointworkname = jointworkname.concat(",");
+            }
+            Log.e("JOINT_WORK_SELECT_NAME", Savejointwork.get(ii).getName());
+            jointwork = jointwork.concat(Savejointwork.get(ii).getId());
+            jointworkname = jointworkname.concat(Savejointwork.get(ii).getName());
+        }
+        Log.e("JOINT_WORK", jointwork);
+        common_class.ProgressdialogShow(1, "Tour  plan");
+        Calendar c = Calendar.getInstance();
+        String Dcr_Dste = new SimpleDateFormat("HH:mm a", Locale.ENGLISH).format(new Date());
+        JSONArray jsonarr = new JSONArray();
+        JSONObject jsonarrplan = new JSONObject();
+        String remarks = edt_remarks.getText().toString();
+        try {
+            JSONObject jsonobj = new JSONObject();
+            jsonobj.put("worktype_code", addquote(worktype_id));
+            jsonobj.put("Tour_Date", addquote(tourdate.getText().toString()));
+            jsonobj.put("worktype_name", addquote(worktype_text.getText().toString()));
+            jsonobj.put("Ekey", Common_Class.GetEkey());
+            jsonobj.put("objective", addquote(remarks));
+            jsonobj.put("Flag", addquote(Fieldworkflag));
+            jsonobj.put("Button_Access", Worktype_Button);
+            jsonobj.put("MOT", addquote(TextMode.getText().toString()));
+            jsonobj.put("DA_Type", addquote(dailyAllowance.getText().toString()));
+            jsonobj.put("Driver_Allow", addquote((driverAllowance.isChecked()) ? "1" : "0"));
+            jsonobj.put("From_Place", addquote(BusFrom.getText().toString()));
+            jsonobj.put("To_Place", addquote(TextToAddress.getText().toString()));
+            jsonobj.put("MOT_ID", addquote(modeId));
+            jsonobj.put("To_Place_ID", addquote(toId));
+            jsonobj.put("Mode_Travel_ID", addquote(startEnd));
+            jsonobj.put("worked_with", addquote(jointworkname));
+            jsonobj.put("jointWorkCode", addquote(jointwork));
+            JSONArray personarray = new JSONArray();
+            JSONObject ProductJson_Object;
+            for (int z = 0; z < dynamicarray.size(); z++) {
+                ProductJson_Object = new JSONObject();
+                try {
+                    ProductJson_Object.put("Fld_ID", dynamicarray.get(z).getFld_ID());
+                    ProductJson_Object.put("Fld_Name", dynamicarray.get(z).getFld_Name());
+                    ProductJson_Object.put("Fld_Type", dynamicarray.get(z).getFld_Type());
+                    ProductJson_Object.put("Fld_Src_Name", dynamicarray.get(z).getFld_Src_Name());
+                    ProductJson_Object.put("Fld_Src_Field", dynamicarray.get(z).getFld_Src_Field());
+                    ProductJson_Object.put("Fld_Length", dynamicarray.get(z).getFld_Length());
+                    ProductJson_Object.put("Fld_Symbol", dynamicarray.get(z).getFld_Symbol());
+                    ProductJson_Object.put("Fld_Mandatory", dynamicarray.get(z).getFld_Mandatory());
+                    ProductJson_Object.put("Active_flag", dynamicarray.get(z).getActive_flag());
+                    ProductJson_Object.put("Control_id", dynamicarray.get(z).getControl_id());
+                    ProductJson_Object.put("Target_Form", dynamicarray.get(z).getTarget_Form());
+                    ProductJson_Object.put("Filter_Text", dynamicarray.get(z).getFilter_Text());
+                    ProductJson_Object.put("Filter_Value", dynamicarray.get(z).getFilter_Value());
+                    ProductJson_Object.put("Field_Col", dynamicarray.get(z).getField_Col());
+                    if (dynamicarray.get(z).getFld_Symbol().equals("D")) {
+                        jsonobj.put("Worked_with_Code", dynamicarray.get(z).getFilter_Text());
+                        jsonobj.put("Worked_with_Name", dynamicarray.get(z).getFilter_Value());
+                    } else if (dynamicarray.get(z).getFld_Symbol().equals("R")) {
+                        jsonobj.put("RouteCode", dynamicarray.get(z).getFilter_Text());
+                        jsonobj.put("RouteName", dynamicarray.get(z).getFilter_Value());
+                    }
+                    personarray.put(ProductJson_Object);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            jsonarrplan.put("Tour_Plan", jsonobj);
+            jsonarrplan.put("Tp_DynamicValues", personarray);
+            jsonarr.put(jsonarrplan);
+            String Sf_Code;
+            if (Shared_Common_Pref.Tp_Approvalflag.equals("0")) {
+                Sf_Code = Shared_Common_Pref.Sf_Code;
+            } else {
+                Sf_Code = Shared_Common_Pref.Tp_SFCode;
+            }
+            Map<String, String> QueryString = new HashMap<>();
+            QueryString.put("sfCode", Sf_Code);
+            QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+            QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+            QueryString.put("Approval_MGR", Shared_Common_Pref.Tp_Approvalflag);
+            QueryString.put("desig", "MGR");
+            Log.e("QueryString", String.valueOf(QueryString));
+            Log.e("QueryString_SF", Sf_Code);
+            Log.e("QueryString_DV", Shared_Common_Pref.Div_Code);
+            Log.e("QueryString_Sc", Shared_Common_Pref.StateCode);
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<Object> Callto = apiInterface.Tb_Mydayplannew(QueryString, jsonarr.toString());
+            Callto.enqueue(new Callback<Object>() {
+                @Override
+                public void onResponse(Call<Object> call, Response<Object> response) {
+                    Log.e("RESPONSE_FROM_SERVER", response.body().toString());
+                    common_class.ProgressdialogShow(2, "Tour  plan");
+                    if (response.code() == 200 || response.code() == 201) {
+                        common_class.GetTP_Result("TourPlanSubmit", "", common_class.getintentValues("SubmitMonth"), common_class.getintentValues("TourYear"));
+
+                        if (Submit_Flag.equals("1")) {
+                            SendtpApproval("NTPApproval", 1);
+                        } else {
+                            common_class.CommonIntentwithoutFinishputextra(Tp_Calander.class, "Monthselection", String.valueOf(common_class.getintentValues("TourMonth")));
+                            Toast.makeText(Tp_Mydayplan.this, "Tour Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
+
+                        }
+
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<Object> call, Throwable t) {
+                    common_class.ProgressdialogShow(2, "Tour  plan");
+                    Log.e("Reponse TAG", "onFailure : " + t.toString());
+                }
+            });
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -505,7 +537,6 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         travelTypeList.add("HQ");
         travelTypeList.add("EXQ");
         travelTypeList.add("Out Station");
-
         for (int i = 0; i < travelTypeList.size(); i++) {
             String id = String.valueOf(travelTypeList.get(i));
             String name = travelTypeList.get(i);
@@ -591,7 +622,6 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 }
 
             }
-
             if (type.equals("3")) {
                 jointwork_recycler.setAdapter(new Joint_Work_Adapter(Jointworklistview, R.layout.jointwork_listitem, getApplicationContext(), "10", new Joint_Work_Listner() {
                     @Override
@@ -616,9 +646,15 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     }
 
     private void Get_MydayPlan(String tourDate) {
+        String Sf_Code = "";
+        if (Shared_Common_Pref.Tp_Approvalflag.equals("0")) {
+            Sf_Code = Shared_Common_Pref.Sf_Code;
+        } else {
+            Sf_Code = Shared_Common_Pref.Tp_SFCode;
+        }
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "Get/Tp_dayplan");
-        QueryString.put("Sf_code", Shared_Common_Pref.Sf_Code);
+        QueryString.put("Sf_code", Sf_Code);
         QueryString.put("Date", tourDate);
         QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
         QueryString.put("desig", "MGR");
@@ -652,13 +688,13 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                         String[] arrOfStr = Jointworkcode.split(",");
                         String[] arrOfname = JointWork_Name.split(",");
                         //Model_Pojo = new Common_Model(arrOfStr.get("Sf_Name").getAsString() + "-" + EmpDet.get("sf_Designation_Short_Name").getAsString(), EmpDet.get("Sf_Code").getAsString(), false);
-
-                        if(!Jointworkcode.equals("")) {
+                        //Log.e("JOINTWORKCode", String.valueOf(arrOfStr.length));
+                        if (!Jointworkcode.equals("")) {
+                            Jointworklistview.clear();
                             for (int ik = 0; arrOfStr.length > ik; ik++) {
                                 Model_Pojo = new Common_Model(arrOfname[ik], arrOfStr[ik], false);
                                 Jointworklistview.add(Model_Pojo);
                             }
-
                             if (Jointworklistview.size() > 0) {
                                 jointwork_layout.setVisibility(View.VISIBLE);
                                 text_tour_plancount.setText(String.valueOf(arrOfStr.length));
@@ -754,6 +790,57 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             }
         });
     }
+    private void SendtpApproval(String Name, int flag) {
+        Map<String, String> QueryString = new HashMap<>();
+        QueryString.put("axn", "dcr/save");
+        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+        QueryString.put("State_Code", Shared_Common_Pref.Div_Code);
+        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+        QueryString.put("Start_date", common_class.getintentValues("TourDate"));
+        QueryString.put("Mr_Sfcode", Shared_Common_Pref.Tp_SFCode);
+        QueryString.put("desig", "MGR");
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        JSONObject sp = new JSONObject();
+        try {
+            sp.put("Sf_Code", Shared_Common_Pref.Tp_SFCode);
+            if (flag == 2) {
+                sp.put("reason", common_class.addquote(reason.getText().toString()));
+            }
+            jsonObject.put(Name, sp);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        jsonArray.put(jsonObject);
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, jsonArray.toString());
+        Log.e("Log_TpQuerySTring", QueryString.toString());
+        Log.e("Log_Tp_SELECT", jsonArray.toString());
+        mCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                // locationList=response.body();
+                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
+                try {
+                    common_class.CommonIntentwithoutFinishputextra(Tp_Calander.class, "Monthselection", String.valueOf(common_class.getintentValues("TourMonth")));
+                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    if (flag == 1) {
+                        Toast.makeText(getApplicationContext(), "TP Approved  Successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "TP Rejected  Successfully", Toast.LENGTH_SHORT).show();
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
+
+            }
+        });
+    }
 
     public void GetEmpList() {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -810,11 +897,17 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     }
 
     public void dynamicMode() {
+        String Sf_Code;
+        if (Shared_Common_Pref.Tp_Approvalflag.equals("0")) {
+            Sf_Code = Shared_Common_Pref.Sf_Code;
+        } else {
+            Sf_Code = Shared_Common_Pref.Tp_SFCode;
+        }
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "table/list");
         QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+        QueryString.put("sfCode", Sf_Code);
+        QueryString.put("rSF", Sf_Code);
         QueryString.put("State_Code", Shared_Common_Pref.StateCode);
         String commonLeaveType = "{\"tableName\":\"getmodeoftravel\",\"coloumns\":\"[\\\"id\\\",\\\"name\\\",\\\"Leave_Name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
@@ -822,7 +915,6 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-
                 userType = new TypeToken<ArrayList<ModeOfTravel>>() {
                 }.getType();
                 modelOfTravel = gson.fromJson(new Gson().toJson(response.body()), userType);
@@ -885,14 +977,21 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
     public void GetTp_Worktype_Fields(String wflag) {
         common_class.ProgressdialogShow(1, "Tour plan PJP");
+        String Sf_Code;
+        if (Shared_Common_Pref.Tp_Approvalflag.equals("0")) {
+            Sf_Code = Shared_Common_Pref.Sf_Code;
+        } else {
+            Sf_Code = Shared_Common_Pref.Tp_SFCode;
+        }
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "get/worktypefields");
         QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+        QueryString.put("sfCode", Sf_Code);
+        QueryString.put("rSF", Sf_Code);
         QueryString.put("Worktype_Code", wflag);
         QueryString.put("State_Code", Shared_Common_Pref.StateCode);
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+        Log.e("QUERY_STRING", QueryString.toString());
         Call<Object> call = service.GettpWorktypeFields(QueryString);
         call.enqueue(new Callback<Object>() {
             @Override
@@ -902,10 +1001,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                         Log.v("print_upload_file_true", "ggg" + response);
                         String jsonData = null;
                         Tp_dynamicArraylist.clear();
-                        //jsonData = response.body();
                         Log.v("response_data", new Gson().toJson(response.body()));
-                        //array = new ArrayList<>();
-                        // JSONObject js = new JSONObject(jsonData);
                         JSONArray jsnArValue = new JSONArray(new Gson().toJson(response.body()));
                         Log.v("AfterTpresponse", jsnArValue.toString());
                         for (int i = 0; i < jsnArValue.length(); i++) {
@@ -932,18 +1028,15 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
 
                             }
-
                             Log.e("THIRUMALAI", String.valueOf(a_listt.size()));
                             Tp_dynamicArraylist.add(new Tp_Dynamic_Modal(json_oo.getString("Fld_ID"), json_oo.getString("Fld_Name"), "", json_oo.getString("Fld_Type"), json_oo.getString("Fld_Src_Name"), json_oo.getString("Fld_Src_Field"), json_oo.getInt("Fld_Length"), json_oo.getString("Fld_Symbol"), json_oo.getString("Fld_Mandatory"), json_oo.getString("Active_flag"), json_oo.getString("Control_id"), json_oo.getString("Target_Form"), json_oo.getString("Filter_Text"), json_oo.getString("Filter_Value"), json_oo.getString("Field_Col"), a_listt));
                         }
-
                         dynamicadapter = new Tp_Mydayplan.DynamicViewAdapter(Tp_dynamicArraylist, R.layout.tp_dynamic_layout, getApplicationContext(), -1);
                         dynamicrecyclerview.setAdapter(dynamicadapter);
                         dynamicadapter.notifyDataSetChanged();
                         //new Tp_Mydayplan.DynamicViewAdapter(Tp_dynamicArraylist, R.layout.tp_dynamic_layout, getApplicationContext(), 0).notifyDataSetChanged();
                         dynamicrecyclerview.setItemViewCacheSize(jsnArValue.length());
                         common_class.ProgressdialogShow(2, "Tour plan PJP");
-
                     }
                 } catch (Exception e) {
                 }

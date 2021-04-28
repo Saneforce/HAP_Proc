@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Tp_View_Master {
-
     @SerializedName("date")
     @Expose
     private String date;
@@ -55,7 +54,7 @@ public class Tp_View_Master {
     private Integer tyear;
     @SerializedName("submit_status")
     @Expose
-    private Integer submitStatus;
+    private String submitStatus;
     @SerializedName("dayofplan")
     @Expose
     private Integer dayofcout;
@@ -247,11 +246,11 @@ public class Tp_View_Master {
         this.tyear = tyear;
     }
 
-    public Integer getSubmitStatus() {
+    public String getSubmitStatus() {
         return submitStatus;
     }
 
-    public void setSubmitStatus(Integer submitStatus) {
+    public void setSubmitStatus(String submitStatus) {
         this.submitStatus = submitStatus;
     }
 

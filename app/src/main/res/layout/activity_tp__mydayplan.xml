@@ -17,7 +17,6 @@
             android:background="@color/colorAccent"
             android:padding="@dimen/C15dp">
 
-
             <TextView
                 android:id="@+id/textView9"
                 style="@style/TextStyle"
@@ -29,13 +28,28 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/Sf_name"
+                style="@style/TextStyle"
+                android:gravity="center"
+                android:text="Time"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+        </RelativeLayout>
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="@dimen/C60dp"
             android:background="@color/bg_color"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,44 +57,36 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:orientation="vertical">
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:visibility="visible">
-
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:padding="5dp">
-
                         <TextView
                             android:id="@+id/tourdate"
                             style="@style/TextStyle"
                             android:text="Time"
                             android:textColor="@color/color_red" />
-
-
                     </RelativeLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/C10dp"
+                        android:layout_margin="@dimen/C10dp"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:orientation="vertical">
-
                         <LinearLayout
                             android:id="@+id/layoutData"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
                             android:visibility="visible">
-
-
                             <LinearLayout
                                 android:id="@+id/worktypelayout"
                                 android:layout_width="match_parent"
@@ -90,8 +96,6 @@
                                 <TextView
                                     style="@style/TextStyle"
                                     android:text="@string/txt_worktype" />
-
-
                                 <TextView
                                     android:id="@+id/worktype_text"
                                     style="@style/TextStyle"
@@ -100,133 +104,6 @@
                                     android:hint="Select the worktype"
                                     android:padding="@dimen/C8dp" />
                             </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/Procrumentlayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical"
-                                android:visibility="gone">
-
-                                <LinearLayout
-                                    android:id="@+id/hqlayout"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        style="@style/TextStyle"
-                                        android:text="@string/txt_hq" />
-
-
-                                    <TextView
-                                        android:id="@+id/hq_text"
-                                        style="@style/TextStyle"
-                                        android:layout_width="match_parent"
-                                        android:background="@drawable/round_white_backround"
-                                        android:hint="Select the HQ"
-                                        android:padding="@dimen/C8dp" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/chillinglayout"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        style="@style/TextStyle"
-                                        android:text="@string/txt_chillingtext" />
-
-                                    <TextView
-                                        android:id="@+id/chilling_text"
-                                        style="@style/TextStyle"
-                                        android:layout_width="match_parent"
-                                        android:background="@drawable/round_white_backround"
-                                        android:hint="Select the Center"
-                                        android:padding="@dimen/C8dp" />
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:id="@+id/shiftypelayout"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical">
-
-                                    <TextView
-                                        style="@style/TextStyle"
-                                        android:text="@string/txt_shifttype" />
-
-                                    <TextView
-                                        android:id="@+id/shift_type"
-                                        style="@style/TextStyle"
-                                        android:layout_width="match_parent"
-                                        android:background="@drawable/round_white_backround"
-                                        android:hint="Select the Shift M/E"
-                                        android:padding="@dimen/C8dp" />
-                                </LinearLayout>
-
-                            </LinearLayout>
-
-
-                            <LinearLayout
-                                android:id="@+id/distributors_layout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="15dp"
-                                android:orientation="vertical"
-                                android:visibility="gone">
-
-                                <TextView
-                                    style="@style/TextStyle"
-                                    android:text="@string/txt_distributors" />
-
-                                <TextView
-                                    android:id="@+id/distributor_text"
-                                    style="@style/TextStyle"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="39dp"
-                                    android:layout_marginTop="10dp"
-                                    android:background="@drawable/round_white_backround"
-                                    android:gravity="center_vertical"
-                                    android:hint="Select the Distributor"
-                                    android:padding="@dimen/C4dp"
-                                    android:textSize="13sp" />
-
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/route_layout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/C15dp"
-                                android:orientation="vertical"
-                                android:visibility="gone">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="15dp"
-                                    android:fontFamily="@font/basic"
-                                    android:text="@string/txt_route"
-                                    android:textColor="#000000"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:id="@+id/route_text"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="39dp"
-                                    android:layout_marginTop="10dp"
-                                    android:background="@drawable/round_white_backround"
-                                    android:gravity="center_vertical"
-                                    android:hint="Select the Route"
-                                    android:padding="@dimen/C4dp"
-                                    android:textSize="13sp" />
-                            </LinearLayout>
-
-
                         </LinearLayout>
 
 
@@ -237,15 +114,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/dynamicrecyclerview"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:padding="@dimen/C5dp"
-                          />
+                            android:padding="@dimen/C10dp" />
 
 
                     </LinearLayout>
+
                     <LinearLayout
                         android:id="@+id/jointwork_layout"
                         android:layout_width="match_parent"
@@ -253,11 +131,13 @@
                         android:layout_marginTop="@dimen/C5dp"
                         android:orientation="vertical"
                         android:visibility="gone">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="10dp"
                             android:orientation="horizontal">
+
                             <TextView
                                 style="@style/TextStyle"
                                 android:layout_width="wrap_content"
@@ -304,6 +184,7 @@
                                     android:elevation="@dimen/C2dp"
                                     android:orientation="vertical"
                                     android:padding="5dp">
+
                                     <EditText
                                         android:id="@+id/empidedittext"
                                         android:layout_width="match_parent"
@@ -336,8 +217,7 @@
                             android:id="@+id/jointwork_recycler"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="@dimen/C5dp" />
-                        />
+                            android:layout_marginTop="@dimen/C10dp" />
                     </LinearLayout>
 
 
@@ -575,8 +455,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="15dp"
-                                android:text="Remarks"
                                 android:fontFamily="@font/basic"
+                                android:text="Remarks"
                                 android:textColor="#000000"
                                 android:textStyle="bold" />
 
@@ -590,6 +470,70 @@
                                 android:hint="Enter the Remarks"
                                 android:padding="@dimen/C5dp"
                                 android:textSize="@dimen/C12dp" />
+
+                            <LinearLayout
+                                android:id="@+id/rejectonly"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:visibility="gone">
+
+                                <TextView
+                                    style="@style/TextStyle"
+                                    android:text="@string/reason"
+                                    android:textStyle="bold" />
+
+                                <androidx.appcompat.widget.AppCompatEditText
+                                    android:id="@+id/reason"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/C60dp"
+                                    android:layout_marginTop="@dimen/C10dp"
+                                    android:layout_marginBottom="@dimen/C10dp"
+                                    android:background="@drawable/round_white_backround"
+                                    android:gravity="start"
+                                    android:hint="@string/txt_enter_reason"
+                                    android:padding="5dp"
+                                    android:textSize="@dimen/C12dp"
+                                    android:visibility="visible" />
+
+                                <Button
+                                    android:id="@+id/tp_rejectsave"
+                                    style="@style/ButtonStyle"
+                                    android:layout_width="110dp"
+                                    android:layout_gravity="center"
+                                    android:background="@drawable/blue_txt_bg"
+                                    android:text="Reject"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:id="@+id/Approvereject"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center"
+                                android:visibility="gone">
+
+                                <Button
+                                    android:id="@+id/tpapprovebutton"
+                                    style="@style/ButtonStyle"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/button_dgreen"
+                                    android:fontFamily="@font/alegreya_sans_sc"
+                                    android:text="Approve"
+                                    android:textStyle="bold" />
+
+                                <Button
+                                    android:id="@+id/tpreject"
+                                    style="@style/ButtonStyle"
+                                    android:layout_weight="1"
+                                    android:background="@drawable/button_amber"
+                                    android:fontFamily="@font/alegreya_sans_sc"
+                                    android:text="Reject"
+                                    android:visibility="gone"
+                                    android:textStyle="bold" />
+
+                            </LinearLayout>
                         </LinearLayout>
 
                     </LinearLayout>

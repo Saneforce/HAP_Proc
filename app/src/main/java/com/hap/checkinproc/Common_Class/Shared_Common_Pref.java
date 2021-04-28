@@ -69,6 +69,10 @@ public class Shared_Common_Pref {
     public static String Outlet_Total_Orders = "Outlet_Total_Orders";
     public static String Outlet_Total_AlldaysOrders = "Outlet_Total_AlldaysOrders";
     public static String TodaySfOrdervalues = "TodaySfOrdervalues";
+    public static String Tp_Approvalflag = "Tp_Approvalflag";
+    public static String Tp_Sf_name = "Tp_Sf_name";
+    public static String Tp_Monthname = "Tp_Monthname";
+    public static String Tp_SFCode= "Tp_SFCode";
 
 
     public Shared_Common_Pref(Activity Ac) {

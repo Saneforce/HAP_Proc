@@ -108,8 +108,6 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
                 startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
-
-
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
         textColorAnim.setDuration(500);
@@ -141,17 +139,24 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
         common_class.getintentValues("Monthselection");
         calendarView = this.findViewById(R.id.gridcalander);
         SelectedMonth = Integer.parseInt(common_class.getintentValues("Monthselection"));
-        currentMonth.setText(common_class.GetMonthname(Integer.parseInt(common_class.getintentValues("Monthselection"))) + "   " + 2021);
         Log.e("MONTH_SELECTion", common_class.getintentValues("Monthselection"));
         _calendar = Calendar.getInstance(Locale.getDefault());
         if (SelectedMonth == 12 || SelectedMonth == 0) {
             SelectedMonth = 0;
-
-            year = _calendar.get(Calendar.YEAR);
+            if (SelectedMonth == 12) {
+                year = _calendar.get(Calendar.YEAR) + 1;
+            } else {
+                year = _calendar.get(Calendar.YEAR);
+            }
         } else {
             year = _calendar.get(Calendar.YEAR);
         }
-
+        if (Shared_Common_Pref.Tp_Approvalflag.equals("0")) {
+            btnsubmit.setVisibility(View.VISIBLE);
+        } else {
+            btnsubmit.setVisibility(View.GONE);
+        }
+        currentMonth.setText(common_class.GetMonthname(Integer.parseInt(common_class.getintentValues("Monthselection"))) + "   " + year);
 
         // backarow.setOnClickListener(this);
         nDialog = new ProgressDialog(Tp_Calander.this);
@@ -173,18 +178,24 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
 
 
     public void GetTp_List() {
-
         Log.e("ERROR_CONTROL", String.valueOf(SelectedMonth));
         int SM = SelectedMonth + 1;
         String Tp_Object = "{\"tableName\":\"vwTourPlan\",\"coloumns\":\"[\\\"date\\\",\\\"remarks\\\",\\\"worktype_code\\\",\\\"worktype_name\\\",\\\"RouteCode\\\",\\\"RouteName\\\",\\\"Worked_with_Code\\\",\\\"Worked_with_Name\\\",\\\"JointWork_Name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<Object> mCall = apiInterface.GettpRespnse(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, String.valueOf(SM), String.valueOf(year), Tp_Object);
+        String Sf_Code = "";
+        if (Shared_Common_Pref.Tp_Approvalflag.equals("0")) {
+            Sf_Code = Shared_Common_Pref.Sf_Code;
+        } else {
+            Sf_Code = Shared_Common_Pref.Tp_SFCode;
+        }
+        Log.e("FIELDFORCE_SF", Sf_Code);
+        Call<Object> mCall = apiInterface.GettpRespnse(Shared_Common_Pref.Div_Code, Sf_Code, Sf_Code, Shared_Common_Pref.StateCode, String.valueOf(SM), String.valueOf(year), Tp_Object);
         mCall.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 // locationList=response.body();
-             /* Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
-                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));*/
+                Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
+                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
                 userType = new TypeToken<ArrayList<Tp_View_Master>>() {
                 }.getType();
                 Tp_View_Master = gson.fromJson(new Gson().toJson(response.body()), userType);
@@ -192,7 +203,6 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
                 month = SelectedMonth + 1;
                 /*     Log.e("TP_VIEW_LENGTH", String.valueOf(Tp_View_Master.size()));
                  */
-
                 adapter = new Tp_Calander.GridCellAdapter(getApplicationContext(), R.id.date, month, year, (ArrayList<com.hap.checkinproc.Model_Class.Tp_View_Master>) Tp_View_Master);
                 adapter.notifyDataSetChanged();
                 calendarView.setAdapter(adapter);
@@ -218,22 +228,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        /*if (v == prevMonth) {
-            if (month <= 1) {
-                month = 12;
-                year--;
-            } else
-                month--;
-            setGridCellAdapterToDate(month, year);
-        }
-        if (v == nextMonth) {
-            if (month > 11) {
-                month = 1;
-                year++;
-            } else
-                month++;
-            setGridCellAdapterToDate(month, year);
-        }*/
+
         switch (v.getId()) {
             case R.id.imag_back:
                 common_class.CommonIntentwithFinish(Tp_Month_Select.class);
@@ -257,9 +252,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
     // Inner Class
     public class GridCellAdapter extends BaseAdapter implements View.OnClickListener {
         private final Context _context;
-
         private final List<String> list;
-
         private ArrayList<Tp_View_Master> Tp_View_Master;
         private ArrayList<String> items;
         private static final int DAY_OFFSET = 1;
@@ -337,8 +330,6 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
 
             int currentMonth = mm - 1;
             daysInMonth = getNumberOfDaysOfMonth(currentMonth);
-
-
             // Gregorian Calendar : MINUS 1, set to FIRST OF MONTH
             GregorianCalendar cal = new GregorianCalendar(yy, currentMonth, 1);
 
@@ -376,12 +367,16 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
 
             // Current Month Days
             for (int i = 1; i <= daysInMonth; i++) {
-
-
-                if (CheckTp_View(i) == true) {
+                if (CheckTp_View(i).equals("1") || CheckTp_View(i).equals("3")) {
                     Log.e("getCurrentDayOfMonth", String.valueOf(i) + "-BLUE" + "-" + curentDateString + "-" + yy + "  " + getMonthAsString(currentMonth) + "DATE " + getCurrentDayOfMonth() + "-" + getMonthAsString(currentMonth) + "=" + yy);
+                    if (CheckTp_View(i).equals("1")) {
+                        Log.e("PENDING_COLOR", CheckTp_View(i));
+                        list.add(String.valueOf(i) + "-BLUE" + "-" + getMonthAsString(currentMonth) + "-" + yy);
+                    } else {
+                        Log.e("APPROVED_COLOR", CheckTp_View(i));
+                        list.add(String.valueOf(i) + "-GREEN" + "-" + getMonthAsString(currentMonth) + "-" + yy);
+                    }
 
-                    list.add(String.valueOf(i) + "-BLUE" + "-" + getMonthAsString(currentMonth) + "-" + yy);
 
                    /* if (getMonthAsString(currentMonth).equals(curentDateString)) {
                         list.add(String.valueOf(i) + "-BLUE" + "-" + getMonthAsString(currentMonth) + "-" + yy);
@@ -451,31 +446,23 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
             // Set the Day GridCell
             gridcell.setText(theday);
             gridcell.setTag(theday + "-" + themonth + "-" + theyear);
-
             Log.e("ALL_DATE", theday + "-" + themonth + "-" + theyear + day_color[1]);
-
             if (day_color[1].equals("GREY")) {
                 gridcell.setTextColor(Color.LTGRAY);
                 gridcell.setEnabled(false);
             }
-
-            if (day_color[1].equals("WHITE")) {
-                gridcell.setTextColor(Color.BLACK);
-                gridcell.setBackgroundColor(getResources().getColor(R.color.color_white));
+            if (day_color[1].equals("GREEN")) {
+                gridcell.setTextColor(getResources().getColor(R.color.subExpHeader));
             }
             if (day_color[1].equals("BLUE")) {
                 // iv_icon.setVisibility(View.VISIBLE);
-                gridcell.setTextColor(getResources().getColor(R.color.color_red));
+                gridcell.setTextColor(getResources().getColor(R.color.Pending_yellow));
                 //gridcell.setBackgroundResource(R.drawable.grid_dateshape);
             }
-
-
             gridcell.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ;
                     String[] day_color = list.get(position).split("-");
-
                     Log.e("THE_DAY_COLOR", String.valueOf(day_color[0]));
                     String theday = day_color[0];
                     String themonth = day_color[2];
@@ -508,15 +495,19 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
             return currentDayOfMonth;
         }
 
-        public boolean CheckTp_View(int a) {
-            boolean bflag = false;
-
+        public String CheckTp_View(int a) {
+            String bflag = "0";
             if (Tp_View_Master != null) {
-                Log.v("TP_VIEW_MASTER", String.valueOf(Tp_View_Master.size()));
+
 
                 for (int i = 0; Tp_View_Master.size() > i; i++) {
                     if (a == Tp_View_Master.get(i).getDayofcout()) {
-                        bflag = true;
+                        Log.v("SUBMIT_STATUS", String.valueOf(Tp_View_Master.get(i).getSubmitStatus() + "DAY" + Tp_View_Master.get(i).getDayofcout()));
+                        if (String.valueOf(Tp_View_Master.get(i).getSubmitStatus()).equals("3")) {
+                            bflag = "3";
+                        } else {
+                            bflag = "1";
+                        }
 
                     }
                 }
@@ -543,7 +534,12 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    common_class.CommonIntentwithFinish(Tp_Month_Select.class);
+                    if (Shared_Common_Pref.Tp_Approvalflag.equals("1")) {
+                        common_class.CommonIntentwithFinish(Tp_Approval.class);
+                    } else {
+                        common_class.CommonIntentwithFinish(Tp_Month_Select.class);
+                    }
+
                 }
             });
 

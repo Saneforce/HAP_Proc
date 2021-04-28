@@ -32,10 +32,13 @@ import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 
+import com.hap.checkinproc.Model_Class.Tp_Approval_FF_Modal;
 import com.hap.checkinproc.Model_Class.Tp_Approval_Model;
 import com.hap.checkinproc.Model_Class.Tp_View_Master;
 import com.hap.checkinproc.Model_Class.Work_Type_Model;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.adapters.New_TP_Approval_Adapter;
+
 import com.hap.checkinproc.adapters.Tp_Approval_Adapter;
 
 import java.lang.reflect.Type;
@@ -49,10 +52,12 @@ import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 public class Tp_Approval extends AppCompatActivity {
     Gson gson;
     Type userType;
-    List<Tp_Approval_Model> Tp_Approval_Model;
+    List<Tp_Approval_FF_Modal> Tp_Approval_Model;
     private RecyclerView recyclerView;
     TextView title;
+    Common_Class common_class;
     private Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,10 +66,8 @@ public class Tp_Approval extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
         gettp_Details();
-
-
-
         TextView txtHelp = findViewById(R.id.toolbar_help);
+        common_class = new Common_Class(this);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,25 +131,26 @@ public class Tp_Approval extends AppCompatActivity {
         String routemaster = " {\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
-        Call<Object> mCall = apiInterface.GetTPObject(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "vwtourplan", routemaster);
-
+        Call<Object> mCall = apiInterface.GetTPObject(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "getreportingtosfname", routemaster);
         mCall.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 // locationList=response.body();
                 Log.e("GetCurrentMonth_Values", String.valueOf(response.body().toString()));
                 Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
-
-                userType = new TypeToken<ArrayList<Tp_Approval_Model>>() {
+                userType = new TypeToken<ArrayList<Tp_Approval_FF_Modal>>() {
                 }.getType();
                 Tp_Approval_Model = gson.fromJson(new Gson().toJson(response.body()), userType);
-
-                recyclerView.setAdapter(new Tp_Approval_Adapter(Tp_Approval_Model, R.layout.tpapproval_layout, getApplicationContext(), new AdapterOnClick() {
+                recyclerView.setAdapter(new New_TP_Approval_Adapter(Tp_Approval_Model, R.layout.tpapproval_layout, getApplicationContext(), new AdapterOnClick() {
                     @Override
                     public void onIntentClick(int Name) {
-                        Intent intent = new Intent(Tp_Approval.this, Tp_Approval_Reject.class);
-                        intent.putExtra("Username", Tp_Approval_Model.get(Name).getFieldForceName());
-                        intent.putExtra("Emp_Code", Tp_Approval_Model.get(Name).getEmpCode());
+                        common_class.CommonIntentwithoutFinishputextra(Tp_Calander.class, "Monthselection", Tp_Approval_Model.get(Name).getTmonth());
+                        Shared_Common_Pref.Tp_Approvalflag = "1";
+                        Shared_Common_Pref.Tp_SFCode = Tp_Approval_Model.get(Name).getSfCode();
+                        Shared_Common_Pref.Tp_Sf_name = Tp_Approval_Model.get(Name).getFieldForceName();
+                        Shared_Common_Pref.Tp_Monthname = Tp_Approval_Model.get(Name).getTmonth();
+                        //startActivity(new Intent(this, Tp_Month_Select.class));
+                      /*  intent.putExtra("Emp_Code", Tp_Approval_Model.get(Name).getEmpCode());
                         intent.putExtra("HQ", Tp_Approval_Model.get(Name).getHQ());
                         intent.putExtra("Designation", Tp_Approval_Model.get(Name).getDesignation());
                         intent.putExtra("MobileNumber", Tp_Approval_Model.get(Name).getSFMobile());
@@ -164,14 +168,13 @@ public class Tp_Approval extends AppCompatActivity {
                         intent.putExtra("Worktype_Flag", Tp_Approval_Model.get(Name).getWorktypeFlag());
                         intent.putExtra("ToDate", Tp_Approval_Model.get(Name).getTodate());
                         intent.putExtra("DeptType", Tp_Approval_Model.get(Name).getDeptType());
-
                         intent.putExtra("MOT", Tp_Approval_Model.get(Name).getMOT());
                         intent.putExtra("DA_Type", Tp_Approval_Model.get(Name).getDA_Type());
                         intent.putExtra("Da", Tp_Approval_Model.get(Name).getDriver_Allow());
                         intent.putExtra("From_Place", Tp_Approval_Model.get(Name).getFrom_Place());
                         intent.putExtra("To_Place", Tp_Approval_Model.get(Name).getTo_Place());
-
-                        startActivity(intent);
+*/
+                        // startActivity(intent);
                     }
                 }));
             }
@@ -188,7 +191,7 @@ public class Tp_Approval extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Tp_Approval.super.onBackPressed();
+                    common_class.CommonIntentwithFinish(Dashboard.class);
                 }
             });
 

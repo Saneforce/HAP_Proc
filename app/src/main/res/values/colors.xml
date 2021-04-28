@@ -3,6 +3,7 @@
     <color name="colorAccent">#4A87EE</color>
     <color name="colorPrimary">#5691F4</color>
     <color name="colorPrimaryDark">#4A87EE</color>
+    <color name="Pending_yellow">#ff9819</color>
 
     <color name="white">#fff</color>
     <color name="awhite">#A8FFFFFF</color>
