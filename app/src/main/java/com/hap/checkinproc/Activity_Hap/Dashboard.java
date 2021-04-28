@@ -53,7 +53,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     TextView username;
     TextView lblUserName, lblEmail;
     Button linMyday, linCheckin, linApprovals, linRequstStaus, linReport, linOnDuty, linTaClaim, linExtShift,
-            linTourPlan, linExit, lin_check_in, linHolidayWorking;
+            linTourPlan, linExit, lin_check_in, linHolidayWorking, linReCheck;
     Integer type, OTFlg = 0;
     Common_Class common_class;
     TextView approvalcount;
@@ -151,6 +151,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         if (sSFType.equals("1")) linTourPlan.setVisibility(View.VISIBLE);
         linHolidayWorking = findViewById(R.id.lin_holiday_working);
         linExit = (findViewById(R.id.lin_exit));
+        linReCheck = findViewById(R.id.lin_RecheckIn);
         approvalcount = findViewById(R.id.approvalcount);
 
         if (shared_common_pref.getvalue(Shared_Common_Pref.CHECK_COUNT).equals("0")) {
@@ -195,6 +196,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linTourPlan.setOnClickListener(this);
         linHolidayWorking.setOnClickListener(this);
         linExit.setOnClickListener(this);
+        linReCheck.setOnClickListener(this);
         getcountdetails();
     }
 
@@ -257,8 +259,11 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 break;
 
             case R.id.lin_RecheckIn:
-                startActivity(new Intent(this, AllowanceActivity.class));
+                Intent recall = new Intent(this, AllowanceActivity.class);
+                recall.putExtra("Recall", "Recall");
+                startActivity(recall);
                 break;
+
 
             case R.id.lin_tour_plan:
                 startActivity(new Intent(this, Tp_Month_Select.class));
@@ -416,7 +421,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 // locationList=response.body();
                 try {
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                    // Log.e("GettodayResult", "response Tp_View: " + jsonObject.getString("success"));
+
+                    Log.v("GET_MYDAY_PLAN", jsonObject.toString());
+                    Integer MotCount = Integer.valueOf(jsonObject.getString("checkMOT"));
+
+                    if (MotCount > 0)
+                        linReCheck.setVisibility(View.VISIBLE);
                     onDuty = jsonObject.getString("CheckOnduty");
                     Log.v("ONDUTY_RESPONSE", jsonObject.getString("CheckOnduty"));
                     sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);

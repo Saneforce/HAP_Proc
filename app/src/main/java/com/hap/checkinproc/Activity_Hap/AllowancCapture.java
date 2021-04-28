@@ -194,9 +194,10 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             editor.putString("SharedImage", Uri.fromFile(file).toString());
             editor.commit();
 
-            startActivity(new Intent(AllowancCapture.this, AllowanceActivity.class));
-
-
+            // startActivity(new Intent(AllowancCapture.this, AllowanceActivity.class));
+            Intent newIntent = new Intent(AllowancCapture.this, AllowanceActivity.class);
+            newIntent.putExtra("CHECKING", Uri.fromFile(file).toString());
+            startActivity(newIntent);
 
         } else if (allowance.equals("three")) {
 
@@ -211,10 +212,8 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             editor.commit();
 
             Log.e("SHARE_MODE", mode);
-          //  startActivity(new Intent(AllowancCapture.this, On_Duty_Activity.class));
-
             Intent newIntent = new Intent(AllowancCapture.this, On_Duty_Activity.class);
-            newIntent.putExtra("CHECKING",Uri.fromFile(file).toString());
+            newIntent.putExtra("CHECKING", Uri.fromFile(file).toString());
             startActivity(newIntent);
 
 
@@ -222,12 +221,21 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString("SharedImages", Uri.fromFile(file).toString());
             editor.commit();
-            startActivity(new Intent(AllowancCapture.this, AllowanceActivityTwo.class));
-        }else if(allowance.equalsIgnoreCase("Missed")){
+            /* startActivity(new Intent(AllowancCapture.this, AllowanceActivityTwo.class));*/
+
+            Intent newIntent = new Intent(AllowancCapture.this, AllowanceActivityTwo.class);
+            newIntent.putExtra("CHECKING", Uri.fromFile(file).toString());
+            startActivity(newIntent);
+
+        } else if (allowance.equalsIgnoreCase("Missed")) {
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString("SharedImages", Uri.fromFile(file).toString());
             editor.commit();
-            startActivity(new Intent(AllowancCapture.this, Missed_Punch.class));
+            /* startActivity(new Intent(AllowancCapture.this, Missed_Punch.class));*/
+
+            Intent newIntent = new Intent(AllowancCapture.this, Missed_Punch.class);
+            newIntent.putExtra("CHECKING", Uri.fromFile(file).toString());
+            startActivity(newIntent);
         }
 
     }
@@ -335,7 +343,6 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             mCamera = null;
         }
     }
-
 
 
     @Override

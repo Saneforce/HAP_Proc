@@ -720,11 +720,17 @@
                                 android:padding="@dimen/C5dp"
                                 android:visibility="gone">
 
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/recycler_fuel"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/C5dp"
-                                    android:orientation="vertical">
+                                    android:orientation="vertical"
+                                    android:visibility="gone">
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -750,15 +756,14 @@
                                     android:id="@+id/linear_bike_mode"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:visibility="gone">
-
+                                    android:orientation="vertical">
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="@dimen/C5dp"
-                                        android:orientation="horizontal">
+                                        android:orientation="horizontal"
+                                        android:visibility="gone">
 
 
                                         <RelativeLayout
@@ -849,7 +854,9 @@
                                         android:layout_height="wrap_content"
                                         android:layout_marginTop="@dimen/C15dp"
                                         android:layout_weight="3"
-                                        android:orientation="horizontal">
+                                        android:orientation="horizontal"
+
+                                        android:visibility="gone">
 
                                         <LinearLayout
                                             android:layout_width="wrap_content"
@@ -1478,7 +1485,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_margin="@dimen/C2dp"
                                             android:text="Early Check-in"
-                                            android:visibility="gone"/>
+                                            android:visibility="gone" />
 
                                         <LinearLayout
                                             android:id="@+id/lin_early"
@@ -1614,7 +1621,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_margin="@dimen/C2dp"
                                             android:text="Late Check-Out"
-                                            android:visibility="gone"/>
+                                            android:visibility="gone" />
 
                                         <LinearLayout
                                             android:id="@+id/lin_late"

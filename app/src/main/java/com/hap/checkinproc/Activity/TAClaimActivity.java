@@ -44,6 +44,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.GoogleMap;
@@ -68,10 +70,12 @@ import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.FuelModeOfTravel;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.adapters.FuelListAdapter;
 import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.TimerService;
 
@@ -116,6 +120,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     GoogleMap mGoogleMap;
     ApiInterface apiInterface;
     Uri outputFileUri;
+    FuelListAdapter fuelListAdapter;
 
     LinearLayout Dynamicallowance, OtherExpense, localTotal, otherExpenseLayout, linAll, linRemarks,
             linFareAmount, ldg_typ_sp, linLocalSpinner, linOtherSpinner, lodgCont, lodgContvw, ldg_stayloc, ldg_stayDt,
@@ -199,6 +204,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     SharedPreferences sharedpreferences;
     SharedPreferences.Editor editors;
     JsonArray jsonArray = null;
+    JsonArray jsonFuelAllowance = null;
     JsonArray jsonExpHead = null;
     JsonArray lcDraftArray = null;
     JsonArray oeDraftArray = null;
@@ -207,6 +213,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     JsonArray travelDetails = null;
     JsonArray LodingCon = null;
     JsonArray StayDate = null;
+    RecyclerView mFuelRecycler;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -342,6 +349,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         edtLateBill = findViewById(R.id.lat_lod_bil);
         linearConView = findViewById(R.id.linear_con);
         viewContinue = (LinearLayout) findViewById(R.id.lin_con_sty);
+
+        mFuelRecycler = findViewById(R.id.recycler_fuel);
+        mFuelRecycler.setLayoutManager(new LinearLayoutManager(this));
 
 
         vwldgBillAmt = findViewById(R.id.vwldgBillAmt);
@@ -1555,7 +1565,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                     Log.v("JSON_TRAVEL_DETAILS", jsonObjects.toString());
 
-
+                    jsonFuelAllowance = jsonObjects.getAsJsonArray("FuelAllowance");
                     jsonArray = jsonObjects.getAsJsonArray("TodayStart_Details");
                     lcDraftArray = jsonObjects.getAsJsonArray("Additional_ExpenseLC");
                     oeDraftArray = jsonObjects.getAsJsonArray("Additional_ExpenseOE");
@@ -1566,14 +1576,48 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     StayDate = jsonObjects.getAsJsonArray("Stay_Date_time");
                     jsonExpHead = jsonObjects.getAsJsonArray("Expense_Head");
 
-
-               /*     if (LodingCon.size() != 0) {
+                      /*  if (LodingCon.size() != 0) {
                         mChckEarly.setVisibility(View.GONE);
                     }*/
+
+                    Log.v("JSON_FUEL_ALLOWANCE", jsonFuelAllowance.toString());
+
+                    fuelListAdapter = new FuelListAdapter(getApplicationContext(), jsonFuelAllowance, new FuelModeOfTravel() {
+                        @Override
+                        public void onIntentClick(double total) {
+
+                            Log.v("TOTAL_TA_FUEL_AMOUNT", String.valueOf(total));
+
+                        }
+
+
+                    });
+                    mFuelRecycler.setAdapter(fuelListAdapter);
+
+
+                    JsonObject jsFuel;
+                    for (int jf = 0; jf < jsonFuelAllowance.size(); jf++) {
+                        jsFuel = jsonFuelAllowance.get(jf).getAsJsonObject();
+
+                        if (!jsFuel.get("End_Km").getAsString().equalsIgnoreCase("")) {
+
+                            Integer start = Integer.valueOf(jsFuel.get("Start_Km").getAsString());
+                            Integer end = Integer.valueOf(jsFuel.get("End_Km").getAsString());
+                            String total = String.valueOf(end - start);
+
+                            Integer Total = Integer.valueOf(total);
+                            Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
+                            String TotalPersonal = String.valueOf(Total - Personal);
+
+
+                        }
+
+                    }
 
                     Log.v("JSON_LODGING", jsonExpHead.toString());
 
                     JsonObject jRremarks = null;
+
 
                     for (int i = 0; i < jsonExpHead.size(); i++) {
                         jRremarks = jsonExpHead.get(i).getAsJsonObject();
@@ -2038,8 +2082,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 customOptionsName.setText("");
                 customOptionsName.setText(eachData.get("fdt").getAsString());
                 viewContinue.addView(customOptionsName);
-               // mChckEarly.setVisibility(View.VISIBLE);
-               // linearConView.setVisibility(View.VISIBLE);
+                // mChckEarly.setVisibility(View.VISIBLE);
+                // linearConView.setVisibility(View.VISIBLE);
             }
         } else {
             mChckEarly.setVisibility(View.GONE);
@@ -2721,9 +2765,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         } else if (requestCode == 143 && resultCode == Activity.RESULT_OK) {
 
 
-
-
-
             getMulipart(lodUKey, filePath, "LOD", "", "Room", "", "");
 
         } else if (requestCode == 343 && resultCode == Activity.RESULT_OK) {
@@ -3257,7 +3298,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             if (LodingCon.size() != 0) {
                 mChckEarly.setVisibility(View.GONE);
             } else {
-              //  mChckEarly.setVisibility(View.VISIBLE);
+                //  mChckEarly.setVisibility(View.VISIBLE);
             }
 
 

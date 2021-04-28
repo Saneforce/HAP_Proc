@@ -112,7 +112,6 @@ public class Leave_Approval extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 common_class.CommonIntentwithFinish(Approvals.class);
-
             }
         });
     }
