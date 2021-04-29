@@ -18,8 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/C40dp"
-        android:layout_marginBottom="@dimen/C40dp"
-        />
+        android:layout_marginBottom="@dimen/C40dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,8 +40,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
-            app:tint="@color/colorPrimaryDark"
-            android:src="@drawable/ic_baseline_offline_bolt_24" />
+            android:src="@drawable/ic_baseline_offline_bolt_24"
+            app:tint="@color/colorPrimaryDark" />
 
         <Space
             android:layout_width="wrap_content"
@@ -75,9 +74,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/C50dp"
+            android:background="@color/grey_100"
             android:orientation="horizontal"
             android:padding="0dp"
-            android:background="@color/grey_100"
             android:weightSum="1">
 
             <Button
@@ -85,12 +84,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
-                android:text="Take Photo"
-                android:padding="2dp"
                 android:layout_margin="0dp"
                 android:background="@color/colorPrimaryDark"
-                android:textColor="#ffffff"
-                android:textAllCaps="false" />
+                android:padding="2dp"
+                android:text="Photo"
+                android:textAllCaps="false"
+                android:textColor="#ffffff" />
 
         </LinearLayout>
     </RelativeLayout>
@@ -142,8 +141,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"
-        android:visibility="gone"
-        >
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/imgPreviewImg"
@@ -163,32 +161,34 @@
                 android:id="@+id/btnRtPrv"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/C10dp"
+                android:layout_marginTop="@dimen/C5dp"
+                android:layout_marginRight="@dimen/C10dp"
+                android:layout_marginBottom="@dimen/C5dp"
                 android:background="@drawable/button_red"
                 android:padding="@dimen/C10dp"
                 android:text="Retry"
                 android:textColor="#ffffff"
-                android:textStyle="bold"
-                android:layout_marginLeft="@dimen/C10dp"
-                android:layout_marginTop="@dimen/C5dp"
-                android:layout_marginBottom="@dimen/C5dp"
-                android:layout_marginRight="@dimen/C10dp"/>
-<Space
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_weight="1"></Space>
+                android:textStyle="bold" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"></Space>
+
             <Button
                 android:id="@+id/btnOkPrv"
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/C10dp"
+                android:layout_marginTop="@dimen/C5dp"
+                android:layout_marginRight="@dimen/C10dp"
+                android:layout_marginBottom="@dimen/C5dp"
                 android:background="@drawable/button_green"
                 android:padding="@dimen/C10dp"
                 android:text="Ok"
                 android:textColor="#ffffff"
-                android:textStyle="bold"
-                android:layout_marginLeft="@dimen/C10dp"
-                android:layout_marginTop="@dimen/C5dp"
-                android:layout_marginBottom="@dimen/C5dp"
-                android:layout_marginRight="@dimen/C10dp"/>
+                android:textStyle="bold" />
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

@@ -80,10 +80,9 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     SharedPreferences CheckInDetails, sharedpreferences, UserDetails;
     Shared_Common_Pref shared_common_pref;
     ApiInterface apiInterface;
-    String Photo_Name = "", imageConvert = "", StartedKm = "", StartedImage = "", CLOSINGKM = "", EndedImage = "",
-            CheckInfo = "CheckInDetail", UserInfo = "MyPrefs", MOT = "ModeOfTravel", Name = "Allowance",
-            mypreference = "mypref", StrToCode = "", toPlace = "", TOKM = " ", cOUT = "", ImageStart = "",
-            strImg = "", strMod = "", strKm = "", Hq = "", EdtReasn = "";
+    String Photo_Name = "", imageConvert = "", StartedKm = "", EndedImage = "", CheckInfo = "CheckInDetail",
+            UserInfo = "MyPrefs", MOT = "ModeOfTravel", Name = "Allowance", mypreference = "mypref", StrToCode = "",
+            toPlace = "",  ImageStart = "", Hq = "";
     LinearLayout linToPlace;
     CustomListViewDialog customDialog;
     Common_Model mCommon_model_spinner;
@@ -113,87 +112,8 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         getToolbar();
-
         BusToValue();
-
-
-        cOUT = String.valueOf(getIntent().getSerializableExtra("Mode"));
-
-        if (!cOUT.equals("null") && !cOUT.equals("")) {
-            callApi();
-        }
-        Log.v("Text_cOUT", cOUT);
-
-        if (sharedpreferences.contains("Share_to_id")) {
-            StrToCode = sharedpreferences.getString("Share_to_id", "");
-
-            Log.v("Text_To_ID", StrToCode);
-        }
-
-
-        if (sharedpreferences.contains("Share_to")) {
-            TOKM = sharedpreferences.getString("Share_to", "");
-            TextToPlace.setText(TOKM);
-            Log.v("Text_To_Place", TextToPlace.getText().toString());
-        }
-
-        if (sharedpreferences.contains("Share_Mot")) {
-            strMod = sharedpreferences.getString("Share_Mot", "");
-            TextModeTravel.setText(strMod);
-            Log.e("COnvert", "imageConvert");
-
-        }
-        if (sharedpreferences.contains("Share_km")) {
-            strKm = sharedpreferences.getString("Share_km", "");
-            TextStartedKm.setText(strKm);
-            Log.e("COnvert", "imageConvert");
-        }
-
-        if (sharedpreferences.contains("Share_Img")) {
-            ImageStart = sharedpreferences.getString("Share_Img", "");
-            Glide.with(getApplicationContext())
-                    .load(ImageStart)
-                    .into(StartedKmImage);
-            Log.v("ImageStart", ImageStart);
-        }
-
-
-        if (sharedpreferences.contains("SharedImage")) {
-            StartedImage = sharedpreferences.getString("SharedImage", "");
-            Log.e("Privacypolicy", "Checking" + StartedImage);
-            if (StartedImage != null && !StartedImage.isEmpty() && !StartedImage.equals("null")) {
-                //StartedKmImage.setImageURI(Uri.parse(StartedImage));
-            }
-        }
-        if (sharedpreferences.contains("SharedImages")) {
-            EndedImage = sharedpreferences.getString("SharedImages", "");
-            Log.e("Privacypolicy", "Checking" + EndedImage);
-            EndedKmImage.setImageURI(Uri.parse(EndedImage));
-            imageConvert = EndedImage.substring(7);
-            Log.e("COnvert", EndedImage.substring(7));
-            Log.e("COnvert", imageConvert);
-            getMulipart(imageConvert, 0);
-
-        }
-        if (sharedpreferences.contains("StartedKM")) {
-            StartedKm = sharedpreferences.getString("StartedKM", "");
-            Log.e("Privacypolicy", "STARTRD      " + StartedKm);
-        }
-
-
-        if (sharedpreferences.contains("Closing")) {
-            CLOSINGKM = sharedpreferences.getString("Closing", "");
-            Log.e("Privacypolicy", "Checking" + CLOSINGKM);
-            if (!CLOSINGKM.equals("")) {
-                EndedEditText.setText(CLOSINGKM);
-            }
-        }
-
-
-        if (sharedpreferences.contains("Share_reason")) {
-            EdtReasn = sharedpreferences.getString("Share_reason", "");
-            ReasonMode.setText(EdtReasn);
-        }
+        callApi();
 
         EndedEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -220,7 +140,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     }
                     Log.e("STARTED_KM", String.valueOf(endKm));
                     if (stKM < endKm) {
-
                         Log.e("STARTED_KM", "GREATER");
                     } else {
                         Log.e("STARTED_KM", "Not GREATER");
@@ -269,7 +188,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                         Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
                         intent.putExtra("ImageUrl", ImageStart);
                         startActivity(intent);
-
                     }
                 });
             }
@@ -286,21 +204,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         cameraPermission.requestPermission();
                     }
-                    Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                 } else {
-                    Log.v("PERMISSION", "PERMISSION");
-                    Log.v("ImageStart_ONCLICK", ImageStart);
-
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
-                    editor.putString("Closing", EndedEditText.getText().toString());
-                    editor.putString("Share_to", TextToPlace.getText().toString());
-                    editor.putString("Share_Mot", TextModeTravel.getText().toString());
-                    editor.putString("Share_km", TextStartedKm.getText().toString());
-                    editor.putString("Share_Img", ImageStart);
-                    editor.putString("Share_to_id", StrToCode);
-                    editor.putString("Share_reason", ReasonMode.getText().toString());
-                    editor.commit();
-
                     Intent intent = new Intent(AllowanceActivityTwo.this, AllowancCapture.class);
                     intent.putExtra("allowance", "Two");
                     startActivity(intent);
@@ -330,11 +234,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
                     }
                     endKm = Integer.valueOf(String.valueOf(EndedEditText.getText().toString()));
-
-                    Log.e("START_KM", String.valueOf(stKM));
-                    Log.e("End_KM", String.valueOf(endKm));
-
-
                     if (stKM < endKm) {
 
                         new LocationFinder(getApplication(), new LocationEvents() {
@@ -488,7 +387,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                 JsonArray jsonArray = response.body();
                 for (int a = 0; a < jsonArray.size(); a++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(a);
-
                     String id = String.valueOf(jsonObject.get("id"));
                     String name = String.valueOf(jsonObject.get("name"));
                     String townName = String.valueOf(jsonObject.get("ODFlag"));
@@ -505,7 +403,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             }
         });
     }
-
 
     public void getToolbar() {
         TextView txtHelp = findViewById(R.id.toolbar_help);
@@ -593,9 +490,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 StrToCode = json_oo.getString("To_Place_Id");
                                 TextToPlace.setText(json_oo.getString("To_Place"));
                                 TotalKm = StratKm + maxKM;
-
-                                Log.v("START_KM", String.valueOf(StratKm));
-                                Log.v("ToTAL_KM", String.valueOf(TotalKm));
 
                                 /* EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(1, TotalKm)});*/
 
@@ -717,6 +611,17 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         super.onResume();
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
+        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+        if (sharedpreferences.contains("SharedImages")) {
+            EndedImage = sharedpreferences.getString("SharedImages", "");
+            Log.e("Privacypolicy", "Checking" + EndedImage);
+            EndedKmImage.setImageURI(Uri.parse(EndedImage));
+            imageConvert = EndedImage.substring(7);
+            Log.e("COnvert", EndedImage.substring(7));
+            Log.e("COnvert", imageConvert);
+            getMulipart(imageConvert, 0);
+
+        }
     }
 
     @Override

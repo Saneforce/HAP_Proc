@@ -167,17 +167,16 @@
                                 android:id="@+id/btn_take_photo"
                                 style="@style/ButtonStyle"
                                 android:background="@drawable/button_blueg"
-                                android:text="Take Photo"
-                                android:textColor="@android:color/white"></Button>
+                                android:text="Photo"
+                                android:textColor="@android:color/white"/>
                         </LinearLayout>
-
 
                         <ImageView
                             android:id="@+id/img_ended_km"
                             android:layout_width="@dimen/C80dp"
                             android:rotation="90"
                             android:layout_height="@dimen/C80dp"
-                            android:layout_marginLeft="@dimen/C20dp"></ImageView>
+                            android:layout_marginLeft="@dimen/C20dp"/>
                     </LinearLayout>
 
 

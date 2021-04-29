@@ -209,7 +209,7 @@ public class TimerService extends Service {
                 edt.setTextSize(12);
                 edt.setPadding(0, 10, 10, 10);
                 /* edt.setText("Please provide AllOW ALWAYS in the permission setting to access the Application");*/
-                edt.setText("To enable, go to 'Settings' and turn on Location permission 'Allow Always'");
+                edt.setText("To enable, go to 'Settings' and turn on Location permission 'Allow all the time'");
                 relative.addView(edt);
 
 
@@ -351,7 +351,7 @@ public class TimerService extends Service {
                 edt.setTextSize(12);
                 edt.setPadding(0, 10, 10, 10);
                 /* edt.setText("Please provide AllOW ALWAYS in the permission setting to access the Application");*/
-                edt.setText("To enable, go to 'Settings' and turn on Location permission 'Allow Always'");
+                edt.setText("To enable, go to 'Settings' and turn on Location permission 'Allow all the time'");
                 relative.addView(edt);
 
 

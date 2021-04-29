@@ -170,7 +170,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         lincheck = findViewById(R.id.lin_mode);
         driverAllowance = findViewById(R.id.da_driver_allowance);
         linCheckdriver = findViewById(R.id.lin_check_driver);
-        chkHlyDyFlg=findViewById(R.id.chkHlyDyFlg);
+        chkHlyDyFlg = findViewById(R.id.chkHlyDyFlg);
         SF_code = UserDetails.getString("Sfcode", "");
         div = UserDetails.getString("Divcode", "");
         dailyAllowance = findViewById(R.id.text_daily_allowance);
@@ -1165,12 +1165,15 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             Log.v("printing_allow", jj.toString());
             Call<ResponseBody> Callto;
             Callto = apiInterface.saveAllowance(jj.toString());
+
+            Log.v("ONDUTY_TEXXT_REQ", Callto.request().toString());
+
             Callto.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         if (response.isSuccessful()) {
-
+                            Log.v("ONDUTY_TEXXT_RES", Callto.request().toString());
                             Log.v("print_upload_file_true", "ggg" + response);
                             JSONObject jb = null;
                             String jsonData = null;
@@ -1192,10 +1195,15 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                                     extras.putString("onDutyPlcID", hapLocid);
                                     extras.putString("onDuty", "cba");
                                 }
-                                extras.putString("HolidayFlag",(chkHlyDyFlg.isChecked())?"1":"0");
+                                extras.putString("HolidayFlag", (chkHlyDyFlg.isChecked()) ? "1" : "0");
                                 extras.putString("vstPurpose", purposeofvisitedittext.getText().toString());
                                 intent.putExtras(extras);
                                 shared_common_pref.save(Shared_Common_Pref.DAMode, true);
+
+                                SharedPreferences.Editor editor = sharedpreferences.edit();
+                                editor.putString("VSTP",purposeofvisitedittext.getText().toString());
+                                editor.commit();
+
                                 mLUService = new SANGPSTracker(On_Duty_Activity.this);
                                 myReceiver = new LocationReceiver();
                                 bindService(new Intent(On_Duty_Activity.this, SANGPSTracker.class), mServiceConection,
@@ -1228,6 +1236,21 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         Log.v("LOG_IN_LOCATION", "ONRESTART");
         checking = String.valueOf(getIntent().getSerializableExtra("CHECKING"));
         Log.v("CHECKING_DATA", checking);
+
+
+        if (sharedpreferences.contains("SharedImage")) {
+            imageURI = sharedpreferences.getString("SharedImage", "");
+            Log.e("Privacypolicy", "Checking" + imageURI);
+
+            imageConvert = imageURI.substring(7);
+            Log.e("COnvert", imageURI.substring(7));
+            Log.e("COnvert", imageConvert);
+            getMulipart(imageConvert, 0);
+            attachedImage.setImageURI(Uri.parse(imageURI));
+            Log.e("IMAGE_URI", imageURI);
+        }
+
+
     }
 
     @Override

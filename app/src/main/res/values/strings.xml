@@ -85,6 +85,6 @@
 
     <bool name="config_closeDialogWhenTouchOutside">false</bool>
     <string name="title_activity_ta_approval_display">TaApprovalDisplay</string>
-    <string name="take_photo">Take Photo</string>
+    <string name="take_photo">Photo</string>
 
 </resources>

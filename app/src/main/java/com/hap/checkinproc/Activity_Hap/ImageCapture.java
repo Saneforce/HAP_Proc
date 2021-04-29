@@ -109,8 +109,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     Common_Class DT = new Common_Class();
-
-    String mMode, WrkType, onDutyPlcID, onDutyPlcNm, vstPurpose, UserInfo = "MyPrefs", imagvalue = "",mypreference = "mypref",PlaceId="",PlaceName="";
+    String VistPurpose = "";
+    String mMode, WrkType, onDutyPlcID, onDutyPlcNm, vstPurpose, UserInfo = "MyPrefs", imagvalue = "", mypreference = "mypref", PlaceId = "", PlaceName = "";
     com.hap.checkinproc.Common_Class.Common_Class common_class;
 
     public static final String sCheckInDetail = "CheckInDetail";
@@ -131,6 +131,14 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         UserDetails = getSharedPreferences(sUserDetail, Context.MODE_PRIVATE);
         common_class = new com.hap.checkinproc.Common_Class.Common_Class(this);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+
+
+        if (sharedpreferences.contains("VSTP")) {
+            VistPurpose = sharedpreferences.getString("VSTP", "");
+            Log.v("vstRmksvstRmks", VistPurpose);
+        }
+
+
         Bundle params = getIntent().getExtras();
         try {
             mMode = params.getString("Mode");
@@ -159,7 +167,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     CheckInInf.put("On_Duty_Flag", WrkType);
                     CheckInInf.put("PlcID", onDutyPlcID);
                     CheckInInf.put("PlcNm", onDutyPlcNm);
-                    CheckInInf.put("vstRmks", vstPurpose);
+                    CheckInInf.put("vstRmks", VistPurpose);
                 }
 
                 if (mMode.equalsIgnoreCase("extended")) {
@@ -667,7 +675,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
         if (sharedpreferences.contains("placeName")) {
             PlaceName = sharedpreferences.getString("placeName", "");
-            Log.e("KARTHIC_PLACE_NAME",  PlaceName);
+            Log.e("KARTHIC_PLACE_NAME", PlaceName);
         }
         if (sharedpreferences.contains("placeId")) {
             PlaceId = sharedpreferences.getString("placeId", "");

@@ -101,7 +101,7 @@
                     android:id="@+id/lin_request_status"
                     style="@style/ButtonStyle"
                     android:background="@drawable/button_amber"
-                    android:text="Requests/status"
+                    android:text="Requests and status"
                     app:layout_flexBasisPercent="47%" />
 
                 <Button

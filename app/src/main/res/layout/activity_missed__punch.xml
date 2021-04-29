@@ -264,7 +264,7 @@
                                     android:id="@+id/btn_take_photo"
                                     style="@style/ButtonStyle"
                                     android:background="@drawable/button_blueg"
-                                    android:text="Take Photo"
+                                    android:text="Photo"
                                     android:textColor="@android:color/white"></Button>
                             </LinearLayout>
 

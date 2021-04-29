@@ -1029,6 +1029,18 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
         super.onResume();
 
         startService(new Intent(this, TimerService.class));
+
+        if (sharedpreferences.contains("SharedImages")) {
+            EndedImage = sharedpreferences.getString("SharedImages", "");
+            Log.e("Privacypolicy", "Checking" + EndedImage);
+            EndedKmImage.setImageURI(Uri.parse(EndedImage));
+            imageConvert = EndedImage.substring(7);
+            Log.e("COnvert", EndedImage.substring(7));
+            Log.e("COnvert", imageConvert);
+            getMulipart(imageConvert, 0);
+
+        }
+
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 

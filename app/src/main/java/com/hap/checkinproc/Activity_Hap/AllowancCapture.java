@@ -22,8 +22,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.hap.checkinproc.Activity.AllowanceActivity;
-import com.hap.checkinproc.Activity.AllowanceActivityTwo;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
@@ -193,12 +191,8 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString("SharedImage", Uri.fromFile(file).toString());
             editor.commit();
-
-            Log.v("CHECKING_DETAILS", Uri.fromFile(file).toString());
             // startActivity(new Intent(AllowancCapture.this, AllowanceActivity.class));
-            Intent newIntent = new Intent(AllowancCapture.this, AllowanceActivity.class);
-            newIntent.putExtra("CHECKING", Uri.fromFile(file).toString());
-            startActivity(newIntent);
+            finish();
 
         } else if (allowance.equals("three")) {
 
@@ -211,11 +205,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             editor.putString("SharedToKm", ToKm);
             editor.putString("SharedFare", Fare);
             editor.commit();
-
-            Log.e("SHARE_MODE", mode);
-            Intent newIntent = new Intent(AllowancCapture.this, On_Duty_Activity.class);
-            newIntent.putExtra("CHECKING", Uri.fromFile(file).toString());
-            startActivity(newIntent);
+            /* startActivity(new Intent(AllowancCapture.this, On_Duty_Activity.class));*/
             finish();
 
 
@@ -224,20 +214,15 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             editor.putString("SharedImages", Uri.fromFile(file).toString());
             editor.commit();
             /* startActivity(new Intent(AllowancCapture.this, AllowanceActivityTwo.class));*/
+            finish();
 
-            Intent newIntent = new Intent(AllowancCapture.this, AllowanceActivityTwo.class);
-            newIntent.putExtra("CHECKING", Uri.fromFile(file).toString());
-            startActivity(newIntent);
 
         } else if (allowance.equalsIgnoreCase("Missed")) {
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString("SharedImages", Uri.fromFile(file).toString());
             editor.commit();
             /* startActivity(new Intent(AllowancCapture.this, Missed_Punch.class));*/
-
-            Intent newIntent = new Intent(AllowancCapture.this, Missed_Punch.class);
-            newIntent.putExtra("CHECKING", Uri.fromFile(file).toString());
-            startActivity(newIntent);
+            finish();
         }
 
     }
