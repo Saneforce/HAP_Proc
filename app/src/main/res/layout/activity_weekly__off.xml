@@ -31,16 +31,16 @@
                     android:padding="5dp">
 
                     <TextView
+                        android:textStyle="bold"
+                        android:text="Weekof Entry"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_yellow"
-                        android:padding="5dp"
-                        android:text="Weekof Entry"
-                        android:textAlignment="center"
-                        android:textAllCaps="false"
-                        android:textColor="#FFFFFF"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:gravity="center"
+                        android:padding="@dimen/C10dp"
+                        android:textAllCaps="true"
+                        android:textColor="@color/color_white"
+                        android:textSize="@dimen/C14dp" />
 
                     <LinearLayout
                         android:id="@+id/misseddatelayout"
@@ -113,7 +113,7 @@
         <Button
             style="@style/ButtonStyle"
             android:id="@+id/weeky_submit"
-            android:background="@drawable/sign_bg"
+            android:background="@drawable/button_blueg"
             android:text="SUBMIT" />
 
 

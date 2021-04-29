@@ -62,7 +62,7 @@
         android:layout_marginStart="23dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="11dp"
-        android:background="@drawable/sign_bg"
+        android:background="@drawable/button_blueg"
         android:text="Capture and Submit" />
 
 

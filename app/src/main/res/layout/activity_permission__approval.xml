@@ -26,18 +26,20 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="39dp"
-            android:gravity="center"
-            android:background="@drawable/button_yellow">
+            android:layout_height="wrap_content"
+    >
 
             <TextView
-                android:layout_width="377dp"
-                android:layout_height="match_parent"
+                android:textStyle="bold"
                 android:text="PERMISSION APPROVAL"
-                android:textAlignment="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_yellow"
                 android:gravity="center"
+                android:padding="@dimen/C10dp"
+                android:textAllCaps="true"
                 android:textColor="@color/color_white"
-                android:textStyle="bold" />
+                android:textSize="@dimen/C14dp"/>
 
 
         </LinearLayout>

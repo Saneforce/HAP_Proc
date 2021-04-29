@@ -532,8 +532,8 @@
         <Button
             android:id="@+id/submit_button"
             style="@style/ButtonStyle"
-            android:background="@drawable/button_dgreen"
-            android:text="Submit"></Button>
+            android:background="@drawable/button_blueg"
+            android:text="Submit"/>
 
         <include layout="@layout/back_arrow"></include>
     </LinearLayout>

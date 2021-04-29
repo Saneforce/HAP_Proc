@@ -29,18 +29,17 @@
                     android:padding="5dp">
 
                     <TextView
+                        android:textStyle="bold"
+
+                        android:text="Missed Punch Entry"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_gravity="center"
                         android:background="@drawable/button_yellow"
                         android:gravity="center"
-                        android:text="Missed Punch Entry"
-                        android:textAllCaps="false"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                        android:textColor="#FFFFFF"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:padding="@dimen/C10dp"
+                        android:textAllCaps="true"
+                        android:textColor="@color/color_white"
+                        android:textSize="@dimen/C14dp"/>
 
                     <LinearLayout
                         android:id="@+id/misseddatelayout"
@@ -52,7 +51,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/C5dp"
-                            android:layout_marginTop="5dp"
+                            android:layout_marginTop="10dp"
                             android:text="Missed Punch Date" />
 
                         <TextView
@@ -60,6 +59,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="45dp"
                             android:layout_marginLeft="@dimen/C5dp"
+                            android:layout_marginTop="@dimen/C5dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginBottom="5dp"
                             android:background="@drawable/textbox_bg"
@@ -362,7 +362,7 @@
         <Button
             style="@style/ButtonStyle"
             android:text="SUBMIT"
-            android:background="@drawable/sign_bg"
+            android:background="@drawable/button_blueg"
             android:id="@+id/submit_missed"/>
 
         <include layout="@layout/back_arrow"></include>

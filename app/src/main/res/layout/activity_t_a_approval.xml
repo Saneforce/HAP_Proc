@@ -24,18 +24,21 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_yellow">
+                android:layout_height="wrap_content">
+
 
                 <TextView
+                    android:textStyle="bold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:fontFamily="@font/alegreya_sans_sc"
+                    android:background="@drawable/button_yellow"
+                    android:gravity="center"
+                    android:padding="@dimen/C10dp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/C14dp"
                     android:text="TRAVEL ALLOWANCE APPROVAL"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold" />
+                   />
 
             </LinearLayout>
 

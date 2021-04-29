@@ -69,7 +69,7 @@
                 android:layout_margin="@dimen/C5dp"
                 android:background="@drawable/button_blueg"
                 android:padding="@dimen/C10dp"
-                android:text="Take Photo"
+                android:text="Photo"
                 android:textColor="@android:color/white" />
         </LinearLayout>
 

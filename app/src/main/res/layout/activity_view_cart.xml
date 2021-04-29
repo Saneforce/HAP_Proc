@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:background="@drawable/button_dgreen"
+            android:background="@drawable/button_blueg"
             android:padding="@dimen/C10dp"
             android:text="Submit"
             android:textColor="@android:color/white"

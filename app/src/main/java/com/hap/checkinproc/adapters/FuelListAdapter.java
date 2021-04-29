@@ -70,14 +70,17 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
         }
 
 
-        Picasso.with(context)
-                .load(jsFuel.get("start_Photo").getAsString())
-                .into(holder.imgStart);
+        if (!jsFuel.get("start_Photo").getAsString().equalsIgnoreCase("")) {
+            Picasso.with(context)
+                    .load(jsFuel.get("start_Photo").getAsString())
+                    .into(holder.imgStart);
+        }
+        if (!jsFuel.get("End_photo").getAsString().equalsIgnoreCase("")) {
+            Picasso.with(context)
+                    .load(jsFuel.get("End_photo").getAsString())
+                    .into(holder.imgEnd);
 
-        Picasso.with(context)
-                .load(jsFuel.get("End_photo").getAsString())
-                .into(holder.imgEnd);
-
+        }
 
     }
 

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
-        <include layout="@layout/custom_toolbar_help"></include>
+        <include layout="@layout/custom_toolbar_help"/>
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -542,7 +542,7 @@
                 android:id="@+id/submit_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_dgreen"
+                android:background="@drawable/button_blueg"
                 android:padding="@dimen/C10dp"
                 android:text="Save"
                 android:textColor="@android:color/white"

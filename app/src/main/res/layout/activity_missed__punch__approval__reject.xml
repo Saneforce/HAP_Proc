@@ -21,19 +21,20 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/bg_color"
-                android:orientation="vertical"
-                android:weightSum="3">
+        >
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:background="@drawable/button_yellow"
-                    android:fontFamily="@font/alegreya_sans_sc"
-                    android:gravity="center"
+                    android:textStyle="bold"
+
                     android:text="Missed Punch Approval"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_yellow"
+                    android:gravity="center"
+                    android:padding="@dimen/C10dp"
+                    android:textAllCaps="true"
                     android:textColor="@color/color_white"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/C14dp"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

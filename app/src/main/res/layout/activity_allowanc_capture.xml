@@ -12,7 +12,6 @@
         android:orientation="vertical"
         tools:context=".Activity_Hap.ImageCapture">
 
-
         <SurfaceView
             android:id="@+id/PREVIEW"
             android:layout_width="match_parent"

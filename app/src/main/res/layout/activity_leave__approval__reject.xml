@@ -25,19 +25,20 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/button_yellow"
-                android:gravity="center">
+          >
 
                 <TextView
+                    android:textStyle="bold"
+
+                    android:text="Leave Approval"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/alegreya_sans_sc"
+                    android:background="@drawable/button_yellow"
                     android:gravity="center"
-                    android:padding="10dp"
-                    android:text="Leave Approval"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/white"
-                    android:textStyle="bold" />
+                    android:padding="@dimen/C10dp"
+                    android:textAllCaps="true"
+                    android:textColor="@color/color_white"
+                    android:textSize="@dimen/C14dp" />
 
             </LinearLayout>
 

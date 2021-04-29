@@ -1,6 +1,9 @@
 package com.hap.checkinproc.Activity;
 
+import android.animation.ArgbEvaluator;
 import android.animation.LayoutTransition;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -10,7 +13,9 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -40,8 +45,11 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.maps.GoogleMap;
@@ -55,7 +63,10 @@ import com.hap.checkinproc.Activity_Hap.AttachementActivity;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
+import com.hap.checkinproc.Activity_Hap.ERT;
+import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Activity_Hap.MapZoomIn;
+import com.hap.checkinproc.Activity_Hap.PayslipFtp;
 import com.hap.checkinproc.Activity_Hap.ProductImageView;
 import com.hap.checkinproc.Activity_Hap.ViewTAStatus;
 import com.hap.checkinproc.Common_Class.CameraPermission;
@@ -64,7 +75,10 @@ import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.adapters.FuelListAdapter;
+import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
@@ -106,14 +120,19 @@ public class TAViewStatus extends AppCompatActivity {
     Common_Class mCommon_class;
     GoogleMap mGoogleMap;
     ApiInterface apiInterface;
+    FuelListAdapter fuelListAdapter;
     Uri outputFileUri;
+    RecyclerView mFuelRecycler;
+
+    Double fuelAmt = 0.0;
 
     LinearLayout Dynamicallowance, OtherExpense, localTotal, otherExpenseLayout, linAll, linRemarks,
             linFareAmount, ldg_typ_sp, linLocalSpinner, linOtherSpinner, lodgCont, lodgContvw, ldg_stayloc, ldg_stayDt,
             lodgJoin, ldgEAra, ldgMyEAra, JNLdgEAra, drvldgEAra, jointLodging, vwBoarding, vwDrvBoarding,
             linAddAllowance, diverAllowanceLinear, LDailyAllowance, LOtherExpense, LLocalConve, LinearOtherAllowance,
             linlocalCon, linBusMode, linBikeMode, linMode, travelDynamicLoaction, linDailyAllowance, linback, lin,
-            linImgPrv, TotalDays, stayDays, linEarly, linLate, linContinueStay, linCheckOut, vwldgBillAmt, linearConView;
+            linImgPrv, TotalDays, stayDays, linEarly, linLate, linContinueStay, linCheckOut, vwldgBillAmt, linearConView,
+            linearApprovals, lineAppRej;
     LinearLayout viewContinue;
     CardView card_date, TravelBike, crdDynamicLocation, ldg_ara;
 
@@ -123,7 +142,8 @@ public class TAViewStatus extends AppCompatActivity {
             lblHdBill, lblHdBln, ldgWOBBal, ldgAdd, txtJNMyEli, txtMyEligi, txtDrivEligi, lbl_ldg_eligi, txt_totDA,
             fuelAmount, TextTotalAmount, editTexts, oeEditext, localText, OeText, grandTotal, txtallamt, txt_BrdAmt,
             txt_DrvBrdAmt, txtJointAdd, txtJNEligi, txtTAamt, txtDesig, txtDept, txtEmpId, txtName, oeTxtUKey, oeTxtUKeys,
-            lcTxtUKey, lcTxtUKeys, tvTxtUKey, tvTxtUKeys, txtMaxKm, txtDrvrBrod, txtStyDays, txtLodgUKey;
+            lcTxtUKey, lcTxtUKeys, tvTxtUKey, tvTxtUKeys, txtMaxKm, txtDrvrBrod, txtStyDays, txtLodgUKey, txtTaAmt, txtDate, txtTotalAmt, txtHQ, txtTrvlMode, txtDA,
+            txtTL, txtLA, txtLC, txtOE, txtReject, txtMobile;
 
     EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt, edt1, edt_ldg_JnEmp,
             edt_ldg_bill, edtLcFare, lodgStyLocation, earCheckIn, earCheckOut, latCheckIn, latCheckOut, edtEarBill, edtLateBill;
@@ -139,8 +159,9 @@ public class TAViewStatus extends AppCompatActivity {
             drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "", finalPath = "",
             attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "", tvEditcnt = "", OeUKey = "",
             LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "",
-            lodgEarly = "", lodgLate = "", Ta_DATE = "",
-            tominYear = "", tominMonth = "", sty_date = "", tominDay = "", ConStay = "", ErlyStay = "", LteStay = "", ErlyChecIn = "", ErlyChecOut = "", ErlyAmt = "", LteAmt = "", LteChecIn = "", LteChecOut = "";
+            lodgEarly = "", lodgLate = "", Ta_DATE = "", SlStart = "", sfCode = "",
+            tominYear = "", tominMonth = "", sty_date = "", tominDay = "", ConStay = "", ErlyStay = "", LteStay = "",
+            ErlyChecIn = "", ErlyChecOut = "", ErlyAmt = "", LteAmt = "", LteChecIn = "", LteChecOut = "", GrandTotalAMT = "";
 
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
             oePosCnt = 0, lcPosCnt = 0, tvSize = 0, ttLod = 0, cnSty = 0, erlSty = 0, lteSty = 0;
@@ -198,6 +219,11 @@ public class TAViewStatus extends AppCompatActivity {
     JsonArray travelDetails = null;
     JsonArray LodingCon = null;
     JsonArray StayDate = null;
+    JsonArray jsonFuelAllowance = null;
+    AppCompatEditText appCompatEditText;
+
+
+    LinearLayout linAccept, linReject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,9 +231,12 @@ public class TAViewStatus extends AppCompatActivity {
         setContentView(R.layout.activity_t_a_view_status);
         startService(new Intent(this, TimerService.class));
         mCommon_class = new Common_Class(this);
-
+        appCompatEditText = findViewById(R.id.reason);
 
         Ta_DATE = String.valueOf(getIntent().getSerializableExtra("TA_Date"));
+
+        SlStart = String.valueOf(getIntent().getSerializableExtra("Sl_No"));
+        sfCode = String.valueOf(getIntent().getSerializableExtra("sfCode"));
 
         Log.v("TA_DATE", Ta_DATE);
         displayTravelMode();
@@ -289,13 +318,11 @@ public class TAViewStatus extends AppCompatActivity {
         ldgWOBBal = findViewById(R.id.ldgWOBBal);
         edt_ldg_bill = findViewById(R.id.edt_ldg_bill);
         img_lodg_prvw = findViewById(R.id.lodg_preview);
-
         txtJNEligi = findViewById(R.id.txtJNEligi);
         ldgAdd = findViewById(R.id.ldg_Add);
         mapZoomIn = findViewById(R.id.map_zoom);
         txtTAamt = findViewById(R.id.txt_trav_loca);
-        linback = findViewById(R.id.lin_back);
-        imgBck = findViewById(R.id.imag_backs);
+
         txtName = findViewById(R.id.txt_Name);
         txtDesig = findViewById(R.id.txt_desg);
         txtDept = findViewById(R.id.txt_dep);
@@ -331,6 +358,56 @@ public class TAViewStatus extends AppCompatActivity {
         edtLateBill = findViewById(R.id.lat_lod_bil);
         linearConView = findViewById(R.id.linear_con);
         viewContinue = (LinearLayout) findViewById(R.id.lin_con_sty);
+
+        mFuelRecycler = findViewById(R.id.recycler_fuel);
+        mFuelRecycler.setHasFixedSize(true);
+        mFuelRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mFuelRecycler.setNestedScrollingEnabled(false);
+
+        lineAppRej = findViewById(R.id.lin_app_rejec);
+        linearApprovals = findViewById(R.id.linea_details);
+
+
+        if (getIntent().getSerializableExtra("TA_APPROVAL").equals("1")) {
+            linearApprovals.setVisibility(View.VISIBLE);
+            lineAppRej.setVisibility(View.VISIBLE);
+        } else {
+            linearApprovals.setVisibility(View.GONE);
+            lineAppRej.setVisibility(View.GONE);
+        }
+
+        GrandTotalAMT = String.valueOf(getIntent().getSerializableExtra("total_amount"));
+
+        txtDate = findViewById(R.id.txt_date);
+        txtTotalAmt = findViewById(R.id.txt_amt);
+        txtName = findViewById(R.id.txt_Name);
+        txtHQ = findViewById(R.id.txt_hq);
+        txtDesig = findViewById(R.id.txt_desg);
+        txtDept = findViewById(R.id.txt_dep);
+        txtTrvlMode = findViewById(R.id.txt_mde);
+        linAccept = findViewById(R.id.lin_accp);
+        linReject = findViewById(R.id.rejectonly);
+        txtReject = findViewById(R.id.L_rejectsave);
+        txtTaAmt = findViewById(R.id.txt_tvrl_amt);
+        txtEmpId = findViewById(R.id.txt_emp_id);
+        txtMobile = findViewById(R.id.txt_moble);
+
+        txtReject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SendtpApproval(2);
+            }
+        });
+        txtDate.setText(String.valueOf(getIntent().getSerializableExtra("date")));
+
+        txtName.setText(String.valueOf(getIntent().getSerializableExtra("name")));
+        txtHQ.setText(String.valueOf(getIntent().getSerializableExtra("head_quaters")));
+        txtDesig.setText(String.valueOf(getIntent().getSerializableExtra("desig")));
+        txtDept.setText(String.valueOf(getIntent().getSerializableExtra("dept")));
+        txtTrvlMode.setText(String.valueOf(getIntent().getSerializableExtra("travel_mode")));
+
+        txtEmpId.setText(String.valueOf(getIntent().getSerializableExtra("sf_emp_id")));
+        txtMobile.setText(String.valueOf(getIntent().getSerializableExtra("SF_Mobile")));
 
 
         vwldgBillAmt = findViewById(R.id.vwldgBillAmt);
@@ -537,21 +614,6 @@ public class TAViewStatus extends AppCompatActivity {
         if (strRetriveType.equals("Daily Allowance")) {
             jsonDailyAllowance = (JSONObject) getIntent().getSerializableExtra("Retrive_Ta_List");
         }
-
-        ImageView backView = findViewById(R.id.imag_back);
-        backView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
-            }
-        });
-
-        imgBck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
-            }
-        });
 
 
         strGT = grandTotal.getText().toString();
@@ -1092,9 +1154,8 @@ public class TAViewStatus extends AppCompatActivity {
 
 
         }
-
-
-        grandTotal.setText("Rs." + new DecimalFormat("##0.00").format(gTotal));
+        double gTT = Double.parseDouble(GrandTotalAMT);
+        grandTotal.setText("Rs." + new DecimalFormat("##0.00").format(gTT));
 
     }
 
@@ -1315,12 +1376,6 @@ public class TAViewStatus extends AppCompatActivity {
         if (sLateAmt.equalsIgnoreCase("")) sLateAmt = "0";
         //  double tTotAmt = ldgEliAmt + ldgDrvEligi + Float.parseFloat(sJnAmt);
         tTotAmt = Double.parseDouble(sMyAmt) + ldgDrvEligi + Float.parseFloat(sJnAmt) + Double.parseDouble(sErlyAmt) + Double.parseDouble(sLateAmt);
-
-        Log.v("TOTAL_STAY", String.valueOf(stayEgTotal));
-        Log.v("TOTAL_DRV", String.valueOf(ldgDrvEligi));
-        Log.v("TOTAL_JNAMT", String.valueOf(sJnAmt));
-        Log.v("TOTAL_TOTMAT", String.valueOf(tTotAmt));
-
         totLodgAmt = String.valueOf(tTotAmt);
         lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
         SumWOBLodging();
@@ -1377,14 +1432,55 @@ public class TAViewStatus extends AppCompatActivity {
     /*Toolbar*/
     public void getToolbar() {
 
-
+        TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
+        txtHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            }
+        });
+        TextView txtErt = findViewById(R.id.toolbar_ert);
+        TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
+
+        ObjectAnimator textColorAnim;
+        textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
+        textColorAnim.setDuration(500);
+        textColorAnim.setEvaluator(new ArgbEvaluator());
+        textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
+        textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
+        textColorAnim.start();
+
+        txtErt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), ERT.class));
+            }
+        });
+        txtPlaySlip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
+            }
+        });
+
+
         imgHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openHome();
+
             }
         });
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
     }
 
     public void openHome() {
@@ -1440,8 +1536,38 @@ public class TAViewStatus extends AppCompatActivity {
                     LodingCon = jsonObjects.getAsJsonArray("LodDtlist");
                     StayDate = jsonObjects.getAsJsonArray("Stay_Date_time");
                     jsonExpHead = jsonObjects.getAsJsonArray("Expense_Head");
+                    jsonFuelAllowance = jsonObjects.getAsJsonArray("FuelAllowance");
+
+                    if (jsonFuelAllowance != null || jsonFuelAllowance.size() != 0) {
+                        Log.v("jsonFuelAllowance_IN", jsonFuelAllowance.toString());
 
 
+                        fuelListAdapter = new FuelListAdapter(getApplicationContext(), jsonFuelAllowance);
+                        mFuelRecycler.setAdapter(fuelListAdapter);
+                        JsonObject jsFuel;
+                        for (int jf = 0; jf < jsonFuelAllowance.size(); jf++) {
+                            jsFuel = jsonFuelAllowance.get(jf).getAsJsonObject();
+
+                            if (!jsFuel.get("End_Km").getAsString().equalsIgnoreCase("")) {
+                                Integer start = Integer.valueOf(jsFuel.get("Start_Km").getAsString());
+                                Integer end = Integer.valueOf(jsFuel.get("End_Km").getAsString());
+                                String total = String.valueOf(end - start);
+                                Integer Total = Integer.valueOf(total);
+                                Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
+                                String TotalPersonal = String.valueOf(Total - Personal);
+                                Double q = Double.valueOf(TotalPersonal);
+                                Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                String qz = String.valueOf(q * z);
+                                Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+
+
+                                fuelAmt = fuelAmt + (q * z);
+                                fuelAmount.setText("Rs ." + fuelAmt);
+
+                                TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+                            }
+                        }
+                    }
                /*     if (LodingCon.size() != 0) {
                         mChckEarly.setVisibility(View.GONE);
                     }*/
@@ -1881,26 +2007,6 @@ public class TAViewStatus extends AppCompatActivity {
 
         JsonObject eachData;
 
-
-        Log.v("Ta_Loadging_type", txt_ldg_type.getText().toString());
-        Log.v("Ta_Loadging_loc", lodgStyLocation.getText().toString());
-        Log.v("Ta_Loadging_sty_dte", sty_date + " " + ldg_cin.getText().toString());
-        Log.v("Ta_Loadging_to_dte", ldg_cout.getText().toString());
-        Log.v("Ta_Loadging_bil_amt", edt_ldg_bill.getText().toString());
-        Log.v("Ta_Loadging_cnSty", String.valueOf(cnSty));
-        Log.v("Ta_Loadging_erlSty", String.valueOf(erlSty));
-        Log.v("Ta_Loadging_lte_sty", String.valueOf(lteSty));
-
-        Log.v("Ta_Loadging_erChckIn", earCheckIn.getText().toString());
-        Log.v("Ta_Loadging_earCheckOut", earCheckOut.getText().toString());
-        Log.v("Ta_Loadging_Ear_amt", edtEarBill.getText().toString());
-
-        Log.v("Ta_Loadging_lat_in", latCheckIn.getText().toString());
-        Log.v("Ta_Loadging_lat_out", latCheckOut.getText().toString());
-        Log.v("Ta_Loadging_lat_bill", edtLateBill.getText().toString());
-        Log.v("Ta_Loadging_txt", txtLodgUKey.getText().toString());
-
-
         if (ContSty.size() != 0) {
             for (int i = 0; i < ContSty.size(); i++) {
                 eachData = (JsonObject) ContSty.get(i);
@@ -1920,292 +2026,303 @@ public class TAViewStatus extends AppCompatActivity {
 
         Log.v("Lodging_Details", ContSty.toString());
         JsonArray jsonAddition = null;
-        JsonObject ldraft;
-        for (int i = 0; i < lodingDraft.size(); i++) {
-            ldraft = (JsonObject) lodingDraft.get(i);
 
-            jsonAddition = ldraft.getAsJsonArray("Additional");
+        JsonObject ldraft = null;
+
+
+
+
+            for (int i = 0; i < lodingDraft.size(); i++) {
+                ldraft = (JsonObject) lodingDraft.get(i);
+
+                jsonAddition = ldraft.getAsJsonArray("Additional");
 /*
             ldgAdd.setText("- Remove");
 */
-            lodgContvw.setVisibility(View.VISIBLE);
-            lodgCont.setVisibility(View.VISIBLE);
-            ldg_stayloc.setVisibility(View.VISIBLE);
-            ldg_stayDt.setVisibility(View.VISIBLE);
-            lodgJoin.setVisibility(View.VISIBLE);
-            linContinueStay.setVisibility(View.VISIBLE);
+                lodgContvw.setVisibility(View.VISIBLE);
+                lodgCont.setVisibility(View.VISIBLE);
+                ldg_stayloc.setVisibility(View.VISIBLE);
+                ldg_stayDt.setVisibility(View.VISIBLE);
+                lodgJoin.setVisibility(View.VISIBLE);
+                linContinueStay.setVisibility(View.VISIBLE);
 
-            ldg_cin.setText(ldraft.get("Stay_Date").getAsString());
-            ldg_cout.setText(ldraft.get("To_Date").getAsString());
-            lodgStyLocation.setText(ldraft.get("Ldg_Stay_Loc").getAsString());
-
-
-            Log.v("LOGIN_STAY_DATE", ldraft.get("Stay_Date").getAsString());
-
-            txtDrivEligi.setText(ldraft.get("Driver_Ldg_Amount").getAsString());
-
-            ConStay = ldraft.get("Continuous_Stay").getAsString();
-            ErlyStay = ldraft.get("Early_Checkin").getAsString();
-            LteStay = ldraft.get("Late_Checkout").getAsString();
-
-            ErlyChecIn = ldraft.get("Erly_Check_in").getAsString();
-            ErlyChecOut = ldraft.get("Erly_Check_out").getAsString();
-            ErlyAmt = ldraft.get("Ear_bill_amt").getAsString();
-
-            LteChecIn = ldraft.get("lat_chec_in").getAsString();
-            LteChecOut = ldraft.get("lat_check_out").getAsString();
-            LteAmt = ldraft.get("lat_bill_amt").getAsString();
+                if (ldraft != null || ldraft.size() != 0) {
+                ldg_cin.setText(""+ldraft.get("Stay_Date").getAsString());
+                ldg_cout.setText(""+ldraft.get("To_Date").getAsString());
+                lodgStyLocation.setText(""+ldraft.get("Ldg_Stay_Loc").getAsString());
 
 
-            earCheckIn.setText(ErlyChecIn);
-            earCheckOut.setText(ErlyChecOut);
-            latCheckIn.setText(LteChecIn);
-            latCheckOut.setText(LteChecOut);
-            edtEarBill.setText(ErlyAmt);
-            edtLateBill.setText(LteAmt);
-
-            if (ConStay.equalsIgnoreCase("1")) mChckCont.setChecked(true);
-            if (ErlyStay.equalsIgnoreCase("1")) mChckEarly.setChecked(true);
-            if (LteStay.equalsIgnoreCase("1")) mChckLate.setChecked(true);
 
 
-            if (mChckCont.isChecked()) {
-                linCheckOut.setVisibility(View.INVISIBLE);
-                vwldgBillAmt.setVisibility(View.GONE);
-                cnSty = 1;
-                ldg_cout.setText("");
-                SumOFLodging(1);
-            } else {
-                SumOFLodging(0);
-                cnSty = 0;
-                vwldgBillAmt.setVisibility(View.VISIBLE);
-                linCheckOut.setVisibility(View.VISIBLE);
+                txtDrivEligi.setText(""+ldraft.get("Driver_Ldg_Amount").getAsString());
 
-            }
+                ConStay =""+ ldraft.get("Continuous_Stay").toString();
+                ErlyStay =""+ ldraft.get("Early_Checkin").toString();
+                LteStay =""+ ldraft.get("Late_Checkout").toString();
 
+                ErlyChecIn = ""+ ldraft.get("Erly_Check_in").toString();
+                ErlyChecOut =""+ ldraft.get("Erly_Check_out").toString();
+                ErlyAmt = ""+ldraft.get("Ear_bill_amt").toString();
 
-            stayDays.setVisibility(View.VISIBLE);
-            Double totlLdgAmt = Double.valueOf(ldraft.get("Total_Ldg_Amount").getAsString());
-            Integer noday = Integer.valueOf(ldraft.get("NO_Of_Days").getAsString());
-
-            txtLodgUKey.setText(ldraft.get("Ukey").getAsString());
-            double elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
-            txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(elibs));
-
-            double srtjdgAmt = Integer.valueOf(ldraft.get("Joining_Ldg_Amount").getAsString());
-            txtJNEligi.setText("Rs." + new DecimalFormat("##0.00").format(srtjdgAmt));
-            Double wobal = Double.valueOf(ldraft.get("WOB_Amt").getAsString());
-
-            Log.v("ldgWOBBal", String.valueOf(wobal));
-            ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(wobal));
-            Log.v("ldgWOBBal_______", ldgWOBBal.getText().toString());
-
-            edt_ldg_bill.setText(ldraft.get("Bill_Amt").getAsString());
-            lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(totlLdgAmt));
-            txtStyDays.setText(ldraft.get("NO_Of_Days").getAsString());
-            if (ldraft.get("Lodging_Type").getAsString().equals("Joined Stay")) {
-                txt_ldg_type.setText("Joined Stay");
-                TotalDays.setVisibility(View.VISIBLE);
-            } else if (ldraft.get("Lodging_Type").getAsString().equals("Independent Stay")) {
-                txt_ldg_type.setText("Independent Stay");
-                lodgJoin.setVisibility(View.GONE);
-                TotalDays.setVisibility(View.VISIBLE);
-            } else {
-                txt_ldg_type.setText("Stay At Relative's House");
-            }
-
-            JsonObject jsonObjectAdd = null;
-            for (int l = 0; l < jsonAddition.size(); l++) {
-
-                Log.e("LOCTAION_LRD", String.valueOf(jsonAddition.size()));
-                jsonObjectAdd = (JsonObject) jsonAddition.get(l);
-
-                jointLodging.setVisibility(View.VISIBLE);
-                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                LteChecIn =""+ ldraft.get("lat_chec_in").toString();
+                LteChecOut =""+ ldraft.get("lat_check_out").toString();
+                LteAmt =""+ ldraft.get("lat_bill_amt").toString();
 
 
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                earCheckIn.setText(ErlyChecIn);
+                earCheckOut.setText(ErlyChecOut);
+                latCheckIn.setText(LteChecIn);
+                latCheckOut.setText(LteChecOut);
+                edtEarBill.setText(ErlyAmt);
+                edtLateBill.setText(LteAmt);
 
-                layoutParams.setMargins(15, 15, 15, 15);
-                View rowView = inflater.inflate(R.layout.activity_loding_layout, null);
-                jointLodging.addView(rowView, layoutParams);
+                if (ConStay.equalsIgnoreCase("1")) mChckCont.setChecked(true);
+                if (ErlyStay.equalsIgnoreCase("1")) mChckEarly.setChecked(true);
+                if (LteStay.equalsIgnoreCase("1")) mChckLate.setChecked(true);
 
-                Integer jfd = jointLodging.indexOfChild(rowView);
 
-                View jdV = jointLodging.getChildAt(jfd);
-                edt_ldg_JnEmp = (EditText) jdV.findViewById(R.id.edt_ldg_JnEmp);
-                edt_ldg_JnEmp.setEnabled(false);
-                txtJNName = (TextView) jdV.findViewById(R.id.txtJNName);
-                txtJNDesig = (TextView) jdV.findViewById(R.id.txtJNDesig);
-                txtJNDept = (TextView) jdV.findViewById(R.id.txtJNDept);
-                txtJNHQ = (TextView) jdV.findViewById(R.id.txtJNHQ);
-                txtJNMob = (TextView) jdV.findViewById(R.id.txtJNMob);
-                txtJNMyEli = (TextView) jdV.findViewById(R.id.txtJNMyEli);
-                ImageView delte = jdV.findViewById(R.id.ldg_delete);
-                delte.setVisibility(View.GONE);
+                if (mChckCont.isChecked()) {
+                    linCheckOut.setVisibility(View.INVISIBLE);
+                    vwldgBillAmt.setVisibility(View.GONE);
+                    cnSty = 1;
+                    ldg_cout.setText("");
+                    SumOFLodging(1);
+                } else {
+                    SumOFLodging(0);
+                    cnSty = 0;
+                    vwldgBillAmt.setVisibility(View.VISIBLE);
+                    linCheckOut.setVisibility(View.VISIBLE);
 
-                edt_ldg_JnEmp.setText(jsonObjectAdd.get("Emp_Code").getAsString());
-                txtJNName.setText(jsonObjectAdd.get("Sf_Name").getAsString());
-                txtJNDesig.setText(jsonObjectAdd.get("Desig").getAsString());
-                txtJNDept.setText(jsonObjectAdd.get("Dept").getAsString());
-                txtJNHQ.setText(jsonObjectAdd.get("Sf_Hq").getAsString());
-                txtJNMob.setText(jsonObjectAdd.get("Sf_Mobile").getAsString());
-                /* double jntEli = Integer.valueOf(ldraft.get("Ldg_Amount").getAsString());*//*
-                txtJNMyEli.setText("Rs." + "0.00");*/
+                }
 
-                float sum = jsonObjectAdd.get("Ldg_Amount").getAsFloat();
-                txtJNMyEli.setText("Rs." + new DecimalFormat("##0.00").format(sum));
 
+                stayDays.setVisibility(View.VISIBLE);
+                Double totlLdgAmt = Double.valueOf(""+ldraft.get("Total_Ldg_Amount").getAsString());
+                Integer noday = Integer.valueOf(""+ldraft.get("NO_Of_Days").getAsString());
+
+                txtLodgUKey.setText(""+ldraft.get("Ukey").getAsString());
+                double elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
+                txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(elibs));
+
+                double srtjdgAmt = Integer.valueOf(""+ldraft.get("Joining_Ldg_Amount").getAsString());
+                txtJNEligi.setText("Rs." + new DecimalFormat("##0.00").format(srtjdgAmt));
+                Double wobal = Double.valueOf(""+ldraft.get("WOB_Amt").getAsString());
+
+                Log.v("ldgWOBBal", String.valueOf(wobal));
+                ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(wobal));
+                Log.v("ldgWOBBal_______", ldgWOBBal.getText().toString());
+
+                edt_ldg_bill.setText(""+ldraft.get("Bill_Amt").getAsString());
+                lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(totlLdgAmt));
+                txtStyDays.setText(""+ldraft.get("NO_Of_Days").getAsString());
+                if (ldraft.get("Lodging_Type").getAsString().equals("Joined Stay")) {
+                    txt_ldg_type.setText("Joined Stay");
+                    TotalDays.setVisibility(View.VISIBLE);
+                } else if (ldraft.get("Lodging_Type").getAsString().equals("Independent Stay")) {
+                    txt_ldg_type.setText("Independent Stay");
+                    lodgJoin.setVisibility(View.GONE);
+                    TotalDays.setVisibility(View.VISIBLE);
+                } else {
+                    txt_ldg_type.setText("Stay At Relative's House");
+                }
+
+                if (jsonAddition != null || jsonAddition.size() != 0) {
+                    JsonObject jsonObjectAdd = null;
+                    for (int l = 0; l < jsonAddition.size(); l++) {
+
+                        Log.e("LOCTAION_LRD", String.valueOf(jsonAddition.size()));
+                        jsonObjectAdd = (JsonObject) jsonAddition.get(l);
+
+                        jointLodging.setVisibility(View.VISIBLE);
+                        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+
+                        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                        layoutParams.setMargins(15, 15, 15, 15);
+                        View rowView = inflater.inflate(R.layout.activity_loding_layout, null);
+                        jointLodging.addView(rowView, layoutParams);
+
+                        Integer jfd = jointLodging.indexOfChild(rowView);
+
+                        View jdV = jointLodging.getChildAt(jfd);
+                        edt_ldg_JnEmp = (EditText) jdV.findViewById(R.id.edt_ldg_JnEmp);
+                        edt_ldg_JnEmp.setEnabled(false);
+                        txtJNName = (TextView) jdV.findViewById(R.id.txtJNName);
+                        txtJNDesig = (TextView) jdV.findViewById(R.id.txtJNDesig);
+                        txtJNDept = (TextView) jdV.findViewById(R.id.txtJNDept);
+                        txtJNHQ = (TextView) jdV.findViewById(R.id.txtJNHQ);
+                        txtJNMob = (TextView) jdV.findViewById(R.id.txtJNMob);
+                        txtJNMyEli = (TextView) jdV.findViewById(R.id.txtJNMyEli);
+                        ImageView delte = jdV.findViewById(R.id.ldg_delete);
+                        delte.setVisibility(View.GONE);
+
+                        edt_ldg_JnEmp.setText(""+jsonObjectAdd.get("Emp_Code").getAsString());
+                        txtJNName.setText(""+jsonObjectAdd.get("Sf_Name").getAsString());
+                        txtJNDesig.setText(""+jsonObjectAdd.get("Desig").getAsString());
+                        txtJNDept.setText(""+jsonObjectAdd.get("Dept").getAsString());
+                        txtJNHQ.setText(""+jsonObjectAdd.get("Sf_Hq").getAsString());
+                        txtJNMob.setText(""+jsonObjectAdd.get("Sf_Mobile").getAsString());
+                        /* double jntEli = Integer.valueOf(ldraft.get("Ldg_Amount").getAsString());*//*
+                       txtJNMyEli.setText("Rs." + "0.00");*/
+
+                        float sum = jsonObjectAdd.get("Ldg_Amount").getAsFloat();
+                        txtJNMyEli.setText("Rs." + new DecimalFormat("##0.00").format(sum));
+
+                    }
+                }
             }
         }
-
     }
 
     public void localConDraft(JsonArray lcDraft) {
 
         JsonArray jsonAddition = null;
-        JsonObject lcdraftJson = null;
-        for (int i = 0; i < lcDraft.size(); i++) {
-            lcdraftJson = (JsonObject) lcDraft.get(i);
-
-            jsonAddition = lcdraftJson.getAsJsonArray("Additional");
-            String expCode = String.valueOf(lcdraftJson.get("Exp_Code"));
-            String expFare = lcdraftJson.get("Exp_Amt").getAsString();
-            lcUKey = lcdraftJson.get("Ukey").getAsString();
-
-            Log.v("EXP_AMOUNT", expFare);
-
-            expCode = expCode.replaceAll("^[\"']+|[\"']+$", "");
-            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
-            layoutParams.setMargins(15, 15, 15, 15);
-
-            final View rowView = inflater.inflate(R.layout.activity_local_convenyance, null);
-            linlocalCon.addView(rowView, layoutParams);
-            localText.setVisibility(View.VISIBLE);
-            localTotal.setVisibility(View.VISIBLE);
-
-            lcSize = linlocalCon.indexOfChild(rowView);
-
-            View LcchildView = linlocalCon.getChildAt(lcSize);
-            localTotal.setVisibility(View.VISIBLE);
-            editTexts = (TextView) (LcchildView.findViewById(R.id.local_enter_mode));
-            editLaFare = (EditText) (LcchildView.findViewById(R.id.edt_la_fare));
-            editLaFare.setEnabled(false);
-            linLocalSpinner = (LinearLayout) LcchildView.findViewById(R.id.lin_loc_spiner);
-            lcAttach = (ImageView) (LcchildView.findViewById(R.id.la_attach_iamg));
-            lcDelet = (ImageView) (LcchildView.findViewById(R.id.delete_lc));
-            lcDelet.setVisibility(View.GONE);
-            lcPreview = (ImageView) (LcchildView.findViewById(R.id.img_prvw_lc));
-
-            editTexts.setText(expCode);
-            editLaFare.setText(expFare);
-            if (!lcUKey.equals("")) {
-                lcTxtUKey.setText(lcUKey);
-            }
+        JsonObject lcdraftJson;
 
 
-            if (lcdraftJson.get("Attachments").getAsString().equals("1")) {
-                lcAttach.setVisibility(View.VISIBLE);
-                lcPreview.setVisibility(View.VISIBLE);
-            } else {
-                lcAttach.setVisibility(View.GONE);
-                lcPreview.setVisibility(View.GONE);
-            }
+            for (int i = 0; i < lcDraft.size(); i++) {
+                lcdraftJson = (JsonObject) lcDraft.get(i);
 
-            Dynamicallowance = (LinearLayout) LcchildView.findViewById(R.id.lin_allowance_dynamic);
-            lcTxtUKey = (TextView) (LcchildView.findViewById(R.id.txt_lc_ukey));
+                jsonAddition = lcdraftJson.getAsJsonArray("Additional");
+                String expCode = String.valueOf(lcdraftJson.get("Exp_Code"));
+                String expFare = lcdraftJson.get("Exp_Amt").getAsString();
+                lcUKey = lcdraftJson.get("Ukey").getAsString();
 
-            editLaFare.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.v("EXP_AMOUNT", expFare);
+
+                expCode = expCode.replaceAll("^[\"']+|[\"']+$", "");
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                layoutParams.setMargins(15, 15, 15, 15);
+
+                final View rowView = inflater.inflate(R.layout.activity_local_convenyance, null);
+                linlocalCon.addView(rowView, layoutParams);
+                localText.setVisibility(View.VISIBLE);
+                localTotal.setVisibility(View.VISIBLE);
+
+                lcSize = linlocalCon.indexOfChild(rowView);
+
+                View LcchildView = linlocalCon.getChildAt(lcSize);
+                localTotal.setVisibility(View.VISIBLE);
+                editTexts = (TextView) (LcchildView.findViewById(R.id.local_enter_mode));
+                editLaFare = (EditText) (LcchildView.findViewById(R.id.edt_la_fare));
+                editLaFare.setEnabled(false);
+                linLocalSpinner = (LinearLayout) LcchildView.findViewById(R.id.lin_loc_spiner);
+                lcAttach = (ImageView) (LcchildView.findViewById(R.id.la_attach_iamg));
+                lcDelet = (ImageView) (LcchildView.findViewById(R.id.delete_lc));
+                lcDelet.setVisibility(View.GONE);
+                lcPreview = (ImageView) (LcchildView.findViewById(R.id.img_prvw_lc));
+
+                editTexts.setText(expCode);
+                editLaFare.setText(expFare);
+                if (!lcUKey.equals("")) {
+                    lcTxtUKey.setText(lcUKey);
                 }
 
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (lcdraftJson.get("Attachments").getAsString().equals("1")) {
+                    lcAttach.setVisibility(View.VISIBLE);
+                    lcPreview.setVisibility(View.VISIBLE);
+                } else {
+                    lcAttach.setVisibility(View.GONE);
+                    lcPreview.setVisibility(View.GONE);
                 }
 
-                @Override
-                public void afterTextChanged(Editable s) {
-                    SumOFLCAmount();
-                }
-            });
+                Dynamicallowance = (LinearLayout) LcchildView.findViewById(R.id.lin_allowance_dynamic);
+                lcTxtUKey = (TextView) (LcchildView.findViewById(R.id.txt_lc_ukey));
 
-
-            linLocalSpinner.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listOrderType.clear();
-                    Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
-                    // dynamicModeType(lcPosCntS);
-                }
-            });
-
-            lcAttach.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    CameraPermission cameraPermission = new CameraPermission(TAViewStatus.this, getApplicationContext());
-                    if (!cameraPermission.checkPermission()) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-
-                            cameraPermission.requestPermission();
-                        }
-                        Log.v("PERMISSION_NOT", "PERMISSION_NOT");
-                    } else {
-                        Log.v("PERMISSION", "PERMISSION");
-
-                        //popupCapture(786);
-
-                        Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
-                        View view = linlocalCon.getChildAt(lcPosCntS);
-                        editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
-                        lcTxtUKey = (TextView) (view.findViewById(R.id.txt_lc_ukey));
-                        editMode = editTexts.getText().toString();
-
-                        if (lcTxtUKey.getText().toString().equals("")) {
-                            DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                            Calendar calobjw = Calendar.getInstance();
-                            lcEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
-                            lcTxtUKey.setText(lcEditcnt);
-
-                        } else {
-                        }
-                        LcUKey = lcTxtUKey.getText().toString();
+                editLaFare.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                     }
 
-                }
-            });
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    }
 
-            lcPreview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    Integer valuelc = linlocalCon.indexOfChild(rowView);
-                    View view = linlocalCon.getChildAt(valuelc);
-                    editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
-                    lcTxtUKeys = (TextView) (view.findViewById(R.id.txt_lc_ukey));
-                    editMode = editTexts.getText().toString();
-                    LcUKey = lcTxtUKeys.getText().toString();
-
-                    DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
-
-                    Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-                    stat.putExtra("position", LcUKey);
-                    stat.putExtra("headTravel", "LC");
-                    stat.putExtra("mode", editMode);
-                    stat.putExtra("date", DateTime);
-                    startActivity(stat);
-                }
-            });
-
-            localConDisplay(expCode, jsonAddition, lcSize);
+                    @Override
+                    public void afterTextChanged(Editable s) {
+                        SumOFLCAmount();
+                    }
+                });
 
 
-        }
+                linLocalSpinner.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        listOrderType.clear();
+                        Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
+                        // dynamicModeType(lcPosCntS);
+                    }
+                });
+
+                lcAttach.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CameraPermission cameraPermission = new CameraPermission(TAViewStatus.this, getApplicationContext());
+                        if (!cameraPermission.checkPermission()) {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+                                cameraPermission.requestPermission();
+                            }
+                            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                        } else {
+                            Log.v("PERMISSION", "PERMISSION");
+
+                            //popupCapture(786);
+
+                            Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
+                            View view = linlocalCon.getChildAt(lcPosCntS);
+                            editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
+                            lcTxtUKey = (TextView) (view.findViewById(R.id.txt_lc_ukey));
+                            editMode = editTexts.getText().toString();
+
+                            if (lcTxtUKey.getText().toString().equals("")) {
+                                DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                                Calendar calobjw = Calendar.getInstance();
+                                lcEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                                lcTxtUKey.setText(lcEditcnt);
+
+                            } else {
+                            }
+                            LcUKey = lcTxtUKey.getText().toString();
+                        }
+
+                    }
+                });
+
+                lcPreview.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Integer valuelc = linlocalCon.indexOfChild(rowView);
+                        View view = linlocalCon.getChildAt(valuelc);
+                        editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
+                        lcTxtUKeys = (TextView) (view.findViewById(R.id.txt_lc_ukey));
+                        editMode = editTexts.getText().toString();
+                        LcUKey = lcTxtUKeys.getText().toString();
+
+                        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+
+                        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                        stat.putExtra("position", LcUKey);
+                        stat.putExtra("headTravel", "LC");
+                        stat.putExtra("mode", editMode);
+                        stat.putExtra("date", DateTime);
+                        startActivity(stat);
+                    }
+                });
+
+                localConDisplay(expCode, jsonAddition, lcSize);
+
+
+            }
+
 
         SumOFLCAmount();
 
@@ -2828,215 +2945,6 @@ public class TAViewStatus extends AppCompatActivity {
         }
     }
 
-  /*  @Override
-    public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-        customDialog.dismiss();
-        if (type == 9) {
-            stayDays.setVisibility(View.VISIBLE);
-            ValCd = myDataset.get(position).getId();
-            String Valname = myDataset.get(position).getName();
-
-            if (DriverNeed.equalsIgnoreCase("true")) {
-                drvldgEAra.setVisibility(View.VISIBLE);
-                if (drvldgEliAmt == null) drvldgEliAmt = "0.0";
-                drvldgEliAmt = drvldgEliAmt.replaceAll("^[\"']+|[\"']+$", "");
-                ldgDrvEligi = Double.valueOf(drvldgEliAmt);
-                txtDrivEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgDrvEligi));
-            } else {
-                drvldgEAra.setVisibility(View.GONE);
-            }
-
-            if (LodingCon.size() != 0) {
-                mChckEarly.setVisibility(View.GONE);
-            } else {
-                mChckEarly.setVisibility(View.VISIBLE);
-            }
-
-
-            txt_ldg_type.setText(Valname);
-            lodgCont.setVisibility(View.VISIBLE);
-            ldg_stayloc.setVisibility(View.GONE);
-            ldg_stayDt.setVisibility(View.GONE);
-            lodgJoin.setVisibility(View.GONE);
-            JNLdgEAra.setVisibility(View.GONE);
-            edt_ldg_bill.setVisibility(View.GONE);
-            lblHdBill.setVisibility(View.GONE);
-            linImgPrv.setVisibility(View.GONE);
-            viewBilling.setVisibility(View.GONE);
-            lblHdBln.setVisibility(View.GONE);
-            ldgWOBBal.setVisibility(View.GONE);
-
-            if (myldgEliAmt == "") myldgEliAmt = "0.0";
-
-            myldgEliAmt = myldgEliAmt.replaceAll("^[\"']+|[\"']+$", "");
-            jointLodging.removeAllViews();
-            ldgEliAmt = Double.valueOf(myldgEliAmt);
-            txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
-
-            Log.e("TXT_MY_ELIGIBLE", txtMyEligi.getText().toString().substring(3, 7));
-            SumOFJointLodging();
-            SumOFLodging(0);
-
-            mChckCont.setChecked(false);
-            mChckLate.setChecked(false);
-            mChckEarly.setChecked(false);
-
-            if (ValCd == "JS") {
-                linContinueStay.setVisibility(View.VISIBLE);
-            } else if (ValCd == "RS") {
-                linContinueStay.setVisibility(View.GONE);
-            } else {
-                linContinueStay.setVisibility(View.VISIBLE);
-            }
-
-            if (ValCd == "JS") {
-                lodgJoin.setVisibility(View.VISIBLE);
-                JNLdgEAra.setVisibility(View.VISIBLE);
-                img_lodg_prvw.setVisibility(View.VISIBLE);
-                linImgPrv.setVisibility(View.VISIBLE);
-                viewBilling.setVisibility(View.VISIBLE);
-
-
-                *//*tTotAmt = 0;*//*
-                ttLod = 1;
-
-
-                txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
-                lodingView();
-            }
-            if (ValCd != "RS") {
-
-
-                ldg_stayloc.setVisibility(View.VISIBLE);
-                ldg_stayDt.setVisibility(View.VISIBLE);
-                lblHdBill.setVisibility(View.VISIBLE);
-                edt_ldg_bill.setVisibility(View.VISIBLE);
-                lblHdBln.setVisibility(View.VISIBLE);
-                ldgWOBBal.setVisibility(View.VISIBLE);
-                linImgPrv.setVisibility(View.VISIBLE);
-                viewBilling.setVisibility(View.VISIBLE);
-
-                ttLod = 1;
-                *//*tTotAmt = 0;*//*
-                txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
-                ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
-                lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
-                img_lodg_prvw.setVisibility(View.VISIBLE);
-            }
-
-            ldg_cin.setText("");
-            ldg_cout.setText("");
-            lodgStyLocation.setText("");
-            if (ldg_cin.getText().toString().equals("") || ldg_cout.getText().toString().equals("")) {
-                TotalDays.setVisibility(View.GONE);
-            } else {
-                TotalDays.setVisibility(View.VISIBLE);
-            }
-            edt_ldg_bill.setText("");
-
-        }
-        if (type == 10) {
-
-
-            txt_date.setText(myDataset.get(position).getName());
-            Log.d("JSON_VALUE", myDataset.get(position).getId());
-            DateTime = myDataset.get(position).getId();
-            DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
-            displayTravelMode(myDataset.get(position).getId());
-            travelDynamicLoaction.removeAllViews();
-            linAddAllowance.setVisibility(View.VISIBLE);
-            linlocalCon.removeAllViews();
-            LinearOtherAllowance.removeAllViews();
-            localText.setText("");
-            OeText.setText("");
-            localTotal.setVisibility(View.GONE);
-            otherExpenseLayout.setVisibility(View.GONE);
-            linAll.setVisibility(View.VISIBLE);
-            linRemarks.setVisibility(View.VISIBLE);
-            linFareAmount.setVisibility(View.VISIBLE);
-            linback.setVisibility(View.GONE);
-
-        } else if (type == 11) {
-            modeTextView.setText(myDataset.get(position).getName());
-        } else if (type == 8) {
-
-            Integer editTextPosition = myDataset.get(position).getPho();
-            View view = travelDynamicLoaction.getChildAt(editTextPosition);
-            editText = (TextView) (view.findViewById(R.id.enter_mode));
-            editText.setText(myDataset.get(position).getName());
-
-        } else if (type == 80) {
-            editTextPositionss = myDataset.get(position).getPho();
-            View view = linlocalCon.getChildAt(editTextPositionss);
-            editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
-            edtLcFare = (EditText) (view.findViewById(R.id.edt_la_fare));
-            lcAttach = (ImageView) (view.findViewById(R.id.la_attach_iamg));
-            lcPreview = (ImageView) (view.findViewById(R.id.img_prvw_lc));
-            edtLcFare.setText("");
-            editTexts.setText(myDataset.get(position).getName());
-            StrModeValue = myDataset.get(position).getName();
-            Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
-            Dynamicallowance.removeAllViews();
-            LocalConvenyanceApi(StrModeValue);
-
-            if (AttachmentImg.get(StrModeValue).equals("1")) {
-                lcAttach.setVisibility(View.VISIBLE);
-                lcPreview.setVisibility(View.VISIBLE);
-            } else {
-                lcAttach.setVisibility(View.GONE);
-                lcPreview.setVisibility(View.GONE);
-            }
-
-        } else if (type == 90) {
-
-            editTextPositionss = myDataset.get(position).getPho();
-            View view = LinearOtherAllowance.getChildAt(editTextPositionss);
-            oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
-            oeAttach = (ImageView) (view.findViewById(R.id.oe_attach_img));
-            oePreview = (ImageView) (view.findViewById(R.id.img_prvw_oe));
-            OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
-            oeEditext.setText(myDataset.get(position).getName());
-            StrModeValue = myDataset.get(position).getName();
-            Log.e("StrMode", StrModeValue);
-            OtherExpense.removeAllViews();
-            OtherExpenseApi(StrModeValue);
-
-            attachCountList.add(AttachmentImg.get(StrModeValue));
-            Log.e("COUNTATTACH", attachCountList.toString());
-            Log.e("COUNTATTACH", AttachmentImg.get(StrModeValue));
-
-            if (AttachmentImg.get(StrModeValue).equals("1")) {
-                oeAttach.setVisibility(View.VISIBLE);
-                oePreview.setVisibility(View.VISIBLE);
-            } else {
-                oeAttach.setVisibility(View.GONE);
-                oePreview.setVisibility(View.GONE);
-            }
-
-
-        } else if (type == 100) {
-            String TrTyp = myDataset.get(position).getName();
-            travelTypeMode.setText(TrTyp);
-
-            if (TrTyp.equalsIgnoreCase("OS") == true) {
-                callApi(DateForAPi, "OS");
-                diverAllowanceLinear.setVisibility(View.VISIBLE);
-            } else {
-                callApi(DateForAPi, "");
-                diverAllowanceLinear.setVisibility(View.GONE);
-            }
-
-        } else if (type == 1) {
-            enterMode.setText(myDataset.get(position).getName());
-        }
-
-    }
-
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mGoogleMap = googleMap;
-    }*/
-
     public void localCon(Integer countPosition) {
 
         Map<String, String> QueryString = new HashMap<>();
@@ -3284,7 +3192,7 @@ public class TAViewStatus extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    TAViewStatus.super.onBackPressed();
+                    finish();
                 }
             });
 
@@ -3396,6 +3304,67 @@ public class TAViewStatus extends AppCompatActivity {
             public void run() {
 
                 mLc.fullScroll(View.FOCUS_DOWN);
+
+            }
+        });
+    }
+
+
+    public void onApproval(View v) {
+        new LocationFinder(getApplication(), new LocationEvents() {
+            @Override
+            public void OnLocationRecived(Location location) {
+                SendtpApproval(1);
+            }
+        });
+    }
+
+    public void onReject(View v) {
+        linAccept.setVisibility(View.GONE);
+        linReject.setVisibility(View.VISIBLE);
+    }
+
+
+    private void SendtpApproval(int flag) {
+        JSONObject taReq = new JSONObject();
+
+        try {
+            taReq.put("sfCode", sfCode);
+            taReq.put("Flag", flag);
+            taReq.put("Sl_No", SlStart);
+            taReq.put("AAmount", GrandTotalAMT);
+            taReq.put("Reason", appCompatEditText.getText());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        Log.v("TA_REQ", taReq.toString());
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonObject> mCall = apiInterface.taApprove(taReq.toString());
+
+        mCall.enqueue(new Callback<JsonObject>() {
+            @Override
+            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                // locationList=response.body();
+                Log.e("TAG_TP_RESPONSE", "response Tp_View: " + new Gson().toJson(response.body()));
+                try {
+                    finish();
+                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+                    if (flag == 1) {
+                        Toast.makeText(getApplicationContext(), "TA  Approved Successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "TA Rejected  Successfully", Toast.LENGTH_SHORT).show();
+
+                    }
+
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonObject> call, Throwable t) {
 
             }
         });

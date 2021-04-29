@@ -39,17 +39,17 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:text="Flight Ticket Booking"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/button_yellow"
                             android:gravity="center"
+                            android:textStyle="bold"
+
                             android:padding="@dimen/C10dp"
-                            android:text="Flight Ticket Booking"
-                            android:textAllCaps="false"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                            android:textColor="#FFFFFF"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
+                            android:textAllCaps="true"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/C14dp"/>
 
 
                         <LinearLayout

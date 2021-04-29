@@ -772,9 +772,9 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                         //new Tp_Mydayplan.DynamicViewAdapter(Tp_dynamicArraylist, R.layout.tp_dynamic_layout, getApplicationContext(), 0).notifyDataSetChanged();
                         dynamicrecyclerview.setItemViewCacheSize(jsnArValue.length());
 
-                        if (String.valueOf(jsoncc.getJSONObject(0).get("submit_status")).equals("3")) {
+           /*             if (String.valueOf(jsoncc.getJSONObject(0).get("submit_status")).equals("3")) {
                             submitbutton.setVisibility(View.GONE);
-                        }
+                        }*/
 
                     } else {
                         Toast.makeText(Mydayplan_Activity.this, "Tour Plan not Done", Toast.LENGTH_SHORT).show();

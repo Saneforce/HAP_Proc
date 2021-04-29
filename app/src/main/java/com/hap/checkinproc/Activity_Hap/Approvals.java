@@ -205,6 +205,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                     countLeaveRequest.setText(jsonObject.getString("leave"));
                     countPermissionRequest.setText(jsonObject.getString("Permission"));
                     countOnDuty.setText(jsonObject.getString("vwOnduty"));
+                    countTravelAllowance.setText(jsonObject.getString("ExpList"));
                     countMissedPunch.setText(jsonObject.getString("vwmissedpunch"));
                     countTourPlan.setText(jsonObject.getString("TountPlanCount"));
                     extendedcount.setText(jsonObject.getString("vwExtended"));
@@ -334,8 +335,18 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
+                    Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                    Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
+                    Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
+                    Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
+                    Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
+                    if (CheckIn == true) {
+                        Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+                        Dashboard.putExtra("Mode", "CIN");
+                        startActivity(Dashboard);
+                    } else
+                        startActivity(new Intent(getApplicationContext(), Dashboard.class));
 
-                    Approvals.super.onBackPressed();
                 }
             });
 

@@ -352,8 +352,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         viewContinue = (LinearLayout) findViewById(R.id.lin_con_sty);
 
         mFuelRecycler = findViewById(R.id.recycler_fuel);
+        mFuelRecycler.setHasFixedSize(true);
         mFuelRecycler.setLayoutManager(new LinearLayoutManager(this));
-
+        mFuelRecycler.setNestedScrollingEnabled(false);
 
         vwldgBillAmt = findViewById(R.id.vwldgBillAmt);
 

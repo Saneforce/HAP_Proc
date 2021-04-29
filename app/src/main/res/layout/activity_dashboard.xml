@@ -161,7 +161,7 @@
                     android:id="@+id/lin_ta_claim"
                     style="@style/ButtonStyle"
                     android:background="@drawable/button_purple"
-                    android:text="TA &amp; claim"
+                    android:text="TA and claim"
                     app:layout_flexBasisPercent="47%" />
 
                 <Button

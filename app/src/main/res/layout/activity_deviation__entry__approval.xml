@@ -27,17 +27,20 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_yellow">
+       >
 
                 <TextView
+                    android:textStyle="bold"
+
+                    android:text="DEVIATION ENTRY APPROVAL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/alegreya_sans_sc"
-                    android:text="DEVIATION ENTRY APPROVAL"
+                    android:background="@drawable/button_yellow"
+                    android:gravity="center"
                     android:padding="@dimen/C10dp"
-                    android:textAlignment="center"
+                    android:textAllCaps="true"
                     android:textColor="@color/color_white"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/C14dp" />
 
 
             </LinearLayout>

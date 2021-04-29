@@ -33,13 +33,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_yellow"
-                        android:padding="5dp"
-                        android:layout_marginBottom="@dimen/C10dp"
+                        android:gravity="center"
+                        android:padding="@dimen/C10dp"
+                        android:textStyle="bold"
+
+                        android:textAllCaps="true"
+                        android:textColor="@color/color_white"
+                        android:textSize="@dimen/C14dp"
                         android:text="Deviation Entry"
-                        android:textAlignment="center"
-                        android:textColor="#FFFFFF"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                   />
 
                         <TextView
                             android:textSize="@dimen/C12dp"
@@ -124,7 +126,8 @@
         <Button
             style="@style/ButtonStyle"
             android:id="@+id/deviation_submit"
-            android:background="@drawable/sign_bg"
+            android:background="@drawable/button_blueg"
+
             android:text="SUBMIT" />
 
         <include layout="@layout/back_arrow"></include>

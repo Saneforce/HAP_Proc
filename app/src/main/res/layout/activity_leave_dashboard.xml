@@ -39,17 +39,18 @@
                         android:orientation="vertical">
 
                         <TextView
+
+                            android:text="Request"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/button_yellow"
-                            android:padding="@dimen/C10dp"
-                            android:text="Request"
                             android:gravity="center"
-                            android:textAllCaps="false"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                            android:textColor="#FFFFFF"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:padding="@dimen/C10dp"
+                            android:textStyle="bold"
+
+                            android:textAllCaps="true"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/C14dp" />
 
 
                         <LinearLayout
@@ -184,18 +185,18 @@
                         android:orientation="vertical">
 
                         <TextView
+
+                            android:text="Status"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
                             android:background="@drawable/button_yellow"
-                            android:padding="@dimen/C10dp"
-                            android:text="Status"
                             android:gravity="center"
-                            android:textAllCaps="false"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                            android:textColor="#FFFFFF"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:padding="@dimen/C10dp"
+                            android:textStyle="bold"
+
+                            android:textAllCaps="true"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/C14dp" />
 
                         <LinearLayout
                             android:id="@+id/lin_leav_sta"

@@ -324,14 +324,14 @@
                         style="@style/ButtonStyle"
                         android:layout_weight="1"
                         android:background="@drawable/button_amber"
-                        android:text="Requests &amp; Status" />
+                        android:text="Requests and Status" />
 
                     <Button
                         android:id="@+id/btn_da_exp_entry"
                         style="@style/ButtonStyle"
                         android:layout_weight="1"
                         android:background="@drawable/button_purple"
-                        android:text="TA &amp; claim"></Button>
+                        android:text="TA and claim"/>
                 </LinearLayout>
 
                 <LinearLayout

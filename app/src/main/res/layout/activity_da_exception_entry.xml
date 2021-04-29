@@ -171,7 +171,7 @@
                 <Button
                     android:onClick="DaException"
                     style="@style/ButtonStyle"
-                    android:background="@color/colorPrimary"
+                    android:background="@drawable/button_blueg"
                     android:text="Save" />
 
             </LinearLayout>

@@ -57,6 +57,8 @@ public class ViewTAStatusAdapter extends RecyclerView.Adapter<ViewTAStatusAdapte
             public void onClick(View v) {
                 Intent TAViewAct = new Intent(context, TAViewStatus.class);
                 TAViewAct.putExtra("TA_Date", jsonObject.get("Expdt").getAsString());
+                TAViewAct.putExtra("TA_APPROVAL", "0");
+                TAViewAct.putExtra("total_amount", jsonObject.get("Total_Amount").getAsString());
                 context.startActivity(TAViewAct);
             }
         });

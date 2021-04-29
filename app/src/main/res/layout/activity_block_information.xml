@@ -43,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/C10dp"
-        android:background="@color/colorPrimaryDark"
+        android:background="@drawable/button_blueg"
         android:padding="@dimen/C5dp"
         android:text="Open Settings"
         android:textColor="@android:color/white" />

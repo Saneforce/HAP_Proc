@@ -14,7 +14,6 @@
         android:orientation="vertical"
         tools:context=".Activity_Hap.Leave_Dashboard">
 
-
         <include layout="@layout/custom_toolbar_help"></include>
 
         <ScrollView
@@ -43,17 +42,16 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:textStyle="bold"
+                            android:text="Dashboard"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/button_yellow"
                             android:gravity="center"
                             android:padding="@dimen/C10dp"
-                            android:text="Dashboard"
-                            android:textAllCaps="false"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-                            android:textColor="#FFFFFF"
-                            android:textSize="13sp"
-                            android:textStyle="bold" />
+                            android:textAllCaps="true"
+                            android:textColor="@color/color_white"
+                            android:textSize="@dimen/C14dp"/>
 
 
                         <LinearLayout

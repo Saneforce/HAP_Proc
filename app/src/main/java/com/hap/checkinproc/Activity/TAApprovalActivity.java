@@ -126,10 +126,9 @@ public class TAApprovalActivity extends AppCompatActivity {
                 recyclerView.setAdapter(new Travel_Approval_Adapter(jsonArray, R.layout.leave_approval_layout, getApplicationContext(), new AdapterOnClick() {
                     @Override
                     public void onIntentClick(int Name) {
-
-                            JsonObject jsonObject = (JsonObject) jsonArray.get(Name);
-                            Log.v("LIST", jsonObject.toString());
-                            Intent intent = new Intent(TAApprovalActivity.this, TaApprovalDisplay.class);
+                        JsonObject jsonObject = (JsonObject) jsonArray.get(Name);
+                        Log.v("LIST", jsonObject.toString());
+                         /*   Intent intent = new Intent(TAApprovalActivity.this, TaApprovalDisplay.class);
                             intent.putExtra("date", jsonObject.get("id").getAsString());
                             intent.putExtra("name", jsonObject.get("Sf_Name").getAsString());
                             intent.putExtra("total_amount", jsonObject.get("Total_Amount").getAsString());
@@ -141,14 +140,26 @@ public class TAApprovalActivity extends AppCompatActivity {
                             intent.putExtra("sfCode", jsonObject.get("Sf_code").getAsString());
                             intent.putExtra("SF_Mobile", jsonObject.get("SF_Mobile").getAsString());
                             intent.putExtra("sf_emp_id", jsonObject.get("sf_emp_id").getAsString());
-                            startActivity(intent);
+                            startActivity(intent);*/
 
-                            Log.e("sfCode", jsonObject.get("Sf_code").getAsString());
-                            Log.e("Sl_No", jsonObject.get("Sl_NoStart").getAsString());
-                            Log.e("total_amount", jsonObject.get("Total_Amount").getAsString());
-                            Log.e("total_amount","fgd");
-                        }
+                        Log.v("TA_DATE", jsonObject.get("id").getAsString());
 
+                        Intent intent = new Intent(getApplicationContext(), TAViewStatus.class);
+                        intent.putExtra("TA_Date", jsonObject.get("id").getAsString());
+                        intent.putExtra("name", jsonObject.get("Sf_Name").getAsString());
+                        intent.putExtra("total_amount", jsonObject.get("Total_Amount").getAsString());
+                        intent.putExtra("head_quaters", jsonObject.get("HQ").getAsString());
+                        intent.putExtra("travel_mode", jsonObject.get("MOT_Name").getAsString());
+                        intent.putExtra("desig", jsonObject.get("sf_Designation_Short_Name").getAsString());
+                        intent.putExtra("dept", jsonObject.get("DeptName").getAsString());
+                        intent.putExtra("Sl_No", jsonObject.get("Sl_NoStart").getAsString());
+                        intent.putExtra("sfCode", jsonObject.get("Sf_code").getAsString());
+                        intent.putExtra("SF_Mobile", jsonObject.get("SF_Mobile").getAsString());
+                        intent.putExtra("sf_emp_id", jsonObject.get("sf_emp_id").getAsString());
+                        intent.putExtra("TA_APPROVAL", "1");
+                        startActivity(intent);
+
+                    }
                 }));
             }
 
@@ -164,7 +175,7 @@ public class TAApprovalActivity extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    TAApprovalActivity.super.onBackPressed();
+                    finish();
                 }
             });
 
@@ -176,6 +187,7 @@ public class TAApprovalActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        getTAList();
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }

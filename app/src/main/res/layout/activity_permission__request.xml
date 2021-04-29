@@ -34,16 +34,16 @@
                     android:padding="@dimen/C8dp">
 
                     <TextView
+                        android:textStyle="bold"
+                        android:text="Permission Request"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/button_yellow"
-                        android:padding="5dp"
-                        android:text="Permission Request"
-                        android:textAlignment="center"
-                        android:textAllCaps="false"
-                        android:textColor="#FFFFFF"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
+                        android:gravity="center"
+                        android:padding="@dimen/C10dp"
+                        android:textAllCaps="true"
+                        android:textColor="@color/color_white"
+                        android:textSize="@dimen/C14dp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -391,7 +391,8 @@
         <Button
             style="@style/ButtonStyle"
             android:id="@+id/btn_submit"
-            android:background="@drawable/sign_bg"
+            android:background="@drawable/button_blueg"
+
             android:text="SUBMIT" />
 
         <include layout="@layout/back_arrow"></include>
