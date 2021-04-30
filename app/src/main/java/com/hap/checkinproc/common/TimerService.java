@@ -401,7 +401,6 @@ public class TimerService extends Service {
                 @SuppressLint("ResourceType")
                 @Override
                 public void run() {
-
                     Intent intent = new Intent();
                     onTaskRemoved(intent);
                     Activity cAtivity=HAPApp.getActiveActivity();
@@ -442,11 +441,9 @@ public class TimerService extends Service {
                         Date Cdate=Dt.getDate(sDt);
                         if (Cdate.getTime()>=CutOff.getTime()){
                             Log.d("Cutoff","Time REached");
-
                             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                             DatabaseHandler db = new DatabaseHandler(context);
                             JSONArray locations=db.getAllPendingTrackDetails();
-
                             if(locations.length()>0 && UpdtFlag==false){
                                 try {
                                     UpdtFlag=true;
