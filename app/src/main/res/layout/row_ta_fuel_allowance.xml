@@ -32,10 +32,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/C5dp"
                 android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                 <TextView
                     style="@style/TextStyle"
+                    android:layout_weight="1"
                     android:text="Mode of Travel" />
+
+
+                    <ImageView
+                        android:id="@+id/img_edit"
+                        android:src="@drawable/edit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/mode_name"

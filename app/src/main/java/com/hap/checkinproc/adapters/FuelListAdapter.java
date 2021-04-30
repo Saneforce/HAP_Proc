@@ -59,6 +59,13 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
             Double FuelaAmt = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
             holder.fuelAmount.setText(" Rs." + new DecimalFormat("##0.00").format(FuelaAmt) + " / KM ");
 
+            holder.imgEdit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
 
             Double q = Double.valueOf(TotalPersonal);
             Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
@@ -82,6 +89,7 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
 
         }
 
+
     }
 
     @Override
@@ -92,7 +100,7 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView TxtStartedKm, TxtClosingKm, travelTypeMode, TotalTravelledKm, txtTaClaim, PersonalTextKM, PersonalKiloMeter,
                 fuelAmount, TextTotalAmount;
-        ImageView imgStart, imgEnd;
+        ImageView imgStart, imgEnd, imgEdit;
 
 
         public MyViewHolder(@NonNull View itemView) {
@@ -106,6 +114,7 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
             PersonalKiloMeter = itemView.findViewById(R.id.pers_kilo_meter);
             imgStart = itemView.findViewById(R.id.startkmimage);
             imgEnd = itemView.findViewById(R.id.endkmimage);
+            imgEdit = itemView.findViewById(R.id.img_edit);
             fuelAmount = itemView.findViewById(R.id.fuel_amount);
             TextTotalAmount = itemView.findViewById(R.id.txt_total_amt);
 
