@@ -249,7 +249,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
                                             calendarmin.set(Integer.parseInt(tominYear), Integer.parseInt(tominMonth) - 1, Integer.parseInt(tominDay));
                                             picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
-                                            calendarmin.add(Calendar.DAY_OF_YEAR, 3);
+                                            calendarmin.add(Calendar.DAY_OF_YEAR, 10);
                                             Log.d("MAXDay", String.valueOf(calendarmin.get(Calendar.DATE)));
                                             picker.getDatePicker().setMaxDate(calendarmin.getTimeInMillis());
                                             picker.show();
@@ -704,8 +704,15 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
     /*Leave reamining*/
     public void leaveReaming() {
+
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+
+        Log.v("CURRENT_YEAR", String.valueOf(year));
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        Call<Object> call = service.remainingLeave("2020", Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode);
+
+        Call<Object> call = service.remainingLeave(String.valueOf(year), Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode);
+
+        Log.e("REMAINING_LEAVES_RE",call.request().toString());
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {

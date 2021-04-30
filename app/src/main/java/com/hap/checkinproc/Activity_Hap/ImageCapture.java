@@ -559,8 +559,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         mIntent.putExtra("FileName", imageFileName);
         mIntent.putExtra("Mode", (mMode.equalsIgnoreCase("PF") ? "PROF" : "ATTN"));
         FileUploadService.enqueueWork(this, mIntent);
-//        getMulipart(String.valueOf(file));
-
         Log.e("Image_Capture", Uri.fromFile(file).toString());
         Log.e("Image_Capture", "IAMGE     " + bitmap);
         if (mMode.equalsIgnoreCase("PF")) {

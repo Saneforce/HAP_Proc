@@ -40,17 +40,17 @@
 
                         <TextView
 
-                            android:text="Request"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/button_yellow"
                             android:gravity="center"
                             android:padding="@dimen/C10dp"
-                            android:textStyle="bold"
-
+                            android:text="Request"
                             android:textAllCaps="true"
+
                             android:textColor="@color/color_white"
-                            android:textSize="@dimen/C14dp" />
+                            android:textSize="@dimen/C14dp"
+                            android:textStyle="bold" />
 
 
                         <LinearLayout
@@ -169,6 +169,27 @@
 
                         </LinearLayout>
 
+                        <include layout="@layout/part_view" />
+
+
+                        <LinearLayout
+                            android:id="@+id/lin_da_excep"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/C10dp">
+
+                            <TextView
+                                style="@style/TextStyle"
+                                android:layout_weight="1"
+                                android:text="Exception Request" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/arrow_right" />
+
+                        </LinearLayout>
+
                     </LinearLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -186,17 +207,17 @@
 
                         <TextView
 
-                            android:text="Status"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@drawable/button_yellow"
                             android:gravity="center"
                             android:padding="@dimen/C10dp"
-                            android:textStyle="bold"
-
+                            android:text="Status"
                             android:textAllCaps="true"
+
                             android:textColor="@color/color_white"
-                            android:textSize="@dimen/C14dp" />
+                            android:textSize="@dimen/C14dp"
+                            android:textStyle="bold" />
 
                         <LinearLayout
                             android:id="@+id/lin_leav_sta"

@@ -34,7 +34,8 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
 
     Common_Class common_class;
     LinearLayout LeaveRequest, PermissionRequest, FlightTick, WeeklyOff, DeveiationEntry;
-    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, MissedPunc, ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus;
+    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, WeeklyOffStatus, MissedPunc,
+            ExtdShift, HolidayEntryStatus, DeviationEntryStatus, LeaveCancelStatus, LinearException;
     TextView countLeaveRequest, countPermissionRequest, countMissedPunch, countWeeklyOff;
     Shared_Common_Pref mShared_common_pref;
 
@@ -111,6 +112,8 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         DeviationEntryStatus = findViewById(R.id.lin_deviation_status);
         LeaveCancelStatus = findViewById(R.id.lin_leave_cancel_status);
         MissedPunc = findViewById(R.id.lin_miss_punch);
+        LinearException = findViewById(R.id.lin_da_excep);
+
         /*Request text*/
         countLeaveRequest = findViewById(R.id.txt_leave_req_count);
         countPermissionRequest = findViewById(R.id.txt_per_req_count);
@@ -132,6 +135,7 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
         HolidayEntryStatus.setOnClickListener(this);
         DeviationEntryStatus.setOnClickListener(this);
         LeaveCancelStatus.setOnClickListener(this);
+        LinearException.setOnClickListener(this);
 
         MissedPunc.setOnClickListener(this);
         ImageView backView = findViewById(R.id.imag_back);
@@ -167,6 +171,10 @@ public class Leave_Dashboard extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.lin_deviation_entry:
                 startActivity(new Intent(Leave_Dashboard.this, DeviationEntry.class));
+                break;
+
+            case R.id.lin_da_excep:
+                startActivity(new Intent(Leave_Dashboard.this, DaExceptionEntry.class));
                 break;
             case R.id.lin_leav_sta:
                 //   common_class.CommonIntentwithoutFinishputextra(Leave_Status_Activity.class, "AMod", "0");

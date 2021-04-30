@@ -67,7 +67,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
 
     EditText cardDate, edtActual, edtEarly, edtAmt;
     DatePickerDialog picker;
-    String minDate, minYear, minMonth, minDay, fullPath = "", finalPath = "", filePath = "",imgUrl="";
+    String minDate, minYear, minMonth, minDay, fullPath = "", finalPath = "", filePath = "", imgUrl = "";
     ArrayList<String> travelTypeList;
     Common_Model mCommon_model_spinner;
     List<Common_Model> listOrderType = new ArrayList<>();
@@ -143,7 +143,11 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
                 mTimePicker = new TimePickerDialog(DaExceptionEntry.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        edtActual.setText(selectedHour + ":" + selectedMinute);
+                        String hour = String.format("%02d", (selectedHour));
+                        String min = String.format("%02d", (selectedMinute));
+
+
+                        edtActual.setText(hour + ":" + min);
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
@@ -163,7 +167,10 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
                 mTimePicker = new TimePickerDialog(DaExceptionEntry.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-                        edtEarly.setText(selectedHour + ":" + selectedMinute);
+                        String hour = String.format("%02d", (selectedHour));
+                        String min = String.format("%02d", (selectedMinute));
+
+                        edtEarly.setText(hour + ":" + min);
                     }
                 }, hour, minute, true);//Yes 24 hour time
                 mTimePicker.setTitle("Select Time");
@@ -180,9 +187,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         cameraPermission.requestPermission();
                     }
-                    //Log.v("PERMISSION_NOT", "PERMISSION_NOT");
                 } else {
-                    //Log.v("PERMISSION", "PERMISSION");
                     popupCapture();
 
                 }
@@ -199,7 +204,6 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 txtTotalAmt.setText("Rs. " + edtAmt.getText().toString() + ".00");
-                //Log.v("EDT_AMOUNT", edtAmt.getText().toString());
             }
 
             @Override
@@ -269,10 +273,6 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         minYear = separated1[0];
         minMonth = separated1[1];
         minDay = separated1[2];
-        //Log.e("Sresdfsd", minYear);
-        //Log.e("Sresdfsd", minMonth);
-        //Log.e("Sresdfsd", minDay);
-
     }
 
     public void OrderType() {
@@ -507,9 +507,15 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
 
     public void daExpen() {
 
+        Log.v("SF_CODE",Shared_Common_Pref.Sf_Code);
+        Log.v("DIVISION_CODE",Shared_Common_Pref.Div_Code);
+
         JSONObject json = new JSONObject();
         try {
+
             json.put("da_type", typeText.getText().toString());
+            json.put("sfCode", Shared_Common_Pref.Sf_Code);
+            json.put("division_code", Shared_Common_Pref.Div_Code);
             json.put("da_date", cardDate.getText().toString());
             json.put("da_actua_time", edtActual.getText().toString());
             json.put("da_early_time", edtEarly.getText().toString());
@@ -529,7 +535,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         Callto.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                Log.v("print_upload_file", "ggg" + response.isSuccessful() + response.body());
+                Log.v("print_upload_file", response.body().toString());
 
                 try {
                     if (response.isSuccessful()) {
