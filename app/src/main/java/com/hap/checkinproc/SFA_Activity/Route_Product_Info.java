@@ -191,9 +191,6 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
                         checkavail = true;
                     }
                 }
-               /* if (checkavail == false && (Compititorname.equals("") || Compititorname == null)) {
-                    Toast.makeText(this, "Select The Other Brand", Toast.LENGTH_SHORT).show();
-                } else {*/
                     StringBuilder CatUniverIds = new StringBuilder();
                     for (Category_Universe_Modal ListUniv : Universelistt) {
                         if (ListUniv.getColorFlag().equals("1")) {
@@ -228,8 +225,6 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
                     intent.putExtra("reason_category", reason_availablity.getText().toString());
                     Shared_Common_Pref.Editoutletflag = "1";
                     startActivity(intent);
-                    // common_class.CommonIntentwithFinish(AddNewRetailer.class);
-
                 break;
 
             case R.id.takeorder:

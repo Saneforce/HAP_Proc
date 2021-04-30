@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -61,15 +63,15 @@ import retrofit2.Response;
 
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 
-public class AddNewRetailer extends AppCompatActivity implements Master_Interface {
+public class AddNewRetailer extends AppCompatActivity implements Master_Interface, View.OnClickListener {
     TextView toolHeader;
     CustomListViewDialog customDialog;
     ImageView imgBack;
     EditText toolSearch, retailercode;
     Button mSubmit;
     ApiInterface service;
-    LinearLayout linReatilerRoute, linReatilerClass, linReatilerChannel, CurrentLocLin,retailercodevisible;
-    TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel;
+    LinearLayout linReatilerRoute, linReatilerClass, linReatilerChannel, CurrentLocLin, retailercodevisible;
+    TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext;
     Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
@@ -77,7 +79,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     Common_Model mCommon_model_spinner;
     List<ReatilRouteModel> mRetailerDetailsModels;
     Gson gson;
-    EditText addRetailerName, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail, CurrentLocationsAddress;
+    EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail, edt_pin_codeedit, edt_gst;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
     JSONObject docMasterObject;
@@ -88,6 +90,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     SharedPreferences CheckInDetails;
     Common_Class common_class;
     List<Retailer_Modal_List> Retailer_Modal_List;
+    ImageView copypaste;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +103,17 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         CurrentLocLin = findViewById(R.id.CurrentLocLin);
         retailercodevisible = findViewById(R.id.retailercodevisible);
         CurrentLocationsAddress = findViewById(R.id.CurrentLocationsAddress);
+        copypaste = findViewById(R.id.copypaste);
+        edt_gst = findViewById(R.id.edt_gst);
+        headtext = findViewById(R.id.headtext);
+        addRetailerName = findViewById(R.id.edt_new_name);
+        owner_name = findViewById(R.id.owner_name);
+        addRetailerAddress = findViewById(R.id.edt_new_address);
+        addRetailerCity = findViewById(R.id.edt_new_city);
+        addRetailerPhone = findViewById(R.id.edt_new_phone);
+        addRetailerEmail = findViewById(R.id.edt_new_email);
+        edt_pin_codeedit = findViewById(R.id.edt_pin_code);
+        copypaste.setOnClickListener(this);
         gson = new Gson();
         shared_common_pref = new Shared_Common_Pref(this);
         service = ApiClient.getClient().create(ApiInterface.class);
@@ -117,6 +131,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             routeId = shared_common_pref.getvalue("RouteSelect");
             txtRetailerRoute.setText(shared_common_pref.getvalue("RouteName"));
             CurrentLocationsAddress.setText("" + Shared_Common_Pref.OutletAddress);
+            headtext.setText("Create Outlet");
         } else {
             retailercodevisible.setVisibility(View.VISIBLE);
             CurrentLocLin.setVisibility(View.GONE);
@@ -125,6 +140,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         }
         if (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1")) {
             mSubmit.setVisibility(View.GONE);
+            headtext.setText("Outlet Info");
         }
         getRouteDetails();
         getRetailerClass();
@@ -181,14 +197,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         OnclickRoute();
         onClickRetailerClass();
         onClickRetailerChannel();
-        addRetailerName = findViewById(R.id.edt_new_name);
-        addRetailerAddress = findViewById(R.id.edt_new_address);
-        addRetailerCity = findViewById(R.id.edt_new_city);
-        addRetailerPhone = findViewById(R.id.edt_new_phone);
-        addRetailerEmail = findViewById(R.id.edt_new_email);
+
+
+
         addRetailerName.clearFocus();
         Intent i = getIntent();
-        Log.e("TestOutler_AddFlag",Shared_Common_Pref.Outler_AddFlag);
+        Log.e("TestOutler_AddFlag", Shared_Common_Pref.Outler_AddFlag);
         if (i != null && i.getExtras() != null) {
             if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
                 Compititor_Id = i.getExtras().getString("Compititor_Id");
@@ -198,13 +212,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 reason_category_remarks = i.getExtras().getString("reason_category");
                 HatsunAvailswitch = i.getExtras().getString("HatsunAvailswitch");
                 categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
-                Log.e("HatsunAvailswitch",HatsunAvailswitch);
-                Log.e("categoryuniverseswitch",categoryuniverseswitch);
-                Log.e("reason_category",reason_category_remarks);
-                Log.e("CatUniverSelectId",CatUniverSelectId);
-                Log.e("AvailUniverSelectId",AvailUniverSelectId);
-                Log.e("Compititor_Name",Compititor_Name);
-
+                Log.e("HatsunAvailswitch", HatsunAvailswitch);
+                Log.e("categoryuniverseswitch", categoryuniverseswitch);
+                Log.e("reason_category", reason_category_remarks);
+                Log.e("CatUniverSelectId", CatUniverSelectId);
+                Log.e("AvailUniverSelectId", AvailUniverSelectId);
+                Log.e("Compititor_Name", Compititor_Name);
                 //The key argument here must match that used in the other activity
             } else {
                 addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
@@ -214,6 +227,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getId());
                 addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
                 addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
+                owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
+                edt_pin_codeedit.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getPin_code()));
+                edt_gst.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getGst()));
                 // txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
                 Compititor_Id = i.getExtras().getString("Compititor_Id");
                 Compititor_Name = i.getExtras().getString("Compititor_Name");
@@ -234,6 +250,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
             addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
             addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
+            owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
+            edt_pin_codeedit.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPin_code());
+            edt_gst.setText("" + Retailer_Modal_List.get(getOutletPosition()).getGst());
             //  txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
             Compititor_Id = i.getExtras().getString("Compititor_Id");
             Compititor_Name = i.getExtras().getString("Compititor_Name");
@@ -249,24 +268,20 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 if (txtRetailerRoute.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Select route", Toast.LENGTH_SHORT).show();
                 } else if (addRetailerName.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Enter Name", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Enter Outlet Name", Toast.LENGTH_SHORT).show();
+                } else if (owner_name.getText().toString().equals("")) {
+                    Toast.makeText(getApplicationContext(), "Enter the owner Name", Toast.LENGTH_SHORT).show();
                 } else if (addRetailerAddress.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Enter Address", Toast.LENGTH_SHORT).show();
                 } else if (addRetailerCity.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Enter City", Toast.LENGTH_SHORT).show();
                 } else if (addRetailerPhone.getText().toString().matches("")) {
                     Toast.makeText(getApplicationContext(), "Enter Phone", Toast.LENGTH_SHORT).show();
-                } else if (addRetailerEmail.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Enter Email", Toast.LENGTH_SHORT).show();
                 } else if (txtRetailerClass.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Select Class", Toast.LENGTH_SHORT).show();
-                } else if (txtRetailerChannel.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Select Channel", Toast.LENGTH_SHORT).show();
-                } else if (!addRetailerEmail.getText().toString().trim().matches(emailPattern)) {
-                    Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
                 } else {
                     addNewRetailers();
-                    Toast.makeText(AddNewRetailer.this, "New Retailer Added successfully", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(AddNewRetailer.this, "New Retailer Added successfully", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -459,7 +474,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("town_code", "'" + routeId + "'");
             reportObject.put("wlkg_sequence", "null");
             reportObject.put("unlisted_doctor_name", "'" + addRetailerName.getText().toString() + "'");
-            reportObject.put("unlisted_doctor_address", "'" + addRetailerAddress.getText().toString() + "'");
+            reportObject.put("unlisted_Owner_name", "'" + owner_name.getText().toString() + "'");
+            reportObject.put("unlisted_doctor_pincode", "'" + edt_pin_codeedit.getText().toString() + "'");
+            reportObject.put("unlisted_doctor_gst", "'" + edt_gst.getText().toString() + "'");
+            reportObject.put("unlisted_doctor_address", "'" + addRetailerAddress.getText().toString().replace("\n", "") + "'");
             reportObject.put("unlisted_doctor_phone", "'" + addRetailerPhone.getText().toString() + "'");
             reportObject.put("unlisted_doctor_cityname", "'" + addRetailerCity.getText().toString() + "'");
             reportObject.put("unlisted_doctor_landmark", "''");
@@ -477,8 +495,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_doctor_Email", common_class.addquote(addRetailerEmail.getText().toString()));
             reportObject.put("unlisted_doctor_contactperson", "''");
             reportObject.put("unlisted_doctor_designation", "''");
-            reportObject.put("unlisted_doctor_gst", "''");
-            reportObject.put("unlisted_doctor_pincode", "''");
             reportObject.put("unlisted_doctor_phone2", "''");
             reportObject.put("unlisted_doctor_phone3", "''");
             reportObject.put("unlisted_doctor_contactperson2", "''");
@@ -504,7 +520,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             totalValueString = mainArray.toString();
         } else {
             QueryString.put("axn", "upd/retailer");
-
             totalValueString = reportObject.toString();
         }
         QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
@@ -521,6 +536,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 JsonObject jsonObject = response.body();
                 Log.e("Add_Retailer_details", String.valueOf(jsonObject));
                 String success = String.valueOf(jsonObject.get("success"));
+                if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                    Toast.makeText(AddNewRetailer.this, "Outlet Added successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(AddNewRetailer.this, "Outlet Updated successfully", Toast.LENGTH_SHORT).show();
+                }
                 if (success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("0") && !Shared_Common_Pref.Editoutletflag.equals("1")) {
                     startActivity(new Intent(getApplicationContext(), SecondaryOrderActivity.class));
                 } else if ((success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) || (success.equalsIgnoreCase("true") && Shared_Common_Pref.Editoutletflag.equals("1"))) {
@@ -576,4 +596,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     }
 
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.copypaste:
+                addRetailerAddress.setText(CurrentLocationsAddress.getText().toString());
+                break;
+        }
+    }
 }

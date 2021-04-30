@@ -82,7 +82,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     ApiInterface apiInterface;
     String Photo_Name = "", imageConvert = "", StartedKm = "", EndedImage = "", CheckInfo = "CheckInDetail",
             UserInfo = "MyPrefs", MOT = "ModeOfTravel", Name = "Allowance", mypreference = "mypref", StrToCode = "",
-            toPlace = "",  ImageStart = "", Hq = "";
+            toPlace = "", ImageStart = "", Hq = "";
     LinearLayout linToPlace;
     CustomListViewDialog customDialog;
     Common_Model mCommon_model_spinner;
@@ -171,26 +171,24 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         });
 
 
-        if (!EndedImage.matches("")) {
-            EndedKmImage.setOnClickListener(new View.OnClickListener() {
+        EndedKmImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                intent.putExtra("ImageUrl", EndedImage);
+                startActivity(intent);
+            }
+        });
+
+        if (!ImageStart.matches("")) {
+            StartedKmImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
-                    intent.putExtra("ImageUrl", EndedImage);
+                    intent.putExtra("ImageUrl", ImageStart);
                     startActivity(intent);
                 }
             });
-
-            if (!ImageStart.matches("")) {
-                StartedKmImage.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
-                        intent.putExtra("ImageUrl", ImageStart);
-                        startActivity(intent);
-                    }
-                });
-            }
         }
 
 
@@ -296,8 +294,8 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
             DatabaseHandler db = new DatabaseHandler(this);
-            JSONArray locations=db.getAllPendingTrackDetails();
-            if(locations.length()>0){
+            JSONArray locations = db.getAllPendingTrackDetails();
+            if (locations.length() > 0) {
                 try {
                     SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
                     if (UserDetails.getString("Sfcode", "") != "") {
@@ -315,7 +313,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                             }
                         });
                     }
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -620,6 +618,16 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             Log.e("COnvert", EndedImage.substring(7));
             Log.e("COnvert", imageConvert);
             getMulipart(imageConvert, 0);
+
+            EndedKmImage.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.v("END_IAMGE", EndedImage);
+                    Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+                    intent.putExtra("ImageUrl", EndedImage);
+                    startActivity(intent);
+                }
+            });
 
         }
     }

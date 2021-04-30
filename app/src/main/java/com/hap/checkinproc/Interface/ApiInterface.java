@@ -229,7 +229,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/Expensedate")
-    Call<JsonArray>  getTADate(@Field("data") String userData);
+    Call<JsonArray> getTADate(@Field("data") String userData);
 
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/expensedatedetailsnew")
@@ -283,11 +283,13 @@ public interface ApiInterface {
     Call<HeaderCat> SubCategory(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                                 @Query("rSF") String rSF, @Query("State_Code") String StateCode,
                                 @Field("data") String data);
+
     /*submitValue*/
     @FormUrlEncoded
     @POST("Db_v300.php?axn=dcr/save")
     Call<JsonObject> submitValue(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                                  @Field("data") String data);
+
     /*ReportView*/
     @POST("db_v14.php?axn=get/ViewReport")
     Call<ReportDataList> reportValues(@Query("Sf_code") String sFCode, @Query("fromdate") String fromdate, @Query("todate") String todate);
@@ -374,12 +376,12 @@ public interface ApiInterface {
 
     @Multipart
     @POST("db_new_activity.php?axn=upload/checkinimage")
-    Call<ResponseBody> CheckImage(  @Query("sfCode") String sfcode,
-                               @Part MultipartBody.Part files);
+    Call<ResponseBody> CheckImage(@Query("sfCode") String sfcode,
+                                  @Part MultipartBody.Part files);
 
     @Multipart
     @POST("db_new_activity.php?axn=upload/checkinimage")
-    Single<ResponseBody> onFileUpload(@Query("sfCode") String sfcode,@Query("FileName") String FileName,@Query("Mode") String Mode,
+    Single<ResponseBody> onFileUpload(@Query("sfCode") String sfcode, @Query("FileName") String FileName, @Query("Mode") String Mode,
                                       @Part MultipartBody.Part file);
 
     @POST("db_new_activity.php?axn=get/TA_Image")
@@ -398,7 +400,7 @@ public interface ApiInterface {
     @POST("Db_V13.php?axn=get/GateEntryHome")
     Call<JsonArray> gteDta(@Query("Sf_code") String sfCode, @Query("TodayDate") String Tdate);
 
-  @POST("Db_V13.php?axn=get/daExpen")
-    Call<ResponseBody> daExpen(@Query("Sf_code") String sfCode,@Query("data") String daDATA);
+    @POST("db_new_activity.php?axn=save/expLodgeException")
+    Call<ResponseBody> daExpen(@Query("Sf_code") String sfCode, @Query("data") String daDATA);
 
 }

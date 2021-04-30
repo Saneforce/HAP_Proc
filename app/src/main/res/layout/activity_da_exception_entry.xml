@@ -15,6 +15,10 @@
 
         <include layout="@layout/custom_toolbar_help" />
 
+        <ScrollView
+            android:layout_marginBottom="@dimen/C100dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -172,12 +176,12 @@
                     android:onClick="DaException"
                     style="@style/ButtonStyle"
                     android:background="@drawable/button_blueg"
-                    android:text="Save" />
+                    android:text="Submit" />
 
             </LinearLayout>
 
         </LinearLayout>
-
+        </ScrollView>
     </LinearLayout>
 
     <include layout="@layout/back_arrow"></include>

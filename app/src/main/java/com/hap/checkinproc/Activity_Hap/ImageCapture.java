@@ -1205,7 +1205,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         startService(new Intent(this, TimerService.class));
     }
 
-
 /*    private Preview mPreview;
     Camera mCamera;
     int numberOfCameras;

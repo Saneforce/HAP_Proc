@@ -60,7 +60,7 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
         gson = new Gson();
         common_class = new Common_Class(this);
         presenter.requestDataFromServer();
-        lastsuccessync.setText(Common_Class.GetDateOnly());
+        lastsuccessync.setText(Common_Class.GetDatemonthyearformat());
         Sf_UserId.setText(Shared_Common_Pref.Sf_Code);
        /* if (Shared_Common_Pref.Todaydayplanresult != null) {
             GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "dayplan");
@@ -82,7 +82,7 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
             todayoutlet.setText("" + todaycount);
         }*/
         SyncButton.setOnClickListener(this);
-        Log.e("SYNC_FLAG", Shared_Common_Pref.Sync_Flag);
+        //Log.e("SYNC_FLAG", Shared_Common_Pref.Sync_Flag);
         if (Shared_Common_Pref.Sync_Flag.equals("0")) {
             progress = new ProgressDialog(this);
             progress.setMessage("Data Is Syncing");
@@ -220,7 +220,7 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
                     invoicevalues.setText("" + jsonObject1.optString("Invoicevalues"));
                     ordervalues.setText("" + jsonObject1.optString("Order_Value"));
                     todayoutlet.setText("" + jsonObject1.optString("Outlet_Fortheday"));
-                    totaloutlets.setText(""+  jsonObject1.optString("Outlet_Fortheday")+"/"+ jsonObject1.optString("Totaloutlet"));
+                    totaloutlets.setText(""+  jsonObject1.optString("Orderoutlet_Count")+"/"+ jsonObject1.optString("Totaloutlet"));
                 }
             }
             //spinner.setSelection(adapter.getPosition("select worktype"));

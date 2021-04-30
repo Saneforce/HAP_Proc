@@ -77,6 +77,12 @@ public class Common_Class {
         shared_common_pref = new Shared_Common_Pref(context);
 
     }
+    public static String GetDatemonthyearformat() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat dpln = new SimpleDateFormat("dd-MM-yyyy");
+        String plantime = dpln.format(c.getTime());
+        return plantime;
+    }
     public void CommonIntentwithoutFinish(Class classname) {
         intent = new Intent(activity, classname);
 

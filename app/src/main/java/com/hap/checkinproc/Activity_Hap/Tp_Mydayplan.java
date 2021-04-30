@@ -511,7 +511,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                             SendtpApproval("NTPApproval", 1);
                         } else {
                             common_class.CommonIntentwithoutFinishputextra(Tp_Calander.class, "Monthselection", String.valueOf(common_class.getintentValues("TourMonth")));
-                            Toast.makeText(Tp_Mydayplan.this, "Tour Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Tp_Mydayplan.this, "Work Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
 
                         }
 

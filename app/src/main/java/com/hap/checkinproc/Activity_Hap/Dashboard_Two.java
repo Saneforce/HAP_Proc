@@ -93,6 +93,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     CardView cardGateDet;
     String dashMdeCnt = "";
     String datefrmt = "";
+    TextView TxtEmpId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +125,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             }
         });
 
+        TxtEmpId = findViewById(R.id.txt_emp_id);
+        TxtEmpId.setText(" - " + mShared_common_pref.getvalue(Shared_Common_Pref.SF_EMP_ID));
         TextView txtErt = findViewById(R.id.toolbar_ert);
         TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
         txtErt.setOnClickListener(new View.OnClickListener() {
@@ -245,7 +248,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         if (getIntent().getExtras() != null) {
             Bundle params = getIntent().getExtras();
             viewMode = params.getString("Mode");
-            if (viewMode.equalsIgnoreCase("CIN") || viewMode.equalsIgnoreCase("extended")) {
+            if (viewMode.equalsIgnoreCase("CIN") || viewMode.equalsIgnoreCase("extended") ) {
                 cardview3.setVisibility(View.VISIBLE);
                 cardview4.setVisibility(View.VISIBLE);
                 //cardView5.setVisibility(View.VISIBLE);
@@ -412,7 +415,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 newItem.addProperty("color", fItm.get("StaColor").getAsString());
                 dyRpt.add(newItem);
 
-                if(!fItm.get("HQNm").getAsString().equalsIgnoreCase("")) {
+                if (!fItm.get("HQNm").getAsString().equalsIgnoreCase("")) {
                     newItem = new JsonObject();
                     newItem.addProperty("name", "Location");
                     newItem.addProperty("value", fItm.get("HQNm").getAsString());
@@ -448,7 +451,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 recyclerView = (RecyclerView) findViewById(R.id.Rv_DyRpt);
 
                 Log.v("Lat_Long", fItm.get("lat_long").getAsString());
-                mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this,fItm.get("lat_long").getAsString());
+                mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this, fItm.get("lat_long").getAsString());
                 RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());

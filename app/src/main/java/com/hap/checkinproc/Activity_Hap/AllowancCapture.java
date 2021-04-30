@@ -236,7 +236,7 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     }
 
     private void StartSelfiCamera() {
-        if (mCamera != null) {
+        /*if (mCamera != null) {
             mCamera.stopPreview();
             mCamera.release();
             mCamera = null;
@@ -256,7 +256,11 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         setCameraDisplayOrientation();
         mCamera.startPreview();
 
-        Log.e("mCAmer_id", String.valueOf(mCamId));
+        Log.e("mCAmer_id", String.valueOf(mCamId));*/
+
+        preview = (SurfaceView) findViewById(R.id.PREVIEW);
+        mHolder = preview.getHolder();
+        mHolder.addCallback(this);
     }
 
 
@@ -288,6 +292,15 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
+
+   /*     mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
+        mCamera.setDisplayOrientation(90);
+        try {
+            mCamera.setPreviewDisplay(surfaceHolder);
+            mCamera.startPreview();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
 
         mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
         mCamera.setDisplayOrientation(90);

@@ -71,6 +71,50 @@ public class Retailer_Modal_List {
     @SerializedName("name")
     @Expose
     private String name;
+
+    public String getOwner_Name() {
+        return Owner_Name;
+    }
+
+    public void setOwner_Name(String owner_Name) {
+        Owner_Name = owner_Name;
+    }
+
+    public Retailer_Modal_List(String id, String name, String owner_Name, String statusname, String valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode, String invoice_Flag, String hatsun_AvailablityId, String listedDr_Email, String cityname, String compititor_Name, String compititor_Id, String lastUpdt_Date, String hatsanavail_Switch, String hatsanCategory_Switch, String reason_category, String category_Universe_Id) {
+        this.id = id;
+        this.name = name;
+        Owner_Name = owner_Name;
+        Statusname = statusname;
+        Valuesinv = valuesinv;
+        InvoiceValues = invoiceValues;
+        InvoiceDate = invoiceDate;
+        this.townCode = townCode;
+        this.townName = townName;
+        this.lat = lat;
+        this._long = _long;
+        this.addrs = addrs;
+        this.listedDrAddress1 = listedDrAddress1;
+        this.listedDrSlNo = listedDrSlNo;
+        this.mobileNumber = mobileNumber;
+        this.docCatCode = docCatCode;
+        this.contactPersion = contactPersion;
+        this.docSpecialCode = docSpecialCode;
+        Invoice_Flag = invoice_Flag;
+        Hatsun_AvailablityId = hatsun_AvailablityId;
+        ListedDr_Email = listedDr_Email;
+        this.cityname = cityname;
+        Compititor_Name = compititor_Name;
+        Compititor_Id = compititor_Id;
+        LastUpdt_Date = lastUpdt_Date;
+        Hatsanavail_Switch = hatsanavail_Switch;
+        HatsanCategory_Switch = hatsanCategory_Switch;
+        this.reason_category = reason_category;
+        Category_Universe_Id = category_Universe_Id;
+    }
+
+    @SerializedName("Owner_Name")
+    @Expose
+    private String Owner_Name;
     @SerializedName("Statusname")
     @Expose
     private String Statusname;
@@ -145,6 +189,59 @@ public class Retailer_Modal_List {
     @Expose
     private String HatsanCategory_Switch;
 
+    public Retailer_Modal_List(String id, String name, String owner_Name, String statusname, String valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode, String invoice_Flag, String hatsun_AvailablityId, String listedDr_Email, String cityname, String compititor_Name, String compititor_Id, String lastUpdt_Date, String hatsanavail_Switch, String hatsanCategory_Switch, String pin_code, String gst, String reason_category, String category_Universe_Id) {
+        this.id = id;
+        this.name = name;
+        Owner_Name = owner_Name;
+        Statusname = statusname;
+        Valuesinv = valuesinv;
+        InvoiceValues = invoiceValues;
+        InvoiceDate = invoiceDate;
+        this.townCode = townCode;
+        this.townName = townName;
+        this.lat = lat;
+        this._long = _long;
+        this.addrs = addrs;
+        this.listedDrAddress1 = listedDrAddress1;
+        this.listedDrSlNo = listedDrSlNo;
+        this.mobileNumber = mobileNumber;
+        this.docCatCode = docCatCode;
+        this.contactPersion = contactPersion;
+        this.docSpecialCode = docSpecialCode;
+        Invoice_Flag = invoice_Flag;
+        Hatsun_AvailablityId = hatsun_AvailablityId;
+        ListedDr_Email = listedDr_Email;
+        this.cityname = cityname;
+        Compititor_Name = compititor_Name;
+        Compititor_Id = compititor_Id;
+        LastUpdt_Date = lastUpdt_Date;
+        Hatsanavail_Switch = hatsanavail_Switch;
+        HatsanCategory_Switch = hatsanCategory_Switch;
+        this.pin_code = pin_code;
+        this.gst = gst;
+        this.reason_category = reason_category;
+        Category_Universe_Id = category_Universe_Id;
+    }
+    @SerializedName("pin_code")
+    @Expose
+    private String pin_code;
+    public String getPin_code() {
+        return pin_code;
+    }
+    public void setPin_code(String pin_code) {
+        this.pin_code = pin_code;
+    }
+    public String getGst() {
+        return gst;
+    }
+
+    public void setGst(String gst) {
+        this.gst = gst;
+    }
+
+    @SerializedName("gst")
+    @Expose
+    private String gst;
     public String getHatsanavail_Switch() {
         return Hatsanavail_Switch;
     }

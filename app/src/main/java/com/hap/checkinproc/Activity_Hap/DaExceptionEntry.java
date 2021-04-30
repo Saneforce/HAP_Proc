@@ -78,6 +78,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
     ImageView imgAttach;
     Dialog dialog;
     Uri outputFileUri;
+    Shared_Common_Pref mShared_common_pref;
 
 
     @Override
@@ -106,7 +107,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             }
         });
 
-
+        mShared_common_pref = new Shared_Common_Pref(this);
         cardDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -507,15 +508,14 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
 
     public void daExpen() {
 
-        Log.v("SF_CODE",Shared_Common_Pref.Sf_Code);
-        Log.v("DIVISION_CODE",Shared_Common_Pref.Div_Code);
+        Log.v("SF_CODE", Shared_Common_Pref.Sf_Code);
+        Log.v("DIVISION_CODE", Shared_Common_Pref.Div_Code);
 
         JSONObject json = new JSONObject();
         try {
-
             json.put("da_type", typeText.getText().toString());
-            json.put("sfCode", Shared_Common_Pref.Sf_Code);
-            json.put("division_code", Shared_Common_Pref.Div_Code);
+            json.put("sfCode", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+            json.put("division_code", mShared_common_pref.getvalue(Shared_Common_Pref.Div_Code));
             json.put("da_date", cardDate.getText().toString());
             json.put("da_actua_time", edtActual.getText().toString());
             json.put("da_early_time", edtEarly.getText().toString());
@@ -525,13 +525,13 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             e.printStackTrace();
         }
 
-        Log.v("Resquest_DAException", json.toString());
-
+       // Log.v("Resquest_DAException", json.toString());
 
         Call<ResponseBody> Callto;
         ApiInterface apiService = ApiClient.getClient().create(ApiInterface.class);
-        Callto = apiService.daExpen(Shared_Common_Pref.Sf_Code, json.toString());
+        Callto = apiService.daExpen(mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), json.toString());
 
+        Log.v("Resquest_DAException", Callto.request().toString());
         Callto.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

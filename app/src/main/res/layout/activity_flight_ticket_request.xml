@@ -230,7 +230,7 @@
 
                                 <Button
                                     style="@style/ButtonStyle"
-                                    android:background="@drawable/button_blue"
+                                    android:background="@drawable/button_blueg"
                                     android:text="submit" />
 
                             </LinearLayout>

@@ -512,15 +512,13 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(int requestCode) {
-
         if (eMail.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Invalid Email ID", Toast.LENGTH_LONG).show();
             mProgress.dismiss();
             return;
         }
         Log.d(TAG, "TWO " + deviceToken);
-
-        //eMail="giritharan.d@hap.in";
+        //eMail="thirumalaivasan786@gmail.com";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
