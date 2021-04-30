@@ -152,43 +152,25 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/C50dp"
-            android:layout_alignParentBottom="true"
-            android:background="#ffffff"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true">
 
             <Button
                 android:id="@+id/btnRtPrv"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/C10dp"
-                android:layout_marginTop="@dimen/C5dp"
-                android:layout_marginRight="@dimen/C10dp"
-                android:layout_marginBottom="@dimen/C5dp"
-                android:background="@drawable/button_red"
-                android:padding="@dimen/C10dp"
-                android:text="Retry"
-                android:textColor="#ffffff"
-                android:textStyle="bold" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"></Space>
+                android:fontFamily="sans-serif-light"
+                style="@style/ButtonStyle"
+                android:layout_weight="1"
+                android:background="@color/color_red"
+                android:text="Retry" />
 
             <Button
+                android:fontFamily="sans-serif-light"
                 android:id="@+id/btnOkPrv"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/C10dp"
-                android:layout_marginTop="@dimen/C5dp"
-                android:layout_marginRight="@dimen/C10dp"
-                android:layout_marginBottom="@dimen/C5dp"
-                android:background="@drawable/button_green"
-                android:padding="@dimen/C10dp"
-                android:text="Ok"
-                android:textColor="#ffffff"
-                android:textStyle="bold" />
+                style="@style/ButtonStyle"
+                android:layout_weight="1"
+                android:background="@color/green"
+                android:text="Ok" />
+
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

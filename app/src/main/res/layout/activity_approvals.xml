@@ -59,6 +59,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="Leave"></TextView>
 
@@ -107,8 +108,13 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
-                                    android:text="Leave Cancel Status"></TextView>
+                                    android:layout_alignParentStart="true"
+                                    android:layout_alignParentBottom="true"
+                                    android:layout_marginStart="4dp"
+                                    android:layout_marginBottom="5dp"
+                                    android:text="Leave Cancel"></TextView>
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -155,6 +161,8 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
+
                                     style="@style/TextStyle"
                                     android:text="Permission"></TextView>
 
@@ -202,6 +210,8 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
+
                                     style="@style/TextStyle"
                                     android:text="On-Duty"></TextView>
 
@@ -249,6 +259,8 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
+
                                     style="@style/TextStyle"
                                     android:text="Missed Punch"></TextView>
 
@@ -298,6 +310,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="Extended Shift"></TextView>
 
@@ -346,6 +359,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="Travel Allowance"></TextView>
 
@@ -394,6 +408,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="Tour Plan"></TextView>
 
@@ -442,6 +457,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="Deviation Entry" />
 
@@ -490,6 +506,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="Holiday Entry" />
 
@@ -564,6 +581,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="Leave"></TextView>
 
@@ -594,6 +612,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="Permission"></TextView>
 
@@ -624,6 +643,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="On-Duty"></TextView>
 
@@ -654,6 +674,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="Missed Punch"></TextView>
 
@@ -685,6 +706,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="Weekoff"></TextView>
 
@@ -716,6 +738,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="Extended shift"></TextView>
 
@@ -748,6 +771,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="Travel Allowance"></TextView>
 
@@ -781,6 +805,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="Tour Plan"></TextView>
 
@@ -812,6 +837,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
+                                    android:textSize="@dimen/C16dp"
                                     style="@style/TextStyle"
                                     android:text="Leave Cancel"></TextView>
 

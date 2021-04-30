@@ -427,6 +427,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     Log.v("GET_MYDAY_PLAN", jsonObject.toString());
                     Integer MotCount = Integer.valueOf(jsonObject.getString("checkMOT"));
 
+                    Log.v("MOT_COUNT", String.valueOf(MotCount));
+
                     if (MotCount > 0)
                         linReCheck.setVisibility(View.VISIBLE);
                     onDuty = jsonObject.getString("CheckOnduty");

@@ -263,7 +263,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         Log.e("ROUTE_MASTER_Object", String.valueOf(noticeArrayList));
         Log.e("TAG", "response Tbmydayplan: " + new Gson().toJson(noticeArrayList));
         if (position == 0) {
-            Log.e("SharedprefrenceVALUES", new Gson().toJson(noticeArrayList));
+            Log.e("SharedprefrenceVALUES", new Gson().toJson(noticeArrayList))  ;
             GetJsonData(new Gson().toJson(noticeArrayList), "0");
         } else if (position == 1) {
             GetJsonData(new Gson().toJson(noticeArrayList), "1");
@@ -591,10 +591,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     }
 
     private void GetJsonData(String jsonResponse, String type) {
-
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
-
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                 String id = String.valueOf(jsonObject1.optInt("id"));
@@ -673,6 +671,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 try {
+                    common_class.ProgressdialogShow(2, "Tour Plan");
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     Log.e("GettodayResult", "response Tp_View: " + jsonObject.getJSONArray("GettodayResult"));
                     Log.e("DynamicViewes", "response Tp_View: " + jsonObject.getJSONArray("DynamicViews"));
@@ -929,6 +928,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         QueryString.put("Worktype_Code", wflag);
         QueryString.put("State_Code", Shared_Common_Pref.StateCode);
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+        Log.e("QUERYSTRING",QueryString.toString());
         Call<Object> call = service.GettpWorktypeFields(QueryString);
         call.enqueue(new Callback<Object>() {
             @Override

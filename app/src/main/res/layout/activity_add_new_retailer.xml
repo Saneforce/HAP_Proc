@@ -11,14 +11,18 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
-        <include layout="@layout/custom_toolbar_help"/>
+
+        <include layout="@layout/custom_toolbar_help"></include>
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/view_bg_color">
+
                 <TextView
                     android:id="@+id/headtext"
                     android:layout_width="match_parent"
@@ -108,20 +112,22 @@
                                     android:textSize="13dp"></TextView>
 
                                 <ImageView
+                                    android:id="@+id/copypaste"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="12dp"
-                                    android:src="@drawable/mandatory" />
+                                    android:src="@drawable/copy_paste" />
 
                             </LinearLayout>
 
-                            <EditText
+                            <TextView
                                 android:id="@+id/CurrentLocationsAddress"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/text_bg"
                                 android:gravity="start"
                                 android:hint="address"
+
                                 android:padding="10dp"
                                 android:textSize="13dp" />
 
@@ -258,6 +264,47 @@
                         android:layout_marginTop="10dp"
                         android:orientation="vertical">
 
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="Owner Name "
+                                android:textColor="@android:color/black"
+                                android:textSize="13dp"></TextView>
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="12dp"
+                                android:src="@drawable/mandatory" />
+
+                        </LinearLayout>
+
+
+                        <EditText
+                            android:id="@+id/owner_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/text_bg"
+                            android:gravity="start"
+                            android:hint="Enter the owner Name"
+                            android:padding="10dp"
+                            android:textSize="13dp" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
 
                         <LinearLayout
                             android:layout_width="wrap_content"
@@ -330,6 +377,78 @@
                             android:background="@drawable/text_bg"
                             android:gravity="start"
                             android:hint="Enter the City"
+                            android:padding="10dp"
+                            android:textSize="13dp" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="Pin code"
+                                android:textColor="@android:color/black"></TextView>
+
+                        </LinearLayout>
+                        <EditText
+                            android:id="@+id/edt_pin_code"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/text_bg"
+                            android:gravity="start"
+                            android:hint="Enter the Pin Code"
+                            android:inputType="number"
+                            android:padding="10dp"
+                            android:textSize="13dp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="vertical">
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="GST"
+                                android:textColor="@android:color/black"></TextView>
+
+
+                        </LinearLayout>
+
+
+                        <EditText
+                            android:id="@+id/edt_gst"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/text_bg"
+                            android:gravity="start"
+                            android:hint="Enter the gst"
                             android:padding="10dp"
                             android:textSize="13dp" />
 
@@ -542,7 +661,7 @@
                 android:id="@+id/submit_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_blueg"
+                android:background="@drawable/button_dgreen"
                 android:padding="@dimen/C10dp"
                 android:text="Save"
                 android:textColor="@android:color/white"

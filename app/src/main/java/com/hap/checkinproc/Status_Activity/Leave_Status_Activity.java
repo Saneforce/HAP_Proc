@@ -124,6 +124,8 @@ public class Leave_Status_Activity extends AppCompatActivity {
         common_class.ProgressdialogShow(1, "Leave Status");
         Call<Object> mCall = apiInterface.GetTPObject1(AMOD, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "GetLeave_Status", routemaster);
 
+        Log.e("GetCurrentMonth_Request", (mCall.request().toString()));
+
         mCall.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {

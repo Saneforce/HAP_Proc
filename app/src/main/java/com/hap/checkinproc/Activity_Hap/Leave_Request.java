@@ -162,9 +162,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         MaxMinDate();
 
         etext2 = (EditText) findViewById(R.id.to_date);
-        /*   etext2.setInputType(InputType.TYPE_NULL);*/
-
-
         Submit = (Button) findViewById(R.id.submitButton);
 
         Bundle params = getIntent().getExtras();
@@ -263,9 +260,12 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                             }
                         }, year, month, day);
                 Calendar calendarmin = Calendar.getInstance();
-                int mnth=Integer.parseInt(minMonth) - 2;
-                int fYr=Integer.parseInt(minYear);
-                if(mnth<0){ mnth=11;fYr=fYr-1;}
+                int mnth = Integer.parseInt(minMonth) - 2;
+                int fYr = Integer.parseInt(minYear);
+                if (mnth < 0) {
+                    mnth = 11;
+                    fYr = fYr - 1;
+                }
                 Log.d("MINMonth", String.valueOf(mnth));
                 calendarmin.set(fYr, mnth, 23);
                 picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
@@ -410,9 +410,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         Log.e("Sresdfsd", tominYear);
         Log.e("Sresdfsd", tominMonth);
         Log.e("Sresdfsd", tominDay);
-
     }
-
 
     public void addingHalfToSpinner() {
         halfTypeList = new ArrayList<>();
@@ -452,7 +450,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             /*  float daysBetween = (difference / (1000*60*60*24));*/
             daysBetween = (int) TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
             System.out.println("Number of Days between dates: " + (daysBetween + 1));
-            if(!etext2.getText().toString().equals("")) etext3.setText("" + (daysBetween + 1));
+            if (!etext2.getText().toString().equals("")) etext3.setText("" + (daysBetween + 1));
             if (daysBetween >= 0) {
 
             } else {
@@ -477,7 +475,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                             oneTwo = true;
                             Log.e("BOOLEAN_CHECK", String.valueOf(oneTwo));
 
-
                         } else {
                             halfChecked = "0";
                             etext3.setText(String.valueOf(daysBetween + 1));
@@ -497,17 +494,10 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
             }
 
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
-
-
-
-
-
 
 
     /*Leave Type api call*/
@@ -527,6 +517,8 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
+
+                Log.v("LEAVE_TYPE_CHEC", response.body().toString());
 
                 userType = new TypeToken<ArrayList<Leave_Type>>() {
                 }.getType();
@@ -626,7 +618,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     public void LeaveSubmitTwo() {
         getReason = "'" + reasonForLeave.getText().toString() + "'";
 
-        String dateDiff =etext3.getText().toString();
+        String dateDiff = etext3.getText().toString();
 
 
         if (halfTypeVal == "First Half") {
@@ -712,7 +704,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
         Call<Object> call = service.remainingLeave(String.valueOf(year), Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode);
 
-        Log.e("REMAINING_LEAVES_RE",call.request().toString());
+        Log.e("REMAINING_LEAVES_RE", call.request().toString());
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
@@ -734,7 +726,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                  finish();
+                    finish();
                 }
             });
 

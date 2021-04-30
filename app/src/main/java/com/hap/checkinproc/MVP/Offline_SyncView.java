@@ -1,16 +1,12 @@
 package com.hap.checkinproc.MVP;
-
 import android.util.Log;
-
 import com.google.gson.Gson;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,7 +20,7 @@ public class Offline_SyncView implements Main_Model.GetRoutemastersyncResult {
             String axnname = "table/list";
             if (i == 0) {
                 //Outlet_List
-                QuerySTring = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",  \\\"reason_category\\\", \\\"town_code\\\", \\\"ListedDr_Email\\\", \\\"cityname\\\",\\\"town_name\\\",\\\"lat\\\",\\\"long\\\",  \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\",  \\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\",  \\\"LastUpdt_Date\\\",    \\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" , \\\"Valuesinv\\\" , \\\"InvoiceDate\\\", \\\"Category_Universe_Id\\\", \\\"Hatsun_AvailablityId\\\",   \\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\"]\",\"where\":\"[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                QuerySTring = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",  \\\"reason_category\\\", \\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"town_name\\\",\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\",\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\",  \\\"LastUpdt_Date\\\",    \\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" , \\\"Valuesinv\\\" , \\\"InvoiceDate\\\", \\\"Category_Universe_Id\\\", \\\"Hatsun_AvailablityId\\\",   \\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\"]\",\"where\":\"[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                 //commonworktype = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
             } else if (i == 1) {
                 //Distributor_List
@@ -78,8 +74,6 @@ public class Offline_SyncView implements Main_Model.GetRoutemastersyncResult {
                 @Override
                 public void onResponse(Call<Object> call, Response<Object> response) {
                     Log.e("MAsterSyncView_Result", response.body() + "");
-                    //System.out.println("Route_Matser" + response.body().toString());
-                    //Log.e("TAG", "response 33: " + new Gson().toJson(response.body()));
                     //approvalList=response.body();
                     onFinishedListener.onFinishedrouteObject(response.body(), ii);
                 }

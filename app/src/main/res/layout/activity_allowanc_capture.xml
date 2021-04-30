@@ -55,12 +55,14 @@
 
             <Button
                 android:id="@+id/btnRtPrv"
+                android:fontFamily="sans-serif-light"
                 style="@style/ButtonStyle"
                 android:layout_weight="1"
                 android:background="@color/color_red"
                 android:text="Retry" />
 
             <Button
+                android:fontFamily="sans-serif-light"
                 android:id="@+id/btnOkPrv"
                 style="@style/ButtonStyle"
                 android:layout_weight="1"

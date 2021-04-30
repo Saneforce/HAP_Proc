@@ -596,6 +596,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty;
             EditText Qty;
+
             public MyViewHolder(View view) {
                 super(view);
                 productname = view.findViewById(R.id.productname);
@@ -641,7 +642,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             }
             if (Product_Details_Modal.getQty() > 0)
                 holder.Qty.setText("" + Product_Details_Modal.getQty());
-                holder.Qty.addTextChangedListener(new TextWatcher() {
+            holder.Qty.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int start,
                                           int before, int count) {

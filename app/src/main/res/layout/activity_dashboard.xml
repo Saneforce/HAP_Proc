@@ -101,7 +101,7 @@
                     android:id="@+id/lin_request_status"
                     style="@style/ButtonStyle"
                     android:background="@drawable/button_amber"
-                    android:text="Requests and status"
+                    android:text="Requests and Status"
                     app:layout_flexBasisPercent="47%" />
 
                 <Button
@@ -161,7 +161,7 @@
                     android:id="@+id/lin_ta_claim"
                     style="@style/ButtonStyle"
                     android:background="@drawable/button_purple"
-                    android:text="TA and claim"
+                    android:text="TA and Claim"
                     app:layout_flexBasisPercent="47%" />
 
                 <Button

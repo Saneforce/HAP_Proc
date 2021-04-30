@@ -350,15 +350,13 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     FRoute_Master.add(Model_Pojo);
                     Route_Masterlist.add(Model_Pojo);
                 } else if (type.equals("6")) {
-                    if (String.valueOf(jsonObject1.optString("Button_Access")).indexOf("D") > -1) {
+
                         route_text.setText(jsonObject1.optString("ClstrName"));
                         Distributor_Id = jsonObject1.optString("stockist");
                         Route_id = jsonObject1.optString("cluster");
                         distributor_text.setText(jsonObject1.optString("StkName"));
                         loadroute(jsonObject1.optString("stockist"));
-                    } else {
-                        Toast.makeText(this, "Distributor Not Selected on day plan", Toast.LENGTH_SHORT).show();
-                    }
+
 
                 }
 
