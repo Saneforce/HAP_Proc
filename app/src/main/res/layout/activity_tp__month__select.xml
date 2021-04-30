@@ -27,7 +27,7 @@
                 android:id="@+id/CurrentMoth"
                 android:layout_width="@dimen/header_date_width"
                 android:textAlignment="center"
-                android:background="@drawable/button_orange"
+                android:background="@drawable/button_blueg"
                 android:text="Current Month"
                 android:padding="@dimen/C10dp"
                 android:textColor="@color/color_white"
