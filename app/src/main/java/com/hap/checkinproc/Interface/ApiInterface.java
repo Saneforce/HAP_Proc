@@ -403,4 +403,9 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=save/expLodgeException")
     Call<ResponseBody> daExpen(@Query("Sf_code") String sfCode, @Query("data") String daDATA);
 
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=save/editstartactivity")
+    Call<JsonObject> upteAllowance(@Field("data") String body);
+
+
 }

@@ -152,7 +152,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "", finalPath = "",
             attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "", tvEditcnt = "", OeUKey = "",
             LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "",
-            lodgEarly = "", lodgLate = "", tominYear = "", tominMonth = "", sty_date = "", tominDay = "", ConStay = "", ErlyStay = "", LteStay = "", ErlyChecIn = "", ErlyChecOut = "", ErlyAmt = "", LteAmt = "", LteChecIn = "", LteChecOut = "";
+           DATE="", lodgEarly = "", lodgLate = "", tominYear = "", tominMonth = "", sty_date = "", tominDay = "", ConStay = "", ErlyStay = "", LteStay = "", ErlyChecIn = "", ErlyChecOut = "", ErlyAmt = "", LteAmt = "", LteChecIn = "", LteChecOut = "";
 
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
             oePosCnt = 0, lcPosCnt = 0, tvSize = 0, ttLod = 0, cnSty = 0, erlSty = 0, lteSty = 0;
@@ -1539,6 +1539,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
     /*Display Mode of travel View based on the choosed Date*/
     public void displayTravelMode(String ChoosedDate) {
+        startMethod(ChoosedDate);
+    }
+
+
+    public void startMethod(String ChoosedDate) {
         viewContinue.removeAllViews();
 
         try {
@@ -1592,20 +1597,24 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             if (!jsFuel.get("End_Km").getAsString().equalsIgnoreCase("")) {
                                 Integer start = Integer.valueOf(jsFuel.get("Start_Km").getAsString());
                                 Integer end = Integer.valueOf(jsFuel.get("End_Km").getAsString());
-                                String total = String.valueOf(end - start);
-                                Integer Total = Integer.valueOf(total);
-                                Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
-                                String TotalPersonal = String.valueOf(Total - Personal);
-                                Double q = Double.valueOf(TotalPersonal);
-                                Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-                                String qz = String.valueOf(q * z);
-                                Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+                                if (end != 0) {
+                                    String total = String.valueOf(end - start);
+                                    Integer Total = Integer.valueOf(total);
+                                    Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                    String TotalPersonal = String.valueOf(Total - Personal);
+                                    Double q = Double.valueOf(TotalPersonal);
+                                    Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                    String qz = String.valueOf(q * z);
+                                    Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+
+                                    fuelAmt = fuelAmt + (q * z);
+                                    fuelAmount.setText("Rs ." + fuelAmt);
+
+                                    TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+
+                                }
 
 
-                                fuelAmt = fuelAmt + (q * z);
-                                fuelAmount.setText("Rs ." + fuelAmt);
-
-                                TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
                             }
                         }
                     }
@@ -1675,6 +1684,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     public void onClick(View v) {
                                         Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
                                         intent.putExtra("ImageUrl", start_Image);
+
                                         startActivity(intent);
                                     }
                                 });
@@ -1732,7 +1742,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                                     Double totalAmount = Double.valueOf(strFuelAmount);
                                     tofuel = 200 * totalAmount;
-                                //    TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
+                                    //    TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
 
 
                                 } else if (totalkm > 500 && StrDaName.equals("Four Wheeler")) {
@@ -1741,7 +1751,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                                     Double totalAmount = Double.valueOf(strFuelAmount);
                                     tofuel = 500 * totalAmount;
-                                   // TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
+                                    // TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
 
                                     txtMaxKm.setVisibility(View.VISIBLE);
                                 } else {
@@ -1749,7 +1759,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                                     Double totalAmount = Double.valueOf(strFuelAmount);
                                     tofuel = totalPersonalKm * totalAmount;
-                                 //   TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
+                                    //   TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
                                     txtMaxKm.setVisibility(View.GONE);
                                 }
 
@@ -3775,6 +3785,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         super.onResume();
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
+        startMethod(DateTime);
+
     }
 
     @Override
