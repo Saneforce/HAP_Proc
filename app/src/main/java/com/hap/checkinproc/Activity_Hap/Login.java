@@ -375,6 +375,7 @@ public class Login extends AppCompatActivity {
             login(requestCode);
         } else {
             mProgress.dismiss();
+            login(requestCode);
             Toast.makeText(getApplicationContext(), "Sign in cancel", LENGTH_LONG).show();
         }
     }
@@ -512,12 +513,12 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(int requestCode) {
+        eMail="anbu@saneforce.com";
         if (eMail.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Invalid Email ID", Toast.LENGTH_LONG).show();
             mProgress.dismiss();
             return;
         }
-        //eMail="ciadmin@hap.in";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
