@@ -74,7 +74,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
     TextView TextModeTravel, TextStartedKm, TextMaxKm, TextToPlace;
     ImageView StartedKmImage, EndedKmImage;
-    Button takeEndedPhoto, submitAllowance;
+    Button  submitAllowance;
     EditText EndedEditText, PersonalKmEdit, ReasonMode;
     Integer stKM = 0, endKm = 0, personalKM = 0, StratKm = 0, maxKM = 0, TotalKm = 0, totalPM = 0;
     SharedPreferences CheckInDetails, sharedpreferences, UserDetails;
@@ -83,7 +83,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     String Photo_Name = "", imageConvert = "", StartedKm = "", EndedImage = "", CheckInfo = "CheckInDetail",
             UserInfo = "MyPrefs", MOT = "ModeOfTravel", Name = "Allowance", mypreference = "mypref", StrToCode = "",
             toPlace = "", ImageStart = "", Hq = "";
-    LinearLayout linToPlace;
+    LinearLayout linToPlace,takeEndedPhoto;
     CustomListViewDialog customDialog;
     Common_Model mCommon_model_spinner;
     List<Common_Model> modelRetailDetails = new ArrayList<>();

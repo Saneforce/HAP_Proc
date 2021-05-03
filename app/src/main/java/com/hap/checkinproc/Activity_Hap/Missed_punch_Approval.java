@@ -137,8 +137,11 @@ public class Missed_punch_Approval extends AppCompatActivity {
 
                 userType = new TypeToken<ArrayList<Missed_Punch_Model>>() {
                 }.getType();
-                approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
 
+
+                approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
+                Log.e("TAG_TP_RESPONSE", approvalList.toString());
+                Log.e("TAG_TP_RESPONSE", userType.toString());
                 recyclerView.setAdapter(new Missed_Punch_Adapter(approvalList, R.layout.missed_punch_list_item, getApplicationContext(), new AdapterOnClick() {
                     @Override
                     public void onIntentClick(int Name) {
@@ -157,6 +160,10 @@ public class Missed_punch_Approval extends AppCompatActivity {
                         intent.putExtra("MissedPunchDate", approvalList.get(Name).getMissedPunchDate());
                         intent.putExtra("CheckinTime", approvalList.get(Name).getCheckinTime());
                         intent.putExtra("CheckoutTime", approvalList.get(Name).getCheckoutTme());
+
+                        Log.e("TAG_TP_RESPONSE", "CHECKIN: " + approvalList.get(Name).getCheckinTime());
+                        Log.e("TAG_TP_RESPONSE", "CHCEKOUT: " + approvalList.get(Name).getCheckoutTme());
+
                        startActivity(intent);
                     }
                 }));

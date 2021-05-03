@@ -247,6 +247,15 @@
                                 android:textColor="#515151"
                                 android:textSize="13sp" />
 
+
+                                <ImageView
+                                    android:id="@+id/capture_img"
+                                    android:layout_width="@dimen/C50dp"
+                                    android:layout_height="@dimen/C50dp"
+                                 android:layout_marginRight="@dimen/C8dp"
+                                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
+                                    />
+
                                 <LinearLayout
                                     android:id="@+id/proof_pic"
                                     android:layout_width="wrap_content"
@@ -262,12 +271,7 @@
                                         android:textColor="#fff"  />
 
                                 </LinearLayout>
-                                <ImageView
-                                    android:id="@+id/capture_img"
-                                    android:layout_width="@dimen/C50dp"
-                                    android:layout_height="@dimen/C50dp"
-                                    app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
-                                />
+
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
 

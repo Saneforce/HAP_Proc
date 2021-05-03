@@ -37,6 +37,7 @@ public class Block_Information extends AppCompatActivity {
         if(!sMsg.equalsIgnoreCase("")) lblMsg.setText(Html.fromHtml(sMsg));
         if(!sHead.equalsIgnoreCase("")) lblInfo.setText(Html.fromHtml(sHead));
         if(mMode.equalsIgnoreCase("FGPS")){
+
             openDateSetting.setText("Exit Application");
         }
         openDateSetting.setOnClickListener(new View.OnClickListener() {
