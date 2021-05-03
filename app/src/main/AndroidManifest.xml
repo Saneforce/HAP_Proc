@@ -3,27 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hap.checkinproc">
 
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission
-        android:name="android.permission.WRITE_SETTINGS"
-        tools:ignore="ProtectedPermissions" />
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <application
         android:name=".SFA_Activity.HAPApp"
         android:allowBackup="false"
@@ -37,7 +16,8 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
-        <activity android:name=".Activity.ModeOfTravel"></activity>
+        <activity android:name=".SFA_Activity.SFADCRActivity"></activity>
+        <activity android:name=".Activity.ModeOfTravel" />
         <activity android:name=".Activity.TAViewStatus" />
         <activity android:name=".Activity_Hap.ViewTAStatus" />
         <activity android:name=".Activity_Hap.FlightTicketRequest" />
@@ -302,20 +282,6 @@
             android:name=".Activity_Hap.ProductImageView"
             android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
 
-        <service
-            android:name=".common.SANGPSTracker"
-            android:enabled="true"
-            android:exported="true" />
-        <service
-            android:name=".common.TimerService"
-            android:enabled="true"
-            android:exported="false" />
-        <service
-            android:name=".common.FileUploadService"
-            android:enabled="true"
-            android:exported="true"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
-
         <activity
             android:name=".Activity_Hap.MainActivity"
             android:screenOrientation="portrait">
@@ -328,10 +294,10 @@
         <activity
             android:name=".Activity.ProcurementDashboardActivity"
             android:screenOrientation="portrait" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key" />
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
@@ -339,6 +305,12 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_launcher" />
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/black" />
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -349,17 +321,46 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_launcher" />
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/black" /> <!-- Notification -->
+        <service
+            android:name=".common.SANGPSTracker"
+            android:enabled="true"
+            android:exported="true" />
+
+        <service
+            android:name=".common.TimerService"
+            android:enabled="true"
+            android:exported="false" />
+        <service
+            android:name=".common.FileUploadService"
+            android:enabled="true"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" /> <!-- Notification -->
         <service android:name=".PushNotification.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
     </application>
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

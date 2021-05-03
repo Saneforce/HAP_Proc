@@ -25,13 +25,14 @@ import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
+import com.hap.checkinproc.SFA_Activity.SFADCRActivity;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, Main_Model.MasterSyncView {
-    LinearLayout Lin_Route, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders;
+    LinearLayout Lin_Route,Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders;
     Gson gson;
     Type userType;
     Common_Class common_class;
@@ -47,6 +48,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         SyncButon = findViewById(R.id.SyncButon);
         DistLocation = findViewById(R.id.DistLocation);
         Lin_Lead = findViewById(R.id.Lin_Lead);
+        Lin_DCR = findViewById(R.id.Lin_DCR);
         Lin_Dashboard = findViewById(R.id.Lin_Dashboard);
         Lin_Outlet = findViewById(R.id.Lin_Outlet);
         linorders = findViewById(R.id.linorders);
@@ -55,6 +57,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         common_class = new Common_Class(this);
         SyncButon.setOnClickListener(this);
         Lin_Route.setOnClickListener(this);
+        Lin_DCR.setOnClickListener(this);
         Lin_Lead.setOnClickListener(this);
         lin_Reports.setOnClickListener(this);
         Lin_Dashboard.setOnClickListener(this);
@@ -74,13 +77,15 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             case R.id.Lin_Dashboard:
                 common_class.CommonIntentwithNEwTask(SFA_Dashboard.class);
                 break;
+            case R.id.Lin_DCR:
+                common_class.CommonIntentwithNEwTask(SFADCRActivity.class);
+                break;
             case R.id.Lin_Route:
                 common_class.CommonIntentwithNEwTask(Dashboard_Route.class);
                 break;
             case R.id.Lin_Outlet:
                 common_class.CommonIntentwithNEwTask(Outlet_Info_Activity.class);
                 break;
-
             case R.id.DistLocation:
                 common_class.CommonIntentwithNEwTask(Dist_Locations.class);
                 break;
