@@ -1,6 +1,8 @@
 package com.hap.checkinproc.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity_Hap.ProductImageView;
+import com.hap.checkinproc.Activity_Hap.TaFuelEdit;
 import com.hap.checkinproc.R;
 import com.squareup.picasso.Picasso;
 
@@ -39,6 +43,9 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
 
         JsonObject jsFuel = (JsonObject) jsonArray.get(position);
 
+        Log.v("FUEL_REPSONE", jsFuel.toString());
+
+
         holder.txtTaClaim.setText(jsFuel.get("MOT_Name").getAsString());
         holder.TxtStartedKm.setText(jsFuel.get("Start_Km").getAsString());
         holder.TxtClosingKm.setText(jsFuel.get("End_Km").getAsString());
@@ -48,32 +55,40 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
 
             Integer start = Integer.valueOf(jsFuel.get("Start_Km").getAsString());
             Integer end = Integer.valueOf(jsFuel.get("End_Km").getAsString());
-            String total = String.valueOf(end - start);
-            holder.TotalTravelledKm.setText(total);
-            holder.PersonalKiloMeter.setText(jsFuel.get("Personal_Km").getAsString());
 
-            Integer Total = Integer.valueOf(total);
-            Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
-            String TotalPersonal = String.valueOf(Total - Personal);
-            holder.PersonalTextKM.setText(TotalPersonal);
-            Double FuelaAmt = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-            holder.fuelAmount.setText(" Rs." + new DecimalFormat("##0.00").format(FuelaAmt) + " / KM ");
+            if (end != 0) {
+                String total = String.valueOf(end - start);
+                holder.TotalTravelledKm.setText(total);
+                holder.PersonalKiloMeter.setText(jsFuel.get("Personal_Km").getAsString());
 
-            holder.imgEdit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                Integer Total = Integer.valueOf(total);
+                Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
+                String TotalPersonal = String.valueOf(Total - Personal);
+                holder.PersonalTextKM.setText(TotalPersonal);
+                Double FuelaAmt = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                holder.fuelAmount.setText(" Rs." + new DecimalFormat("##0.00").format(FuelaAmt) + " / KM ");
 
-                }
-            });
+                holder.imgEdit.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, TaFuelEdit.class);
+                        intent.putExtra("SL_NO", jsFuel.get("Sl_No").getAsString());
+                        intent.putExtra("MOT", jsFuel.get("MOT").getAsString());
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+
+                    }
+                });
 
 
-            Double q = Double.valueOf(TotalPersonal);
-            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                Double q = Double.valueOf(TotalPersonal);
+                Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
 
 
-            String qz = String.valueOf(q * z);
+                String qz = String.valueOf(q * z);
 
-            holder.TextTotalAmount.setText("Rs. " + qz);
+                holder.TextTotalAmount.setText("Rs. " + qz);
+            }
         }
 
 
@@ -81,11 +96,31 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
             Picasso.with(context)
                     .load(jsFuel.get("start_Photo").getAsString())
                     .into(holder.imgStart);
+
+            holder.imgStart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ProductImageView.class);
+                    intent.putExtra("ImageUrl", jsFuel.get("start_Photo").getAsString());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            });
         }
         if (!jsFuel.get("End_photo").getAsString().equalsIgnoreCase("")) {
             Picasso.with(context)
                     .load(jsFuel.get("End_photo").getAsString())
                     .into(holder.imgEnd);
+
+            holder.imgEnd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, ProductImageView.class);
+                    intent.putExtra("ImageUrl", jsFuel.get("End_photo").getAsString());
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                }
+            });
 
         }
 
