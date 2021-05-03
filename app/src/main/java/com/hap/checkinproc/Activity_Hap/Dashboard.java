@@ -98,14 +98,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
 
-        /* editor.putString("url",profile);*/
-/*
-        ImageView inm= findViewById(R.id.imag);
-        Bitmap bitmap = ((BitmapDrawable) inm.getDrawable()).getBitmap();
-
-        //Let's apply Gaussian blur effect with radius "10.5" and set to ImageView.
-        inm.setImageBitmap(new BlurUtils().blur(Dashboard.this, bitmap, 10.5f));*/
-
         String eMail = UserDetails.getString("email", "");
         String sSFName = UserDetails.getString("SfName", "");
         sSFType = UserDetails.getString("Sf_Type", "");

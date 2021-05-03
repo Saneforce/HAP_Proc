@@ -27,7 +27,7 @@
             android:layout_below="@id/AppTitle"
             android:layout_marginLeft="13dp"
             android:layout_marginTop="-14dp"
-            android:text="Ver 3.0.0"
+            android:text="@string/tool_app_ver"
             android:textColor="@color/white"
             android:textSize="8sp" />
     </LinearLayout>

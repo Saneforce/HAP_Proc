@@ -27,8 +27,8 @@
             android:id="@+id/myQR"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="15dp"
-            android:layout_width="@dimen/C40dp"
-            android:layout_height="@dimen/C40dp"
+            android:layout_width="@dimen/C30dp"
+            android:layout_height="@dimen/C30dp"
             android:layout_marginTop="0dp"
             app:tint="@color/colorPrimaryDark"
             android:padding="5dp"
@@ -192,6 +192,14 @@
                 style="@style/ButtonStyle"
                 android:background="@drawable/button_check_out"
                 android:text="Exit" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginRight="15dp"
+                android:text="@string/app_ver" />
 
         </LinearLayout>
 

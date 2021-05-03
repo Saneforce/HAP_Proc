@@ -17,9 +17,11 @@ public class Missed_Punch_Model {
     @SerializedName("Shift_Name")
     @Expose
     private String shiftName;
+
     @SerializedName("Checkin_Time")
     @Expose
     private String checkinTime;
+
     @SerializedName("Sf_name")
     @Expose
     private String sfName;

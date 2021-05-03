@@ -85,10 +85,10 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     private static final String TAG = "ImageCapture";
     Button button;
     TextureView textureView;
-    ImageView btnFlash;
+    ImageView btnFlash,btnWBal;
     ImageView btnSwchCam;
-    ListView lstFlashMode;
-    LinearLayout lstModalFlash;
+    ListView lstFlashMode,lstWBalance;
+    LinearLayout lstModalFlash,lstModalWBal;
     SeekBar skBarBright;
     String imagePath;
     String imageFileName;
@@ -210,10 +210,18 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         btnRtPrv = (Button) findViewById(R.id.btnRtPrv);
         btnOkPrv = (Button) findViewById(R.id.btnOkPrv);
         btnFlash = (ImageView) findViewById(R.id.button_flash);
+        btnWBal = (ImageView) findViewById(R.id.button_WBalance);
         btnSwchCam = (ImageView) findViewById(R.id.button_switchCam);
         lstModalFlash = (LinearLayout) findViewById(R.id.lstMFlash);
+        lstModalWBal = (LinearLayout) findViewById(R.id.lstMWBalance);
         lstFlashMode = (ListView) findViewById(R.id.lstFlashMode);
+        lstWBalance = (ListView) findViewById(R.id.lstWBalance);
 
+
+       String[] WBModes=getSupportedWhiteBalanceModes();
+
+        ArrayAdapter simpleWBAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, WBModes);
+        lstWBalance.setAdapter(simpleWBAdapter);//sets the adapter for listView
 
         ArrayAdapter simpleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, flashModes);
         lstFlashMode.setAdapter(simpleAdapter);//sets the adapter for listView
@@ -260,7 +268,13 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 }
             }
         });
-
+        lstWBalance.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                lstModalWBal.setVisibility(View.GONE);
+                setWhiteBalanceMode(WBModes[i]);
+            }
+        });
         //      }
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -298,6 +312,12 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 lstModalFlash.setVisibility(View.VISIBLE);
             }
         });
+        btnWBal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lstModalWBal.setVisibility(View.VISIBLE);
+            }
+        });
 
         btnRtPrv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -313,7 +333,25 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             }
         });
         skBarBright = (SeekBar) findViewById(R.id.skBarBright);
+        skBarBright.setProgress(50);
+        skBarBright.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int bright=(int)((Float.parseFloat(String.valueOf(progress)) / 100) * 40) - 20;
+                Log.d("Brightness",String.valueOf(bright));
+                setExposureCompensation(bright);
+            }
 
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
@@ -924,6 +962,99 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 //mCamId = i;
             }
         }
+    }
+
+    private boolean setExposureCompensation(int exposureCompensation) {
+
+        Camera.Parameters params = mCamera.getParameters();
+
+        int minExposureCompensation = mCamera.getParameters().getMinExposureCompensation();
+        int maxExposureCompensation = mCamera.getParameters().getMaxExposureCompensation();
+
+        if ( minExposureCompensation == 0 && maxExposureCompensation == 0) {
+            Log.d("Cam Error","Can't set Exposure");
+        } else {
+            if (exposureCompensation < minExposureCompensation) {
+                exposureCompensation = minExposureCompensation;
+            } else if (exposureCompensation > maxExposureCompensation) {
+                exposureCompensation = maxExposureCompensation;
+            }
+            params.setExposureCompensation(exposureCompensation);
+            mCamera.setParameters(params);
+        }
+
+        return true;
+    }
+    private String[] getSupportedWhiteBalanceModes() {
+        Camera.Parameters params = mCamera.getParameters();
+
+        List<String> supportedWhiteBalanceModes;
+        supportedWhiteBalanceModes = params.getSupportedWhiteBalance();
+
+        JSONArray jsonWhiteBalanceModes = new JSONArray();
+        String[] lstModes = new String[supportedWhiteBalanceModes.size()];
+        if (mCamera.getParameters().isAutoWhiteBalanceLockSupported()) {
+            jsonWhiteBalanceModes.put(new String("lock"));
+        }
+        if (supportedWhiteBalanceModes != null) {
+            for (int i=0; i<supportedWhiteBalanceModes.size(); i++) {
+                jsonWhiteBalanceModes.put(new String(supportedWhiteBalanceModes.get(i)));
+                lstModes[i]=supportedWhiteBalanceModes.get(i);
+            }
+        }
+
+       // callbackContext.success(jsonWhiteBalanceModes);
+        return lstModes;
+    }
+
+    private boolean getWhiteBalanceMode() {
+        Camera.Parameters params = mCamera.getParameters();
+
+        String whiteBalanceMode;
+
+        if (mCamera.getParameters().isAutoWhiteBalanceLockSupported()) {
+            if (mCamera.getParameters().getAutoWhiteBalanceLock()) {
+                whiteBalanceMode = "lock";
+            } else {
+                whiteBalanceMode = mCamera.getParameters().getWhiteBalance();
+            };
+        } else {
+            whiteBalanceMode = mCamera.getParameters().getWhiteBalance();
+        }
+        if (whiteBalanceMode != null) {
+            //callbackContext.success(whiteBalanceMode);
+        } else {
+            Log.e("Cam Error","White balance mode not supported");
+        }
+
+        return true;
+    }
+
+    private boolean setWhiteBalanceMode(String whiteBalanceMode) {
+        Camera.Parameters params = mCamera.getParameters();
+
+        if (whiteBalanceMode.equals("lock")) {
+            if (mCamera.getParameters().isAutoWhiteBalanceLockSupported()) {
+                params.setAutoWhiteBalanceLock(true);
+                mCamera.setParameters(params);
+            } else {
+                Log.e("Cam Error","White balance lock not supported");
+            }
+        } else if (whiteBalanceMode.equals("auto") ||
+                whiteBalanceMode.equals("incandescent") ||
+                whiteBalanceMode.equals("cloudy-daylight") ||
+                whiteBalanceMode.equals("daylight") ||
+                whiteBalanceMode.equals("fluorescent") ||
+                whiteBalanceMode.equals("shade") ||
+                whiteBalanceMode.equals("twilight") ||
+                whiteBalanceMode.equals("warm-fluorescent")) {
+            params.setWhiteBalance(whiteBalanceMode);
+            mCamera.setParameters(params);
+        } else {
+            Log.e("Cam Error","White balance parameter not supported");
+        }
+
+        return true;
     }
 
     public void setCameraDisplayOrientation() {

@@ -117,7 +117,7 @@ public class Checkin extends AppCompatActivity {
             onDutyPlcNm = String.valueOf(bundle.getSerializable("onDutyPlcNm"));
             vstPurpose = String.valueOf(bundle.getSerializable("vstPurpose"));
             Check_Flag = String.valueOf(bundle.getSerializable("Mode"));
-            DutyType = String.valueOf(bundle.getSerializable("onDuty"));
+            DutyType = String.valueOf(bundle.getString("onDuty",""));
             onDutyFlag = String.valueOf(bundle.getSerializable("HolidayFlag"));
             Log.e("CHECKIN_FLAG", Check_Flag);
             if (onDutyPlcID == "0") {

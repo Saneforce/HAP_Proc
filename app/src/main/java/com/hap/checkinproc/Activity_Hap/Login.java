@@ -517,24 +517,14 @@ public class Login extends AppCompatActivity {
             mProgress.dismiss();
             return;
         }
-        Log.d(TAG, "TWO " + deviceToken);
-        eMail = "ciadmin@hap.in";
+        eMail="ciadmin@hap.in";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
-
                 if (response.isSuccessful()) {
-                    Log.d(TAG, "Three " + deviceToken);
-
-                    Log.d("LoginData", String.valueOf(response.body()));
-
-                    // Log.e("sfName",response.body().getData().get(0).getSfCode());
-
                     if (response.body().getSuccess() == true) {
-                        Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_LONG).show();
                         Intent intent;
-
                         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                         JsonArray CinData = response.body().getCInData();
                         if (CinData.size() > 0) {

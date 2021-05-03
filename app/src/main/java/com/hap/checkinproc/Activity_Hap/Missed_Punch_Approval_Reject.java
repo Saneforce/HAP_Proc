@@ -140,7 +140,7 @@ public class Missed_Punch_Approval_Reject extends AppCompatActivity implements V
         misseddate.setText("" + i.getExtras().getString("MissedPunchDate"));
         shiftonduty.setText("" + i.getExtras().getString("Shiftonduty"));
         checkintime.setText("" + i.getExtras().getString("CheckinTime"));
-        checkouttime.setText("" + i.getExtras().getString("CheckinTime"));
+        checkouttime.setText("" + i.getExtras().getString("CheckoutTime"));
         Sf_Code = i.getExtras().getString("Sf_Code");
         Sl_No = i.getExtras().getString("Sl_No");
         mobilenumber.setOnClickListener(this);

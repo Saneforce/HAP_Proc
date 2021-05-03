@@ -367,7 +367,9 @@ public class SANGPSTracker extends Service {
             if(HAPApp.activeActivity.getClass()!=Block_Information.class) {
                 Intent nwScr = new Intent(mContext, Block_Information.class);
                 nwScr.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                // intent.putExtra("Msg","")
+                nwScr.putExtra("Mode","FGPS");
+                nwScr.putExtra("Head","APP Locked");
+                nwScr.putExtra("Msg","Your Device Using Mock Location.<br /><br /><b>Contact Administrator.</b>");
                 startActivity(nwScr);
             }
         }

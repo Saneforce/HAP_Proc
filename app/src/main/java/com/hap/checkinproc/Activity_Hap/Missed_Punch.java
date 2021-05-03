@@ -212,7 +212,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
         checkIn = (EditText) findViewById(R.id.missed_checkin);
         reasonMP = (EditText) findViewById(R.id.reason_missed);
 
-        Bundle params = getIntent().getExtras();
+        /*Bundle params = getIntent().getExtras();
 
         if (!(params == null)) {
             missedDates = params.getString("EDt");
@@ -221,10 +221,14 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             missedCheckOut = params.getString("COutTm");
             visbleMOde = params.getString("Aflag");
 
+
+
             if (visbleMOde.equalsIgnoreCase("1")) {
                 linMode.setVisibility(View.VISIBLE);
+                Log.v("VISIBLE_MODE_VISIBLE",visbleMOde);
             } else {
                 linMode.setVisibility(View.GONE);
+                Log.v("VISIBLE_MODE_GONE",visbleMOde);
             }
 
 
@@ -232,16 +236,19 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             shiftType.setText(missedShift);
             misseddateselect.setText(missedDates);
             checkOutTime.setText(missedCheckOut);
-        }
+        }*/
         leaveTypeMethod();
 
-        Log.d(Tag, String.valueOf(params));
+      //  Log.d(Tag, String.valueOf(params));
 
 
         mButtonSubmit = (Button) findViewById(R.id.submit_missed);
         mButtonSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                Log.v("VISIBLE_MODE_VALUE",visbleMOde);
 
                 if (!misseddateselect.getText().toString().matches("") && !reasonMP.getText().toString().matches("")) {
                     if (visbleMOde.equalsIgnoreCase("1")) {
@@ -532,7 +539,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                 Log.e("RESPONSE_LOG", response.body().toString());
                 GetJsonData(new Gson().toJson(response.body()), "0");
 
-                //DistributorTypeAdapter();
+
             }
 
             @Override
@@ -611,7 +618,10 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             count = myDataset.get(position).getPho();
             visbleMOde = myDataset.get(position).getCont();
 
+            Log.v("VISIBLE_COUNT",visbleMOde);
+
             if (visbleMOde.equalsIgnoreCase("1")) {
+
                 linMode.setVisibility(View.VISIBLE);
 
             } else {
@@ -639,6 +649,12 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                 String ModeCount = jsonObject1.optString("mode_count");
 
                 String visbleMOde = jsonObject1.optString("Aflag");
+
+
+                checkIn.setText(Checkin_Time);
+                shiftType.setText(shift);
+                misseddateselect.setText(MissedDate);
+                checkOutTime.setText(COutTime);
 
 
                 Log.v("visbleMOdevisbleMOde", visbleMOde);
@@ -677,12 +693,11 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                         count = Model_Pojo.getPho();
                         visbleMOde = Model_Pojo.getCont();
 
+                        Log.v("VISIBLE_COUNT",Model_Pojo.getCont());
+
                         if (visbleMOde.equalsIgnoreCase("1")) {
                             linMode.setVisibility(View.VISIBLE);
-
                         } else {
-
-
                             linMode.setVisibility(View.GONE);
                         }
                     }

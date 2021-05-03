@@ -152,7 +152,7 @@ public class Tp_Calander extends AppCompatActivity implements View.OnClickListen
             year = _calendar.get(Calendar.YEAR);
         }
         if (Shared_Common_Pref.Tp_Approvalflag.equals("0")) {
-            btnsubmit.setVisibility(View.VISIBLE);
+            btnsubmit.setVisibility(View.GONE);
         } else {
             btnsubmit.setVisibility(View.GONE);
         }
