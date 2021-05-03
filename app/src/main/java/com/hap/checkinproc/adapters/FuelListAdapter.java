@@ -74,6 +74,8 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
                         Intent intent = new Intent(context, TaFuelEdit.class);
                         intent.putExtra("SL_NO", jsFuel.get("Sl_No").getAsString());
                         intent.putExtra("MOT", jsFuel.get("MOT").getAsString());
+                        intent.putExtra("Start", jsFuel.get("Start_Km").getAsString());
+                        intent.putExtra("End", jsFuel.get("End_Km").getAsString());
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
 
