@@ -517,7 +517,7 @@ public class Login extends AppCompatActivity {
             mProgress.dismiss();
             return;
         }
-        eMail="ciadmin@hap.in";
+      //  eMail="ciadmin@hap.in";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
