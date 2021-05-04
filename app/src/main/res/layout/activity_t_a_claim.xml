@@ -2097,11 +2097,27 @@
                                                 android:text="Continue Stay Balance" />
 
                                             <LinearLayout
-                                                android:id="@+id/lin_con_sty"
+                                                android:id="@+id/data"
+                                                android:orientation="horizontal"
                                                 android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:orientation="vertical"
-                                                android:padding="5dp" />
+                                                android:layout_height="wrap_content">
+
+                                                <LinearLayout
+                                                    android:id="@+id/lin_con_sty"
+                                                    android:layout_weight="1"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="vertical"
+                                                    android:padding="5dp" />
+
+                                                <LinearLayout
+                                                    android:id="@+id/lin_con_sty_amt"
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="vertical"
+                                                    android:padding="5dp" />
+
+                                            </LinearLayout>
 
                                         </LinearLayout>
 

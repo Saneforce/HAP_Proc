@@ -127,7 +127,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             linAddAllowance, diverAllowanceLinear, LDailyAllowance, LOtherExpense, LLocalConve, LinearOtherAllowance,
             linlocalCon, linBusMode, linBikeMode, linMode, travelDynamicLoaction, linDailyAllowance, linback, lin,
             linImgPrv, TotalDays, stayDays, linEarly, linLate, linContinueStay, linCheckOut, vwldgBillAmt, linearConView;
-    LinearLayout viewContinue;
+    LinearLayout viewContinue,viewContinueTotal,ViewData;
     CardView card_date, TravelBike, crdDynamicLocation, ldg_ara;
 
     TextView txt_date, txt_ldg_type, TxtStartedKm, TxtClosingKm, modeTextView, travelTypeMode,
@@ -152,7 +152,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "", finalPath = "",
             attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "", tvEditcnt = "", OeUKey = "",
             LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "",
-           DATE="", lodgEarly = "", lodgLate = "", tominYear = "", tominMonth = "", sty_date = "", tominDay = "", ConStay = "", ErlyStay = "", LteStay = "", ErlyChecIn = "", ErlyChecOut = "", ErlyAmt = "", LteAmt = "", LteChecIn = "", LteChecOut = "";
+            DATE = "", lodgEarly = "", lodgLate = "", tominYear = "", tominMonth = "", sty_date = "", tominDay = "", ConStay = "", ErlyStay = "", LteStay = "", ErlyChecIn = "", ErlyChecOut = "", ErlyAmt = "", LteAmt = "", LteChecIn = "", LteChecOut = "";
 
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
             oePosCnt = 0, lcPosCnt = 0, tvSize = 0, ttLod = 0, cnSty = 0, erlSty = 0, lteSty = 0;
@@ -350,6 +350,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         edtLateBill = findViewById(R.id.lat_lod_bil);
         linearConView = findViewById(R.id.linear_con);
         viewContinue = (LinearLayout) findViewById(R.id.lin_con_sty);
+        viewContinueTotal = (LinearLayout) findViewById(R.id.lin_con_sty_amt);
+        ViewData = findViewById(R.id.data);
 
         mFuelRecycler = findViewById(R.id.recycler_fuel);
         mFuelRecycler.setHasFixedSize(true);
@@ -1544,8 +1546,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
 
     public void startMethod(String ChoosedDate) {
-        viewContinue.removeAllViews();
 
+   /*     viewContinue.removeAllViews();
+        viewContinueTotal.removeAllViews();*/
         try {
 
             ChoosedDate = ChoosedDate.replaceAll("^[\"']+|[\"']+$", "");
@@ -1993,6 +1996,69 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     if (oeDraftArray != null || oeDraftArray.size() != 0) OeDraft(oeDraftArray);
                     if (trvldArray != null || trvldArray.size() != 0) trvldLocation(trvldArray);
 
+
+                    JsonObject eachData;
+
+
+                    Log.v("Data_Details", LodingCon.toString());
+                    if (LodingCon.size() != 0) {
+
+
+                        for (int i = 0; i < LodingCon.size(); i++) {
+
+                            eachData = (JsonObject) LodingCon.get(i);
+                            lodgContvw.setVisibility(View.VISIBLE);
+                            linContinueStay.setVisibility(View.VISIBLE);
+                            linearConView.setVisibility(View.VISIBLE);
+
+/*
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+
+                            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+
+                            layoutParams.setMargins(15, 15, 15, 15);
+                            final View rowView = inflater.inflate(R.layout.cont_stay_amt, null);
+
+                            TextView txtConDate  = rowView.findViewById(R.id.txt_date);
+                            TextView txtRate  = rowView.findViewById(R.id.txt_tota);
+*/
+                           /* viewContinue.setOrientation(LinearLayout.HORIZONTAL);
+                            for (int ia = 0; ia < 2; ia++) {
+
+                                TextView customOptionsName = new TextView(TAClaimActivity.this);
+                                customOptionsName.setPadding(0, 15, 0, 15);
+                                customOptionsName.setText("");
+                                if(ia==0) {
+                                    customOptionsName.setText(eachData.get("fdt").getAsString());
+                                    Log.v("STRING","1");
+                                }else if(ia==1){
+                                    Log.v("STRING","2");
+                                    customOptionsName.setText(eachData.get("Amt").getAsString());
+                                }
+                                viewContinue.addView(customOptionsName);
+
+                            }
+*/
+
+                            TextView customOptionsName = new TextView(TAClaimActivity.this);
+                            customOptionsName.setPadding(0, 15, 0, 15);
+                            customOptionsName.setText(eachData.get("fdt").getAsString());
+                            viewContinue.addView(customOptionsName);
+
+                            TextView customOptionsNames = new TextView(TAClaimActivity.this);
+                            customOptionsNames.setPadding(0, 15, 0, 15);
+                            customOptionsNames.setText("Rs : "+eachData.get("Amt").getAsString()+".00");
+                            viewContinueTotal.addView(customOptionsNames);
+
+
+
+                        }
+                    }
+
+
                     Log.v("LODGING_ARRAY", String.valueOf(ldArray.size()));
                     if (ldArray != null || ldArray.size() != 0) {
                         Log.v("LODGING_ARRAY_IF", String.valueOf(ldArray.size()));
@@ -2079,23 +2145,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         Log.v("Ta_Loadging_txt", txtLodgUKey.getText().toString());
 
 
-        if (ContSty.size() != 0) {
-            for (int i = 0; i < ContSty.size(); i++) {
-                eachData = (JsonObject) ContSty.get(i);
-
-                TextView customOptionsName = new TextView(TAClaimActivity.this);
-                customOptionsName.setPadding(0, 15, 0, 15);
-                customOptionsName.setText("");
-                customOptionsName.setText(eachData.get("fdt").getAsString());
-                viewContinue.addView(customOptionsName);
-                // mChckEarly.setVisibility(View.VISIBLE);
-                // linearConView.setVisibility(View.VISIBLE);
-            }
-        } else {
-            mChckEarly.setVisibility(View.GONE);
-            linearConView.setVisibility(View.GONE);
-        }
-
         Log.v("Lodging_Details", ContSty.toString());
         JsonArray jsonAddition = null;
         JsonObject ldraft;
@@ -2103,9 +2152,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldraft = (JsonObject) lodingDraft.get(i);
 
             jsonAddition = ldraft.getAsJsonArray("Additional");
-/*
-            ldgAdd.setText("- Remove");
-*/
+
             lodgContvw.setVisibility(View.VISIBLE);
             lodgCont.setVisibility(View.VISIBLE);
             ldg_stayloc.setVisibility(View.VISIBLE);
