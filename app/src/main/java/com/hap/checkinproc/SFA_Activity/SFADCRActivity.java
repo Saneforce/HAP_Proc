@@ -5,8 +5,10 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.onPayslipItemClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.HAPListItem;
@@ -19,11 +21,13 @@ public class SFADCRActivity extends AppCompatActivity {
     JSONArray MnuList;
     RecyclerView recyclerView;
     private HAPListItem mAdapter;
+    Shared_Common_Pref CommonPref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sfa_dcr);
+        CommonPref = new Shared_Common_Pref(this);
         MnuList= new JSONArray();
         addMnuitem("1","SALES CALLS");
         addMnuitem("2","VAN ROUTE SUPPLY");
@@ -36,7 +40,15 @@ public class SFADCRActivity extends AppCompatActivity {
         HAPListItem.SetPayOnClickListener(new onPayslipItemClick() {
             @Override
             public void onClick(JSONObject item) {
+                try {
+                    if (item.getString("id") == "1") {
+                        CommonPref.save(CommonPref.DCRMode, "SC");
+                        Intent intent=new Intent(SFADCRActivity.this,Dashboard_Route.class);
+                        startActivity(intent);
+                    }
+                }catch (JSONException e){
 
+                }
             }
         });
     }
@@ -46,6 +58,7 @@ public class SFADCRActivity extends AppCompatActivity {
             item.put("id",id);
             item.put("name",name);
             MnuList.put(item);
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

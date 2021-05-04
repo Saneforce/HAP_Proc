@@ -79,7 +79,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     List<Common_Model> Route_Masterlist = new ArrayList<>();
     CustomListViewDialog customDialog;
     List<Common_Model> FRoute_Master = new ArrayList<>();
-    String Route_id, Distributor_Id;
+    String Route_id, Distributor_Id,DCRMode;
     Shared_Common_Pref sharedCommonPref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +120,12 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
         }.getType();
         GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "6");
+        DCRMode=sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
+        if(DCRMode.equalsIgnoreCase("SC")){
+            headtext.setText("SALES CALLS");
+        }
+
+
         Retailer_Modal_ListFilter = new ArrayList<>();
         Retailer_Modal_List = new ArrayList<>();
         String outletserializableob = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List);
@@ -237,6 +243,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             Distributor_Id = myDataset.get(position).getId();
             distributor_text.setText(myDataset.get(position).getName());
             loadroute(myDataset.get(position).getId());
+            if(myDataset.size()>0){
+                Route_id = myDataset.get(position).getId();
+                route_text.setText(myDataset.get(position).getName());
+                OutletFilter(myDataset.get(position).getId(), "0");
+            }
         } else if (type == 3) {
             Route_id = myDataset.get(position).getId();
             route_text.setText(myDataset.get(position).getName());

@@ -16,7 +16,8 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
-        <activity android:name=".SFA_Activity.SFADCRActivity"></activity>
+        <activity android:name=".SFA_Activity.SalesCallsActivity"></activity>
+        <activity android:name=".SFA_Activity.SFADCRActivity" />
         <activity android:name=".Activity.ModeOfTravel" />
         <activity android:name=".Activity.TAViewStatus" />
         <activity android:name=".Activity_Hap.ViewTAStatus" />
@@ -281,7 +282,6 @@
         <activity
             android:name=".Activity_Hap.ProductImageView"
             android:theme="@style/Theme.AppCompat.Transparent.NoActionBar" />
-
         <activity
             android:name=".Activity_Hap.MainActivity"
             android:screenOrientation="portrait">
@@ -294,23 +294,23 @@
         <activity
             android:name=".Activity.ProcurementDashboardActivity"
             android:screenOrientation="portrait" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/map_key" />
-
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/ic_launcher" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/black" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -325,7 +325,6 @@
             android:name=".common.SANGPSTracker"
             android:enabled="true"
             android:exported="true" />
-
         <service
             android:name=".common.TimerService"
             android:enabled="true"
@@ -344,6 +343,7 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
+
     <uses-feature android:name="android.hardware.camera.autofocus" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -353,10 +353,8 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
         tools:ignore="ProtectedPermissions" />
