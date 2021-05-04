@@ -2,6 +2,7 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -28,7 +30,7 @@ public class TaFuelEdit extends AppCompatActivity {
     EditText edtFrom, edtTo, edtPersonal;
     String SLNO = "", MOT = "", starEd = "", endEd = "";
     Shared_Common_Pref mShared_common_pref;
-    Integer inEdtFrom, inEdtTo;
+    Integer inEdtFrom, inEdtTo,intSum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,17 @@ public class TaFuelEdit extends AppCompatActivity {
         edtFrom.setText("" + getIntent().getSerializableExtra("Start"));
         edtTo.setText("" + getIntent().getSerializableExtra("End"));
         edtPersonal.setText("0");
+
+
+        inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
+        inEdtTo = Integer.parseInt(edtTo.getText().toString());
+
+        intSum = inEdtTo - inEdtFrom;
+        Log.v("INT_SUM", String.valueOf(intSum));
+        edtPersonal.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, intSum)});
+
+
+
         edtTo.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -67,7 +80,12 @@ public class TaFuelEdit extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
+                inEdtTo = Integer.parseInt(edtTo.getText().toString());
 
+                intSum = inEdtTo - inEdtFrom;
+                Log.v("INT_SUM", String.valueOf(intSum));
+                edtPersonal.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, intSum)});
             }
         });
 
