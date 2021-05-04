@@ -12,10 +12,10 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        mApiComponent = DaggerApiComponent.builder()
+       /* mApiComponent = DaggerApiComponent.builder()
                 .appModule(new AppModule(this))
                 .apiModule(new ApiModule("https://hap.sanfmcg.com/server/"))
-                .build();
+                .build();*/
         setupActivityListener();
     }
 

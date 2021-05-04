@@ -581,7 +581,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    Mydayplan_Activity.super.onBackPressed();
+                  startActivity(new Intent(getApplicationContext(),Dashboard.class));
                 }
             });
 

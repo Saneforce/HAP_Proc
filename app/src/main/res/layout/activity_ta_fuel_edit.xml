@@ -11,6 +11,10 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <TextView
+            style="@style/TextStyle"
+            android:text="Started km"/>
+
         <EditText
             android:id="@+id/edt_from"
             android:maxLength="8"
@@ -19,6 +23,9 @@
             android:hint="Start km"
             android:inputType="number"
             android:textSize="@dimen/C13dp" />
+        <TextView
+            style="@style/TextStyle"
+            android:text="Closing km"/>
 
         <EditText
             android:id="@+id/edt_to"
@@ -28,6 +35,9 @@
             android:maxLength="8"
             android:inputType="number"
             android:textSize="@dimen/C13dp" />
+        <TextView
+            style="@style/TextStyle"
+            android:text="Traveled km"/>
 
         <EditText
             android:id="@+id/edt_pers"
