@@ -43,9 +43,12 @@ public class SFADCRActivity extends AppCompatActivity {
                 try {
                     if (item.getString("id") == "1") {
                         CommonPref.save(CommonPref.DCRMode, "SC");
-                        Intent intent=new Intent(SFADCRActivity.this,Dashboard_Route.class);
-                        startActivity(intent);
                     }
+                    if (item.getString("id") == "2") {
+                        CommonPref.save(CommonPref.DCRMode, "VC");
+                    }
+                    Intent intent=new Intent(SFADCRActivity.this,Dashboard_Route.class);
+                    startActivity(intent);
                 }catch (JSONException e){
 
                 }
