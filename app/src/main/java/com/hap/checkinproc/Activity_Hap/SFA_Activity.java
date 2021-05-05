@@ -101,9 +101,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 AlertDialogBox.showDialog(SFA_Activity.this, "HAP SFA", "Are You Sure Want to Logout?", "OK", "Cancel", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
-                        Intent Dashboard = new Intent(SFA_Activity.this, Dashboard_Two.class);
-                        Dashboard.putExtra("Mode", "CIN");
-                        startActivity(Dashboard);
+                        Intent intent = new Intent(SFA_Activity.this, Dashboard_Two.class);
+                        intent.putExtra("Mode", "CIN");
+                        startActivity(intent);
                         finish();
                     }
 

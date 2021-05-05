@@ -139,7 +139,11 @@ public class HolidayEntryStatus extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    common_class.CommonIntentwithFinish(Approvals.class);
+                    if(AMOD.equalsIgnoreCase("1")){
+                        common_class.CommonIntentwithFinish(Approvals.class);
+                    }else{
+                        common_class.CommonIntentwithFinish(Leave_Dashboard.class);
+                    }
                 }
             });
 

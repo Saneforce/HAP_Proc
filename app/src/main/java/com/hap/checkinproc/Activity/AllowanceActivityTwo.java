@@ -123,7 +123,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         ClosingDate = String.valueOf(getIntent().getSerializableExtra("Cls_dte"));
 
 
-        if (!ClosingDate.equals("")) {
+        if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
             TextCloseDate.setVisibility(View.VISIBLE);
             TextCloseDate.setText(ClosingDate);
             callApi(ClosingDate);
@@ -257,7 +257,8 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                         new LocationFinder(getApplication(), new LocationEvents() {
                             @Override
                             public void OnLocationRecived(Location location) {
-                                if (!ClosingDate.equals("")) {
+//                                if (!ClosingDate.equals("")) {
+                                if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
                                     submitData(ClosingDate);
                                 } else {
                                     submitData(Common_Class.GetDate());
@@ -341,8 +342,9 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     e.printStackTrace();
                 }
             }
-            if (!ClosingDate.equals("")) {
+           // if (!ClosingDate.equals("")  ) {
 
+            if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
                 Callto = apiInterface.updateAllowance("update/predayallowance", jj.toString());
             } else {
                 Callto = apiInterface.updateAllowance("update/allowance", jj.toString());
@@ -378,7 +380,8 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 editor.remove("Closing");
                                 shared_common_pref.clear_pref(Shared_Common_Pref.DAMode);
 
-                                if (!ClosingCon.equals("")) {
+                                //if (!ClosingCon.equals("")) {
+                                if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
                                     startActivity(new Intent(getApplicationContext(), Mydayplan_Activity.class));
                                 } else {
                                     Intent takePhoto = new Intent(AllowanceActivityTwo.this, ImageCapture.class);
@@ -492,7 +495,15 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+
+                    if (!(ClosingCon.equals("") || ClosingCon.equalsIgnoreCase("null"))) {
+                        startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                    } else {
+                        Intent Dashboard = new Intent(AllowanceActivityTwo.this, Dashboard_Two.class);
+                        Dashboard.putExtra("Mode", "CIN");
+                        startActivity(Dashboard);
+                    }
+                    //startActivity(new Intent(getApplicationContext(), Dashboard.class));
                 }
             });
 
@@ -503,7 +514,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
     public void openHome() {
 
-        if (!ClosingCon.equals("")) {
+        if (!(ClosingCon.equals("") || ClosingCon.equalsIgnoreCase("null"))) {
             startActivity(new Intent(getApplicationContext(), Dashboard.class));
         } else {
             Intent Dashboard = new Intent(AllowanceActivityTwo.this, Dashboard_Two.class);
