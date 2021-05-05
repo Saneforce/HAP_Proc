@@ -212,8 +212,8 @@ public interface ApiInterface {
     Call<ResponseBody> saveAllowance(@Field("data") String userData);
 
     @FormUrlEncoded
-    @POST("db_new_activity.php?axn=update/allowance")
-    Call<ResponseBody> updateAllowance(@Field("data") String userData);
+    @POST("db_new_activity.php?")
+    Call<ResponseBody> updateAllowance(  @Query("axn") String axn,@Field("data") String userData);
 
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/travelmode")
@@ -248,7 +248,7 @@ public interface ApiInterface {
     Call<ResponseBody> getDailyAllowance(@Field("data") String userData);
 
     @FormUrlEncoded
-    @POST("db_new_activity.php?axn=get/startkmdetails")
+        @POST("db_new_activity.php?axn=get/startkmdetails")
     Call<ResponseBody> getStartKmDetails(@Field("data") String userData);
 
     @FormUrlEncoded

@@ -1390,10 +1390,24 @@
                                                 android:layout_weight="1"
                                                 android:orientation="vertical">
 
-                                                <TextView
-                                                    style="@style/TextStyle"
-                                                    android:text="Hotel Check In"
-                                                    android:textSize="10sp" />
+                                                <LinearLayout
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content">
+
+                                                    <TextView
+                                                        android:layout_weight="1"
+                                                        style="@style/TextStyle"
+                                                        android:text="Hotel Check In"
+                                                        android:textSize="10sp" />
+
+                                                    <TextView
+                                                        style="@style/TextStyle"
+                                                        android:textColor="@android:color/holo_red_dark"
+                                                        android:id="@+id/txt_hotel_date"
+                                                        android:text="Hotel Check In"
+                                                        android:textSize="10sp" />
+
+                                                </LinearLayout>
 
                                                 <EditText
                                                     android:id="@+id/from_picker"
@@ -2098,15 +2112,15 @@
 
                                             <LinearLayout
                                                 android:id="@+id/data"
-                                                android:orientation="horizontal"
                                                 android:layout_width="match_parent"
-                                                android:layout_height="wrap_content">
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal">
 
                                                 <LinearLayout
                                                     android:id="@+id/lin_con_sty"
-                                                    android:layout_weight="1"
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
+                                                    android:layout_weight="1"
                                                     android:orientation="vertical"
                                                     android:padding="5dp" />
 
@@ -2137,7 +2151,7 @@
                                                 android:text="Total"
                                                 android:textColor="@color/black"
                                                 android:textSize="@dimen/C15dp"
-                                                android:textStyle="bold"></TextView>
+                                                android:textStyle="bold" />
 
                                             <TextView
                                                 android:id="@+id/lbl_ldg_eligi"
@@ -2146,7 +2160,7 @@
                                                 android:text="Rs. 0.00"
                                                 android:textColor="@android:color/holo_red_dark"
                                                 android:textSize="@dimen/C15dp"
-                                                android:textStyle="bold"></TextView>
+                                                android:textStyle="bold" />
                                         </LinearLayout>
 
                                     </LinearLayout>

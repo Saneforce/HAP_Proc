@@ -40,10 +40,10 @@ public class PdfViewerActivity extends AppCompatActivity {
 
         if (pdfFile.equalsIgnoreCase("local")) {
             pdfView.fromFile(new File(pdfurl)).load();
+
         } else {
             new RetrivePDFfromUrl().execute(pdfurl);
         }
-
     }
 
 
@@ -56,8 +56,6 @@ public class PdfViewerActivity extends AppCompatActivity {
 
         @Override
         protected InputStream doInBackground(String... strings) {
-
-            Log.e("sdfdsfdfdf", "doInBackground");
             InputStream inputStream = null;
             try {
                 URL url = new URL(strings[0]);
@@ -80,8 +78,6 @@ public class PdfViewerActivity extends AppCompatActivity {
                 pdfView.fromStream(inputStream).load();
                 dialog.dismiss();
             }
-
-
         }
 
         @Override
@@ -89,7 +85,6 @@ public class PdfViewerActivity extends AppCompatActivity {
             super.onPreExecute();
             dialog.setMessage("please wait.");
             dialog.show();
-
         }
     }  @Override
     protected void onResume() {

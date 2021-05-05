@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -34,10 +35,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.AllowancCapture;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
+import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Activity_Hap.ImageCapture;
+import com.hap.checkinproc.Activity_Hap.Mydayplan_Activity;
 import com.hap.checkinproc.Activity_Hap.PayslipFtp;
 import com.hap.checkinproc.Activity_Hap.ProductImageView;
 import com.hap.checkinproc.Common_Class.CameraPermission;
@@ -72,9 +75,9 @@ import retrofit2.Response;
 
 public class AllowanceActivityTwo extends AppCompatActivity implements Master_Interface {
 
-    TextView TextModeTravel, TextStartedKm, TextMaxKm, TextToPlace;
+    TextView TextModeTravel, TextStartedKm, TextMaxKm, TextToPlace, TextCloseDate;
     ImageView StartedKmImage, EndedKmImage;
-    Button  submitAllowance;
+    Button submitAllowance;
     EditText EndedEditText, PersonalKmEdit, ReasonMode;
     Integer stKM = 0, endKm = 0, personalKM = 0, StratKm = 0, maxKM = 0, TotalKm = 0, totalPM = 0;
     SharedPreferences CheckInDetails, sharedpreferences, UserDetails;
@@ -82,8 +85,8 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     ApiInterface apiInterface;
     String Photo_Name = "", imageConvert = "", StartedKm = "", EndedImage = "", CheckInfo = "CheckInDetail",
             UserInfo = "MyPrefs", MOT = "ModeOfTravel", Name = "Allowance", mypreference = "mypref", StrToCode = "",
-            toPlace = "", ImageStart = "", Hq = "";
-    LinearLayout linToPlace,takeEndedPhoto;
+            toPlace = "", ImageStart = "", Hq = "", ClosingCon = "", ClosingDate = "";
+    LinearLayout linToPlace, takeEndedPhoto;
     CustomListViewDialog customDialog;
     Common_Model mCommon_model_spinner;
     List<Common_Model> modelRetailDetails = new ArrayList<>();
@@ -97,6 +100,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
         TextModeTravel = findViewById(R.id.txt_mode_travel);
+        TextCloseDate = findViewById(R.id.closing_date);
         TextStartedKm = findViewById(R.id.txt_started_km);
         TextMaxKm = findViewById(R.id.txt_max);
         StartedKmImage = findViewById(R.id.img_started_km);
@@ -111,9 +115,25 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         shared_common_pref = new Shared_Common_Pref(this);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
+/*
+        closingIntet.putExtra("Cls_con","cls");
+        closingIntet.putExtra("Cls_dte","");*/
+
+        ClosingCon = String.valueOf(getIntent().getSerializableExtra("Cls_con"));
+        ClosingDate = String.valueOf(getIntent().getSerializableExtra("Cls_dte"));
+
+
+        if (!ClosingDate.equals("")) {
+            TextCloseDate.setVisibility(View.VISIBLE);
+            TextCloseDate.setText(ClosingDate);
+            callApi(ClosingDate);
+        } else {
+            callApi(Common_Class.GetDate());
+        }
+
         getToolbar();
         BusToValue();
-        callApi();
+
 
         EndedEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -237,7 +257,11 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                         new LocationFinder(getApplication(), new LocationEvents() {
                             @Override
                             public void OnLocationRecived(Location location) {
-                                submitData();
+                                if (!ClosingDate.equals("")) {
+                                    submitData(ClosingDate);
+                                } else {
+                                    submitData(Common_Class.GetDate());
+                                }
                             }
                         });
 
@@ -264,7 +288,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     }
 
     /*Submit*/
-    public void submitData() {
+    public void submitData(String date) {
 
         Log.e("PERSONAL_KM", PersonalKmEdit.getText().toString());
 
@@ -287,7 +311,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             jj.put("to", TextToPlace.getText().toString());
             jj.put("to_code", StrToCode);
             jj.put("fare", "");
-            jj.put("Activity_Date", Common_Class.GetDate());
+            jj.put("Activity_Date", date);
             //saveAllowance
             Log.v("printing_allow", jj.toString());
             Call<ResponseBody> Callto;
@@ -317,7 +341,13 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     e.printStackTrace();
                 }
             }
-            Callto = apiInterface.updateAllowance(jj.toString());
+            if (!ClosingDate.equals("")) {
+
+                Callto = apiInterface.updateAllowance("update/predayallowance", jj.toString());
+            } else {
+                Callto = apiInterface.updateAllowance("update/allowance", jj.toString());
+            }
+
 
             Callto.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -348,9 +378,15 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 editor.remove("Closing");
                                 shared_common_pref.clear_pref(Shared_Common_Pref.DAMode);
 
-                                Intent takePhoto = new Intent(AllowanceActivityTwo.this, ImageCapture.class);
-                                takePhoto.putExtra("Mode", "COUT");
-                                startActivity(takePhoto);
+                                if (!ClosingCon.equals("")) {
+                                    startActivity(new Intent(getApplicationContext(), Mydayplan_Activity.class));
+                                } else {
+                                    Intent takePhoto = new Intent(AllowanceActivityTwo.this, ImageCapture.class);
+                                    takePhoto.putExtra("Mode", "COUT");
+                                    startActivity(takePhoto);
+                                }
+
+
                             } else
                                 Toast.makeText(AllowanceActivityTwo.this, " Cannot submitted the data ", Toast.LENGTH_SHORT).show();
                         }
@@ -442,16 +478,42 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                 openHome();
             }
         });
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
+    }
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                }
+            });
+
+    @Override
+    public void onBackPressed() {
+
     }
 
     public void openHome() {
-        Intent Dashboard = new Intent(AllowanceActivityTwo.this, Dashboard_Two.class);
-        Dashboard.putExtra("Mode", "CIN");
-        startActivity(Dashboard);
+
+        if (!ClosingCon.equals("")) {
+            startActivity(new Intent(getApplicationContext(), Dashboard.class));
+        } else {
+            Intent Dashboard = new Intent(AllowanceActivityTwo.this, Dashboard_Two.class);
+            Dashboard.putExtra("Mode", "CIN");
+            startActivity(Dashboard);
+        }
     }
 
 
-    public void callApi() {
+    public void callApi(String date) {
 
         try {
             JSONObject jj = new JSONObject();
@@ -459,7 +521,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             jj.put("sf", Shared_Common_Pref.Sf_Code);
             jj.put("rSF", Shared_Common_Pref.Sf_Code);
             jj.put("State_Code", Shared_Common_Pref.StateCode);
-            jj.put("Activity_Date", Common_Class.GetDate());
+            jj.put("Activity_Date", date);
             Log.v("json_obj_ta", jj.toString());
             Call<ResponseBody> Callto = apiInterface.getStartKmDetails(jj.toString());
             Callto.enqueue(new Callback<ResponseBody>() {

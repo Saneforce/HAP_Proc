@@ -21,6 +21,7 @@ import com.google.android.flexbox.FlexboxLayout;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivity;
+import com.hap.checkinproc.Activity.AllowanceActivityTwo;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -59,7 +60,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     TextView approvalcount;
     Shared_Common_Pref shared_common_pref;
     String imageProfile = "", sSFType = "";
-    String onDuty = "";
+    String onDuty = "",ClosingDate="";
     ImageView profilePic, btMyQR;
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
@@ -73,6 +74,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     SharedPreferences.Editor editors;
     SharedPreferences sharedpreferences;
     RelativeLayout mRelApproval;
+    Integer ClosingKm = 0;
 
 
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
@@ -247,7 +249,20 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 startActivity(new Intent(this, Approvals.class));
                 break;
             case R.id.lin_myday_plan:
-                startActivity(new Intent(this, Mydayplan_Activity.class));
+                if (ClosingKm == 1) {
+
+                    Intent closingIntet  = new Intent(this,AllowanceActivityTwo.class);
+                    closingIntet.putExtra("Cls_con","cls");
+                    closingIntet.putExtra("Cls_dte",ClosingDate);
+                    startActivity(closingIntet);
+                    finish();
+                } else {
+
+                    startActivity(new Intent(this, Mydayplan_Activity.class));
+
+                }
+
+
                 break;
 
             case R.id.lin_RecheckIn:
@@ -418,6 +433,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
                     Log.v("GET_MYDAY_PLAN", jsonObject.toString());
                     Integer MotCount = Integer.valueOf(jsonObject.getString("checkMOT"));
+
+                    ClosingKm = Integer.valueOf(jsonObject.getString("CheckEndKM"));
+                    ClosingDate = jsonObject.getString("CheckEndDT");
+
 
                     Log.v("MOT_COUNT", String.valueOf(MotCount));
 

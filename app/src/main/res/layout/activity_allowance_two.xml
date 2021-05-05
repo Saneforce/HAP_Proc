@@ -29,6 +29,13 @@
 
                 <TextView
                     style="@style/TextStyle"
+                    android:visibility="gone"
+                    android:id="@+id/closing_date"
+                    android:textColor="@android:color/holo_red_dark" />
+
+
+                <TextView
+                    style="@style/TextStyle"
                     android:text="Mode of Travels " />
 
                     <LinearLayout
