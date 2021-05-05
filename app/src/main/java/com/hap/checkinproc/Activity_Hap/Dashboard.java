@@ -97,6 +97,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         type = (shared.getInt("CheckCount", 0));
         common_class = new Common_Class(this);
 
+        Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+        if(CheckIn==true){
+            Intent intent= new Intent(getApplicationContext(), Dashboard_Two.class);
+            intent.putExtra("Mode", "CIN");
+            startActivity(intent);
+        }
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
 
@@ -261,8 +267,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     startActivity(new Intent(this, Mydayplan_Activity.class));
 
                 }
-
-
                 break;
 
             case R.id.lin_RecheckIn:
