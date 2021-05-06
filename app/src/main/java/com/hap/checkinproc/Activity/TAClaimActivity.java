@@ -1602,25 +1602,71 @@ TextCheckInDate = findViewById(R.id.txt_hotel_date);
                                 if (end != 0) {
                                     String total = String.valueOf(end - start);
                                     Integer Total = Integer.valueOf(total);
-                                    Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
-                                    String TotalPersonal = String.valueOf(Total - Personal);
-                                    Double q = Double.valueOf(TotalPersonal);
-                                    Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-                                    String qz = String.valueOf(q * z);
-                                    Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
 
-                                    fuelAmt = fuelAmt + (q * z);
-                                    fuelAmount.setText("Rs ." + fuelAmt);
+                                    if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler")) {
 
-                                    TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+                                        if (Total >= 200) {
+                                            Total = 200;
+                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                            String TotalPersonal = String.valueOf(Total - Personal);
+                                            Double q = Double.valueOf(TotalPersonal);
+                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                            String qz = String.valueOf(q * z);
+                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
 
+                                            fuelAmt = fuelAmt + (q * z);
+                                            fuelAmount.setText("Rs ." + fuelAmt);
+
+                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+                                        }else{
+                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                            String TotalPersonal = String.valueOf(Total - Personal);
+                                            Double q = Double.valueOf(TotalPersonal);
+                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                            String qz = String.valueOf(q * z);
+                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+
+                                            fuelAmt = fuelAmt + (q * z);
+                                            fuelAmount.setText("Rs ." + fuelAmt);
+
+                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+
+                                        }
+                                    } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
+                                        if (Total >= 500) {
+                                            Total = 500;
+                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                            String TotalPersonal = String.valueOf(Total - Personal);
+                                            Double q = Double.valueOf(TotalPersonal);
+                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                            String qz = String.valueOf(q * z);
+                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+
+                                            fuelAmt = fuelAmt + (q * z);
+                                            fuelAmount.setText("Rs ." + fuelAmt);
+
+                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+                                        }else{
+                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                            String TotalPersonal = String.valueOf(Total - Personal);
+                                            Double q = Double.valueOf(TotalPersonal);
+                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                            String qz = String.valueOf(q * z);
+                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+
+                                            fuelAmt = fuelAmt + (q * z);
+                                            fuelAmount.setText("Rs ." + fuelAmt);
+
+                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+
+                                        }
+                                    }
                                 }
 
 
                             }
                         }
                     }
-
                     JsonObject jRremarks = null;
 
                     for (int i = 0; i < jsonExpHead.size(); i++) {
@@ -3861,25 +3907,71 @@ TextCheckInDate = findViewById(R.id.txt_hotel_date);
                                 if (end != 0) {
                                     String total = String.valueOf(end - start);
                                     Integer Total = Integer.valueOf(total);
-                                    Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
-                                    String TotalPersonal = String.valueOf(Total - Personal);
-                                    Double q = Double.valueOf(TotalPersonal);
-                                    Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-                                    String qz = String.valueOf(q * z);
-                                    Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
 
-                                    fuelAmt = fuelAmt + (q * z);
-                                    fuelAmount.setText("Rs ." + fuelAmt);
+                                    if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler")) {
 
-                                    TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+                                        if (Total >= 200) {
+                                            Total = 200;
+                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                            String TotalPersonal = String.valueOf(Total - Personal);
+                                            Double q = Double.valueOf(TotalPersonal);
+                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                            String qz = String.valueOf(q * z);
+                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
 
+                                            fuelAmt = fuelAmt + (q * z);
+                                            fuelAmount.setText("Rs ." + fuelAmt);
+
+                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+                                        }else{
+                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                            String TotalPersonal = String.valueOf(Total - Personal);
+                                            Double q = Double.valueOf(TotalPersonal);
+                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                            String qz = String.valueOf(q * z);
+                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+
+                                            fuelAmt = fuelAmt + (q * z);
+                                            fuelAmount.setText("Rs ." + fuelAmt);
+
+                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+
+                                        }
+                                    } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
+                                        if (Total >= 500) {
+                                            Total = 500;
+                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                            String TotalPersonal = String.valueOf(Total - Personal);
+                                            Double q = Double.valueOf(TotalPersonal);
+                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                            String qz = String.valueOf(q * z);
+                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+
+                                            fuelAmt = fuelAmt + (q * z);
+                                            fuelAmount.setText("Rs ." + fuelAmt);
+
+                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+                                        }else{
+                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                            String TotalPersonal = String.valueOf(Total - Personal);
+                                            Double q = Double.valueOf(TotalPersonal);
+                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                            String qz = String.valueOf(q * z);
+                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+
+                                            fuelAmt = fuelAmt + (q * z);
+                                            fuelAmount.setText("Rs ." + fuelAmt);
+
+                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+
+                                        }
+                                    }
                                 }
 
 
                             }
                         }
                     }
-
                     calOverAllTotal(localCov, otherExp, tTotAmt);
                 }
 

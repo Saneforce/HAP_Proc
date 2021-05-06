@@ -6,10 +6,13 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.barteksc.pdfviewer.PDFView;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.TimerService;
 
@@ -38,15 +41,60 @@ public class PdfViewerActivity extends AppCompatActivity {
         pdfFile = String.valueOf(getIntent().getSerializableExtra("PDF_FILE"));
         Log.v("KARTHIC_URl", pdfurl);
 
+        FloatingActionButton fab = findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Snackbar.make(view, "Downloaded Successfully...", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        });
+
         if (pdfFile.equalsIgnoreCase("local")) {
             pdfView.fromFile(new File(pdfurl)).load();
-
         } else {
             new RetrivePDFfromUrl().execute(pdfurl);
         }
     }
 
+  /*  private Boolean downloadAndSaveFile(String server, int portNumber,
+                                        String user, String password, String filename, File localFile)
+            throws IOException {
+        FTPClient ftp = null;
 
+        try {
+            ftp = new FTPClient();
+            ftp.connect(server, portNumber);
+            //Log.d(LOG_TAG, "Connected. Reply: " + ftp.getReplyString());
+
+            ftp.login(user, password);
+            //Log.d(LOG_TAG, "Logged in");
+            ftp.setFileType(FTP.BINARY_FILE_TYPE);
+            //Log.d(LOG_TAG, "Downloading");
+            ftp.enterLocalPassiveMode();
+
+            OutputStream outputStream = null;
+            boolean success = false;
+            try {
+                outputStream = new BufferedOutputStream(new FileOutputStream(
+                        localFile));
+                success = ftp.retrieveFile(filename, outputStream);
+            } finally {
+                if (outputStream != null) {
+                    outputStream.close();
+                }
+            }
+
+            return success;
+        } finally {
+            if (ftp != null) {
+                ftp.logout();
+                ftp.disconnect();
+            }
+        }
+    }
+*/
     class RetrivePDFfromUrl extends AsyncTask<String, Void, InputStream> {
         ProgressDialog dialog;
 

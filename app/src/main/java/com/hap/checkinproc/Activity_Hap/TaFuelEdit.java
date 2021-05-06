@@ -66,6 +66,9 @@ public class TaFuelEdit extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
+                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
+                if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
                 inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
                 if (!edtTo.getText().toString().equals("")) {
 
@@ -80,9 +83,12 @@ public class TaFuelEdit extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
+                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
+                if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
                 inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
                 inEdtTo = Integer.parseInt(edtTo.getText().toString());
-
                 intSum = inEdtTo - inEdtFrom;
                 Log.v("INT_SUM", String.valueOf(intSum));
                 edtPersonal.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, intSum)});

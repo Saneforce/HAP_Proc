@@ -89,6 +89,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     LinearLayout linToPlace, takeEndedPhoto;
     CustomListViewDialog customDialog;
     Common_Model mCommon_model_spinner;
+    Common_Class mCommonClass;
     List<Common_Model> modelRetailDetails = new ArrayList<>();
 
     @Override
@@ -114,6 +115,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         ReasonMode = findViewById(R.id.reason_mode);
         shared_common_pref = new Shared_Common_Pref(this);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        mCommonClass = new Common_Class(this);
 
 /*
         closingIntet.putExtra("Cls_con","cls");
@@ -246,6 +248,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     return;
                 } else {
 
+                    mCommonClass.ProgressdialogShow(1,"Please wait...");
                     try {
                         stKM = Integer.valueOf(TextStartedKm.getText().toString());
                     } catch (NumberFormatException ex) { // handle your exception
@@ -269,6 +272,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     } else {
                         Toast.makeText(AllowanceActivityTwo.this, "Should be greater then Started Km", Toast.LENGTH_SHORT).show();
 
+                        mCommonClass.ProgressdialogShow(0,"Please wait...");
                     }
                 }
 
@@ -355,6 +359,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
+                        mCommonClass.ProgressdialogShow(0,"Please wait...");
                         if (response.isSuccessful()) {
 
                             Log.v("print_upload_file_true", "ggg" + response);
@@ -400,6 +405,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
 
+                    mCommonClass.ProgressdialogShow(0,"Please wait...");
                 }
             });
         } catch (Exception e) {

@@ -1404,7 +1404,7 @@
                                                         style="@style/TextStyle"
                                                         android:textColor="@android:color/holo_red_dark"
                                                         android:id="@+id/txt_hotel_date"
-                                                        android:text="Hotel Check In"
+                                                        android:text=""
                                                         android:textSize="10sp" />
 
                                                 </LinearLayout>
