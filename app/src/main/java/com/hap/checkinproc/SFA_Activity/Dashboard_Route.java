@@ -79,7 +79,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     List<Common_Model> Route_Masterlist = new ArrayList<>();
     CustomListViewDialog customDialog;
     List<Common_Model> FRoute_Master = new ArrayList<>();
-    String Route_id, Distributor_Id;
+    String Route_id, Distributor_Id,DCRMode;
     Shared_Common_Pref sharedCommonPref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,6 +120,15 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
         }.getType();
         GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "6");
+        DCRMode=sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
+        if(DCRMode.equalsIgnoreCase("SC")){
+            headtext.setText("SALES CALLS");
+        }
+        DCRMode=sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
+        if(DCRMode.equalsIgnoreCase("VC")){
+            headtext.setText("VAN ROUTE SUPPLY");
+        }
+
         Retailer_Modal_ListFilter = new ArrayList<>();
         Retailer_Modal_List = new ArrayList<>();
         String outletserializableob = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List);
@@ -150,7 +159,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             }
         }
         Retailer_Modal_ListFilter.clear();
-        Retailer_Modal_ListFilter.addAll(Retailer_Modal_List);
+      //  Retailer_Modal_ListFilter.addAll(Retailer_Modal_List);
+
+        OutletFilter(Distributor_Id, "1");
         recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
             @Override
             public void onIntentClick(int position) {
@@ -237,6 +248,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             Distributor_Id = myDataset.get(position).getId();
             distributor_text.setText(myDataset.get(position).getName());
             loadroute(myDataset.get(position).getId());
+            OutletFilter(myDataset.get(position).getId(), "1");
+
         } else if (type == 3) {
             Route_id = myDataset.get(position).getId();
             route_text.setText(myDataset.get(position).getName());
@@ -247,12 +260,19 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     private void OutletFilter(String id, String flag) {
         Retailer_Modal_ListFilter.clear();
         Log.e("Retailer_Modal_ListSIZE", "" + Retailer_Modal_List.size());
-        if (flag.equals("1")) {
+    /*    if (flag.equals("1")) {
             Retailer_Modal_ListFilter.addAll(Retailer_Modal_List);
+
         } else {
-            for (int i = 0; i < Retailer_Modal_List.size(); i++) {
+  */
+        for (int i = 0; i < Retailer_Modal_List.size(); i++) {
                 if (flag.equals("0")) {
                     if (Retailer_Modal_List.get(i).getTownCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
+                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                    }
+                }
+                if (flag.equals("1")) {
+                    if (Retailer_Modal_List.get(i).getDistCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
                         Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
                     }
                 }
@@ -269,7 +289,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
             }
 
-        }
+//        }
         recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
             @Override
             public void onIntentClick(int position) {

@@ -72,6 +72,12 @@ public class Retailer_Modal_List {
     @Expose
     private String name;
 
+
+
+    @SerializedName("Distributor_Code")
+    @Expose
+    private String DistCode;
+
     public String getOwner_Name() {
         return Owner_Name;
     }
@@ -265,7 +271,13 @@ public class Retailer_Modal_List {
     public void setReason_category(String reason_category) {
         this.reason_category = reason_category;
     }
+    public String getDistCode() {
+        return DistCode;
+    }
 
+    public void setDistCode(String distCode) {
+        DistCode = distCode;
+    }
     @SerializedName("reason_category")
     @Expose
     private String reason_category;
