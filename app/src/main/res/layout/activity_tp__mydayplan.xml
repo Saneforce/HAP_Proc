@@ -197,14 +197,14 @@
 
                                 <Button
                                     android:id="@+id/GetEmpId"
-                                    android:layout_width="80dp"
+                                    android:layout_width="70dp"
                                     android:layout_height="37dp"
                                     android:layout_margin="@dimen/C2dp"
                                     android:background="@drawable/otherlocations"
-                                    android:padding="@dimen/C5dp"
                                     android:text="Get"
+                                    android:padding="@dimen/C10dp"
                                     android:textColor="@color/white"
-                                    android:textSize="@dimen/C8dp" />
+                                    android:textSize="@dimen/C14dp" />
 
                             </LinearLayout>
 

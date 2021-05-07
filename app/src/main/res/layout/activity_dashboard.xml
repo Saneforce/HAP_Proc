@@ -43,6 +43,7 @@
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:srcCompat="@drawable/profile_img" />
 
+
         <TextView
             android:id="@+id/lblUserName"
             style="@style/TextStyle"
@@ -192,6 +193,9 @@
                 style="@style/ButtonStyle"
                 android:background="@drawable/button_check_out"
                 android:text="Exit" />
+
+
+
 
 
             <TextView

@@ -61,12 +61,72 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
                 holder.TotalTravelledKm.setText(total);
                 holder.PersonalKiloMeter.setText(jsFuel.get("Personal_Km").getAsString());
 
+
                 Integer Total = Integer.valueOf(total);
-                Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
-                String TotalPersonal = String.valueOf(Total - Personal);
-                holder.PersonalTextKM.setText(TotalPersonal);
-                Double FuelaAmt = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-                holder.fuelAmount.setText(" Rs." + new DecimalFormat("##0.00").format(FuelaAmt) + " / KM ");
+
+                if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler")) {
+
+                    if (Total >= 200) {
+                        Total = 200;
+                        Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
+                        String TotalPersonal = String.valueOf(Total - Personal);
+                        holder.PersonalTextKM.setText(TotalPersonal);
+                        Double FuelaAmt = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                        holder.fuelAmount.setText(" Rs." + new DecimalFormat("##0.00").format(FuelaAmt) + " / KM ");
+                        Double q = Double.valueOf(TotalPersonal);
+                        Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+
+
+                        String qz = String.valueOf(q * z);
+
+                        Log.v("Testing_Total", qz);
+
+                        holder.TextTotalAmount.setText("Rs. " + qz);
+                    }else{
+                        Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
+                        String TotalPersonal = String.valueOf(Total - Personal);
+                        holder.PersonalTextKM.setText(TotalPersonal);
+                        Double FuelaAmt = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                        holder.fuelAmount.setText(" Rs." + new DecimalFormat("##0.00").format(FuelaAmt) + " / KM ");
+                        Double q = Double.valueOf(TotalPersonal);
+                        Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+
+
+                        String qz = String.valueOf(q * z);
+
+                        Log.v("Testing_Total", qz);
+
+                        holder.TextTotalAmount.setText("Rs. " + qz);
+                    }
+                } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
+                    if (Total >= 500) {
+                        Total = 500;
+                        Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
+                        String TotalPersonal = String.valueOf(Total - Personal);
+                        holder.PersonalTextKM.setText(TotalPersonal);
+                        Double FuelaAmt = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                        holder.fuelAmount.setText(" Rs." + new DecimalFormat("##0.00").format(FuelaAmt) + " / KM ");
+                        Double q = Double.valueOf(TotalPersonal);
+                        Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+
+
+                        String qz = String.valueOf(q * z);
+
+                        holder.TextTotalAmount.setText("Rs. " + qz);
+                    }else{
+                        Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
+                        String TotalPersonal = String.valueOf(Total - Personal);
+                        holder.PersonalTextKM.setText(TotalPersonal);
+                        Double FuelaAmt = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                        holder.fuelAmount.setText(" Rs." + new DecimalFormat("##0.00").format(FuelaAmt) + " / KM ");
+                        Double q = Double.valueOf(TotalPersonal);
+                        Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                        String qz = String.valueOf(q * z);
+                        Log.v("Testing_Total", qz);
+                        holder.TextTotalAmount.setText("Rs. " + qz);
+                    }
+                }
+
 
                 holder.imgEdit.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -83,13 +143,6 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
                 });
 
 
-                Double q = Double.valueOf(TotalPersonal);
-                Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-
-
-                String qz = String.valueOf(q * z);
-
-                holder.TextTotalAmount.setText("Rs. " + qz);
             }
         }
 

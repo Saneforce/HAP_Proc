@@ -13,39 +13,56 @@
 
         <TextView
             style="@style/TextStyle"
-            android:text="Started km"/>
+            android:text="Started km" />
 
         <EditText
             android:id="@+id/edt_from"
-            android:maxLength="8"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Start km"
             android:inputType="number"
+            android:maxLength="8"
             android:textSize="@dimen/C13dp" />
+
         <TextView
             style="@style/TextStyle"
-            android:text="Closing km"/>
+            android:text="Closing km" />
 
         <EditText
             android:id="@+id/edt_to"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="End km"
-            android:maxLength="8"
             android:inputType="number"
+            android:maxLength="8"
             android:textSize="@dimen/C13dp" />
+
         <TextView
             style="@style/TextStyle"
-            android:text="Traveled km"/>
+            android:text="Traveled km" />
+
+        <EditText
+            android:id="@+id/edt_travelled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:padding="@dimen/C10dp"
+            android:background="#0D000000"
+            android:inputType="number"
+            android:maxLength="8"
+            android:textSize="@dimen/C13dp" />
+
+        <TextView
+            style="@style/TextStyle"
+            android:text="Personal km" />
 
         <EditText
             android:id="@+id/edt_pers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Personal km"
-            android:maxLength="8"
             android:inputType="number"
+            android:maxLength="8"
             android:textSize="@dimen/C13dp" />
 
         <LinearLayout
@@ -56,8 +73,8 @@
             <Button
                 android:id="@+id/button_update"
                 style="@style/ButtonStyle"
-                android:onClick="UpdteAllowance"
                 android:background="@drawable/button_blueg"
+                android:onClick="UpdteAllowance"
                 android:text="Update" />
 
         </LinearLayout>

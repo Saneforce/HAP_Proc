@@ -1,5 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +64,10 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
         presenter.requestDataFromServer();
         lastsuccessync.setText(Common_Class.GetDatemonthyearformat());
         Sf_UserId.setText(Shared_Common_Pref.Sf_Code);
+
+
+
+
        /* if (Shared_Common_Pref.Todaydayplanresult != null) {
             GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "dayplan");
         }
@@ -229,4 +235,7 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
             e.printStackTrace();
         }
     }
+
+
+
 }

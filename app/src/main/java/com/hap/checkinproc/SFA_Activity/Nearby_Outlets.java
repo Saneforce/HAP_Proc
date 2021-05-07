@@ -1,23 +1,19 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
-import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.Dashboard_View_Model;
@@ -25,7 +21,6 @@ import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Nearby_Outlets extends AppCompatActivity implements View.OnClickListener {
@@ -71,16 +66,18 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             }
         }
         availableoutlets.setText("Available Outlets:" + "\t" + ShowRetailer_Modal_List.size());
-        recyclerView.setAdapter(new Outlet_Info_Adapter(ShowRetailer_Modal_List, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {
-            @Override
-            public void onIntentClick(int position) {
-                Shared_Common_Pref.Outler_AddFlag = "0";
-                Shared_Common_Pref.OutletName = ShowRetailer_Modal_List.get(position).getName().toUpperCase();
-                Shared_Common_Pref.OutletCode = ShowRetailer_Modal_List.get(position).getId();
-                common_class.CommonIntentwithFinish(Route_Product_Info.class);
-                common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-            }
-        }));
+        if (ShowRetailer_Modal_List != null && ShowRetailer_Modal_List.size() > 0) {
+            recyclerView.setAdapter(new Outlet_Info_Adapter(ShowRetailer_Modal_List, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {
+                @Override
+                public void onIntentClick(int position) {
+                    Shared_Common_Pref.Outler_AddFlag = "0";
+                    Shared_Common_Pref.OutletName = ShowRetailer_Modal_List.get(position).getName().toUpperCase();
+                    Shared_Common_Pref.OutletCode = ShowRetailer_Modal_List.get(position).getId();
+                    common_class.CommonIntentwithFinish(Route_Product_Info.class);
+                    common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                }
+            }));
+        }
         Createoutlet.setOnClickListener(this);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
@@ -97,9 +94,9 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         switch (v.getId()) {
             case R.id.Createoutlet:
                 Shared_Common_Pref.OutletAvail = "";
-                Shared_Common_Pref.OutletUniv ="";
+                Shared_Common_Pref.OutletUniv = "";
                 Shared_Common_Pref.Outler_AddFlag = "1";
-                Shared_Common_Pref.Editoutletflag="0";
+                Shared_Common_Pref.Editoutletflag = "0";
                 Shared_Common_Pref.OutletAvail = "";
                 Shared_Common_Pref.OutletUniv = "";
                 Shared_Common_Pref.Outlet_Info_Flag = "0";

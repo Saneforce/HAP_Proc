@@ -27,7 +27,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TaFuelEdit extends AppCompatActivity {
-    EditText edtFrom, edtTo, edtPersonal;
+    EditText edtFrom, edtTo, edtPersonal,edtTraveled;
     String SLNO = "", MOT = "", starEd = "", endEd = "";
     Shared_Common_Pref mShared_common_pref;
     Integer inEdtFrom, inEdtTo,intSum;
@@ -43,7 +43,7 @@ public class TaFuelEdit extends AppCompatActivity {
         edtFrom = findViewById(R.id.edt_from);
         edtTo = findViewById(R.id.edt_to);
         edtPersonal = findViewById(R.id.edt_pers);
-
+        edtTraveled = findViewById(R.id.edt_travelled);
         edtFrom.setText("" + getIntent().getSerializableExtra("Start"));
         edtTo.setText("" + getIntent().getSerializableExtra("End"));
         edtPersonal.setText("0");
@@ -54,7 +54,46 @@ public class TaFuelEdit extends AppCompatActivity {
 
         intSum = inEdtTo - inEdtFrom;
         Log.v("INT_SUM", String.valueOf(intSum));
+        edtTraveled.setText(""+intSum);
         edtPersonal.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, intSum)});
+
+
+        edtFrom.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
+                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
+                if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
+                inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
+                if (!edtTo.getText().toString().equals("")) {
+
+                    try {
+                        inEdtTo = Integer.parseInt(edtTo.getText().toString());
+                    } catch (NumberFormatException ex) { // handle your exception
+
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
+                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
+                if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
+                inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
+                inEdtTo = Integer.parseInt(edtTo.getText().toString());
+                intSum = inEdtTo - inEdtFrom;
+                Log.v("INT_SUM", String.valueOf(intSum));
+                edtTraveled.setText(""+intSum);
+
+                edtPersonal.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, intSum)});
+            }
+        });
 
 
 
@@ -66,6 +105,9 @@ public class TaFuelEdit extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
+                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
+                if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
                 inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
                 if (!edtTo.getText().toString().equals("")) {
 
@@ -80,11 +122,16 @@ public class TaFuelEdit extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+
+                if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
+                if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
+                if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
                 inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
                 inEdtTo = Integer.parseInt(edtTo.getText().toString());
-
                 intSum = inEdtTo - inEdtFrom;
                 Log.v("INT_SUM", String.valueOf(intSum));
+                edtTraveled.setText(""+intSum);
+
                 edtPersonal.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, intSum)});
             }
         });
