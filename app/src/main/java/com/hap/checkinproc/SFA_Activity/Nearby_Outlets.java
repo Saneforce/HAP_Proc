@@ -125,16 +125,18 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             }
         }
         availableoutlets.setText("Available Outlets:" + "\t" + ShowRetailer_Modal_List.size());
-        recyclerView.setAdapter(new Outlet_Info_Adapter(ShowRetailer_Modal_List, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {
-            @Override
-            public void onIntentClick(int position) {
-                Shared_Common_Pref.Outler_AddFlag = "0";
-                Shared_Common_Pref.OutletName = ShowRetailer_Modal_List.get(position).getName().toUpperCase();
-                Shared_Common_Pref.OutletCode = ShowRetailer_Modal_List.get(position).getId();
-                common_class.CommonIntentwithFinish(Route_Product_Info.class);
-                common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-            }
-        }));
+        if (ShowRetailer_Modal_List != null && ShowRetailer_Modal_List.size() > 0) {
+            recyclerView.setAdapter(new Outlet_Info_Adapter(ShowRetailer_Modal_List, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {
+                @Override
+                public void onIntentClick(int position) {
+                    Shared_Common_Pref.Outler_AddFlag = "0";
+                    Shared_Common_Pref.OutletName = ShowRetailer_Modal_List.get(position).getName().toUpperCase();
+                    Shared_Common_Pref.OutletCode = ShowRetailer_Modal_List.get(position).getId();
+                    common_class.CommonIntentwithFinish(Route_Product_Info.class);
+                    common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                }
+            }));
+        }
         Createoutlet.setOnClickListener(this);
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {

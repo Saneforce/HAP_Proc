@@ -1,32 +1,26 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Lead_Adapter;
-import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
 import org.json.JSONArray;
@@ -50,6 +44,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<Common_Model> Route_Masterlist = new ArrayList<>();
     CustomListViewDialog customDialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,10 +84,13 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             }
         }
         todayoutlets.setText("Today Outlets:" + "\t" + todaycount);
-        recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
-        new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();
-        recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
+        if (Retailer_Modal_ListFilter != null && Retailer_Modal_ListFilter.size() > 0) {
+            recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
+            new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();
+            recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
+        }
     }
+
     @Override
     public void OnclickMasterType(java.util.List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
@@ -145,13 +143,15 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
 
     private void OutletFilter(String id) {
         Retailer_Modal_ListFilter.clear();
-        for (int i = 0; i < Retailer_Modal_List.size(); i++) {
-            if (Retailer_Modal_List.get(i).getTownCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+        if (Retailer_Modal_List != null && Retailer_Modal_List.size() > 0) {
+            for (int i = 0; i < Retailer_Modal_List.size(); i++) {
+                if (Retailer_Modal_List.get(i).getTownCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
+                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                }
             }
+            recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
+            new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();
+            recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
         }
-        recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
-        new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();
-        recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
     }
 }

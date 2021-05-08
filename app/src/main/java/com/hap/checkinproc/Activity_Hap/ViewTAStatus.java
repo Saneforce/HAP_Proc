@@ -115,6 +115,8 @@ public class ViewTAStatus extends AppCompatActivity {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 JsonArray jsonTa = response.body();
+                Log.v("JSON_VIEW_Array", jsonTa.toString());
+
                 viewTAStatusAdapter = new ViewTAStatusAdapter(ViewTAStatus.this, jsonTa);
                 mTaStatusList.setAdapter(viewTAStatusAdapter);
             }

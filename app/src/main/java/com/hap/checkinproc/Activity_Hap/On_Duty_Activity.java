@@ -438,11 +438,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         capture_img = findViewById(R.id.capture_img);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         btn_submit = findViewById(R.id.btn_submit);
-
-
         mShared_common_pref = new Shared_Common_Pref(this);
-
-
         ModeTravel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -526,7 +522,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         if (sharedpreferences.contains(hapLocation)) {
             strHapLocation = sharedpreferences.getString(hapLocation, "");
             //
-
             Log.e("FlagCountFlagCount", strHapLocation);
             if (!strHapLocation.equals("")) {
                 flag = 0;
@@ -545,7 +540,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             }
             Log.e("strHapLocation", strHapLocation);
         }
-
         if (sharedpreferences.contains(otherLocation)) {
             strVisitPurpose = sharedpreferences.getString(otherLocation, "");
             Log.e("FlagCountFlagCount", strVisitPurpose);
@@ -564,24 +558,19 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             }
             Log.e("strHapLocation", strHapLocation);
         }
-
         if (sharedpreferences.contains("SharedImage")) {
             imageURI = sharedpreferences.getString("SharedImage", "");
             Log.e("Privacypolicy", "Checking" + imageURI);
-
             imageConvert = imageURI.substring(7);
             Log.e("COnvert", imageURI.substring(7));
             Log.e("COnvert", imageConvert);
             getMulipart(imageConvert, 0);
-
             Log.e("IMAGE_URI", imageURI);
         }
 
         if (sharedpreferences.contains("SharedDailyAllowancess")) {
             strDailyAllowance = sharedpreferences.getString("SharedDailyAllowancess", "");
             Log.e("strDailyAllowance", "Checking" + strDailyAllowance);
-
-
             if (strDailyAllowance.equals("HQ")) {
                 linearBus.setVisibility(View.GONE);
             } else {
@@ -592,12 +581,10 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             DriverNeed = sharedpreferences.getString("SharedDriverAllowancess", "");
             Log.e("DriverNeed", DriverNeed);
         }
-
         if (sharedpreferences.contains(visitPurpose)) {
             purposeofvisitedittext.setText(sharedpreferences.getString(visitPurpose, ""));
             Log.e("DriverNeed", DriverNeed);
         }
-
         if (sharedpreferences.contains(modeFromKm)) {
             FromKm = sharedpreferences.getString(modeFromKm, "");
             Log.e("Mode_FROm", sharedpreferences.getString(modeFromKm, ""));
@@ -633,7 +620,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             Log.e("Mode_TYPE", sharedpreferences.getString(modeTypeVale, ""));
 
             if (ModeTravelType.equals("0")) {
-
                 BusMode.setVisibility(View.VISIBLE);
                 BikeMode.setVisibility(View.GONE);
                 ReasonPhoto.setVisibility(View.VISIBLE);
@@ -646,7 +632,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 attachedImage.setRotation(90);
 
             } else {
-
                 BusMode.setVisibility(View.VISIBLE);
                 BikeMode.setVisibility(View.VISIBLE);
                 ReasonPhoto.setVisibility(View.VISIBLE);
@@ -657,8 +642,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 dailyAllowance.setText(strDailyAllowance);
                 attachedImage.setImageURI(Uri.parse(imageURI));
                 attachedImage.setRotation(90);
-
-
                 if (TextMode.getText().equals("Four Wheeler")) {
                     linCheckdriver.setVisibility(View.VISIBLE);
                     if (DriverNeed.equals("true")) {
@@ -1026,14 +1009,11 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 12 && resultCode == Activity.RESULT_OK) {
-
             String finalPath = "/storage/emulated/0";
             String filePath = outputFileUri.getPath();
             filePath = filePath.substring(1);
             filePath = finalPath + filePath.substring(filePath.indexOf("/"));
             Log.v("printing__file_path", filePath);
-
-
             if (filePath == null)
                 Toast.makeText(On_Duty_Activity.this, "This file format not supported", Toast.LENGTH_LONG).show();
             else {
@@ -1049,8 +1029,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     }
 
     public void getMulipart(String path, int x) {
-
-
         MultipartBody.Part imgg = convertimg("file", path);
         HashMap<String, RequestBody> values = field(UserDetails.getString("Sfcode", ""));
         Log.e("IMAGE_URI_1", path);
@@ -1065,11 +1043,9 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         return xx;
 
     }
-
     private RequestBody createFromString(String txt) {
         return RequestBody.create(MultipartBody.FORM, txt);
     }
-
     public MultipartBody.Part convertimg(String tag, String path) {
         MultipartBody.Part yy = null;
         Log.v("full_profile", path);
@@ -1100,11 +1076,8 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 Log.v("print_upload_file", "ggg" + response.isSuccessful() + response.body());
                 //uploading.setText("Uploading "+String.valueOf(count)+"/"+String.valueOf(count_check));
-
                 try {
                     if (response.isSuccessful()) {
-
-
                         Log.v("print_upload_file_true", "ggg" + response);
                         JSONObject jb = null;
                         String jsonData = null;
@@ -1112,11 +1085,9 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                         Log.v("request_data_upload", String.valueOf(jsonData));
                         JSONObject js = new JSONObject(jsonData);
                         if (js.getString("success").equalsIgnoreCase("true")) {
-
                             imageServer = js.getString("url");
                             Log.v("printing_dynamic_cou", js.getString("url"));
                         }
-
                     }
 
                 } catch (Exception e) {
@@ -1131,7 +1102,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     }
 
     public void submitData() {
-
         String n = "True";
         String Mode = TextMode.getText().toString();
         SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -1199,11 +1169,9 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                                 extras.putString("vstPurpose", purposeofvisitedittext.getText().toString());
                                 intent.putExtras(extras);
                                 shared_common_pref.save(Shared_Common_Pref.DAMode, true);
-
                                 SharedPreferences.Editor editor = sharedpreferences.edit();
                                 editor.putString("VSTP",purposeofvisitedittext.getText().toString());
                                 editor.commit();
-
                                 mLUService = new SANGPSTracker(On_Duty_Activity.this);
                                 myReceiver = new LocationReceiver();
                                 bindService(new Intent(On_Duty_Activity.this, SANGPSTracker.class), mServiceConection,
@@ -1212,7 +1180,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                                         new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
                                 mLUService.requestLocationUpdates();
                                 startActivity(intent);
-
                             } else
                                 Toast.makeText(On_Duty_Activity.this, " Cannot submitted the data ", Toast.LENGTH_SHORT).show();
                         }
@@ -1236,7 +1203,6 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         Log.v("LOG_IN_LOCATION", "ONRESTART");
         checking = String.valueOf(getIntent().getSerializableExtra("CHECKING"));
         Log.v("CHECKING_DATA", checking);
-
 
         if (sharedpreferences.contains("SharedImage")) {
             imageURI = sharedpreferences.getString("SharedImage", "");

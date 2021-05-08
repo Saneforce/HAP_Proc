@@ -356,8 +356,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         viewContinue = (LinearLayout) findViewById(R.id.lin_con_sty);
         viewContinueTotal = (LinearLayout) findViewById(R.id.lin_con_sty_amt);
         ViewData = findViewById(R.id.data);
-TextCheckInDate = findViewById(R.id.txt_hotel_date);
-
+        TextCheckInDate = findViewById(R.id.txt_hotel_date);
 
         mFuelRecycler = findViewById(R.id.recycler_fuel);
         mFuelRecycler.setHasFixedSize(true);
@@ -1618,7 +1617,7 @@ TextCheckInDate = findViewById(R.id.txt_hotel_date);
                                             fuelAmount.setText("Rs ." + fuelAmt);
 
                                             TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
-                                        }else{
+                                        } else {
                                             Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
                                             String TotalPersonal = String.valueOf(Total - Personal);
                                             Double q = Double.valueOf(TotalPersonal);
@@ -1646,7 +1645,7 @@ TextCheckInDate = findViewById(R.id.txt_hotel_date);
                                             fuelAmount.setText("Rs ." + fuelAmt);
 
                                             TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
-                                        }else{
+                                        } else {
                                             Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
                                             String TotalPersonal = String.valueOf(Total - Personal);
                                             Double q = Double.valueOf(TotalPersonal);
@@ -1667,6 +1666,7 @@ TextCheckInDate = findViewById(R.id.txt_hotel_date);
                             }
                         }
                     }
+
                     JsonObject jRremarks = null;
 
                     for (int i = 0; i < jsonExpHead.size(); i++) {
@@ -2053,7 +2053,7 @@ TextCheckInDate = findViewById(R.id.txt_hotel_date);
                         elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
                         txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(elibs));
 
-                                TextCheckInDate.setText(ldraft.get("Tadate").getAsString());
+                        TextCheckInDate.setText(ldraft.get("Tadate").getAsString());
                     }
 
                     if (LodingCon.size() != 0) {
@@ -3907,7 +3907,6 @@ TextCheckInDate = findViewById(R.id.txt_hotel_date);
                                 if (end != 0) {
                                     String total = String.valueOf(end - start);
                                     Integer Total = Integer.valueOf(total);
-
                                     if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler")) {
 
                                         if (Total >= 200) {
@@ -3923,7 +3922,7 @@ TextCheckInDate = findViewById(R.id.txt_hotel_date);
                                             fuelAmount.setText("Rs ." + fuelAmt);
 
                                             TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
-                                        }else{
+                                        } else {
                                             Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
                                             String TotalPersonal = String.valueOf(Total - Personal);
                                             Double q = Double.valueOf(TotalPersonal);
@@ -3951,7 +3950,7 @@ TextCheckInDate = findViewById(R.id.txt_hotel_date);
                                             fuelAmount.setText("Rs ." + fuelAmt);
 
                                             TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
-                                        }else{
+                                        } else {
                                             Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
                                             String TotalPersonal = String.valueOf(Total - Personal);
                                             Double q = Double.valueOf(TotalPersonal);
@@ -3972,7 +3971,8 @@ TextCheckInDate = findViewById(R.id.txt_hotel_date);
                             }
                         }
                     }
-                    calOverAllTotal(localCov, otherExp, tTotAmt);
+
+                    calOverAllTotal(localCov, otherExp, 0);
                 }
 
                 @Override

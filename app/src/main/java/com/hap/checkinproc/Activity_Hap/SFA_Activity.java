@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
@@ -69,6 +71,15 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         gson = new Gson();
         // presenter.requestDataFromServer();
 
+
+        ImageView backView = findViewById(R.id.imag_back);
+        backView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnBackPressedDispatcher.onBackPressed();
+            }
+        });
+
     }
 
     @Override
@@ -112,7 +123,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         startActivity(intent);
                         finish();
                     }
-
                     @Override
                     public void NegativeMethod(DialogInterface dialog, int id) {
                         dialog.dismiss();
@@ -124,12 +134,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void showProgress() {
-
     }
 
     @Override
     public void hideProgress() {
-
     }
 
     @Override
@@ -167,7 +175,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             System.out.println("Compititor_List" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.Compititor_List, serializedData);
         }
-
     }
 
     @Override
@@ -175,6 +182,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+/*
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -182,5 +190,20 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             return true;
         }
         return false;
+    }
+*/
+
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+            new OnBackPressedDispatcher(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                }
+            });
+
+
+    @Override
+    public void onBackPressed() {
+        Log.v("CHECKING", "CHECKING");
     }
 }

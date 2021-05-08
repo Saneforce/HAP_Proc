@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -60,7 +62,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     TextView approvalcount;
     Shared_Common_Pref shared_common_pref;
     String imageProfile = "", sSFType = "";
-    String onDuty = "",ClosingDate="";
+    String onDuty = "", ClosingDate = "";
     ImageView profilePic, btMyQR;
     public static final String hapLocation = "hpLoc";
     public static final String otherLocation = "othLoc";
@@ -76,7 +78,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     RelativeLayout mRelApproval;
     Integer ClosingKm = 0;
 
-
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
     @Override
@@ -84,7 +85,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         startService(new Intent(this, TimerService.class));
-
         username = findViewById(R.id.username);
         lblUserName = (TextView) findViewById(R.id.lblUserName);
         lblEmail = (TextView) findViewById(R.id.lblEmail);
@@ -98,8 +98,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         common_class = new Common_Class(this);
 
         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-        if(CheckIn==true){
-            Intent intent= new Intent(getApplicationContext(), Dashboard_Two.class);
+        if (CheckIn == true) {
+            Intent intent = new Intent(getApplicationContext(), Dashboard_Two.class);
             intent.putExtra("Mode", "CIN");
             startActivity(intent);
         }
@@ -141,6 +141,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linOnDuty = (findViewById(R.id.lin_onduty));
         linOnDuty.setVisibility(View.GONE);
         if (sSFType.equals("0")) linOnDuty.setVisibility(View.VISIBLE);
+
+        if (linOnDuty.getVisibility() == View.VISIBLE) {
+            linCheckin.setVisibility(View.VISIBLE);
+        } else {
+            linCheckin.setVisibility(View.GONE);
+        }
+
         linApprovals = findViewById(R.id.lin_approvals);
         linTaClaim = (findViewById(R.id.lin_ta_claim));
         linExtShift = (findViewById(R.id.lin_extenden_shift));
@@ -257,9 +264,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             case R.id.lin_myday_plan:
                 if (ClosingKm == 1) {
 
-                    Intent closingIntet  = new Intent(this,AllowanceActivityTwo.class);
-                    closingIntet.putExtra("Cls_con","cls");
-                    closingIntet.putExtra("Cls_dte",ClosingDate);
+                    Intent closingIntet = new Intent(this, AllowanceActivityTwo.class);
+                    closingIntet.putExtra("Cls_con", "cls");
+                    closingIntet.putExtra("Cls_dte", ClosingDate);
                     startActivity(closingIntet);
                     finish();
                 } else {

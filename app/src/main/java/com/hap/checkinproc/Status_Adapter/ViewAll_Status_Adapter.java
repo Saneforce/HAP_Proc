@@ -3,11 +3,9 @@ package com.hap.checkinproc.Status_Adapter;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,7 +45,12 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
         holder.shifttime.setText(View_Status_ModelsList.get(position).getSFTName().toString());
         holder.txt_in_time.setText(View_Status_ModelsList.get(position).getAttTm().toString());
         holder.txt_out_time.setText(View_Status_ModelsList.get(position).getET().toString());
-        String color=View_Status_Model.getStusClr().replace("!important", "");
+
+        holder.txt_in_geo.setText(View_Status_ModelsList.get(position).getGeoin().toString());
+        holder.txt_out_geo.setText(View_Status_ModelsList.get(position).getGeoout().toString());
+        holder.txt_Loc.setText(View_Status_ModelsList.get(position).getLoc().toString());
+
+        String color = View_Status_Model.getStusClr().replace("!important", "");
         drawable.setColor(Color.parseColor(color.trim()));
     }
 
@@ -57,7 +60,7 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView weekofdate, wkstatus, shifttime, txt_in_time, txt_out_time;
+        public TextView weekofdate, wkstatus, shifttime, txt_in_time, txt_out_time, txt_in_geo, txt_out_geo, txt_Loc;
 
         public MyViewHolder(View view) {
             super(view);
@@ -66,6 +69,9 @@ public class ViewAll_Status_Adapter extends RecyclerView.Adapter<ViewAll_Status_
             shifttime = view.findViewById(R.id.shifttime);
             txt_in_time = view.findViewById(R.id.txt_in_time);
             txt_out_time = view.findViewById(R.id.txt_out_time);
+            txt_in_geo = view.findViewById(R.id.txt_in_geo);
+            txt_out_geo = view.findViewById(R.id.txt_out_geo);
+            txt_Loc = view.findViewById(R.id.txt_loc);
 
         }
     }

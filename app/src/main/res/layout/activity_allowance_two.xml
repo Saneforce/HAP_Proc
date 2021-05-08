@@ -264,7 +264,9 @@
 
                         </LinearLayout>
                     </androidx.cardview.widget.CardView>
-
+                    <TextView
+                        android:id="@+id/txt_max"
+                        style="@style/TextStyle" />
 
                   <!--  <LinearLayout
                         android:layout_width="wrap_content"

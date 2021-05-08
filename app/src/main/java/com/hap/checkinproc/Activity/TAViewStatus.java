@@ -175,6 +175,7 @@ public class TAViewStatus extends AppCompatActivity {
 
     double TotDA = 0.0, sTotal = 0.0, sums = 0.0, sumsTa = 0.0, tTotAmt = 0.0, stayEgTotal = 0.0;
     float tJointAmt = 0;
+    double continueStay = 0.0;
 
 
     ArrayList<SelectionModel> array = new ArrayList<>();
@@ -221,8 +222,6 @@ public class TAViewStatus extends AppCompatActivity {
     JsonArray StayDate = null;
     JsonArray jsonFuelAllowance = null;
     AppCompatEditText appCompatEditText;
-
-
     LinearLayout linAccept, linReject;
 
     @Override
@@ -411,7 +410,7 @@ public class TAViewStatus extends AppCompatActivity {
 
 
         vwldgBillAmt = findViewById(R.id.vwldgBillAmt);
-
+        SumOFLodging(0);
         mChckCont.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -1121,7 +1120,54 @@ public class TAViewStatus extends AppCompatActivity {
     }
 
     private void calOverAllTotal(Double localCov, Double otherExp, double tTotAmt) {
+
         Log.v("tTotAmt", String.valueOf(tTotAmt));
+
+        String strldgTotal = lbl_ldg_eligi.getText().toString().substring(lbl_ldg_eligi.getText().toString().indexOf(".") + 1).trim();
+        String separators = ".";
+        int intldgTotal = strldgTotal.lastIndexOf(separators);
+
+        Log.v("STRING_TOTAL", strldgTotal);
+
+    /*   Log.v("tTotAmt_intldg", String.valueOf(intldgTotal));
+       Log.v("tTotAmt_double", String.valueOf(Double.valueOf(strldgTotal.substring(0, intldgTotal))));*/
+
+        if (tTotAmt == 0.0) {
+            gTotal = localCov + myBrdAmt + drvBrdAmt + otherExp + GrandTotalAllowance + 0.0;
+            Log.v("STRING_gTotal0", String.valueOf(gTotal));
+            Log.v("STRING_gTotal1", String.valueOf(localCov));
+            Log.v("STRING_gTotal2", String.valueOf(myBrdAmt));
+            Log.v("STRING_gTotal3", String.valueOf(otherExp));
+            Log.v("STRING_gTotal4", String.valueOf(GrandTotalAllowance));
+
+
+        } else {
+
+
+            if (LodingCon.size() != 0) {
+                mChckEarly.setVisibility(View.GONE);
+                Integer ValueTotal = LodingCon.size() + 1;
+                Double TotalVal = ValueTotal * Double.valueOf(strldgTotal.substring(0, intldgTotal));
+                gTotal = localCov + myBrdAmt + drvBrdAmt + otherExp + GrandTotalAllowance + Double.valueOf(tTotAmt);
+                Log.v("STRING_gTotal_1", String.valueOf(gTotal));
+            } else {
+                gTotal = localCov + myBrdAmt + drvBrdAmt + otherExp + GrandTotalAllowance + Double.valueOf(tTotAmt);
+                // gTotal = localCov + myBrdAmt + drvBrdAmt + otherExp + GrandTotalAllowance + Double.valueOf(strldgTotal.substring(0, intldgTotal));
+                Log.v("LOADIGN_DAYS", String.valueOf(gTotal));
+                Log.v("STRING_gTotal_2", String.valueOf(gTotal));
+            }
+
+            Log.v("LOADIGN_DAYS", String.valueOf(LodingCon.size()));
+
+
+        }
+
+
+        grandTotal.setText("Rs." + new DecimalFormat("##0.00").format(gTotal));
+
+
+
+        /* Log.v("tTotAmt", String.valueOf(tTotAmt));
 
 
         String strldgTotal = lbl_ldg_eligi.getText().toString().substring(lbl_ldg_eligi.getText().toString().indexOf(".") + 1).trim();
@@ -1155,7 +1201,7 @@ public class TAViewStatus extends AppCompatActivity {
 
         }
         double gTT = Double.parseDouble(GrandTotalAMT);
-        grandTotal.setText("Rs." + new DecimalFormat("##0.00").format(gTT));
+        grandTotal.setText("Rs." + new DecimalFormat("##0.00").format(gTT));*/
 
     }
 
@@ -1375,14 +1421,22 @@ public class TAViewStatus extends AppCompatActivity {
         if (sErlyAmt.equalsIgnoreCase("")) sErlyAmt = "0";
         if (sLateAmt.equalsIgnoreCase("")) sLateAmt = "0";
         //  double tTotAmt = ldgEliAmt + ldgDrvEligi + Float.parseFloat(sJnAmt);
-        tTotAmt = Double.parseDouble(sMyAmt) + ldgDrvEligi + Float.parseFloat(sJnAmt) + Double.parseDouble(sErlyAmt) + Double.parseDouble(sLateAmt);
+        //   tTotAmt = Double.parseDouble(sMyAmt) + ldgDrvEligi + Float.parseFloat(sJnAmt) + Double.parseDouble(sErlyAmt) + Double.parseDouble(sLateAmt);
+        tTotAmt = continueStay + ldgDrvEligi + Float.parseFloat(sJnAmt) + Double.parseDouble(sErlyAmt) + Double.parseDouble(sLateAmt);
+
+
+        Log.v("TOTAL_STAY", String.valueOf(stayEgTotal));
+        Log.v("TOTAL_DRV", String.valueOf(ldgDrvEligi));
+        Log.v("TOTAL_JNAMT", String.valueOf(sJnAmt));
+        Log.v("TOTAL_TOTMAT", String.valueOf(tTotAmt));
+
         totLodgAmt = String.valueOf(tTotAmt);
-        lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
-        SumWOBLodging();
+        //  lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
+        // SumWOBLodging();
 
         int IntValue = (int) tTotAmt;
         //tTotAmt = Double.parseDouble(sMyAmt) + ldgDrvEligi + Float.parseFloat(sJnAmt)+Double.parseDouble(sErlyAmt) +Double.parseDouble(sLateAmt) ;
-        Log.v("TOTAL_AMOUNT", String.valueOf(IntValue));
+
         edt_ldg_bill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue - 1)});
         edtEarBill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue - 1)});
 
@@ -1391,9 +1445,9 @@ public class TAViewStatus extends AppCompatActivity {
             tTotAmt = 0;
             calOverAllTotal(localCov, otherExp, tTotAmt);
         } else {
+            Log.v("TOTAL_continueStay", String.valueOf(continueStay));
             calOverAllTotal(localCov, otherExp, tTotAmt);
         }
-
 
     }
 
@@ -1538,6 +1592,7 @@ public class TAViewStatus extends AppCompatActivity {
                     jsonExpHead = jsonObjects.getAsJsonArray("Expense_Head");
                     jsonFuelAllowance = jsonObjects.getAsJsonArray("FuelAllowance");
 
+
                     if (jsonFuelAllowance != null || jsonFuelAllowance.size() != 0) {
                         Log.v("jsonFuelAllowance_IN", jsonFuelAllowance.toString());
 
@@ -1551,26 +1606,74 @@ public class TAViewStatus extends AppCompatActivity {
                             if (!jsFuel.get("End_Km").getAsString().equalsIgnoreCase("")) {
                                 Integer start = Integer.valueOf(jsFuel.get("Start_Km").getAsString());
                                 Integer end = Integer.valueOf(jsFuel.get("End_Km").getAsString());
-                                String total = String.valueOf(end - start);
-                                Integer Total = Integer.valueOf(total);
-                                Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
-                                String TotalPersonal = String.valueOf(Total - Personal);
-                                Double q = Double.valueOf(TotalPersonal);
-                                Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-                                String qz = String.valueOf(q * z);
-                                Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+                                if (end != 0) {
+                                    String total = String.valueOf(end - start);
+                                    Integer Total = Integer.valueOf(total);
+
+                                    if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler")) {
+
+                                        if (Total >= 200) {
+                                            Total = 200;
+                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                            String TotalPersonal = String.valueOf(Total - Personal);
+                                            Double q = Double.valueOf(TotalPersonal);
+                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                            String qz = String.valueOf(q * z);
+                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+
+                                            fuelAmt = fuelAmt + (q * z);
+                                            fuelAmount.setText("Rs ." + fuelAmt);
+
+                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+                                        } else {
+                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                            String TotalPersonal = String.valueOf(Total - Personal);
+                                            Double q = Double.valueOf(TotalPersonal);
+                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                            String qz = String.valueOf(q * z);
+                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+
+                                            fuelAmt = fuelAmt + (q * z);
+                                            fuelAmount.setText("Rs ." + fuelAmt);
+
+                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+
+                                        }
+                                    } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
+                                        if (Total >= 500) {
+                                            Total = 500;
+                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                            String TotalPersonal = String.valueOf(Total - Personal);
+                                            Double q = Double.valueOf(TotalPersonal);
+                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                            String qz = String.valueOf(q * z);
+                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+
+                                            fuelAmt = fuelAmt + (q * z);
+                                            fuelAmount.setText("Rs ." + fuelAmt);
+
+                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+                                        } else {
+                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                            String TotalPersonal = String.valueOf(Total - Personal);
+                                            Double q = Double.valueOf(TotalPersonal);
+                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                            String qz = String.valueOf(q * z);
+                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+
+                                            fuelAmt = fuelAmt + (q * z);
+                                            fuelAmount.setText("Rs ." + fuelAmt);
+
+                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+
+                                        }
+                                    }
+                                }
 
 
-                                fuelAmt = fuelAmt + (q * z);
-                                fuelAmount.setText("Rs ." + fuelAmt);
-
-                                TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
                             }
                         }
                     }
-               /*     if (LodingCon.size() != 0) {
-                        mChckEarly.setVisibility(View.GONE);
-                    }*/
 
                     Log.v("JSON_LODGING", jsonExpHead.toString());
 
@@ -1694,7 +1797,7 @@ public class TAViewStatus extends AppCompatActivity {
 
                                 Double totalAmount = Double.valueOf(strFuelAmount);
                                 tofuel = 200 * totalAmount;
-                                TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
+                                //    TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
 
 
                             } else if (totalkm > 500 && StrDaName.equals("Four Wheeler")) {
@@ -1703,7 +1806,7 @@ public class TAViewStatus extends AppCompatActivity {
 
                                 Double totalAmount = Double.valueOf(strFuelAmount);
                                 tofuel = 500 * totalAmount;
-                                TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
+                                // TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
 
                                 txtMaxKm.setVisibility(View.VISIBLE);
                             } else {
@@ -1711,7 +1814,7 @@ public class TAViewStatus extends AppCompatActivity {
 
                                 Double totalAmount = Double.valueOf(strFuelAmount);
                                 tofuel = totalPersonalKm * totalAmount;
-                                TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
+                                //   TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
                                 txtMaxKm.setVisibility(View.GONE);
                             }
 
@@ -1933,13 +2036,69 @@ public class TAViewStatus extends AppCompatActivity {
                         }
 
                     }
-                    GrandTotalAllowance = doubleAmount + tofuel;
+
+                    GrandTotalAllowance = doubleAmount + fuelAmt;
                     /*Local Convenyance*/
                     if (lcDraftArray != null || lcDraftArray.size() != 0) {
                         localConDraft(lcDraftArray);
                     }
                     if (oeDraftArray != null || oeDraftArray.size() != 0) OeDraft(oeDraftArray);
                     if (trvldArray != null || trvldArray.size() != 0) trvldLocation(trvldArray);
+
+                    JsonObject eachData;
+
+                    double elibs = 0.0;
+                    JsonArray jsonAddition = null;
+                    JsonObject ldraft;
+                    for (int i = 0; i < ldArray.size(); i++) {
+                        ldraft = (JsonObject) ldArray.get(i);
+
+                        elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
+                        txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(elibs));
+
+                        // TextCheckInDate.setText(ldraft.get("Tadate").getAsString());
+                    }
+
+
+                    if (LodingCon.size() != 0) {
+                        viewContinue.removeAllViews();
+                        //  viewContinueTotal.removeAllViews();
+                        LinearLayout linearLayout = findViewById(R.id.prm_linear_orders);
+                        linearLayout.setOnClickListener(null);
+
+                        ldg_cin.setOnClickListener(null);
+                        // countLoding = 1;
+                        for (int i = 0; i < LodingCon.size(); i++) {
+
+                            eachData = (JsonObject) LodingCon.get(i);
+                            lodgContvw.setVisibility(View.VISIBLE);
+                            linContinueStay.setVisibility(View.VISIBLE);
+                            linearConView.setVisibility(View.VISIBLE);
+
+                            TextView customOptionsName = new TextView(TAViewStatus.this);
+                            customOptionsName.setPadding(0, 15, 0, 15);
+                            customOptionsName.setText(eachData.get("fdt").getAsString());
+                            viewContinue.addView(customOptionsName);
+
+                            TextView customOptionsNames = new TextView(TAViewStatus.this);
+                            customOptionsNames.setPadding(0, 15, 0, 15);
+                            customOptionsNames.setText("Rs : " + eachData.get("Amt").getAsString() + ".00");
+                            //  viewContinueTotal.addView(customOptionsNames);
+                            continueStay = continueStay + Double.parseDouble(eachData.get("Amt").getAsString());
+                            Log.v("TOTAL_DATE", String.valueOf(continueStay));
+
+
+                        }
+                    }
+
+
+                    Log.v("TEXT_ELIGIBLE", txtMyEligi.getText().toString().replaceAll("Rs .", ""));
+                    Log.v("TEXT_ELIGIBLE_AMT", String.valueOf(elibs));
+
+                    continueStay = continueStay + elibs;
+                    lbl_ldg_eligi.setText("Rs. " + continueStay);
+                    Log.v("TOTAL_DATE_Outer", String.valueOf(continueStay));
+
 
                     Log.v("LODGING_ARRAY", String.valueOf(ldArray.size()));
                     if (ldArray != null || ldArray.size() != 0) {
@@ -1959,7 +2118,7 @@ public class TAViewStatus extends AppCompatActivity {
                             lodgStyLocation.setText("");
                             txtMyEligi.setText("Rs." + 0.00);
                             ldgWOBBal.setText("Rs." + 0.00);
-                            lbl_ldg_eligi.setText("Rs." + 0.00);
+                            //  lbl_ldg_eligi.setText("Rs." + 0.00);
                             edt_ldg_bill.setText("");
                             txt_ldg_type.setText("");
                             TotalDays.setVisibility(View.GONE);
@@ -1983,14 +2142,14 @@ public class TAViewStatus extends AppCompatActivity {
                         lodgStyLocation.setText("");
                         txtMyEligi.setText("Rs." + 0.00);
                         ldgWOBBal.setText("Rs." + 0.00);
-                        lbl_ldg_eligi.setText("Rs." + 0.00);
+                        // .setText("Rs." + 0.00);
                         edt_ldg_bill.setText("");
                         txt_ldg_type.setText("");
                         TotalDays.setVisibility(View.GONE);
                         lodgContvw.setVisibility(View.GONE);
                     }
 
-                    calOverAllTotal(localCov, otherExp, tTotAmt);
+                    calOverAllTotal(localCov, otherExp, 0);
                 }
 
                 @Override
@@ -2007,7 +2166,7 @@ public class TAViewStatus extends AppCompatActivity {
 
         JsonObject eachData;
 
-        if (ContSty.size() != 0) {
+/*        if (ContSty.size() != 0) {
             for (int i = 0; i < ContSty.size(); i++) {
                 eachData = (JsonObject) ContSty.get(i);
 
@@ -2024,49 +2183,44 @@ public class TAViewStatus extends AppCompatActivity {
             linearConView.setVisibility(View.GONE);
         }
 
-        Log.v("Lodging_Details", ContSty.toString());
+        Log.v("Lodging_Details", ContSty.toString());*/
         JsonArray jsonAddition = null;
 
         JsonObject ldraft = null;
 
 
+        for (int i = 0; i < lodingDraft.size(); i++) {
+            ldraft = (JsonObject) lodingDraft.get(i);
 
-
-            for (int i = 0; i < lodingDraft.size(); i++) {
-                ldraft = (JsonObject) lodingDraft.get(i);
-
-                jsonAddition = ldraft.getAsJsonArray("Additional");
+            jsonAddition = ldraft.getAsJsonArray("Additional");
 /*
             ldgAdd.setText("- Remove");
 */
-                lodgContvw.setVisibility(View.VISIBLE);
-                lodgCont.setVisibility(View.VISIBLE);
-                ldg_stayloc.setVisibility(View.VISIBLE);
-                ldg_stayDt.setVisibility(View.VISIBLE);
-                lodgJoin.setVisibility(View.VISIBLE);
-                linContinueStay.setVisibility(View.VISIBLE);
+            lodgContvw.setVisibility(View.VISIBLE);
+            lodgCont.setVisibility(View.VISIBLE);
+            ldg_stayloc.setVisibility(View.VISIBLE);
+            ldg_stayDt.setVisibility(View.VISIBLE);
+            lodgJoin.setVisibility(View.VISIBLE);
+            linContinueStay.setVisibility(View.VISIBLE);
 
-                if (ldraft != null || ldraft.size() != 0) {
-                ldg_cin.setText(""+ldraft.get("Stay_Date").getAsString());
-                ldg_cout.setText(""+ldraft.get("To_Date").getAsString());
-                lodgStyLocation.setText(""+ldraft.get("Ldg_Stay_Loc").getAsString());
+            if (ldraft != null || ldraft.size() != 0) {
+                ldg_cin.setText("" + ldraft.get("Stay_Date").getAsString());
+                ldg_cout.setText("" + ldraft.get("To_Date").getAsString());
+                lodgStyLocation.setText("" + ldraft.get("Ldg_Stay_Loc").getAsString());
 
+                txtDrivEligi.setText("" + ldraft.get("Driver_Ldg_Amount").getAsString());
 
+                ConStay = "" + ldraft.get("Continuous_Stay").toString();
+                ErlyStay = "" + ldraft.get("Early_Checkin").toString();
+                LteStay = "" + ldraft.get("Late_Checkout").toString();
 
+                ErlyChecIn = "" + ldraft.get("Erly_Check_in").toString();
+                ErlyChecOut = "" + ldraft.get("Erly_Check_out").toString();
+                ErlyAmt = "" + ldraft.get("Ear_bill_amt").toString();
 
-                txtDrivEligi.setText(""+ldraft.get("Driver_Ldg_Amount").getAsString());
-
-                ConStay =""+ ldraft.get("Continuous_Stay").toString();
-                ErlyStay =""+ ldraft.get("Early_Checkin").toString();
-                LteStay =""+ ldraft.get("Late_Checkout").toString();
-
-                ErlyChecIn = ""+ ldraft.get("Erly_Check_in").toString();
-                ErlyChecOut =""+ ldraft.get("Erly_Check_out").toString();
-                ErlyAmt = ""+ldraft.get("Ear_bill_amt").toString();
-
-                LteChecIn =""+ ldraft.get("lat_chec_in").toString();
-                LteChecOut =""+ ldraft.get("lat_check_out").toString();
-                LteAmt =""+ ldraft.get("lat_bill_amt").toString();
+                LteChecIn = "" + ldraft.get("lat_chec_in").toString();
+                LteChecOut = "" + ldraft.get("lat_check_out").toString();
+                LteAmt = "" + ldraft.get("lat_bill_amt").toString();
 
 
                 earCheckIn.setText(ErlyChecIn);
@@ -2097,24 +2251,24 @@ public class TAViewStatus extends AppCompatActivity {
 
 
                 stayDays.setVisibility(View.VISIBLE);
-                Double totlLdgAmt = Double.valueOf(""+ldraft.get("Total_Ldg_Amount").getAsString());
-                Integer noday = Integer.valueOf(""+ldraft.get("NO_Of_Days").getAsString());
+                Double totlLdgAmt = Double.valueOf("" + ldraft.get("Total_Ldg_Amount").getAsString());
+                Integer noday = Integer.valueOf("" + ldraft.get("NO_Of_Days").getAsString());
 
-                txtLodgUKey.setText(""+ldraft.get("Ukey").getAsString());
+                txtLodgUKey.setText("" + ldraft.get("Ukey").getAsString());
                 double elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
                 txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(elibs));
 
-                double srtjdgAmt = Integer.valueOf(""+ldraft.get("Joining_Ldg_Amount").getAsString());
+                double srtjdgAmt = Integer.valueOf("" + ldraft.get("Joining_Ldg_Amount").getAsString());
                 txtJNEligi.setText("Rs." + new DecimalFormat("##0.00").format(srtjdgAmt));
-                Double wobal = Double.valueOf(""+ldraft.get("WOB_Amt").getAsString());
+                Double wobal = Double.valueOf("" + ldraft.get("WOB_Amt").getAsString());
 
                 Log.v("ldgWOBBal", String.valueOf(wobal));
                 ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(wobal));
                 Log.v("ldgWOBBal_______", ldgWOBBal.getText().toString());
 
-                edt_ldg_bill.setText(""+ldraft.get("Bill_Amt").getAsString());
+                edt_ldg_bill.setText("" + ldraft.get("Bill_Amt").getAsString());
                 lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(totlLdgAmt));
-                txtStyDays.setText(""+ldraft.get("NO_Of_Days").getAsString());
+                txtStyDays.setText("" + ldraft.get("NO_Of_Days").getAsString());
                 if (ldraft.get("Lodging_Type").getAsString().equals("Joined Stay")) {
                     txt_ldg_type.setText("Joined Stay");
                     TotalDays.setVisibility(View.VISIBLE);
@@ -2158,12 +2312,12 @@ public class TAViewStatus extends AppCompatActivity {
                         ImageView delte = jdV.findViewById(R.id.ldg_delete);
                         delte.setVisibility(View.GONE);
 
-                        edt_ldg_JnEmp.setText(""+jsonObjectAdd.get("Emp_Code").getAsString());
-                        txtJNName.setText(""+jsonObjectAdd.get("Sf_Name").getAsString());
-                        txtJNDesig.setText(""+jsonObjectAdd.get("Desig").getAsString());
-                        txtJNDept.setText(""+jsonObjectAdd.get("Dept").getAsString());
-                        txtJNHQ.setText(""+jsonObjectAdd.get("Sf_Hq").getAsString());
-                        txtJNMob.setText(""+jsonObjectAdd.get("Sf_Mobile").getAsString());
+                        edt_ldg_JnEmp.setText("" + jsonObjectAdd.get("Emp_Code").getAsString());
+                        txtJNName.setText("" + jsonObjectAdd.get("Sf_Name").getAsString());
+                        txtJNDesig.setText("" + jsonObjectAdd.get("Desig").getAsString());
+                        txtJNDept.setText("" + jsonObjectAdd.get("Dept").getAsString());
+                        txtJNHQ.setText("" + jsonObjectAdd.get("Sf_Hq").getAsString());
+                        txtJNMob.setText("" + jsonObjectAdd.get("Sf_Mobile").getAsString());
                         /* double jntEli = Integer.valueOf(ldraft.get("Ldg_Amount").getAsString());*//*
                        txtJNMyEli.setText("Rs." + "0.00");*/
 
@@ -2182,146 +2336,146 @@ public class TAViewStatus extends AppCompatActivity {
         JsonObject lcdraftJson;
 
 
-            for (int i = 0; i < lcDraft.size(); i++) {
-                lcdraftJson = (JsonObject) lcDraft.get(i);
+        for (int i = 0; i < lcDraft.size(); i++) {
+            lcdraftJson = (JsonObject) lcDraft.get(i);
 
-                jsonAddition = lcdraftJson.getAsJsonArray("Additional");
-                String expCode = String.valueOf(lcdraftJson.get("Exp_Code"));
-                String expFare = lcdraftJson.get("Exp_Amt").getAsString();
-                lcUKey = lcdraftJson.get("Ukey").getAsString();
+            jsonAddition = lcdraftJson.getAsJsonArray("Additional");
+            String expCode = String.valueOf(lcdraftJson.get("Exp_Code"));
+            String expFare = lcdraftJson.get("Exp_Amt").getAsString();
+            lcUKey = lcdraftJson.get("Ukey").getAsString();
 
-                Log.v("EXP_AMOUNT", expFare);
+            Log.v("EXP_AMOUNT", expFare);
 
-                expCode = expCode.replaceAll("^[\"']+|[\"']+$", "");
-                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            expCode = expCode.replaceAll("^[\"']+|[\"']+$", "");
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                layoutParams.setMargins(15, 15, 15, 15);
+            layoutParams.setMargins(15, 15, 15, 15);
 
-                final View rowView = inflater.inflate(R.layout.activity_local_convenyance, null);
-                linlocalCon.addView(rowView, layoutParams);
-                localText.setVisibility(View.VISIBLE);
-                localTotal.setVisibility(View.VISIBLE);
+            final View rowView = inflater.inflate(R.layout.activity_local_convenyance, null);
+            linlocalCon.addView(rowView, layoutParams);
+            localText.setVisibility(View.VISIBLE);
+            localTotal.setVisibility(View.VISIBLE);
 
-                lcSize = linlocalCon.indexOfChild(rowView);
+            lcSize = linlocalCon.indexOfChild(rowView);
 
-                View LcchildView = linlocalCon.getChildAt(lcSize);
-                localTotal.setVisibility(View.VISIBLE);
-                editTexts = (TextView) (LcchildView.findViewById(R.id.local_enter_mode));
-                editLaFare = (EditText) (LcchildView.findViewById(R.id.edt_la_fare));
-                editLaFare.setEnabled(false);
-                linLocalSpinner = (LinearLayout) LcchildView.findViewById(R.id.lin_loc_spiner);
-                lcAttach = (ImageView) (LcchildView.findViewById(R.id.la_attach_iamg));
-                lcDelet = (ImageView) (LcchildView.findViewById(R.id.delete_lc));
-                lcDelet.setVisibility(View.GONE);
-                lcPreview = (ImageView) (LcchildView.findViewById(R.id.img_prvw_lc));
+            View LcchildView = linlocalCon.getChildAt(lcSize);
+            localTotal.setVisibility(View.VISIBLE);
+            editTexts = (TextView) (LcchildView.findViewById(R.id.local_enter_mode));
+            editLaFare = (EditText) (LcchildView.findViewById(R.id.edt_la_fare));
+            editLaFare.setEnabled(false);
+            linLocalSpinner = (LinearLayout) LcchildView.findViewById(R.id.lin_loc_spiner);
+            lcAttach = (ImageView) (LcchildView.findViewById(R.id.la_attach_iamg));
+            lcDelet = (ImageView) (LcchildView.findViewById(R.id.delete_lc));
+            lcDelet.setVisibility(View.GONE);
+            lcPreview = (ImageView) (LcchildView.findViewById(R.id.img_prvw_lc));
 
-                editTexts.setText(expCode);
-                editLaFare.setText(expFare);
-                if (!lcUKey.equals("")) {
-                    lcTxtUKey.setText(lcUKey);
-                }
-
-
-                if (lcdraftJson.get("Attachments").getAsString().equals("1")) {
-                    lcAttach.setVisibility(View.VISIBLE);
-                    lcPreview.setVisibility(View.VISIBLE);
-                } else {
-                    lcAttach.setVisibility(View.GONE);
-                    lcPreview.setVisibility(View.GONE);
-                }
-
-                Dynamicallowance = (LinearLayout) LcchildView.findViewById(R.id.lin_allowance_dynamic);
-                lcTxtUKey = (TextView) (LcchildView.findViewById(R.id.txt_lc_ukey));
-
-                editLaFare.addTextChangedListener(new TextWatcher() {
-                    @Override
-                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    }
-
-                    @Override
-                    public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    }
-
-                    @Override
-                    public void afterTextChanged(Editable s) {
-                        SumOFLCAmount();
-                    }
-                });
-
-
-                linLocalSpinner.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        listOrderType.clear();
-                        Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
-                        // dynamicModeType(lcPosCntS);
-                    }
-                });
-
-                lcAttach.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        CameraPermission cameraPermission = new CameraPermission(TAViewStatus.this, getApplicationContext());
-                        if (!cameraPermission.checkPermission()) {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-
-                                cameraPermission.requestPermission();
-                            }
-                            Log.v("PERMISSION_NOT", "PERMISSION_NOT");
-                        } else {
-                            Log.v("PERMISSION", "PERMISSION");
-
-                            //popupCapture(786);
-
-                            Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
-                            View view = linlocalCon.getChildAt(lcPosCntS);
-                            editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
-                            lcTxtUKey = (TextView) (view.findViewById(R.id.txt_lc_ukey));
-                            editMode = editTexts.getText().toString();
-
-                            if (lcTxtUKey.getText().toString().equals("")) {
-                                DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                                Calendar calobjw = Calendar.getInstance();
-                                lcEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
-                                lcTxtUKey.setText(lcEditcnt);
-
-                            } else {
-                            }
-                            LcUKey = lcTxtUKey.getText().toString();
-                        }
-
-                    }
-                });
-
-                lcPreview.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Integer valuelc = linlocalCon.indexOfChild(rowView);
-                        View view = linlocalCon.getChildAt(valuelc);
-                        editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
-                        lcTxtUKeys = (TextView) (view.findViewById(R.id.txt_lc_ukey));
-                        editMode = editTexts.getText().toString();
-                        LcUKey = lcTxtUKeys.getText().toString();
-
-                        DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
-
-                        Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
-                        stat.putExtra("position", LcUKey);
-                        stat.putExtra("headTravel", "LC");
-                        stat.putExtra("mode", editMode);
-                        stat.putExtra("date", DateTime);
-                        startActivity(stat);
-                    }
-                });
-
-                localConDisplay(expCode, jsonAddition, lcSize);
-
-
+            editTexts.setText(expCode);
+            editLaFare.setText(expFare);
+            if (!lcUKey.equals("")) {
+                lcTxtUKey.setText(lcUKey);
             }
+
+
+            if (lcdraftJson.get("Attachments").getAsString().equals("1")) {
+                lcAttach.setVisibility(View.VISIBLE);
+                lcPreview.setVisibility(View.VISIBLE);
+            } else {
+                lcAttach.setVisibility(View.GONE);
+                lcPreview.setVisibility(View.GONE);
+            }
+
+            Dynamicallowance = (LinearLayout) LcchildView.findViewById(R.id.lin_allowance_dynamic);
+            lcTxtUKey = (TextView) (LcchildView.findViewById(R.id.txt_lc_ukey));
+
+            editLaFare.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    SumOFLCAmount();
+                }
+            });
+
+
+            linLocalSpinner.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listOrderType.clear();
+                    Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
+                    // dynamicModeType(lcPosCntS);
+                }
+            });
+
+            lcAttach.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CameraPermission cameraPermission = new CameraPermission(TAViewStatus.this, getApplicationContext());
+                    if (!cameraPermission.checkPermission()) {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+                            cameraPermission.requestPermission();
+                        }
+                        Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                    } else {
+                        Log.v("PERMISSION", "PERMISSION");
+
+                        //popupCapture(786);
+
+                        Integer lcPosCntS = linlocalCon.indexOfChild(rowView);
+                        View view = linlocalCon.getChildAt(lcPosCntS);
+                        editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
+                        lcTxtUKey = (TextView) (view.findViewById(R.id.txt_lc_ukey));
+                        editMode = editTexts.getText().toString();
+
+                        if (lcTxtUKey.getText().toString().equals("")) {
+                            DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                            Calendar calobjw = Calendar.getInstance();
+                            lcEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                            lcTxtUKey.setText(lcEditcnt);
+
+                        } else {
+                        }
+                        LcUKey = lcTxtUKey.getText().toString();
+                    }
+
+                }
+            });
+
+            lcPreview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Integer valuelc = linlocalCon.indexOfChild(rowView);
+                    View view = linlocalCon.getChildAt(valuelc);
+                    editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
+                    lcTxtUKeys = (TextView) (view.findViewById(R.id.txt_lc_ukey));
+                    editMode = editTexts.getText().toString();
+                    LcUKey = lcTxtUKeys.getText().toString();
+
+                    DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+
+                    Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
+                    stat.putExtra("position", LcUKey);
+                    stat.putExtra("headTravel", "LC");
+                    stat.putExtra("mode", editMode);
+                    stat.putExtra("date", DateTime);
+                    startActivity(stat);
+                }
+            });
+
+            localConDisplay(expCode, jsonAddition, lcSize);
+
+
+        }
 
 
         SumOFLCAmount();
@@ -3329,6 +3483,7 @@ public class TAViewStatus extends AppCompatActivity {
         JSONObject taReq = new JSONObject();
 
         try {
+
             taReq.put("sfCode", sfCode);
             taReq.put("Flag", flag);
             taReq.put("Sl_No", SlStart);

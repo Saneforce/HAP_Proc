@@ -1,5 +1,4 @@
 package com.hap.checkinproc.Activity_Hap;
-
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -30,9 +29,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
-
 public class Checkin extends AppCompatActivity {
-
     private static String Tag = "HAP_Check-In";
     SharedPreferences sharedPreferences;
     SharedPreferences CheckInDetails;
@@ -44,19 +41,15 @@ public class Checkin extends AppCompatActivity {
     String ODFlag, onDutyPlcID, onDutyPlcNm, vstPurpose, Check_Flag, onDutyFlag, DutyAlp = "", DutyType = "";
     Intent intent;
     public static final String mypreference = "mypref";
-
     /*  ShiftDuty*/
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkin);
-
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         TextView txtErt = findViewById(R.id.toolbar_ert);
         TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
-
         ObjectAnimator textColorAnim;
         textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
         textColorAnim.setDuration(500);
@@ -64,7 +57,6 @@ public class Checkin extends AppCompatActivity {
         textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
         textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
         textColorAnim.start();
-
         txtErt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,8 +66,6 @@ public class Checkin extends AppCompatActivity {
         txtPlaySlip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
             }
         });
@@ -96,10 +86,8 @@ public class Checkin extends AppCompatActivity {
                     startActivity(Dashboard);
                 } else
                     startActivity(new Intent(getApplicationContext(), Dashboard.class));
-
             }
         });
-
         Check_Flag = "CIN";
         sharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         if (sharedPreferences.contains("ShiftDuty")) {
@@ -107,7 +95,6 @@ public class Checkin extends AppCompatActivity {
         }
         SharedPreferences CheckInDetails = getSharedPreferences(spCheckIn, MODE_PRIVATE);
         String SFTID = CheckInDetails.getString("Shift_Selected_Id", "");
-
         intent = getIntent();
         Bundle bundle = intent.getExtras();
         onDutyFlag = "0";
@@ -124,13 +111,11 @@ public class Checkin extends AppCompatActivity {
                 SFTID = "0";
                 onDutyPlcID = "";
             }
-
             if (Check_Flag.equals("holidayentry")) {
                 DutyType="holiday";
                 onDutyFlag = "1";
             }
         }
-
         if (SFTID != "") {
             Intent takePhoto = new Intent(this, ImageCapture.class);
             takePhoto.putExtra("Mode", Check_Flag);
@@ -188,11 +173,9 @@ public class Checkin extends AppCompatActivity {
                 startActivity(takePhoto);
                 finish();
             }
-
         }
 
     }
-
     public void SetShitItems() {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mAdapter = new ShiftListItem(ShiftItems, this, Check_Flag, onDutyFlag);
@@ -201,7 +184,6 @@ public class Checkin extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
     }
-
     private void spinnerValue(String a, String dc, String sc) {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonArray> shiftCall = apiInterface.getDataArrayList(a, dc, sc);
@@ -212,7 +194,6 @@ public class Checkin extends AppCompatActivity {
                 ShiftItems = response.body();
                 SetShitItems();
             }
-
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
 

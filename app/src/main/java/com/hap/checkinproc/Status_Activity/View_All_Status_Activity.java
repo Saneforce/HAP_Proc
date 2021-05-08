@@ -1,14 +1,5 @@
 package com.hap.checkinproc.Status_Activity;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -22,27 +13,24 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.Approvals;
-import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
-import com.hap.checkinproc.Activity_Hap.Leave_Request;
 import com.hap.checkinproc.Activity_Hap.PayslipFtp;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.Status_Adapter.Permission_Status_Adapter;
 import com.hap.checkinproc.Status_Adapter.ViewAll_Status_Adapter;
-import com.hap.checkinproc.Status_Adapter.WeekOff_Status_Adapter;
-import com.hap.checkinproc.Status_Model_Class.Permission_Status_Model;
 import com.hap.checkinproc.Status_Model_Class.View_All_Model;
-import com.hap.checkinproc.Status_Model_Class.WeekOff_Status_Model;
 import com.hap.checkinproc.common.TimerService;
 
 import java.lang.reflect.Type;
@@ -51,6 +39,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class View_All_Status_Activity extends AppCompatActivity {
     List<View_All_Model> approvalList;
     Gson gson;
@@ -58,8 +50,7 @@ public class View_All_Status_Activity extends AppCompatActivity {
     Type userType;
     Common_Class common_class;
     Intent i;
-    String AMOD = "0",mMode="0",mStatus="";
-
+    String AMOD = "0", mMode = "0", mStatus = "";
 
 
     SharedPreferences CheckInDetails;
@@ -71,7 +62,8 @@ public class View_All_Status_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view__all__status_);     startService(new Intent(this, TimerService.class));
+        setContentView(R.layout.activity_view__all__status_);
+        startService(new Intent(this, TimerService.class));
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
 
@@ -101,10 +93,10 @@ public class View_All_Status_Activity extends AppCompatActivity {
 
         Bundle params = getIntent().getExtras();
         try {
-            mMode = params.getString("Priod","0");
-            mStatus=params.getString("Status","");
+            mMode = params.getString("Priod", "0");
+            mStatus = params.getString("Status", "");
 
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
 
@@ -157,10 +149,13 @@ public class View_All_Status_Activity extends AppCompatActivity {
         QueryString.put("axn", "get/AttnStatus");
         QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
         QueryString.put("Status", mStatus);
-        QueryString.put("Priod",mMode );
+        QueryString.put("Priod", mMode);
         String commonworktype = "[]";
 
-        Call<Object> mCall = apiInterface.Getwe_Status(mMode, Shared_Common_Pref.Sf_Code,"get/AttnStatus",mStatus,"[]");
+
+        Call<Object> mCall = apiInterface.Getwe_Status(mMode, Shared_Common_Pref.Sf_Code, "get/AttnStatus", mStatus, "[]");
+
+        Log.v("get/AttnStatus", mCall.request().toString());
         mCall.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
@@ -173,12 +168,13 @@ public class View_All_Status_Activity extends AppCompatActivity {
                     }.getType();
                     approvalList = gson.fromJson(new Gson().toJson(response.body()), userType);
                     recyclerView.setAdapter(new ViewAll_Status_Adapter(approvalList, R.layout.view_all_status_listitem, getApplicationContext(), AMOD));
-                }catch (Exception e){}
+                } catch (Exception e) {
+                }
             }
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
-                Log.e("ONfailureSTATUS",QueryString.toString());
+                Log.e("ONfailureSTATUS", QueryString.toString());
                 common_class.ProgressdialogShow(2, "Permission Status");
             }
         });
@@ -231,4 +227,5 @@ public class View_All_Status_Activity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-    }}
+    }
+}

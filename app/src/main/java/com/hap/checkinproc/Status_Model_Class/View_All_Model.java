@@ -30,7 +30,39 @@ public class View_All_Model {
     @Expose
     private String stusClr;
 
-   
+    @SerializedName("Geoin")
+    @Expose
+    private String Geoin    ;
+    @SerializedName("Geoout")
+    @Expose
+    private String Geoout;
+    @SerializedName("Loc")
+    @Expose
+    private String Loc;
+
+    public String getLoc() {
+        return Loc;
+    }
+
+    public void setLoc(String loc) {
+        Loc = loc;
+    }
+
+    public String getGeoin() {
+        return Geoin;
+    }
+
+    public void setGeoin(String geoin) {
+        Geoin = geoin;
+    }
+
+    public String getGeoout() {
+        return Geoout;
+    }
+
+    public void setGeoout(String geoout) {
+        Geoout = geoout;
+    }
 
     public String getWrkDate() {
         return wrkDate;

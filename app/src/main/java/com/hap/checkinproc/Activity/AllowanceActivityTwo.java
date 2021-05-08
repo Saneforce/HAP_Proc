@@ -79,7 +79,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     ImageView StartedKmImage, EndedKmImage;
     Button submitAllowance;
     EditText EndedEditText, PersonalKmEdit, ReasonMode;
-    Integer stKM = 0, endKm = 0, personalKM = 0, StratKm = 0, maxKM = 0, TotalKm = 0, totalPM = 0;
+    Integer stKM = 0, endKm = 0, personalKM = 0, StratKm = 0, maxKM = 0, TotalKm = 0, totalPM = 0,StartedKM=0;
     SharedPreferences CheckInDetails, sharedpreferences, UserDetails;
     Shared_Common_Pref shared_common_pref;
     ApiInterface apiInterface;
@@ -89,7 +89,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     LinearLayout linToPlace, takeEndedPhoto;
     CustomListViewDialog customDialog;
     Common_Model mCommon_model_spinner;
-    Common_Class mCommonClass;
+    Common_Class common_class;
     List<Common_Model> modelRetailDetails = new ArrayList<>();
 
     @Override
@@ -115,11 +115,12 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         ReasonMode = findViewById(R.id.reason_mode);
         shared_common_pref = new Shared_Common_Pref(this);
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        mCommonClass = new Common_Class(this);
-
+        common_class = new Common_Class(this);
 /*
         closingIntet.putExtra("Cls_con","cls");
         closingIntet.putExtra("Cls_dte","");*/
+
+
 
         ClosingCon = String.valueOf(getIntent().getSerializableExtra("Cls_con"));
         ClosingDate = String.valueOf(getIntent().getSerializableExtra("Cls_dte"));
@@ -147,25 +148,54 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (EndedEditText.getText().toString() != null && !EndedEditText.getText().toString().isEmpty() && !EndedEditText.getText().toString().equals("null")) {
 
-                    try {
+                    Log.v("StartedKM", String.valueOf(StartedKM));
+
+                    endKm = Integer.parseInt(EndedEditText.getText().toString());
+                    if (StartedKM < endKm) {
+
+                        if(TextModeTravel.getText().toString().equalsIgnoreCase("Two Wheeler")){
+
+                            Log.v("EDITEXTCHECKING", String.valueOf(StartedKM));
+                            Log.v("EDITEXTCHECKING", String.valueOf(StartedKM + 200));
+                            EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+200)});
+                        }else if(TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")){
+
+                            Log.v("EDITEXTCHECKING", String.valueOf(StartedKM));
+                            Log.v("EDITEXTCHECKING", String.valueOf(StartedKM + 500));
+
+                            EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+500)});
+                        }
+                        Log.e("STARTED_KM", "GREATER");
+                    } else {
+                        Log.e("STARTED_KM", "Not GREATER");
+                    }
+
+
+                 /*   try {
                         stKM = Integer.valueOf(StartedKm);
+
                     } catch (NumberFormatException ex) { // handle your exception
 
                     }
                     if (!EndedEditText.getText().toString().equals("")) {
 
+
                         try {
                             endKm = Integer.parseInt(EndedEditText.getText().toString());
+
+
                         } catch (NumberFormatException ex) { // handle your exception
 
                         }
                     }
                     Log.e("STARTED_KM", String.valueOf(endKm));
                     if (stKM < endKm) {
+
+
                         Log.e("STARTED_KM", "GREATER");
                     } else {
                         Log.e("STARTED_KM", "Not GREATER");
-                    }
+                    }*/
                 }
 
 
@@ -248,7 +278,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     return;
                 } else {
 
-                    mCommonClass.ProgressdialogShow(1,"Please wait...");
                     try {
                         stKM = Integer.valueOf(TextStartedKm.getText().toString());
                     } catch (NumberFormatException ex) { // handle your exception
@@ -256,14 +285,31 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     }
                     endKm = Integer.valueOf(String.valueOf(EndedEditText.getText().toString()));
                     if (stKM < endKm) {
+                        endKm = Integer.parseInt(EndedEditText.getText().toString());
+                        if (StartedKM < endKm) {
 
+                            if(TextModeTravel.getText().toString().equalsIgnoreCase("Two Wheeler")){
+
+                                Log.v("EDITEXTCHECKING", String.valueOf(StartedKM));
+                                Log.v("EDITEXTCHECKING", String.valueOf(StartedKM + 200));
+                                EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+200)});
+                            }else if(TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")){
+
+                                Log.v("EDITEXTCHECKING", String.valueOf(StartedKM));
+                                Log.v("EDITEXTCHECKING", String.valueOf(StartedKM + 500));
+
+                                EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+500)});
+                            }
+                        }
                         new LocationFinder(getApplication(), new LocationEvents() {
                             @Override
                             public void OnLocationRecived(Location location) {
 //                                if (!ClosingDate.equals("")) {
                                 if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
+                                    common_class.ProgressdialogShow(1, "Please wait...");
                                     submitData(ClosingDate);
                                 } else {
+                                    common_class.ProgressdialogShow(1, "Please wait...");
                                     submitData(Common_Class.GetDate());
                                 }
                             }
@@ -272,7 +318,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     } else {
                         Toast.makeText(AllowanceActivityTwo.this, "Should be greater then Started Km", Toast.LENGTH_SHORT).show();
 
-                        mCommonClass.ProgressdialogShow(0,"Please wait...");
                     }
                 }
 
@@ -359,9 +404,8 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
-                        mCommonClass.ProgressdialogShow(0,"Please wait...");
                         if (response.isSuccessful()) {
-
+                            common_class.ProgressdialogShow(0, "");
                             Log.v("print_upload_file_true", "ggg" + response);
                             JSONObject jb = null;
                             String jsonData = null;
@@ -405,7 +449,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
 
-                    mCommonClass.ProgressdialogShow(0,"Please wait...");
                 }
             });
         } catch (Exception e) {
@@ -561,8 +604,10 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 maxKM = json_oo.getInt("Maxkm");
                                 Hq = json_oo.getString("dailyAllowance");
 
-                                //   TextMaxKm.setText("Maximum km : " + maxKM);
+                                TextMaxKm.setText("Maximum km : " + maxKM);
                                 StratKm = Integer.valueOf(json_oo.getString("Start_Km"));
+
+                                StartedKM  = Integer.valueOf(json_oo.getString("Start_Km"));
                                 ImageStart = json_oo.getString("start_Photo");
                                 StrToCode = json_oo.getString("To_Place_Id");
                                 TextToPlace.setText(json_oo.getString("To_Place"));

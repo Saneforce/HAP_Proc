@@ -211,6 +211,10 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=save/allowance")
     Call<ResponseBody> saveAllowance(@Field("data") String userData);
 
+   @FormUrlEncoded
+    @POST("db_new_activity.php?axn=save/recallallowance")
+    Call<ResponseBody> RecallSave(@Field("data") String userData);
+
     @FormUrlEncoded
     @POST("db_new_activity.php?")
     Call<ResponseBody> updateAllowance(  @Query("axn") String axn,@Field("data") String userData);
