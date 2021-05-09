@@ -358,7 +358,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         ViewData = findViewById(R.id.data);
         TextCheckInDate = findViewById(R.id.txt_hotel_date);
 
-
         mFuelRecycler = findViewById(R.id.recycler_fuel);
         mFuelRecycler.setHasFixedSize(true);
         mFuelRecycler.setLayoutManager(new LinearLayoutManager(this));
