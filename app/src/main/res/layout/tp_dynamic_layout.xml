@@ -21,7 +21,7 @@
             style="@style/TextStyle"
             android:layout_width="match_parent"
             android:background="@drawable/round_white_backround"
-            android:padding="@dimen/C8dp"
+            android:padding="@dimen/C5dp"
             android:visibility="gone" />
 
         <EditText
@@ -29,7 +29,7 @@
             style="@style/TextStyle"
             android:layout_width="match_parent"
             android:background="@drawable/round_white_backround"
-            android:padding="@dimen/C8dp"
+            android:padding="@dimen/C5dp"
             android:visibility="gone" />
 
         <TextView
@@ -37,7 +37,7 @@
             style="@style/TextStyle"
             android:layout_width="match_parent"
             android:background="@drawable/round_white_backround"
-            android:padding="@dimen/C8dp"
+            android:padding="@dimen/C5dp"
             android:visibility="gone" />
         <RadioGroup
             android:id="@+id/radiogroup"

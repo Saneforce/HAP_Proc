@@ -103,6 +103,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     Button submitbutton, GetEmpId;
     CustomListViewDialog customDialog;
     ProgressBar progressbar;
+    boolean ExpNeed;
     TextView worktype_text, Sf_name, distributor_text, route_text, text_tour_plancount, hq_text, shift_type, chilling_text, Remarkscaption;
     TextView tourdate;
     Common_Model Model_Pojo;
@@ -118,7 +119,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     List<ModeOfTravel> modelOfTravel;
     List<Common_Model> modelTravelType = new ArrayList<>();
     TextView TextMode, TextToAddress, dailyAllowance;
-    LinearLayout linCheckdriver;
+    LinearLayout linCheckdriver,vwExpTravel;
     List<Common_Model> listOrderType = new ArrayList<>();
     Common_Model mCommon_model_spinner;
     String modeId = "", toId = "", startEnd = "";
@@ -148,6 +149,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
         reason = findViewById(R.id.reason);
         edt_remarks = findViewById(R.id.edt_remarks);
         Dynamictpview = findViewById(R.id.Dynamictpview);
+        vwExpTravel=findViewById(R.id.vwExpTravel);
         dynamicrecyclerview = findViewById(R.id.dynamicrecyclerview);
         dynamicrecyclerview.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
@@ -290,11 +292,16 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             Log.e("Button_Access", myDataset.get(position).getCheckouttime());
             Fieldworkflag = myDataset.get(position).getFlag();
             Worktype_Button = myDataset.get(position).getCheckouttime();
+            ExpNeed=myDataset.get(position).getExpNeed();
             Log.e("LogWorktype", String.valueOf(myDataset.get(position).getId()));
             jointwork_layout.setVisibility(View.GONE);
             Jointworklistview.clear();
             GetTp_Worktype_Fields(Worktype_Button);
             Log.e("FIELD_Dept_Type", Shared_Common_Pref.Dept_Type);
+            vwExpTravel.setVisibility(View.VISIBLE);
+            if(ExpNeed==false){
+                vwExpTravel.setVisibility(View.GONE);
+            }
         } else if (type == 7) {
             BusFrom.setText(myDataset.get(position).getName());
             shifttypeid = myDataset.get(position).getId();
@@ -595,7 +602,9 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 String ETabs = jsonObject1.optString("ETabs");
                 Model_Pojo = new Common_Model(id, name, flag);
                 if (type.equals("0")) {
-                    Model_Pojo = new Common_Model(id, name, flag, ETabs);
+                    String PlInv = jsonObject1.optString("Place_Involved");
+                    boolean ExpNeed=(PlInv.equalsIgnoreCase("Y")?true:false);
+                    Model_Pojo = new Common_Model(id, name, flag, ETabs,ExpNeed);
                     worktypelist.add(Model_Pojo);
                     Log.e("WORK_TYPE", String.valueOf(worktypelist));
                 } else if (type.equals("1")) {
