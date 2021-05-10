@@ -146,7 +146,6 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
             }
         }
 
-
         if (!jsFuel.get("start_Photo").getAsString().equalsIgnoreCase("")) {
             Picasso.with(context)
                     .load(jsFuel.get("start_Photo").getAsString())

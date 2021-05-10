@@ -7,6 +7,7 @@ public class Common_Model {
     private String address;
     private String phone;
      String checkouttime;
+     boolean ExpNeed;
      boolean isSelected;
      private Integer Pho;
      private String cont;
@@ -38,6 +39,13 @@ public class Common_Model {
         this.cont= cont;
     }
 
+    public Common_Model(String id, String name, String flag, String checkouttime,Boolean ExpNeed) {
+        this.id = id;
+        this.name = name;
+        this.flag = flag;
+        this.checkouttime = checkouttime;
+        this.ExpNeed=ExpNeed;
+    }
     public Common_Model(String id, String name, String flag, String checkouttime) {
         this.id = id;
         this.name = name;
@@ -112,6 +120,9 @@ public class Common_Model {
     }
 
 
+    public boolean getExpNeed() {
+        return ExpNeed;
+    }
     public String getId() {
         return id;
     }

@@ -45,7 +45,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.CameraPermission;
@@ -518,25 +517,19 @@ public class Login extends AppCompatActivity {
             mProgress.dismiss();
             return;
         }
-        //eMail = "prakash.lg@hap.in";
+        //eMail="krishnan.bg@hap.in";
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
             public void onResponse(Call<Model> call, Response<Model> response) {
                 if (response.isSuccessful()) {
-
-                    Log.e("Reponse_Sucess", new Gson().toJson(response.body()));
-
                     if (response.body().getSuccess() == true) {
                         Intent intent;
                         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                         JsonArray CinData = response.body().getCInData();
-
-
                         if (CinData.size() > 0) {
                             JsonObject CinObj = CinData.get(0).getAsJsonObject();
                             Log.d("CinData", String.valueOf(CinObj));
-
 
                             SharedPreferences.Editor editor = CheckInDetails.edit();
                             editor.putString("Shift_Selected_Id", CinObj.get("Sft_ID").getAsString());
@@ -574,9 +567,6 @@ public class Login extends AppCompatActivity {
                         }
                         String code = response.body().getData().get(0).getSfCode();
                         String Sf_type = String.valueOf(response.body().getData().get(0).getSFFType());
-
-
-                        Log.v("Sf_TypeSf_Type", Sf_type);
                         String empID = response.body().getData().get(0).getSfEmpId();
                         String sName = response.body().getData().get(0).getSfName();
                         String div = response.body().getData().get(0).getDivisionCode();

@@ -1,42 +1,66 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
+import com.hap.checkinproc.Activity_Hap.Tp_Mydayplan;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.ViewReport;
 import com.hap.checkinproc.MVP.Main_Model;
 import com.hap.checkinproc.MVP.MasterSync_Implementations;
 import com.hap.checkinproc.MVP.Master_Sync_View;
 import com.hap.checkinproc.Model_Class.Route_Master;
+import com.hap.checkinproc.Model_Class.Tp_View_Master;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Adapter.Dashboard_View_Adapter;
+import com.hap.checkinproc.SFA_Adapter.Outlet_Report_View_Adapter;
 import com.hap.checkinproc.SFA_Adapter.Route_View_Adapter;
+import com.hap.checkinproc.SFA_Model_Class.Dashboard_View_Model;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
+import com.hap.checkinproc.adapters.Leave_Approval_Adapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class Dashboard_Route extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface {
     List<Retailer_Modal_List> Retailer_Modal_List;
@@ -55,15 +79,13 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     List<Common_Model> Route_Masterlist = new ArrayList<>();
     CustomListViewDialog customDialog;
     List<Common_Model> FRoute_Master = new ArrayList<>();
-    String Route_id, Distributor_Id;
+    String Route_id, Distributor_Id,DCRMode;
     Shared_Common_Pref sharedCommonPref;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard__route);
     }
-
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
@@ -98,6 +120,15 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
         }.getType();
         GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "6");
+        DCRMode=sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
+        if(DCRMode.equalsIgnoreCase("SC")){
+            headtext.setText("SALES CALLS");
+        }
+        DCRMode=sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
+        if(DCRMode.equalsIgnoreCase("VC")){
+            headtext.setText("VAN ROUTE SUPPLY");
+        }
+
         Retailer_Modal_ListFilter = new ArrayList<>();
         Retailer_Modal_List = new ArrayList<>();
         String outletserializableob = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List);
@@ -111,41 +142,40 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             for (int i = 0; Retailer_Modal_List.size() > i; i++) {
                 for (int j = 0; Retailer_Order_List.size() > j; j++) {
                     if (Retailer_Modal_List.get(i).getId().equals(Retailer_Order_List.get(j).getOutletCode())) {
-                        Log.e("Invoice_Flag", Retailer_Order_List.get(j).getInvoice_Flag());
+                        Log.e("Invoice_Flag",Retailer_Order_List.get(j).getInvoice_Flag());
                         if (Retailer_Order_List.get(j).getInvoice_Flag().equals("2")) {
                             Retailer_Modal_List.get(i).setInvoiceDate(Retailer_Order_List.get(j).getOrderDate());
                             Retailer_Modal_List.get(i).setInvoiceValues(String.valueOf(Retailer_Order_List.get(j).getInvoicevalues()));
                             Retailer_Modal_List.get(i).setStatusname(String.valueOf(Retailer_Order_List.get(j).getStatus()));
                             Retailer_Modal_List.get(i).setInvoice_Flag(Retailer_Order_List.get(j).getInvoice_Flag());
                             //Log.e("INVOICE_Refrence", Retailer_Modal_ListFilter.get(j).getInvoice_Flag()+"Outlet_Code"+Retailer_Order_List.get(j).getOutletCode());
-                            Retailer_Modal_List.get(i).setValuesinv("" + Retailer_Order_List.get(j).getOrderValue());
+                            Retailer_Modal_List.get(i).setValuesinv(""+Retailer_Order_List.get(j).getOrderValue());
                         } else {
-                            Log.e("Invoice_Flag", Retailer_Order_List.get(j).getInvoice_Flag());
+                            Log.e("Invoice_Flag",Retailer_Order_List.get(j).getInvoice_Flag());
                             Retailer_Modal_List.get(i).setInvoice_Flag(Retailer_Order_List.get(j).getInvoice_Flag());
                         }
                     }
                 }
             }
         }
-        if (Retailer_Modal_List != null && Retailer_Modal_List.size() > 0) {
-            Retailer_Modal_ListFilter.clear();
-            Retailer_Modal_ListFilter.addAll(Retailer_Modal_List);
-            recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
-                @Override
-                public void onIntentClick(int position) {
-                    Shared_Common_Pref.Outler_AddFlag = "0";
-                    Log.e("Route_Outlet_Info", Retailer_Modal_List.get(position).getId());
-                    Shared_Common_Pref.OutletName = Retailer_Modal_List.get(position).getName().toUpperCase() + "~" + Retailer_Modal_List.get(position).getId();
-                    Shared_Common_Pref.OutletCode = Retailer_Modal_List.get(position).getId();
-                    Shared_Common_Pref.OutletAvail = Retailer_Modal_List.get(position).getHatsun_AvailablityId();
-                    Shared_Common_Pref.OutletUniv = Retailer_Modal_List.get(position).getCategory_Universe_Id();
-                    common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+        Retailer_Modal_ListFilter.clear();
+      //  Retailer_Modal_ListFilter.addAll(Retailer_Modal_List);
 
-                }
-            }));
-        }
+        OutletFilter(Distributor_Id, "1");
+        recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
+            @Override
+            public void onIntentClick(int position) {
+                Shared_Common_Pref.Outler_AddFlag = "0";
+                Log.e("Route_Outlet_Info", Retailer_Modal_List.get(position).getId());
+                Shared_Common_Pref.OutletName = Retailer_Modal_List.get(position).getName().toUpperCase() + "~" + Retailer_Modal_List.get(position).getId();
+                Shared_Common_Pref.OutletCode = Retailer_Modal_List.get(position).getId();
+                Shared_Common_Pref.OutletAvail = Retailer_Modal_List.get(position).getHatsun_AvailablityId();
+                Shared_Common_Pref.OutletUniv = Retailer_Modal_List.get(position).getCategory_Universe_Id();
+                common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+
+            }
+        }));
     }
-
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -218,6 +248,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             Distributor_Id = myDataset.get(position).getId();
             distributor_text.setText(myDataset.get(position).getName());
             loadroute(myDataset.get(position).getId());
+            OutletFilter(myDataset.get(position).getId(), "1");
+
         } else if (type == 3) {
             Route_id = myDataset.get(position).getId();
             route_text.setText(myDataset.get(position).getName());
@@ -228,12 +260,19 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     private void OutletFilter(String id, String flag) {
         Retailer_Modal_ListFilter.clear();
         Log.e("Retailer_Modal_ListSIZE", "" + Retailer_Modal_List.size());
-        if (flag.equals("1")) {
+    /*    if (flag.equals("1")) {
             Retailer_Modal_ListFilter.addAll(Retailer_Modal_List);
+
         } else {
-            for (int i = 0; i < Retailer_Modal_List.size(); i++) {
+  */
+        for (int i = 0; i < Retailer_Modal_List.size(); i++) {
                 if (flag.equals("0")) {
                     if (Retailer_Modal_List.get(i).getTownCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
+                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                    }
+                }
+                if (flag.equals("1")) {
+                    if (Retailer_Modal_List.get(i).getDistCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
                         Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
                     }
                 }
@@ -250,7 +289,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
             }
 
-        }
+//        }
         recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
             @Override
             public void onIntentClick(int position) {
@@ -332,11 +371,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     Route_Masterlist.add(Model_Pojo);
                 } else if (type.equals("6")) {
 
-                    route_text.setText(jsonObject1.optString("ClstrName"));
-                    Distributor_Id = jsonObject1.optString("stockist");
-                    Route_id = jsonObject1.optString("cluster");
-                    distributor_text.setText(jsonObject1.optString("StkName"));
-                    loadroute(jsonObject1.optString("stockist"));
+                        route_text.setText(jsonObject1.optString("ClstrName"));
+                        Distributor_Id = jsonObject1.optString("stockist");
+                        Route_id = jsonObject1.optString("cluster");
+                        distributor_text.setText(jsonObject1.optString("StkName"));
+                        loadroute(jsonObject1.optString("stockist"));
 
 
                 }

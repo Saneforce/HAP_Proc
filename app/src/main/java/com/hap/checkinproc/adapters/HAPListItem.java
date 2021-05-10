@@ -59,7 +59,7 @@ public class HAPListItem extends RecyclerView.Adapter<HAPListItem.ViewHolder> {
                 JSONObject itm = null;
                 try {
                     itm = mlist.getJSONObject(position);
-                    payClick.onClick(itm);
+                    if(payClick!=null) payClick.onClick(itm);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

@@ -63,6 +63,11 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
         invoicerecyclerview = (RecyclerView) findViewById(R.id.invoicerecyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         invoicerecyclerview.setLayoutManager(layoutManager);
+       String DCRMode=sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
+        lin_invoice.setVisibility(View.VISIBLE);
+        if(!DCRMode.equalsIgnoreCase("")){
+            lin_invoice.setVisibility(View.GONE);
+        }
         String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.GetTodayOrder_List);
         userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
         }.getType();

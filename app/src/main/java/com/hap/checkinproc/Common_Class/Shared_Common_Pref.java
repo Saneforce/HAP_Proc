@@ -73,6 +73,7 @@ public class Shared_Common_Pref {
     public static String Tp_Sf_name = "Tp_Sf_name";
     public static String Tp_Monthname = "Tp_Monthname";
     public static String Tp_SFCode= "Tp_SFCode";
+    public static String DCRMode="DCRMode";
 
 
     public Shared_Common_Pref(Activity Ac) {

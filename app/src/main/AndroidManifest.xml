@@ -37,6 +37,8 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
+        <activity android:name=".SFA_Activity.SalesCallsActivity"></activity>
+        <activity android:name=".SFA_Activity.SFADCRActivity" />
         <activity
             android:name=".Activity_Hap.TaFuelEdit"
             android:theme="@style/AppTheme.Dialog"/>

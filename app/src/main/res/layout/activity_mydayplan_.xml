@@ -65,7 +65,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/C10dp"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:orientation="vertical">
@@ -256,7 +255,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp"
                             android:orientation="horizontal">
                             <TextView
                                 style="@style/TextStyle"
@@ -285,7 +283,6 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
                             android:orientation="vertical">
 
 
@@ -315,17 +312,16 @@
                                         android:textSize="13dp" />
                                 </LinearLayout>
 
-
                                 <Button
                                     android:id="@+id/GetEmpId"
                                     android:layout_width="70dp"
-                                    android:layout_height="37dp"
-                                    android:layout_margin="@dimen/C2dp"
-                                    android:background="@drawable/otherlocations"
+                                    android:layout_height="match_parent"
                                     android:text="Get"
-                                    android:padding="@dimen/C10dp"
+                                    android:background="@drawable/button_blueg"
                                     android:textColor="@color/white"
-                                    android:textSize="@dimen/C14dp" />
+                                    android:padding="@dimen/C1dp"
+                                    android:textSize="13sp" />
+
 
                             </LinearLayout>
 

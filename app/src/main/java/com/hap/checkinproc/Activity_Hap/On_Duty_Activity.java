@@ -108,7 +108,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
     /*OnDUTY ALlowance*/
 
     CardView ModeTravel, BusCardTo, cardHapLoaction;
-    LinearLayout BikeMode, BusMode, ReasonPhoto, ProofImage;
+    LinearLayout BikeMode, BusMode, ReasonPhoto, ProofImage,vwHlyDyEntry;
     EditText StartKm, onDutyFrom, EditRemarks;
     ImageView attachedImage;
     Button SubmitValue;
@@ -170,6 +170,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         lincheck = findViewById(R.id.lin_mode);
         driverAllowance = findViewById(R.id.da_driver_allowance);
         linCheckdriver = findViewById(R.id.lin_check_driver);
+
         chkHlyDyFlg = findViewById(R.id.chkHlyDyFlg);
         SF_code = UserDetails.getString("Sfcode", "");
         div = UserDetails.getString("Divcode", "");
@@ -237,6 +238,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
         exitclose = findViewById(R.id.exitclose);
         ModeOfTravel = findViewById(R.id.mode_of_travel);
         cardHapLoaction = findViewById(R.id.card_hap_loaction);
+        vwHlyDyEntry=findViewById(R.id.vwHlyDyEntry);
 
 
         Log.v("ON_Duty_COUNT", String.valueOf(OnDutyCount));
@@ -779,6 +781,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             case R.id.otherlocationbutton:
                 flag = 1;
                 Log.v("ON_DUTY_LOCATION", String.valueOf(flag));
+                vwHlyDyEntry.setVisibility(View.VISIBLE);
                 ondutylocations.setVisibility(View.VISIBLE);
                 purposeofvisittext.setVisibility(View.VISIBLE);
                 closebutton.setVisibility(View.VISIBLE);
@@ -798,6 +801,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             case R.id.haplocationbutton:
                 flag = 0;
                 Log.v("ON_DUTY_LOCATION", String.valueOf(flag));
+                vwHlyDyEntry.setVisibility(View.VISIBLE);
                 if (sharedpreferences.contains(hapLocation)) {
                     strHapLocation = sharedpreferences.getString(hapLocation, "");
                     selecthaplocationss.setText("");
@@ -831,6 +835,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                 break;
 
             case R.id.closebutton:
+                vwHlyDyEntry.setVisibility(View.GONE);
                 haplocationtext.setVisibility(View.GONE);
                 purposeofvisittext.setVisibility(View.GONE);
                 submitbutton.setVisibility(View.GONE);
