@@ -433,30 +433,48 @@
 
     </LinearLayout>
 
-    <LinearLayout
+
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
-        <Button
-            android:id="@+id/submitButton"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/button_blueg"
-            android:gravity="center_vertical"
-            android:text="SUBMIT"
-            android:textAlignment="center"
-            android:textColor="#FFFFFF"
-            android:textStyle="bold"
-            tools:ignore="RtlCompat" />
+            android:background="#99ECEAEA"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            >
+            <Button
+                android:id="@+id/submitButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_blueg"
+                android:gravity="center_vertical"
+                android:text="SUBMIT"
+                android:textAlignment="center"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                tools:ignore="RtlCompat" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imag_back"
+                android:layout_margin="@dimen/C5dp"
+                android:paddingLeft="@dimen/C8dp"
+                android:paddingRight="@dimen/C8dp"
+                android:src="@drawable/back_arrow"></ImageView>
+
+        </LinearLayout>
 
 
-        <include layout="@layout/back_arrow"></include>
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
