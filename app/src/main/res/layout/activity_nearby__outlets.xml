@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:weightSum="2"
             android:background="@color/grey_200"
+            android:visibility="gone"
             >
             <TextView
                 android:id="@+id/btnNearme"
@@ -39,6 +40,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             >
 
             <com.google.android.gms.maps.MapView
@@ -80,7 +82,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="gone">
+    android:visibility="visible">
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

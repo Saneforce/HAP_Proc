@@ -141,6 +141,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     ArrayList<Tp_Dynamic_Modal> dynamicarray = new ArrayList<>();
     Mydayplan_Activity.DynamicViewAdapter dynamicadapter;
     Integer count = 0;
+    boolean ExpNeed=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -319,6 +320,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             Log.e("Button_Access", myDataset.get(position).getCheckouttime());
             Fieldworkflag = myDataset.get(position).getFlag();
             Worktype_Button = myDataset.get(position).getCheckouttime();
+            ExpNeed=myDataset.get(position).getExpNeed();
             Log.e("LogWorktype", String.valueOf(myDataset.get(position).getId()));
             jointwork_layout.setVisibility(View.GONE);
             GetTp_Worktype_Fields(Worktype_Button);
@@ -476,7 +478,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                                 Log.e("RESPONSE_FROM_SERVER", response.body().toString());
                                 common_class.ProgressdialogShow(2, "Tour  plan");
                                 if (response.code() == 200 || response.code() == 201) {
-                                    if (count == 1) {
+                                    if (count == 1 && ExpNeed==true) {
                                         Intent intent = new Intent(Mydayplan_Activity.this, AllowanceActivity.class);
                                         intent.putExtra("My_Day_Plan", "One");
                                         startActivity(intent);
@@ -601,7 +603,9 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 String ETabs = jsonObject1.optString("ETabs");
                 Model_Pojo = new Common_Model(id, name, flag);
                 if (type.equals("0")) {
-                    Model_Pojo = new Common_Model(id, name, flag, ETabs);
+                    String PlInv = jsonObject1.optString("Place_Involved");
+                    boolean tExpNeed=(PlInv.equalsIgnoreCase("Y")?true:false);
+                    Model_Pojo = new Common_Model(id, name, flag, ETabs,tExpNeed);
                     worktypelist.add(Model_Pojo);
                     Log.e("WORK_TYPE", String.valueOf(worktypelist));
                 } else if (type.equals("1")) {
