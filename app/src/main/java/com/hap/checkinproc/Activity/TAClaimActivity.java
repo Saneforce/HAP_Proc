@@ -1547,6 +1547,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
     /*Display Mode of travel View based on the choosed Date*/
     public void displayTravelMode(String ChoosedDate) {
+        viewContinue.removeAllViews();
+        viewContinueTotal.removeAllViews();
+
         try {
 
             ChoosedDate = ChoosedDate.replaceAll("^[\"']+|[\"']+$", "");
@@ -2057,8 +2060,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     }
 
                     if (LodingCon.size() != 0) {
-                        viewContinue.removeAllViews();
-                        viewContinueTotal.removeAllViews();
                         LinearLayout linearLayout = findViewById(R.id.prm_linear_orders);
                         linearLayout.setOnClickListener(null);
 
@@ -3241,7 +3242,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                 Log.v("TA_Response", response.body().toString());
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                openHome();
+                openHome();
                 if (responseVal.equals("Save")) {
                     Toast.makeText(TAClaimActivity.this, "Saved Successfully ", Toast.LENGTH_SHORT).show();
                 } else {
