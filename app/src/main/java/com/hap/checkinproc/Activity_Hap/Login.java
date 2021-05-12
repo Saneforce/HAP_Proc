@@ -47,12 +47,14 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
@@ -313,9 +315,23 @@ public class Login extends AppCompatActivity {
                 Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
                 Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
                 Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
-                Intent Dashboard = new Intent(Login.this, Dashboard_Two.class);
-                Dashboard.putExtra("Mode", "CIN");
-                startActivity(Dashboard);
+
+                String ActStarted=shared_common_pref.getvalue("ActivityStart");
+                if(ActStarted.equalsIgnoreCase("true")){
+                    Intent aIntent;
+                    String sDeptType = UserDetails.getString("DeptType", "");
+                    if (sDeptType.equalsIgnoreCase("1")) {
+                        aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
+                    } else {
+                        Shared_Common_Pref.Sync_Flag = "0";
+                        aIntent = new Intent(getApplicationContext(), Offline_Sync_Activity.class);
+                    }
+                    startActivity(aIntent);
+                }else{
+                    Intent Dashboard = new Intent(Login.this, Dashboard_Two.class);
+                    Dashboard.putExtra("Mode", "CIN");
+                    startActivity(Dashboard);
+                }
             }
         }
 

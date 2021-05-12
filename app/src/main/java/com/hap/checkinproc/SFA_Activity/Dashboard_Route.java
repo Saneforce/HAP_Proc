@@ -171,8 +171,12 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 Shared_Common_Pref.OutletCode = Retailer_Modal_List.get(position).getId();
                 Shared_Common_Pref.OutletAvail = Retailer_Modal_List.get(position).getHatsun_AvailablityId();
                 Shared_Common_Pref.OutletUniv = Retailer_Modal_List.get(position).getCategory_Universe_Id();
-                common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
 
+                if(!DCRMode.equalsIgnoreCase("")) {
+                    common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                }else {
+                    common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                }
             }
         }));
     }

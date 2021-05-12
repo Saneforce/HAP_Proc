@@ -594,7 +594,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         private int Categorycolor;
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView productname, Rate, Amount, Disc, Free, RegularQty;
+            public TextView productname, Rate, Amount, Disc, Free, RegularQty,lblRQty;
             EditText Qty;
 
             public MyViewHolder(View view) {
@@ -602,6 +602,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 productname = view.findViewById(R.id.productname);
                 Rate = view.findViewById(R.id.Rate);
                 Qty = view.findViewById(R.id.Qty);
+                lblRQty=view.findViewById(R.id.status);
                 RegularQty = view.findViewById(R.id.RegularQty);
                 Amount = view.findViewById(R.id.Amount);
                 Disc = view.findViewById(R.id.Disc);
@@ -640,9 +641,16 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             } else {
                 holder.Qty.setEnabled(true);
             }
+            String DCRMode=sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
+            holder.Qty.setVisibility(View.VISIBLE);
+            holder.lblRQty.setVisibility(View.VISIBLE);
+            if(DCRMode.equalsIgnoreCase("")){
+                holder.lblRQty.setVisibility(View.GONE);
+                holder.Qty.setVisibility(View.GONE);
+            }
             if (Product_Details_Modal.getQty() > 0)
                 holder.Qty.setText("" + Product_Details_Modal.getQty());
-            holder.Qty.addTextChangedListener(new TextWatcher() {
+                holder.Qty.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void onTextChanged(CharSequence charSequence, int start,
                                           int before, int count) {

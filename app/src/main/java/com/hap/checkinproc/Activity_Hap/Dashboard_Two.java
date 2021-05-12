@@ -628,6 +628,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                 String sDeptType = UserDetails.getString("DeptType", "");
                                 Log.d("DeptType", sDeptType);
 
+                                mShared_common_pref.save("ActivityStart", "true");
                                 if (sDeptType.equalsIgnoreCase("1")) {
                                     aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
                                 } else {

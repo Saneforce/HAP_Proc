@@ -56,7 +56,7 @@ public class ExploreMapAdapter  extends RecyclerView.Adapter<ExploreMapAdapter.V
 
             JSONObject json = array.getJSONObject(position);
             holder.txt_dr.setText(json.getString("name"));
-            holder.txt_add.setText(json.getString("place_id"));
+            holder.txt_add.setText(json.getString("vicinity"));
             JSONArray jsonA = json.getJSONArray("photos");
             if (jsonA.length() > 0){
                 JSONObject jo = jsonA.getJSONObject(0);
