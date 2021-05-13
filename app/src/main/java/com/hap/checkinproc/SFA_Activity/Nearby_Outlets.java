@@ -6,9 +6,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -60,7 +62,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     private RecyclerView recyclerView,rclRetail;
     Type userType;
     Common_Class common_class;
-    TextView Createoutlet, latitude, longitude, availableoutlets;
+    TextView Createoutlet, latitude, longitude, availableoutlets,btnNearme,btnExplore;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> ShowRetailer_Modal_List;
     Shared_Common_Pref shared_common_pref;
@@ -74,7 +76,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     static String googlePlacesData, placeDetail;
     double laty = 0.0, lngy = 0.0;
     JSONArray resData;
-    RelativeLayout vwRetails;
+    RelativeLayout vwRetails,tabExplore;
     private int _xDelta;
     private int _yDelta,ht;
     @Override
@@ -91,6 +93,9 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         longitude = findViewById(R.id.longitude);
 
         vwRetails=findViewById(R.id.vwRetails);
+        tabExplore=findViewById(R.id.tabExplore);
+        btnNearme=findViewById(R.id.btnNearme);
+        btnExplore=findViewById(R.id.btnExplore);
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.onCreate(savedInstanceState);
 
@@ -102,6 +107,27 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         vwRetails.setLayoutParams(rel_btn);
         Log.d("Height:",String.valueOf(vwRetails.getHeight()));
 
+        btnNearme.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnExplore.setBackgroundColor(Color.TRANSPARENT);
+                btnExplore.setTextColor(Color.BLACK);
+                btnNearme.setBackgroundResource(R.color.colorPrimary);
+                btnNearme.setTextColor(Color.WHITE);
+                tabExplore.setVisibility(View.GONE);
+            }
+        });
+
+        btnExplore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnNearme.setBackgroundColor(Color.TRANSPARENT);
+                btnNearme.setTextColor(Color.BLACK);
+                btnExplore.setBackgroundResource(R.color.colorPrimary);
+                btnExplore.setTextColor(Color.WHITE);
+                tabExplore.setVisibility(View.VISIBLE);
+            }
+        });
         latitude.setText("Latitude : " + Shared_Common_Pref.Outletlat);
         longitude.setText("Latitude : " + Shared_Common_Pref.Outletlong);
         common_class = new Common_Class(this);
@@ -183,8 +209,9 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     public void getExploreDr(){
         sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location="+laty+","+lngy);
-        sb.append("&radius=500");
-        sb.append("&keyword=milk");
+        sb.append("&radius=100");
+        sb.append("&types=cafe|store|shop");
+        //sb.append("&keyword=store|tea shop|juice");
         sb.append("&key="+"AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
         Log.v("Doctor_detail_print",sb.toString());
         //https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&keyword=milk|juice&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU

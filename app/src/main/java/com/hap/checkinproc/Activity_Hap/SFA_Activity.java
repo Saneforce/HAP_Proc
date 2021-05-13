@@ -13,6 +13,7 @@ import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
+import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -118,6 +119,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 AlertDialogBox.showDialog(SFA_Activity.this, "HAP SFA", "Are You Sure Want to Logout?", "OK", "Cancel", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
+                        sharedCommonPref.save("ActivityStart", "false");
                         Intent intent = new Intent(SFA_Activity.this, Dashboard_Two.class);
                         intent.putExtra("Mode", "CIN");
                         startActivity(intent);

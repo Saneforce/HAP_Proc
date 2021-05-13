@@ -18,14 +18,18 @@
             android:layout_height="wrap_content"
             android:weightSum="2"
             android:background="@color/grey_200"
+            android:visibility="visible"
+            android:layout_marginTop="1dp"
             >
             <TextView
                 android:id="@+id/btnNearme"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Near Me"
+                android:text="Near By Outlets"
                 android:textAlignment="center"
                 android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
                 android:padding="@dimen/C10dp"/>
             <TextView
                 android:id="@+id/btnExplore"
@@ -37,8 +41,10 @@
                 android:padding="@dimen/C10dp"/>
         </LinearLayout>
         <RelativeLayout
+            android:id="@+id/tabExplore"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             >
 
             <com.google.android.gms.maps.MapView
@@ -80,11 +86,11 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="gone">
+    android:visibility="visible">
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:visibility="gone"
             >
 
             <LinearLayout

@@ -48,7 +48,7 @@
             <ScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/C100dp"
+                android:layout_marginBottom="@dimen/C50dp"
                 android:scrollbars="none">
 
                 <LinearLayout
@@ -648,29 +648,38 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints">
+        app:layout_constraintEnd_toEndOf="parent">
 
 
         <LinearLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/C20dp"
-            android:layout_marginRight="@dimen/C20dp">
+            android:background="@color/view_bg_color">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imag_back"
+                android:layout_marginLeft="@dimen/C5dp"
+                android:layout_marginRight="@dimen/C5dp"
+                android:paddingLeft="@dimen/C8dp"
+                android:paddingRight="@dimen/C8dp"
+                android:src="@drawable/back_arrow"
+                app:tint="@color/white" />
 
             <Button
                 android:id="@+id/submit_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/button_dgreen"
+                android:background="@color/view_bg_color"
                 android:padding="@dimen/C10dp"
                 android:text="Save"
                 android:textColor="@android:color/white"
-                android:textSize="13dp"
-                android:visibility="gone"></Button>
+                android:textSize="14sp"
+                android:visibility="visible"
+                android:layout_weight="1" />
 
         </LinearLayout>
-
-        <include layout="@layout/back_arrow"></include>
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

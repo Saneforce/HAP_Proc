@@ -103,7 +103,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     Button submitbutton, GetEmpId;
     CustomListViewDialog customDialog;
     ProgressBar progressbar;
-    boolean ExpNeed;
+    boolean ExpNeed=false;
     TextView worktype_text, Sf_name, distributor_text, route_text, text_tour_plancount, hq_text, shift_type, chilling_text, Remarkscaption;
     TextView tourdate;
     Common_Model Model_Pojo;
@@ -563,13 +563,26 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             if (dynamicarray.get(i).getFilter_Value() != null && dynamicarray.get(i).getFilter_Value().equals("") && dynamicarray.get(i).getFld_Mandatory().equals("1")) {
                 if (dynamicarray.get(i).getFld_Symbol().equals("JW")) {
                     if (Jointworklistview.size() == 0) {
-                        Toast.makeText(this, "Required Field" + "\t\t" + dynamicarray.get(i).getFld_Name(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Required Field " + dynamicarray.get(i).getFld_Name(), Toast.LENGTH_SHORT).show();
                         return false;
                     }
                 } else {
-                    Toast.makeText(this, "Required Field" + "\t\t" + dynamicarray.get(i).getFld_Name(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Required Field " + dynamicarray.get(i).getFld_Name(), Toast.LENGTH_SHORT).show();
                     return false;
                 }
+            }
+        }
+        if(ExpNeed==true){
+            String sMsg="";
+            if(TextMode.getText().toString().equalsIgnoreCase("")){
+                sMsg="Select the Mode of travel";
+            }
+            if(dailyAllowance.getText().toString().equalsIgnoreCase("")){
+                sMsg="Select the DA Type";
+            }
+            if(!sMsg.equalsIgnoreCase("")){
+                Toast.makeText(this, sMsg, Toast.LENGTH_SHORT).show();
+                return false;
             }
         }
 
@@ -603,8 +616,8 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 Model_Pojo = new Common_Model(id, name, flag);
                 if (type.equals("0")) {
                     String PlInv = jsonObject1.optString("Place_Involved");
-                    boolean ExpNeed=(PlInv.equalsIgnoreCase("Y")?true:false);
-                    Model_Pojo = new Common_Model(id, name, flag, ETabs,ExpNeed);
+                    boolean tExpNeed=(PlInv.equalsIgnoreCase("Y")?true:false);
+                    Model_Pojo = new Common_Model(id, name, flag, ETabs,tExpNeed);
                     worktypelist.add(Model_Pojo);
                     Log.e("WORK_TYPE", String.valueOf(worktypelist));
                 } else if (type.equals("1")) {
