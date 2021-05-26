@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:focusableInTouchMode="true"
         android:orientation="vertical"
-        tools:context=".Activity.TAClaimActivity">
+        android:layout_weight="1" >
 
         <include layout="@layout/custom_toolbar_help" />
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryDark">
+            <TextView
+                android:id="@+id/txtExpDt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/C5dp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:text="2020-02-20"/>
+        </LinearLayout>
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/header_width5">
-
+            android:layout_height="match_parent">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -49,8 +61,6 @@
                         android:src="@drawable/zoom_in" />
 
                 </RelativeLayout>
-
-
                 <LinearLayout
                     android:visibility="gone"
                     android:layout_width="match_parent"
@@ -237,8 +247,6 @@
 
 
                 </LinearLayout>
-
-
                 <LinearLayout
                     android:visibility="gone"
                     android:layout_width="match_parent"
@@ -349,8 +357,6 @@
 
                     </androidx.cardview.widget.CardView>
                 </LinearLayout>
-
-
                 <LinearLayout
                     android:visibility="gone"
                     android:id="@+id/linea_details"
@@ -1580,14 +1586,16 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_margin="@dimen/C2dp"
-                                            android:text="Continue Stay" />
+                                            android:text="Continue Stay"
+                                            android:clickable="false"/>
 
                                         <CheckBox
                                             android:id="@+id/chk_early"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_margin="@dimen/C2dp"
-                                            android:text="Early Check-in" />
+                                            android:text="Early Check-in"
+                                            android:visibility="gone"/>
 
                                         <LinearLayout
                                             android:id="@+id/lin_early"
@@ -1718,6 +1726,7 @@
                                         </LinearLayout>
 
                                         <CheckBox
+                                            android:visibility="gone"
                                             android:id="@+id/chk_late"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
@@ -2122,6 +2131,7 @@
                                                             android:layout_width="@dimen/C40dp"
                                                             android:layout_height="@dimen/C40dp"
                                                             android:padding="@dimen/C2dp"
+                                                            android:visibility="gone"
                                                             android:src="@drawable/attach_files" />
 
 
@@ -2572,7 +2582,7 @@
         android:layout_marginRight="@dimen/C5dp"
         android:background="#ECEAEA"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -2697,8 +2707,21 @@
             </LinearLayout>
         </LinearLayout>
 
-        <include layout="@layout/back_arrow" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#99ECEAEA"
+            >
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/imag_back"
+                android:layout_margin="@dimen/C5dp"
+                android:paddingLeft="@dimen/C8dp"
+                android:paddingRight="@dimen/C8dp"
+                android:src="@drawable/back_arrow" />
+        </LinearLayout>
     </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

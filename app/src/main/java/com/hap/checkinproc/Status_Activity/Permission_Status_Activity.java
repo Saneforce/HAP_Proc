@@ -51,7 +51,8 @@ public class Permission_Status_Activity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_permission__status_);     startService(new Intent(this, TimerService.class));
+        setContentView(R.layout.activity_permission__status_);
+        startService(new Intent(this, TimerService.class));
 
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);

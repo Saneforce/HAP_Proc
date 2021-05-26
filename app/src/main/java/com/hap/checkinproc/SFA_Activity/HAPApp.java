@@ -4,14 +4,20 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.ComponentCallbacks;
 import android.content.ComponentCallbacks2;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
+
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 
 public class HAPApp extends Application {
 
     private ApiComponent mApiComponent;
     public static Activity activeActivity;
 
+    SharedPreferences CommUserDetails;
+    public static final String UserDetail = "MyPrefs";
     @Override
     public void onCreate() {
         super.onCreate();
@@ -30,6 +36,12 @@ public class HAPApp extends Application {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 activeActivity = activity;
+
+                CommUserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+                Shared_Common_Pref.Sf_Code = CommUserDetails.getString("Sfcode", "");
+                Shared_Common_Pref.Sf_Name = CommUserDetails.getString("SfName", "");
+                Shared_Common_Pref.Div_Code = CommUserDetails.getString("Divcode", "");
+                Shared_Common_Pref.StateCode = CommUserDetails.getString("State_Code", "");
 
             }
 

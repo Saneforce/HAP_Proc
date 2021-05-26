@@ -2,6 +2,7 @@ package com.hap.checkinproc.common;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +28,9 @@ import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.Block_Information;
 import com.hap.checkinproc.Activity_Hap.Common_Class;
 import com.hap.checkinproc.Activity_Hap.Login;
+import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Common_Class.LocationServices;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.SFA_Activity.HAPApp;
@@ -67,7 +70,15 @@ public class TimerService extends Service {
     public void startTimerService(){
         startService(new Intent(this, TimerService.class));
     }
-
+    private boolean isMyServiceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     public void onCreate() {
         if (mTimer != null) // Cancel if already existed
@@ -75,9 +86,11 @@ public class TimerService extends Service {
         else
             mTimer = new Timer();   //recreate new
         mTimer.scheduleAtFixedRate(new TimeDisplay(), 0, notify);   //Schedule task
-
-        Intent inten = new Intent(this, TimerService.class);
-        startService(inten);
+        if (isMyServiceRunning(TimerService.class)==false)
+        {
+            Intent inten = new Intent(this, TimerService.class);
+            startService(inten);
+        }
     }
 
     @Override
@@ -122,12 +135,14 @@ public class TimerService extends Service {
                 sMsg = "Higher Version";
             } else {
             }
-            ViewGroup rootView = cAtivity.getWindow().getDecorView().findViewById(android.R.id.content);
+            ViewGroup rootView =null;
             try {
-                RelativeLayout el = rootView.findViewById(42311);
-                if (el.getVisibility() == View.VISIBLE) {
-                    rootView.removeView(el);
-
+                if(cAtivity.getWindow()!=null){
+                    rootView = cAtivity.getWindow().getDecorView().findViewById(android.R.id.content);
+                    RelativeLayout el = rootView.findViewById(42311);
+                    if (el.getVisibility() == View.VISIBLE) {
+                        rootView.removeView(el);
+                    }
                 }
             } catch (Exception e) {
             }
@@ -242,8 +257,7 @@ public class TimerService extends Service {
                 });
                 relative.addView(btn);
 
-
-                rootView.addView(relative);
+                if(rootView!=null) rootView.addView(relative);
             }
 
             super.onTaskRemoved(rootIntent);
@@ -441,6 +455,9 @@ public class TimerService extends Service {
                         Date Cdate=Dt.getDate(sDt);
                         if (Cdate.getTime()>=CutOff.getTime()){
                             Log.d("Cutoff","Time REached");
+                            Shared_Common_Pref sharedCommonPref = new Shared_Common_Pref(TimerService.this);
+                            sharedCommonPref.save("ActivityStart","false");
+                            sharedCommonPref.save(sharedCommonPref.DCRMode, "");
                             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                             DatabaseHandler db = new DatabaseHandler(context);
                             JSONArray locations=db.getAllPendingTrackDetails();

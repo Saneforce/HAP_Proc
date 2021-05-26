@@ -70,7 +70,7 @@ public class foodExp extends AppCompatActivity {
         });
 
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/foodexp",
+        Call<JsonArray> rptCall = apiInterface.getDataArrayListA("get/foodexp",
                 UserDetails.getString("Divcode", ""),
                 UserDetails.getString("Sfcode", ""), "", "", null);
         rptCall.enqueue(new Callback<JsonArray>() {

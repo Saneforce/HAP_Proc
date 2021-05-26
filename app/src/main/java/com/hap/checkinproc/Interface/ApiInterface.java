@@ -10,6 +10,9 @@ import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.Model_Class.ReportDataList;
 import com.hap.checkinproc.Model_Class.RetailerViewDetails;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +75,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v300.php?")
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("sfCode") String Sf_code, @Query("State_Code") String State_code, @Query("desig") String desig, @Field("data") String body);
+
 
     @FormUrlEncoded
     @POST("Db_v300.php?")
@@ -235,10 +239,6 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=get/Expensedate")
     Call<JsonArray> getTADate(@Field("data") String userData);
 
-    @FormUrlEncoded
-    @POST("db_new_activity.php?axn=get/expensedatedetailsnew")
-    Call<JsonObject> getTAdateDetails(@Field("data") String userData);
-
     @Multipart
     @POST("db_new_activity.php?axn=upload/img")
     Call<ResponseBody> uploadimg(@PartMap() HashMap<String, RequestBody> values, @Part MultipartBody.Part file);
@@ -294,6 +294,11 @@ public interface ApiInterface {
     Call<JsonObject> submitValue(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                                  @Field("data") String data);
 
+    /*submitValue*/
+    @FormUrlEncoded
+    @POST("Db_v300.php?axn=dcr/save")
+    Call<JSONArray> submitValueA(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
+                                 @Field("data") String data);
     /*ReportView*/
     @POST("db_v14.php?axn=get/ViewReport")
     Call<ReportDataList> reportValues(@Query("Sf_code") String sFCode, @Query("fromdate") String fromdate, @Query("todate") String todate);
@@ -411,5 +416,17 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=save/editstartactivity")
     Call<JsonObject> upteAllowance(@Field("data") String body);
 
+
+    @FormUrlEncoded
+    @POST("db_v310.php?axn=save/salescalls")
+    Call<JsonObject> saveCalls(@Query("divisionCode") String div_code, @Query("Sf_code")  String sf_code, @Field("data") String toString);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?")
+    Call<JsonArray> getDataArrayListA(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("sfCode") String Sf_code, @Query("State_Code") String State_code, @Query("desig") String desig, @Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("db_v310.php?axn=get/expensedatedetailsnew")
+    Call<JsonObject> getTAdateDetails(@Field("data") String userData);
 
 }

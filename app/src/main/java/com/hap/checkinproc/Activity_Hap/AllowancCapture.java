@@ -281,6 +281,11 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         Camera.getCameraInfo(mCamId, info);
         int rotation = getWindowManager().getDefaultDisplay().getRotation();
         mCamera.setDisplayOrientation(90);
+        Camera.Parameters params = mCamera.getParameters();
+        Log.d("CurrZoom",params.getFocusMode()+"="+params.getZoom()+":"+params.getMaxZoom());
+        if(Camera.Parameters.FOCUS_MODE_AUTO!=params.getFocusMode()) params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+//some more settings
+        mCamera.setParameters(params);
         mCamera.startPreview();
         int degrees = 0;
         switch (rotation) {
@@ -304,7 +309,13 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
 
         mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_BACK);
         mCamera.setDisplayOrientation(90);
+        Camera.Parameters params = mCamera.getParameters();
+        //if(Camera.Parameters.FOCUS_MODE_AUTO!=params.getFocusMode())
+            //params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+//some more settings
         try {
+            params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+            mCamera.setParameters(params);
             mCamera.setPreviewDisplay(surfaceHolder);
             mCamera.startPreview();
         } catch (IOException e) {
@@ -323,8 +334,14 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         if (mCamera != null) {
             // Stop if preview surface is already running.
             mCamera.stopPreview();
+            Camera.Parameters params = mCamera.getParameters();
+//            if(Camera.Parameters.FOCUS_MODE_AUTO!=params.getFocusMode())
+//                params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+//some more settings
             try {
                 // Set preview display
+                params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+                mCamera.setParameters(params);
                 mCamera.setPreviewDisplay(surfaceHolder);
             } catch (IOException e) {
                 e.printStackTrace();
