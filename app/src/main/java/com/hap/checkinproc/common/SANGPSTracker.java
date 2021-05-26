@@ -192,9 +192,10 @@ public class SANGPSTracker extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "Service started");
-        boolean startedFromNotification = intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
-                false);
+        boolean startedFromNotification =false;
         try {
+            startedFromNotification =intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
+                    false);
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
         } catch (SecurityException unlikely) {
             //Utils.setRequestingLocationUpdates(this, false);
@@ -455,12 +456,14 @@ public class SANGPSTracker extends Service {
         double longitude, latitude;
         //imei = mSharedPreferences.getString(APP_PREFERENCES_IMEI, "");
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        Intent batteryStatus = mContext.registerReceiver(null, ifilter);
+        float batteryPct =-1;
+        if(ifilter!=null) {
+            Intent batteryStatus = mContext.registerReceiver(new PowerConnectionReceiver(), ifilter);
 
-        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-        float batteryPct = (level * 100) / (float)scale;
-
+            int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+            int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+             batteryPct = (level * 100) / (float) scale;
+        }
         DatabaseHandler db = new DatabaseHandler(this);
         mLocation = location;
 
@@ -610,5 +613,16 @@ public class SANGPSTracker extends Service {
                 });
 
 
+    }
+    public class PowerConnectionReceiver extends BroadcastReceiver {
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent.getAction().equals(Intent.ACTION_POWER_CONNECTED))
+                Toast.makeText(context, "Power Connected", Toast.LENGTH_SHORT).show();
+
+            else if (intent.getAction().equals(Intent.ACTION_POWER_DISCONNECTED))
+                Toast.makeText(context, "Power Not Connected", Toast.LENGTH_SHORT).show();
+
+        }
     }
 }

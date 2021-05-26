@@ -27,6 +27,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lnlblRwEntry"
         android:layout_width="match_parent"
         android:layout_height="25dp"
         android:background="@color/orderbackroundcolor"
@@ -45,23 +46,25 @@
             android:textColor="@color/black" />
 
         <TextView
-
+            android:id="@+id/lblAddQty"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="Qty"
+            android:text="Additional"
             android:textColor="@color/black" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:gravity="center"
             android:text="Amount"
             android:textColor="@color/black" />
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/lnRwEntry"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:background="@color/orderbackroundcolor"
@@ -77,6 +80,7 @@
             android:gravity="center"
             android:hint="0"
             android:inputType="number"
+            android:textSize="14sp"
             android:maxLength="4"
             android:textColor="@color/black" />
         <EditText
@@ -89,6 +93,7 @@
             android:gravity="center"
             android:hint="0"
             android:inputType="number"
+            android:textSize="14sp"
             android:maxLength="4"
             android:textColor="@color/black" />
         <TextView
@@ -99,7 +104,7 @@
             android:layout_weight="1"
             android:background="@drawable/order_amount_back"
             android:gravity="center"
-            android:text="1200"
+            android:text="0.00"
             android:textColor="@color/black" />
     </LinearLayout>
 
@@ -114,6 +119,7 @@
             android:id="@+id/Rate"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/C3dp"
             android:layout_weight="1"
             android:text="Rate:"
             android:textColor="@color/black" />

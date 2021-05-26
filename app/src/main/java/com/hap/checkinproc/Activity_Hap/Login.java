@@ -287,7 +287,8 @@ public class Login extends AppCompatActivity {
 
         Boolean Login = UserDetails.getBoolean("Login", false);
         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-
+        Intent inten = new Intent(this, TimerService.class);
+        startService(inten);
         if (Login == true || CheckIn == true) {
 
             /*PERMISSION REQUEST*/
@@ -616,6 +617,7 @@ public class Login extends AppCompatActivity {
                         shared_common_pref.save(Shared_Common_Pref.SF_DESIG, response.body().getData().get(0).getSfDesignationShortName());
 
                         shared_common_pref.save(Shared_Common_Pref.CHECK_COUNT, String.valueOf(type));
+                        shared_common_pref.save(Shared_Common_Pref.Sf_Code, code);
 
                         Shared_Common_Pref.Dept_Type = DeptType;
                         Shared_Common_Pref.SF_Type = Sf_type;

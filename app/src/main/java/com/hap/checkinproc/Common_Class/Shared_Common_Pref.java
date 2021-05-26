@@ -100,9 +100,13 @@ public class Shared_Common_Pref {
         editor.commit();
     }
 
+    public String getvalue(String key,String defValue) {
+        if(defValue==null) defValue = "";
+        String text = Common_pref.getString(key, defValue);
+        return text;
+    }
     public String getvalue(String key) {
-        String text = null;
-        text = Common_pref.getString(key, null);
+        String text = Common_pref.getString(key, "");
         return text;
     }
 

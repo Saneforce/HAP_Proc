@@ -24,10 +24,16 @@ import java.text.DecimalFormat;
 public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyViewHolder> {
     Context context;
     JsonArray jsonArray;
-
+    boolean editMode;
     public FuelListAdapter(Context context, JsonArray jsonArray) {
         this.context = context;
         this.jsonArray = jsonArray;
+        this.editMode=true;
+    }
+    public FuelListAdapter(Context context, JsonArray jsonArray,boolean editMode) {
+        this.context = context;
+        this.jsonArray = jsonArray;
+        this.editMode=editMode;
     }
 
 
@@ -49,7 +55,8 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
         holder.txtTaClaim.setText(jsFuel.get("MOT_Name").getAsString());
         holder.TxtStartedKm.setText(jsFuel.get("Start_Km").getAsString());
         holder.TxtClosingKm.setText(jsFuel.get("End_Km").getAsString());
-
+        holder.imgEdit.setVisibility(View.VISIBLE);
+        if (editMode==false) holder.imgEdit.setVisibility(View.GONE);
 
         if (!jsFuel.get("End_Km").getAsString().equalsIgnoreCase("")) {
 

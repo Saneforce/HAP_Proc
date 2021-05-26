@@ -45,6 +45,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
     @Override
     public void onBindViewHolder(FruitViewHolder fruitViewHolder, final int position) {
+        if(position>=contactListFiltered.size()) return;
         final Common_Model contact = contactListFiltered.get(position);
         fruitViewHolder.mTextName.setText(contact.getName());
         String getAddress = contact.getAddress();

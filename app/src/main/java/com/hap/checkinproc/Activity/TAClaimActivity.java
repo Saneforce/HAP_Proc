@@ -218,7 +218,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     Double fuelAmt = 0.0;
     TextView TextCheckInDate;
     LinearLayout LinearCheckInDate;
-
+    Location clocation=null;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -240,6 +240,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         OEdynamicList = new ArrayList<>();
         attachCountList = new ArrayList<>();
 
+        new LocationFinder(getApplication(), new LocationEvents() {
+            @Override
+            public void OnLocationRecived(Location location) {
+                clocation=location;
+            }
+        });
         txt_date = findViewById(R.id.txt_date);
         card_date = findViewById(R.id.card_date);
         btn_sub = findViewById(R.id.btn_sub);
@@ -424,9 +430,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         cameraPermission.requestPermission();
                     }
-                    Log.v("PERMISSION_NOT", "PERMISSION_NOT");
+                    Log.v("PERMISSION", "NO");
                 } else {
-                    Log.v("PERMISSION", "PERMISSION");
+                    Log.v("PERMISSION", "Yes");
                     popupCapture(143);
 
                     if (txtLodgUKey.getText().toString().equals("")) {
@@ -460,15 +466,15 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                 drvldgEAra.setVisibility(View.GONE);
                 if (ldgAdd.getText().equals("+ Add")) {
-                    /* ldgAdd.setText("- Remove");*/
+                    ldgAdd.setText("- Remove");
                     lodgContvw.setVisibility(View.VISIBLE);
                 } else {
-                    /*              ldgAdd.setText("+ Add");*/
+                    ldgAdd.setText("+ Add");
                     lodgContvw.setVisibility(View.GONE);
-
-
                     txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(Double.valueOf("0.00")));
+
                 }
+                SumOFLodging(0);
             }
         });
         ldg_typ_sp.setOnClickListener(new View.OnClickListener() {
@@ -484,14 +490,12 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 ShowTimePicker("check");
             }
         });
-
         ldg_cin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ShowTimePicker("Lod_Check_In");
             }
         });
-
         ldg_cout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -541,6 +545,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 SumWOBLodging();
             }
         });
+        //Not Needed below code
         edtEarBill.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -556,7 +561,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 SumWOBLodging();
             }
         });
-
         edtEarBill.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -571,7 +575,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 SumOFLodging(0);
             }
         });
-
         edtLateBill.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -586,6 +589,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 SumOFLodging(0);
             }
         });
+        //end comment
 
         strRetriveType = String.valueOf(getIntent().getSerializableExtra("Retrive_Type"));
         if (strRetriveType.equals("Daily Allowance")) {
@@ -614,15 +618,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         LOtherExpense.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-
                 otherExpenseLayout.setVisibility(View.VISIBLE);
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-
                 layoutParams.setMargins(15, 15, 15, 15);
                 final View rowView = inflater.inflate(R.layout.activity_other_expense, null);
                 LinearOtherAllowance.addView(rowView, layoutParams);
@@ -670,7 +669,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                     }
                 });
-
                 oePreview.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -690,8 +688,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         startActivity(stat);
                     }
                 });
-
-
                 edtOE.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -976,7 +972,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
         });
 
-
         txtJointAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -998,20 +993,15 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         TaSharedPrefernce = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
 
         if (TaSharedPrefernce.contains(SKM)) {
-
             StartedKm = TaSharedPrefernce.getString(SKM, "");
         }
-
         if (TaSharedPrefernce.contains(MOT)) {
             ModeOfTravel = TaSharedPrefernce.getString(MOT, "");
-
         }
-
         dynamicDate();
         btn_sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (txt_date.getText().toString().matches("")) {
                     Toast.makeText(TAClaimActivity.this, "Please choose Date", Toast.LENGTH_SHORT).show();
                 } else {
@@ -1019,8 +1009,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 }
             }
         });
-
-
         card_date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -1031,7 +1019,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 customDialog.show();
             }
         });
-
 
         mapZoomIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1048,22 +1035,23 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             }
         });
-
-
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(clocation!=null){
+                    submitData("Save");
+                }else{
                 new LocationFinder(getApplication(), new LocationEvents() {
                     @Override
                     public void OnLocationRecived(Location location) {
+
                         submitData("Save");
                     }
                 });
+                }
 
             }
         });
-
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             shouldShowRequestPermissionRationale("true");
@@ -1087,7 +1075,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         }
     }
-
     public void LateAttach(View v) {
         DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
         Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
@@ -1097,8 +1084,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         stat.putExtra("date", DateTime);
         startActivity(stat);
     }
-
-
     public void EarImage(View v) {
         CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
 
@@ -1116,7 +1101,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         }
     }
-
     public void EarAttach(View v) {
         DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
         Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
@@ -1127,43 +1111,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         startActivity(stat);
     }
 
-    private void calOverAllTotal(Double localCov, Double otherExp, double tTotAmt) {
-        Log.v("tTotAmt", String.valueOf(tTotAmt));
-
-        String strldgTotal = lbl_ldg_eligi.getText().toString().substring(lbl_ldg_eligi.getText().toString().indexOf(".") + 1).trim();
-        String separators = ".";
-        int intldgTotal = strldgTotal.lastIndexOf(separators);
-    /*   Log.v("tTotAmt_intldg", String.valueOf(intldgTotal));
-       Log.v("tTotAmt_double", String.valueOf(Double.valueOf(strldgTotal.substring(0, intldgTotal))));*/
-
-        if (tTotAmt == 0.0) {
-            gTotal = localCov + myBrdAmt + drvBrdAmt + otherExp + GrandTotalAllowance + 0.0;
-
-        } else {
-
-
-            if (LodingCon.size() != 0) {
-                mChckEarly.setVisibility(View.GONE);
-                Integer ValueTotal = LodingCon.size() + 1;
-                Double TotalVal = ValueTotal * Double.valueOf(strldgTotal.substring(0, intldgTotal));
-                gTotal = localCov + myBrdAmt + drvBrdAmt + otherExp + GrandTotalAllowance + Double.valueOf(tTotAmt);
-
-            } else {
-                gTotal = localCov + myBrdAmt + drvBrdAmt + otherExp + GrandTotalAllowance + Double.valueOf(tTotAmt);
-                // gTotal = localCov + myBrdAmt + drvBrdAmt + otherExp + GrandTotalAllowance + Double.valueOf(strldgTotal.substring(0, intldgTotal));
-                Log.v("LOADIGN_DAYS", String.valueOf(gTotal));
-            }
-
-            Log.v("LOADIGN_DAYS", String.valueOf(LodingCon.size()));
-
-
-        }
-
-
-        grandTotal.setText("Rs." + new DecimalFormat("##0.00").format(gTotal));
-
-    }
-
     public void ShowTimePicker(String str) {
         Calendar mcurrentTime = Calendar.getInstance();
         int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
@@ -1172,13 +1119,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         mTimePicker = new TimePickerDialog(TAClaimActivity.this, new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
-
-
                 String hour = String.format("%02d", (selectedHour));
                 String min = String.format("%02d", (selectedMinute));
-
-                Log.v("TIME_SELECTED", String.valueOf(selectedHour));
-                Log.v("TIME_SELECTED", hour);
 
                 if (str.equalsIgnoreCase("Lod_Check_In")) {
                     ldg_cin.setText(hour + ":" + min);
@@ -1221,7 +1163,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         }
     }
-
     public void onLCDelete(View v) {
         linlocalCon.removeView((View) v.getParent());
 
@@ -1234,15 +1175,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         SumOFLCAmount();
 
     }
-
-    public void viewStaus(View v) {
-        startActivity(new Intent(getApplicationContext(), ViewTAStatus.class));
-    }
-
-    public void ImagePdf(View v) {
-        pdfViewList();
-    }
-
     public void onOEDelete(View v) {
         LinearOtherAllowance.removeView((View) v.getParent());
         LayoutTransition transition = new LayoutTransition();
@@ -1255,8 +1187,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         SumOFOTAmount();
     }
 
+    public void viewStaus(View v) {
+        startActivity(new Intent(getApplicationContext(), ViewTAStatus.class));
+    }
+    public void ImagePdf(View v) {
+        pdfViewList();
+    }
     public void lodingView() {
-
         jointLodging.setVisibility(View.VISIBLE);
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View rowView = null;
@@ -1277,12 +1214,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
         }
     }
-
     public void onLodingDelete(View v) {
         jointLodging.removeView((View) v.getParent());
         SumOFJointLodging();
     }
-
     public void onGetEmpDetails(View v) {
         View pv = (View) v.getParent().getParent();
         edt_ldg_JnEmp = pv.findViewById(R.id.edt_ldg_JnEmp);
@@ -1350,7 +1285,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         calOverAllTotal(localCov, otherExp, tTotAmt);
     }
-
     public void SumOFLCAmount() {
         sum = 0.0;
         int lcSize = linlocalCon.getChildCount();
@@ -1367,7 +1301,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         calOverAllTotal(localCov, otherExp, tTotAmt);
     }
-
     public void SumOFOTAmount() {
         sumsTot = 0.0;
         int OeSize = LinearOtherAllowance.getChildCount();
@@ -1385,7 +1318,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         otherExp = sumsTot;
         calOverAllTotal(localCov, otherExp, tTotAmt);
     }
-
     public void SumOFDAAmount() {
         String sAmt = txtallamt.getText().toString().replaceAll("Rs.", "");
         String sBrdAmt = txt_BrdAmt.getText().toString().replaceAll("Rs.", "");
@@ -1400,7 +1332,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     }
 
     public void SumOFJointLodging() {
-
+        tJointAmt=0;
         for (int i = 0; i < jointLodging.getChildCount(); i++) {
             View childView = jointLodging.getChildAt(i);
             TextView jLdgEli = (TextView) childView.findViewById(R.id.txtJNMyEli);
@@ -1410,7 +1342,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         txtJNEligi.setText("Rs." + new DecimalFormat("##0.00").format(tJointAmt));
         SumOFLodging(0);
     }
-
     public void SumOFLodging(Integer count) {
 
         String sMyAmt = txtMyEligi.getText().toString().replaceAll("Rs.", "");
@@ -1421,28 +1352,28 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         if (sErlyAmt.equalsIgnoreCase("")) sErlyAmt = "0";
         if (sLateAmt.equalsIgnoreCase("")) sLateAmt = "0";
-        //  double tTotAmt = ldgEliAmt + ldgDrvEligi + Float.parseFloat(sJnAmt);
-        //   tTotAmt = Double.parseDouble(sMyAmt) + ldgDrvEligi + Float.parseFloat(sJnAmt) + Double.parseDouble(sErlyAmt) + Double.parseDouble(sLateAmt);
-        tTotAmt = continueStay + ldgDrvEligi + Float.parseFloat(sJnAmt) + Double.parseDouble(sErlyAmt) + Double.parseDouble(sLateAmt);
+        tTotAmt = Double.parseDouble(sMyAmt) + ldgDrvEligi + Float.parseFloat(sJnAmt) + Double.parseDouble(sErlyAmt) + Double.parseDouble(sLateAmt);
+        //ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
+        SumWOBLodging();
+        int IntValue = (int) tTotAmt;
+        edt_ldg_bill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue)});
+        edtEarBill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue)});
 
+        if(!mChckCont.isChecked())
+            tTotAmt = continueStay +Double.parseDouble(sMyAmt)+ ldgDrvEligi + Float.parseFloat(sJnAmt) + Double.parseDouble(sErlyAmt) + Double.parseDouble(sLateAmt);
 
-        Log.v("TOTAL_STAY", String.valueOf(stayEgTotal));
-        Log.v("TOTAL_DRV", String.valueOf(ldgDrvEligi));
-        Log.v("TOTAL_JNAMT", String.valueOf(sJnAmt));
-        Log.v("TOTAL_TOTMAT", String.valueOf(tTotAmt));
 
         totLodgAmt = String.valueOf(tTotAmt);
         //  lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
-        // SumWOBLodging();
 
-        int IntValue = (int) tTotAmt;
         //tTotAmt = Double.parseDouble(sMyAmt) + ldgDrvEligi + Float.parseFloat(sJnAmt)+Double.parseDouble(sErlyAmt) +Double.parseDouble(sLateAmt) ;
 
-        edt_ldg_bill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue - 1)});
-        edtEarBill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue - 1)});
+        lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
+
 
         Log.v("COunt_stay", String.valueOf(count));
-        if (count == 1) {
+        if(mChckCont.isChecked())//if (count == 1)
+        {
             tTotAmt = 0;
             calOverAllTotal(localCov, otherExp, tTotAmt);
         } else {
@@ -1451,7 +1382,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         }
 
     }
-
     public void SumWOBLodging() {
         String sMyAmt = txtMyEligi.getText().toString().replaceAll("Rs.", "");
         String sJnAmt = txtJNEligi.getText().toString().replaceAll("Rs.", "");
@@ -1471,16 +1401,39 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         Log.v("TOTAL_LODG_BILL", sBillAmt);
         Log.v("TOTAL_LODG_TOTAL", String.valueOf(tBalAmts));
 
-        if (tBalAmts > 0) {
+       // if (tBalAmts > 0) {
             ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(tBalAmts));
-        }
+       // }
 
         if (sBillAmt.isEmpty()) sBillAmt = "0";
         double tBalAmt = tTotAmt - Float.parseFloat(sBillAmt);
         witOutBill = String.valueOf(tBalAmt);
-        if (tBalAmt > 0) {
+       // if (tBalAmt > 0) {
             ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(tBalAmt));
-        }
+       // }
+
+    }
+    private void calOverAllTotal(Double localCov, Double otherExp, double tTotAmt) {
+        Log.v("tTotAmt", String.valueOf(tTotAmt));
+
+        String strldgTotal = lbl_ldg_eligi.getText().toString().substring(lbl_ldg_eligi.getText().toString().indexOf(".") + 1).trim();
+        String separators = ".";
+        int intldgTotal = strldgTotal.lastIndexOf(separators);
+
+        gTotal = localCov + myBrdAmt + drvBrdAmt + otherExp + GrandTotalAllowance + tTotAmt;
+        //if (tTotAmt == 0.0) {
+        /*} else {
+            if (LodingCon.size() != 0) {
+                mChckEarly.setVisibility(View.GONE);
+                Integer ValueTotal = LodingCon.size() + 1;
+                Double TotalVal = ValueTotal * Double.valueOf(strldgTotal.substring(0, intldgTotal));
+            }
+            gTotal = localCov + myBrdAmt + drvBrdAmt + otherExp + GrandTotalAllowance + Double.valueOf(tTotAmt);
+                // gTotal = localCov + myBrdAmt + drvBrdAmt + otherExp + GrandTotalAllowance + Double.valueOf(strldgTotal.substring(0, intldgTotal));
+        }*/
+
+
+        grandTotal.setText("Rs." + new DecimalFormat("##0.00").format(gTotal));
 
     }
 
@@ -1514,7 +1467,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
     /*Choosing Dynamic date*/
     public void dynamicDate() {
-
         JSONObject jj = new JSONObject();
         try {
             jj.put("sfCode", SF_code);
@@ -1587,14 +1539,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                     if (jsonFuelAllowance != null || jsonFuelAllowance.size() != 0) {
                         Log.v("jsonFuelAllowance_IN", jsonFuelAllowance.toString());
-
-
                         fuelListAdapter = new FuelListAdapter(getApplicationContext(), jsonFuelAllowance);
                         mFuelRecycler.setAdapter(fuelListAdapter);
                         JsonObject jsFuel;
+                        if(jsonFuelAllowance.size()<1){
+                            TravelBike.setVisibility(View.GONE);
+                        }
                         for (int jf = 0; jf < jsonFuelAllowance.size(); jf++) {
                             jsFuel = jsonFuelAllowance.get(jf).getAsJsonObject();
-
                             if (!jsFuel.get("End_Km").getAsString().equalsIgnoreCase("")) {
                                 Integer start = Integer.valueOf(jsFuel.get("Start_Km").getAsString());
                                 Integer end = Integer.valueOf(jsFuel.get("End_Km").getAsString());
@@ -1602,67 +1554,23 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     String total = String.valueOf(end - start);
                                     Integer Total = Integer.valueOf(total);
 
-                                    if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler")) {
-
-                                        if (Total >= 200) {
-                                            Total = 200;
-                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
-                                            String TotalPersonal = String.valueOf(Total - Personal);
-                                            Double q = Double.valueOf(TotalPersonal);
-                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-                                            String qz = String.valueOf(q * z);
-                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
-
-                                            fuelAmt = fuelAmt + (q * z);
-                                            fuelAmount.setText("Rs ." + fuelAmt);
-
-                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
-                                        } else {
-                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
-                                            String TotalPersonal = String.valueOf(Total - Personal);
-                                            Double q = Double.valueOf(TotalPersonal);
-                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-                                            String qz = String.valueOf(q * z);
-                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
-
-                                            fuelAmt = fuelAmt + (q * z);
-                                            fuelAmount.setText("Rs ." + fuelAmt);
-
-                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
-
-                                        }
-                                    } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
-                                        if (Total >= 500) {
-                                            Total = 500;
-                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
-                                            String TotalPersonal = String.valueOf(Total - Personal);
-                                            Double q = Double.valueOf(TotalPersonal);
-                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-                                            String qz = String.valueOf(q * z);
-                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
-
-                                            fuelAmt = fuelAmt + (q * z);
-                                            fuelAmount.setText("Rs ." + fuelAmt);
-
-                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
-                                        } else {
-                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
-                                            String TotalPersonal = String.valueOf(Total - Personal);
-                                            Double q = Double.valueOf(TotalPersonal);
-                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-                                            String qz = String.valueOf(q * z);
-                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
-
-                                            fuelAmt = fuelAmt + (q * z);
-                                            fuelAmount.setText("Rs ." + fuelAmt);
-
-                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
-
-                                        }
+                                    if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler")){
+                                        if (Total >= 200) Total = 200;
+                                    }else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
+                                        if (Total >= 500)  Total = 500;
                                     }
+                                    Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                    String TotalPersonal = String.valueOf(Total - Personal);
+                                    Double q = Double.valueOf(TotalPersonal);
+                                    Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                    String qz = String.valueOf(q * z);
+                                    Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+
+                                    fuelAmt = fuelAmt + (q * z);
+                                    fuelAmount.setText("Rs ." + fuelAmt);
+
+                                    TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
                                 }
-
-
                             }
                         }
                     }
@@ -1673,10 +1581,16 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         jRremarks = jsonExpHead.get(i).getAsJsonObject();
                         String strRemarks = jRremarks.get("Reason").getAsString();
                         editTextRemarks.setText(strRemarks);
-
                     }
 
 
+                    TravelBike.setVisibility(View.GONE);
+                    linMode.setVisibility(View.GONE);
+                    linBusMode.setVisibility(View.GONE);
+                    linBikeMode.setVisibility(View.GONE);
+
+                    btn_sub.setVisibility(View.VISIBLE);
+                    buttonSave.setVisibility(View.VISIBLE);
                     if (jsonArray != null || jsonArray.size() != 0) {
                         JsonObject jsonObject = null;
                         for (int i = 0; i < jsonArray.size(); i++) {
@@ -1753,20 +1667,22 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 TxtStartedKm.setText(StartedKm);
                                 fAmount = Double.valueOf(strFuelAmount);
                                 fuelAmount.setText(" Rs." + new DecimalFormat("##0.00").format(fAmount) + " / KM ");
+
+                                btn_sub.setVisibility(View.GONE);
+                                buttonSave.setVisibility(View.GONE);
+
+                                TravelBike.setVisibility(View.VISIBLE);
+                                linMode.setVisibility(View.VISIBLE);
+                                linBikeMode.setVisibility(View.VISIBLE);
                             }
 
                             txtTaClaim.setText(StrDaName);
                             if (!ClosingKm.equals("0")) {
-
                                 StartedKm = StartedKm.replaceAll("^[\"']+|[\"']+$", "");
-
                                 PersonalKm = PersonalKm.replaceAll("^[\"']+|[\"']+$", "");
 
-                                if (PersonalKm.equals("null")) {
-                                    PersonalKiloMeter.setText("0");
-                                } else {
-                                    PersonalKiloMeter.setText(PersonalKm);
-                                }
+                                if (PersonalKm.equals("null")) PersonalKm="0";
+                                PersonalKiloMeter.setText(PersonalKm);
 
                                 if (ClosingKm != null && !ClosingKm.isEmpty() && !ClosingKm.equals("null") && !ClosingKm.equals("")) {
                                     ClosingKm = ClosingKm.replaceAll("^[\"']+|[\"']+$", "");
@@ -1782,46 +1698,20 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     totalPersonalKm = totalkm - Pva;
                                 }
 
-
-                                if (totalPersonalKm > 200 && StrDaName.equals("Two Wheeler")) {
-                                    PersonalTextKM.setText("200");
-                                    txtMaxKm.setText("Actual Allowance is " + totalkm + " but the max allowance is 200 ");
-                                    txtMaxKm.setVisibility(View.VISIBLE);
-
-                                    Double totalAmount = Double.valueOf(strFuelAmount);
-                                    tofuel = 200 * totalAmount;
-                                    //    TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
-
-
-                                } else if (totalkm > 500 && StrDaName.equals("Four Wheeler")) {
-                                    PersonalTextKM.setText("500");
-                                    txtMaxKm.setText("Actual Allowance is " + totalkm + " but the max allowance is 500 ");
-
-                                    Double totalAmount = Double.valueOf(strFuelAmount);
-                                    tofuel = 500 * totalAmount;
-                                    // TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
-
-                                    txtMaxKm.setVisibility(View.VISIBLE);
-                                } else {
-                                    PersonalTextKM.setText(String.valueOf(totalPersonalKm));
-
-                                    Double totalAmount = Double.valueOf(strFuelAmount);
-                                    tofuel = totalPersonalKm * totalAmount;
-                                    //   TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(tofuel));
-                                    txtMaxKm.setVisibility(View.GONE);
-                                }
+                                Integer TtrvKm=totalPersonalKm;
+                                if (TtrvKm > 200 && StrDaName.equals("Two Wheeler")) TtrvKm=200;
+                                if (TtrvKm > 500 && StrDaName.equals("Four Wheeler")) TtrvKm=500;
+                                PersonalTextKM.setText(String.valueOf(TtrvKm));
+                                Double totalAmount = Double.valueOf(strFuelAmount);
+                                tofuel = TtrvKm * totalAmount;
+                                txtMaxKm.setVisibility(View.GONE);
 
                                 btn_sub.setVisibility(View.VISIBLE);
                                 buttonSave.setVisibility(View.VISIBLE);
 
-                            } else {
-
-                                btn_sub.setVisibility(View.GONE);
-                                buttonSave.setVisibility(View.GONE);
                             }
 
                             txtDailyAllowance.setText(StrDailyAllowance + " - " + StrTo);
-
                             myBrdAmt = 0.0;
                             drvBrdAmt = 0.0;
                             vwDrvBoarding.setVisibility(View.GONE);
@@ -2023,14 +1913,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                     StrTo = StrTo.replaceAll("^[\"']+|[\"']+$", "");
                                     txtBusTo.setText(StrTo);
                                 }
-                            } else {
-
-                                TravelBike.setVisibility(View.VISIBLE);
-                                linMode.setVisibility(View.VISIBLE);
-                                linBusMode.setVisibility(View.GONE);
-                                linBikeMode.setVisibility(View.VISIBLE);
                             }
-
+                           /* if(){
+                                btn_sub.setVisibility(View.VISIBLE);
+                                buttonSave.setVisibility(View.VISIBLE);
+                            }*/
                         }
                     }
                     GrandTotalAllowance = doubleAmount + fuelAmt;
@@ -2041,7 +1928,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     if (oeDraftArray != null || oeDraftArray.size() != 0) OeDraft(oeDraftArray);
                     if (trvldArray != null || trvldArray.size() != 0) trvldLocation(trvldArray);
 
-
                     JsonObject eachData;
 
                     double elibs = 0.0;
@@ -2049,14 +1935,18 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     JsonObject ldraft;
                     for (int i = 0; i < ldArray.size(); i++) {
                         ldraft = (JsonObject) ldArray.get(i);
-
                         elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
                         txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(elibs));
-
                         TextCheckInDate.setText(ldraft.get("Tadate").getAsString());
                     }
 
+                    ldg_cin.setText("");
+                    ldg_cout.setText("");
                     if (LodingCon.size() != 0) {
+                        if(StayDate.size()>0){
+                            TextCheckInDate.setText(StayDate.get(0).getAsJsonObject().get("CInDate").getAsString());
+                            ldg_cin.setText(StayDate.get(0).getAsJsonObject().get("CInTime").getAsString());
+                        }
                         viewContinue.removeAllViews();
                         viewContinueTotal.removeAllViews();
                         LinearLayout linearLayout = findViewById(R.id.prm_linear_orders);
@@ -2065,7 +1955,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         ldg_cin.setOnClickListener(null);
                         countLoding = 1;
                         for (int i = 0; i < LodingCon.size(); i++) {
-
                             eachData = (JsonObject) LodingCon.get(i);
                             lodgContvw.setVisibility(View.VISIBLE);
                             linContinueStay.setVisibility(View.VISIBLE);
@@ -2082,35 +1971,26 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             viewContinueTotal.addView(customOptionsNames);
                             continueStay = continueStay + Double.parseDouble(eachData.get("Amt").getAsString());
                             Log.v("TOTAL_DATE", String.valueOf(continueStay));
-
-
                         }
                     }
 
-
-                    Log.v("TEXT_ELIGIBLE", txtMyEligi.getText().toString().replaceAll("Rs .", ""));
-                    Log.v("TEXT_ELIGIBLE_AMT", String.valueOf(elibs));
-
-                    continueStay = continueStay + elibs;
-                    lbl_ldg_eligi.setText("Rs. " + continueStay);
+                    //continueStay = continueStay + elibs;
+                   // lbl_ldg_eligi.setText("Rs. " + continueStay);
                     Log.v("TOTAL_DATE_Outer", String.valueOf(continueStay));
-
-
                     Log.v("LODGING_ARRAY", String.valueOf(ldArray.size()));
                     if (ldArray != null || ldArray.size() != 0) {
                         Log.v("LODGING_ARRAY_IF", String.valueOf(ldArray.size()));
                         if (ldgAdd.getText().equals("+ Add")) {
-                            /*ldgAdd.setText("- Remove");*/
+                            //ldgAdd.setText("- Remove");
                             lodgContvw.setVisibility(View.GONE);
                             lodingDraft(ldArray, LodingCon);
+
                             Log.v("TO_DA_GA_PA", txt_ldg_type.getText().toString());
-                        } else {
-/*
-                            ldgAdd.setText("+ Add");
-*/
+                        }
+                        else {
+                            //ldgAdd.setText("+ Add");
+
                             lodgContvw.setVisibility(View.VISIBLE);
-                            ldg_cin.setText("");
-                            ldg_cout.setText("");
                             lodgStyLocation.setText("");
                             txtMyEligi.setText("Rs." + 0.00);
                             ldgWOBBal.setText("Rs." + 0.00);
@@ -2128,7 +2008,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             mChckEarly.setChecked(false);
                             mChckLate.setChecked(false);
                         }
-
                     } else {
                         //lodgContvw.setVisibility(View.GONE);
                         Log.v("LODGING_ARRAY_ELSE", String.valueOf(ldArray.size()));
@@ -2144,8 +2023,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         TotalDays.setVisibility(View.GONE);
                         lodgContvw.setVisibility(View.GONE);
                     }
-
-                    calOverAllTotal(localCov, otherExp, 0);
+                    SumOFLodging(0);
                 }
 
                 @Override
@@ -2157,16 +2035,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         }
     }
 
-
     @SuppressLint("SetTextI18n")
     public void lodingDraft(JsonArray lodingDraft, JsonArray ContSty) {
-
         JsonArray jsonAddition = null;
         JsonObject ldraft;
-        for (int i = 0; i < lodingDraft.size(); i++) {
-            ldraft = (JsonObject) lodingDraft.get(i);
-
-            jsonAddition = ldraft.getAsJsonArray("Additional");
+        if(lodingDraft.size()>0 || ContSty.size()>0){
 
             lodgContvw.setVisibility(View.VISIBLE);
             lodgCont.setVisibility(View.VISIBLE);
@@ -2174,16 +2047,21 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldg_stayDt.setVisibility(View.VISIBLE);
             lodgJoin.setVisibility(View.VISIBLE);
             linContinueStay.setVisibility(View.VISIBLE);
+            SumOFLodging(0);
+        }
+        for (int i = 0; i < lodingDraft.size(); i++) {
+            ldraft = (JsonObject) lodingDraft.get(i);
+            jsonAddition = ldraft.getAsJsonArray("Additional");
 
             ldg_cin.setText(ldraft.get("Stay_Date").getAsString());
             ldg_cout.setText(ldraft.get("To_Date").getAsString());
             lodgStyLocation.setText(ldraft.get("Ldg_Stay_Loc").getAsString());
-
-
-            Log.v("LOGIN_STAY_DATE", ldraft.get("Stay_Date").getAsString());
-
-            txtDrivEligi.setText(ldraft.get("Driver_Ldg_Amount").getAsString());
-
+            Double drvAmt=Double.valueOf(ldraft.get("Driver_Ldg_Amount").getAsString());
+            txtDrivEligi.setVisibility(View.GONE);
+            if(drvAmt!=0) {
+                txtDrivEligi.setVisibility(View.VISIBLE);
+                txtDrivEligi.setText("Rs." + new DecimalFormat("##0.00").format(drvAmt));
+            }
             ConStay = ldraft.get("Continuous_Stay").getAsString();
             ErlyStay = ldraft.get("Early_Checkin").getAsString();
             LteStay = ldraft.get("Late_Checkout").getAsString();
@@ -2208,7 +2086,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             //if (ErlyStay.equalsIgnoreCase("1")) mChckEarly.setChecked(true);
             //if (LteStay.equalsIgnoreCase("1")) mChckLate.setChecked(true);
 
-
             if (mChckCont.isChecked()) {
                 linCheckOut.setVisibility(View.INVISIBLE);
                 vwldgBillAmt.setVisibility(View.GONE);
@@ -2222,9 +2099,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 countLoding = 0;
                 vwldgBillAmt.setVisibility(View.VISIBLE);
                 linCheckOut.setVisibility(View.VISIBLE);
-
             }
-
 
             stayDays.setVisibility(View.VISIBLE);
             Double totlLdgAmt = Double.valueOf(ldraft.get("Total_Ldg_Amount").getAsString());
@@ -2246,10 +2121,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             Log.v("ldgWOBBal_______", ldgWOBBal.getText().toString());
 
             edt_ldg_bill.setText(ldraft.get("Bill_Amt").getAsString());
-            // lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(totlLdgAmt));
             txtStyDays.setText(ldraft.get("NO_Of_Days").getAsString());
+
+
+            JNLdgEAra.setVisibility(View.GONE);
             if (ldraft.get("Lodging_Type").getAsString().equals("Joined Stay")) {
                 txt_ldg_type.setText("Joined Stay");
+                JNLdgEAra.setVisibility(View.VISIBLE);
                 TotalDays.setVisibility(View.VISIBLE);
             } else if (ldraft.get("Lodging_Type").getAsString().equals("Independent Stay")) {
                 txt_ldg_type.setText("Independent Stay");
@@ -2261,14 +2139,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
             JsonObject jsonObjectAdd = null;
             for (int l = 0; l < jsonAddition.size(); l++) {
-
                 Log.e("LOCTAION_LRD", String.valueOf(jsonAddition.size()));
                 jsonObjectAdd = (JsonObject) jsonAddition.get(l);
 
                 jointLodging.setVisibility(View.VISIBLE);
                 LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
@@ -2293,8 +2168,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 txtJNDept.setText(jsonObjectAdd.get("Dept").getAsString());
                 txtJNHQ.setText(jsonObjectAdd.get("Sf_Hq").getAsString());
                 txtJNMob.setText(jsonObjectAdd.get("Sf_Mobile").getAsString());
-                /* double jntEli = Integer.valueOf(ldraft.get("Ldg_Amount").getAsString());*//*
-                txtJNMyEli.setText("Rs." + "0.00");*/
 
                 float sum = jsonObjectAdd.get("Ldg_Amount").getAsFloat();
                 txtJNMyEli.setText("Rs." + new DecimalFormat("##0.00").format(sum));
@@ -2303,7 +2176,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         }
 
     }
-
     public void localConDraft(JsonArray lcDraft) {
 
         JsonArray jsonAddition = null;
@@ -2449,7 +2321,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         SumOFLCAmount();
 
     }
-
     public void OeDraft(JsonArray oEDraft) {
         //  JsonArray jsonAddition = null;
         JsonObject lcdraftJson = null;
@@ -2592,7 +2463,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         }
         SumOFOTAmount();
     }
-
     public void trvldLocation(JsonArray traveldLoc) {
 
         try {
@@ -2643,7 +2513,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         }
 
     }
-
     public void localConDisplay(String modeName, JsonArray jsonAddition, int position) {
 
         JsonObject jsonObjectAdd = null;
@@ -2679,7 +2548,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == 144) {
-
             if (resultCode == RESULT_OK) {
                 if (requestCode == 144) {
                     if (data.getClipData() != null) {
@@ -2691,8 +2559,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             ImageFilePath filepath = new ImageFilePath();
                             fullPath = filepath.getPath(TAClaimActivity.this, mClipData.getItemAt(i).getUri());
                             lodgArrLst.add(fullPath);
-
-
                             getMulipart(lodUKey, fullPath, "LOD", "", "Room", "", "");
 
                         }
@@ -2990,6 +2856,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             jsonData.put("SF_Code", SF_code);
             jsonData.put("exp_date", DateTime);
             jsonData.put("da_mode", StrDailyAllowance);
+            jsonData.put("latLong", clocation.getLatitude()+":"+clocation.getLongitude());
             jsonData.put("al_type", "");
             jsonData.put("from_place", StrBus);
             jsonData.put("to_place", StrTo);
@@ -3011,15 +2878,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             daAll.put("drvBrdAmt", drvBrdAmt);
 
             /*Lodging Save*/
-
-
-            Log.v("Ta_Loadging_elgble", txtMyEligi.getText().toString().replaceAll("Rs.", ""));
-            Log.v("Ta_Loadging_wob_amt", ldgWOBBal.getText().toString().replaceAll("Rs.", ""));
-            Log.v("Ta_Loadging_drv_ldg_amt", txtDrivEligi.getText().toString().replaceAll("Rs.", ""));
-            Log.v("Ta_Loadging_jnt_ldg_amt", txtJNEligi.getText().toString().replaceAll("Rs.", ""));
-            Log.v("Ta_Loadging_ttl_ldg_amt", lbl_ldg_eligi.getText().toString().replaceAll("Rs.", ""));
-
-
             JSONObject ldgSave = new JSONObject();
             ldgSave.put("ldg_type", txt_ldg_type.getText().toString());
             ldgSave.put("ldg_type_sty", lodgStyLocation.getText().toString());
@@ -3043,24 +2901,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             ldgSave.put("total_ldg_amt", lbl_ldg_eligi.getText().toString().replaceAll("Rs.", ""));
             ldgSave.put("attch_bill", "");
             ldgSave.put("u_key", txtLodgUKey.getText().toString());
-
-
-            Log.v("Ta_Loadging_loc", lodgStyLocation.getText().toString());
-            Log.v("Ta_Loadging_sty_dte", sty_date + " " + ldg_cin.getText().toString());
-            Log.v("Ta_Loadging_to_dte", ldg_cout.getText().toString());
-            Log.v("Ta_Loadging_bil_amt", edt_ldg_bill.getText().toString());
-            Log.v("Ta_Loadging_cnSty", String.valueOf(cnSty));
-            Log.v("Ta_Loadging_erlSty", String.valueOf(erlSty));
-            Log.v("Ta_Loadging_lte_sty", String.valueOf(lteSty));
-
-            Log.v("Ta_Loadging_erChckIn", earCheckIn.getText().toString());
-            Log.v("Ta_Loadging_earCheckOut", earCheckOut.getText().toString());
-            Log.v("Ta_Loadging_Ear_amt", edtEarBill.getText().toString());
-
-            Log.v("Ta_Loadging_lat_in", latCheckIn.getText().toString());
-            Log.v("Ta_Loadging_lat_out", latCheckOut.getText().toString());
-            Log.v("Ta_Loadging_lat_bill", edtLateBill.getText().toString());
-            Log.v("Ta_Loadging_txt", txtLodgUKey.getText().toString());
 
             JSONArray ldgArySve = new JSONArray();
             for (int jd = 0; jd < jointLodging.getChildCount(); jd++) {
@@ -3214,12 +3054,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             jsonData.put("Trv_details", trDet);
             jsonData.put("Lodg_details", ldgSave);
             jsonData.put("Da_Claim", daAll);
-
             transHead.put(jsonData);
-
-            Log.e("TOTAL_JSON", transHead.toString());
-            Log.e("TOTAL_JSON_HHHH", jsonData.toString());
-
         } catch (Exception e) {
             Log.e("TOTAL_JSON_OUT", e.toString());
         }
@@ -3241,7 +3076,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                 Log.v("TA_Response", response.body().toString());
-                startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                //startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                openHome();
                 if (responseVal.equals("Save")) {
                     Toast.makeText(TAClaimActivity.this, "Saved Successfully ", Toast.LENGTH_SHORT).show();
                 } else {
@@ -3389,7 +3225,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             lblHdBln.setVisibility(View.GONE);
             ldgWOBBal.setVisibility(View.GONE);
 
-            if (myldgEliAmt == "") myldgEliAmt = "0.0";
+            if (myldgEliAmt.equalsIgnoreCase("")) myldgEliAmt = "0.0";
 
             myldgEliAmt = myldgEliAmt.replaceAll("^[\"']+|[\"']+$", "");
             jointLodging.removeAllViews();
@@ -3397,39 +3233,29 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
 
             Log.e("TXT_MY_ELIGIBLE", txtMyEligi.getText().toString().substring(3, 7));
-            SumOFJointLodging();
-            SumOFLodging(0);
 
             mChckCont.setChecked(false);
             mChckLate.setChecked(false);
             mChckEarly.setChecked(false);
 
-            if (ValCd == "JS") {
+            if (ValCd.equalsIgnoreCase("JS")) {
                 linContinueStay.setVisibility(View.VISIBLE);
-            } else if (ValCd == "RS") {
-                linContinueStay.setVisibility(View.GONE);
-            } else {
-                linContinueStay.setVisibility(View.VISIBLE);
-            }
-
-            if (ValCd == "JS") {
                 lodgJoin.setVisibility(View.VISIBLE);
                 JNLdgEAra.setVisibility(View.VISIBLE);
                 img_lodg_prvw.setVisibility(View.VISIBLE);
                 linImgPrv.setVisibility(View.VISIBLE);
                 viewBilling.setVisibility(View.VISIBLE);
-
-
                 /*tTotAmt = 0;*/
                 ttLod = 1;
-
-
                 txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
                 lodingView();
+            } else if (ValCd.equalsIgnoreCase("RS")) {
+                linContinueStay.setVisibility(View.GONE);
+            } else {
+                linContinueStay.setVisibility(View.VISIBLE);
             }
+
             if (ValCd != "RS") {
-
-
                 ldg_stayloc.setVisibility(View.VISIBLE);
                 ldg_stayDt.setVisibility(View.VISIBLE);
                 lblHdBill.setVisibility(View.VISIBLE);
@@ -3446,8 +3272,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
                 img_lodg_prvw.setVisibility(View.VISIBLE);
             }
-
-            ldg_cin.setText("");
             ldg_cout.setText("");
             lodgStyLocation.setText("");
             if (ldg_cin.getText().toString().equals("") || ldg_cout.getText().toString().equals("")) {
@@ -3457,10 +3281,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
             edt_ldg_bill.setText("");
 
+            SumOFJointLodging();
+            SumOFLodging(0);
         }
         if (type == 10) {
-
-
             txt_date.setText(myDataset.get(position).getName());
             Log.d("JSON_VALUE", myDataset.get(position).getId());
             DateTime = myDataset.get(position).getId();
@@ -3559,7 +3383,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     public void onMapReady(GoogleMap googleMap) {
         mGoogleMap = googleMap;
     }
-
     public void localCon(Integer countPosition) {
 
         Map<String, String> QueryString = new HashMap<>();
@@ -3604,7 +3427,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
         });
     }
-
     public void LDGType() {
 
         mCommon_model_spinner = new Common_Model("Independent Stay", "IS");
@@ -3620,7 +3442,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         customDialog.show();
     }
-
     public void dynamicModeType(Integer poisition) {
 
         for (int i = 0; i < LC.size(); i++) {
@@ -3634,7 +3455,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         customDialog.show();
     }
-
     public void OtherExpenseMode(Integer poisition) {
         for (int i = 0; i < OE.size(); i++) {
             String name = OE.get(i);
@@ -3647,7 +3467,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         customDialog.show();
     }
-
     public void LocalConvenyanceApi(String sss) {
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         try {
@@ -3723,7 +3542,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         } catch (Exception e) {
         }
     }
-
     public void OtherExpenseApi(String sss) {
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -3801,18 +3619,15 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         }
     }
 
-    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
-            new OnBackPressedDispatcher(new Runnable() {
+    private final OnBackPressedDispatcher mOnBackPressedDispatcher = new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
                     TAClaimActivity.super.onBackPressed();
                 }
             });
-
     @Override
     public void onBackPressed() {
     }
-
     /*Imageview */
     private void sendImageToServer(String count, String HeadTravel, String Mode, String from, String To, MultipartBody.Part imgg) {
 
@@ -3847,7 +3662,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
         });
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -3879,6 +3693,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     Log.v("JSON_TRAVEL_DETAILS", jsonObjects.toString());
 
                     jsonFuelAllowance = jsonObjects.getAsJsonArray("FuelAllowance");
+/*
                     jsonArray = jsonObjects.getAsJsonArray("TodayStart_Details");
                     lcDraftArray = jsonObjects.getAsJsonArray("Additional_ExpenseLC");
                     oeDraftArray = jsonObjects.getAsJsonArray("Additional_ExpenseOE");
@@ -3887,87 +3702,37 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                     travelDetails = jsonObjects.getAsJsonArray("Travelled_Details");
                     LodingCon = jsonObjects.getAsJsonArray("LodDtlist");
                     StayDate = jsonObjects.getAsJsonArray("Stay_Date_time");
-                    jsonExpHead = jsonObjects.getAsJsonArray("Expense_Head");
+                    jsonExpHead = jsonObjects.getAsJsonArray("Expense_Head");*/
 
                     Log.v("jsonFuelAllowance", jsonFuelAllowance.toString());
 
                     if (jsonFuelAllowance != null || jsonFuelAllowance.size() != 0) {
                         Log.v("jsonFuelAllowance_IN", jsonFuelAllowance.toString());
-
-
                         fuelListAdapter = new FuelListAdapter(getApplicationContext(), jsonFuelAllowance);
                         mFuelRecycler.setAdapter(fuelListAdapter);
                         JsonObject jsFuel;
                         for (int jf = 0; jf < jsonFuelAllowance.size(); jf++) {
                             jsFuel = jsonFuelAllowance.get(jf).getAsJsonObject();
-
                             if (!jsFuel.get("End_Km").getAsString().equalsIgnoreCase("")) {
                                 Integer start = Integer.valueOf(jsFuel.get("Start_Km").getAsString());
                                 Integer end = Integer.valueOf(jsFuel.get("End_Km").getAsString());
                                 if (end != 0) {
                                     String total = String.valueOf(end - start);
                                     Integer Total = Integer.valueOf(total);
-                                    if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler")) {
+                                    if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler") && Total >= 200) Total = 200;
+                                    if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler") && Total >= 500) Total = 500;
 
-                                        if (Total >= 200) {
-                                            Total = 200;
-                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
-                                            String TotalPersonal = String.valueOf(Total - Personal);
-                                            Double q = Double.valueOf(TotalPersonal);
-                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-                                            String qz = String.valueOf(q * z);
-                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+                                    Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
+                                    String TotalPersonal = String.valueOf(Total - Personal);
+                                    Double q = Double.valueOf(TotalPersonal);
+                                    Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
+                                    String qz = String.valueOf(q * z);
+                                    Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
+                                    fuelAmt = fuelAmt + (q * z);
+                                    fuelAmount.setText("Rs ." + fuelAmt);
 
-                                            fuelAmt = fuelAmt + (q * z);
-                                            fuelAmount.setText("Rs ." + fuelAmt);
-
-                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
-                                        } else {
-                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
-                                            String TotalPersonal = String.valueOf(Total - Personal);
-                                            Double q = Double.valueOf(TotalPersonal);
-                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-                                            String qz = String.valueOf(q * z);
-                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
-
-                                            fuelAmt = fuelAmt + (q * z);
-                                            fuelAmount.setText("Rs ." + fuelAmt);
-
-                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
-
-                                        }
-                                    } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
-                                        if (Total >= 500) {
-                                            Total = 500;
-                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
-                                            String TotalPersonal = String.valueOf(Total - Personal);
-                                            Double q = Double.valueOf(TotalPersonal);
-                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-                                            String qz = String.valueOf(q * z);
-                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
-
-                                            fuelAmt = fuelAmt + (q * z);
-                                            fuelAmount.setText("Rs ." + fuelAmt);
-
-                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
-                                        } else {
-                                            Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
-                                            String TotalPersonal = String.valueOf(Total - Personal);
-                                            Double q = Double.valueOf(TotalPersonal);
-                                            Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-                                            String qz = String.valueOf(q * z);
-                                            Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
-
-                                            fuelAmt = fuelAmt + (q * z);
-                                            fuelAmount.setText("Rs ." + fuelAmt);
-
-                                            TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
-
-                                        }
-                                    }
+                                    TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
                                 }
-
-
                             }
                         }
                     }
@@ -3984,34 +3749,29 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         }
 
     }
-
     @Override
     protected void onPause() {
         super.onPause();
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
-
     @Override
     protected void onStop() {
         super.onStop();
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
-
     @Override
     protected void onStart() {
         super.onStart();
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
-
     @Override
     protected void onRestart() {
         super.onRestart();
         startService(new Intent(this, TimerService.class));
     }
-
     public void MaxMinDateTo(String strMinDate) {
         Log.e("MAX_DATE_TWO", " " + strMinDate);
 
@@ -4025,7 +3785,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         tominDay = separated1[2];
 
     }
-
     public void difference(String str) {
 
         stayEgTotal = 1 * ldgEliAmt;
@@ -4039,7 +3798,6 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         SumOFLodging(0);
 
     }
-
     public void scroll() {
 
         mLc.post(new Runnable() {

@@ -91,7 +91,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     Common_Model mCommon_model_spinner;
     Common_Class common_class;
     List<Common_Model> modelRetailDetails = new ArrayList<>();
-
+Location mlocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,7 +120,12 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         closingIntet.putExtra("Cls_con","cls");
         closingIntet.putExtra("Cls_dte","");*/
 
-
+        new LocationFinder(getApplication(), new LocationEvents() {
+            @Override
+            public void OnLocationRecived(Location location) {
+                mlocation=location;
+            }
+        });
 
         ClosingCon = String.valueOf(getIntent().getSerializableExtra("Cls_con"));
         ClosingDate = String.valueOf(getIntent().getSerializableExtra("Cls_dte"));
@@ -129,6 +134,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
             TextCloseDate.setVisibility(View.VISIBLE);
             TextCloseDate.setText(ClosingDate);
+            takeEndedPhoto.setVisibility(View.GONE);
             callApi(ClosingDate);
         } else {
             callApi(Common_Class.GetDate());
@@ -156,14 +162,14 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                         if(TextModeTravel.getText().toString().equalsIgnoreCase("Two Wheeler")){
 
                             Log.v("EDITEXTCHECKING", String.valueOf(StartedKM));
-                            Log.v("EDITEXTCHECKING", String.valueOf(StartedKM + 200));
-                            EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+200)});
+                            Log.v("EDITEXTCHECKING", String.valueOf(StartedKM + maxKM));
+                            EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+maxKM)});
                         }else if(TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")){
 
                             Log.v("EDITEXTCHECKING", String.valueOf(StartedKM));
-                            Log.v("EDITEXTCHECKING", String.valueOf(StartedKM + 500));
+                            Log.v("EDITEXTCHECKING", String.valueOf(StartedKM + maxKM));
 
-                            EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+500)});
+                            EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+maxKM)});
                         }
                         Log.e("STARTED_KM", "GREATER");
                     } else {
@@ -268,12 +274,11 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         submitAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                 if (EndedEditText.getText().toString().matches("")) {
                     Toast.makeText(AllowanceActivityTwo.this, "Choose End Km", Toast.LENGTH_SHORT).show();
                     return;
-                } else if (EndedImage.matches("")) {
+                } else if (EndedImage.matches("") &&
+                        ((ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) ) {
                     Toast.makeText(AllowanceActivityTwo.this, "Choose End photo", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
@@ -289,32 +294,38 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                         if (StartedKM < endKm) {
 
                             if(TextModeTravel.getText().toString().equalsIgnoreCase("Two Wheeler")){
-
-                                Log.v("EDITEXTCHECKING", String.valueOf(StartedKM));
-                                Log.v("EDITEXTCHECKING", String.valueOf(StartedKM + 200));
-                                EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+200)});
+                                EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+maxKM)});
                             }else if(TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")){
-
-                                Log.v("EDITEXTCHECKING", String.valueOf(StartedKM));
-                                Log.v("EDITEXTCHECKING", String.valueOf(StartedKM + 500));
-
-                                EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+500)});
+                                EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+maxKM)});
                             }
                         }
-                        new LocationFinder(getApplication(), new LocationEvents() {
-                            @Override
-                            public void OnLocationRecived(Location location) {
-//                                if (!ClosingDate.equals("")) {
-                                if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
-                                    common_class.ProgressdialogShow(1, "Please wait...");
-                                    submitData(ClosingDate);
-                                } else {
-                                    common_class.ProgressdialogShow(1, "Please wait...");
-                                    submitData(Common_Class.GetDate());
-                                }
+                        if((StartedKM+maxKM)<endKm){
+                            Toast.makeText(AllowanceActivityTwo.this, "KM Limit is Exceeded", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        if(mlocation!=null){
+                            common_class.ProgressdialogShow(1, "Submitting Please wait...");
+                            if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
+                                submitData(ClosingDate);
+                            } else {
+                                submitData(Common_Class.GetDate());
                             }
-                        });
-
+                        }
+                        else {
+                            common_class.ProgressdialogShow(1, "Getting location please wait...");
+                            new LocationFinder(getApplication(), new LocationEvents() {
+                                @Override
+                                public void OnLocationRecived(Location location) {
+//                                if (!ClosingDate.equals("")) {
+                                    common_class.ProgressdialogShow(1, "Submitting Please wait...");
+                                    if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
+                                        submitData(ClosingDate);
+                                    } else {
+                                        submitData(Common_Class.GetDate());
+                                    }
+                                }
+                            });
+                        }
                     } else {
                         Toast.makeText(AllowanceActivityTwo.this, "Should be greater then Started Km", Toast.LENGTH_SHORT).show();
 
@@ -362,6 +373,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             jj.put("to_code", StrToCode);
             jj.put("fare", "");
             jj.put("Activity_Date", date);
+            jj.put("location", mlocation.getLatitude()+":"+mlocation.getLongitude());
             //saveAllowance
             Log.v("printing_allow", jj.toString());
             Call<ResponseBody> Callto;
@@ -605,6 +617,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 Hq = json_oo.getString("dailyAllowance");
 
                                 TextMaxKm.setText("Maximum km : " + maxKM);
+                                TextMaxKm.setVisibility(View.GONE);
                                 StratKm = Integer.valueOf(json_oo.getString("Start_Km"));
 
                                 StartedKM  = Integer.valueOf(json_oo.getString("Start_Km"));

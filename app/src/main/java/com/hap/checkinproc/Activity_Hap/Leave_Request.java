@@ -166,12 +166,24 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
         Bundle params = getIntent().getExtras();
         if (params != null) {
-            eText.setText(params.getString("EDt"));
-            etext2.setText(params.getString("EDt"));
+            String Edt=params.getString("EDt","");
+            String[] stDt;
+            if(Edt.indexOf("/")>-1) {
+                stDt = Edt.split("/");
+                fromData = stDt[2] + "-" + stDt[1] + "-" + stDt[0];
+                toData = stDt[2] + "-" + stDt[1] + "-" + stDt[0];
 
-            String[] stDt = params.getString("EDt").split("/");
-            fromData = stDt[2] + "-" + stDt[1] + "-" + stDt[0];
-            toData = stDt[2] + "-" + stDt[1] + "-" + stDt[0];
+                eText.setText(params.getString("EDt"));
+                etext2.setText(params.getString("EDt"));
+            }else{
+
+                fromData = Edt;
+                toData = Edt;
+                stDt = params.getString("EDt").split("-");
+                String sEdt=stDt[2] + "/" + stDt[1] + "/" + stDt[0];
+                eText.setText(sEdt);
+                etext2.setText(sEdt);
+            }
             difference();
             //eText.setText(stDt[2]+"-"+stDt[1]+"-"+stDt[0]);
             eText.setEnabled(false);

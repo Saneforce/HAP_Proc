@@ -14,6 +14,23 @@
         android:orientation="vertical">
 
         <include layout="@layout/custom_toolbar_help"></include>
+        <LinearLayout
+            android:id="@+id/vwlblHead"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/view_bg_color">
+            <TextView
+                android:id="@+id/lblHead"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Closing Travel Missed"
+                android:textAllCaps="true"
+                android:textSize="14sp"
+                android:padding="5dp"
+                android:gravity="center"
+                android:textColor="@color/white"
+                />
+        </LinearLayout>
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -28,9 +45,19 @@
 
 
                 <TextView
-                    style="@style/TextStyle"
-                    android:visibility="gone"
+                    style="@style/TextStyleNoM"
+                    android:text="Date of Travel"
+                    android:layout_marginLeft="5dp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/C5dp"
+                    android:layout_marginLeft="@dimen/C5dp"
+                    android:layout_marginBottom="@dimen/C5dp"
+                    android:visibility="visible"
                     android:id="@+id/closing_date"
+                    android:textStyle="bold"
                     android:textColor="@android:color/holo_red_dark" />
 
 

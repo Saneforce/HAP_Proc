@@ -212,7 +212,7 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
         checkIn = (EditText) findViewById(R.id.missed_checkin);
         reasonMP = (EditText) findViewById(R.id.reason_missed);
 
-        /*Bundle params = getIntent().getExtras();
+        Bundle params = getIntent().getExtras();
 
         if (!(params == null)) {
             missedDates = params.getString("EDt");
@@ -232,11 +232,11 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
             }
 
 
-            checkIn.setText(missedCHeckin);
+            /*checkIn.setText(missedCHeckin);
             shiftType.setText(missedShift);
             misseddateselect.setText(missedDates);
-            checkOutTime.setText(missedCheckOut);
-        }*/
+            checkOutTime.setText(missedCheckOut);*/
+        }
         leaveTypeMethod();
 
       //  Log.d(Tag, String.valueOf(params));
@@ -649,14 +649,14 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                 String ModeCount = jsonObject1.optString("mode_count");
 
                 String visbleMOde = jsonObject1.optString("Aflag");
-
+/*
 
                 checkIn.setText(Checkin_Time);
                 shiftType.setText(shift);
                 misseddateselect.setText(MissedDate);
                 checkOutTime.setText(COutTime);
 
-
+*/
                 Log.v("visbleMOdevisbleMOde", visbleMOde);
                 Model_Pojo = new Common_Model(shift, MissedDate, Checkin_Time, COutTime, ModeCount, visbleMOde);
                 missed_punch.add(Model_Pojo);
@@ -762,8 +762,14 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
                             dialog.dismiss();
-                            if (jsonObjecta.get("success").getAsBoolean() == true)
+                            if (jsonObjecta.get("MsgID").getAsString().equalsIgnoreCase("2")){
+                                Intent mIntent = new Intent(Missed_Punch.this, Leave_Request.class);
+                                mIntent.putExtra("EDt", missedDates);
+                                startActivity(mIntent);
+                                finish();
+                            }else if (jsonObjecta.get("success").getAsBoolean() == true)
                                 startActivity(new Intent(Missed_Punch.this, Leave_Dashboard.class));//openHome();
+
                         }
 
                         @Override
