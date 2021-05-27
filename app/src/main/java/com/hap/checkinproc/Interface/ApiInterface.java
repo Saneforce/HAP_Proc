@@ -138,6 +138,11 @@ public interface ApiInterface {
     @POST("Db_v300.php")
     Call<JsonObject> DCRSave(@QueryMap Map<String, String> params, @Field("data") String body);
 
+
+    @FormUrlEncoded
+    @POST("db_new_activity.php?axn=save/taexecptionapprove")
+    Call<JsonObject> DCRSaves( @Field("data") String body);
+
     @FormUrlEncoded
     @POST("Db_v300.php")
     Call<Object> GetTPObject(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
@@ -353,13 +358,21 @@ public interface ApiInterface {
     @POST("Db_v300.php")
     Call<Object> getHolidayStatus(@Query("AMod") String Amod, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn, @Field("data") String data);
 
+
+   @FormUrlEncoded
+    @POST("db_new_activity.php")
+    Call<Object> getHolidayStatuss(@Query("AMod") String Amod, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn, @Field("data") String data);
+
     @POST("Db_v300.php?axn=get/track")
     Call<ResponseBody> getMap(@Query("SF_Code") String SfCode, @Query("Dt") String Date);
 
     @POST("db_new_activity.php?axn=get/expenseapprovallist")
     Call<JsonArray> getApprovalList(@Query("SF_Code") String SF_Code);
 
-    @POST("db_new_activity.php?axn=get/expensesubdatestatus")
+    @POST("db_new_activity.php?axn=get/vwexceptionstatus")
+    Call<JsonArray> getDaException(@Query("sfCode") String SF_Code);
+
+    @POST("db_new_activity.php?axn=expensesubdatestatus")
     Call<JsonArray> getTaViewStatus(@Query("SF_Code") String SF_Code);
 
     @FormUrlEncoded
@@ -409,8 +422,9 @@ public interface ApiInterface {
     @POST("Db_V13.php?axn=get/GateEntryHome")
     Call<JsonArray> gteDta(@Query("Sf_code") String sfCode, @Query("TodayDate") String Tdate);
 
+    @FormUrlEncoded
     @POST("db_new_activity.php?axn=save/expLodgeException")
-    Call<ResponseBody> daExpen(@Query("Sf_code") String sfCode, @Query("data") String daDATA);
+    Call<JsonObject> daExpen(@Field("data") String daDATA);
 
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=save/editstartactivity")

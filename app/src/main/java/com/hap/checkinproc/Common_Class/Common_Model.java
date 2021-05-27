@@ -6,6 +6,7 @@ public class Common_Model {
     private String flag;
     private String address;
     private String phone;
+
      String checkouttime;
      boolean ExpNeed;
      boolean isSelected;

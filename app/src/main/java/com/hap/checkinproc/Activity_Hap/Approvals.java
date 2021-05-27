@@ -1,10 +1,5 @@
 package com.hap.checkinproc.Activity_Hap;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -18,11 +13,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.activity.OnBackPressedDispatcher;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.TAApprovalActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
-import com.hap.checkinproc.Common_Class.LocationBlocker;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -37,14 +35,19 @@ import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Approvals extends AppCompatActivity implements View.OnClickListener {
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    LinearLayout LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan ,lin_leavecancel_histry, lin_leaveholidaystatus;
-    LinearLayout LeaveStatus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff,linLeaveCancel,lin_DeviationApproval,lin_holidayentryApproval;
+    LinearLayout LeaveRequest, PermissionRequest, OnDuty, MissedPunch, ExtendedShift, TravelAllowance, TourPlan, lin_leavecancel_histry, lin_leaveholidaystatus;
+    LinearLayout LeaveStatus, DaExcptStaus, PermissionStatus, OnDutyStatus, MissedStatus, ExtdShift, lin_weekoff, linLeaveCancel, lin_DeviationApproval, lin_holidayentryApproval, linDaExceptionEntry;
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     SharedPreferences Setups;
@@ -52,7 +55,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     public static final String UserInfo = "MyPrefs";
     public static final String SetupsInfo = "MySettings";
     TextView countLeaveRequest, extendedcount, countPermissionRequest, countOnDuty, countMissedPunch,
-            countTravelAllowance, countTourPlan,  txt_holiday_count,txt_deviation_count,txt_leavecancel_count;
+            countTravelAllowance, countTourPlan, txt_holiday_count, txt_deviation_count, txt_leavecancel_count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,9 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         Setups = getSharedPreferences(SetupsInfo, Context.MODE_PRIVATE);
         lin_leavecancel_histry = findViewById(R.id.lin_leavecancel_histry);
         lin_leaveholidaystatus = findViewById(R.id.lin_leaveholidaystatus);
-        linLeaveCancel  = findViewById(R.id.lin_leave_cancel);
+        linLeaveCancel = findViewById(R.id.lin_leave_cancel);
+        linDaExceptionEntry = findViewById(R.id.lin_daExp_entry);
+        DaExcptStaus = findViewById(R.id.lin_da_excep_status);
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
         txtHelp.setOnClickListener(new View.OnClickListener() {
@@ -151,9 +156,9 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         countMissedPunch = findViewById(R.id.txt_miss_punch_count);
         countTravelAllowance = findViewById(R.id.txt_trvl_all);
         countTourPlan = findViewById(R.id.txt_tour_plan);
-        txt_holiday_count= findViewById(R.id.txt_holiday_count);
-        txt_deviation_count= findViewById(R.id.txt_deviation_count);
-        txt_leavecancel_count= findViewById(R.id.txt_leave_cancel_req_count);
+        txt_holiday_count = findViewById(R.id.txt_holiday_count);
+        txt_deviation_count = findViewById(R.id.txt_deviation_count);
+        txt_leavecancel_count = findViewById(R.id.txt_leave_cancel_req_count);
 
         lin_holidayentryApproval = findViewById(R.id.lin_holidayentryApproval);
         lin_DeviationApproval = findViewById(R.id.lin_DeviationApproval);
@@ -177,6 +182,10 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         linLeaveCancel.setOnClickListener(this);
         lin_holidayentryApproval.setOnClickListener(this);
         lin_DeviationApproval.setOnClickListener(this);
+        linDaExceptionEntry.setOnClickListener(this);
+        DaExcptStaus.setOnClickListener(this);
+
+
         getcountdetails();
     }
 
@@ -235,7 +244,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 finish();
                 break;
 
-                case R.id.lin_leave_cancel:
+            case R.id.lin_leave_cancel:
 
                 startActivity(new Intent(Approvals.this, Leave_Cancel_Approval.class));
                 finish();
@@ -268,6 +277,11 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
             case R.id.lin_tour_plan:
                 startActivity(new Intent(Approvals.this, Tp_Approval.class));
+                finish();
+                break;
+
+            case R.id.lin_daExp_entry:
+                startActivity(new Intent(Approvals.this, DAExcApproval.class));
                 finish();
                 break;
 
@@ -309,6 +323,11 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 common_class.CommonIntentwithoutFinishputextra(HolidayEntryStatus.class, "AMod", "1");
                 finish();
                 break;
+
+            case R.id.lin_da_excep_status:
+                common_class.CommonIntentwithoutFinishputextra(DaExceptionStatus.class, "AMod", "1");
+                finish();
+                break;
             case R.id.lin_holidayentryApproval:
                 startActivity(new Intent(Approvals.this, Holiday_Entry_Approval.class));
                 finish();
@@ -321,8 +340,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         }
 
 
-
-}
+    }
 
     @Override
     protected void onRestart() {
@@ -355,6 +373,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     public void onBackPressed() {
 
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -382,7 +401,6 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
-
 
 
 }

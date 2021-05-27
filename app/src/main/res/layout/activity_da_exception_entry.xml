@@ -46,30 +46,29 @@
 
             </androidx.cardview.widget.CardView>
 
+            <TextView
+                style="@style/TextStyle"
+                android:text="Date" />
+
+
+            <EditText
+                android:id="@+id/choose_date"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="@dimen/C7dp"
+                android:background="@drawable/textbox_bg"
+                android:clickable="false"
+                android:focusable="false"
+                android:hint="Select the Date"
+                android:paddingLeft="@dimen/C5dp"
+                android:textSize="@dimen/C13dp" />
+
             <LinearLayout
                 android:id="@+id/linear_view"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-          >
-
-                <TextView
-                    style="@style/TextStyle"
-                    android:text="Date" />
-
-
-                <EditText
-                    android:id="@+id/choose_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_margin="@dimen/C7dp"
-                    android:background="@drawable/textbox_bg"
-                    android:clickable="false"
-                    android:focusable="false"
-                    android:hint="Select the Date"
-                    android:paddingLeft="@dimen/C5dp"
-                    android:textSize="@dimen/C13dp" />
-
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/actual_timer"
@@ -91,7 +90,6 @@
                     android:id="@+id/early_timer"
                     style="@style/TextStyle" />
 
-
                 <EditText
                     android:id="@+id/early_time"
                     android:layout_width="match_parent"
@@ -105,80 +103,160 @@
                     android:textSize="@dimen/C13dp" />
 
 
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:id="@+id/mode_linear"
+android:visibility="gone"
+                android:layout_height="wrap_content">
+
                 <TextView
                     style="@style/TextStyle"
-                    android:text="Amount" />
+                    android:text="From Type" />
 
-                <EditText
-                    android:id="@+id/edt_amt"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_margin="@dimen/C7dp"
-                    android:background="@drawable/textbox_bg"
-                    android:hint="Select the Amount"
-                    android:inputType="number"
-                    android:paddingLeft="@dimen/C5dp"
-                    android:textSize="@dimen/C13dp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        style="@style/TextStyle"
-                        android:layout_weight="1"
-                        android:text="Attactment" />
-
-                    <LinearLayout
-                        android:id="@+id/lin_img_prv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:id="@+id/da_exp_att"
-                            android:layout_width="@dimen/C40dp"
-                            android:layout_height="@dimen/C40dp"
-                            android:padding="@dimen/C2dp"
-                            android:src="@drawable/attach_files" />
-
-                        <ImageView
-                            android:id="@+id/da_exp_prv"
-                            android:layout_width="@dimen/C40dp"
-                            android:layout_height="@dimen/C40dp"
-                            android:layout_marginLeft="@dimen/C2dp"
-                            android:padding="@dimen/C2dp"
-                            android:src="@drawable/image_preview" />
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/exp_mode_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/C20dp">
+                    android:layout_margin="@dimen/C7dp"
+                    android:background="#B1AFAF"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="2dp">
 
                     <TextView
+                        android:id="@+id/txt_mode_tpe"
                         style="@style/TextStyle"
-                        android:layout_weight="1"
-                        android:text="Total :"
-                        android:textSize="18dp" />
+                        android:hint="Mode Type"
+                        android:padding="@dimen/C5dp" />
 
+                </androidx.cardview.widget.CardView>
+                <TextView
+                    style="@style/TextStyle"
+                    android:text="To Type" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/exp_to_mode_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/C7dp"
+                    android:background="#B1AFAF"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="2dp">
 
                     <TextView
-                        android:id="@+id/total_amount"
+                        android:id="@+id/txt_to_mode_tpe"
                         style="@style/TextStyle"
-                        android:textSize="18dp" />
+                        android:hint="Mode Type"
+                        android:padding="@dimen/C5dp" />
 
-                </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
 
-                <Button
-                    android:onClick="DaException"
-                    style="@style/ButtonStyle"
-                    android:background="@drawable/button_blueg"
-                    android:text="Submit" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone"
+                android:id="@+id/train_linear"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:text="Train Class" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/exp_train_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/C7dp"
+                    android:background="#B1AFAF"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="2dp">
+
+                    <TextView
+                        android:id="@+id/txt_train_tpe"
+                        style="@style/TextStyle"
+                        android:hint="Mode Type"
+                        android:padding="@dimen/C5dp" />
+
+                </androidx.cardview.widget.CardView>
 
             </LinearLayout>
+
+            <TextView
+                style="@style/TextStyle"
+                android:text="Amount" />
+
+            <EditText
+                android:id="@+id/edt_amt"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_margin="@dimen/C7dp"
+                android:background="@drawable/textbox_bg"
+                android:hint="Select the Amount"
+                android:inputType="number"
+                android:paddingLeft="@dimen/C5dp"
+                android:textSize="@dimen/C13dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_weight="1"
+                    android:text="Attactment" />
+
+                <LinearLayout
+                    android:id="@+id/lin_img_prv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/da_exp_att"
+                        android:layout_width="@dimen/C40dp"
+                        android:layout_height="@dimen/C40dp"
+                        android:padding="@dimen/C2dp"
+                        android:src="@drawable/attach_files" />
+
+                    <ImageView
+                        android:id="@+id/da_exp_prv"
+                        android:layout_width="@dimen/C40dp"
+                        android:layout_height="@dimen/C40dp"
+                        android:layout_marginLeft="@dimen/C2dp"
+                        android:padding="@dimen/C2dp"
+                        android:src="@drawable/image_preview" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/C20dp">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_weight="1"
+                    android:text="Total :"
+                    android:textSize="18dp" />
+
+
+                <TextView
+                    android:id="@+id/total_amount"
+                    style="@style/TextStyle"
+                    android:textSize="18dp" />
+
+            </LinearLayout>
+
+            <Button
+                android:onClick="DaException"
+                style="@style/ButtonStyle"
+                android:background="@drawable/button_blueg"
+                android:text="Submit" />
+
 
         </LinearLayout>
         </ScrollView>

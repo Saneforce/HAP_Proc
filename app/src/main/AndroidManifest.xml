@@ -37,11 +37,14 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
-        <activity android:name=".SFA_Activity.SalesCallsActivity"></activity>
+        <activity android:name=".Activity_Hap.DaExceptionStatus"></activity>
+        <activity android:name=".Activity_Hap.DaExceptionReject" />
+        <activity android:name=".Activity_Hap.DAExcApproval" />
+        <activity android:name=".SFA_Activity.SalesCallsActivity" />
         <activity android:name=".SFA_Activity.SFADCRActivity" />
         <activity
             android:name=".Activity_Hap.TaFuelEdit"
-            android:theme="@style/AppTheme.Dialog"/>
+            android:theme="@style/AppTheme.Dialog" />
         <activity android:name=".Activity.ModeOfTravel" />
         <activity android:name=".Activity.TAViewStatus" />
         <activity android:name=".Activity_Hap.ViewTAStatus" />

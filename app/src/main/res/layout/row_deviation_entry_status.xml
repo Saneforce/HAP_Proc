@@ -76,8 +76,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/C7dp">
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -91,27 +90,163 @@
                             android:textAllCaps="true"
                             android:textColor="@color/dark_greys"
                             android:textSize="11dp" />
+                        <TextView
+                            android:id="@+id/deviation_entry"
+                            style="@style/TextStyleOne"
+                            android:text="-"
+                            android:textSize="11sp"
+                            android:textStyle="bold" />
+
 
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:id="@+id/lin_actual"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:textColor="@color/dark_greys"
+                                android:layout_width="match_parent"
+                                android:layout_weight="1"
+                                android:text="Actual Check-in Time" />
+
+                            <TextView
+                                android:id="@+id/workinghours"
+                                style="@style/TextStyleOne"
+                                android:textColor="@color/green" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:layout_width="match_parent"
+                                android:layout_weight="1"
+                                android:textColor="@color/dark_greys"
+                                android:text="Early Check-in Time"/>
+
+                            <TextView
+                                android:id="@+id/shiftdate"
+                                style="@style/TextStyleOne"
+                                android:textColor="@color/green" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:id="@+id/lin_late"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:textColor="@color/dark_greys"
+                                android:layout_width="match_parent"
+                                android:layout_weight="1"
+                                android:text="Actual Check-out Time" />
+
+                            <TextView
+                                android:id="@+id/lateactualout"
+                                style="@style/TextStyleOne"
+                                android:textColor="@color/green" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:textColor="@color/dark_greys"
+                                android:layout_width="match_parent"
+                                android:layout_weight="1"
+                                android:text="Late Check-out Time"/>
+
+                            <TextView
+                                android:id="@+id/latecheckout"
+                                style="@style/TextStyleOne"
+                                android:textColor="@color/green" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:id="@+id/lin_daType"
+                        android:visibility="gone"
+                        android:layout_height="wrap_content">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:textColor="@color/dark_greys"
+                                android:layout_width="match_parent"
+                                android:layout_weight="1"
+                                android:text="From Type" />
+
+                            <TextView
+                                android:id="@+id/from_type"
+                                style="@style/TextStyleOne"
+                                android:textColor="@color/green" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:layout_width="match_parent"
+                                android:layout_weight="1"
+                                android:textColor="@color/dark_greys"
+                                android:text="To Type"/>
+
+                            <TextView
+                                android:id="@+id/to_type"
+                                style="@style/TextStyleOne"
+                                android:textColor="@color/green" />
+                        </LinearLayout>
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <TextView
-                            android:id="@+id/deviation_entry"
-                            style="@style/TextStyleOne"
-                            android:layout_weight="1"
-                            android:text="-"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
+
+                            <TextView
+                                style="@style/TextStyleOne"
+                                android:textColor="@color/dark_greys"
+                                android:layout_width="match_parent"
+                                android:layout_weight="1"
+                                android:text="Amount" />
+
+                            <TextView
+                                android:id="@+id/amnt_txt"
+                                style="@style/TextStyleOne"
+                                android:textColor="@color/green" />
+
 
                     </LinearLayout>
+
 
                     <TextView
                         style="@style/TextStyleOne"
                         android:layout_marginTop="@dimen/C10dp"
                         android:text="Reason"
+                        android:visibility="gone"
                         android:textAllCaps="true"
                         android:textColor="@color/dark_greys"
                         android:textSize="11dp" />
@@ -120,6 +255,7 @@
                         android:id="@+id/deviation_reason"
                         style="@style/TextStyleOne"
                         android:text="-"
+                        android:visibility="gone"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -130,6 +266,7 @@
                         android:layout_marginTop="@dimen/C8dp">
 
                         <LinearLayout
+
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1">
