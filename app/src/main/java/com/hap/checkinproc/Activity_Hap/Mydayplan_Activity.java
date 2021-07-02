@@ -104,7 +104,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     EditText edt_remarks, eText, etext2, empidedittext;
     Shared_Common_Pref shared_common_pref;
     Common_Class common_class;
-    String worktype_id, Worktype_Button = "", distributorid, routename, routeid, Fieldworkflag = "", hqid, shifttypeid, Chilling_Id;
+    String TpDate,worktype_id, Worktype_Button = "", distributorid, routename, routeid, Fieldworkflag = "", hqid, shifttypeid, Chilling_Id;
     private TextClock tClock;
     Button submitbutton, GetEmpId;
     CustomListViewDialog customDialog;
@@ -156,7 +156,9 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         dynamicrecyclerview.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
         tourdate = findViewById(R.id.tourdate);
-        tourdate.setText(com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly());
+        TpDate=com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly();
+        String[] TP_Dt=TpDate.split("-");
+        tourdate.setText(TP_Dt[2]+"/"+TP_Dt[1]+"/"+TP_Dt[0]);
         route_text = findViewById(R.id.route_text);
         worktypelayout = findViewById(R.id.worktypelayout);
         distributors_layout = findViewById(R.id.distributors_layout);
@@ -409,7 +411,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     try {
                         JSONObject jsonobj = new JSONObject();
                         jsonobj.put("worktype_code", addquote(worktype_id));
-                        jsonobj.put("dcr_activity_date", addquote(tourdate.getText().toString()));
+                        jsonobj.put("dcr_activity_date", addquote(TpDate));
                         jsonobj.put("worktype_name", addquote(worktype_text.getText().toString()));
                         jsonobj.put("Ekey", Common_Class.GetEkey());
                         jsonobj.put("objective", addquote(remarks));
@@ -478,7 +480,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                                 Log.e("RESPONSE_FROM_SERVER", response.body().toString());
                                 common_class.ProgressdialogShow(2, "Tour  plan");
                                 if (response.code() == 200 || response.code() == 201) {
-                                    if (count == 1 && ExpNeed==true) {
+                                    if (ExpNeed==true) {
                                         Intent intent = new Intent(Mydayplan_Activity.this, AllowanceActivity.class);
                                         intent.putExtra("My_Day_Plan", "One");
                                         startActivity(intent);
@@ -487,7 +489,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                                         common_class.CommonIntentwithFinish(Dashboard.class);
                                     }
 
-                                    Toast.makeText(Mydayplan_Activity.this, "Day Plan Submitted Successfully", Toast.LENGTH_SHORT).show();   }
+                                    Toast.makeText(Mydayplan_Activity.this, "Day Plan Submitted Successfully", Toast.LENGTH_SHORT).show();
+                                }
 
                             }
 

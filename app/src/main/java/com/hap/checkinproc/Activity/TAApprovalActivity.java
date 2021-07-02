@@ -152,7 +152,7 @@ public class TAApprovalActivity extends AppCompatActivity {
                         intent.putExtra("travel_mode", jsonObject.get("MOT_Name").getAsString());
                         intent.putExtra("desig", jsonObject.get("sf_Designation_Short_Name").getAsString());
                         intent.putExtra("dept", jsonObject.get("DeptName").getAsString());
-                        intent.putExtra("Sl_No", jsonObject.get("Sl_NoStart").getAsString());
+                        intent.putExtra("Sl_No", jsonObject.get("Sl_No").getAsString());
                         intent.putExtra("sfCode", jsonObject.get("Sf_code").getAsString());
                         intent.putExtra("SF_Mobile", jsonObject.get("SF_Mobile").getAsString());
                         intent.putExtra("sf_emp_id", jsonObject.get("sf_emp_id").getAsString());

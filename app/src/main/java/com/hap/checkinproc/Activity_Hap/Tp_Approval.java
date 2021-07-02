@@ -192,7 +192,7 @@ public class Tp_Approval extends AppCompatActivity {
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                    common_class.CommonIntentwithFinish(Dashboard.class);
+                    common_class.CommonIntentwithFinish(Approvals.class);
                 }
             });
 

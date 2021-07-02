@@ -31,7 +31,7 @@
 
                 <TextView
                     android:textStyle="bold"
-                    android:text="DAException Approval"
+                    android:text="@string/trv_exc_aprvl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button_yellow"

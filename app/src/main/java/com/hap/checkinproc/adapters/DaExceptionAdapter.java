@@ -36,12 +36,12 @@ public class DaExceptionAdapter extends RecyclerView.Adapter<DaExceptionAdapter.
     @Override
     public DaExceptionAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-        view.setOnClickListener(new View.OnClickListener() {
+        /*view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAdapterOnClick.onIntentClick(dummy);
             }
-        });
+        });*/
 
         return new DaExceptionAdapter.MyViewHolder(view);
     }

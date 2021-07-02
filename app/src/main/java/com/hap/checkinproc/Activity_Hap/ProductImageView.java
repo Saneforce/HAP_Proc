@@ -30,7 +30,7 @@ public class ProductImageView extends Activity {
         startService(new Intent(this, TimerService.class));
         ImageUrl = getIntent().getStringExtra("ImageUrl");
         ProductZoomImage = findViewById(R.id.product_image);
-        ProductZoomImage.setRotation(90);
+       // ProductZoomImage.setRotation(90);
         new DownLoadImageTask(ProductZoomImage).execute(ImageUrl);
     }
 

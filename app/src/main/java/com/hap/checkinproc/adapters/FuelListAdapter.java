@@ -106,8 +106,8 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
                         holder.TextTotalAmount.setText("Rs. " + qz);
                     }
                 } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
-                    if (Total >= 500) {
-                        Total = 500;
+                    if (Total >= 1000) {
+                        Total = 1000;
                         Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
                         String TotalPersonal = String.valueOf(Total - Personal);
                         holder.PersonalTextKM.setText(TotalPersonal);
@@ -117,9 +117,10 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
                         Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
 
 
-                        String qz = String.valueOf(q * z);
+                       // String qz = String.valueOf(q * z);
 
-                        holder.TextTotalAmount.setText("Rs. " + qz);
+                        double qz =  q * z;
+                        holder.TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(qz));
                     }else{
                         Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
                         String TotalPersonal = String.valueOf(Total - Personal);
@@ -128,9 +129,8 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
                         holder.fuelAmount.setText(" Rs." + new DecimalFormat("##0.00").format(FuelaAmt) + " / KM ");
                         Double q = Double.valueOf(TotalPersonal);
                         Double z = Double.valueOf(jsFuel.get("FuelAmt").getAsString());
-                        String qz = String.valueOf(q * z);
-                        Log.v("Testing_Total", qz);
-                        holder.TextTotalAmount.setText("Rs. " + qz);
+                        double qz =  q * z;
+                        holder.TextTotalAmount.setText("Rs. " + new DecimalFormat("##0.00").format(qz) );
                     }
                 }
 
@@ -141,6 +141,8 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
                         Intent intent = new Intent(context, TaFuelEdit.class);
                         intent.putExtra("SL_NO", jsFuel.get("Sl_No").getAsString());
                         intent.putExtra("MOT", jsFuel.get("MOT").getAsString());
+                        intent.putExtra("MOTNm", jsFuel.get("MOT_Name").getAsString());
+
                         intent.putExtra("Start", jsFuel.get("Start_Km").getAsString());
                         intent.putExtra("End", jsFuel.get("End_Km").getAsString());
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

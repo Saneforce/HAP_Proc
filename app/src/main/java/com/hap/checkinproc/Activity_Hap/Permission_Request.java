@@ -49,6 +49,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
+import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -63,6 +64,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     SharedPreferences Setups;
+
     public static final String CheckInfo = "CheckInDetail";
     public static final String UserInfo = "MyPrefs";
     public static final String SetupsInfo = "MySettings";
@@ -99,6 +101,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
     String maxYear, maxMonth, maxDay, minYear, minMonth, minDay, StringFromTinme = "", StringPremissonEntry = "", TOTime = "";
     TextView PermissionHours;
 
+    com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,16 +203,18 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                      fYr=Integer.parseInt(minYear);
                 }
                 if(mnth<0){ mnth=11;fYr=fYr-1;}
-                Log.d("MINMonth", String.valueOf(mnth));
                 calendarmin.set(fYr, mnth, 23);
                 picker1.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
-                /*Calendar calendarmin = Calendar.getInstance();
-                calendarmin.set(Integer.parseInt(minYear), Integer.parseInt(minMonth) - 1, Integer.parseInt(minDay));
-                picker1.getDatePicker().setMinDate(calendarmin.getTimeInMillis());*/
                 picker1.show();
 
             }
         });
+
+        modelShiftType.clear();
+        SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String Scode = (shared.getString("Sfcode", "null"));
+        String Dcode = (shared.getString("Divcode", "null"));
+        spinnerValue("get/Shift_timing", Dcode, Scode);
 
         eText = (EditText) findViewById(R.id.from_time);
         eText2 = (EditText) findViewById(R.id.to_time);
@@ -228,7 +233,28 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                             new TimePickerDialog.OnTimeSetListener() {
                                 @Override
                                 public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                                    StringFromTinme = String.format("%02d:%02d", sHour, sMinute);
+
+                                    StringFromTinme = clickedDate+" "+ String.format("%02d:%02d:00", sHour, sMinute);
+                                    Date fTime=DT.getDate(StringFromTinme);
+                                    int sftFHour=DT.getHour(shiftFromDate); int sftFMinute=DT.getMinute(shiftFromDate);
+                                    StringFromTinme = clickedDate+" "+ String.format("%02d:%02d:00", sftFHour, sftFMinute);
+                                    Date sftSTime=DT.getDate(StringFromTinme);
+                                    int sftTHour=DT.getHour(shiftToDate); int sftTMinute=DT.getMinute(shiftToDate);
+                                    StringFromTinme = clickedDate+" "+ String.format("%02d:%02d:00", sftTHour, sftTMinute);
+                                    Date sftETime=DT.getDate(StringFromTinme);
+                                    if(sftFHour>sftTHour){
+                                        sftETime=DT.AddDays(StringFromTinme,1);
+                                    }
+                                    if(sftSTime.getTime()<=fTime.getTime() && fTime.getTime()<=sftETime.getTime()){
+                                        eText.setText(String.format("%02d:%02d", sHour, sMinute));
+                                    }else{
+                                        eText.setText("");
+                                        eText2.setText("");
+                                        Toast.makeText(Permission_Request.this, "Please Choose the time between the Shifttime", Toast.LENGTH_SHORT).show();
+                                    }
+                                    ToTimeData();
+
+                                    /*StringFromTinme = String.format("%02d:%02d", sHour, sMinute);
                                     Log.e("From_Time_sMinute", String.format("%02d:%02d", sHour, sMinute));
 
                                     fromTime(sHour, sMinute);
@@ -238,8 +264,6 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                                     String now = StringFromTinme;
                                     String start = shiftFromDate;
                                     String end = shiftToDate;
-                                    System.out.println("CHECK_THE_CURRENT_TIME" + "" + now + " between " + start + "-" + end + "?");
-                                    System.out.println("CHECK_THE_CURRENT_TIME" + isHourInInterval(now, start, end));
 
                                     if (isHourInInterval(now, start, end) == true) {
                                         eText.setText(StringFromTinme);
@@ -248,7 +272,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                                         eText2.setText("");
                                         Toast.makeText(Permission_Request.this, "Please Choose the time between the Shifttime", Toast.LENGTH_SHORT).show();
                                     }
-                                    ToTimeData();
+                                    ToTimeData();*/
                                 }
                             }, hour, minutes, true);
                     picker.show();
@@ -266,12 +290,19 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         shitType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                modelShiftType.clear();
-                SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                String Scode = (shared.getString("Sfcode", "null"));
-                String Dcode = (shared.getString("Divcode", "null"));
-                spinnerValue("get/Shift_timing", Dcode, Scode);
+                if(permsissionDate.getText().toString().equalsIgnoreCase("")){
+                    Toast.makeText(Permission_Request.this, "select the date of permission", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(PermissionHours.getText().toString().equalsIgnoreCase("")){
+                    Toast.makeText(Permission_Request.this, "select the permission hours", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                customDialog = new CustomListViewDialog(Permission_Request.this, modelShiftType, 7);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
                 /*selectedHours("", "", "");*/
             }
         });
@@ -417,17 +448,10 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         toTime = new StringBuilder().append(hours).append(':')
                 .append(minutes).append(" ").append(timeSet).toString();
 
-        Log.e("TIME_WITH_AM_PM", toTime);
-        Log.e("TIME_WITH_AM_PM", String.valueOf(hours));
-        Log.e("TIME_WITH_AM_PM", String.valueOf(minutes));
-
-
     }
 
 
     private void differ() {
-        Log.e("ClickedfromTime", fromTime);
-        Log.e("ClickedtoTime", toTime);
         AvlHrs = TotHrs - tknHrs;
         hrsAvail.setText(String.valueOf(AvlHrs));
         if (!fromTime.equals("") && !toTime.equals("")) {
@@ -480,7 +504,6 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                 Log.e("REMAINING_LEAVES", String.valueOf(response.body()));
                 for (int i = 0; i < mAvalaibilityHours.size(); i++) {
                     takenLeave = mAvalaibilityHours.get(i).getTknHrS();
-                    Log.e("dsdsa", "" + takenLeave);
                     if (takenLeave != null) {
                         takenHrs.setText(takenLeave);
                         tknHrs = Integer.parseInt(takenLeave);
@@ -489,7 +512,6 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                         tknHrs = 0;
                     }
                     differ();
-
                 }
 
 
@@ -509,12 +531,6 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
         String hoursCount = "'" + String.valueOf(differnce) + "'";
 
-        Log.e("ClieckedData", clickedDate);
-        Log.e("ClieckedData", FTime);
-        Log.e("ClieckedData", TOTime);
-        Log.e("ClieckedData", hoursCount);
-
-
         JSONObject jsonleaveType = new JSONObject();
         JSONObject jsonleaveTypeS = new JSONObject();
         JSONArray jsonArray1 = new JSONArray();
@@ -533,12 +549,6 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
             e.printStackTrace();
         }
         String leaveCap1 = jsonArray1.toString();
-        System.out.println("Activity_Event_Capturesaaa" + leaveCap1);
-        Log.e("SF_Name", Shared_Common_Pref.Sf_Name);
-        Log.e("SF_Name", Shared_Common_Pref.Div_Code);
-        Log.e("SF_Name", Shared_Common_Pref.Sf_Code);
-        Log.e("SF_Name", Shared_Common_Pref.StateCode);
-
 
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonObject> call = service.leaveSubmit(Shared_Common_Pref.Sf_Name, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "MGR", leaveCap1);
@@ -581,12 +591,6 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
         String hoursCount = String.valueOf(differnce);
 
-        Log.e("ClieckedData", clickedDate);
-        Log.e("ClieckedData", FTime);
-        Log.e("ClieckedData", TOTime);
-        Log.e("ClieckedData", StringPremissonEntry);
-
-
         JSONObject jsonleaveType = new JSONObject();
         JSONObject jsonleaveTypeS = new JSONObject();
         JSONArray jsonArray1 = new JSONArray();
@@ -604,12 +608,6 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
             e.printStackTrace();
         }
         String leaveCap1 = jsonArray1.toString();
-        System.out.println("Activity_Event_Capturesaaa" + leaveCap1);
-        Log.e("SF_Name", Shared_Common_Pref.Sf_Name);
-        Log.e("SF_Name", Shared_Common_Pref.Div_Code);
-        Log.e("SF_Name", Shared_Common_Pref.Sf_Code);
-        Log.e("SF_Name", Shared_Common_Pref.StateCode);
-
 
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonObject> call = service.leaveSubmit(Shared_Common_Pref.Sf_Name, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.Sf_Code, "MGR", leaveCap1);
@@ -619,11 +617,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
                 JsonObject jsonObjecta = response.body();
 
-                Log.e("TOTAL_REPOSNE_PER", String.valueOf(jsonObjecta));
                 String Msg = jsonObjecta.get("Msg").getAsString();
-                Log.e("SDFDFD", jsonObjecta.get("success").toString());
-                Log.e("SDFDFDDFF", String.valueOf(Msg.length()));
-
                 if (Msg != null && !Msg.isEmpty()) {
                     AlertDialogBox.showDialog(Permission_Request.this, "HAP Check-In", Msg, "OK", "", false, new AlertBox() {
                         @Override
@@ -669,10 +663,7 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         shiftCall.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-
-
                 String REPONSE = String.valueOf(response.body());
-
                 try {
                     JSONArray jsonArray = new JSONArray(REPONSE);
 
@@ -681,21 +672,9 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                         String id = jsonObject1.optString("id");
                         String name = jsonObject1.optString("name");
                         String flag = jsonObject1.optString("FWFlg");
-                        Model_Pojo = new Common_Model(id, name, flag);
-                        Log.e("ShiftTime_Leave_Request", id);
-                        Log.e("ShiftTime_Leave_Request", name);
-                        Log.e("ShiftTime_Leave_Request", flag);
-
+                        Model_Pojo = new Common_Model(id, name, jsonObject1);
                         modelShiftType.add(Model_Pojo);
-                        Log.e("MODELSHIFTTYPE", String.valueOf(modelShiftType));
-
-
                     }
-                    customDialog = new CustomListViewDialog(Permission_Request.this, modelShiftType, 7);
-                    Window window = customDialog.getWindow();
-                    window.setGravity(Gravity.CENTER);
-                    window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                    customDialog.show();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -741,18 +720,24 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         customDialog.dismiss();
         if (type == 7) {
             shitType.setText(myDataset.get(position).getName());
+            shiftTypeId = myDataset.get(position).getId();
+            JSONObject item=myDataset.get(position).getJSONObject();
+            try {
+                shiftFromDate=item.getJSONObject("Sft_STime").getString("date");
+                shiftToDate=item.getJSONObject("sft_ETime").getString("date");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+/*
             shiftFromDate = shitType.getText().toString();
             shiftToDate = shitType.getText().toString();
             shiftFromDate = shiftFromDate.substring(0, 5);
-            Log.e("STR_ID", myDataset.get(position).getId());
-            shiftTypeId = myDataset.get(position).getId();
-            shiftToDate = shiftToDate.substring(9, 14);
-            Log.e("STR_TIME_VLAUE", shiftToDate);
+            shiftToDate = shiftToDate.substring(9, 14);*/
         } else if (type == 10) {
             PermissionHours.setText(myDataset.get(position).getName());
             StringPremissonEntry = myDataset.get(position).getName();
             ToTimeData();
-            Log.e("STR_TIME_VLAUE", myDataset.get(position).getName().toString());
         }
     }
 
@@ -765,17 +750,11 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
-                Log.e("StringFromTinme", StringFromTinme);
-                Log.e("StringFromTinme", StringPremissonEntry);
-
-
                 JsonObject jsonObjecta = response.body();
 
                 Log.e("TOTAL_REPOSNE_PER", String.valueOf(jsonObjecta));
                 TOTime = jsonObjecta.get("Totime").getAsString();
                 if (!StringFromTinme.equals("")) {
-
                     Log.v("eText.getText",eText.getText().toString());
                     if (!eText.getText().toString().equals("")) {
                         eText2.setText(TOTime);
@@ -785,8 +764,6 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
 
                 }
                 AvalaibilityHours();
-                Log.e("SDFDFD", TOTime);
-
             }
 
             @Override
@@ -798,24 +775,19 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
     @Override
     protected void onResume() {
         super.onResume();
-
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override

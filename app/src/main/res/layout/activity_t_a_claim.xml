@@ -432,8 +432,9 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@color/subExpHeader"
+                                android:background="@drawable/button_yellow"
                                 android:padding="@dimen/C8dp">
+<!--                                android:background="@color/subExpHeader"-->
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -694,7 +695,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:background="@color/subExpHeader"
+                                android:background="@drawable/button_yellow"
                                 android:padding="@dimen/C8dp">
 
                                 <TextView
@@ -721,12 +722,15 @@
 
                                 <androidx.core.widget.NestedScrollView
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
+                                    android:layout_height="match_parent"
+                                    android:overScrollMode="never"
+                                    android:focusableInTouchMode="false">
 
-                                    <androidx.recyclerview.widget.RecyclerView
+                                <androidx.recyclerview.widget.RecyclerView
                                         android:id="@+id/recycler_fuel"
                                         android:layout_width="match_parent"
-                                        android:layout_height="match_parent">
+                                        android:layout_height="wrap_content"
+                                        android:clickable="false">
 
                                     </androidx.recyclerview.widget.RecyclerView>
 
@@ -1130,6 +1134,78 @@
                         </LinearLayout>
 
                     </androidx.cardview.widget.CardView>
+                    <!--Traveling Places-->
+                    <androidx.cardview.widget.CardView
+                        android:id="@+id/card_travel_places"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/C8dp"
+                        app:cardCornerRadius="@dimen/C5dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="2"
+                                    android:background="@drawable/button_yellow"
+                                    android:padding="@dimen/C8dp">
+
+                                    <LinearLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:fontFamily="@font/basic"
+                                            android:text="Travel Places"
+                                            android:textAllCaps="true"
+                                            android:textColor="#FFF"
+                                            android:textSize="14sp"
+                                            android:textStyle="bold" />
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/lin_travel_places"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentLeft="true"
+                                        android:layout_alignParentEnd="true"
+                                        android:layout_alignParentRight="true">
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_gravity="center"
+                                            android:text="+ Add"
+                                            android:textAllCaps="false"
+                                            android:textColor="#FFF"
+                                            android:textSize="12sp" />
+                                    </LinearLayout>
+                                </LinearLayout>
+                            </LinearLayout>
+                            <LinearLayout
+                                android:id="@+id/lin_travel_dynamic_place"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                tools:ignore="MissingPrefix">
+
+                            </LinearLayout>
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
                     <!--Traveling Details-->
                     <androidx.cardview.widget.CardView
                         android:id="@+id/card_travel_loaction"
@@ -1320,7 +1396,6 @@
                                         android:id="@+id/ldg_typ"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginLeft="@dimen/C8dp"
                                         android:layout_weight="1"
                                         android:hint="Select the type of Lodging"
                                         android:textSize="@dimen/C13dp" />
@@ -1338,7 +1413,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:orientation="vertical">
-
                                     <LinearLayout
                                         android:id="@+id/ldg_stayloc"
                                         android:layout_width="match_parent"
@@ -1350,16 +1424,46 @@
                                             android:text="Stay Location"
                                             android:textSize="10sp" />
 
+                                        <LinearLayout
+                                            android:id="@+id/ldg_StylocSpinner"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_centerVertical="true"
+                                            android:layout_marginLeft="@dimen/C8dp"
+                                            android:layout_marginRight="@dimen/C8dp"
+                                            android:layout_marginBottom="@dimen/C5dp"
+                                            android:background="@drawable/item_border"
+                                            android:orientation="horizontal"
+                                            android:padding="5dp">
+
+
+                                            <TextView
+                                                android:id="@+id/txt_Styloc"
+                                                android:layout_width="wrap_content"
+                                                android:layout_height="wrap_content"
+                                                android:layout_weight="1"
+                                                android:hint="Select the Stay Location"
+                                                android:textSize="@dimen/C13dp" />
+
+                                            <ImageView
+                                                android:layout_width="@dimen/C20dp"
+                                                android:layout_height="match_parent"
+                                                android:padding="@dimen/C5dp"
+                                                android:src="@drawable/spin_down_arrow" />
+
+                                        </LinearLayout>
                                         <EditText
                                             android:id="@+id/edt_stay_loc"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginLeft="@dimen/C5dp"
+                                            android:layout_marginLeft="@dimen/C8dp"
                                             android:layout_marginRight="@dimen/C8dp"
                                             android:hint="Enter Stay Location"
-                                            android:paddingTop="0dp"
+                                            android:paddingTop="5dp"
                                             android:textColorHint="#C0C0C0"
-                                            android:textSize="@dimen/C13dp" />
+                                            android:textSize="14sp"
+                                            android:visibility="gone"
+                                            />
                                     </LinearLayout>
 
 

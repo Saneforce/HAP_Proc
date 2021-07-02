@@ -214,20 +214,6 @@ public interface ApiInterface {
     Call<Object> Getwe_Status(@Query("Priod") String Amod, @Query("sfCode") String sFCode,
                               @Query("axn") String axn, @Query("Status") String status,
                               @Field("data") String data);
-
-
-    @FormUrlEncoded
-    @POST("db_new_activity.php?axn=save/allowance")
-    Call<ResponseBody> saveAllowance(@Field("data") String userData);
-
-   @FormUrlEncoded
-    @POST("db_new_activity.php?axn=save/recallallowance")
-    Call<ResponseBody> RecallSave(@Field("data") String userData);
-
-    @FormUrlEncoded
-    @POST("db_new_activity.php?")
-    Call<ResponseBody> updateAllowance(  @Query("axn") String axn,@Field("data") String userData);
-
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/travelmode")
     Call<ResponseBody> getTravelMode(@Field("data") String userData);
@@ -340,15 +326,10 @@ public interface ApiInterface {
     @POST("Db_V13.php?axn=GetERTList")
     Call<JsonObject> ERTDetails(@Query("sfCode") String sFCode);
 
-    /*Devaition Entry*/
     @FormUrlEncoded
     @POST("Db_V13.php?")
     Call<Object> GetRouteObjects(@QueryMap Map<String, String> params, @Field("data") String data);
 
-    /*Save Devaition Entry*/
-    @FormUrlEncoded
-    @POST("Db_V13.php?axn=dcr/save")
-    Call<JsonObject> deviationSave(@Query("sf_name") String SfName, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("State_Code") String StateCode, @Query("desig") String desig, @Field("data") String data);
 
     /*Permission Select Hours*/
     @GET("Db_V13.php?")
@@ -372,16 +353,12 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=get/vwexceptionstatus")
     Call<JsonArray> getDaException(@Query("sfCode") String SF_Code);
 
-    @POST("db_new_activity.php?axn=expensesubdatestatus")
+    @POST("db_new_activity.php?axn=get/expensesubdatestatus")
     Call<JsonArray> getTaViewStatus(@Query("SF_Code") String SF_Code);
 
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/expensesflist")
     Call<JsonArray> getApprovalDisplay(@Field("data") String data);
-
-    @FormUrlEncoded
-    @POST("db_new_activity.php?axn=save/taapprove")
-    Call<JsonObject> taApprove(@Field("data") String body);
 
     @Multipart
     @POST("db_new_activity.php?axn=upload/Taimg")
@@ -440,7 +417,42 @@ public interface ApiInterface {
     Call<JsonArray> getDataArrayListA(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("sfCode") String Sf_code, @Query("State_Code") String State_code, @Query("desig") String desig, @Field("data") String body);
 
     @FormUrlEncoded
+    @POST("Db_v310.php?")
+    Call<JsonArray> getDataArrayListA(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("sfCode") String Sf_code, @Query("rSF") String rSF, @Query("State_Code") String State_code, @Query("desig") String desig, @Field("data") String body);
+
+    @FormUrlEncoded
     @POST("db_v310.php?axn=get/expensedatedetailsnew")
     Call<JsonObject> getTAdateDetails(@Field("data") String userData);
+
+    /*Devaition Entry*/
+    @FormUrlEncoded
+    @POST("Db_v310.php?")
+    Call<Object> GetExceptionRoutes(@QueryMap Map<String, String> params, @Field("data") String data);
+
+    /*Save Devaition Entry*/
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=save/exception")
+    Call<JsonObject> deviationSave(@Query("sf_name") String SfName, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("State_Code") String StateCode, @Query("desig") String desig, @Field("data") String data);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=save/allowance")
+    Call<ResponseBody> saveAllowance(@Field("data") String userData);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=save/recallallowance")
+    Call<ResponseBody> RecallSave(@Field("data") String userData);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=save/taapprove")
+    Call<JsonObject> taApprove(@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?")
+    Call<ResponseBody> updateAllowance(  @Query("axn") String axn,@Field("data") String userData);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?")
+    Call<JsonArray> getLDGAllowance(@Query("axn") String axn, @Field("data") String body);
+
 
 }

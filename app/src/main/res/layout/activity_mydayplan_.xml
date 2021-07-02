@@ -15,18 +15,47 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorAccent"
-            android:padding="@dimen/C15dp">
+            android:padding="@dimen/C10dp"
+            android:gravity="center">
 
-
-            <TextView
-                android:id="@+id/textView9"
-                style="@style/TextStyle"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
                 android:gravity="center"
-                android:text="@string/DayPlan"
-                android:textColor="#FFFFFF"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="@dimen/C5dp">
+                <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="@string/DayPlan"
+                        android:textColor="#FFFFFF"
+                        android:textSize="17sp"
+                    android:padding="@dimen/C2dp"
+                        android:textStyle="bold"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="-"
+                    android:textColor="#FFFFFF"
+                    android:textSize="17sp"
+                    android:layout_marginLeft="@dimen/C5dp"
+                    android:padding="@dimen/C2dp"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:id="@+id/tourdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="#FFFFFF"
+                    android:textSize="17sp"
+                    android:layout_marginLeft="@dimen/C5dp"
+                    android:padding="@dimen/C2dp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
         </LinearLayout>
 
         <androidx.core.widget.NestedScrollView
@@ -49,19 +78,6 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical"
                     android:visibility="visible">
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
-                        <TextView
-                            android:id="@+id/tourdate"
-                            style="@style/TextStyle"
-                            android:text="Time"
-                            android:textColor="@color/color_red" />
-                    </RelativeLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -85,7 +101,8 @@
 
                                 <TextView
                                     style="@style/TextStyle"
-                                    android:text="@string/txt_worktype" />
+                                    android:text="@string/txt_worktype"
+                                    android:textStyle="bold"/>
 
                                 <TextView
                                     android:id="@+id/worktype_text"
@@ -189,7 +206,7 @@
                                     android:gravity="center_vertical"
                                     android:hint="Select the Distributor"
                                     android:padding="@dimen/C4dp"
-                                    android:textSize="13sp" />
+                                    android:textSize="14sp" />
 
                             </LinearLayout>
 
@@ -219,7 +236,7 @@
                                     android:gravity="center_vertical"
                                     android:hint="Select the Route"
                                     android:padding="@dimen/C4dp"
-                                    android:textSize="13sp" />
+                                    android:textSize="14sp" />
                             </LinearLayout>
 
 
@@ -309,7 +326,7 @@
                                         android:hint="EMP ID"
                                         android:inputType="text"
                                         android:padding="5dp"
-                                        android:textSize="13dp" />
+                                        android:textSize="14dp" />
                                 </LinearLayout>
 
                                 <Button
@@ -320,7 +337,7 @@
                                     android:background="@drawable/button_blueg"
                                     android:textColor="@color/white"
                                     android:padding="@dimen/C1dp"
-                                    android:textSize="13sp" />
+                                    android:textSize="14sp" />
 
 
                             </LinearLayout>
@@ -392,7 +409,7 @@
                                             android:padding="@dimen/C10dp"
                                             android:textAllCaps="false"
                                             android:textColor="#515151"
-                                            android:textSize="13sp" />
+                                            android:textSize="14sp" />
 
                                     </androidx.cardview.widget.CardView>
 
@@ -442,7 +459,7 @@
                                                 android:padding="@dimen/C10dp"
                                                 android:textAllCaps="false"
                                                 android:textColor="#515151"
-                                                android:textSize="13sp" />
+                                                android:textSize="14sp" />
 
                                         </androidx.cardview.widget.CardView>
 
@@ -513,7 +530,7 @@
                                                 android:text=""
                                                 android:textAllCaps="false"
                                                 android:textColor="#515151"
-                                                android:textSize="13sp" />
+                                                android:textSize="14sp" />
 
                                         </androidx.cardview.widget.CardView>
                                     </LinearLayout>
@@ -558,7 +575,7 @@
                                                 android:text=""
                                                 android:textAllCaps="false"
                                                 android:textColor="#515151"
-                                                android:textSize="13sp" />
+                                                android:textSize="14sp" />
 
                                         </androidx.cardview.widget.CardView>
                                     </LinearLayout>
@@ -574,8 +591,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
+                        android:layout_marginLeft="5dp"
                         android:text="Remarks"
-                        android:fontFamily="@font/basic"
                         android:textColor="#000000"
                         android:textStyle="bold" />
 
@@ -584,11 +601,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/C100dp"
                         android:layout_marginTop="@dimen/C10dp"
+                        android:layout_marginLeft="@dimen/C5dp"
+                        android:layout_marginRight="@dimen/C5dp"
                         android:background="@drawable/round_white_backround"
                         android:gravity="top"
                         android:hint="Enter the Remarks"
                         android:padding="@dimen/C5dp"
-                        android:textSize="@dimen/C12dp" />
+                        android:textSize="17sp" />
                     <ProgressBar
                         android:id="@+id/progressbar"
                         android:layout_width="match_parent"

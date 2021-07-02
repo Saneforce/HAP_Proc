@@ -43,12 +43,12 @@ public class New_TP_Approval_Adapter extends RecyclerView.Adapter<New_TP_Approva
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-        view.setOnClickListener(new View.OnClickListener() {
+        /*view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAdapterOnClick.onIntentClick(dummy);
             }
-        });
+        });*/
         return new MyViewHolder(view);
     }
 

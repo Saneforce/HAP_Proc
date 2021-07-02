@@ -45,12 +45,12 @@ public class Leave_Approval_Adapter extends RecyclerView.Adapter<Leave_Approval_
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-        view.setOnClickListener(new View.OnClickListener() {
+        /*view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAdapterOnClick.onIntentClick(dummy);
             }
-        });
+        });*/
 
         return new MyViewHolder(view);
     }

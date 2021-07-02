@@ -3,10 +3,14 @@ package com.hap.checkinproc.Activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -41,13 +45,20 @@ public class PdfViewerActivity extends AppCompatActivity {
         pdfFile = String.valueOf(getIntent().getSerializableExtra("PDF_FILE"));
         Log.v("KARTHIC_URl", pdfurl);
 
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Snackbar.make(view, "Downloaded Successfully...", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                String sUrl=pdfurl.replace("file://","");
+                File outputPath= new File(sUrl);
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("application/pdf");
+                shareIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+outputPath));
+                shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(Intent.createChooser(shareIntent, "Share it"));
             }
         });
 
@@ -124,7 +135,14 @@ public class PdfViewerActivity extends AppCompatActivity {
             super.onPostExecute(inputStream);
             if (dialog.isShowing()){
                 pdfView.fromStream(inputStream).load();
+
                 dialog.dismiss();
+                Toast.makeText(PdfViewerActivity.this,"Downloaded Successfully...",Toast.LENGTH_LONG).show();
+                /*View view = findViewById(R.id.fab);
+                Snackbar.make(pdfView, "Downloaded Successfully...", Snackbar.LENGTH_LONG)
+                        .setBackgroundTint(Color.BLACK)
+                        .setTextColor(Color.WHITE)
+                        .setAction("Action", null).show();*/
             }
         }
 
@@ -137,34 +155,29 @@ public class PdfViewerActivity extends AppCompatActivity {
     }  @Override
     protected void onResume() {
         super.onResume();
-        startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        startService(new Intent(this, TimerService.class));
     }
 }

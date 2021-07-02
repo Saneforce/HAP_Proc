@@ -72,14 +72,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         gson = new Gson();
         // presenter.requestDataFromServer();
 
-
+/*
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnBackPressedDispatcher.onBackPressed();
             }
-        });
+        });*/
 
     }
 

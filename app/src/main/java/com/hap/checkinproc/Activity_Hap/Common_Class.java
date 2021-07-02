@@ -12,7 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Common_Class {
-    public static String Version_Name="Ver 3.1.5";
+    public static String Version_Name="Ver 3.1.10-b";
     public static String Work_Type="0";
     public static Location location=null;
 
@@ -68,6 +68,19 @@ public class Common_Class {
         return dateInString;
 
     }
+    public Date AddDays(String dateInString,int NoofDays) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        try {
+
+            c.setTime(sdf.parse(dateInString));
+            c.add(Calendar.DATE, NoofDays);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Date resultdate = new Date(c.getTimeInMillis());
+        return resultdate;
+    }
     public String AddMonths(String dateInString,int NoofDays, String pattern) {
         Log.d("DateString",dateInString);
         Log.d("DateString No.Dys",String.valueOf(NoofDays));
@@ -122,6 +135,36 @@ public class Common_Class {
         }
         return c.get(Calendar.YEAR);
     }
+    public int getHour(String dateInString){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(dateInString));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return c.get(Calendar.HOUR);
+    }
+    public int getMinute(String dateInString){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(dateInString));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return c.get(Calendar.MINUTE);
+    }
+    public int getSeconds(String dateInString){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(dateInString));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return c.get(Calendar.SECOND);
+    }
     public Date getDate(String dateInString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
@@ -146,5 +189,21 @@ public class Common_Class {
         Date resultdate = new Date(c.getTimeInMillis());
         dateInString = sdf.format(resultdate);
         return dateInString;
+    }
+
+    public Date AddMinute(Date date,int NoofDays) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar c = Calendar.getInstance();
+        try {
+
+            c.setTime(date);
+            c.add(Calendar.MINUTE, NoofDays);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        Date resultdate = new Date(c.getTimeInMillis());
+        return resultdate;
+
     }
 }

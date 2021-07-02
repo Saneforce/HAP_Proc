@@ -18,6 +18,10 @@ public class ModeOfTravel {
     @Expose
     private Integer driverNeed;
 
+    @SerializedName("Eligible")
+    @Expose
+    private Integer Eligible;
+
     public Integer getId() {
         return id;
     }
@@ -46,6 +50,9 @@ public class ModeOfTravel {
         return driverNeed;
     }
 
+    public Integer getEligible() {
+        return Eligible;
+    }
     public void setDriverNeed(Integer driverNeed) {
         this.driverNeed = driverNeed;
     }

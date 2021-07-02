@@ -78,8 +78,8 @@ import static com.hap.checkinproc.SFA_Activity.HAPApp.activeActivity;
 public class SANGPSTracker extends Service {
     private static Location location = null;
     private BroadcastReceiver yourReceiver;
-    private static final String PACKAGE_NAME =
-            "com.google.android.gms.location.sample.locationupdatesforegroundservice";
+    private static final String PACKAGE_NAME ="com.hap.checkinproc.common";
+            //"com.google.android.gms.location.sample.locationupdatesforegroundservice";
     private static final String ACTION_GPS = "android.location.PROVIDERS_CHANGED";
 
     private static final String TAG = SANGPSTracker.class.getSimpleName();

@@ -63,10 +63,10 @@
 
     <style name="ButtonStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">@dimen/C45dp</item>
         <item name="android:layout_margin">@dimen/C5dp</item>
-        <item name="android:padding">@dimen/C10dp</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:padding">@dimen/C1dp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 

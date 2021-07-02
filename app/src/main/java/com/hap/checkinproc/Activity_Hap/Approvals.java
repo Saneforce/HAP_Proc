@@ -245,7 +245,6 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 break;
 
             case R.id.lin_leave_cancel:
-
                 startActivity(new Intent(Approvals.this, Leave_Cancel_Approval.class));
                 finish();
                 break;

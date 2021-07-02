@@ -144,22 +144,6 @@
 
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
-
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:layout_marginRight="@dimen/C10dp"
-                                android:onClick="ImagePdf"
-                                android:src="@drawable/info">
-
-                            </ImageView>
-                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -2692,7 +2676,7 @@
                 <Button
                     style="@style/ButtonStyle"
                     android:layout_weight="1"
-                    android:background="@color/GrandTotal"
+                    android:background="@color/ApproveGreen"
                     android:onClick="onApproval"
                     android:text="Approve " />
 

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity_Hap.Dashboard">
-
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-<RelativeLayout
+        <RelativeLayout
     android:layout_marginTop="@dimen/C10dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -42,14 +44,11 @@
             android:layout_gravity="center_horizontal"
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             app:srcCompat="@drawable/profile_img" />
-
-
         <TextView
             android:id="@+id/lblUserName"
             style="@style/TextStyle"
             android:layout_gravity="center"
             android:textStyle="bold" />
-
         <TextView
             style="@style/TextStyle"
             android:id="@+id/lblEmail"
@@ -59,7 +58,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
             android:layout_marginTop="25dp"
             android:layout_marginRight="15dp"
@@ -71,29 +70,26 @@
                 style="@style/ButtonStyle"
                 android:background="@drawable/g_sign"
                 android:text="My day plan" />
-
             <Button
                 android:id="@+id/lin_check_in"
                 style="@style/ButtonStyle"
                 android:background="@drawable/button_green"
                 android:text="Check-In"
                 android:visibility="gone" />
-
             <Button
                 android:id="@+id/lin_RecheckIn"
                 style="@style/ButtonStyle"
                 android:background="@drawable/button_orange"
                 android:text="Re-Call"
                 android:visibility="gone" />
-
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/flxlayut"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
                 app:alignContent="stretch"
                 app:alignItems="stretch"
                 app:flexDirection="row"
-                android:layout_marginBottom="@dimen/C30dp"
                 app:flexWrap="wrap"
                 app:showDivider="middle">
 
@@ -191,6 +187,7 @@
             <Button
                 android:id="@+id/lin_exit"
                 style="@style/ButtonStyle"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/button_check_out"
                 android:text="Exit" />
 
@@ -208,4 +205,5 @@
         </LinearLayout>
 
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
+</LinearLayout>

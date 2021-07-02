@@ -49,6 +49,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:padding="@dimen/C5dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="5dp"
             android:background="#f6eeee"
@@ -93,17 +94,14 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
+            android:layout_height="match_parent"
             android:layout_marginRight="5dp">
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/leaverecyclerview"
                 android:layout_width="match_parent"
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="5dp"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/C60dp" />
+                android:layout_height="match_parent" />
         </LinearLayout>
 
     </LinearLayout>

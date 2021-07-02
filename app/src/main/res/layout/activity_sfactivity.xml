@@ -270,7 +270,7 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <include layout="@layout/back_arrow"></include>
+<!--
+    <include layout="@layout/back_arrow"></include>-->
 
 </LinearLayout>

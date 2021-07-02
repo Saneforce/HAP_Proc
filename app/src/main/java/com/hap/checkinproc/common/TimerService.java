@@ -68,7 +68,11 @@ public class TimerService extends Service {
     }
 
     public void startTimerService(){
-        startService(new Intent(this, TimerService.class));
+        if (isMyServiceRunning(TimerService.class)==false) {
+            try{
+            startService(new Intent(this, TimerService.class));
+            }catch (Exception e){}
+        }
     }
     private boolean isMyServiceRunning(Class<?> serviceClass) {
         ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
@@ -88,8 +92,10 @@ public class TimerService extends Service {
         mTimer.scheduleAtFixedRate(new TimeDisplay(), 0, notify);   //Schedule task
         if (isMyServiceRunning(TimerService.class)==false)
         {
-            Intent inten = new Intent(this, TimerService.class);
-            startService(inten);
+            try {
+                Intent inten = new Intent(this, TimerService.class);
+                startService(inten);
+            }catch (Exception e){}
         }
     }
 
@@ -103,15 +109,25 @@ public class TimerService extends Service {
     @Override
     public void onRebind(Intent intent) {
         super.onRebind(intent);
-        Intent inten = new Intent(this, TimerService.class);
-        startService(inten);
+        if (isMyServiceRunning(TimerService.class)==false)
+        {
+            try{
+            Intent inten = new Intent(this, TimerService.class);
+            startService(inten);
+            }catch (Exception e){}
+        }
     }
 
     @Override
     public void onStart(Intent intent, int startId) {
         super.onStart(intent, startId);
-        Intent inten = new Intent(this, TimerService.class);
-        startService(inten);
+        if (isMyServiceRunning(TimerService.class)==false)
+        {
+            try{
+                Intent inten = new Intent(this, TimerService.class);
+                startService(inten);
+            }catch (Exception e){}
+        }
     }
 
 

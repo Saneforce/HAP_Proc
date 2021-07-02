@@ -171,9 +171,9 @@ public class Weekly_Off extends AppCompatActivity {
                     weekOff();
                 } else if (eText.getText().toString().matches("")) {
                     Toast.makeText(Weekly_Off.this, "Enter Date", Toast.LENGTH_SHORT).show();
-                } else if (remark.getText().toString().matches("")) {
+                } /*else if (remark.getText().toString().matches("")) {
                     Toast.makeText(Weekly_Off.this, "Enter Remarks", Toast.LENGTH_SHORT).show();
-                }
+                }*/
             }
         });
 

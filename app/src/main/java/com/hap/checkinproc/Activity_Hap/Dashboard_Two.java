@@ -4,6 +4,8 @@ package com.hap.checkinproc.Activity_Hap;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +28,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.crashlytics.internal.model.CrashlyticsReport;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivityTwo;
@@ -42,6 +45,7 @@ import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.Status_Activity.View_All_Status_Activity;
 import com.hap.checkinproc.adapters.GateAdapter;
 import com.hap.checkinproc.adapters.HomeRptRecyler;
+import com.hap.checkinproc.common.AlmReceiver;
 import com.hap.checkinproc.common.TimerService;
 
 import java.text.SimpleDateFormat;
@@ -93,8 +97,9 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     CardView cardGateDet;
     String dashMdeCnt = "";
     String datefrmt = "";
-    TextView TxtEmpId;
+    TextView TxtEmpId,txDesgName,txHQName,txDeptName;
 
+    Common_Class DT = new Common_Class();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,8 +130,17 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             }
         });
 
+        CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
         TxtEmpId = findViewById(R.id.txt_emp_id);
         TxtEmpId.setText(" - " + mShared_common_pref.getvalue(Shared_Common_Pref.SF_EMP_ID));
+        txHQName = findViewById(R.id.txHQName);
+        txDesgName = findViewById(R.id.txDesgName);
+        txDeptName = findViewById(R.id.txDeptName);
+        txHQName.setText(UserDetails.getString("SFHQ",""));
+        txDesgName.setText(mShared_common_pref.getvalue(Shared_Common_Pref.SF_DESIG,""));
+        txDeptName.setText(mShared_common_pref.getvalue(Shared_Common_Pref.SF_DEPT,""));
+
         TextView txtErt = findViewById(R.id.toolbar_ert);
         TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
         txtErt.setOnClickListener(new View.OnClickListener() {
@@ -175,8 +189,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     startActivity(new Intent(getApplicationContext(), Dashboard.class));
             }
         });
-        CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
-        UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
         TextView txUserName = findViewById(R.id.txUserName);
         String sUName = UserDetails.getString("SfName", "");
@@ -240,11 +252,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         btnGateOut.setVisibility(View.GONE);
         cardGateDet.setVisibility(View.GONE);
 
-        if (Integer.parseInt(CheckInDetails.getString("On_Duty_Flag", "0")) > 0) {
-            btnGateIn.setVisibility(View.VISIBLE);
-            btnGateOut.setVisibility(View.VISIBLE);
-            cardGateDet.setVisibility(View.VISIBLE);
-        }
         if (getIntent().getExtras() != null) {
             Bundle params = getIntent().getExtras();
             viewMode = params.getString("Mode");
@@ -273,6 +280,18 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         if (sSFType.equals("0"))
             StActivity.setVisibility(View.GONE);
 
+        if (Integer.parseInt(CheckInDetails.getString("On_Duty_Flag", "0")) > 0 || sSFType.equals("1")) {
+            btnGateIn.setVisibility(View.VISIBLE);
+            btnGateOut.setVisibility(View.VISIBLE);
+            cardGateDet.setVisibility(View.VISIBLE);
+        }
+
+        String ChkOutTm=CheckInDetails.getString("ShiftEnd","");
+        if (!ChkOutTm.equalsIgnoreCase("")) {
+            long AlrmTime = DT.getDate(ChkOutTm).getTime();
+            //long AlrmTime=DT.AddMinute(DT.GetCurrDateTime(Dashboard_Two.this),2).getTime();
+            sendAlarmNotify(1001, AlrmTime, "HAP Check-In", "Check-Out Alert !.");
+        }
         getNotify();
         getDyReports();
         getMnthReports(0);
@@ -764,8 +783,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         super.onRestart();
         startService(new Intent(this, TimerService.class));
     }
-
-
     public void gatevalue(String Date) {
         Log.v("plantimeplantime", Date);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -794,5 +811,21 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         });
 
 
+    }
+
+    public void sendAlarmNotify(int AlmID,long AlmTm,String NotifyTitle,String NotifyMsg){
+
+        /*AlmTm=AlmTm.replaceAll(" ","-").replaceAll("/","-").replaceAll(":","-");
+        String[] sDts= AlmTm.split("-");
+        Calendar cal = Calendar.getInstance();
+        cal.set(sDts[0],sDts[1],sDts[2],sDts[3],sDts[4]);*/
+
+        Intent intent = new Intent(this, AlmReceiver.class);
+        intent.putExtra("ID",String.valueOf(AlmID));
+        intent.putExtra("Title",NotifyTitle);
+        intent.putExtra("Message",NotifyMsg);
+        PendingIntent pIntent=PendingIntent.getBroadcast(this.getApplicationContext(),AlmID,intent,0);
+        AlarmManager alarmManager=(AlarmManager) this.getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,AlmTm,pIntent);
     }
 }

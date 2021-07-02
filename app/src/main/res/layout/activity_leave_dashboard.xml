@@ -62,7 +62,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="Leave Request"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -82,7 +82,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="Permission Request"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -102,7 +102,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="Flight Ticket Booking"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -123,7 +123,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="Missed Punch"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp"/>
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -143,7 +143,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="Weekly Off"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -165,7 +165,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="Deviation Entry"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -186,8 +186,8 @@
                             <TextView
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
-                                android:text="Exception Request"
-                                android:textSize="@dimen/C16dp" />
+                                android:text="Travel Mode Exception Request"
+                                android:textSize="16sp" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -234,7 +234,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="Leave Status"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -256,7 +256,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="Permission Status"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp" />
 
 
                             <ImageView
@@ -279,7 +279,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="On-duty Status"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -301,7 +301,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="Missed Punch Status"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp" />
 
 
                             <ImageView
@@ -323,7 +323,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="Weekly-off Status"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -346,7 +346,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="Extended shift Status"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -370,7 +370,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="Holiday Entry Status"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp" />
 
 
                             <ImageView
@@ -391,7 +391,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="Deviation Entry Status"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -414,7 +414,7 @@
                                 style="@style/TextStyle"
                                 android:layout_weight="1"
                                 android:text="Leave Cancel Status"
-                                android:textSize="@dimen/C16dp" />
+                                android:textSize="16sp" />
 
                             <ImageView
                                 android:layout_width="wrap_content"
@@ -439,9 +439,9 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
-                                    android:text="Da Exception Status" />
+                                    android:text="Travel Mode Exception Status" />
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"

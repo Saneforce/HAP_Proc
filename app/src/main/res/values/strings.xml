@@ -64,8 +64,7 @@
         <item>November</item>
         <item>December</item>
     </array>
-    <string name="btnsummit">Submit For Approval
-</string>
+    <string name="btnsummit">Submit For Approval</string>
 
     <!--Order Deatils-->
     <string name="Rep_orders">Reports</string>
@@ -86,7 +85,10 @@
     <bool name="config_closeDialogWhenTouchOutside">false</bool>
     <string name="title_activity_ta_approval_display">TaApprovalDisplay</string>
     <string name="take_photo">Photo</string>
-    <string name="app_ver">v3.1.5</string>
-    <string name="tool_app_ver">Ver 3.1.5</string>
+    <string name="app_ver">v3.1.10 - beta</string>
+    <string name="tool_app_ver">Ver 3.1.10 - beta</string>
+    <string name="trv_exc_entry">Travel Mode Exception Entry</string>
+    <string name="trv_exc_aprvl">Travel Mode Exception Approval</string>
+    <string name="trv_exc_status">Travel Mode Exception Status</string>
 
 </resources>

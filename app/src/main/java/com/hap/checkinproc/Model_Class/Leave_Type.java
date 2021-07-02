@@ -13,6 +13,13 @@ public class Leave_Type {
     @SerializedName("Leave_SName")
     @Expose
     private String leaveSName;
+    @SerializedName("COffType")
+    @Expose
+    private Integer COffType;
+    @SerializedName("MaxDays")
+    @Expose
+    private Integer MaxDays;
+
 
     public Integer getId() {
         return id;
@@ -29,6 +36,14 @@ public class Leave_Type {
     public void setName(String name) {
         this.name = name;
     }
+
+    public Integer getCOffType() {
+        return COffType;
+    }
+    public Integer getMaxDays() {
+        return MaxDays;
+    }
+
 
     public String getLeaveSName() {
         return leaveSName;

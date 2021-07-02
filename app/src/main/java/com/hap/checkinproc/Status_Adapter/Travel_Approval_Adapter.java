@@ -36,12 +36,12 @@ public class Travel_Approval_Adapter extends RecyclerView.Adapter<Travel_Approva
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-        view.setOnClickListener(new View.OnClickListener() {
+        /*view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAdapterOnClick.onIntentClick(dummy);
             }
-        });
+        });*/
 
         return new Travel_Approval_Adapter.MyViewHolder(view);
     }

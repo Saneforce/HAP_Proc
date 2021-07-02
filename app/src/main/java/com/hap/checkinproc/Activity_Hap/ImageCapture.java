@@ -1,6 +1,8 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.app.Activity;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -55,6 +57,7 @@ import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.AlmReceiver;
 import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.TimerService;
@@ -71,6 +74,7 @@ import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import id.zelory.compressor.Compressor;
@@ -99,6 +103,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     Camera mCamera;
     int mCamId = 1;
     String[] flashModes = {"OFF", "Auto", "ON", "Torch"};
+    String[] WBModes;
     private File file;
     SurfaceView preview;
     SurfaceHolder mHolder;
@@ -110,7 +115,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     SharedPreferences UserDetails;
     Common_Class DT = new Common_Class();
     String VistPurpose = "";
-    String mMode, WrkType, onDutyPlcID, onDutyPlcNm, vstPurpose, UserInfo = "MyPrefs", imagvalue = "", mypreference = "mypref", PlaceId = "", PlaceName = "";
+    String sStatus,mMode, WrkType, onDutyPlcID, onDutyPlcNm, vstPurpose, UserInfo = "MyPrefs", imagvalue = "", mypreference = "mypref", PlaceId = "", PlaceName = "";
     com.hap.checkinproc.Common_Class.Common_Class common_class;
 
     public static final String sCheckInDetail = "CheckInDetail";
@@ -130,7 +135,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         CheckInDetails = getSharedPreferences(sCheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(sUserDetail, Context.MODE_PRIVATE);
         common_class = new com.hap.checkinproc.Common_Class.Common_Class(this);
-        UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
 
 
         if (sharedpreferences.contains("VSTP")) {
@@ -218,10 +222,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         lstWBalance = (ListView) findViewById(R.id.lstWBalance);
 
 
-       String[] WBModes=getSupportedWhiteBalanceModes();
-
-        ArrayAdapter simpleWBAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, WBModes);
-        lstWBalance.setAdapter(simpleWBAdapter);//sets the adapter for listView
 
         ArrayAdapter simpleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, flashModes);
         lstFlashMode.setAdapter(simpleAdapter);//sets the adapter for listView
@@ -272,6 +272,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 lstModalWBal.setVisibility(View.GONE);
+
                 setWhiteBalanceMode(WBModes[i]);
             }
         });
@@ -315,6 +316,11 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         btnWBal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                WBModes=getSupportedWhiteBalanceModes();
+
+                ArrayAdapter simpleWBAdapter = new ArrayAdapter<String>(ImageCapture.this, android.R.layout.simple_list_item_1, WBModes);
+                lstWBalance.setAdapter(simpleWBAdapter);//sets the adapter for listView
+
                 lstModalWBal.setVisibility(View.VISIBLE);
             }
         });
@@ -413,8 +419,10 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     }
 
     public void takePicture() {
+
+        String usrNm=UserDetails.getString("Sfcode","");
         long tsLong = System.currentTimeMillis() / 1000;
-        imageFileName = Long.toString(tsLong) + ".jpg";
+        imageFileName = usrNm+"_"+Long.toString(tsLong) + ".jpg";
         //file  = new File(Environment.getExternalStorageDirectory() + "/"+ts+".jpg");
         imagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + imageFileName;
         file = new File(imagePath);
@@ -710,11 +718,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
         if (sharedpreferences.contains("placeName")) {
             PlaceName = sharedpreferences.getString("placeName", "");
-            Log.e("KARTHIC_PLACE_NAME", PlaceName);
         }
         if (sharedpreferences.contains("placeId")) {
             PlaceId = sharedpreferences.getString("placeId", "");
-            Log.e("KARTHIC_PLACE_ID", "Checking" + PlaceId);
         }
 
         try {
@@ -735,9 +741,13 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             CheckInInf.put("long", lng);
             CheckInInf.put("Lattitude", lat);
             CheckInInf.put("Langitude", lng);
-            CheckInInf.put("PlcNm", PlaceName);
-            CheckInInf.put("PlcID", PlaceId);
-
+            if(mMode.equalsIgnoreCase("onduty")) {
+                CheckInInf.put("PlcNm", PlaceName);
+                CheckInInf.put("PlcID", PlaceId);
+            }else{
+                CheckInInf.put("PlcNm", "");
+                CheckInInf.put("PlcID", "");
+            }
             if (mMode.equalsIgnoreCase("holidayentry"))
                 CheckInInf.put("On_Duty_Flag", "1");
             else
@@ -776,7 +786,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                             JsonObject itm = response.body().getAsJsonObject();
                             Log.e("RESPONSE_FROM_SERVER", String.valueOf(response.body().getAsJsonObject()));
                             mProgress.dismiss();
-                            if (itm.get("success").getAsString().equalsIgnoreCase("true")) {
+                            sStatus=itm.get("success").getAsString();
+                            if (sStatus.equalsIgnoreCase("true")) {
                                 SharedPreferences.Editor editor = CheckInDetails.edit();
                                 try {
                                     if (mMode.equalsIgnoreCase("CIN")) {
@@ -785,6 +796,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                                         editor.putString("ShiftStart", CheckInInf.getString("ShiftStart"));
                                         editor.putString("ShiftEnd", CheckInInf.getString("ShiftEnd"));
                                         editor.putString("ShiftCutOff", CheckInInf.getString("ShiftCutOff"));
+
+                                        long AlrmTime=DT.getDate(CheckInInf.getString("ShiftEnd")).getTime();
+                                        sendAlarmNotify(1001,AlrmTime,"HAP Check-In","Check-Out Alert !.");
                                     }
                                     if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
                                         editor.putString("FTime", CTime);
@@ -795,10 +809,8 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                                     else
                                         editor.putString("On_Duty_Flag", "0");
 
-
                                     editor.putBoolean("CheckIn", true);
                                     editor.apply();
-
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -812,13 +824,11 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                             AlertDialogBox.showDialog(ImageCapture.this, "HAP Check-In", String.valueOf(Html.fromHtml(mMessage)), "Yes", "", false, new AlertBox() {
                                 @Override
                                 public void PositiveMethod(DialogInterface dialog, int id) {
-
-                                    if (itm.get("success").getAsString().equalsIgnoreCase("true")) {
+                                    if (sStatus.equalsIgnoreCase("true")) {
                                         Intent Dashboard = new Intent(ImageCapture.this, Dashboard_Two.class);
                                         Dashboard.putExtra("Mode", "CIN");
                                         ImageCapture.this.startActivity(Dashboard);
                                     }
-
                                     ((AppCompatActivity) ImageCapture.this).finish();
                                 }
 
@@ -1311,4 +1321,18 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     }
     */
 
+    public void sendAlarmNotify(int AlmID,long AlmTm,String NotifyTitle,String NotifyMsg){
+        /*AlmTm=AlmTm.replaceAll(" ","-").replaceAll("/","-").replaceAll(":","-");
+        String[] sDts= AlmTm.split("-");
+        Calendar cal = Calendar.getInstance();
+        cal.set(sDts[0],sDts[1],sDts[2],sDts[3],sDts[4]);*/
+
+        Intent intent = new Intent(this, AlmReceiver.class);
+        intent.putExtra("ID",String.valueOf(AlmID));
+        intent.putExtra("Title",NotifyTitle);
+        intent.putExtra("Message",NotifyMsg);
+        PendingIntent pIntent=PendingIntent.getBroadcast(this.getApplicationContext(),AlmID,intent,0);
+        AlarmManager alarmManager=(AlarmManager) this.getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP,AlmTm,pIntent);
+    }
 }

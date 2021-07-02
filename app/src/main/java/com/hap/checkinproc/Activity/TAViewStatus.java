@@ -488,7 +488,7 @@ public String ddmmyy(String srcdt){
             //popupCapture(343);
             DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Calendar calobjw = Calendar.getInstance();
-            lodgLate = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+            lodgLate = keyEk + sfCode + dfw.format(calobjw.getTime()).hashCode();
 
         }
     }
@@ -514,7 +514,7 @@ public String ddmmyy(String srcdt){
             //popupCapture(405);
             DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Calendar calobjw = Calendar.getInstance();
-            lodgEarly = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+            lodgEarly = keyEk + sfCode + dfw.format(calobjw.getTime()).hashCode();
 
         }
     }
@@ -555,16 +555,6 @@ public String ddmmyy(String srcdt){
         }
         grandTotal.setText("Rs." + new DecimalFormat("##0.00").format(gTotal));
     }
-
-
-    public void viewStaus(View v) {
-        startActivity(new Intent(getApplicationContext(), ViewTAStatus.class));
-    }
-
-    public void ImagePdf(View v) {
-        pdfViewList();
-    }
-
 
     public void onGetEmpDetails(View v) {
         View pv = (View) v.getParent().getParent();
@@ -839,7 +829,7 @@ public String ddmmyy(String srcdt){
 
             JSONObject jj = new JSONObject();
             try {
-                jj.put("sfCode", Shared_Common_Pref.Sf_Code);
+                jj.put("sfCode", sfCode);
                 jj.put("divisionCode", Shared_Common_Pref.Div_Code);
                 jj.put("Selectdate", Ta_DATE);
             } catch (JSONException e) {
@@ -870,13 +860,22 @@ public String ddmmyy(String srcdt){
 
                     Log.v("jsonFuelAllowance", jsonFuelAllowance.toString());
 
+                    TravelBike.setVisibility(View.GONE);
+                    linMode.setVisibility(View.GONE);
+                    linBusMode.setVisibility(View.GONE);
+                    linBikeMode.setVisibility(View.GONE);
+
                     if (jsonFuelAllowance != null || jsonFuelAllowance.size() != 0) {
                         Log.v("jsonFuelAllowance_IN", jsonFuelAllowance.toString());
                         fuelListAdapter = new FuelListAdapter(getApplicationContext(), jsonFuelAllowance,false);
                         mFuelRecycler.setAdapter(fuelListAdapter);
                         JsonObject jsFuel;
+                        linMode.setVisibility(View.VISIBLE);
+                        TravelBike.setVisibility(View.VISIBLE);
+                        linBikeMode.setVisibility(View.VISIBLE);
                         if(jsonFuelAllowance.size()<1){
                             TravelBike.setVisibility(View.GONE);
+                            linBikeMode.setVisibility(View.GONE);
                         }
                         for (int jf = 0; jf < jsonFuelAllowance.size(); jf++) {
                             jsFuel = jsonFuelAllowance.get(jf).getAsJsonObject();
@@ -890,7 +889,7 @@ public String ddmmyy(String srcdt){
                                     if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler")){
                                         if (Total >= 200) Total = 200;
                                     }else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
-                                        if (Total >= 500)  Total = 500;
+                                        if (Total >= 1000)  Total = 1000;
                                     }
                                     Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
                                     String TotalPersonal = String.valueOf(Total - Personal);
@@ -915,12 +914,6 @@ public String ddmmyy(String srcdt){
                         String strRemarks = jRremarks.get("Reason").getAsString();
                         editTextRemarks.setText(strRemarks);
                     }
-
-
-                    TravelBike.setVisibility(View.GONE);
-                    linMode.setVisibility(View.GONE);
-                    linBusMode.setVisibility(View.GONE);
-                    linBikeMode.setVisibility(View.GONE);
 
                     if (jsonArray != null || jsonArray.size() != 0) {
                         JsonObject jsonObject = null;
@@ -962,7 +955,7 @@ public String ddmmyy(String srcdt){
                                     txtTAamt.setText("Rs." + taAmt + ".00");
                                 }
                             }
-
+/*
                             Log.v("DRIVER", ClosingKm);
                             Glide.with(getApplicationContext())
                                     .load(start_Image.replaceAll("^[\"']+|[\"']+$", ""))
@@ -1033,8 +1026,8 @@ public String ddmmyy(String srcdt){
                                 Double totalAmount = Double.valueOf(strFuelAmount);
                                 tofuel = TtrvKm * totalAmount;
                                 txtMaxKm.setVisibility(View.GONE);
-                            }
-
+                            }*/
+                            txtTaClaim.setText(StrDaName);
                             txtDailyAllowance.setText(StrDailyAllowance + " - " + StrTo);
                             myBrdAmt = 0.0;
                             drvBrdAmt = 0.0;
@@ -1058,7 +1051,8 @@ public String ddmmyy(String srcdt){
 
                                 vwBoarding.setVisibility(View.VISIBLE);
                                 SumOFDAAmount();
-                            } else {
+                            }
+                            else {
                                 allowanceAmt = allowanceAmt.replaceAll("^[\"']+|[\"']+$", "");
                                 doubleAmount = Double.valueOf(allowanceAmt);
                                 myBrdAmt = 0.0;
@@ -1078,8 +1072,40 @@ public String ddmmyy(String srcdt){
                                 vwBoarding.setVisibility(View.GONE);
                                 SumOFDAAmount();
                             }
+                            if (StrToEnd.equals("0") && trvldArray.size()<1) {
+                                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-                            if (StrToEnd.equals("0")) {
+                                layoutParams.setMargins(15, 15, 15, 15);
+                                final View rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
+
+                                travelDynamicLoaction.addView(rowView, layoutParams);
+                                tvSize = travelDynamicLoaction.indexOfChild(rowView);
+
+                                View tvchildView = travelDynamicLoaction.getChildAt(tvSize);
+                                viw.setVisibility(View.VISIBLE);
+                                lin.setVisibility(View.VISIBLE);
+
+                                LinearLayout lad = (LinearLayout) tvchildView.findViewById(R.id.linear_row_ad);
+                                editText = (TextView) tvchildView.findViewById(R.id.enter_mode);
+                                enterFrom = tvchildView.findViewById(R.id.enter_from);
+                                enterTo = tvchildView.findViewById(R.id.enter_to);
+                                enterFare = tvchildView.findViewById(R.id.enter_fare);
+                                tvTxtUKey = (TextView) (tvchildView.findViewById(R.id.txt_tv_ukey));
+
+                                editText.setText(StrDaName);
+                                enterFrom.setText(StrBus);
+                                enterTo.setText(StrTo);
+
+                                deleteButton = tvchildView.findViewById(R.id.delete_button);
+                                taAttach = (ImageView) tvchildView.findViewById(R.id.image_attach);
+                                previewss = (ImageView) tvchildView.findViewById(R.id.image_preview);
+                                deleteButton.setVisibility(View.GONE);
+                                taAttach.setVisibility(View.GONE);
+                                previewss.setVisibility(View.GONE);
+                            }
+                            /*if (StrToEnd.equals("0")) {
                                 StrBus = StrBus.replaceAll("^[\"']+|[\"']+$", "");
                                 StrTo = StrTo.replaceAll("^[\"']+|[\"']+$", "");
                                 for (int j = 0; j < trvldArray.size(); j++) {
@@ -1162,11 +1188,77 @@ public String ddmmyy(String srcdt){
                                     StrTo = StrTo.replaceAll("^[\"']+|[\"']+$", "");
                                     txtBusTo.setText(StrTo);
                                 }
-                            }
+                            }*/
                            /* if(){
                                 btn_sub.setVisibility(View.VISIBLE);
                                 buttonSave.setVisibility(View.VISIBLE);
                             }*/
+                        }
+
+                    }
+
+                    if(trvldArray.size()>0){
+                        StrBus = StrBus.replaceAll("^[\"']+|[\"']+$", "");
+                        StrTo = StrTo.replaceAll("^[\"']+|[\"']+$", "");
+                        for (int j = 0; j < trvldArray.size(); j++) {
+                            Integer finc = j;
+                            JsonObject tldraftJson = (JsonObject) trvldArray.get(j);
+                            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+                            layoutParams.setMargins(15, 15, 15, 15);
+                            final View rowView = inflater.inflate(R.layout.travel_allowance_dynamic, null);
+
+                            travelDynamicLoaction.addView(rowView, layoutParams);
+                            tvSize = travelDynamicLoaction.indexOfChild(rowView);
+
+                            View tvchildView = travelDynamicLoaction.getChildAt(tvSize);
+                            viw.setVisibility(View.VISIBLE);
+                            lin.setVisibility(View.VISIBLE);
+
+                            LinearLayout lad = (LinearLayout) tvchildView.findViewById(R.id.linear_row_ad);
+                            editText = (TextView) tvchildView.findViewById(R.id.enter_mode);
+                            enterFrom = tvchildView.findViewById(R.id.enter_from);
+                            enterTo = tvchildView.findViewById(R.id.enter_to);
+                            enterFare = tvchildView.findViewById(R.id.enter_fare);
+                            tvTxtUKey = (TextView) (tvchildView.findViewById(R.id.txt_tv_ukey));
+
+                            editText.setText("" + tldraftJson.get("Mode").getAsString());
+                            enterFrom.setText(tldraftJson.get("From_P").getAsString());
+                            enterTo.setText(tldraftJson.get("To_P").getAsString());
+                            enterFare.setText(tldraftJson.get("Fare").getAsString());
+
+
+                            if (!tldraftJson.get("Ukey").getAsString().equals("") &&
+                                    !tldraftJson.get("Ukey").getAsString().isEmpty() &&
+                                    tldraftJson.get("Ukey").getAsString() != null) {
+                                tvTxtUKey.setText(tldraftJson.get("Ukey").getAsString());
+                            }
+
+                            editMode = editText.getText().toString();
+
+                            Log.v("Travel_Location", editMode);
+
+                            deleteButton = tvchildView.findViewById(R.id.delete_button);
+                            taAttach = (ImageView) tvchildView.findViewById(R.id.image_attach);
+                            deleteButton.setVisibility(View.GONE);
+                            taAttach.setVisibility(View.GONE);
+                            previewss = (ImageView) tvchildView.findViewById(R.id.image_preview);
+                            fuelAmt=fuelAmt+tldraftJson.get("Fare").getAsFloat();
+                            SumOFTAAmount();
+                            if (j == 0) {
+                                deleteButton.setVisibility(View.GONE);
+                                lad.setOnClickListener(null);
+                                editText.setOnClickListener(null);
+                                editText.setClickable(false);
+                                enterFrom.setEnabled(false);
+                                if (tldraftJson.get("To_P").getAsString().equals("")) {
+
+                                } else {
+                                    enterTo.setEnabled(false);
+                                }
+                            }
                         }
                     }
                     GrandTotalAllowance = doubleAmount + fuelAmt;
@@ -1451,7 +1543,6 @@ public String ddmmyy(String srcdt){
             }
         }
     }
-
     public void localConDraft(JsonArray lcDraft) {
 
         JsonArray jsonAddition = null;
@@ -1561,7 +1652,7 @@ public String ddmmyy(String srcdt){
                         if (lcTxtUKey.getText().toString().equals("")) {
                             DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                             Calendar calobjw = Calendar.getInstance();
-                            lcEditcnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                            lcEditcnt = keyEk + sfCode + dfw.format(calobjw.getTime()).hashCode();
                             lcTxtUKey.setText(lcEditcnt);
 
                         } else {
@@ -1603,7 +1694,6 @@ public String ddmmyy(String srcdt){
         SumOFLCAmount();
 
     }
-
     public void OeDraft(JsonArray oEDraft) {
         //  JsonArray jsonAddition = null;
         JsonObject lcdraftJson = null;
@@ -1679,7 +1769,7 @@ public String ddmmyy(String srcdt){
                         if (oeTxtUKeys.getText().toString().equals("")) {
                             DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                             Calendar calobjw = Calendar.getInstance();
-                            oeEditCnt = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + dfw.format(calobjw.getTime()).hashCode();
+                            oeEditCnt = keyEk + sfCode + dfw.format(calobjw.getTime()).hashCode();
                             oeTxtUKeys.setText(oeEditCnt);
                         }
                         OeUKey = oeTxtUKeys.getText().toString();
@@ -1749,7 +1839,6 @@ public String ddmmyy(String srcdt){
         }
         SumOFOTAmount();
     }
-
     public void trvldLocation(JsonArray traveldLoc) {
 
         try {
@@ -1802,7 +1891,6 @@ public String ddmmyy(String srcdt){
         }
 
     }
-
     public void localConDisplay(String modeName, JsonArray jsonAddition, int position) {
 
         JsonObject jsonObjectAdd = null;
@@ -2050,60 +2138,7 @@ public String ddmmyy(String srcdt){
         }
     }
 
-    public void pdfViewList() {
-        dialog = new Dialog(TAViewStatus.this, R.style.AlertDialogCustom);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setContentView(R.layout.row_pdf_viewer_list);
-        dialog.show();
-        LinearLayout pdf1 = dialog.findViewById(R.id.lin_pdf);
-        LinearLayout pdf2 = dialog.findViewById(R.id.lin_pdf2);
-        pdf1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-
-                Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
-                stat.putExtra("PDF_ONE", "https://hap.sanfmcg.com/Travel%20and%20Daily%20Allowance%20Policy%20-%20Domestic%20Travel%20Annexure%20C-1_1%20Feb-21.pdf");
-                stat.putExtra("PDF_FILE", "Web");
-                startActivity(stat);
-
-                dialog.dismiss();
-
-            }
-        });
-        pdf2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent stat = new Intent(getApplicationContext(), PdfViewerActivity.class);
-                stat.putExtra("PDF_ONE", "https://hap.sanfmcg.com/HAP_ANNEXURE_C.pdf");
-                stat.putExtra("PDF_FILE", "Web");
-                startActivity(stat);
-
-                dialog.dismiss();
-            }
-        });
-    }
-
-
-    public void selectMultiImage(Integer attachName) {
-        dialog.dismiss();
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), attachName + 1);
-
-    }
-
-    public void captureFile(Integer positionC) {
-        dialog.dismiss();
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        outputFileUri = FileProvider.getUriForFile(TAViewStatus.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), Shared_Common_Pref.Sf_Code + "_" + System.currentTimeMillis() + ".jpeg"));
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivityForResult(intent, positionC);
-
-    }
 
 
     public void getMulipart(String count, String path, String x, String imageKEY, String mode, String from, String to) {
@@ -2218,11 +2253,11 @@ public String ddmmyy(String srcdt){
 
         long nano_startTime = System.nanoTime();
         Log.e("nano_startTime", String.valueOf(nano_startTime));
-        ImageUKey = keyEk + mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + nano_startTime;
+        ImageUKey = keyEk + sfCode + nano_startTime;
 
         DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<ResponseBody> mCall = apiInterface.taImage(ImageUKey, count, HeadTravel, Mode, DateTime, mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), from, To, imgg);
+        Call<ResponseBody> mCall = apiInterface.taImage(ImageUKey, count, HeadTravel, Mode, DateTime, sfCode, from, To, imgg);
 
         Log.e("SEND_IMAGE_SERVER", mCall.request().toString());
 
@@ -2246,30 +2281,6 @@ public String ddmmyy(String srcdt){
                 Log.e("SEND_IMAGE_Response", "ERROR");
             }
         });
-    }
-    @Override protected void onResume() {
-        super.onResume();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-    @Override protected void onPause() {
-        super.onPause();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-    @Override protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-    @Override protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-    @Override protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
     }
 
 
@@ -2314,9 +2325,9 @@ public String ddmmyy(String srcdt){
                     finish();
                     JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
                     if (flag == 1) {
-                        Toast.makeText(getApplicationContext(), "TA  Approved Successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "TA Approved Successfully", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getApplicationContext(), "TA Rejected  Successfully", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "TA Rejected Successfully", Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -2328,6 +2339,7 @@ public String ddmmyy(String srcdt){
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "TA Approval Failed", Toast.LENGTH_SHORT).show();
 
             }
         });

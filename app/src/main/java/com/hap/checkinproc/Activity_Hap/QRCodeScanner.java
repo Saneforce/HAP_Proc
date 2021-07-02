@@ -60,7 +60,7 @@ public class QRCodeScanner extends AppCompatActivity {
     Button btnAction;
     String[] arrSplit;
     String latlon = "", NameValue = "", intentData = "";
-
+    Boolean readFlag=false;
     private FusedLocationProviderClient fusedLocationClient;
 
     @Override
@@ -161,27 +161,37 @@ public class QRCodeScanner extends AppCompatActivity {
             @Override
             public void receiveDetections(Detector.Detections<Barcode> detections) {
                 final SparseArray<Barcode> barcodes = detections.getDetectedItems();
-
-
-                if (barcodes.size() != 0) {
-
+                if (barcodes.size() != 0 && readFlag==false) {
                     surfaceView.post(new Runnable() {
+
                         @Override
                         public void run() {
-                            intentData = barcodes.valueAt(0).displayValue.replace("|", ",");
-                            cameraSource.release();
+                            if(readFlag==false) {
+                                intentData = barcodes.valueAt(0).displayValue.replace("|", ",");
+                                cameraSource.release();
+                                readFlag = true;
+                                if (!intentData.equals("")) {
+                                    arrSplit = intentData.split(",");
+                                    if (String.valueOf(arrSplit.length).equals("5")) {
+                                        if ((NameValue.equalsIgnoreCase("gatein") && arrSplit[3].equals("IN")) || (NameValue.equalsIgnoreCase("gateout") && arrSplit[3].equals("Out"))) {
 
-                            if (!intentData.equals("")) {
-                                arrSplit = intentData.split(",");
-                                if (String.valueOf(arrSplit.length).equals("5")) {
-                                    if ((NameValue.equalsIgnoreCase("gatein") && arrSplit[3].equals("IN")) || (NameValue.equalsIgnoreCase("gateout") && arrSplit[3].equals("Out"))) {
-                                        GateIn(NameValue, arrSplit, 1);
-                                        Log.e("INTENT_DATA", arrSplit[0]);
-                                        Log.e("INTENT_DATA", arrSplit[1]);
-                                        Log.e("INTENT_DATA", arrSplit[2]);
-                                        Log.e("INTENT_DATA", arrSplit[3]);
-                                        Log.e("INTENT_DATA", arrSplit[4]);
-                                       // Toast.makeText(QRCodeScanner.this, "Code is successfull", Toast.LENGTH_SHORT).show();
+                                            Log.d("BarCodeDetact", "Called 2 " + intentData);
+                                            GateIn(NameValue, arrSplit, 1);
+                                            // Toast.makeText(QRCodeScanner.this, "Code is successfull", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            AlertDialogBox.showDialog(QRCodeScanner.this, "HAP Check-In", "Provide a Valid QR Code", "OK", "", false, new AlertBox() {
+                                                @Override
+                                                public void PositiveMethod(DialogInterface dialog, int id) {
+                                                    dialog.dismiss();
+                                                    QRCodeScanner.this.finish();
+                                                }
+
+                                                @Override
+                                                public void NegativeMethod(DialogInterface dialog, int id) {
+
+                                                }
+                                            });
+                                        }
                                     } else {
                                         AlertDialogBox.showDialog(QRCodeScanner.this, "HAP Check-In", "Provide a Valid QR Code", "OK", "", false, new AlertBox() {
                                             @Override
@@ -195,21 +205,8 @@ public class QRCodeScanner extends AppCompatActivity {
 
                                             }
                                         });
+
                                     }
-                                } else {
-                                    AlertDialogBox.showDialog(QRCodeScanner.this, "HAP Check-In", "Provide a Valid QR Code", "OK", "", false, new AlertBox() {
-                                        @Override
-                                        public void PositiveMethod(DialogInterface dialog, int id) {
-                                            dialog.dismiss();
-                                            QRCodeScanner.this.finish();
-                                        }
-
-                                        @Override
-                                        public void NegativeMethod(DialogInterface dialog, int id) {
-
-                                        }
-                                    });
-
                                 }
                             }
                         }
@@ -223,18 +220,7 @@ public class QRCodeScanner extends AppCompatActivity {
 
 
     private void GateIn(String Name, String[] arrSplit, int flag) {
-
-
         if (!arrSplit[0].equals("") || !arrSplit[1].equals("") || !arrSplit[2].equals("") || !arrSplit[3].equals("") || !arrSplit[4].equals("")) {
-
-
-            Log.e("INTENT_DATA_IN", arrSplit[0]);
-            Log.e("INTENT_DATA_IN", arrSplit[1]);
-            Log.e("INTENT_DATA_IN", arrSplit[2]);
-            Log.e("INTENT_DATA_IN", arrSplit[3]);
-            Log.e("INTENT_DATA_IN", arrSplit[4]);
-
-
             Calendar calendar;
             SimpleDateFormat dateFormat, dateTime, time;
             String date, dateTi, ti;
@@ -262,18 +248,15 @@ public class QRCodeScanner extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject();
             JSONObject sp = new JSONObject();
             try {
-
-
                 sp.put("HQLoc", arrSplit[0]);
                 sp.put("HQLocID", arrSplit[1]);
-                sp.put("Location", latlon);
+                sp.put("Location", arrSplit[2]);
                 sp.put("MajourType", arrSplit[4]);
-                sp.put("latLng", arrSplit[2]);
+                sp.put("latLng", latlon);
                 sp.put("mode", arrSplit[3]);
                 sp.put("time", date);
                 sp.put("eDate", dateTi);
                 sp.put("eTime", ti);
-
                 jsonObject.put(Name, sp);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -281,9 +264,6 @@ public class QRCodeScanner extends AppCompatActivity {
             jsonArray.put(jsonObject);
             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
             Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, jsonArray.toString());
-            Log.e("Log_TpQuerySTring", QueryString.toString());
-            Log.e("Log_Tp_SELECT", jsonArray.toString());
-
             mCall.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {

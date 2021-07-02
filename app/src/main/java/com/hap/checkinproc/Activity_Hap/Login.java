@@ -1,4 +1,4 @@
-package com.hap.checkinproc.Activity_Hap;
+   package com.hap.checkinproc.Activity_Hap;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -534,9 +534,13 @@ public class Login extends AppCompatActivity {
             mProgress.dismiss();
             return;
         }
-        //eMail="krishnan.bg@hap.in";
-       //eMail = "ciadmin@hap.in";
-        //eMail = "kandasamy.r@hap.in";
+
+        //eMail = "kaviyarasu.m@hap.in";
+        //eMail = "kannan.p@hap.in";
+        //eMail = "ciadmin@hap.in";
+        //eMail = "haptest5@hap.in";
+        //eMail = "1977ananthkumar@gmail.com";
+
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
             @Override
@@ -622,12 +626,6 @@ public class Login extends AppCompatActivity {
                         Shared_Common_Pref.Dept_Type = DeptType;
                         Shared_Common_Pref.SF_Type = Sf_type;
 
-                        Log.e("SF_TYPEVALUE", Sf_type);
-                        Log.e("STATECODE", code);
-                        Log.e("STATECODE", div);
-
-                        Log.e("STATECODE", Shared_Common_Pref.StateCode);
-                        Log.e("LOGIN_RESPONSE", String.valueOf(response.body().getData().get(0).getSfCode()));
                         editor.putString("Sf_Type", Sf_type);
                         editor.putString("Sfcode", code);
                         editor.putString("EmpId", empID);
@@ -717,6 +715,7 @@ public class Login extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case REQUEST_PERMISSIONS_REQUEST_CODE:
                 if (grantResults.length <= 0) {

@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.DatePickerDialog;
+//import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -47,6 +48,7 @@ import com.hap.checkinproc.Model_Class.Leave_Type;
 import com.hap.checkinproc.Model_Class.MaxMinDate;
 import com.hap.checkinproc.Model_Class.RemainingLeave;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.adapters.HAPListItem;
 import com.hap.checkinproc.adapters.LeaveRemaining;
 import com.hap.checkinproc.common.TimerService;
 
@@ -88,7 +90,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     String daysDifferce;
     CheckBox mHalfCheck;
     private ArrayList<String> shitList, halfTypeList;
-    LinearLayout mCheckHalf, mShitTiming, mHalfDayType;
+    LinearLayout mCheckHalf, mShitTiming, mHalfDayType,WrkDt_linear,lin_coffWrk;
     RecyclerView mRecycleLeaveRemaining;
     List<RemainingLeave> mRemainingLeaves;
     LeaveRemaining leaveRemaining;
@@ -96,9 +98,10 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     String shiftTypeVal = "", halfTypeVal = "", halfChecked, getReason;
     Boolean oneTwo = false;
 
-    TextView shitType, leaveType, halfType;
+    TextView shitType, leaveType, halfType,WrkDt,wrkCin,wrkCOut,wrkHrs,wrkEligi;
     CustomListViewDialog customDialog;
     List<Common_Model> modelShiftType = new ArrayList<>();
+    List<Common_Model> modelWrkDt = new ArrayList<>();
     List<Common_Model> modelleaveType = new ArrayList<>();
     List<Common_Model> modelhalfdayType = new ArrayList<>();
     Common_Model Model_Pojo;
@@ -106,8 +109,10 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     String minDate = "";
     String minYear = "", minMonth = "", minDay = "";
     String tominYear = "", tominMonth = "", tominDay = "";
-    String frmDte = "";
-
+    String frmDte = "",flCOff="0",sWrkDt="";
+    int AutoPost=0,MaxDays=0;
+    private JsonArray WrkedDys = new JsonArray();
+    HAPListItem lstWrkDts;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -162,12 +167,14 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         MaxMinDate();
 
         etext2 = (EditText) findViewById(R.id.to_date);
+        etext3 = (EditText) findViewById(R.id.no_of_days);
         Submit = (Button) findViewById(R.id.submitButton);
 
         Bundle params = getIntent().getExtras();
         if (params != null) {
             String Edt=params.getString("EDt","");
             String[] stDt;
+            AutoPost=1;
             if(Edt.indexOf("/")>-1) {
                 stDt = Edt.split("/");
                 fromData = stDt[2] + "-" + stDt[1] + "-" + stDt[0];
@@ -201,13 +208,66 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         mCheckHalf = (LinearLayout) findViewById(R.id.check_half_linear);
         mShitTiming = (LinearLayout) findViewById(R.id.shit_linear);
         mHalfDayType = (LinearLayout) findViewById(R.id.half_day_linear);
-
+        lin_coffWrk= (LinearLayout) findViewById(R.id.coffWrk);
         mHalfCheck = (CheckBox) findViewById(R.id.check_half);
+
+        WrkDt_linear = findViewById(R.id.WrkDt_linear);
+        WrkDt = findViewById(R.id.WrkDt);
+        wrkCin = findViewById(R.id.wrkCin);
+        wrkCOut = findViewById(R.id.wrkCOut);
+        wrkHrs = findViewById(R.id.wrkHrs);
+        wrkEligi = findViewById(R.id.wrkEligi);
+
+        lin_coffWrk.setVisibility(View.GONE);
 
         mRecycleLeaveRemaining = (RecyclerView) findViewById(R.id.leave_remaining);
         mRecycleLeaveRemaining.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecycleLeaveRemaining.setLayoutManager(layoutManager);
+
+        leaveTypeMethod();
+
+        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> call = service.getDataArrayList("get/WrkDates",UserDetails.getString("Divcode",""),UserDetails.getString("Sfcode",""));
+        call.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                WrkedDys=response.body();
+                Log.d("WorkedDays",String.valueOf(WrkedDys));
+                for (int i = 0; i < WrkedDys.size(); i++) {
+                    JsonObject jsonObject1 = WrkedDys.get(i).getAsJsonObject();
+                    String id = jsonObject1.get("id").getAsString();
+                    String name = jsonObject1.get("name").getAsString();
+                    Common_Model item = new Common_Model(id, name, jsonObject1);
+                    modelWrkDt.add(item);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+
+            }
+        });
+
+        WrkDt_linear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customDialog = new CustomListViewDialog(Leave_Request.this, modelWrkDt, 7);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+                /*JSONArray jsonArray = null;
+                try {
+                    jsonArray = new JSONArray(WrkedDys.toString());
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                lstWrkDts= new HAPListItem(jsonArray,Leave_Request.this);*/
+
+            }
+        });
 
         eText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -230,7 +290,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                                 maxTWoDate = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
                                 MaxMinDateTo(maxTWoDate);
                                 frmDte = eText.getText().toString();
-                                Log.v("EDITEXT_VALUE_EpTy", frmDte);
 
                                 if (TextUtils.isEmpty(eText.getText().toString())) {
                                     Log.v("EDITEXT_VALUE", frmDte);
@@ -258,12 +317,13 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
                                             calendarmin.set(Integer.parseInt(tominYear), Integer.parseInt(tominMonth) - 1, Integer.parseInt(tominDay));
                                             picker.getDatePicker().setMinDate(calendarmin.getTimeInMillis());
-                                            calendarmin.add(Calendar.DAY_OF_YEAR, 10);
-                                            Log.d("MAXDay", String.valueOf(calendarmin.get(Calendar.DATE)));
+                                            if(flCOff.equalsIgnoreCase("1"))
+                                                calendarmin.add(Calendar.DAY_OF_YEAR, 0);
+                                            else
+                                                calendarmin.add(Calendar.DAY_OF_YEAR, MaxDays-1);
+
                                             picker.getDatePicker().setMaxDate(calendarmin.getTimeInMillis());
                                             picker.show();
-
-
                                         }
                                     });
                                 }
@@ -289,19 +349,23 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
 
         leaveReaming();
+
+        modelShiftType.clear();
+        SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        String Scode = (shared.getString("Sfcode", "null"));
+        String Dcode = (shared.getString("Divcode", "null"));
+        spinnerValue("get/Shift_timing", Dcode, Scode);
+
         // addingShiftToSpinner();
         shitType = findViewById(R.id.shift_timing);
         shitType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                modelShiftType.clear();
-                SharedPreferences shared = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-                String Scode = (shared.getString("Sfcode", "null"));
-                String Dcode = (shared.getString("Divcode", "null"));
-                spinnerValue("get/Shift_timing", Dcode, Scode);
-
-
+                customDialog = new CustomListViewDialog(Leave_Request.this, modelShiftType, 4);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
             }
         });
 
@@ -311,8 +375,11 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         leaveType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                modelleaveType.clear();
-                leaveTypeMethod();
+                customDialog = new CustomListViewDialog(Leave_Request.this, modelleaveType, 5);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
             }
         });
 
@@ -354,7 +421,23 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                 if (leaveType.getText().toString().matches("")) {
                     Toast.makeText(Leave_Request.this, "Enter Leave Type", Toast.LENGTH_SHORT).show();
                     return;
-                } else if (eText.getText().toString().matches("")) {
+                }
+                if(flCOff.equalsIgnoreCase("1")){
+                    if (sWrkDt.equalsIgnoreCase("")) {
+                        Toast.makeText(Leave_Request.this, "Select the worked date", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
+                    if(Float.parseFloat(etext3.getText().toString())>Float.parseFloat(wrkEligi.getText().toString())){
+                        Toast.makeText(Leave_Request.this, leaveType.getText()+" Limit Exceed", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    if(Float.parseFloat(etext3.getText().toString())>0.5 && Float.parseFloat(wrkEligi.getText().toString())!=1){
+                        Toast.makeText(Leave_Request.this, "Allowed! Only Half Day", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                if (eText.getText().toString().matches("")) {
                     Toast.makeText(Leave_Request.this, "Enter From date", Toast.LENGTH_SHORT).show();
                     return;
                 } else if (etext2.getText().toString().matches("")) {
@@ -401,9 +484,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         minYear = separated1[0];
         minMonth = separated1[1];
         minDay = separated1[2];
-        Log.e("Sresdfsd", minYear);
-        Log.e("Sresdfsd", minMonth);
-        Log.e("Sresdfsd", minDay);
 
     }
 
@@ -419,9 +499,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         tominYear = separated1[0];
         tominMonth = separated1[1];
         tominDay = separated1[2];
-        Log.e("Sresdfsd", tominYear);
-        Log.e("Sresdfsd", tominMonth);
-        Log.e("Sresdfsd", tominDay);
     }
 
     public void addingHalfToSpinner() {
@@ -437,6 +514,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
         Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
         Log.d(Tag, String.valueOf(CheckIn));
+
         if (CheckIn == true) {
             Intent Dashboard = new Intent(Leave_Request.this, Dashboard_Two.class);
             Dashboard.putExtra("Mode", "CIN");
@@ -446,15 +524,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     }
 
     public void difference() {
-
         SimpleDateFormat myFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String dateBeforeString = "01/31/2014";
-        String dateAfterString = "02/02/2014";
-        etext3 = (EditText) findViewById(R.id.no_of_days);
-        System.out.println("dateBeforeString " + dateBeforeString);
-        System.out.println("dateBeforeString1 " + eText.getText().toString());
-        System.out.println("dateAfterString " + dateAfterString);
-        System.out.println("dateAfterString1 " + eText.getText().toString());
         try {
             Date dateBefore = myFormat.parse(eText.getText().toString());
             Date dateAfter = myFormat.parse(etext2.getText().toString());
@@ -462,7 +532,13 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             /*  float daysBetween = (difference / (1000*60*60*24));*/
             daysBetween = (int) TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
             System.out.println("Number of Days between dates: " + (daysBetween + 1));
-            if (!etext2.getText().toString().equals("")) etext3.setText("" + (daysBetween + 1));
+            if (!etext2.getText().toString().equals(""))
+            {
+                if(mHalfCheck.isChecked())
+                    etext3.setText(String.valueOf(0.5));
+                else
+                    etext3.setText("" + (daysBetween + 1));
+            }
             if (daysBetween >= 0) {
 
             } else {
@@ -485,15 +561,12 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                             mShitTiming.setVisibility(View.VISIBLE);
                             mHalfDayType.setVisibility(View.VISIBLE);
                             oneTwo = true;
-                            Log.e("BOOLEAN_CHECK", String.valueOf(oneTwo));
-
                         } else {
                             halfChecked = "0";
                             etext3.setText(String.valueOf(daysBetween + 1));
                             mShitTiming.setVisibility(View.GONE);
                             mHalfDayType.setVisibility(View.GONE);
                             oneTwo = false;
-                            Log.e("BOOLEAN_CHECK", String.valueOf(oneTwo));
                         }
                     }
                 });
@@ -516,6 +589,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
     public void leaveTypeMethod() {
 
+        modelleaveType.clear();
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "table/list");
         QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
@@ -531,25 +605,21 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             public void onResponse(Call<Object> call, Response<Object> response) {
 
                 Log.v("LEAVE_TYPE_CHEC", response.body().toString());
-
                 userType = new TypeToken<ArrayList<Leave_Type>>() {
                 }.getType();
                 leavetypelist = gson.fromJson(new Gson().toJson(response.body()), userType);
                 for (int i = 0; i < leavetypelist.size(); i++) {
                     String id = String.valueOf(leavetypelist.get(i).getId());
                     String name = leavetypelist.get(i).getName();
-                    Model_Pojo = new Common_Model(id, name, "flag");
-                    Log.e("LeaveType_Request", id);
-                    Log.e("LeaveType_Request", name);
+                    String cOffType = String.valueOf(leavetypelist.get(i).getCOffType());
+                    Integer MxDys = leavetypelist.get(i).getMaxDays();
 
+
+
+                    Model_Pojo = new Common_Model(id, name, cOffType,MxDys);
                     modelleaveType.add(Model_Pojo);
                 }
 
-                customDialog = new CustomListViewDialog(Leave_Request.this, modelleaveType, 5);
-                Window window = customDialog.getWindow();
-                window.setGravity(Gravity.CENTER);
-                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
 
             }
 
@@ -578,7 +648,16 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             jsonleaveType.put("From_Date", fromData);
             jsonleaveType.put("To_Date", toData);
             jsonleaveType.put("Shift", shiftTypeVal);
-            jsonleaveType.put("PChk", halfChecked);
+            jsonleaveType.put("PChk", AutoPost);
+            jsonleaveType.put("HalfDay_Type", halfTypeVal);
+            jsonleaveType.put("HalfDay", halfChecked);
+            jsonleaveType.put("Shift_Id", shiftTypeVal);
+
+            jsonleaveType.put("value", sWrkDt);
+            jsonleaveType.put("Intime", wrkCin.getText());
+            jsonleaveType.put("Outime", wrkCOut.getText());
+            jsonleaveType.put("NoofHrs", wrkHrs.getText());
+            jsonleaveType.put("EligDys", wrkEligi.getText());
             //  jsonleaveArrayType.put(jsonleaveType);
             jsonleaveTypeS.put("LeaveFormValidate", jsonleaveType);
             jsonArray1.put(jsonleaveTypeS);
@@ -588,11 +667,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
 
         //String leaveCap = "[{\"LeaveFormValidate\":{\"Leave_Type\":\"'9'\",\"From_Date\":\"2020-11-02\",\"To_Date\":\"'2020-11-05'\",\"Shift\":\"0\",\"PChk\":0}}]";
         String leaveCap = jsonArray1.toString();
-        System.out.println("Activity_Event_Captures" + leaveCap);
-        Log.e("SF_Name", Shared_Common_Pref.Sf_Name);
-        Log.e("SF_Name", Shared_Common_Pref.Div_Code);
-        Log.e("SF_Name", Shared_Common_Pref.Sf_Code);
-        Log.e("SF_Name", Shared_Common_Pref.StateCode);
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonObject> call = service.leaveSubmit(Shared_Common_Pref.Sf_Name, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "MGR", leaveCap);
         call.enqueue(new Callback<JsonObject>() {
@@ -629,15 +703,12 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     /*SUbmit Leave Request 2 */
     public void LeaveSubmitTwo() {
         getReason = "'" + reasonForLeave.getText().toString() + "'";
-
         String dateDiff = etext3.getText().toString();
 
-
         if (halfTypeVal == "First Half") {
-
             halfTypeVal = "1";
         } else if (halfTypeVal == "Second Half") {
-            halfTypeVal = "2    ";
+            halfTypeVal = "2";
         } else {
             halfTypeVal = "3";
         }
@@ -659,6 +730,13 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             jsonleaveType.put("HalfDay_Type", halfTypeVal);
             jsonleaveType.put("HalfDay", halfChecked);
             jsonleaveType.put("Shift_Id", shiftTypeVal);
+
+            jsonleaveType.put("value", sWrkDt);
+            jsonleaveType.put("Intime", wrkCin.getText());
+            jsonleaveType.put("Outime", wrkCOut.getText());
+            jsonleaveType.put("NoofHrs", wrkHrs.getText());
+            jsonleaveType.put("EligDys", wrkEligi.getText());
+
             jsonleaveTypeS.put("LeaveForm", jsonleaveType);
             jsonArray1.put(jsonleaveTypeS);
 
@@ -666,11 +744,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             e.printStackTrace();
         }
         String leaveCap1 = jsonArray1.toString();
-        System.out.println("Activity_Event_Capturesaaa" + leaveCap1);
-        Log.e("SF_Name", Shared_Common_Pref.Sf_Name);
-        Log.e("SF_Name", Shared_Common_Pref.Div_Code);
-        Log.e("SF_Name", Shared_Common_Pref.Sf_Code);
-        Log.e("SF_Name", Shared_Common_Pref.StateCode);
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonObject> call = service.leaveSubmit(Shared_Common_Pref.Sf_Name, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "MGR", leaveCap1);
         call.enqueue(new Callback<JsonObject>() {
@@ -684,11 +757,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                         @Override
                         public void PositiveMethod(DialogInterface dialog, int id) {
                             dialog.dismiss();
-
-
                             if (jsonObjecta.get("success").getAsBoolean() == true) openHome();
-
-
                         }
 
                         @Override
@@ -769,20 +838,8 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                         String name = jsonObject1.optString("name");
                         String flag = jsonObject1.optString("FWFlg");
                         Model_Pojo = new Common_Model(id, name, flag);
-                        Log.e("ShiftTime_Leave_Request", id);
-                        Log.e("ShiftTime_Leave_Request", name);
-                        Log.e("ShiftTime_Leave_Request", flag);
-
                         modelShiftType.add(Model_Pojo);
-                        Log.e("MODELSHIFTTYPE", String.valueOf(modelShiftType));
-
-
                     }
-                    customDialog = new CustomListViewDialog(Leave_Request.this, modelShiftType, 4);
-                    Window window = customDialog.getWindow();
-                    window.setGravity(Gravity.CENTER);
-                    window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                    customDialog.show();
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -813,9 +870,39 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         } else if (type == 5) {
             leaveType.setText(myDataset.get(position).getName());
             leavetype_id = myDataset.get(position).getId();
+            flCOff=myDataset.get(position).getFlag();
+            MaxDays=myDataset.get(position).getMaxDays();
+            lin_coffWrk.setVisibility(View.GONE);
+            WrkDt.setText("");
+            sWrkDt="";
+            wrkCin.setText("");
+            wrkCOut.setText("");
+            wrkHrs.setText("");
+            wrkEligi.setText("");
+            mHalfCheck.setClickable(true);
+            mHalfCheck.setChecked(false);
+            if(flCOff.equalsIgnoreCase("1")){
+                lin_coffWrk.setVisibility(View.VISIBLE);
+
+            }
         } else if (type == 6) {
             halfType.setText(myDataset.get(position).getName());
-
+        } else if (type == 7) {
+           JsonObject item= myDataset.get(position).getJsonObject();
+            WrkDt.setText(myDataset.get(position).getName());
+            sWrkDt=item.get("Startdate").getAsString();
+            wrkCin.setText(item.get("InTime").getAsString());
+            wrkCOut.setText(item.get("OutTime").getAsString());
+            wrkHrs.setText(item.get("NoofHrs").getAsString());
+            wrkEligi.setText(item.get("EligDys").getAsString());
+            float eli=Float.parseFloat(item.get("EligDys").getAsString());
+            mHalfCheck.setClickable(true);
+            mHalfCheck.setChecked(false);
+            if(eli<1){
+                mHalfCheck.setChecked(true);
+                mHalfCheck.setClickable(false);
+                etext3.setText("0.5");
+            }
         }
     }
 

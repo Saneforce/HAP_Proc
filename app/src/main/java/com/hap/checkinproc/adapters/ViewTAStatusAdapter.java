@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.TAViewStatus;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 
 
@@ -56,6 +57,8 @@ public class ViewTAStatusAdapter extends RecyclerView.Adapter<ViewTAStatusAdapte
             @Override
             public void onClick(View v) {
                 Intent TAViewAct = new Intent(context, TAViewStatus.class);
+
+                TAViewAct.putExtra("sfCode", Shared_Common_Pref.Sf_Code);
                 TAViewAct.putExtra("TA_Date", jsonObject.get("Expdt").getAsString());
                 TAViewAct.putExtra("TA_APPROVAL", "0");
                 TAViewAct.putExtra("total_amount", jsonObject.get("Total_Amount").getAsString());

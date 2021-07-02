@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
@@ -83,7 +84,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
     List<Common_Model> TrainTypeModel = new ArrayList<>();
     CustomListViewDialog customDialog;
     CardView expType, expModetype, trainType, toModeType;
-    TextView typeText, TxtActl, TxtErly, txtTotalAmt;
+    TextView typeText, TxtActl, TxtErly,txtRmks, txtTotalAmt;
     LinearLayout dataVisiblity, modeTravel, trainAllowance;
     ImageView imgAttach;
     Dialog dialog;
@@ -103,6 +104,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         gson = new Gson();
         getTool();
         MaxMinDate();
+        ModeOfType();
         cardDate = findViewById(R.id.choose_date);
         expType = findViewById(R.id.exp_card_type);
         expModetype = findViewById(R.id.exp_mode_type);
@@ -122,6 +124,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         trainAllowance = findViewById(R.id.train_linear);
         toModeType = findViewById(R.id.exp_to_mode_type);
         txtToTravel = findViewById(R.id.txt_to_mode_tpe);
+        txtRmks=findViewById(R.id.remarks);
         expType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,8 +135,11 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         expModetype.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ModeOfTravel.clear();
-                ModeOfType();
+                customDialog = new CustomListViewDialog(DaExceptionEntry.this, ModeOfTravel, 8);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
             }
         });
         trainType.setOnClickListener(new View.OnClickListener() {
@@ -146,9 +152,11 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         toModeType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToModeOfTravel.clear();
-                ToModeOfType();
-
+                customDialog = new CustomListViewDialog(DaExceptionEntry.this, ToModeOfTravel, 9);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
             }
         });
 
@@ -177,7 +185,6 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             }
 
         });
-
         edtActual.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,8 +208,6 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
 
             }
         });
-
-
         edtEarly.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,8 +228,6 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
                 mTimePicker.show();
             }
         });
-
-
         imgAttach.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,8 +242,6 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
                 }
             }
         });
-
-
         edtAmt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -259,7 +260,6 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         });
 
     }
-
     public void popupCapture() {
         dialog = new Dialog(DaExceptionEntry.this, R.style.AlertDialogCustom);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -280,7 +280,6 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             }
         });
     }
-
     public void selectMultiImage() {
         dialog.dismiss();
         Intent intent = new Intent();
@@ -290,7 +289,6 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), 2);
 
     }
-
     public void captureFile() {
         dialog.dismiss();
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -300,10 +298,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         startActivityForResult(intent, 1);
 
     }
-
-
     public void MaxMinDate() {
-
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         Date date = new Date();
         System.out.println("Current_DATE_FORMAT" + formatter.format(date));
@@ -320,12 +315,11 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         minMonth = separated1[1];
         minDay = separated1[2];
     }
-
     public void OrderType() {
         travelTypeList = new ArrayList<>();
-        travelTypeList.add("EARLY CHECK-IN");
-        travelTypeList.add("LATE CHECK-OUT");
-        travelTypeList.add("TA EXCEPTION");
+        travelTypeList.add("TRAVEL EARLY CHECK-IN");
+        travelTypeList.add("TRAVEL LATE CHECK-OUT");
+        travelTypeList.add("TRAVEL EXCEPTION");
 
         for (int i = 0; i < travelTypeList.size(); i++) {
             String id = String.valueOf(travelTypeList.get(i));
@@ -339,8 +333,6 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         customDialog.show();
     }
-
-
     public void TrainType() {
         trainTypeList = new ArrayList<>();
         trainTypeList.add("SS");
@@ -362,17 +354,16 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
         customDialog.show();
 
     }
-
     public void ModeOfType() {
         Map<String, String> QueryString = new HashMap<>();
-        QueryString.put("axn", "table/list");
+        QueryString.put("axn", "get/exceptravel");
         QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
         QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
         QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
         QueryString.put("State_Code", Shared_Common_Pref.StateCode);
         String commonLeaveType = "{\"tableName\":\"getmodeoftravel\",\"coloumns\":\"[\\\"id\\\",\\\"name\\\",\\\"Leave_Name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        Call<Object> call = service.GetRouteObjects(QueryString, commonLeaveType);
+        Call<Object> call = service.GetExceptionRoutes(QueryString, commonLeaveType);
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
@@ -384,15 +375,14 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
                     String name = modelOfTravels.get(i).getName();
                     String modeId = String.valueOf(modelOfTravels.get(i).getId());
                     String driverMode = String.valueOf(modelOfTravels.get(i).getDriverNeed());
+                    Integer ModeTyp = modelOfTravels.get(i).getEligible();
                     Log.v("Name_of_mode_travel", name);
                     mCommon_model_spinner = new Common_Model(id, name, modeId, driverMode);
-                    ModeOfTravel.add(mCommon_model_spinner);
+                    if (ModeTyp==1)
+                        ModeOfTravel.add(mCommon_model_spinner);
+                    else
+                        ToModeOfTravel.add(mCommon_model_spinner);
                 }
-                customDialog = new CustomListViewDialog(DaExceptionEntry.this, ModeOfTravel, 8);
-                Window window = customDialog.getWindow();
-                window.setGravity(Gravity.CENTER);
-                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
             }
 
             @Override
@@ -401,46 +391,6 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             }
         });
     }
-
-    public void ToModeOfType() {
-        Map<String, String> QueryString = new HashMap<>();
-        QueryString.put("axn", "table/list");
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
-        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
-        String commonLeaveType = "{\"tableName\":\"getmodeoftravel\",\"coloumns\":\"[\\\"id\\\",\\\"name\\\",\\\"Leave_Name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        Call<Object> call = service.GetRouteObjects(QueryString, commonLeaveType);
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                userType = new TypeToken<ArrayList<com.hap.checkinproc.Model_Class.ModeOfTravel>>() {
-                }.getType();
-                TomodelOfTravels = gson.fromJson(new Gson().toJson(response.body()), userType);
-                for (int i = 0; i < TomodelOfTravels.size(); i++) {
-                    String id = String.valueOf(TomodelOfTravels.get(i).getStEndNeed());
-                    String name = TomodelOfTravels.get(i).getName();
-                    String modeId = String.valueOf(TomodelOfTravels.get(i).getId());
-                    String driverMode = String.valueOf(TomodelOfTravels.get(i).getDriverNeed());
-                    Log.v("Name_of_mode_travel", name);
-                    mCommon_model_spinner = new Common_Model(id, name, modeId, driverMode);
-                    ToModeOfTravel.add(mCommon_model_spinner);
-                }
-                customDialog = new CustomListViewDialog(DaExceptionEntry.this, ToModeOfTravel, 9);
-                Window window = customDialog.getWindow();
-                window.setGravity(Gravity.CENTER);
-                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
-            }
-
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                Log.d("LeaveTypeList", "Error");
-            }
-        });
-    }
-
     public void getTool() {
         TextView txtHelp = findViewById(R.id.toolbar_help);
         ImageView imgHome = findViewById(R.id.toolbar_home);
@@ -489,7 +439,6 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             }
         });
     }
-
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
@@ -515,12 +464,12 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             txtToTravel.setText("");
             cardDate.setText("");
             typeText.setText(myDataset.get(position).getName());
-            if (typeText.getText().toString().equals("EARLY CHECK-IN")) {
+            if (typeText.getText().toString().equals("TRAVEL EARLY CHECK-IN")) {
                 TxtActl.setText("Actual Check-in Time");
                 TxtErly.setText("Early Check-in Time");
                 dataVisiblity.setVisibility(View.VISIBLE);
                 modeTravel.setVisibility(View.GONE);
-            } else if (typeText.getText().toString().equalsIgnoreCase("LATE CHECK-OUT")) {
+            } else if (typeText.getText().toString().equalsIgnoreCase("TRAVEL LATE CHECK-OUT")) {
                 TxtActl.setText("Actual Check-out Time");
                 TxtErly.setText("Late Check-out Time");
                 dataVisiblity.setVisibility(View.VISIBLE);
@@ -531,7 +480,6 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             }
         } else if (type == 8) {
             txtMode.setText(myDataset.get(position).getName());
-
             IdFrom = myDataset.get(position).getFlag();
             NameFrom = myDataset.get(position).getName();
         } else if (type == 102) {
@@ -666,10 +614,24 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
     }
 
     public void DaException(View v) {
-        daExpen();
+        if(validateTAExcep()) daExpen();
     }
 
-
+    public boolean validateTAExcep(){
+        if(typeText.getText().toString().equalsIgnoreCase("")){
+            Toast.makeText(DaExceptionEntry.this,"Select the exception type",Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if(typeText.getText().toString().equalsIgnoreCase("")){
+            Toast.makeText(DaExceptionEntry.this,"Select the exception type",Toast.LENGTH_LONG).show();
+            return false;
+        }
+        if(txtRmks.getText().toString().equalsIgnoreCase("")){
+            Toast.makeText(DaExceptionEntry.this,"Enter the Remarks",Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
     public void daExpen() {
 
         Log.v("SF_CODE", Shared_Common_Pref.Sf_Code);
@@ -689,6 +651,7 @@ public class DaExceptionEntry extends AppCompatActivity implements View.OnClickL
             json.put("TMOT", IdTo);
             json.put("FMOTName", NameFrom);
             json.put("TMOTName", NameTo);
+            json.put("Rmks", txtRmks.getText());
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -42,12 +42,12 @@ public class Holiday_Approval_Adapter extends RecyclerView.Adapter<Holiday_Appro
     @Override
     public Holiday_Approval_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-        view.setOnClickListener(new View.OnClickListener() {
+        /*view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAdapterOnClick.onIntentClick(dummy);
             }
-        });
+        });*/
         return new Holiday_Approval_Adapter.MyViewHolder(view);
     }
 

@@ -45,6 +45,7 @@
 
 
                 <TextView
+                    android:id="@+id/DtTrv"
                     style="@style/TextStyleNoM"
                     android:text="Date of Travel"
                     android:layout_marginLeft="5dp"

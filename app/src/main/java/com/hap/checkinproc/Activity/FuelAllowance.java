@@ -30,8 +30,6 @@ import java.text.DecimalFormat;
 
 
 public class FuelAllowance extends AppCompatActivity {
-
-
     String FUClaim = "", StartedKm = "", ClosingKm = "", PersonalKm = "", StrDaName = "", strFuelAmount = "";
     Double tofuel = 0.0, fAmount = 0.0;
     TextView TxtStartedKm, TxtClosingKm, travelTypeMode, TotalTravelledKm, txtTaClaim, PersonalTextKM, PersonalKiloMeter,

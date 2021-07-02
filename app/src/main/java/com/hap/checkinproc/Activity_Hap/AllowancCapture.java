@@ -45,7 +45,9 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     String mode = "", allowance = "", StartedKM = "", FromKm = "", ToKm = "", Fare = "", Closing = "";
     Shared_Common_Pref mShared_common_pref;
     SharedPreferences sharedpreferences;
+    SharedPreferences UserDetails;
     public static final String mypreference = "mypref";
+    public static final String UserInfo = "MyPrefs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,8 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         setContentView(R.layout.activity_allowanc_capture);
         startService(new Intent(this, TimerService.class));
         sharedpreferences = getSharedPreferences(mypreference,
+                Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(UserInfo,
                 Context.MODE_PRIVATE);
         mShared_common_pref = new Shared_Common_Pref(this);
 
@@ -99,8 +103,9 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
 
 
     public void takePicture() {
+        String usrNm=UserDetails.getString("Sfcode","");
         long tsLong = System.currentTimeMillis() / 1000;
-        imageFileName = Long.toString(tsLong) + ".jpg";
+        imageFileName = usrNm+"_"+Long.toString(tsLong) + ".jpg";
         imagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + imageFileName;
         file = new File(imagePath);
         try {
@@ -284,7 +289,9 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         Camera.Parameters params = mCamera.getParameters();
         Log.d("CurrZoom",params.getFocusMode()+"="+params.getZoom()+":"+params.getMaxZoom());
         if(Camera.Parameters.FOCUS_MODE_AUTO!=params.getFocusMode()) params.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
-//some more settings
+        params.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+
+        //some more settings
         mCamera.setParameters(params);
         mCamera.startPreview();
         int degrees = 0;

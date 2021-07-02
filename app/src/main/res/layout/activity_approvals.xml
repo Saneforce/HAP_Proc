@@ -52,29 +52,26 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/C10dp"
-                            android:orientation="vertical">
+                            android:orientation="horizontal">
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
-                                    android:text="Leave"></TextView>
+                                    android:text="Leave"
+                                    android:layout_weight="1"
+                                    android:gravity="center_vertical"></TextView>
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentLeft="true"
-                                    android:layout_alignParentEnd="true"
-                                    android:layout_alignParentRight="true"
-                                    android:orientation="horizontal">
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal"
+                                    android:gravity="center_vertical">
 
                                     <LinearLayout
                                         android:layout_width="23dp"
                                         android:layout_height="23dp"
-                                        android:background="@drawable/circle">
+                                        >
 
                                         <TextView
                                             android:id="@+id/txt_leave_req_count"
@@ -84,18 +81,19 @@
                                             android:gravity="center"
                                             android:maxEms="2"
                                             android:text="0"
+                                            android:background="@drawable/circle"
                                             android:textColor="@android:color/white"></TextView>
 
                                     </LinearLayout>
-
-                                    <include layout="@layout/image_arrow"></include>
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:src="@drawable/arrow_right"/>
 
                                 </LinearLayout>
-                            </RelativeLayout>
+
                         </LinearLayout>
-
                         <include layout="@layout/part_view" />
-
                         <LinearLayout
                             android:id="@+id/lin_leave_cancel"
                             android:layout_width="match_parent"
@@ -108,7 +106,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:layout_alignParentStart="true"
                                     android:layout_alignParentBottom="true"
@@ -146,9 +144,7 @@
                                 </LinearLayout>
                             </RelativeLayout>
                         </LinearLayout>
-
                         <include layout="@layout/part_view" />
-
                         <LinearLayout
                             android:id="@+id/lin_per_req"
                             android:layout_width="match_parent"
@@ -161,7 +157,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
 
                                     style="@style/TextStyle"
                                     android:text="Permission"></TextView>
@@ -195,9 +191,7 @@
                                 </LinearLayout>
                             </RelativeLayout>
                         </LinearLayout>
-
                         <include layout="@layout/part_view" />
-
                         <LinearLayout
                             android:id="@+id/lin_on_duty"
                             android:layout_width="match_parent"
@@ -210,7 +204,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
 
                                     style="@style/TextStyle"
                                     android:text="On-Duty"></TextView>
@@ -244,9 +238,7 @@
                                 </LinearLayout>
                             </RelativeLayout>
                         </LinearLayout>
-
                         <include layout="@layout/part_view" />
-
                         <LinearLayout
                             android:id="@+id/lin_miss_punch"
                             android:layout_width="match_parent"
@@ -259,7 +251,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
 
                                     style="@style/TextStyle"
                                     android:text="Missed Punch"></TextView>
@@ -295,9 +287,7 @@
                             </RelativeLayout>
 
                         </LinearLayout>
-
                         <include layout="@layout/part_view" />
-
                         <LinearLayout
                             android:id="@+id/lin_ext_shift_status"
                             android:layout_width="match_parent"
@@ -310,7 +300,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="Extended Shift"></TextView>
 
@@ -344,9 +334,7 @@
                             </RelativeLayout>
 
                         </LinearLayout>
-
                         <include layout="@layout/part_view" />
-
                         <LinearLayout
                             android:id="@+id/lin_travel_allow"
                             android:layout_width="match_parent"
@@ -359,7 +347,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="Travel Allowance"></TextView>
 
@@ -408,7 +396,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="Work Plan-PJP"></TextView>
 
@@ -457,7 +445,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="Deviation Entry" />
 
@@ -506,7 +494,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="Holiday Entry" />
 
@@ -555,9 +543,9 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
-                                    android:text="DAException Entry" />
+                                    android:text="@string/trv_exc_entry" />
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"
@@ -630,7 +618,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="Leave"></TextView>
 
@@ -661,7 +649,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="Permission"></TextView>
 
@@ -692,7 +680,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="On-Duty"></TextView>
 
@@ -723,7 +711,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="Missed Punch"></TextView>
 
@@ -755,7 +743,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="Weekoff"></TextView>
 
@@ -787,7 +775,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="Extended shift"></TextView>
 
@@ -820,7 +808,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="Travel Allowance"></TextView>
 
@@ -854,7 +842,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="Tour Plan"></TextView>
 
@@ -886,7 +874,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="Leave Cancel"></TextView>
 
@@ -918,7 +906,7 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
                                     android:text="Holiday Entry" />
 
@@ -950,9 +938,9 @@
                                 android:layout_height="wrap_content">
 
                                 <TextView
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="16sp"
                                     style="@style/TextStyle"
-                                    android:text="Da Exception" />
+                                    android:text="Travel Mode Exception" />
 
                                 <LinearLayout
                                     android:layout_width="wrap_content"

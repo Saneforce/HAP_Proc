@@ -75,7 +75,7 @@ import retrofit2.Response;
 
 public class AllowanceActivityTwo extends AppCompatActivity implements Master_Interface {
 
-    TextView TextModeTravel, TextStartedKm, TextMaxKm, TextToPlace, TextCloseDate;
+    TextView TextModeTravel, TextStartedKm, TextMaxKm, TextToPlace, TextCloseDate,TextDtTrv;
     ImageView StartedKmImage, EndedKmImage;
     Button submitAllowance;
     EditText EndedEditText, PersonalKmEdit, ReasonMode;
@@ -86,7 +86,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     String Photo_Name = "", imageConvert = "", StartedKm = "", EndedImage = "", CheckInfo = "CheckInDetail",
             UserInfo = "MyPrefs", MOT = "ModeOfTravel", Name = "Allowance", mypreference = "mypref", StrToCode = "",
             toPlace = "", ImageStart = "", Hq = "", ClosingCon = "", ClosingDate = "";
-    LinearLayout linToPlace, takeEndedPhoto;
+    LinearLayout linToPlace, takeEndedPhoto,vwlblHead;
     CustomListViewDialog customDialog;
     Common_Model mCommon_model_spinner;
     Common_Class common_class;
@@ -101,6 +101,8 @@ Location mlocation;
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
         TextModeTravel = findViewById(R.id.txt_mode_travel);
+        vwlblHead=findViewById(R.id.vwlblHead);
+        TextDtTrv = findViewById(R.id.DtTrv);
         TextCloseDate = findViewById(R.id.closing_date);
         TextStartedKm = findViewById(R.id.txt_started_km);
         TextMaxKm = findViewById(R.id.txt_max);
@@ -120,6 +122,9 @@ Location mlocation;
         closingIntet.putExtra("Cls_con","cls");
         closingIntet.putExtra("Cls_dte","");*/
 
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.remove("SharedImages");
+        editor.commit();
         new LocationFinder(getApplication(), new LocationEvents() {
             @Override
             public void OnLocationRecived(Location location) {
@@ -132,11 +137,15 @@ Location mlocation;
 
 
         if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
+            vwlblHead.setVisibility(View.VISIBLE);
             TextCloseDate.setVisibility(View.VISIBLE);
             TextCloseDate.setText(ClosingDate);
-            takeEndedPhoto.setVisibility(View.GONE);
+            //takeEndedPhoto.setVisibility(View.GONE);
             callApi(ClosingDate);
         } else {
+            vwlblHead.setVisibility(View.GONE);
+            TextCloseDate.setVisibility(View.GONE);
+            TextDtTrv.setVisibility(View.GONE);
             callApi(Common_Class.GetDate());
         }
 
@@ -277,8 +286,7 @@ Location mlocation;
                 if (EndedEditText.getText().toString().matches("")) {
                     Toast.makeText(AllowanceActivityTwo.this, "Choose End Km", Toast.LENGTH_SHORT).show();
                     return;
-                } else if (EndedImage.matches("") &&
-                        ((ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) ) {
+                } else if (EndedImage.matches("")) { //if (EndedImage.matches("") && ((ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) )
                     Toast.makeText(AllowanceActivityTwo.this, "Choose End photo", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
@@ -316,6 +324,7 @@ Location mlocation;
                             new LocationFinder(getApplication(), new LocationEvents() {
                                 @Override
                                 public void OnLocationRecived(Location location) {
+                                    mlocation=location;
 //                                if (!ClosingDate.equals("")) {
                                     common_class.ProgressdialogShow(1, "Submitting Please wait...");
                                     if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
@@ -378,31 +387,6 @@ Location mlocation;
             Log.v("printing_allow", jj.toString());
             Call<ResponseBody> Callto;
 
-            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-            DatabaseHandler db = new DatabaseHandler(this);
-            JSONArray locations = db.getAllPendingTrackDetails();
-            if (locations.length() > 0) {
-                try {
-                    SharedPreferences UserDetails = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-                    if (UserDetails.getString("Sfcode", "") != "") {
-                        Call<JsonObject> call = apiInterface.JsonSave("save/trackall", "3", UserDetails.getString("Sfcode", ""), "", "", locations.toString());
-                        call.enqueue(new Callback<JsonObject>() {
-                            @Override
-                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                // Get result Repo from response.body()
-                                db.deleteAllTrackDetails();
-                            }
-
-                            @Override
-                            public void onFailure(Call<JsonObject> call, Throwable t) {
-                                Log.d("LocationUpdate", "onFailure Local Location");
-                            }
-                        });
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
            // if (!ClosingDate.equals("")  ) {
 
             if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
@@ -452,18 +436,29 @@ Location mlocation;
 
 
                             } else
-                                Toast.makeText(AllowanceActivityTwo.this, " Cannot submitted the data ", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AllowanceActivityTwo.this, "Cannot submitted the data. Try again", Toast.LENGTH_SHORT).show();
+                        }else{
+                            common_class.ProgressdialogShow(0, "");
+                            Toast.makeText(AllowanceActivityTwo.this, "Cannot submitted the data. Try again", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
+                        common_class.ProgressdialogShow(0, "");
+                        Toast.makeText(AllowanceActivityTwo.this, "Cannot submitted the data. Try again", Toast.LENGTH_SHORT).show();
+
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    common_class.ProgressdialogShow(0, "");
+                    Toast.makeText(AllowanceActivityTwo.this, "Cannot submitted the data. Try again", Toast.LENGTH_SHORT).show();
+
 
                 }
             });
         } catch (Exception e) {
+            common_class.ProgressdialogShow(0, "");
+            Toast.makeText(AllowanceActivityTwo.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -752,6 +747,7 @@ Location mlocation;
             Log.e("Privacypolicy", "Checking" + EndedImage);
             EndedKmImage.setImageURI(Uri.parse(EndedImage));
             imageConvert = EndedImage.substring(7);
+            Photo_Name=imageConvert.substring(imageConvert.lastIndexOf("/")+1);
             Log.e("COnvert", EndedImage.substring(7));
             Log.e("COnvert", imageConvert);
             getMulipart(imageConvert, 0);

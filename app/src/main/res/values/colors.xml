@@ -1,13 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-<!--    <color name="colorAccent">#4A87EE</color>-->
-<!--    <color name="colorPrimary">#5691F4</color>-->
-<!--    <color name="colorPrimaryDark">#4A87EE</color>-->
+    <color name="colorAccent">#3949AB</color>
+    <color name="colorPrimary">#4E5FCA</color>
+    <color name="colorPrimaryDark">#3949AB</color>
+<!--    <color name="colorAccent">#43A047</color>-->
+<!--    <color name="colorPrimary">#7CB342</color>-->
+<!--    <color name="colorPrimaryDark">#43A047</color>-->
 
-    <color name="colorAccent">#009688</color>
-    <color name="colorPrimary">#009688</color>
-    <color name="colorPrimaryDark">#009688</color>
+<!--    <color name="colorAccent">#4A87EE</color>-->
+<!--    <color name="colorPrimary">#FFC107</color>-->
+<!--    <color name="colorPrimaryDark">#ff9819</color>-->
+
+    <!--    <color name="colorAccent">#4A87EE</color>-->
+<!--    <color name="colorPrimary">#5691F4</color>-->
+<!--    <color name="colorPrimaryDark">#1068D6</color>-->
+
+<!--    <color name="colorAccent">#009688</color>-->
+<!--    <color name="colorPrimary">#009688</color>-->
+<!--    <color name="colorPrimaryDark">#009688</color>-->
+
+
+<!--    <color name="subExpHeader">#43A047</color>-->
+
+    <!--    <color name="subExpHeader">#03A9F4</color>-->
+    <!--    <color name="subExpHeader">#009688</color>-->
+    <color name="subExpHeader">#BB52D8</color>
+    <color name="GrandTotal">#4CAF50</color>
+    <color name="ApproveGreen">#4CAF50</color>
     <color name="Pending_yellow">#ff9819</color>
 
     <color name="white">#fff</color>
@@ -34,8 +54,6 @@
     <color name="subHeader">#9C000000</color>
     <color name="checkout">#D04736</color>
 
-    <color name="subExpHeader">#009688</color>
-    <color name="GrandTotal">#4CAF50</color>
 
     <color name="Hap_location">#10B2C7</color>
 
@@ -59,7 +77,8 @@
     <color name="admin_card_strokecolor">#706F6F</color>
     <color name="txt_template_color">#F8AB58</color>
     <color name="layout_bg_color">#F2F2F2</color>
-    <color name="view_bg_color">#009688</color>
+    <color name="view_bg_color">#43A047</color>
+<!--    <color name="view_bg_color">#009688</color>-->
     <color name="view_bg_header">#F4F3F4</color>
     <color name="view_division">#F1E7E7</color>
 

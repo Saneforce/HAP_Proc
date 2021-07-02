@@ -43,12 +43,12 @@ public class Deviation_Approval_Adapter extends RecyclerView.Adapter<Deviation_A
     @Override
     public Deviation_Approval_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-        view.setOnClickListener(new View.OnClickListener() {
+        /*view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mAdapterOnClick.onIntentClick(dummy);
             }
-        });
+        });*/
         return new Deviation_Approval_Adapter.MyViewHolder(view);
     }
 
