@@ -1242,6 +1242,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         SumOFOTAmount();
     }
 
+    public void openFuleEntry(View v) {
+        startActivity(new Intent(getApplicationContext(), FuleEntryActivity.class));
+    }
     public void viewStaus(View v) {
         startActivity(new Intent(getApplicationContext(), ViewTAStatus.class));
     }

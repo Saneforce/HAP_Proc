@@ -97,17 +97,16 @@
         android:textFontWeight="900"
         android:textSize="12sp"
         android:layout_weight="1"/>
+    </LinearLayout>
     <TextView
         android:id="@+id/txDeptName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAlignment="viewEnd"
         android:text="ITES"
         android:textColor="@color/grey_600"
         android:textFontWeight="900"
         android:textSize="12sp"
         android:layout_weight="1" />
-    </LinearLayout>
 </LinearLayout>
                     <TextView
                         android:id="@+id/MRQtxt"

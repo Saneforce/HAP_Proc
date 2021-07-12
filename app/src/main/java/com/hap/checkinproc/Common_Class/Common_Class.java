@@ -62,7 +62,7 @@ public class Common_Class {
 
     // Gson gson;
     String Result = "false";
-    public static String Version_Name = "ver 3.1.10-b";
+    public static String Version_Name = "ver 3.1.11-b";
     public static String Work_Type = "0";
 
     public void CommonIntentwithFinish(Class classname) {

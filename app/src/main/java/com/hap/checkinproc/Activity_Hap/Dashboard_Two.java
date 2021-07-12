@@ -62,6 +62,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     SharedPreferences UserDetails;
     public static final String CheckInDetail = "CheckInDetail";
     public static final String UserDetail = "MyPrefs";
+
     Shared_Common_Pref mShared_common_pref;
     GateEntryQREvents GateEvents;
     private RecyclerView recyclerView;
@@ -72,6 +73,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     Button StActivity, cardview3, cardview4, cardView5, btnCheckout, btnApprovals;
     String AllowancePrefernce = "";
     ImageView btMyQR;
+
     public static final String mypreference = "mypref";
     public static final String Name = "Allowance";
     public static final String MOT = "ModeOfTravel";
@@ -107,9 +109,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         startService(new Intent(this, TimerService.class));
 
         mShared_common_pref = new Shared_Common_Pref(this);
-
         mShared_common_pref.save("Dashboard", "one");
-
         sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
 
         if (sharedpreferences.contains("SharedMode")) {
@@ -132,14 +132,15 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
         CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+
         TxtEmpId = findViewById(R.id.txt_emp_id);
-        TxtEmpId.setText(" - " + mShared_common_pref.getvalue(Shared_Common_Pref.SF_EMP_ID));
+        TxtEmpId.setText(" - " + UserDetails.getString("EmpId",""));
         txHQName = findViewById(R.id.txHQName);
         txDesgName = findViewById(R.id.txDesgName);
         txDeptName = findViewById(R.id.txDeptName);
         txHQName.setText(UserDetails.getString("SFHQ",""));
-        txDesgName.setText(mShared_common_pref.getvalue(Shared_Common_Pref.SF_DESIG,""));
-        txDeptName.setText(mShared_common_pref.getvalue(Shared_Common_Pref.SF_DEPT,""));
+        txDesgName.setText(UserDetails.getString("SFDesig",""));
+        txDeptName.setText(UserDetails.getString("DeptNm",""));
 
         TextView txtErt = findViewById(R.id.toolbar_ert);
         TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
@@ -231,7 +232,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         mRecyclerView.setLayoutManager(layoutManager);
         //mRecyclerView.stopScroll();
 
-        if (mShared_common_pref.getvalue(Shared_Common_Pref.CHECK_COUNT).equals("0")) {
+        if (UserDetails.getInt("CheckCount",0)<=0) {
             btnApprovals.setVisibility(View.GONE);
             //linApprovals.setVisibility(View.VISIBLE);
         } else {
@@ -280,6 +281,10 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         if (sSFType.equals("0"))
             StActivity.setVisibility(View.GONE);
 
+        getNotify();
+        getDyReports();
+        getMnthReports(0);
+        GetMissedPunch();
         if (Integer.parseInt(CheckInDetails.getString("On_Duty_Flag", "0")) > 0 || sSFType.equals("1")) {
             btnGateIn.setVisibility(View.VISIBLE);
             btnGateOut.setVisibility(View.VISIBLE);
@@ -289,13 +294,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         String ChkOutTm=CheckInDetails.getString("ShiftEnd","");
         if (!ChkOutTm.equalsIgnoreCase("")) {
             long AlrmTime = DT.getDate(ChkOutTm).getTime();
-            //long AlrmTime=DT.AddMinute(DT.GetCurrDateTime(Dashboard_Two.this),2).getTime();
-            sendAlarmNotify(1001, AlrmTime, "HAP Check-In", "Check-Out Alert !.");
+            long cTime=DT.GetCurrDateTime(Dashboard_Two.this).getTime();
+            if(AlrmTime>cTime){
+                sendAlarmNotify(1001, AlrmTime, "HAP Check-In", "Check-Out Alert !.");
+            }
         }
-        getNotify();
-        getDyReports();
-        getMnthReports(0);
-        GetMissedPunch();
 
 
         viewButton = findViewById(R.id.button3);

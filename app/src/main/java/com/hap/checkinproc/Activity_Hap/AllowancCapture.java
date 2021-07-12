@@ -3,6 +3,8 @@ package com.hap.checkinproc.Activity_Hap;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
 import android.net.Uri;
@@ -24,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.TimerService;
 
@@ -46,6 +49,8 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
     Shared_Common_Pref mShared_common_pref;
     SharedPreferences sharedpreferences;
     SharedPreferences UserDetails;
+    static OnImagePickListener imagePickListener;
+
     public static final String mypreference = "mypref";
     public static final String UserInfo = "MyPrefs";
 
@@ -191,7 +196,6 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
         button.setVisibility(View.GONE);
         BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
         vwPreview.setBackground(drawableBitmap);
-
         if (allowance.equals("One")) {
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString("SharedImage", Uri.fromFile(file).toString());
@@ -201,7 +205,14 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
 
         } else if (allowance.equals("three")) {
 
-            SharedPreferences.Editor editor = sharedpreferences.edit();
+            String filePath = String.valueOf(file);
+            Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+            imgPreview.setImageBitmap(bitmap);
+
+            imagePickListener.OnImageURIPick(bitmap,  imageFileName,filePath.replace("file://",""));
+            finish();
+
+           /* SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString("SharedImage", Uri.fromFile(file).toString());
             editor.putString("Sharedallowance", "One");
             editor.putString("SharedMode", mode);
@@ -210,8 +221,8 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             editor.putString("SharedToKm", ToKm);
             editor.putString("SharedFare", Fare);
             editor.commit();
-            /* startActivity(new Intent(AllowancCapture.this, On_Duty_Activity.class));*/
-            finish();
+            /* startActivity(new Intent(AllowancCapture.this, On_Duty_Activity.class));* /
+            finish();*/
 
 
         } else if (allowance.equals("Two")) {
@@ -227,6 +238,14 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             editor.putString("SharedImages", Uri.fromFile(file).toString());
             editor.commit();
             /* startActivity(new Intent(AllowancCapture.this, Missed_Punch.class));*/
+            finish();
+        }else{
+
+            String filePath = String.valueOf(file);
+            Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+            imgPreview.setImageBitmap(bitmap);
+
+            imagePickListener.OnImagePick(bitmap,  imageFileName);
             finish();
         }
 
@@ -366,6 +385,10 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             mCamera.release();
             mCamera = null;
         }
+    }
+
+    public static void setOnImagePickListener(OnImagePickListener mImagePickListener) {
+        imagePickListener = mImagePickListener;
     }
 
 

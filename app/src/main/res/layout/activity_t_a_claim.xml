@@ -20,6 +20,7 @@
             android:orientation="horizontal"
             android:paddingBottom="5dp">
 
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -52,6 +53,19 @@
                 android:layout_weight="1" />
 
 
+            <TextView
+                android:id="@+id/toolbar_view2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="openFuleEntry"
+                android:padding="@dimen/C3dp"
+                android:text="Add Chauffer Entry"
+                android:textAlignment="textEnd"
+                android:layout_gravity="center_vertical"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                tools:ignore="RtlCompat"
+                android:visibility="gone"/>
             <TextView
                 android:id="@+id/toolbar_view"
                 style="@style/TextStyle"

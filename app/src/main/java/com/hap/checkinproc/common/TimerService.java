@@ -533,7 +533,7 @@ public class TimerService extends Service {
                         RelativeLayout relative = new RelativeLayout(getApplicationContext());
                         relative.setId(4231);
                         relative.setLayoutParams(lp);
-                        relative.setBackgroundColor(Color.parseColor("#b75501"));
+                        relative.setBackgroundColor(Color.parseColor("#b7454587"));
 
                         TextView tv = new TextView(getApplicationContext());
                         tv.setLayoutParams(lp);

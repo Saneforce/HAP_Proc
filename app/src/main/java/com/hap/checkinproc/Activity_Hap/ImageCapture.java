@@ -4,9 +4,12 @@ import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -22,6 +25,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.IBinder;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -46,6 +50,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.exifinterface.media.ExifInterface;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
@@ -60,6 +65,8 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.AlmReceiver;
 import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationFinder;
+import com.hap.checkinproc.common.LocationReceiver;
+import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
@@ -123,6 +130,12 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
     Button btnRtPrv, btnOkPrv;
 
+    private SANGPSTracker mLUService;
+    private boolean mBound = false;
+    private LocationReceiver myReceiver;
+    Location mlocation;
+    String UKey="";
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -136,16 +149,21 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         UserDetails = getSharedPreferences(sUserDetail, Context.MODE_PRIVATE);
         common_class = new com.hap.checkinproc.Common_Class.Common_Class(this);
 
-
-        if (sharedpreferences.contains("VSTP")) {
-            VistPurpose = sharedpreferences.getString("VSTP", "");
-            Log.v("vstRmksvstRmks", VistPurpose);
-        }
-
-
+        new LocationFinder(getApplication(), new LocationEvents() {
+            @Override
+            public void OnLocationRecived(Location location) {
+                mlocation = location;
+            }
+        });
+        UKey=UserDetails.getString("Sfcode", "")+"-"+(new Date().getTime());
         Bundle params = getIntent().getExtras();
         try {
             mMode = params.getString("Mode");
+
+            String exData = params.getString("data","");
+            if(!(exData.equalsIgnoreCase("")||exData.equalsIgnoreCase("null"))){
+                CheckInInf=new JSONObject(exData);
+            }
 
             if (!mMode.equalsIgnoreCase("PF")) {
                 CheckInInf.put("Mode", mMode);
@@ -238,10 +256,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     //params.setFlashMode(Parameters.FLASH_MODE_TORCH);
                     params.set("flash-mode", flashModes[i].toLowerCase());
                     mCamera.setParameters(params);
-
-
-                    Log.e("POSITION", String.valueOf(i));
-                    Log.e("POSITION", String.valueOf(l));
                     if (i == 0) {
                         CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
                         try {
@@ -607,7 +621,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Log.e("Image_Capture", Uri.fromFile(file).toString());
         Log.e("Image_Capture", "IAMGE     " + bitmap);
         if (mMode.equalsIgnoreCase("PF")) {
-            imagePickListener.OnImagePick(bitmap, mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code) + "_" + imageFileName);
+            imagePickListener.OnImagePick(bitmap, imageFileName);
             finish();
         } else {
             mProgress = new ProgressDialog(this);
@@ -615,18 +629,25 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             mProgress.setTitle(titleId);
             mProgress.setMessage("Preparing Please Wait...");
             mProgress.show();
-            new LocationFinder(this, new LocationEvents() {
-                @Override
-                public void OnLocationRecived(Location location) {
-                    Common_Class.location = location;
-
-                    mProgress.setMessage("Submiting Please Wait...");
-                    vwPreview.setVisibility(View.GONE);
-                    // imgPreview.setImageURI(Uri.fromFile(file));
-                    button.setVisibility(View.GONE);
-                    saveCheckIn();
-                }
-            });
+            if(mlocation!=null){
+                mProgress.setMessage("Submiting Please Wait...");
+                vwPreview.setVisibility(View.GONE);
+                // imgPreview.setImageURI(Uri.fromFile(file));
+                button.setVisibility(View.GONE);
+                saveCheckIn();
+            }else {
+                new LocationFinder(getApplication(), new LocationEvents() {
+                    @Override
+                    public void OnLocationRecived(Location location) {
+                        mlocation=location;
+                        mProgress.setMessage("Submiting Please Wait...");
+                        vwPreview.setVisibility(View.GONE);
+                        // imgPreview.setImageURI(Uri.fromFile(file));
+                        button.setVisibility(View.GONE);
+                        saveCheckIn();
+                    }
+                });
+            }
         }
     }
 
@@ -638,7 +659,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 @Override
                 public void OnLocationRecived(Location location) {
                     try {
-                        Common_Class.location = location;
+                        mlocation = location;
 
                         ImageCapture.vwPreview.setVisibility(View.GONE);
                         // imgPreview.setImageURI(Uri.fromFile(file));
@@ -716,22 +737,22 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
     private void saveCheckIn() {
 
-        if (sharedpreferences.contains("placeName")) {
-            PlaceName = sharedpreferences.getString("placeName", "");
-        }
-        if (sharedpreferences.contains("placeId")) {
-            PlaceId = sharedpreferences.getString("placeId", "");
-        }
+
 
         try {
 
-            Location location = Common_Class.location;//locationFinder.getLocation();
+            Location location = mlocation;//Common_Class.location;//locationFinder.getLocation();
             String CTime = DT.GetDateTime(getApplicationContext(), "HH:mm:ss");
             String CDate = DT.GetDateTime(getApplicationContext(), "yyyy-MM-dd");
-
+            if (mMode.equalsIgnoreCase("onduty")) {
+                PlaceName = CheckInInf.getString("onDutyPlcNm");
+                PlaceId = CheckInInf.getString("onDutyPlcID");
+                if (CheckInInf.has("vstPurpose"))
+                    VistPurpose = CheckInInf.getString("vstPurpose");
+            }
             CheckInInf.put("eDate", CDate + " " + CTime);
             CheckInInf.put("eTime", CTime);
-
+            CheckInInf.put("UKey", UKey);
             double lat = 0, lng = 0;
             if (location != null) {
                 lat = location.getLatitude();
@@ -741,6 +762,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             CheckInInf.put("long", lng);
             CheckInInf.put("Lattitude", lat);
             CheckInInf.put("Langitude", lng);
+
             if(mMode.equalsIgnoreCase("onduty")) {
                 CheckInInf.put("PlcNm", PlaceName);
                 CheckInInf.put("PlcID", PlaceId);
@@ -752,9 +774,11 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 CheckInInf.put("On_Duty_Flag", "1");
             else
                 CheckInInf.put("On_Duty_Flag", "0");
+
             CheckInInf.put("iimgSrc", imagePath);
             CheckInInf.put("slfy", imageFileName);
-            CheckInInf.put("Rmks", "");
+            CheckInInf.put("Rmks", vstPurpose);
+            CheckInInf.put("vstRmks", VistPurpose);
 
             Log.e("Image_Capture", imagePath);
             Log.e("Image_Capture", imageFileName);
@@ -800,6 +824,20 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                                         long AlrmTime=DT.getDate(CheckInInf.getString("ShiftEnd")).getTime();
                                         sendAlarmNotify(1001,AlrmTime,"HAP Check-In","Check-Out Alert !.");
                                     }
+
+                                    if (mMode.equalsIgnoreCase("ONDuty")){
+                                        mShared_common_pref.save(Shared_Common_Pref.DAMode, true);
+
+                                        mLUService = new SANGPSTracker(ImageCapture.this);
+                                        myReceiver = new LocationReceiver();
+                                        bindService(new Intent(ImageCapture.this, SANGPSTracker.class), mServiceConection,
+                                                Context.BIND_AUTO_CREATE);
+                                        LocalBroadcastManager.getInstance(ImageCapture.this).registerReceiver(myReceiver,
+                                                new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
+                                        mLUService.requestLocationUpdates();
+                                    }
+
+
                                     if (CheckInDetails.getString("FTime", "").equalsIgnoreCase(""))
                                         editor.putString("FTime", CTime);
                                     editor.putString("Logintime", CTime);
@@ -1335,4 +1373,19 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         AlarmManager alarmManager=(AlarmManager) this.getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP,AlmTm,pIntent);
     }
+
+
+    private final ServiceConnection mServiceConection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mLUService = ((SANGPSTracker.LocationBinder) service).getLocationUpdateService(getApplicationContext());
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mLUService = null;
+            mBound = false;
+        }
+    };
 }

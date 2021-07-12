@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity.AllowanceActivityTwo;
@@ -34,6 +35,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
+import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
 
@@ -66,27 +68,20 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     String imageProfile = "", sSFType = "";
     String onDuty = "", ClosingDate = "";
     ImageView profilePic, btMyQR;
-    public static final String hapLocation = "hpLoc";
-    public static final String otherLocation = "othLoc";
-    public static final String visitPurpose = "vstPur";
-    public static final String modeTravelId = "ShareModesss";
-    public static final String modeTypeVale = "SharedModeTypeValesss";
-    public static final String modeFromKm = "SharedFromKmsss";
-    public static final String modeToKm = "SharedToKmsss";
-    public static final String StartedKm = "StartedKMsss";
-    public static final String StartedImage = "SharedImage";
     SharedPreferences.Editor editors;
     SharedPreferences sharedpreferences;
     RelativeLayout mRelApproval;
     Integer ClosingKm = 0;
 
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
-
+    DatabaseHandler db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         startService(new Intent(this, TimerService.class));
+
+        db = new DatabaseHandler(this);
         username = findViewById(R.id.username);
         lblUserName = (TextView) findViewById(R.id.lblUserName);
         lblEmail = (TextView) findViewById(R.id.lblEmail);
@@ -96,11 +91,15 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linMyday = findViewById(R.id.lin_myday_plan);
         linHolidayWorking = findViewById(R.id.lin_holiday_working);
 
-        Get_MydayPlan(1, "check/mydayplan");
-        shared_common_pref = new Shared_Common_Pref(this);
         CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
+        Get_MydayPlan(1, "check/mydayplan");
+        getHapLocations();
+        shared_common_pref = new Shared_Common_Pref(this);
+
         type = (UserDetails.getInt("CheckCount", 0));
+
         common_class = new Common_Class(this);
 
         startService(new Intent(this, TimerService.class));
@@ -110,12 +109,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         String sSFName = UserDetails.getString("SfName", "");
         sSFType = UserDetails.getString("Sf_Type", "");
         OTFlg = UserDetails.getInt("OTFlg", 0);
+
         mRelApproval = findViewById(R.id.rel_app);
 
-        Log.e("DASHBORAD_SF", sSFType);
-
         imageProfile = UserDetails.getString("url", "");
-        Log.e("CHECKING", imageProfile);
 
         lblUserName.setText(sSFName);
         lblEmail.setText(eMail);
@@ -136,11 +133,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             linCheckin.setVisibility(View.GONE);
         }
 
-        Log.v("SSFTYPE_DASH_BOARD", sSFType);
-
         linRequstStaus = (findViewById(R.id.lin_request_status));
         linReport = (findViewById(R.id.lin_report));
         linOnDuty = (findViewById(R.id.lin_onduty));
+
         linOnDuty.setVisibility(View.GONE);
         if (sSFType.equals("0")) linOnDuty.setVisibility(View.VISIBLE);
 
@@ -163,7 +159,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linReCheck = findViewById(R.id.lin_RecheckIn);
         approvalcount = findViewById(R.id.approvalcount);
 
-        if (shared_common_pref.getvalue(Shared_Common_Pref.CHECK_COUNT).equals("0")) {
+        if (UserDetails.getInt("CheckCount",0)<=0) {
             mRelApproval.setVisibility(View.GONE);
             //linApprovals.setVisibility(View.VISIBLE);
         } else {
@@ -250,16 +246,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.lin_myday_plan:
                 if (ClosingKm == 1) {
-
                     Intent closingIntet = new Intent(this, AllowanceActivityTwo.class);
                     closingIntet.putExtra("Cls_con", "cls");
                     closingIntet.putExtra("Cls_dte", ClosingDate);
                     startActivity(closingIntet);
                     finish();
                 } else {
-
                     startActivity(new Intent(this, Mydayplan_Activity.class));
-
                 }
                 break;
 
@@ -290,29 +283,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.lin_onduty:
 
-                SharedPreferences.Editor editors = CheckInDetails.edit();
-                editors.remove("SharedImage");
-                editors.remove("Sharedallowance");
-                //editor.remove("SharedMode");
-                editors.remove("StartedKM");
-                editors.remove("SharedFromKm");
-                editors.remove("SharedToKm");
-                editors.remove("SharedFare");
-                editors.remove("SharedImages");
-                editors.remove("Closing");
-                editors.remove(hapLocation);
-                editors.remove(otherLocation);
-                editors.remove(visitPurpose);
-                editors.remove(modeTravelId);
-                editors.remove(modeTypeVale);
-                editors.remove(modeFromKm);
-                editors.remove(modeToKm);
-                editors.remove(StartedKm);
-                editors.remove("SharedDailyAllowancess");
-                editors.remove("SharedDriverss");
-                editors.remove("ShareModeIDs");
-                editors.remove("StoreId");
-                editors.commit();
                 // startActivity(new Intent(this, On_Duty_Activity.class));
                 Intent oDutyInt = new Intent(this, On_Duty_Activity.class);
                 oDutyInt.putExtra("Onduty", onDuty);
@@ -366,9 +336,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     private void validateExtened(String Name) {
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", Name);
-        QueryString.put("Sf_code", Shared_Common_Pref.Sf_Code);
+        QueryString.put("Sf_code", UserDetails.getString("Sfcode",""));
         QueryString.put("Date", common_class.GetDate());
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+        QueryString.put("divisionCode", UserDetails.getString("Divcode",""));
         QueryString.put("desig", "MGR");
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
@@ -430,24 +400,33 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         });
     }
 
+    public void getHapLocations() {
+        String commonLeaveType = "{\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+        Call<JsonArray> GetHAPLocation = service.GetHAPLocation(UserDetails.getString("Divcode",""), UserDetails.getString("Sfcode",""), commonLeaveType);
+        GetHAPLocation.enqueue(new Callback<JsonArray>() {
+            @Override
+            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                db.deleteMasterData("HAPLocations");
+                db.addMasterData("HAPLocations",response.body());
+            }
+
+            @Override
+            public void onFailure(Call<JsonArray> call, Throwable t) {
+            }
+        });
+    }
 
     private void Get_MydayPlan(int flag, String Name) {
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", Name);
-        QueryString.put("Sf_code", Shared_Common_Pref.Sf_Code);
+        QueryString.put("Sf_code", UserDetails.getString("Sfcode",""));
         QueryString.put("Date", common_class.GetDate());
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+        QueryString.put("divisionCode", UserDetails.getString("Divcode",""));
         QueryString.put("desig", "MGR");
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-        JSONObject sp = new JSONObject();
-        jsonArray.put(jsonObject);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, jsonArray.toString());
-        Log.e("Log_TpQuerySTring", QueryString.toString());
-        Log.e("LOG_NAME", Name);
-        Log.e("Log_Tp_SELECT", jsonArray.toString());
-        Log.e("Log_FLAG", String.valueOf(flag));
+        Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, "[]");
+
         mCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -466,24 +445,21 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
                     if (MotCount > 0)
                         linReCheck.setVisibility(View.VISIBLE);
+
                     onDuty = jsonObject.getString("CheckOnduty");
                     Log.v("ONDUTY_RESPONSE", jsonObject.getString("CheckOnduty"));
+
                     sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
                     editors = sharedpreferences.edit();
-                        editors.putString("Onduty", onDuty);
-                        editors.putString("ShiftDuty", jsonObject.getString("Todaycheckin_Flag"));
+                    editors.putString("Onduty", onDuty);
+                    editors.putString("ShiftDuty", jsonObject.getString("Todaycheckin_Flag"));
                     editors.commit();
 
                     linCheckin.setVisibility(View.VISIBLE);
                     linHolidayWorking.setVisibility(View.VISIBLE);
                     if (flag == 1 && sSFType.equals("1")) {
                         JSONArray jsoncc = jsonObject.getJSONArray("Checkdayplan");
-                        Log.e("LENGTH_Checkin", String.valueOf(jsoncc));
-                        Log.e("LENGTH_Checkin", String.valueOf(jsoncc.length()));
-                        //Log.e("TB_MyDAy_Plan",String.valueOf(jsoncc.getJSONObject(0).get("remarks")));
-                        Log.e("MyDAY_LENGTH", String.valueOf(jsoncc.length()));
                         if (jsoncc.length() > 0) {
-                            Log.e("LENGTH_FOR_LOOP", String.valueOf(jsoncc.length()));
                             if (jsoncc.getJSONObject(0).getInt("Cnt") < 1) {
                                 Intent intent = new Intent(Dashboard.this, AllowanceActivity.class);
                                 intent.putExtra("My_Day_Plan", "One");
@@ -554,10 +530,10 @@ Log.d("MDPError",t.getMessage());
 
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "ViewAllCount");
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+        QueryString.put("sfCode", UserDetails.getString("Sfcode",""));
+        QueryString.put("State_Code", UserDetails.getString("State_Code", ""));
+        QueryString.put("divisionCode", UserDetails.getString("Divcode",""));
+        QueryString.put("rSF", UserDetails.getString("Sfcode",""));
         QueryString.put("desig", "MGR");
         String commonworktype = "{\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
 

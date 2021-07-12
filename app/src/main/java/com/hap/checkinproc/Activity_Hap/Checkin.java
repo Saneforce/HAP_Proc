@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -13,15 +14,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.JsonArray;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.ShiftListItem;
+import com.hap.checkinproc.common.LocationReceiver;
+import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
 
 import retrofit2.Call;
@@ -38,7 +43,7 @@ public class Checkin extends AppCompatActivity {
     private JsonArray ShiftItems = new JsonArray();
     private RecyclerView recyclerView;
     private ShiftListItem mAdapter;
-    String ODFlag, onDutyPlcID, onDutyPlcNm, vstPurpose, Check_Flag, onDutyFlag, DutyAlp = "", DutyType = "";
+    String ODFlag, onDutyPlcID, onDutyPlcNm, vstPurpose, Check_Flag, onDutyFlag, DutyAlp = "0", DutyType = "",exData="";
     Intent intent;
     public static final String mypreference = "mypref";
     /*  ShiftDuty*/
@@ -91,7 +96,7 @@ public class Checkin extends AppCompatActivity {
         Check_Flag = "CIN";
         sharedPreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         if (sharedPreferences.contains("ShiftDuty")) {
-            DutyAlp = sharedPreferences.getString("ShiftDuty", "");
+            DutyAlp = sharedPreferences.getString("ShiftDuty", "0");
         }
         SharedPreferences CheckInDetails = getSharedPreferences(spCheckIn, MODE_PRIVATE);
         String SFTID = CheckInDetails.getString("Shift_Selected_Id", "");
@@ -99,14 +104,15 @@ public class Checkin extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         onDutyFlag = "0";
         if (bundle != null) {
+            Check_Flag = String.valueOf(bundle.getSerializable("Mode"));
+            exData=String.valueOf(bundle.getSerializable("data"));
             ODFlag = String.valueOf(bundle.getSerializable("ODFlag"));
             onDutyPlcID = String.valueOf(bundle.getSerializable("onDutyPlcID"));
             onDutyPlcNm = String.valueOf(bundle.getSerializable("onDutyPlcNm"));
             vstPurpose = String.valueOf(bundle.getSerializable("vstPurpose"));
-            Check_Flag = String.valueOf(bundle.getSerializable("Mode"));
             DutyType = String.valueOf(bundle.getString("onDuty",""));
             onDutyFlag = String.valueOf(bundle.getSerializable("HolidayFlag"));
-            Log.e("CHECKIN_FLAG", Check_Flag);
+
             if (onDutyPlcID == "0") {
                 SFTID = "0";
                 onDutyPlcID = "";
@@ -129,6 +135,7 @@ public class Checkin extends AppCompatActivity {
             takePhoto.putExtra("onDutyPlcID", onDutyPlcID);
             takePhoto.putExtra("onDutyPlcNm", onDutyPlcNm);
             takePhoto.putExtra("vstPurpose", vstPurpose);
+            takePhoto.putExtra("data",exData);
             startActivity(takePhoto);
             finish();
             return;
@@ -150,6 +157,7 @@ public class Checkin extends AppCompatActivity {
             takePhoto.putExtra("onDutyPlcID", onDutyPlcID);
             takePhoto.putExtra("onDutyPlcNm", onDutyPlcNm);
             takePhoto.putExtra("vstPurpose", vstPurpose);
+            takePhoto.putExtra("data",exData);
             startActivity(takePhoto);
             finish();
         } else {
@@ -170,6 +178,7 @@ public class Checkin extends AppCompatActivity {
                 takePhoto.putExtra("onDutyPlcID", onDutyPlcID);
                 takePhoto.putExtra("onDutyPlcNm", onDutyPlcNm);
                 takePhoto.putExtra("vstPurpose", vstPurpose);
+                takePhoto.putExtra("data",exData);
                 startActivity(takePhoto);
                 finish();
             }
@@ -178,7 +187,7 @@ public class Checkin extends AppCompatActivity {
     }
     public void SetShitItems() {
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mAdapter = new ShiftListItem(ShiftItems, this, Check_Flag, onDutyFlag);
+        mAdapter = new ShiftListItem(ShiftItems, this, Check_Flag, onDutyFlag,exData);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

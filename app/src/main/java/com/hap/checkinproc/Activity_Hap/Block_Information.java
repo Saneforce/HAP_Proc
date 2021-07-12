@@ -19,6 +19,8 @@ import com.hap.checkinproc.common.SANGPSTracker;
 public class Block_Information extends AppCompatActivity {
     Button openDateSetting;
     TextView lblMsg,lblInfo;
+    String mMode = "",sMsg="",sHead= "";
+
     SharedPreferences UserDetails;
     public static final String MyPREFERENCES = "MyPrefs";
     @Override
@@ -27,9 +29,12 @@ public class Block_Information extends AppCompatActivity {
         setContentView(R.layout.activity_block_information);
         UserDetails = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         Bundle params = getIntent().getExtras();
-        String mMode = params.getString("Mode","");
-        String sMsg = params.getString("Msg","");
-        String sHead = params.getString("Head","");
+        mMode = "";sMsg="";sHead= "";
+        if(params!=null) {
+             mMode = params.getString("Mode", "");
+             sMsg = params.getString("Msg", "");
+             sHead = params.getString("Head", "");
+        }
         lblMsg=findViewById(R.id.txtMsg);
         lblInfo=findViewById(R.id.txt_info);
         openDateSetting = (Button) findViewById(R.id.openDateTime);

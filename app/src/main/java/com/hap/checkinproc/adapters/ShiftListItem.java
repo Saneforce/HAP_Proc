@@ -26,12 +26,22 @@ public class ShiftListItem extends RecyclerView.Adapter<ShiftListItem.ViewHolder
     private Context mContext;
     private String checkflag;
     private String OnDutyFlag;
+    private String exData;
 
     public ShiftListItem(JsonArray mShift_time, Context mContext, String checkflag, String OnDutyFlag) {
         this.mShift_time = mShift_time;
         this.mContext = mContext;
         this.checkflag = checkflag;
         this.OnDutyFlag = OnDutyFlag;
+        this.exData="";
+    }
+
+    public ShiftListItem(JsonArray mShift_time, Context mContext, String checkflag, String OnDutyFlag, String exData) {
+        this.mShift_time = mShift_time;
+        this.mContext = mContext;
+        this.checkflag = checkflag;
+        this.OnDutyFlag = OnDutyFlag;
+        this.exData=exData;
     }
 
     @NonNull
@@ -71,6 +81,7 @@ public class ShiftListItem extends RecyclerView.Adapter<ShiftListItem.ViewHolder
                                 takePhoto.putExtra("ShiftStart", itm.getAsJsonObject("Sft_STime").get("date").getAsString());
                                 takePhoto.putExtra("ShiftEnd", itm.getAsJsonObject("sft_ETime").get("date").getAsString());
                                 takePhoto.putExtra("ShiftCutOff", itm.getAsJsonObject("ACutOff").get("date").getAsString());
+                                takePhoto.putExtra("data",exData);
                                 mContext.startActivity(takePhoto);
                                 ((AppCompatActivity) mContext).finish();
                             }

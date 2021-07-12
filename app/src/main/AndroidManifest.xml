@@ -38,7 +38,8 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
-        <activity android:name=".Activity_Hap.DaExceptionStatus"></activity>
+        <activity android:name=".Activity.FuleEntryActivity"></activity>
+        <activity android:name=".Activity_Hap.DaExceptionStatus" />
         <activity android:name=".Activity_Hap.DaExceptionReject" />
         <activity android:name=".Activity_Hap.DAExcApproval" />
         <activity android:name=".SFA_Activity.SalesCallsActivity" />
@@ -368,12 +369,10 @@
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
-        </service>
-
-        <!-- Broadcast receiver declaration in manifest file and make sure to enable it -->
+        </service> <!-- Broadcast receiver declaration in manifest file and make sure to enable it -->
         <receiver
             android:name=".common.ConnectivityReceiver"
-            android:enabled="true" >
+            android:enabled="true">
             <intent-filter>
 
                 <!-- Intent filters for broadcast receiver -->
@@ -382,11 +381,9 @@
                 <action android:name="android.net.wifi.STATE_CHANGE" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".common.AlmReceiver"
             android:enabled="true" />
-
     </application>
 
 </manifest>

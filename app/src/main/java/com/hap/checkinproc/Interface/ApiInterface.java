@@ -302,6 +302,10 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("Db_v300.php?axn=get/FieldForce_HQ")
+    Call<JsonArray> GetHAPLocation(@Query("divisionCode") String disvisonCode, @Query("sf_code") String sFCode, @Field("data") String data);
+
+    @FormUrlEncoded
+    @POST("Db_v300.php?axn=get/FieldForce_HQ")
     Call<Object> getFieldForce_HQ(@Query("divisionCode") String disvisonCode, @Query("sf_code") String sFCode, @Field("data") String data);
 
     /*Retailer View Details*/

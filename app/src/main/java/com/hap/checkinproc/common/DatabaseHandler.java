@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -14,7 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "DBHAPCheckin";
     private static final String TABLE_Track = "Tracking_Location";
     private static final String Loc_Date = "Loc_Date";
@@ -32,6 +33,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String Mock = "Mock";
     private static final String Batt = "Batt";
     private static final String Flag = "Flag";
+
+
+    private static final String TABLE_Masters = "HAP_Masters";
+    private static final String ID = "ID";
+    private static final String Data = "Data";
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -53,6 +59,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + Batt + " TEXT,"
                 + Flag + " INT" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
+
+        String CREATE_Master_TABLE = "CREATE TABLE " + TABLE_Masters + "("
+                + ID + " TEXT PRIMARY KEY,"
+                + Data + " TEXT" + ")";
+        db.execSQL(CREATE_Master_TABLE);
     }
 
     // Upgrading database
@@ -60,9 +71,37 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_Track);
-
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Masters);
         // Create tables again
         onCreate(db);
+    }
+    public void deleteMasterData(String Key){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "delete from " + TABLE_Masters+" WHERE "+ID+" = '"+Key+"' ";
+        db.execSQL(selectQuery);
+    }
+    public void addMasterData(String Key,JsonArray uData){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ID, Key);
+        values.put(Data, String.valueOf(uData));
+        db.insert(TABLE_Masters, null, values);
+        db.close();
+    }
+
+    public JSONArray getMasterData(String Key) throws JSONException {
+        // Select All Query
+        String selectQuery = "SELECT  "+Data+" FROM " + TABLE_Masters+" WHERE "+ID+"='"+Key+"'";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        JSONArray uData=new JSONArray();
+        if (cursor.moveToFirst()) {
+            uData=new JSONArray(cursor.getString(0));
+        }
+
+        // return contact list
+        return uData;
     }
 
     void addTrackDetails(JSONObject Location) {

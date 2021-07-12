@@ -72,6 +72,7 @@ public class Login extends AppCompatActivity {
     String photo;
     String idToken, eMail;
     Button signInButton, ReportsButton, ExitButton;
+
     Shared_Common_Pref shared_common_pref;
     private static final String TAG = "LoginActivity";
     private GoogleApiClient googleApiClient;
@@ -106,7 +107,6 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         FirebaseMessaging.getInstance().getToken()
                 .addOnCompleteListener(new OnCompleteListener<String>() {
@@ -116,13 +116,8 @@ public class Login extends AppCompatActivity {
                             Log.w(TAG, "Fetching FCM registration token failed", task.getException());
                             return;
                         }
-
                         // Get new FCM registration token
                         deviceToken = task.getResult();
-
-
-                        // Log and toast
-
                         Log.e("LoginActivity", deviceToken);
                     }
                 });
@@ -290,7 +285,6 @@ public class Login extends AppCompatActivity {
         Intent inten = new Intent(this, TimerService.class);
         startService(inten);
         if (Login == true || CheckIn == true) {
-
             /*PERMISSION REQUEST*/
             if (cameraPermission.checkPermission()) {
 
@@ -370,8 +364,6 @@ public class Login extends AppCompatActivity {
 
     private void handleSignInResult(GoogleSignInResult result, int requestCode) {
         if (result.isSuccess()) {
-
-
             GoogleSignInAccount account = result.getSignInAccount();
             //assert account != null;
             Log.d("LoginDetails", String.valueOf(account.getPhotoUrl()));
@@ -381,7 +373,6 @@ public class Login extends AppCompatActivity {
             eMail = account.getEmail();
             try {
                 Glide.with(this).load(account.getPhotoUrl()).into(profileImage);
-                Log.e("aara", account.getPhotoUrl().toString());
                 photo = account.getPhotoUrl().toString();
                 shared_common_pref.save(Shared_Common_Pref.Profile, account.getPhotoUrl().toString());
             } catch (NullPointerException e) {
@@ -415,25 +406,17 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
-     /*   Intent inten = new Intent(this, TimerService.class);
-        startService(inten);*/
     }
 
     @Override
     protected void onRestart() {
-
         super.onRestart();
-      /*  Intent inten = new Intent(this, TimerService.class);
-        startService(inten);*/
         Log.v("LOG_IN_LOCATION", "ONRESTART");
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
        /* Intent inten = new Intent(this, TimerService.class);
         startService(inten);*/
         Log.v("LOG_IN_LOCATION", "ONRESUME");
@@ -441,15 +424,7 @@ public class Login extends AppCompatActivity {
         if (cameraPermission.checkPermission()) {
             if (mLUService == null)
                 mLUService = new SANGPSTracker(getApplicationContext());
-
             myReceiver = new LocationReceiver();
-             /*if (Utils.requestingLocationUpdates(this)) {
-             if (!checkPermission()) {
-             requestPermissions();
-             } else {
-             // mLUService.requestLocationUpdates();
-             }
-             }*/
 
             // Bind to the service. If the service is in foreground mode, this signals to the service
             // that since this activity is in the foreground, the service can exit foreground mode.
@@ -461,17 +436,6 @@ public class Login extends AppCompatActivity {
                 LocalBroadcastManager.getInstance(this).registerReceiver(myReceiver,
                         new IntentFilter(SANGPSTracker.ACTION_BROADCAST));
             }
- /* LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
- new IntentFilter(Config.REGISTRATION_COMPLETE));
-
- // register new push message receiver
- // by doing this, the activity will be notified each time a new message arrives
- LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
- new IntentFilter(Config.PUSH_NOTIFICATION));
-
- // clear the notification area when the app is opened
- MyNotificationManager.clearNotifications(getApplicationContext());*/
-
             Log.e("Loaction_Check", "Loaction_Check");
 
         }
@@ -480,8 +444,6 @@ public class Login extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-      /*  Intent inten = new Intent(this, TimerService.class);
-        startService(inten);*/
         Log.v("LOG_IN_LOCATION", "ONPAUSE");
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
 
@@ -495,9 +457,6 @@ public class Login extends AppCompatActivity {
 
     @Override
     protected void onStart() {
-
-      /*  Intent inten = new Intent(this, TimerService.class);
-        startService(inten);*/
         Log.v("LOG_IN_LOCATION", "ONSTART");
         super.onStart();
         if (authStateListener != null) {
@@ -539,7 +498,10 @@ public class Login extends AppCompatActivity {
         //eMail = "kannan.p@hap.in";
         //eMail = "ciadmin@hap.in";
         //eMail = "haptest5@hap.in";
+        //eMail = "sajan@hap.in";
         //eMail = "1977ananthkumar@gmail.com";
+        //eMail = "sivakumar.s@hap.in";
+        //eMail = "test@saneforce.com";
 
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
@@ -594,7 +556,9 @@ public class Login extends AppCompatActivity {
                         String sName = response.body().getData().get(0).getSfName();
                         String div = response.body().getData().get(0).getDivisionCode();
                         Integer type = response.body().getData().get(0).getCheckCount();
+                        String DesigNm =response.body().getData().get(0).getSfDesignationShortName();
                         String DeptCd = response.body().getData().get(0).getSFDept();
+                        String DeptNm =response.body().getData().get(0).getDeptName();
                         String DeptType = response.body().getData().get(0).getDeptType();
                         String SFHQ = response.body().getData().get(0).getsFHQ();
                         String SFHQID = response.body().getData().get(0).getHQID();
@@ -603,33 +567,32 @@ public class Login extends AppCompatActivity {
                         int THrsPerm = response.body().getData().get(0).getTHrsPerm();
                         String mProfile = response.body().getData().get(0).getProfile();
                         String mProfPath = response.body().getData().get(0).getProfPath();
-
-
                         Integer OTFlg = response.body().getData().get(0).getOTFlg();
-                        SharedPreferences.Editor editor = UserDetails.edit();
+
+                        /* Unwanted Lines */
                         Shared_Common_Pref.Sf_Code = code;
                         Shared_Common_Pref.Sf_Name = response.body().getData().get(0).getSfName();
                         Shared_Common_Pref.Div_Code = div;
                         Shared_Common_Pref.StateCode = Sf_type;
-                        shared_common_pref.save(Shared_Common_Pref.Sf_Code, code);
-                        shared_common_pref.save(Shared_Common_Pref.Div_Code, div);
-                        shared_common_pref.save(Shared_Common_Pref.StateCode, Sf_type);
-                        shared_common_pref.save(Shared_Common_Pref.SF_EMP_ID, response.body().getData().get(0).getSfEmpId());
-                        shared_common_pref.save(Shared_Common_Pref.Sf_Name, response.body().getData().get(0).getSfName());
-
-                        shared_common_pref.save(Shared_Common_Pref.SF_DEPT, response.body().getData().get(0).getDeptName());
-                        shared_common_pref.save(Shared_Common_Pref.SF_DESIG, response.body().getData().get(0).getSfDesignationShortName());
-
-                        shared_common_pref.save(Shared_Common_Pref.CHECK_COUNT, String.valueOf(type));
-                        shared_common_pref.save(Shared_Common_Pref.Sf_Code, code);
-
+                        shared_common_pref.save(Shared_Common_Pref.Sf_Code, code); //l
+                        shared_common_pref.save(Shared_Common_Pref.Div_Code, div); //l
+                        shared_common_pref.save(Shared_Common_Pref.StateCode, Sf_type); //l
+                        shared_common_pref.save(Shared_Common_Pref.SF_EMP_ID, response.body().getData().get(0).getSfEmpId()); //l
+                        shared_common_pref.save(Shared_Common_Pref.Sf_Name, response.body().getData().get(0).getSfName()); //l
+                        shared_common_pref.save(Shared_Common_Pref.SF_DEPT, response.body().getData().get(0).getDeptName()); //l
+                        shared_common_pref.save(Shared_Common_Pref.SF_DESIG, response.body().getData().get(0).getSfDesignationShortName()); //l
+                        shared_common_pref.save(Shared_Common_Pref.CHECK_COUNT, String.valueOf(type)); //l
+                        shared_common_pref.save(Shared_Common_Pref.Sf_Code, code); //l
                         Shared_Common_Pref.Dept_Type = DeptType;
                         Shared_Common_Pref.SF_Type = Sf_type;
+                        /*Endof Unwanted Lines*/
 
+                        SharedPreferences.Editor editor = UserDetails.edit();
                         editor.putString("Sf_Type", Sf_type);
                         editor.putString("Sfcode", code);
                         editor.putString("EmpId", empID);
                         editor.putString("SfName", sName);
+                        editor.putString("SFDesig", DesigNm);
                         editor.putString("SFHQ", SFHQ);
                         editor.putString("SFHQCode", SFHQCode);
                         editor.putString("SFHQID", SFHQID);
@@ -637,6 +600,7 @@ public class Login extends AppCompatActivity {
                         editor.putString("Divcode", div);
                         editor.putInt("CheckCount", type);
                         editor.putString("DeptCd", DeptCd);
+                        editor.putString("DeptNm", DeptNm);
                         editor.putString("DeptType", DeptType);
                         editor.putInt("OTFlg", OTFlg);
                         Log.d("DeptType", String.valueOf(DeptType));
