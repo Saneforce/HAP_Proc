@@ -78,7 +78,7 @@
             android:layout_weight="1"
             android:background="@drawable/order_qty_backround"
             android:gravity="center"
-            android:hint="0"
+            android:hint=""
             android:inputType="number"
             android:textSize="14sp"
             android:maxLength="4"

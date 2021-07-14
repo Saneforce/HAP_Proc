@@ -27,7 +27,6 @@ import com.google.gson.JsonObject;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.New_Outlet_Map_creations;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -77,24 +76,23 @@ public class Common_Class {
         shared_common_pref = new Shared_Common_Pref(context);
 
     }
+
     public static String GetDatemonthyearformat() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat dpln = new SimpleDateFormat("dd-MM-yyyy");
         String plantime = dpln.format(c.getTime());
         return plantime;
     }
+
     public void CommonIntentwithoutFinish(Class classname) {
         intent = new Intent(activity, classname);
-
         activity.startActivity(intent);
-
     }
 
     public Common_Class(Activity activity) {
         this.activity = activity;
         nDialog = new ProgressDialog(activity);
         shared_common_pref = new Shared_Common_Pref(activity);
-
     }
 
     public void ProgressdialogShow(int flag, String message) {
@@ -186,6 +184,7 @@ public class Common_Class {
         dist = dist * 60 * 1.1515;
         return (dist);
     }
+
     private static double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
     }
@@ -396,8 +395,6 @@ public class Common_Class {
             }
         });
     }
-
-
 
 
     public static class InputFilterMinMax implements InputFilter {
