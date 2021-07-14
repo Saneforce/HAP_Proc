@@ -38,6 +38,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:visibility="invisible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -49,6 +50,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:visibility="invisible"
                     android:id="@+id/ok"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -1,4 +1,4 @@
-   package com.hap.checkinproc.Activity_Hap;
+package com.hap.checkinproc.Activity_Hap;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -49,15 +49,20 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Common_Class.CameraPermission;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
+import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -100,12 +105,16 @@ public class Login extends AppCompatActivity {
     ApiInterface apiInterface;
     CameraPermission cameraPermission;
     Common_Class DT = new Common_Class();
+    DatabaseHandler db;
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        db = new DatabaseHandler(this);
+
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         FirebaseMessaging.getInstance().getToken()
@@ -311,18 +320,21 @@ public class Login extends AppCompatActivity {
                 Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
                 Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
 
-                String ActStarted=shared_common_pref.getvalue("ActivityStart");
-                if(ActStarted.equalsIgnoreCase("true")){
+                String ActStarted = shared_common_pref.getvalue("ActivityStart");
+                if (ActStarted.equalsIgnoreCase("true")) {
                     Intent aIntent;
                     String sDeptType = UserDetails.getString("DeptType", "");
                     if (sDeptType.equalsIgnoreCase("1")) {
                         aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
                     } else {
                         Shared_Common_Pref.Sync_Flag = "0";
-                        aIntent = new Intent(getApplicationContext(), Offline_Sync_Activity.class);
+                        if (checkValueStore())
+                            aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
+                        else
+                            aIntent = new Intent(getApplicationContext(), Offline_Sync_Activity.class);
                     }
                     startActivity(aIntent);
-                }else{
+                } else {
                     Intent Dashboard = new Intent(Login.this, Dashboard_Two.class);
                     Dashboard.putExtra("Mode", "CIN");
                     startActivity(Dashboard);
@@ -333,6 +345,17 @@ public class Login extends AppCompatActivity {
 
     }
 
+    boolean checkValueStore() {
+        try {
+            JSONArray storeData = db.getMasterData(Constants.Distributor_List);
+            if (storeData != null && storeData.length() > 0)
+                return true;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
 
  /* private void displayFirebaseRegId() {
  SharedPreferences pref = getApplicationContext().getSharedPreferences(Config.SHARED_PREF, 0);
@@ -488,6 +511,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(int requestCode) {
+      //  eMail="ekumar.san@gmail.com";
         if (eMail.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Invalid Email ID", Toast.LENGTH_LONG).show();
             mProgress.dismiss();
@@ -556,9 +580,9 @@ public class Login extends AppCompatActivity {
                         String sName = response.body().getData().get(0).getSfName();
                         String div = response.body().getData().get(0).getDivisionCode();
                         Integer type = response.body().getData().get(0).getCheckCount();
-                        String DesigNm =response.body().getData().get(0).getSfDesignationShortName();
+                        String DesigNm = response.body().getData().get(0).getSfDesignationShortName();
                         String DeptCd = response.body().getData().get(0).getSFDept();
-                        String DeptNm =response.body().getData().get(0).getDeptName();
+                        String DeptNm = response.body().getData().get(0).getDeptName();
                         String DeptType = response.body().getData().get(0).getDeptType();
                         String SFHQ = response.body().getData().get(0).getsFHQ();
                         String SFHQID = response.body().getData().get(0).getHQID();

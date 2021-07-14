@@ -1,29 +1,25 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
-import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.MVP.Main_Model;
 import com.hap.checkinproc.MVP.MasterSync_Implementations;
-import com.hap.checkinproc.MVP.Master_Sync_View;
 import com.hap.checkinproc.MVP.Offline_SyncView;
 import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
+import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,11 +38,14 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
     Common_Class common_class;
     TextView Backbuttontextview, lastsuccessync, Sf_UserId, distributornametext, SyncButton, totaloutlets, todayoutlet, invoicevalues, ordervalues;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
+    DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offline__sync_);
+        db = new DatabaseHandler(this);
+
         sharedCommonPref = new Shared_Common_Pref(Offline_Sync_Activity.this);
         Backbuttontextview = findViewById(R.id.Backbuttontextview);
         lastsuccessync = findViewById(R.id.lastsuccessync);
@@ -141,10 +140,12 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
             System.out.println("GetOutlet_All" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.Outlet_List, serializedData);
             System.out.println("OUTLETLIST" + sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List));
+            getResponseFromserver(Constants.Retailor_OutletList,serializedData);
         } else if (position == 1) {
             //Distributor_List
             System.out.println("Distributor_List" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.Distributor_List, serializedData);
+            getResponseFromserver(Constants.Distributor_List, serializedData);
         } else if (position == 2) {
             //Category_List
             System.out.println("Category_List" + serializedData);
@@ -168,6 +169,7 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
         } else if (position == 7) {
             System.out.println("Town_List" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.Rout_List, serializedData);
+            getResponseFromserver(Constants.Rout_List,serializedData);
         } else if (position == 8) {
             System.out.println("Route_Dashboars_Orders" + serializedData);
             sharedCommonPref.save(Shared_Common_Pref.Outlet_Total_Orders, serializedData);
@@ -226,7 +228,7 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
                     invoicevalues.setText("" + jsonObject1.optString("Invoicevalues"));
                     ordervalues.setText("" + jsonObject1.optString("Order_Value"));
                     todayoutlet.setText("" + jsonObject1.optString("Outlet_Fortheday"));
-                    totaloutlets.setText(""+  jsonObject1.optString("Orderoutlet_Count")+"/"+ jsonObject1.optString("Totaloutlet"));
+                    totaloutlets.setText("" + jsonObject1.optString("Orderoutlet_Count") + "/" + jsonObject1.optString("Totaloutlet"));
                 }
             }
             //spinner.setSelection(adapter.getPosition("select worktype"));
@@ -236,6 +238,13 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
         }
     }
 
+    //156
+    //Store Distributor_List values in local db
+    public void getResponseFromserver(String key, String jsonResponse) {
+        db.deleteMasterData(key);
+        db.addMasterData(key, jsonResponse);
+    }
 
+    //156
 
 }

@@ -4,24 +4,24 @@
     <color name="colorAccent">#3949AB</color>
     <color name="colorPrimary">#4E5FCA</color>
     <color name="colorPrimaryDark">#3949AB</color>
-<!--    <color name="colorAccent">#43A047</color>-->
-<!--    <color name="colorPrimary">#7CB342</color>-->
-<!--    <color name="colorPrimaryDark">#43A047</color>-->
-
-<!--    <color name="colorAccent">#4A87EE</color>-->
-<!--    <color name="colorPrimary">#FFC107</color>-->
-<!--    <color name="colorPrimaryDark">#ff9819</color>-->
+    <!--    <color name="colorAccent">#43A047</color>-->
+    <!--    <color name="colorPrimary">#7CB342</color>-->
+    <!--    <color name="colorPrimaryDark">#43A047</color>-->
 
     <!--    <color name="colorAccent">#4A87EE</color>-->
-<!--    <color name="colorPrimary">#5691F4</color>-->
-<!--    <color name="colorPrimaryDark">#1068D6</color>-->
+    <!--    <color name="colorPrimary">#FFC107</color>-->
+    <!--    <color name="colorPrimaryDark">#ff9819</color>-->
 
-<!--    <color name="colorAccent">#009688</color>-->
-<!--    <color name="colorPrimary">#009688</color>-->
-<!--    <color name="colorPrimaryDark">#009688</color>-->
+    <!--    <color name="colorAccent">#4A87EE</color>-->
+    <!--    <color name="colorPrimary">#5691F4</color>-->
+    <!--    <color name="colorPrimaryDark">#1068D6</color>-->
+
+    <!--    <color name="colorAccent">#009688</color>-->
+    <!--    <color name="colorPrimary">#009688</color>-->
+    <!--    <color name="colorPrimaryDark">#009688</color>-->
 
 
-<!--    <color name="subExpHeader">#43A047</color>-->
+    <!--    <color name="subExpHeader">#43A047</color>-->
 
     <!--    <color name="subExpHeader">#03A9F4</color>-->
     <!--    <color name="subExpHeader">#009688</color>-->
@@ -77,8 +77,9 @@
     <color name="admin_card_strokecolor">#706F6F</color>
     <color name="txt_template_color">#F8AB58</color>
     <color name="layout_bg_color">#F2F2F2</color>
-    <color name="view_bg_color">#43A047</color>
-<!--    <color name="view_bg_color">#009688</color>-->
+    <!--    <color name="view_bg_color">#43A047</color>-->
+    <color name="view_bg_color">#3949AB</color>
+    <!--    <color name="view_bg_color">#009688</color>-->
     <color name="view_bg_header">#F4F3F4</color>
     <color name="view_division">#F1E7E7</color>
 
