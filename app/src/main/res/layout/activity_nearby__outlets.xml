@@ -11,67 +11,100 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <include layout="@layout/custom_toolbar_help"></include>
+
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:weightSum="2"
-            android:background="@color/grey_200"
-            android:visibility="visible"
             android:layout_marginTop="1dp"
-            >
+            android:background="@color/grey_200"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
             <TextView
                 android:id="@+id/btnNearme"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Near By Outlets"
-                android:textAlignment="center"
                 android:layout_weight="1"
                 android:background="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:padding="@dimen/C10dp"/>
+                android:padding="@dimen/C10dp"
+                android:text="Near By Outlets"
+                android:textAlignment="center"
+                android:textColor="@color/white" />
+
             <TextView
                 android:id="@+id/btnExplore"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:text="Explore"
-                android:textAlignment="center"
                 android:layout_weight="1"
-                android:padding="@dimen/C10dp"/>
+                android:padding="@dimen/C10dp"
+                android:text="Explore"
+                android:textAlignment="center" />
+
+            <ImageView
+                android:id="@+id/ivRefreshMenu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:background="@color/colorPrimary"
+                android:padding="@dimen/C10dp"
+                android:src="@drawable/ic_baseline_refresh_24"
+                android:visibility="gone" />
+
+
+            <ImageView
+                android:id="@+id/ivFilterKeysMenu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1.5"
+                android:background="@color/colorPrimary"
+                android:padding="@dimen/C10dp"
+                android:src="@drawable/ic_baseline_more_vert_24"
+                android:visibility="gone" />
+
+
+            <include
+                android:id="@+id/llFilterKeysParent"
+                layout="@layout/popup_map_filterkeys_view"
+                android:visibility="gone"></include>
+
+
         </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/tabExplore"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
-            >
+            android:visibility="visible">
 
             <com.google.android.gms.maps.MapView
                 android:id="@+id/mapview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
 
             </com.google.android.gms.maps.MapView>
+
             <RelativeLayout
                 android:id="@+id/vwRetails"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:background="@color/white"
+                android:layout_alignParentBottom="true"
                 android:layout_marginLeft="@dimen/C1dp"
                 android:layout_marginRight="@dimen/C1dp"
-                android:layout_alignParentBottom="true">
+                android:background="@color/white">
+
                 <LinearLayout
                     android:layout_width="25dp"
                     android:layout_height="4dp"
-                    android:orientation="vertical"
+                    android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/C10dp"
                     android:background="@color/grey_300"
-                    android:layout_centerHorizontal="true"
-                    >
+                    android:orientation="vertical">
 
                 </LinearLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rclRetail"
                     android:layout_width="match_parent"
@@ -83,131 +116,130 @@
         </RelativeLayout>
 
         <LinearLayout
-    android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:visibility="visible">
-        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            >
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/view_bg_color">
+
+                    <TextView
+                        android:id="@+id/headtext"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="Near by outlets"
+                        android:textAlignment="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="18dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/view_bg_color">
+                android:background="@color/ablack"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/headtext"
+                    android:id="@+id/availableoutlets"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_margin="10dp"
-                    android:text="Near by outlets"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/white"
-                    android:textSize="18dp"
-                    android:textStyle="bold" />
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="Available Outlets:"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+
             </LinearLayout>
 
-
-        </androidx.cardview.widget.CardView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/ablack"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/availableoutlets"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:text="Available Outlets:"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/white"
-                android:textSize="16dp" />
+                android:layout_height="wrap_content"
+                android:background="@color/black"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/latitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="Latitude:"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
 
+                <TextView
+                    android:id="@+id/longitude"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:layout_weight="1"
+                    android:gravity="start"
+                    android:text="Latitude:"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0.8">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/outletrecyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/C60dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/view_bg_color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:ignore="MissingConstraints">
+
+                <ImageView
+                    android:id="@+id/imag_back"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_margin="@dimen/C5dp"
+                    android:paddingLeft="@dimen/C8dp"
+                    android:paddingRight="@dimen/C8dp"
+                    android:src="@drawable/back_arrow"
+                    android:visibility="gone"></ImageView>
+
+                <TextView
+                    android:id="@+id/Createoutlet"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:gravity="center_horizontal|center_vertical"
+                    android:text="Create Outlet"
+                    android:textColor="@color/white"
+                    android:textSize="18dp" />
+            </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/black"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/latitude"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:text="Latitude:"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/white"
-                android:textSize="16dp" />
-
-            <TextView
-                android:id="@+id/longitude"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:gravity="start"
-                android:text="Latitude:"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/white"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="0.8">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/outletrecyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/C60dp"
-                 />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/view_bg_color"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:ignore="MissingConstraints">
-
-            <ImageView
-                android:id="@+id/imag_back"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="@dimen/C5dp"
-                android:visibility="gone"
-                android:paddingLeft="@dimen/C8dp"
-                android:paddingRight="@dimen/C8dp"
-                android:src="@drawable/back_arrow"></ImageView>
-
-            <TextView
-                android:id="@+id/Createoutlet"
-                android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:gravity="center_horizontal|center_vertical"
-                android:text="Create Outlet"
-                android:textColor="@color/white"
-                android:textSize="18dp" />
-        </LinearLayout>
-</LinearLayout>
     </LinearLayout>
 
 

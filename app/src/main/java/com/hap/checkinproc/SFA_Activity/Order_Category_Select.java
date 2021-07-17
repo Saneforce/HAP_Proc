@@ -225,6 +225,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     }
 
     private void GetJsonData(String jsonResponse, String type) {
+
+        //type =1 product category data values
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
             Category_Modal.clear();
@@ -400,7 +402,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
                         ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
                         ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
-                        ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
+                        //  ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
+                        ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getQty());
                         ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() + Getorder_Array_List.get(z).getRegularQty());
                         ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
                         ProdItem.put("Rate", Getorder_Array_List.get(z).getRate());
@@ -450,7 +453,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
             @Override
             public void NegativeMethod(DialogInterface dialog, int id) {
-
                 dialog.dismiss();
             }
         });
@@ -707,11 +709,11 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             holder.lblAddQty.setVisibility(View.VISIBLE);
 
             holder.lblRQty.setText("Regular");
-            holder.lnRwEntry.setWeightSum(3);
-            holder.lnlblRwEntry.setWeightSum(3);
+//            holder.lnRwEntry.setWeightSum(3);
+//            holder.lnlblRwEntry.setWeightSum(3);
             if (DCRMode.equalsIgnoreCase("")) {
-                holder.lnRwEntry.setWeightSum(2);
-                holder.lnlblRwEntry.setWeightSum(2);
+//                holder.lnRwEntry.setWeightSum(2);
+//                holder.lnlblRwEntry.setWeightSum(2);
 
                 holder.lblRQty.setText("Qty");
                 holder.lblAddQty.setVisibility(View.GONE);
@@ -725,19 +727,23 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                           int before, int count) {
 
 
-//                    if (!charSequence.toString().equals("")) {
+                    if (!charSequence.toString().equals("")) {
 //                        if (Double.valueOf(charSequence.toString()) > 0)
 //                            listt.get(Categorycolor).setColorFlag("1");
 //                        Product_Details_Modalitem.get(position).setQty(Integer.valueOf(charSequence.toString()));
-                    holder.Amount.setText("" + String.valueOf((Double.valueOf(charSequence.toString()) + Product_Details_Modalitem.get(position).getRegularQty()) * Product_Details_Modalitem.get(position).getRate()));
+                        holder.Amount.setText("" + String.valueOf((Double.valueOf(charSequence.toString()) + Product_Details_Modalitem.get(position).getRegularQty()) * Product_Details_Modalitem.get(position).getRate()));
 //                        Product_Details_Modalitem.get(position).setAmount(((Double.valueOf(charSequence.toString()) + Product_Details_Modalitem.get(position).getRegularQty()) * Product_Details_Modalitem.get(position).getRate()));
-//                    } else {
+                        tvAmount.set(position, holder.Qty.getText().toString());
+
+                    } else {
 //                        holder.Amount.setText("" + String.valueOf(Product_Details_Modalitem.get(position).getRegularQty() * Product_Details_Modalitem.get(position).getRate()));
 //                        Product_Details_Modalitem.get(position).setQty((Integer) 0);
 //                        Product_Details_Modalitem.get(position).setAmount(Product_Details_Modalitem.get(position).getRegularQty() * Product_Details_Modalitem.get(position).getRate());
-//                    }
+//
+                        tvAmount.set(position, "0");
 
-                    tvAmount.set(position, holder.Qty.getText().toString());
+                    }
+
 
                 }
 

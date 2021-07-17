@@ -755,7 +755,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
 
-        GetMissedPunch();
+        //GetMissedPunch();
         startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }

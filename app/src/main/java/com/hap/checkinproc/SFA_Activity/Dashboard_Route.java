@@ -135,7 +135,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         //  String outletserializableob = shared_common_pref.getvalue(Shared_Common_Pref.Outlet_List);
         String outletserializableob = null;
         try {
-            outletserializableob = String.valueOf(db.getMasterData(Constants.Retailor_OutletList));
+            outletserializableob = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
         } catch (JSONException e) {
             e.printStackTrace();
         }

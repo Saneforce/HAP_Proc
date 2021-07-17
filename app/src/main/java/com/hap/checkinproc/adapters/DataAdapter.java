@@ -1,7 +1,6 @@
 package com.hap.checkinproc.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
@@ -33,7 +31,8 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
         contactList = myDataset;
         typeName = type;
         contactListFiltered = myDataset;
-        updateUi = ((Master_Interface) context);
+        if (type != 1000)
+            updateUi = ((Master_Interface) context);
     }
 
     @NonNull
@@ -45,7 +44,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
     @Override
     public void onBindViewHolder(FruitViewHolder fruitViewHolder, final int position) {
-        if(position>=contactListFiltered.size()) return;
+        if (position >= contactListFiltered.size()) return;
         final Common_Model contact = contactListFiltered.get(position);
         fruitViewHolder.mTextName.setText(contact.getName());
         String getAddress = contact.getAddress();
@@ -76,13 +75,13 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
-                    List<Common_Model> filteredList = new ArrayList<>();
-                    for (Common_Model row : contactList) {
-                        if (row.getName().toLowerCase().trim().replaceAll("\\s", "").contains(charString.toLowerCase().trim().replaceAll("\\s", ""))) {
-                            filteredList.add(row);
-                        }
+                List<Common_Model> filteredList = new ArrayList<>();
+                for (Common_Model row : contactList) {
+                    if (row.getName().toLowerCase().trim().replaceAll("\\s", "").contains(charString.toLowerCase().trim().replaceAll("\\s", ""))) {
+                        filteredList.add(row);
                     }
-                    contactListFiltered = filteredList;
+                }
+                contactListFiltered = filteredList;
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = contactListFiltered;
                 return filterResults;

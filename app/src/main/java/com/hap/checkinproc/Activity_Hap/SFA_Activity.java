@@ -4,16 +4,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
-import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -35,7 +32,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, Main_Model.MasterSyncView {
-    LinearLayout Lin_Route,Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders;
+    LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders;
     Gson gson;
     Type userType;
     Common_Class common_class;
@@ -125,6 +122,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         startActivity(intent);
                         finish();
                     }
+
                     @Override
                     public void NegativeMethod(DialogInterface dialog, int id) {
                         dialog.dismiss();
@@ -153,29 +151,35 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         // Toast.makeText(this, "Position" + position, Toast.LENGTH_SHORT).show();
         Log.e("ResponseFromServer", String.valueOf(responsebody));
         String serializedData = gson.toJson(responsebody);
-        if (position == 0) {
-            //Outlet_List
-            System.out.println("GetTodayOrder_All" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Outlet_List, serializedData);
-        } else if (position == 1) {
-            //Distributor_List
-            System.out.println("Distributor_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Distributor_List, serializedData);
-        } else if (position == 2) {
-            //Category_List
-            System.out.println("Category_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Category_List, serializedData);
-        } else if (position == 3) {
-            //Product_List
-            System.out.println("Product_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Product_List, serializedData);
-        } else if (position == 4) {
-            //GetTodayOrder_List
-            System.out.println("GetTodayOrder_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.GetTodayOrder_List, serializedData);
-        } else {
-            System.out.println("Compititor_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Compititor_List, serializedData);
+        switch (position) {
+            case (0):
+                //Outlet_List
+                System.out.println("GetTodayOrder_All" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.Outlet_List, serializedData);
+                break;
+            case (1):
+                //Distributor_List
+                System.out.println("Distributor_List" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.Distributor_List, serializedData);
+                break;
+            case (2):
+                //Category_List
+                System.out.println("Category_List" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.Category_List, serializedData);
+                break;
+            case (3):
+                //Product_List
+                System.out.println("Product_List" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.Product_List, serializedData);
+                break;
+            case (4):
+                //GetTodayOrder_List
+                System.out.println("GetTodayOrder_List" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.GetTodayOrder_List, serializedData);
+                break;
+            default:
+                System.out.println("Compititor_List" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.Compititor_List, serializedData);
         }
     }
 
