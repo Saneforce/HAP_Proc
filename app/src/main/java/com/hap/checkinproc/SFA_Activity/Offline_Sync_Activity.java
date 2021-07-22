@@ -230,7 +230,7 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
 
     }
 
-    private void GetJsonData(String jsonResponse, String Name) {
+    public void GetJsonData(String jsonResponse, String Name) {
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
             for (int i = 0; i < jsonArray.length(); i++) {

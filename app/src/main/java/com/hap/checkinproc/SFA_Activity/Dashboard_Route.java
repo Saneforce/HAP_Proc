@@ -208,6 +208,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             if (distributor_text.getText().toString().equals(""))
                 btnCmbRoute.setVisibility(View.GONE);
             else {
+                Distributor_Id = shared_common_pref.getvalue(Constants.Distributor_Id);
                 btnCmbRoute.setVisibility(View.VISIBLE);
                 loadroute(shared_common_pref.getvalue(Constants.Distributor_Id));
             }
@@ -343,9 +344,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 } else if ((Route_id == null || Route_id.equalsIgnoreCase("")) && !sDeptType.equalsIgnoreCase("2")) {
                     Toast.makeText(Dashboard_Route.this, "Select The Route", Toast.LENGTH_SHORT).show();
                 } else {
+                    Shared_Common_Pref.Outler_AddFlag = "0";
                     Shared_Common_Pref.OutletName = Retailer_Modal_ListFilter.get(position).getName().toUpperCase() + "~" + Retailer_Modal_ListFilter.get(position).getId();
                     Shared_Common_Pref.OutletCode = Retailer_Modal_ListFilter.get(position).getId();
-                    Shared_Common_Pref.DistributorCode = Distributor_Id;
                     Shared_Common_Pref.DistributorCode = Distributor_Id;
                     Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
                     Shared_Common_Pref.Route_Code = Route_id;

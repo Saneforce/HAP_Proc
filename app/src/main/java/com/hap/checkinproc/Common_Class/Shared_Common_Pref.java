@@ -26,7 +26,7 @@ public class Shared_Common_Pref {
     public static Double Outletlat;
     public static Double Outletlong;
     public static String OutletAddress;
-    public static String Outler_AddFlag;
+    public static String Outler_AddFlag="";
     public static String OutletName = "OutletName";
     public static String OutletCode = "OutletCode";
 
@@ -53,6 +53,7 @@ public class Shared_Common_Pref {
     public static String Invoicetoorder;
     public static String OutletAvail = "OutletAvail";
     public static String OutletUniv = "OutletUniv";
+
     public static String Rout_List = "Rout_List";
     public static String Outlet_List = "Outlet_List";
     public static String Distributor_List = "Distributor_List";
@@ -62,13 +63,14 @@ public class Shared_Common_Pref {
     public static String TodayOrderDetails_List = "TodayOrderDetails_List";
     public static String Compititor_List = "Compititor_List";
     public static String Todaydayplanresult = "Todaydayplanresult";
+    public static String Outlet_Total_Orders = "Outlet_Total_Orders";
+    public static String Outlet_Total_AlldaysOrders = "Outlet_Total_AlldaysOrders";
+
+    public static String TodaySfOrdervalues = "TodaySfOrdervalues";
     public static String DistributorCode = "DistributorCode";
     public static String DistributorName = "DistributorName";
     public static String Route_Code = "Route_Code";
     public static String Editoutletflag = "Editoutletflag";
-    public static String Outlet_Total_Orders = "Outlet_Total_Orders";
-    public static String Outlet_Total_AlldaysOrders = "Outlet_Total_AlldaysOrders";
-    public static String TodaySfOrdervalues = "TodaySfOrdervalues";
     public static String Tp_Approvalflag = "Tp_Approvalflag";
     public static String Tp_Sf_name = "Tp_Sf_name";
     public static String Tp_Monthname = "Tp_Monthname";

@@ -38,6 +38,7 @@ import com.hap.checkinproc.Model_Class.ReatilRouteModel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
+import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -87,6 +88,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     List<Retailer_Modal_List> Retailer_Modal_List;
     ImageView copypaste;
     String TAG = "AddNewRetailer: ";
+    DatabaseHandler db;
 
 
     @Override
@@ -96,6 +98,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_add_new_retailer);
+            db = new DatabaseHandler(this);
             linReatilerRoute = findViewById(R.id.linear_Retailer);
             txtRetailerRoute = findViewById(R.id.retailer_type);
             retailercode = findViewById(R.id.retailercode);
@@ -121,7 +124,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             gson = new Gson();
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
-            String OrdersTable = shared_common_pref.getvalue(Shared_Common_Pref.Outlet_List);
+            // String OrdersTable = shared_common_pref.getvalue(Shared_Common_Pref.Outlet_List);
+            String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
             if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
                 mSubmit.setVisibility(View.VISIBLE);

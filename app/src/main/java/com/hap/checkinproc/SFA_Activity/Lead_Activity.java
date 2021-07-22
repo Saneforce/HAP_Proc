@@ -78,8 +78,9 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             gson = new Gson();
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
-            String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List);
-            System.out.println("OUTLETLIST" + sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List));
+            //String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List);
+            String OrdersTable= String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+          // System.out.println("OUTLETLIST" + sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List));
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
             Retailer_Modal_ListFilter = gson.fromJson(OrdersTable, userType);
             //GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "2");
