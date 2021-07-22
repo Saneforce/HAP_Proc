@@ -1,26 +1,17 @@
 package com.hap.checkinproc.MVP;
 
-import android.content.SharedPreferences;
 import android.util.Log;
 
-import com.google.gson.Gson;
-import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Model_Class.Route_Master;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.http.Query;
-
-import static android.content.Context.MODE_PRIVATE;
 
 public class Master_Sync_View implements Main_Model.GetRoutemastersyncResult {
 
@@ -36,6 +27,7 @@ public class Master_Sync_View implements Main_Model.GetRoutemastersyncResult {
 
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
+// 0-retailor,1=distributor,2=category list,3=product list,4=rout list
         for (int i = 0; i < 7; i++) {
             String axnname = "table/list";
             if (i == 0) {
@@ -49,13 +41,13 @@ public class Master_Sync_View implements Main_Model.GetRoutemastersyncResult {
                 commonworktype = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                 //commonworktype = "{\"tableName\":\"salesforce_master\",\"coloumns\":\"[\\\"sf_code as id\\\", \\\"sf_name as name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
             } else if (i == 4) {
-                axnname="get/FieldForce_HQ";
+                axnname = "get/FieldForce_HQ";
                 commonworktype = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
             } else if (i == 5) {
-                axnname="get/Shift_type";
+                axnname = "get/Shift_type";
                 commonworktype = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-            }else if (i == 6) {
-                axnname="get/Chilling_Centre";
+            } else if (i == 6) {
+                axnname = "get/Chilling_Centre";
                 commonworktype = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
             }
 
@@ -73,7 +65,7 @@ public class Master_Sync_View implements Main_Model.GetRoutemastersyncResult {
             call.enqueue(new Callback<Object>() {
                 @Override
                 public void onResponse(Call<Object> call, Response<Object> response) {
-                         //approvalList=response.body();
+                    //approvalList=response.body();
                     Log.e("MAsterSyncView_Result", response.body() + "");
                     onFinishedListener.onFinishedrouteObject(response.body(), ii);
                 }

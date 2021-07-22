@@ -1,9 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -15,9 +13,6 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.MVP.Main_Model;
-import com.hap.checkinproc.MVP.MasterSync_Implementations;
-import com.hap.checkinproc.MVP.Offline_SyncView;
-import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.DatabaseHandler;
 
@@ -26,10 +21,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
-public class Offline_Sync_Activity extends AppCompatActivity implements View.OnClickListener, Main_Model.MasterSyncView {
+public class Offline_Sync_Activity extends AppCompatActivity implements View.OnClickListener/*, Main_Model.MasterSyncView*/ {
     private Main_Model.presenter presenter;
     Shared_Common_Pref sharedCommonPref;
     Type userType;
@@ -56,11 +50,11 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
         ordervalues = findViewById(R.id.ordervalues);
         totaloutlets = findViewById(R.id.totaloutlets);
         todayoutlet = findViewById(R.id.todayoutlet);
-        presenter = new MasterSync_Implementations(this, new Offline_SyncView());
+        //   presenter = new MasterSync_Implementations(this, new Offline_SyncView());
         Backbuttontextview.setOnClickListener(this);
         gson = new Gson();
         common_class = new Common_Class(this);
-        presenter.requestDataFromServer();
+//        presenter.requestDataFromServer();
         lastsuccessync.setText(Common_Class.GetDatemonthyearformat());
         Sf_UserId.setText(Shared_Common_Pref.Sf_Code);
 
@@ -116,7 +110,7 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
         }
     }
 
-    @Override
+   /* @Override
     public void showProgress() {
 
     }
@@ -136,6 +130,7 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
         // Toast.makeText(this, "Position" + position, Toast.LENGTH_SHORT).show();
         String serializedData = gson.toJson(responsebody);
 
+
         switch (position) {
 
             case (0):
@@ -147,9 +142,9 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
                 break;
             case (1):
                 //Distributor_List
-                System.out.println("Distributor_List" + serializedData);
-                sharedCommonPref.save(Shared_Common_Pref.Distributor_List, serializedData);
-                getResponseFromserver(Constants.Distributor_List, serializedData);
+                // System.out.println("Distributor_List" + serializedData);
+                // sharedCommonPref.save(Shared_Common_Pref.Distributor_List, serializedData);
+                // getResponseFromserver(Constants.Distributor_List, serializedData);
                 break;
             case (2):
                 //Category_List
@@ -178,9 +173,9 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
                 sharedCommonPref.save(Shared_Common_Pref.Todaydayplanresult, serializedData);
                 break;
             case (7):
-                System.out.println("Town_List" + serializedData);
-                sharedCommonPref.save(Shared_Common_Pref.Rout_List, serializedData);
-                getResponseFromserver(Constants.Rout_List, serializedData);
+                // System.out.println("Town_List" + serializedData);
+                //sharedCommonPref.save(Shared_Common_Pref.Rout_List, serializedData);
+                //  getResponseFromserver(Constants.Rout_List, serializedData);
                 break;
             case (8):
                 System.out.println("Route_Dashboars_Orders" + serializedData);
@@ -217,6 +212,8 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
 
     }
 
+    */
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -224,8 +221,9 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
                 common_class.CommonIntentwithFinish(SFA_Activity.class);
                 break;
             case R.id.SyncButton:
-                Shared_Common_Pref.Sync_Flag = "0";
-                common_class.CommonIntentwithFinish(Offline_Sync_Activity.class);
+//                Shared_Common_Pref.Sync_Flag = "0";
+//                common_class.CommonIntentwithFinish(Offline_Sync_Activity.class);
+                common_class.getDataFromApi(Constants.Retailer_OutletList, this, true);
                 break;
         }
 

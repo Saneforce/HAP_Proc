@@ -13,10 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.gson.Gson;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.MVP.Main_Model;
-import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
@@ -27,22 +27,26 @@ import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFADCRActivity;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
+import com.hap.checkinproc.common.DatabaseHandler;
+
+import org.json.JSONArray;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 
-public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, Main_Model.MasterSyncView {
+public class SFA_Activity extends AppCompatActivity implements View.OnClickListener /*,Main_Model.MasterSyncView*/ {
     LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders;
     Gson gson;
     Type userType;
     Common_Class common_class;
     private Main_Model.presenter presenter;
     Shared_Common_Pref sharedCommonPref;
+    DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sfactivity);
+        db = new DatabaseHandler(this);
         sharedCommonPref = new Shared_Common_Pref(SFA_Activity.this);
         Lin_Route = findViewById(R.id.Lin_Route);
         SyncButon = findViewById(R.id.SyncButon);
@@ -77,6 +81,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 mOnBackPressedDispatcher.onBackPressed();
             }
         });*/
+
+        if (sharedCommonPref.getvalue(Constants.HAVE_VALUE, "").equals(""))
+            common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
+
 
     }
 
@@ -132,7 +140,20 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
+
+    boolean checkValueStore() {
+        try {
+            JSONArray storeData = db.getMasterData(Constants.Outlet_Total_Orders);
+            if (storeData != null && storeData.length() > 0)
+                return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+   /* @Override
     public void showProgress() {
     }
 
@@ -159,8 +180,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 break;
             case (1):
                 //Distributor_List
-                System.out.println("Distributor_List" + serializedData);
-                sharedCommonPref.save(Shared_Common_Pref.Distributor_List, serializedData);
+                //  System.out.println("Distributor_List" + serializedData);
+                //  sharedCommonPref.save(Shared_Common_Pref.Distributor_List, serializedData);
                 break;
             case (2):
                 //Category_List
@@ -186,7 +207,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onResponseFailure(Throwable throwable) {
 
-    }
+    }*/
 
 /*
     @Override

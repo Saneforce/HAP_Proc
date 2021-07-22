@@ -492,7 +492,6 @@
                             android:gravity="start"
                             android:hint="Enter the Phone No"
                             android:inputType="phone"
-                            android:maxLength="10"
                             android:padding="10dp"
                             android:textSize="13dp" />
 

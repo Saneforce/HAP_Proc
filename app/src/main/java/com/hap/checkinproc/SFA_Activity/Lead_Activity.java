@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -17,11 +18,13 @@ import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Lead_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
+import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,50 +47,62 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<Common_Model> Route_Masterlist = new ArrayList<>();
     CustomListViewDialog customDialog;
+    DatabaseHandler db;
+    String TAG = "Lead_Activity:";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lead_);
-        sharedCommonPref = new Shared_Common_Pref(Lead_Activity.this);
-        recyclerView = findViewById(R.id.outletrecyclerview);
-        route_text = findViewById(R.id.route_text);
-        reachedoutlets = findViewById(R.id.reachedoutlets);
-        todayoutlets = findViewById(R.id.todayoutlets);
-        TotalOutlets = findViewById(R.id.TotalOutlets);
-        common_class = new Common_Class(this);
-        route_text.setOnClickListener(this);
-        reachedoutlets.setOnClickListener(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        gson = new Gson();
-        ImageView backView = findViewById(R.id.imag_back);
-        backView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_lead_);
+            db = new DatabaseHandler(this);
+
+            sharedCommonPref = new Shared_Common_Pref(Lead_Activity.this);
+            recyclerView = findViewById(R.id.outletrecyclerview);
+            route_text = findViewById(R.id.route_text);
+            reachedoutlets = findViewById(R.id.reachedoutlets);
+            todayoutlets = findViewById(R.id.todayoutlets);
+            TotalOutlets = findViewById(R.id.TotalOutlets);
+            common_class = new Common_Class(this);
+            route_text.setOnClickListener(this);
+            reachedoutlets.setOnClickListener(this);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            gson = new Gson();
+            ImageView backView = findViewById(R.id.imag_back);
+            backView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+            gson = new Gson();
+            userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
+            }.getType();
+            String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List);
+            System.out.println("OUTLETLIST" + sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List));
+            Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
+            Retailer_Modal_ListFilter = gson.fromJson(OrdersTable, userType);
+            //GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "2");
+            // GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Rout_List), "1");
+            GetJsonData(String.valueOf(db.getMasterData(Constants.Rout_List)), "1");
+            GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "2");
+
+
+            TotalOutlets.setText("Total Outlets:" + "\t" + Retailer_Modal_List.size());
+            int todaycount = 0;
+            for (Retailer_Modal_List lm : Retailer_Modal_List) {
+                if (lm.getLastUpdt_Date() != null && lm.getLastUpdt_Date().equals(Common_Class.GetDatewothouttime())) {
+                    todaycount++;
+                }
             }
-        });
-        gson = new Gson();
-        userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
-        }.getType();
-        String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List);
-        System.out.println("OUTLETLIST" + sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List));
-        Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
-        Retailer_Modal_ListFilter = gson.fromJson(OrdersTable, userType);
-        GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "2");
-        GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Rout_List), "1");
-        TotalOutlets.setText("Total Outlets:" + "\t" + Retailer_Modal_List.size());
-        int todaycount = 0;
-        for (Retailer_Modal_List lm : Retailer_Modal_List) {
-            if (lm.getLastUpdt_Date() != null && lm.getLastUpdt_Date().equals(Common_Class.GetDatewothouttime())) {
-                todaycount++;
+            todayoutlets.setText("Today Outlets:" + "\t" + todaycount);
+            if (Retailer_Modal_ListFilter != null && Retailer_Modal_ListFilter.size() > 0) {
+                recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
+                new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();
+                recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
             }
-        }
-        todayoutlets.setText("Today Outlets:" + "\t" + todaycount);
-        if (Retailer_Modal_ListFilter != null && Retailer_Modal_ListFilter.size() > 0) {
-            recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
-            new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();
-            recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
         }
     }
 

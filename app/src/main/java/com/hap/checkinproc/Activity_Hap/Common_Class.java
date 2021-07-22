@@ -1,20 +1,40 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.hap.checkinproc.Common_Class.Constants;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.common.DatabaseHandler;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.hap.checkinproc.Common_Class.Constants.Category_List;
+import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
+import static com.hap.checkinproc.Common_Class.Constants.Product_List;
+import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
+import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 
 public class Common_Class {
-    public static String Version_Name="Ver 3.1.11-b";
-    public static String Work_Type="0";
-    public static Location location=null;
+    public static String Version_Name = "Ver 3.1.11-b";
+    public static String Work_Type = "0";
+    public static Location location = null;
 
 
     public void openDateTimeSetting() {
@@ -29,8 +49,9 @@ public class Common_Class {
             return android.provider.Settings.System.getInt(c.getContentResolver(), android.provider.Settings.System.AUTO_TIME, 0) == 1;
         }
     }
+
     public Date GetCurrDateTime(Context context) {
-        if(isTimeAutomatic(context)==false){
+        if (isTimeAutomatic(context) == false) {
 
             //this.webView.sendJavascript("blockApp('date')");
         }
@@ -40,8 +61,9 @@ public class Common_Class {
         return resultdate;
 
     }
-    public  String GetDateTime(Context context,String pattern) {
-        if(isTimeAutomatic(context)==false){
+
+    public String GetDateTime(Context context, String pattern) {
+        if (isTimeAutomatic(context) == false) {
 
             //this.webView.sendJavascript("blockApp('date')");
         }
@@ -51,7 +73,8 @@ public class Common_Class {
         return df.format(c.getTime());
 
     }
-    public String AddDays(String dateInString,int NoofDays, String pattern) {
+
+    public String AddDays(String dateInString, int NoofDays, String pattern) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
         try {
@@ -68,7 +91,8 @@ public class Common_Class {
         return dateInString;
 
     }
-    public Date AddDays(String dateInString,int NoofDays) {
+
+    public Date AddDays(String dateInString, int NoofDays) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
         try {
@@ -81,9 +105,10 @@ public class Common_Class {
         Date resultdate = new Date(c.getTimeInMillis());
         return resultdate;
     }
-    public String AddMonths(String dateInString,int NoofDays, String pattern) {
-        Log.d("DateString",dateInString);
-        Log.d("DateString No.Dys",String.valueOf(NoofDays));
+
+    public String AddMonths(String dateInString, int NoofDays, String pattern) {
+        Log.d("DateString", dateInString);
+        Log.d("DateString No.Dys", String.valueOf(NoofDays));
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
         try {
@@ -100,7 +125,8 @@ public class Common_Class {
         return dateInString;
 
     }
-    public int getDay(String dateInString){
+
+    public int getDay(String dateInString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
         try {
@@ -112,8 +138,8 @@ public class Common_Class {
         return c.get(Calendar.DATE);
     }
 
-    public int getMonth(String dateInString){
-        Log.d("DateString GMonth",dateInString);
+    public int getMonth(String dateInString) {
+        Log.d("DateString GMonth", dateInString);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
         try {
@@ -121,11 +147,11 @@ public class Common_Class {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        Log.d("DateString GMonth",dateInString+"-"+String.valueOf(c.get(Calendar.MONTH)+1));
-        return c.get(Calendar.MONTH)+1;
+        Log.d("DateString GMonth", dateInString + "-" + String.valueOf(c.get(Calendar.MONTH) + 1));
+        return c.get(Calendar.MONTH) + 1;
     }
 
-    public int getYear(String dateInString){
+    public int getYear(String dateInString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
         try {
@@ -135,7 +161,8 @@ public class Common_Class {
         }
         return c.get(Calendar.YEAR);
     }
-    public int getHour(String dateInString){
+
+    public int getHour(String dateInString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
         try {
@@ -145,7 +172,8 @@ public class Common_Class {
         }
         return c.get(Calendar.HOUR);
     }
-    public int getMinute(String dateInString){
+
+    public int getMinute(String dateInString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
         try {
@@ -155,7 +183,8 @@ public class Common_Class {
         }
         return c.get(Calendar.MINUTE);
     }
-    public int getSeconds(String dateInString){
+
+    public int getSeconds(String dateInString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
         try {
@@ -165,6 +194,7 @@ public class Common_Class {
         }
         return c.get(Calendar.SECOND);
     }
+
     public Date getDate(String dateInString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
@@ -176,6 +206,7 @@ public class Common_Class {
         Date resultdate = new Date(c.getTimeInMillis());
         return resultdate;
     }
+
     public String getDateWithFormat(String dateInString, String pattern) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
@@ -191,7 +222,7 @@ public class Common_Class {
         return dateInString;
     }
 
-    public Date AddMinute(Date date,int NoofDays) {
+    public Date AddMinute(Date date, int NoofDays) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar c = Calendar.getInstance();
         try {
@@ -206,4 +237,7 @@ public class Common_Class {
         return resultdate;
 
     }
+
+
+
 }

@@ -97,7 +97,6 @@ public class HAPApp extends Application {
     }
 
     public static Activity getActiveActivity() {
-
         return activeActivity;
     }
     public static void sendOFFlineLocations(){

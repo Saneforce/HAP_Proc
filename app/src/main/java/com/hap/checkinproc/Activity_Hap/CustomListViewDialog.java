@@ -126,10 +126,12 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
                     Gson gson = new Gson();
                     Nearby_Outlets.shared_common_pref.save(Constants.MAP_KEYLIST, gson.toJson(mDataset));
                     da.notifyDataSetChanged();
-                    Nearby_Outlets.nearby_outlets.getExploreDr();
+
                 }
             }
         });
+
+
 
 
     }

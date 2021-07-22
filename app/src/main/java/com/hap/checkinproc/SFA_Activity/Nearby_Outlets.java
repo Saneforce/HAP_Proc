@@ -2,6 +2,7 @@ package com.hap.checkinproc.SFA_Activity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -42,6 +44,7 @@ import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.Dashboard_View_Model;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.adapters.ExploreMapAdapter;
+import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -56,7 +59,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Nearby_Outlets extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, OnMapReadyCallback {
     List<Dashboard_View_Model> approvalList;
@@ -94,124 +99,136 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     public static Nearby_Outlets nearby_outlets;
 
     private EndlessRecyclerViewScrollListener scrollListener;
+    ExploreMapAdapter explore;
+
+    String mapKey;
+    DatabaseHandler db;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nearby__outlets);
-        nearby_outlets = this;
-        shared_common_pref = new Shared_Common_Pref(this);
-        recyclerView = findViewById(R.id.outletrecyclerview);
-        rclRetail = findViewById(R.id.rclRetail);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_nearby__outlets);
+            db = new DatabaseHandler(this);
+            nearby_outlets = this;
+            shared_common_pref = new Shared_Common_Pref(this);
+            recyclerView = findViewById(R.id.outletrecyclerview);
+            rclRetail = findViewById(R.id.rclRetail);
 
-        Createoutlet = findViewById(R.id.Createoutlet);
-        availableoutlets = findViewById(R.id.availableoutlets);
-        latitude = findViewById(R.id.latitude);
-        longitude = findViewById(R.id.longitude);
+            Createoutlet = findViewById(R.id.Createoutlet);
+            availableoutlets = findViewById(R.id.availableoutlets);
+            latitude = findViewById(R.id.latitude);
+            longitude = findViewById(R.id.longitude);
 
-        vwRetails = findViewById(R.id.vwRetails);
-        tabExplore = findViewById(R.id.tabExplore);
-        btnNearme = findViewById(R.id.btnNearme);
-        btnExplore = findViewById(R.id.btnExplore);
-        mapView = (MapView) findViewById(R.id.mapview);
-        ivFilterKeysMenu = (findViewById(R.id.ivFilterKeysMenu));
-        ivRefresh = findViewById(R.id.ivRefreshMenu);
+            vwRetails = findViewById(R.id.vwRetails);
+            tabExplore = findViewById(R.id.tabExplore);
+            btnNearme = findViewById(R.id.btnNearme);
+            btnExplore = findViewById(R.id.btnExplore);
+            mapView = (MapView) findViewById(R.id.mapview);
+            ivFilterKeysMenu = (findViewById(R.id.ivFilterKeysMenu));
+            ivRefresh = findViewById(R.id.ivRefreshMenu);
 
-        mapView.onCreate(savedInstanceState);
+            mapView.onCreate(savedInstanceState);
 
-        mapView.getMapAsync(this);
-        vwRetails.setOnTouchListener(this);
-        RelativeLayout.LayoutParams rel_btn = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT, 635);
-        rel_btn.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-        vwRetails.setLayoutParams(rel_btn);
-        Log.d("Height:", String.valueOf(vwRetails.getHeight()));
+            mapView.getMapAsync(this);
+            vwRetails.setOnTouchListener(this);
+            RelativeLayout.LayoutParams rel_btn = new RelativeLayout.LayoutParams(
+                    RelativeLayout.LayoutParams.MATCH_PARENT, 635);
+            rel_btn.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+            vwRetails.setLayoutParams(rel_btn);
+            Log.d("Height:", String.valueOf(vwRetails.getHeight()));
 
-        ivFilterKeysMenu.setOnClickListener(this);
-        btnNearme.setOnClickListener(this);
+            ivFilterKeysMenu.setOnClickListener(this);
+            btnNearme.setOnClickListener(this);
 
-        btnExplore.setOnClickListener(this);
+            btnExplore.setOnClickListener(this);
 
-        ivRefresh.setOnClickListener(this);
+            ivRefresh.setOnClickListener(this);
 
-        latitude.setText("Latitude : " + Shared_Common_Pref.Outletlat);
-        longitude.setText("Latitude : " + Shared_Common_Pref.Outletlong);
-        common_class = new Common_Class(this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+            latitude.setText("Latitude : " + Shared_Common_Pref.Outletlat);
+            longitude.setText("Latitude : " + Shared_Common_Pref.Outletlong);
+            common_class = new Common_Class(this);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 
-        recyclerView.setLayoutManager(linearLayoutManager);
-        rclRetail.setLayoutManager(new LinearLayoutManager(this));
-        gson = new Gson();
-        userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
-        }.getType();
-        String OrdersTable = shared_common_pref.getvalue(Shared_Common_Pref.Outlet_List);
-        Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
-        System.out.println("DISTANCE_CHECKING_Lat" + "---" + Shared_Common_Pref.Outletlat + "----->");
-        System.out.println("DISTANCE_CHECKING_Long" + "---" + Shared_Common_Pref.Outletlong + "----->");
-        ShowRetailer_Modal_List = new ArrayList<>();
-        ShowRetailer_Modal_List.clear();
-        for (Retailer_Modal_List rml : Retailer_Modal_List) {
-            if (rml.getLat() != null && rml.getLat() != "") {
-                System.out.println("DISTANCE_CHECKING" + "---" + rml.getId() + "----->" + String.valueOf(Common_Class.Check_Distance(Common_Class.ParseDouble(rml.getLat()), Common_Class.ParseDouble(rml.getLong()), Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong)));
-                if (Common_Class.Check_Distance(Common_Class.ParseDouble(rml.getLat()), Common_Class.ParseDouble(rml.getLong()), Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong) < 0.5) {
-                    ShowRetailer_Modal_List.add(rml);
+            recyclerView.setLayoutManager(linearLayoutManager);
+            rclRetail.setLayoutManager(new LinearLayoutManager(this));
+            gson = new Gson();
+            userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
+            }.getType();
+            // String OrdersTable = shared_common_pref.getvalue(Shared_Common_Pref.Outlet_List);
+            String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+            Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
+            System.out.println("DISTANCE_CHECKING_Lat" + "---" + Shared_Common_Pref.Outletlat + "----->");
+            System.out.println("DISTANCE_CHECKING_Long" + "---" + Shared_Common_Pref.Outletlong + "----->");
+            ShowRetailer_Modal_List = new ArrayList<>();
+            ShowRetailer_Modal_List.clear();
+            for (Retailer_Modal_List rml : Retailer_Modal_List) {
+                if (rml.getLat() != null && rml.getLat() != "") {
+                    System.out.println("DISTANCE_CHECKING" + "---" + rml.getId() + "----->" + String.valueOf(Common_Class.Check_Distance(Common_Class.ParseDouble(rml.getLat()), Common_Class.ParseDouble(rml.getLong()), Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong)));
+                    if (Common_Class.Check_Distance(Common_Class.ParseDouble(rml.getLat()), Common_Class.ParseDouble(rml.getLong()), Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong) < 0.5) {
+                        ShowRetailer_Modal_List.add(rml);
+                    }
                 }
             }
-        }
-        availableoutlets.setText("Available Outlets:" + "\t" + ShowRetailer_Modal_List.size());
-        if (ShowRetailer_Modal_List != null && ShowRetailer_Modal_List.size() > 0) {
-            recyclerView.setAdapter(new Outlet_Info_Adapter(ShowRetailer_Modal_List, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {
+            availableoutlets.setText("Available Outlets:" + "\t" + ShowRetailer_Modal_List.size());
+            if (ShowRetailer_Modal_List != null && ShowRetailer_Modal_List.size() > 0) {
+                recyclerView.setAdapter(new Outlet_Info_Adapter(ShowRetailer_Modal_List, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {
+                    @Override
+                    public void onIntentClick(int position) {
+                        Shared_Common_Pref.Outler_AddFlag = "0";
+                        Shared_Common_Pref.OutletName = ShowRetailer_Modal_List.get(position).getName().toUpperCase();
+                        Shared_Common_Pref.OutletCode = ShowRetailer_Modal_List.get(position).getId();
+                        common_class.CommonIntentwithFinish(Route_Product_Info.class);
+                        common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                    }
+                }));
+            }
+            Createoutlet.setOnClickListener(this);
+            ImageView backView = findViewById(R.id.imag_back);
+
+            backView.setOnClickListener(this);
+
+
+            if (getArrayList(Constants.MAP_KEYLIST) == null || getArrayList(Constants.MAP_KEYLIST).size() == 0) {
+                mapKeyList.add(new Common_Model("Shop"));
+                shared_common_pref.save(Constants.MAP_KEYLIST, gson.toJson(mapKeyList));
+                shared_common_pref.save(Constants.MAP_KEY, "Shop");
+            } else {
+                mapKeyList = getArrayList(Constants.MAP_KEYLIST);
+                mapKey = shared_common_pref.getvalue(Constants.MAP_KEY);
+            }
+
+
+//        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+//            @Override
+//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+//                // Triggered only when new data needs to be appended to the list
+//                // Add whatever code is needed to append new items to the bottom of the list
+//                //loadNextDataFromApi(page);
+//               // getExploreDr();
+//            }
+//        };
+//        // Adds the scroll listener to RecyclerView
+//        recyclerView.addOnScrollListener(scrollListener);
+
+
+            rclRetail.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
-                public void onIntentClick(int position) {
-                    Shared_Common_Pref.Outler_AddFlag = "0";
-                    Shared_Common_Pref.OutletName = ShowRetailer_Modal_List.get(position).getName().toUpperCase();
-                    Shared_Common_Pref.OutletCode = ShowRetailer_Modal_List.get(position).getId();
-                    common_class.CommonIntentwithFinish(Route_Product_Info.class);
-                    common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+
+
+                    if (!recyclerView.canScrollVertically(1)) {
+                        // Toast.makeText(Nearby_Outlets.this, "Last", Toast.LENGTH_LONG).show();
+                        getExploreDr(true);
+
+                    }
                 }
-            }));
+            });
+        } catch (Exception e) {
+
         }
-        Createoutlet.setOnClickListener(this);
-        ImageView backView = findViewById(R.id.imag_back);
-
-        backView.setOnClickListener(this);
-
-
-        if (getArrayList(Constants.MAP_KEYLIST) == null || getArrayList(Constants.MAP_KEYLIST).size() == 0) {
-            mapKeyList.add(new Common_Model("Hospital"));
-            shared_common_pref.save(Constants.MAP_KEYLIST, gson.toJson(mapKeyList));
-        } else {
-            mapKeyList = getArrayList(Constants.MAP_KEYLIST);
-        }
-
-
-        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-                //loadNextDataFromApi(page);
-                getExploreDr();
-            }
-        };
-        // Adds the scroll listener to RecyclerView
-        recyclerView.addOnScrollListener(scrollListener);
-
-
-        rclRetail.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-
-                if (!recyclerView.canScrollVertically(1)) {
-                    // Toast.makeText(Nearby_Outlets.this, "Last", Toast.LENGTH_LONG).show();
-                    getExploreDr();
-
-                }
-            }
-        });
     }
 
     public ArrayList<Common_Model> getArrayList(String key) {
@@ -266,9 +283,9 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 customDialog.show();
                 break;
-            case R.id.ivRefreshMenu:
-                getExploreDr();
-                break;
+//            case R.id.ivRefreshMenu:
+//                getExploreDr();
+//                break;
 
             case R.id.imag_back:
                 finish();
@@ -290,32 +307,31 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             map.setMyLocationEnabled(true);
             map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(laty, lngy)));
             map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
-            getExploreDr();
+            getExploreDr(true);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
     }
 
-    public void getExploreDr() {
+    public void getExploreDr(boolean boolNextPage) {
         sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location=" + laty + "," + lngy);
-        sb.append("&radius=500");
+        sb.append("&radius=1500");
         //  sb.append("&types=cafe|store|shop");
         //sb.append("&keyword=tea shop|juice");
 
         mapKeyList = getArrayList(Constants.MAP_KEYLIST);
 
-        String keyVal = "";
-        for (int i = 0; i < mapKeyList.size(); i++) {
-            keyVal = keyVal + mapKeyList.get(i).getName() + "|";
-        }
+//        String keyVal = "";
+//        for (int i = 0; i < mapKeyList.size(); i++) {
+//            keyVal = keyVal + mapKeyList.get(i).getName() + "|";
+//        }
 
-        keyVal = "&types=" + keyVal;
+        // keyVal = "&keyword=" + keyVal;
 
-        sb.append(keyVal);
+        sb.append("&keyword=" + shared_common_pref.getvalue(Constants.MAP_KEY));
 
         sb.append("&key=" + "AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
-        Log.v("Doctor_detail_print", sb.toString());
         //https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&
         // keyword=milk|juice&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU
 
@@ -328,8 +344,14 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
         //next page token:Aap_uECXTWAZEAaw417hZSGDM6er_hQeOHMqMn6M3tW_yOBnr1PprfHabmN7Bq-E_z7oyt4B3-vEn9wIvxVV19WJuDMHyyTNhU8SvRGcENx2czJ_GOdWhbrTgJvqDPwZ7RyPxXI8XXc0Kcas6M8C5CjVkYbMYEP7t3uO7AFNBC1nxLIKirdy1OCZe5LNX7IZca-6zG7xcJ1mCXaXKM6rorkao0BWjs9Foibzs38M6fEwPxsEBk0n8747BwVKzzsOq1QnmH3iMncK0uPcT-PbOvNt_KL9sxLTwu6-MXVi9A96HlnwnztvoEZd-DUMien7nxtlp7eveYmNfHXI7nffHFtKDb4QyLOfrsX-WxP3DekLszOEC0S37gMBI317dyTVxLmaEsW9hU-jI7uOxi1M2z7SA9LMTYenI3otwebmJzT27RIYMfgIY1RbssqOcl7RJKrmcrRia9vyucN6b-mFAlvx9dxbSYXyFuHZsouyVujWZyARnYFpKS9dLFxxNr1tPTJV6RvHO_0GAr-WdGDLo1gqGxiCb8gELZ947iik6sbu_Jb80US2Z0DdeCnmDL7NqaX4g0xwB2g7yV4tLVFmgCR9ORQUQpeCZC8r18RepZIJ3ZYqqAq6OtQkJvRERZrOP0TkW2X3nQl9ubc5squAlhCEv1Ou6B16hc85Op7KBcW4QUmHqrCl1xWSz1UJPw-ASim8VYBx09QSBPi30wSCdeAOJzXsN5MKQO1Wg4G4OqgB95Y2gOIy8mNiMsZeDxie3VZ34kiIsDMI0cpauTLJWLzky14FBVKvjq9aM7pB-TcihT1VBgda34RECiDj9p98mDUZ-7_bBfZBc-OEqIg01Vd0OWZZN71WuizykO3u08upH_TI4nHjt6SC6yJK7ZgH6PW33Nd-04YcumLebzyc
 
-        if (nextPageToken.length() > 0)
+        if (nextPageToken.length() > 0 && boolNextPage)
             sb.append("&pagetoken=" + nextPageToken);
+
+        Log.v(TAG + " Doctor_detail_print", sb.toString());
+
+        if (!boolNextPage)
+            resData = new JSONArray();
+
 
         if (common_class.isNetworkAvailable(this))
             new findDrDetail().execute();
@@ -410,6 +432,25 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         return dp * context.getResources().getDisplayMetrics().density;
     }
 
+    public void getPlaceIdValues(int position) {
+
+        sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?");
+
+        try {
+            sb.append("place_id=" + resData.getJSONObject(position).getString("place_id"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //   sb.append("&fields=name,rating,formatted_phone_number,vicinity,formatted_address");
+        sb.append("&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
+
+        if (common_class.isNetworkAvailable(this))
+            new findPlaceDetail().execute();
+
+
+    }
+
     class findDrDetail extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -418,8 +459,9 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             DownloadUrl downloadUrl = new DownloadUrl();
             try {
                 googlePlacesData = downloadUrl.readUrl(sb.toString());
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
+                Log.e(TAG + " doInBackground: ", e.getMessage());
             }
             return null;
         }
@@ -428,6 +470,34 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(Void aVoid) {
             Log.v("get_dr_detttt", googlePlacesData);
             getDrDetail(googlePlacesData);
+        }
+    }
+
+
+    class findPlaceDetail extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            DownloadUrl downloadUrl = new DownloadUrl();
+            try {
+                googlePlacesData = downloadUrl.readUrl(sb.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e(TAG + " doInBackground: ", e.getMessage());
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Log.v("get_dr_detttt", googlePlacesData + " :api: " + sb.toString());
+            // getDrDetail(googlePlacesData);
+
+            Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
+            intent.putExtra(Constants.PLACE_ID, googlePlacesData);
+            startActivity(intent);
+
         }
     }
 
@@ -447,9 +517,9 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             nextPageToken = jsonObject.optString("next_page_token");
             Log.e(TAG, "nextPageToken:" + nextPageToken);
 
-            if (oldKey.length() > 1 && nextPageToken.equals("")) {
-                return;
-            }
+//            if (oldKey.length() > 1 && nextPageToken.equals("")) {
+//                return;
+//            }
 
             if (oldData != null) {
                 for (int i = 0; i < oldData.length(); i++) {
@@ -501,6 +571,35 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+
+    JSONArray removeDuplicateItem(JSONArray yourJSONArray) {
+        try {
+            Set<String> stationCodes = new HashSet<String>();
+            JSONArray tempArray = new JSONArray();
+
+
+            for (int i = 0; i < yourJSONArray.length(); i++) {
+                String stationCode = yourJSONArray.getJSONObject(i).getString("name");
+                if (stationCodes.contains(stationCode)) {
+                    continue;
+                } else {
+                    stationCodes.add(stationCode);
+                    tempArray.put(yourJSONArray.getJSONObject(i));
+                }
+
+            }
+
+            Log.e(TAG, " total size:" + yourJSONArray.length() + " FilterSize: " + tempArray.length());
+
+            yourJSONArray = tempArray; //assign temp to original
+            return yourJSONArray;
+
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
+
     public class DownloadUrl {
 
         public String readUrl(String strUrl) throws IOException {
@@ -540,14 +639,21 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             }
             return data;
         }
+
     }
 
 
     public void drDetail() {
-
-        ExploreMapAdapter explore = new ExploreMapAdapter(Nearby_Outlets.this, resData, String.valueOf(Shared_Common_Pref.Outletlat), String.valueOf(Shared_Common_Pref.Outletlong));
+        //if (explore == null) {
+        resData = removeDuplicateItem(resData);
+        explore = new ExploreMapAdapter(Nearby_Outlets.this, resData, String.valueOf(Shared_Common_Pref.Outletlat), String.valueOf(Shared_Common_Pref.Outletlong));
         rclRetail.setAdapter(explore);
         explore.notifyDataSetChanged();
+//        } else {
+//            removeDuplicateItem(resData);
+//            explore = new ExploreMapAdapter(Nearby_Outlets.this, resData, String.valueOf(Shared_Common_Pref.Outletlat), String.valueOf(Shared_Common_Pref.Outletlong));
+//            explore.notifyDataSetChanged();
+//        }
 
     }
 

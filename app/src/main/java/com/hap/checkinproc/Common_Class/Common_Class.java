@@ -24,9 +24,11 @@ import androidx.core.content.ContextCompat;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,13 +40,23 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
+import static com.hap.checkinproc.Common_Class.Constants.Category_List;
+import static com.hap.checkinproc.Common_Class.Constants.Competitor_List;
+import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
+import static com.hap.checkinproc.Common_Class.Constants.Outlet_Total_Orders;
+import static com.hap.checkinproc.Common_Class.Constants.Product_List;
+import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
+import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
+import static com.hap.checkinproc.Common_Class.Constants.TodayOrderDetails_List;
 
 
 public class Common_Class {
@@ -218,6 +230,159 @@ public class Common_Class {
         }
         return ResArray;
     }
+
+    public void getDataFromApi(String key, Activity activity, Boolean boolRefresh) {
+        String QuerySTring1 = "";
+        Map<String, String> QueryString = new HashMap<>();
+        String axnname = "table/list";
+
+        switch (key) {
+
+            case (Retailer_OutletList):
+                QuerySTring1 = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",  \\\"reason_category\\\", \\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"town_name\\\",\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\",\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\",  \\\"LastUpdt_Date\\\",    \\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" , \\\"Valuesinv\\\" , \\\"InvoiceDate\\\", \\\"Category_Universe_Id\\\", \\\"Hatsun_AvailablityId\\\",   \\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\",\\\"Distributor_Code\\\"]\",\"where\":\"[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                break;
+            case (Constants.Distributor_List):
+                QuerySTring1 = "{\"tableName\":\"vwstockiest_Master_APP\",\"coloumns\":\"[\\\"distributor_code as id\\\", \\\"stockiest_name as name\\\",\\\"town_code\\\",\\\"town_name\\\",\\\"Addr1\\\",\\\"Addr2\\\",\\\"City\\\",\\\"Pincode\\\",\\\"GSTN\\\",\\\"lat\\\",\\\"long\\\",\\\"addrs\\\",\\\"Tcode\\\",\\\"Dis_Cat_Code\\\"]\",\"where\":\"[\\\"isnull(Stockist_Status,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                break;
+            case (Constants.Category_List):
+                QuerySTring1 = "{\"tableName\":\"category_universe\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                break;
+            case (Constants.Product_List):
+                QuerySTring1 = "{\"tableName\":\"getproduct_details\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                break;
+            case (Constants.Rout_List):
+                QuerySTring1 = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                break;
+
+            case Constants.GetTodayOrder_List:
+                QuerySTring1 = "{\"tableName\":\"gettotalorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                break;
+
+            case Constants.Outlet_Total_Orders:
+                QuerySTring1 = "{\"tableName\":\"gettotaloutletorders\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                break;
+            case Constants.TodayOrderDetails_List:
+                QuerySTring1 = "{\"tableName\":\"GettotalOrderDetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                QueryString.put("todate", Common_Class.GetDatewothouttime());
+                break;
+
+            case Constants.Competitor_List:
+                QuerySTring1 = "{\"tableName\":\"get_compititordetails\"}";
+
+                break;
+            case Constants.Todaydayplanresult:
+                axnname = "Get/dayplanresult";
+                QueryString.put("Date", Common_Class.GetDatewothouttime());
+                break;
+            case Constants.Outlet_Total_AlldaysOrders:
+                QuerySTring1 = "{\"tableName\":\"gettotalalldaysoutletorders\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                QueryString.put("todate", Common_Class.GetDatewothouttime());
+                break;
+        }
+
+        QueryString.put("axn", axnname);
+        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+
+        callAPI(QuerySTring1, QueryString, key, activity, boolRefresh);
+
+
+    }
+
+    void callAPI(String QuerySTring1, Map<String, String> QueryString, String key, Activity activity, Boolean boolRefresh) {
+        DatabaseHandler db = new DatabaseHandler(activity);
+
+        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+
+        Call<Object> call = service.GetRouteObject(QueryString, QuerySTring1);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+
+                // Log.e(TAG + "Key: ", key);
+                Gson gson = new Gson();
+                db.deleteMasterData(key);
+                db.addMasterData(key, gson.toJson(response.body()));
+
+                switch (key) {
+                    case Retailer_OutletList:
+                        getDataFromApi(Constants.Distributor_List, activity, boolRefresh);
+                        break;
+                    case Distributor_List:
+                        getDataFromApi(Category_List, activity, boolRefresh);
+                        break;
+                    case Category_List:
+                        getDataFromApi(Product_List, activity, boolRefresh);
+                        break;
+                    case Product_List:
+                        getDataFromApi(Rout_List, activity, boolRefresh);
+                        break;
+                    case Rout_List:
+                        if (boolRefresh)
+                            getDataFromApi(Constants.GetTodayOrder_List, activity, boolRefresh);
+
+                        else
+                            activity.startActivity(new Intent(activity, SFA_Activity.class));
+                        break;
+                    case Constants.GetTodayOrder_List:
+                        getDataFromApi(Constants.Outlet_Total_Orders, activity, boolRefresh);
+                        break;
+                    case Outlet_Total_Orders:
+                        getDataFromApi(Constants.TodayOrderDetails_List, activity, boolRefresh);
+                        break;
+                    case TodayOrderDetails_List:
+                        getDataFromApi(Constants.Competitor_List, activity, boolRefresh);
+                        break;
+                    case Competitor_List:
+                        getDataFromApi(Constants.Outlet_Total_AlldaysOrders, activity, boolRefresh);
+                        break;
+                    case Constants.Outlet_Total_AlldaysOrders:
+                        getDataFromApi(Constants.Todaydayplanresult, activity, boolRefresh);
+                        break;
+                    case Constants.Todaydayplanresult:
+                        shared_common_pref.save(Constants.HAVE_VALUE, Constants.HAVE_VALUE);
+                        if (boolRefresh)
+                            CommonIntentwithFinish(SFA_Activity.class);
+                        break;
+
+
+                }
+
+
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+            }
+        });
+    }
+
+    public boolean checkValueStore(Activity activity, String key) {
+        DatabaseHandler db = new DatabaseHandler(activity);
+
+        try {
+            JSONArray storeData = db.getMasterData(key);
+            if (storeData != null && storeData.length() > 0)
+                return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+
+
+
    /* public void Reurnypeface(class cl,){
         userType = new TypeToken<ArrayList<Work_Type_Model>>() {
         }.getType();

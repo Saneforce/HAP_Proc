@@ -28,6 +28,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.AlertBox;
@@ -39,6 +40,7 @@ import com.hap.checkinproc.SFA_Model_Class.Category_Universe_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 import com.hap.checkinproc.SFA_Model_Class.RegularQty_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
+import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
@@ -89,139 +91,149 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     Prodct_Adapter mProdct_Adapter;
 
     String TAG = "Order_Category_Select";
+    DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order__category__select);
-        //  ((MyApplication) getApplication()).getNetComponent().inject(this);
-        sharedCommonPref = new Shared_Common_Pref(Order_Category_Select.this);
-        common_class = new Common_Class(this);
-        categorygrid = findViewById(R.id.category);
-        takeorder = findViewById(R.id.takeorder);
-        orderbutton = findViewById(R.id.orderbutton);
-        netamount = findViewById(R.id.netamount);
-        ok = findViewById(R.id.ok);
-        back = findViewById(R.id.back);
-        mDCRMode = sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
-        GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "6");
-        lin_orderrecyclerview = findViewById(R.id.lin_orderrecyclerview);
-        totalorderbottom = findViewById(R.id.totalorderbottom);
-        cashdiscount = findViewById(R.id.cashdiscount);
-        linnetamount = findViewById(R.id.linnetamount);
-        linnercashdiscount = findViewById(R.id.linnercashdiscount);
-        lin_gridcategory = findViewById(R.id.lin_gridcategory);
-        totalqty = findViewById(R.id.totalqty);
-        totalvalue = findViewById(R.id.totalvalue);
-        Out_Let_Name = findViewById(R.id.outlet_name);
-        Category_Nametext = findViewById(R.id.Category_Nametext);
-        Out_Let_Name.setText(Shared_Common_Pref.OutletName);
-        Product_ModalSetAdapter = new ArrayList<>();
-        gson = new Gson();
-        ok.setOnClickListener(this);
-        takeorder.setOnClickListener(this);
-        back.setOnClickListener(this);
-        orderbutton.setOnClickListener(this);
-        Ukey = Common_Class.GetEkey();
-        Out_Let_Name.setText(Shared_Common_Pref.OutletName);
-        recyclerView = findViewById(R.id.orderrecyclerview);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Category_List), "1");
-        String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.Product_List);
-        userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
-        }.getType();
-        Product_Modal = gson.fromJson(OrdersTable, userType);
-        //156
-        if (Shared_Common_Pref.Invoicetoorder == null || Shared_Common_Pref.Invoicetoorder.equals("0")) {
-            //  Get_regularqty();
-        }
-        Order_Category_Select.CategoryAdapter customAdapteravail = new Order_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
-        categorygrid.setAdapter(customAdapteravail);
-        if (Shared_Common_Pref.Invoicetoorder != null) {
-            if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
-                ok.setText("Edit");
-                String orderlist = sharedCommonPref.getvalue(Shared_Common_Pref.TodayOrderDetails_List);
-                userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
-                }.getType();
-                InvoiceorderDetails_List = gson.fromJson(orderlist, userType);
-                Log.e("ORDER_SL_NUmber", Shared_Common_Pref.TransSlNo);
-                Order_Outlet_Filter = new ArrayList<>();
-                for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
-                    if (ivl.getTransSlNo().equals(Shared_Common_Pref.TransSlNo)) {
-                        Log.e("ORDER_SL_Loop", Shared_Common_Pref.TransSlNo);
-                        Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
-                                "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(), ivl.getQty(), ivl.getValue()));
-                    }
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_order__category__select);
+            //  ((MyApplication) getApplication()).getNetComponent().inject(this);
+            db = new DatabaseHandler(this);
+            sharedCommonPref = new Shared_Common_Pref(Order_Category_Select.this);
+            common_class = new Common_Class(this);
+            categorygrid = findViewById(R.id.category);
+            takeorder = findViewById(R.id.takeorder);
+            orderbutton = findViewById(R.id.orderbutton);
+            netamount = findViewById(R.id.netamount);
+            ok = findViewById(R.id.ok);
+            back = findViewById(R.id.back);
+            mDCRMode = sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
+            //   GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "6");
+            GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6");
+            lin_orderrecyclerview = findViewById(R.id.lin_orderrecyclerview);
+            totalorderbottom = findViewById(R.id.totalorderbottom);
+            cashdiscount = findViewById(R.id.cashdiscount);
+            linnetamount = findViewById(R.id.linnetamount);
+            linnercashdiscount = findViewById(R.id.linnercashdiscount);
+            lin_gridcategory = findViewById(R.id.lin_gridcategory);
+            totalqty = findViewById(R.id.totalqty);
+            totalvalue = findViewById(R.id.totalvalue);
+            Out_Let_Name = findViewById(R.id.outlet_name);
+            Category_Nametext = findViewById(R.id.Category_Nametext);
+            Out_Let_Name.setText(Shared_Common_Pref.OutletName);
+            Product_ModalSetAdapter = new ArrayList<>();
+            gson = new Gson();
+            ok.setOnClickListener(this);
+            takeorder.setOnClickListener(this);
+            back.setOnClickListener(this);
+            orderbutton.setOnClickListener(this);
+            Ukey = Common_Class.GetEkey();
+            Out_Let_Name.setText(Shared_Common_Pref.OutletName);
+            recyclerView = findViewById(R.id.orderrecyclerview);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            //  GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Category_List), "1");
+            GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1");
+            // String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.Product_List);
+            String OrdersTable = String.valueOf(db.getMasterData(Constants.Product_List));
+            userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
+            }.getType();
+            Product_Modal = gson.fromJson(OrdersTable, userType);
+            //156
+            if (Shared_Common_Pref.Invoicetoorder == null || Shared_Common_Pref.Invoicetoorder.equals("0")) {
+                //  Get_regularqty();
+            }
+            Order_Category_Select.CategoryAdapter customAdapteravail = new Order_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+            categorygrid.setAdapter(customAdapteravail);
+            if (Shared_Common_Pref.Invoicetoorder != null) {
+                if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
+                    ok.setText("Edit");
+                    // String orderlist = sharedCommonPref.getvalue(Shared_Common_Pref.TodayOrderDetails_List);
+                    String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
+                    userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
+                    }.getType();
+                    InvoiceorderDetails_List = gson.fromJson(orderlist, userType);
+                    Log.e("ORDER_SL_NUmber", Shared_Common_Pref.TransSlNo);
+                    Order_Outlet_Filter = new ArrayList<>();
+                    for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
+                        if (ivl.getTransSlNo().equals(Shared_Common_Pref.TransSlNo)) {
+                            Log.e("ORDER_SL_Loop", Shared_Common_Pref.TransSlNo);
+                            Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
+                                    "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(), ivl.getQty(), ivl.getValue()));
+                        }
 
-                }
-                //Log.e("Product_Modal.size()", String.valueOf(Product_Modal.size()));
-                for (int j = 0; Product_Modal.size() > j; j++) {
-                    for (int i = 0; Order_Outlet_Filter.size() > i; i++) {
-                        if (Product_Modal.get(j).getId().equals(Order_Outlet_Filter.get(i).getId())) {
-                            Product_Modal.get(j).setQty(Order_Outlet_Filter.get(i).getQty());
-                            // Log.e("SETQTY", String.valueOf(Order_Outlet_Filter.get(i).getQty()));
-                            Product_Modal.get(j).setAmount(Order_Outlet_Filter.get(i).getAmount());
-                            Product_Modal.get(j).setRegularQty(Order_Outlet_Filter.get(i).getRegularQty());
+                    }
+                    //Log.e("Product_Modal.size()", String.valueOf(Product_Modal.size()));
+                    for (int j = 0; Product_Modal.size() > j; j++) {
+                        for (int i = 0; Order_Outlet_Filter.size() > i; i++) {
+                            if (Product_Modal.get(j).getId().equals(Order_Outlet_Filter.get(i).getId())) {
+                                Product_Modal.get(j).setQty(Order_Outlet_Filter.get(i).getQty());
+                                // Log.e("SETQTY", String.valueOf(Order_Outlet_Filter.get(i).getQty()));
+                                Product_Modal.get(j).setAmount(Order_Outlet_Filter.get(i).getAmount());
+                                Product_Modal.get(j).setRegularQty(Order_Outlet_Filter.get(i).getRegularQty());
+                            }
                         }
                     }
-                }
-                //GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Category_List), "2");
-                int jki = 0;
-                Log.e("Category_Before", String.valueOf(Category_Modal.size()));
-                for (Category_Universe_Modal CM : Category_Modal) {
-                    for (Product_Details_Modal PM : Product_Modal) {
-                        if (PM.getQty() > 0 || PM.getRegularQty() > 0) {
+                    //GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Category_List), "2");
+                    int jki = 0;
+                    Log.e("Category_Before", String.valueOf(Category_Modal.size()));
+                    for (Category_Universe_Modal CM : Category_Modal) {
+                        for (Product_Details_Modal PM : Product_Modal) {
+                            if (PM.getQty() > 0 || PM.getRegularQty() > 0) {
                           /*  Log.e("GETQTY", String.valueOf(PM.getQty()));
                             Log.e("GETREgular", String.valueOf(PM.getRegularQty()));
                             Log.e("Category_Universe_Modal", CM.getId());
                             Log.e("Product_Details_Modal", String.valueOf(PM.getProductCatCode()));*/
-                            if (CM.getId().equals(String.valueOf(PM.getProductCatCode())) && (PM.getQty() > 0 || PM.getRegularQty() > 0)) {
-                                Category_Modal.get(jki).setColorFlag("1");
-                                Log.e("Category_Modal_CAT", Category_Modal.get(jki).getColorFlag());
+                                if (CM.getId().equals(String.valueOf(PM.getProductCatCode())) && (PM.getQty() > 0 || PM.getRegularQty() > 0)) {
+                                    Category_Modal.get(jki).setColorFlag("1");
+                                    Log.e("Category_Modal_CAT", Category_Modal.get(jki).getColorFlag());
+                                }
                             }
                         }
+                        jki++;
+
                     }
-                    jki++;
-
-                }
-                FilterProduct("invoice", true);
-            } else {
-                ok.setText("Ok");
-            }
-        } else {
-            ok.setText("OK");
-        }
-
-        cashdiscount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // TODO Auto-generated method stub
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (!s.toString().equals("")) {
-                    if (Double.valueOf(s.toString()) > 0) {
-                        Double totalamount = Double.valueOf(totalvalue.getText().toString());
-                        if (Double.valueOf(s.toString()) > Double.valueOf(totalvalue.getText().toString())) {
-                            Toast.makeText(Order_Category_Select.this, "Discount Exceeded", Toast.LENGTH_SHORT).show();
-                            cashdiscount.setText("");
-                            netamount.setText("" + totalvalue.getText().toString());
-                        } else {
-                            Double discountvalues = totalamount - Double.valueOf(s.toString());
-                            netamount.setText("" + discountvalues);
-                        }
-                    }
+                    FilterProduct("invoice", true);
                 } else {
-                    netamount.setText("" + totalvalue.getText().toString());
+                    ok.setText("Ok");
                 }
+            } else {
+                ok.setText("OK");
             }
-        });
+
+            cashdiscount.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void afterTextChanged(Editable s) {
+                    // TODO Auto-generated method stub
+                }
+
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    // TODO Auto-generated method stub
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (!s.toString().equals("")) {
+                        if (Double.valueOf(s.toString()) > 0) {
+                            Double totalamount = Double.valueOf(totalvalue.getText().toString());
+                            if (Double.valueOf(s.toString()) > Double.valueOf(totalvalue.getText().toString())) {
+                                Toast.makeText(Order_Category_Select.this, "Discount Exceeded", Toast.LENGTH_SHORT).show();
+                                cashdiscount.setText("");
+                                netamount.setText("" + totalvalue.getText().toString());
+                            } else {
+                                Double discountvalues = totalamount - Double.valueOf(s.toString());
+                                netamount.setText("" + discountvalues);
+                            }
+                        }
+                    } else {
+                        netamount.setText("" + totalvalue.getText().toString());
+                    }
+                }
+            });
+        } catch (Exception e) {
+
+        }
     }
 
     private void GetJsonData(String jsonResponse, String type) {
@@ -427,13 +439,15 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                 Log.e("Success_Message", san);
                                 if (san.equals("true")) {
                                     if (Shared_Common_Pref.Invoicetoorder.equals("0")) {
-
                                         Toast.makeText(Order_Category_Select.this, "Order Submitted Successfully", Toast.LENGTH_SHORT).show();
                                     } else {
                                         Toast.makeText(Order_Category_Select.this, "Invoice Submitted Successfully", Toast.LENGTH_SHORT).show();
                                     }
                                     Shared_Common_Pref.Sync_Flag = "2";
-                                    startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
+//                                    startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
+//                                    finish();
+
+                                    startActivity(new Intent(getApplicationContext(), Invoice_History.class));
                                     finish();
                                 }
 

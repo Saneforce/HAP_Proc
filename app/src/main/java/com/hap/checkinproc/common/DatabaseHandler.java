@@ -115,6 +115,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return uData;
     }
 
+    public boolean checkKeyExist(String key) {
+        String selectQuery = "SELECT  " + Data + " FROM " + TABLE_Masters + " WHERE " + ID + "='" + key + "'";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        int index = cursor.getColumnIndex(key);
+        if (index == -1) {
+            // Column doesn't exist
+            return false;
+        }
+
+        return true;
+    }
+
     void addTrackDetails(JSONObject Location) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();

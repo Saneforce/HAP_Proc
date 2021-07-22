@@ -1,9 +1,5 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,15 +9,18 @@ import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
-import com.hap.checkinproc.Interface.ApiClient;
-import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.MVP.Main_Model;
 import com.hap.checkinproc.MVP.MasterSync_Implementations;
@@ -30,26 +29,16 @@ import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Complete_Order_Adapter;
 import com.hap.checkinproc.SFA_Adapter.Outlet_Orders_Alldays;
-import com.hap.checkinproc.SFA_Adapter.Route_View_Adapter;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
+import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class Dashboard_Order_Reports extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface {
     List<Outlet_Orders_Alldays> Retailer_Modal_List;
@@ -72,60 +61,67 @@ public class Dashboard_Order_Reports extends AppCompatActivity implements Main_M
 
     String Route_id, Distributor_Id;
     Shared_Common_Pref sharedCommonPref;
+    DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard__order__reports);
-        recyclerView = findViewById(R.id.leaverecyclerview);
-        sharedCommonPref = new Shared_Common_Pref(Dashboard_Order_Reports.this);
-        presenter = new MasterSync_Implementations(this, new Master_Sync_View());
-        presenter.requestDataFromServer();
-        shared_common_pref = new Shared_Common_Pref(this);
-        headtext = findViewById(R.id.headtext);
-        route_text = findViewById(R.id.route_text);
-        distributor_text = findViewById(R.id.distributor_text);
-        textViewname = findViewById(R.id.textViewname);
-        Alltextclick = findViewById(R.id.Alltextclick);
-        Completeclick = findViewById(R.id.Completeclick);
-        Pendingclick = findViewById(R.id.Pendingclick);
-        Alltextview = findViewById(R.id.Alltextview);
-        completeview = findViewById(R.id.completeview);
-        pendingview = findViewById(R.id.pendingview);
-        Alltextview.setVisibility(View.VISIBLE);
-        completeview.setVisibility(View.INVISIBLE);
-        pendingview.setVisibility(View.INVISIBLE);
-        Alltextclick.setOnClickListener(this);
-        Completeclick.setOnClickListener(this);
-        Pendingclick.setOnClickListener(this);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_dashboard__order__reports);
+            db = new DatabaseHandler(this);
+            recyclerView = findViewById(R.id.leaverecyclerview);
+            sharedCommonPref = new Shared_Common_Pref(Dashboard_Order_Reports.this);
+            presenter = new MasterSync_Implementations(this, new Master_Sync_View());
+            presenter.requestDataFromServer();
+            shared_common_pref = new Shared_Common_Pref(this);
+            headtext = findViewById(R.id.headtext);
+            route_text = findViewById(R.id.route_text);
+            distributor_text = findViewById(R.id.distributor_text);
+            textViewname = findViewById(R.id.textViewname);
+            Alltextclick = findViewById(R.id.Alltextclick);
+            Completeclick = findViewById(R.id.Completeclick);
+            Pendingclick = findViewById(R.id.Pendingclick);
+            Alltextview = findViewById(R.id.Alltextview);
+            completeview = findViewById(R.id.completeview);
+            pendingview = findViewById(R.id.pendingview);
+            Alltextview.setVisibility(View.VISIBLE);
+            completeview.setVisibility(View.INVISIBLE);
+            pendingview.setVisibility(View.INVISIBLE);
+            Alltextclick.setOnClickListener(this);
+            Completeclick.setOnClickListener(this);
+            Pendingclick.setOnClickListener(this);
 
-        distributor_text.setOnClickListener(this);
-        route_text.setOnClickListener(this);
-        common_class = new Common_Class(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        gson = new Gson();
-        userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
-        }.getType();
-        String todayorderliost = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_Total_AlldaysOrders);
-        userType = new TypeToken<ArrayList<Outlet_Orders_Alldays>>() {
-        }.getType();
-        Retailer_Order_List = gson.fromJson(todayorderliost, userType);
-        FilterCompleteList = new ArrayList<>();
-        Retailer_Modal_ListFilter = new ArrayList<>();
-        int index = 0;
-        Retailer_Modal_ListFilter.addAll(Retailer_Order_List);
-        FilterCompleteList.addAll(Retailer_Order_List);
-        recyclerView.setAdapter(new Complete_Order_Adapter(Retailer_Modal_ListFilter, R.layout.complete_orders_recyclerview, getApplicationContext(), new AdapterOnClick() {
-            @Override
-            public void onIntentClick(int position) {
-                Shared_Common_Pref.Outler_AddFlag = "0";
-                Log.e("Route_Outlet_Info", Shared_Common_Pref.Outler_AddFlag);
+            distributor_text.setOnClickListener(this);
+            route_text.setOnClickListener(this);
+            common_class = new Common_Class(this);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            gson = new Gson();
+            userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
+            }.getType();
+            // String todayorderliost = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_Total_AlldaysOrders);
+            String todayorderliost = String.valueOf(db.getMasterData(Constants.Outlet_Total_AlldaysOrders));
+            userType = new TypeToken<ArrayList<Outlet_Orders_Alldays>>() {
+            }.getType();
+            Retailer_Order_List = gson.fromJson(todayorderliost, userType);
+            FilterCompleteList = new ArrayList<>();
+            Retailer_Modal_ListFilter = new ArrayList<>();
+            int index = 0;
+            Retailer_Modal_ListFilter.addAll(Retailer_Order_List);
+            FilterCompleteList.addAll(Retailer_Order_List);
+            recyclerView.setAdapter(new Complete_Order_Adapter(Retailer_Modal_ListFilter, R.layout.complete_orders_recyclerview, getApplicationContext(), new AdapterOnClick() {
+                @Override
+                public void onIntentClick(int position) {
+                    Shared_Common_Pref.Outler_AddFlag = "0";
+                    Log.e("Route_Outlet_Info", Shared_Common_Pref.Outler_AddFlag);
                 /*Shared_Common_Pref.OutletName = Retailer_Modal_List.get(position).getName().toUpperCase() + "~" + Retailer_Modal_List.get(position).getId();
                 Shared_Common_Pref.OutletCode = Retailer_Modal_List.get(position).getId();
                 common_class.CommonIntentwithoutFinish(Route_Product_Info.class);*/
 
-            }
-        }));
+                }
+            }));
+        } catch (Exception e) {
+
+        }
     }
 
 
@@ -193,7 +189,7 @@ public class Dashboard_Order_Reports extends AppCompatActivity implements Main_M
         } else if (type == 3) {
             Route_id = myDataset.get(position).getId();
             route_text.setText(myDataset.get(position).getName());
-         //   OutletFilter(myDataset.get(position).getId(), "0");
+            //   OutletFilter(myDataset.get(position).getId(), "0");
         }
 
     }
