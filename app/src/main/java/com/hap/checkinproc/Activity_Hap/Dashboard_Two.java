@@ -668,11 +668,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                     Shared_Common_Pref.Sync_Flag = "0";
                                     com.hap.checkinproc.Common_Class.Common_Class common_class = new com.hap.checkinproc.Common_Class.Common_Class(Dashboard_Two.this);
 
-                                    if (common_class.checkValueStore(Dashboard_Two.this, Retailer_OutletList)) {
-                                        startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
-                                    } else {
-                                        common_class.getDataFromApi(Retailer_OutletList, Dashboard_Two.this, false);
-                                    }
+//                                    if (common_class.checkValueStore(Dashboard_Two.this, Retailer_OutletList)) {
+//                                        startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
+//                                    } else {
+                                    common_class.getDataFromApi(Retailer_OutletList, Dashboard_Two.this, false);
+                                    // }
 
 
                                 }

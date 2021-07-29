@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -111,10 +112,19 @@ public class Common_Class {
 
         if (flag == 1) {
             nDialog.setMessage("Loading.......");
-            nDialog.setTitle(message);
+            if (message.length() > 1) {
+                nDialog.setTitle(message);
+                nDialog.setCancelable(true);
+
+            }
             nDialog.setIndeterminate(false);
-            nDialog.setCancelable(true);
             nDialog.show();
+
+            if (message.equals("")) {
+                nDialog.setCancelable(false);
+                nDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                nDialog.setContentView(R.layout.loading_progress_bottom);
+            }
 
 
         } else {
@@ -239,6 +249,7 @@ public class Common_Class {
         switch (key) {
 
             case (Retailer_OutletList):
+                ProgressdialogShow(1, "Data Syncing");
                 QuerySTring1 = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",  \\\"reason_category\\\", \\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"town_name\\\",\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\",\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\",  \\\"LastUpdt_Date\\\",    \\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" , \\\"Valuesinv\\\" , \\\"InvoiceDate\\\", \\\"Category_Universe_Id\\\", \\\"Hatsun_AvailablityId\\\",   \\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\",\\\"Distributor_Code\\\"]\",\"where\":\"[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                 break;
             case (Constants.Distributor_List):
@@ -330,26 +341,33 @@ public class Common_Class {
                         if (boolRefresh)
                             getDataFromApi(Constants.GetTodayOrder_List, activity, boolRefresh);
 
-                        else
+                        else {
+                            ProgressdialogShow(0, "Data Syncing");
                             activity.startActivity(new Intent(activity, SFA_Activity.class));
+                        }
                         break;
+
                     case Constants.GetTodayOrder_List:
-                        getDataFromApi(Constants.Outlet_Total_Orders, activity, boolRefresh);
+                        if (boolRefresh)
+                            getDataFromApi(Constants.Outlet_Total_Orders, activity, boolRefresh);
                         break;
                     case Outlet_Total_Orders:
-                        getDataFromApi(Constants.TodayOrderDetails_List, activity, boolRefresh);
+                        if (boolRefresh)
+                            getDataFromApi(Constants.TodayOrderDetails_List, activity, boolRefresh);
                         break;
                     case TodayOrderDetails_List:
-                        getDataFromApi(Constants.Competitor_List, activity, boolRefresh);
+                        if (boolRefresh)
+                            getDataFromApi(Constants.Competitor_List, activity, boolRefresh);
                         break;
                     case Competitor_List:
-                        getDataFromApi(Constants.Outlet_Total_AlldaysOrders, activity, boolRefresh);
+                        if (boolRefresh)
+                            getDataFromApi(Constants.Outlet_Total_AlldaysOrders, activity, boolRefresh);
                         break;
                     case Constants.Outlet_Total_AlldaysOrders:
-                        getDataFromApi(Constants.Todaydayplanresult, activity, boolRefresh);
+                        if (boolRefresh)
+                            getDataFromApi(Constants.Todaydayplanresult, activity, boolRefresh);
                         break;
                     case Constants.Todaydayplanresult:
-                        shared_common_pref.save(Constants.HAVE_VALUE, Constants.HAVE_VALUE);
                         if (boolRefresh)
                             CommonIntentwithFinish(SFA_Activity.class);
                         break;
@@ -379,6 +397,7 @@ public class Common_Class {
 
         return false;
     }
+
 
 
 

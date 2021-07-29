@@ -14,11 +14,13 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,9 +32,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -89,7 +91,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
     String TAG = "Nearby_Outlets";
 
-    ImageView ivFilterKeysMenu, ivRefresh;
+    ImageView ivFilterKeysMenu, ivNearMe, ivExplore;
     CustomListViewDialog customDialog;
 
     List<Common_Model> mapKeyList = new ArrayList<>();
@@ -98,12 +100,15 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
     public static Nearby_Outlets nearby_outlets;
 
-    private EndlessRecyclerViewScrollListener scrollListener;
     ExploreMapAdapter explore;
 
     String mapKey;
     DatabaseHandler db;
-
+    LinearLayout llNearMe, llExplore;
+    private Polyline mPolyline;
+    private String dest_lat;
+    private String dest_lng;
+    private String dest_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,21 +118,10 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             db = new DatabaseHandler(this);
             nearby_outlets = this;
             shared_common_pref = new Shared_Common_Pref(this);
-            recyclerView = findViewById(R.id.outletrecyclerview);
-            rclRetail = findViewById(R.id.rclRetail);
 
-            Createoutlet = findViewById(R.id.Createoutlet);
-            availableoutlets = findViewById(R.id.availableoutlets);
-            latitude = findViewById(R.id.latitude);
-            longitude = findViewById(R.id.longitude);
+            init();
+            setClickListener();
 
-            vwRetails = findViewById(R.id.vwRetails);
-            tabExplore = findViewById(R.id.tabExplore);
-            btnNearme = findViewById(R.id.btnNearme);
-            btnExplore = findViewById(R.id.btnExplore);
-            mapView = (MapView) findViewById(R.id.mapview);
-            ivFilterKeysMenu = (findViewById(R.id.ivFilterKeysMenu));
-            ivRefresh = findViewById(R.id.ivRefreshMenu);
 
             mapView.onCreate(savedInstanceState);
 
@@ -139,15 +133,9 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             vwRetails.setLayoutParams(rel_btn);
             Log.d("Height:", String.valueOf(vwRetails.getHeight()));
 
-            ivFilterKeysMenu.setOnClickListener(this);
-            btnNearme.setOnClickListener(this);
 
-            btnExplore.setOnClickListener(this);
-
-            ivRefresh.setOnClickListener(this);
-
-            latitude.setText("Latitude : " + Shared_Common_Pref.Outletlat);
-            longitude.setText("Latitude : " + Shared_Common_Pref.Outletlong);
+            latitude.setText("Lat : " + Shared_Common_Pref.Outletlat);
+            longitude.setText("Lng : " + Shared_Common_Pref.Outletlong);
             common_class = new Common_Class(this);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 
@@ -171,7 +159,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                     }
                 }
             }
-            availableoutlets.setText("Available Outlets:" + "\t" + ShowRetailer_Modal_List.size());
+            availableoutlets.setText("Available Outlets :" + "\t" + ShowRetailer_Modal_List.size());
             if (ShowRetailer_Modal_List != null && ShowRetailer_Modal_List.size() > 0) {
                 recyclerView.setAdapter(new Outlet_Info_Adapter(ShowRetailer_Modal_List, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {
                     @Override
@@ -200,19 +188,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             }
 
 
-//        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-//            @Override
-//            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-//                // Triggered only when new data needs to be appended to the list
-//                // Add whatever code is needed to append new items to the bottom of the list
-//                //loadNextDataFromApi(page);
-//               // getExploreDr();
-//            }
-//        };
-//        // Adds the scroll listener to RecyclerView
-//        recyclerView.addOnScrollListener(scrollListener);
-
-
             rclRetail.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -220,15 +195,48 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
 
                     if (!recyclerView.canScrollVertically(1)) {
-                        // Toast.makeText(Nearby_Outlets.this, "Last", Toast.LENGTH_LONG).show();
+                        common_class.ProgressdialogShow(1, "");
                         getExploreDr(true);
-
                     }
                 }
             });
         } catch (Exception e) {
+            Log.e(TAG, " onCreate: " + e.getMessage());
 
         }
+    }
+
+    private void setClickListener() {
+        ivFilterKeysMenu.setOnClickListener(this);
+        btnNearme.setOnClickListener(this);
+
+        btnExplore.setOnClickListener(this);
+
+        llNearMe.setOnClickListener(this);
+        llExplore.setOnClickListener(this);
+    }
+
+    void init() {
+        recyclerView = findViewById(R.id.outletrecyclerview);
+        rclRetail = findViewById(R.id.rclRetail);
+
+        Createoutlet = findViewById(R.id.Createoutlet);
+        availableoutlets = findViewById(R.id.availableoutlets);
+        latitude = findViewById(R.id.latitude);
+        longitude = findViewById(R.id.longitude);
+
+        vwRetails = findViewById(R.id.vwRetails);
+        tabExplore = findViewById(R.id.tabExplore);
+        btnNearme = findViewById(R.id.btnNearme);
+        btnExplore = findViewById(R.id.btnExplore);
+        mapView = (MapView) findViewById(R.id.mapview);
+        ivFilterKeysMenu = (findViewById(R.id.ivFilterKeysMenu));
+
+        llNearMe = (LinearLayout) findViewById(R.id.llNearMe);
+        llExplore = (LinearLayout) findViewById(R.id.llExplore);
+        ivExplore = (ImageView) findViewById(R.id.ivExplore);
+        ivNearMe = (ImageView) findViewById(R.id.ivNearMe);
+
     }
 
     public ArrayList<Common_Model> getArrayList(String key) {
@@ -252,40 +260,67 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 Shared_Common_Pref.Outlet_Info_Flag = "0";
                 common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                 break;
-            case R.id.btnNearme:
-                btnExplore.setBackgroundColor(Color.TRANSPARENT);
+            case R.id.llNearMe:
+                llExplore.setBackgroundColor(Color.TRANSPARENT);
                 btnExplore.setTextColor(Color.BLACK);
-                btnNearme.setBackgroundResource(R.color.colorPrimary);
+                ivExplore.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
+
+                llNearMe.setBackgroundResource(R.drawable.blue_bg);
                 btnNearme.setTextColor(Color.WHITE);
+                ivNearMe.setColorFilter(ContextCompat.getColor(this, R.color.white), android.graphics.PorterDuff.Mode.MULTIPLY);
                 tabExplore.setVisibility(View.GONE);
                 ivFilterKeysMenu.setVisibility(View.GONE);
-                ivRefresh.setVisibility(View.GONE);
                 break;
-            case R.id.btnExplore:
-                btnNearme.setBackgroundColor(Color.TRANSPARENT);
+            case R.id.llExplore:
+                llNearMe.setBackgroundColor(Color.TRANSPARENT);
                 btnNearme.setTextColor(Color.BLACK);
-                btnExplore.setBackgroundResource(R.color.colorPrimary);
+                ivNearMe.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
+
+                llExplore.setBackgroundResource(R.drawable.blue_bg);
                 btnExplore.setTextColor(Color.WHITE);
+                ivExplore.setColorFilter(ContextCompat.getColor(this, R.color.white), android.graphics.PorterDuff.Mode.MULTIPLY);
+
                 tabExplore.setVisibility(View.VISIBLE);
                 ivFilterKeysMenu.setVisibility(View.VISIBLE);
-                //  ivRefresh.setVisibility(View.VISIBLE);
+
+
+                break;
+
+
+            case R.id.btnNearme:
+                llExplore.setBackgroundColor(Color.TRANSPARENT);
+                btnExplore.setTextColor(Color.BLACK);
+                ivExplore.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
+
+                llNearMe.setBackgroundResource(R.drawable.blue_bg);
+                btnNearme.setTextColor(Color.WHITE);
+                ivNearMe.setColorFilter(ContextCompat.getColor(this, R.color.white), android.graphics.PorterDuff.Mode.MULTIPLY);
+                tabExplore.setVisibility(View.GONE);
+                ivFilterKeysMenu.setVisibility(View.GONE);
+                break;
+            case R.id.btnExplore:
+                llNearMe.setBackgroundColor(Color.TRANSPARENT);
+                btnNearme.setTextColor(Color.BLACK);
+                ivNearMe.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
+
+                llExplore.setBackgroundResource(R.drawable.blue_bg);
+                btnExplore.setTextColor(Color.WHITE);
+                ivExplore.setColorFilter(ContextCompat.getColor(this, R.color.white), android.graphics.PorterDuff.Mode.MULTIPLY);
+
+                tabExplore.setVisibility(View.VISIBLE);
+                ivFilterKeysMenu.setVisibility(View.VISIBLE);
+
 
                 break;
 
             case R.id.ivFilterKeysMenu:
-//                findViewById(R.id.llFilterKeysParent).setVisibility(View.VISIBLE);
-//                btnExplore.setVisibility(View.GONE);
-//                btnNearme.setVisibility(View.GONE);
-
                 customDialog = new CustomListViewDialog(Nearby_Outlets.this, mapKeyList, 1000);
                 Window windoww = customDialog.getWindow();
                 windoww.setGravity(Gravity.CENTER);
                 windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 customDialog.show();
                 break;
-//            case R.id.ivRefreshMenu:
-//                getExploreDr();
-//                break;
+
 
             case R.id.imag_back:
                 finish();
@@ -316,7 +351,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     public void getExploreDr(boolean boolNextPage) {
         sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
         sb.append("location=" + laty + "," + lngy);
-        sb.append("&radius=1500");
+        sb.append("&radius=500");
         //  sb.append("&types=cafe|store|shop");
         //sb.append("&keyword=tea shop|juice");
 
@@ -433,22 +468,58 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     }
 
     public void getPlaceIdValues(int position) {
-
-        sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?");
-
         try {
-            sb.append("place_id=" + resData.getJSONObject(position).getString("place_id"));
-        } catch (JSONException e) {
-            e.printStackTrace();
+
+            JSONObject jsonObject = resData.getJSONObject(position).getJSONObject("geometry");
+
+            JSONObject jsonLatLongObj = jsonObject.getJSONObject("location");
+
+            dest_lat = jsonLatLongObj.getString("lat");
+            dest_lng = jsonLatLongObj.getString("lng");
+            dest_name = resData.getJSONObject(position).getString("name");
+
+
+            String dest = jsonLatLongObj.getString("lat") + "," + jsonLatLongObj.getString("lng");
+
+            drawRoute(dest);
+            sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?");
+
+            try {
+                sb.append("place_id=" + resData.getJSONObject(position).getString("place_id"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            //   sb.append("&fields=name,rating,formatted_phone_number,vicinity,formatted_address");
+            // sb.append("&sensor=false&mode=walking&alternatives=true");
+
+            sb.append("&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
+
+            shared_common_pref.save(Constants.PLACE_ID_URL, sb.toString());
+
+
+            JSONArray jsonA = resData.getJSONObject(position).getJSONArray("photos");
+
+
+            if (jsonA != null & jsonA.length() > 0) {
+                JSONObject jo = jsonA.getJSONObject(0);
+
+                StringBuilder bu = new StringBuilder("https://maps.googleapis.com/maps/api/place/photo?photoreference=");
+                bu.append(jo.getString("photo_reference"));
+                bu.append("&sensor=false");
+                bu.append("&maxheight=" + jo.getString("height"));
+                bu.append("&maxwidth=" + jo.getString("width"));
+                bu.append("&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
+
+                shared_common_pref.save(Constants.SHOP_PHOTO, bu.toString());
+            } else {
+                shared_common_pref.save(Constants.SHOP_PHOTO, "");
+
+            }
+        } catch (Exception e) {
+            shared_common_pref.save(Constants.SHOP_PHOTO, "");
+
         }
-
-        //   sb.append("&fields=name,rating,formatted_phone_number,vicinity,formatted_address");
-        sb.append("&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
-
-        if (common_class.isNetworkAvailable(this))
-            new findPlaceDetail().execute();
-
-
     }
 
     class findDrDetail extends AsyncTask<Void, Void, Void> {
@@ -470,34 +541,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         protected void onPostExecute(Void aVoid) {
             Log.v("get_dr_detttt", googlePlacesData);
             getDrDetail(googlePlacesData);
-        }
-    }
-
-
-    class findPlaceDetail extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            DownloadUrl downloadUrl = new DownloadUrl();
-            try {
-                googlePlacesData = downloadUrl.readUrl(sb.toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e(TAG + " doInBackground: ", e.getMessage());
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            Log.v("get_dr_detttt", googlePlacesData + " :api: " + sb.toString());
-            // getDrDetail(googlePlacesData);
-
-            Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
-            intent.putExtra(Constants.PLACE_ID, googlePlacesData);
-            startActivity(intent);
-
         }
     }
 
@@ -649,6 +692,8 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         explore = new ExploreMapAdapter(Nearby_Outlets.this, resData, String.valueOf(Shared_Common_Pref.Outletlat), String.valueOf(Shared_Common_Pref.Outletlong));
         rclRetail.setAdapter(explore);
         explore.notifyDataSetChanged();
+
+        common_class.ProgressdialogShow(0, "");
 //        } else {
 //            removeDuplicateItem(resData);
 //            explore = new ExploreMapAdapter(Nearby_Outlets.this, resData, String.valueOf(Shared_Common_Pref.Outletlat), String.valueOf(Shared_Common_Pref.Outletlong));
@@ -682,6 +727,59 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         super.onLowMemory();
         mapView.onLowMemory();
     }
+
+
+    //draw route
+    private void drawRoute(String mDestination) {
+
+
+        // Getting URL to the Google Directions API
+        String url = getDirectionsUrl(mDestination);
+
+        Intent intent = new Intent(getApplicationContext(), MapDirectionActivity.class);
+        intent.putExtra(Constants.MAP_ROUTE, url);
+        intent.putExtra(Constants.DEST_LAT, dest_lat);
+        intent.putExtra(Constants.DEST_LNG, dest_lng);
+        intent.putExtra(Constants.DEST_NAME, dest_name);
+        startActivity(intent);
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        drDetail();
+
+    }
+
+    private String getDirectionsUrl(String dest) {
+
+        // Origin of route
+        String str_origin = "origin=" + Shared_Common_Pref.Outletlat + "," + Shared_Common_Pref.Outletlong;
+
+
+        // Destination of route
+        String str_dest = "destination=" + dest;
+
+        // Key
+        String key = "key=" + getString(R.string.map_api_key);
+
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + key;
+
+        // Output format
+        String output = "json";
+
+        // Building the url to the web service
+//        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
+        // https://maps.googleapis.com/maps/api/directions/json?origin=13.06035965534021,80.26152804493904&destination=13.058304658284644,80.26527408510447&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU
+        String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
+
+        return url;
+    }
+
+
+    //draw route
 
 
 }

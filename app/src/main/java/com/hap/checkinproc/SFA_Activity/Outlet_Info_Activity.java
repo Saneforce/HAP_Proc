@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,6 +37,7 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     Shared_Common_Pref shared_common_pref;
     Shared_Common_Pref sharedCommonPref;
     DatabaseHandler db;
+    ImageView ivHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +51,9 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             headtext = findViewById(R.id.headtext);
             textViewname = findViewById(R.id.textViewname);
             homebutton = findViewById(R.id.homebutton);
+            ivHome = findViewById(R.id.toolbar_home);
             homebutton.setOnClickListener(this);
+            ivHome.setOnClickListener(this);
             common_class = new Common_Class(this);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             gson = new Gson();
@@ -92,6 +96,9 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.homebutton:
+                finish();
+                break;
+            case R.id.toolbar_home:
                 finish();
                 break;
         }

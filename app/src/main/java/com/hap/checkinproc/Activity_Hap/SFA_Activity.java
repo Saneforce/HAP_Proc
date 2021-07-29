@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.activity.OnBackPressedDispatcher;
@@ -42,12 +43,15 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     Shared_Common_Pref sharedCommonPref;
     DatabaseHandler db;
 
+    ImageView ivLogout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sfactivity);
         db = new DatabaseHandler(this);
         sharedCommonPref = new Shared_Common_Pref(SFA_Activity.this);
+        ivLogout = findViewById(R.id.toolbar_home);
         Lin_Route = findViewById(R.id.Lin_Route);
         SyncButon = findViewById(R.id.SyncButon);
         DistLocation = findViewById(R.id.DistLocation);
@@ -69,6 +73,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         DistLocation.setOnClickListener(this);
         linorders.setOnClickListener(this);
         Logout.setOnClickListener(this);
+        ivLogout.setOnClickListener(this);
         //presenter = new MasterSync_Implementations(this, new Offline_SyncView());
         gson = new Gson();
         // presenter.requestDataFromServer();
@@ -82,8 +87,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             }
         });*/
 
-        if (sharedCommonPref.getvalue(Constants.HAVE_VALUE, "").equals(""))
-            common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
+        ivLogout.setImageResource(R.drawable.ic_baseline_logout_24);
+//        if (sharedCommonPref.getvalue(Constants.HAVE_VALUE, "").equals(""))
+//            common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
 
 
     }
@@ -120,7 +126,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             case R.id.Lin_Lead:
                 common_class.CommonIntentwithNEwTask(Lead_Activity.class);
                 break;
-            case R.id.Logout:
+            case R.id.toolbar_home:
                 AlertDialogBox.showDialog(SFA_Activity.this, "HAP SFA", "Are You Sure Want to Logout?", "OK", "Cancel", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
@@ -141,17 +147,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    boolean checkValueStore() {
-        try {
-            JSONArray storeData = db.getMasterData(Constants.Outlet_Total_Orders);
-            if (storeData != null && storeData.length() > 0)
-                return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
 
    /* @Override
     public void showProgress() {

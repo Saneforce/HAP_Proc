@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -22,7 +21,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/view_bg_color"
+                android:background="@drawable/blue_bg"
                 android:orientation="horizontal">
 
                 <TextView
@@ -38,7 +37,6 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:visibility="invisible"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
@@ -47,10 +45,10 @@
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
                     android:textSize="17dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="invisible" />
 
                 <TextView
-                    android:visibility="invisible"
                     android:id="@+id/ok"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -61,7 +59,8 @@
                     android:textAlignment="center"
                     android:textColor="@android:color/white"
                     android:textSize="17dp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="invisible" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -69,7 +68,6 @@
             android:id="@+id/more_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/black"
             android:orientation="horizontal"
             android:weightSum="2">
 
@@ -77,18 +75,20 @@
                 android:id="@+id/outlet_name"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="0.2"
                 android:gravity="center"
-                android:text=""
-                android:textColor="@color/white"
-                android:textSize="17dp" />
+                android:text="Retailor"
+                android:textColor="@color/black"
+                android:textSize="17dp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/lin_gridcategory"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_margin="@dimen/C10dp"
             android:layout_weight="0.8"
             android:orientation="vertical"
             android:visibility="visible"
@@ -97,19 +97,13 @@
             <GridView
                 android:id="@+id/category"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_weight="1"
+                android:background="@drawable/button_whitebg"
                 android:gravity="center"
                 android:numColumns="3"
                 android:padding="@dimen/C5dp"
                 android:stretchMode="columnWidth" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/ablack"
-                android:outlineAmbientShadowColor="@color/ablack"></View>
 
 
         </LinearLayout>
@@ -121,6 +115,7 @@
             android:orientation="vertical"
             android:visibility="gone"
             android:weightSum="3">
+
 
             <TextView
                 android:id="@+id/Category_Nametext"
@@ -147,52 +142,61 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/C10dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:visibility="gone"
                 android:weightSum="3">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_weight="0.2"
-                    android:background="@color/black"
-                    android:orientation="horizontal"
-                    android:weightSum="3">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:gravity="start"
-                        android:text="TOTAL"
-                        android:textColor="@color/white"
-                        android:textSize="17dp" />
 
-                    <TextView
-                        android:id="@+id/totalqty"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="45"
-                        android:textColor="@color/white"
-                        android:textSize="17dp" />
 
-                    <TextView
-                        android:id="@+id/totalvalue"
+                    <LinearLayout
+                        android:background="@drawable/button_greenbg"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="6789"
-                        android:textColor="@color/white"
-                        android:textSize="17dp" />
-                </LinearLayout>
+                        android:layout_height="@dimen/C40dp"
+                        android:layout_weight="0.2"
+                        android:layout_margin="@dimen/C10dp"
+                        android:orientation="horizontal"
+                        android:weightSum="3">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_gravity="center"
+                            android:text="TOTAL"
+                            android:gravity="center"
+                            android:textColor="@color/white"
+                            android:textSize="17dp" />
+
+                        <TextView
+                            android:id="@+id/totalqty"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:text="45"
+                            android:textColor="@color/white"
+                            android:textSize="17dp" />
+
+                        <TextView
+                            android:id="@+id/totalvalue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:text="6789"
+                            android:textColor="@color/white"
+                            android:textSize="17dp" />
+
+
+                    </LinearLayout>
+
+
+
 
                 <LinearLayout
                     android:id="@+id/linnercashdiscount"
@@ -278,29 +282,18 @@
 
                 <TextView
                     android:id="@+id/orderbutton"
-                    android:layout_width="match_parent"
-                    android:layout_height="55dp"
-                    android:background="@color/view_bg_color"
-                    android:gravity="center"
+                    style="@style/ButtonStyle"
                     android:text="ORDER"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="17dp"
                     android:visibility="gone" />
 
             </LinearLayout>
+
 
         </LinearLayout>
 
         <TextView
             android:id="@+id/takeorder"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="@dimen/C10dp"
-            android:background="@color/view_bg_color"
-            android:gravity="center"
-            android:text="Next"
-            android:textColor="@color/white"
-            android:textSize="17dp" />
+            style="@style/ButtonStyle"
+            android:text="Next" />
     </LinearLayout>
 </LinearLayout>

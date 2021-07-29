@@ -12,7 +12,7 @@
         android:id="@+id/llHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/blue_bg"
         android:orientation="horizontal">
 
 
@@ -21,9 +21,11 @@
             style="@style/TextStyle"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:paddingLeft="@dimen/C10dp"
             android:text="Select Item"
             android:textColor="@color/white"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            />
 
         <ImageView
             android:id="@+id/ivAddKey"

@@ -69,6 +69,8 @@ public class Dashboard_Order_Reports extends AppCompatActivity implements Main_M
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_dashboard__order__reports);
             db = new DatabaseHandler(this);
+            common_class = new Common_Class(this);
+            common_class.getDataFromApi(Constants.Outlet_Total_AlldaysOrders, this, false);
             recyclerView = findViewById(R.id.leaverecyclerview);
             sharedCommonPref = new Shared_Common_Pref(Dashboard_Order_Reports.this);
             presenter = new MasterSync_Implementations(this, new Master_Sync_View());
@@ -93,7 +95,6 @@ public class Dashboard_Order_Reports extends AppCompatActivity implements Main_M
 
             distributor_text.setOnClickListener(this);
             route_text.setOnClickListener(this);
-            common_class = new Common_Class(this);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             gson = new Gson();
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {

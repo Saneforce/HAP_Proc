@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
+import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -71,6 +73,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     public static final String UserDetail = "MyPrefs";
     DatabaseHandler db;
 
+    ImageView ivToolbarHome;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +82,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         db = new DatabaseHandler(this);
         getDbstoreData(Constants.Distributor_List);
         getDbstoreData(Constants.Rout_List);
+
+        common_class = new Common_Class(this);
+        common_class.getDataFromApi(Constants.Outlet_Total_Orders, this, false);
 
 
     }
@@ -102,6 +109,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             ReachedOutlet = findViewById(R.id.ReachedOutlet);
             pendingview = findViewById(R.id.pendingview);
             btnCmbRoute = findViewById(R.id.btnCmbRoute);
+            ivToolbarHome = findViewById(R.id.toolbar_home);
             Alltextview.setVisibility(View.VISIBLE);
             completeview.setVisibility(View.INVISIBLE);
             pendingview.setVisibility(View.INVISIBLE);
@@ -111,7 +119,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             ReachedOutlet.setOnClickListener(this);
             distributor_text.setOnClickListener(this);
             route_text.setOnClickListener(this);
-            common_class = new Common_Class(this);
+            ivToolbarHome.setOnClickListener(this);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             gson = new Gson();
 
@@ -265,6 +273,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 windowww.setGravity(Gravity.CENTER);
                 windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 customDialog.show();
+                break;
+            case R.id.toolbar_home:
+                common_class.CommonIntentwithoutFinish(SFA_Activity.class);
                 break;
         }
     }

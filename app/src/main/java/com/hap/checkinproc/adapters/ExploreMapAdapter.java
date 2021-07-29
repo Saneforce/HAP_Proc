@@ -2,7 +2,8 @@ package com.hap.checkinproc.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Nearby_Outlets;
@@ -31,6 +31,7 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
     Context context;
     String laty, lngy;
     JSONObject json;
+    StringBuilder bu;
 
     public ExploreMapAdapter(Activity context, JSONArray array, String laty, String lngy) {
 
@@ -58,7 +59,19 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
             json = array.getJSONObject(position);
             holder.txt_dr.setText(json.getString("name"));
             holder.txt_add.setText(json.getString("vicinity"));
+
+            if (json.getString("name").equals(Nearby_Outlets.shared_common_pref.getvalue(Constants.DEST_NAME))) {
+                holder.btnAddToList.setText("Marked");
+                holder.btnAddToList.setBackgroundResource(R.drawable.button_greenbg);
+                Log.v("ExploreAdapter: ", position + ":Marked");
+            } else {
+                Log.v("ExploreAdapter: ", position + ":Direction");
+
+            }
+
             JSONArray jsonA = json.getJSONArray("photos");
+
+
             if (jsonA.length() > 0) {
                 JSONObject jo = jsonA.getJSONObject(0);
                 JSONArray ja = jo.getJSONArray("html_attributions");
@@ -78,7 +91,14 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
                         .override(200, 200) // resizing
                         .centerCrop()
                         .into(holder.shopPhoto);
+
+
             }
+
+            // if ((Nearby_Outlets.shared_common_pref.getIntValue(Constants.DirectionListPos) != -1) && Nearby_Outlets.shared_common_pref.getIntValue(Constants.DirectionListPos) == position) {
+
+            // notifyDataSetChanged();
+            // }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -95,6 +115,8 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
             public void onClick(View v) {
 
                 Nearby_Outlets.nearby_outlets.getPlaceIdValues(position);
+
+
 
 //                Intent intent = new Intent(context, AddNewRetailer.class);
 //                try {

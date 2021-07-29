@@ -50,6 +50,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             printrecyclerview.setLayoutManager(layoutManager);
             sharedCommonPref = new Shared_Common_Pref(Print_Invoice_Activity.this);
             common_class = new Common_Class(this);
+
+            common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
+
             netamount = findViewById(R.id.netamount);
             back = findViewById(R.id.back);
             cashdiscount = findViewById(R.id.cashdiscount);

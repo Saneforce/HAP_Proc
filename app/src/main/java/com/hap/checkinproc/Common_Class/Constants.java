@@ -22,5 +22,11 @@ public class Constants {
     public static final String Outlet_Total_AlldaysOrders = "Outlet_Total_AlldaysOrders";
 
 
-    public static final String HAVE_VALUE = "haveValue";
+    public static final String MAP_ROUTE = "mapRoute";
+    public static final String DEST_LAT = "destLat";
+    public static final String DEST_LNG = "destLng";
+    public static final String DEST_NAME = "destName";
+    public static final String PLACE_ID_URL = "placeIdUrl";
+    public static final String SHOP_PHOTO = "shopPhoto";
+    public static String DirectionListPos = "directionListPos";
 }

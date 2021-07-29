@@ -70,10 +70,12 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
             setContentView(R.layout.activity_route__product__info);
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(this);
+            common_class = new Common_Class(this);
+            common_class.getDataFromApi(Constants.Competitor_List, this, false);
+
             gson = new Gson();
             Availlistt = new ArrayList<>();
             Universelistt = new ArrayList<>();
-            common_class = new Common_Class(this);
             Categorygrid = findViewById(R.id.category);
             takeorder = findViewById(R.id.takeorder);
             reason_category = findViewById(R.id.reason_category);

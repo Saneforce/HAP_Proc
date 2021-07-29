@@ -110,6 +110,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             back = findViewById(R.id.back);
             mDCRMode = sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
             //   GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "6");
+            common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
+            common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6");
             lin_orderrecyclerview = findViewById(R.id.lin_orderrecyclerview);
             totalorderbottom = findViewById(R.id.totalorderbottom);

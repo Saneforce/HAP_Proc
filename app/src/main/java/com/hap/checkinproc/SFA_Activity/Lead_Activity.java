@@ -56,14 +56,14 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_lead_);
             db = new DatabaseHandler(this);
-
+            common_class = new Common_Class(this);
+            common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
             sharedCommonPref = new Shared_Common_Pref(Lead_Activity.this);
             recyclerView = findViewById(R.id.outletrecyclerview);
             route_text = findViewById(R.id.route_text);
             reachedoutlets = findViewById(R.id.reachedoutlets);
             todayoutlets = findViewById(R.id.todayoutlets);
             TotalOutlets = findViewById(R.id.TotalOutlets);
-            common_class = new Common_Class(this);
             route_text.setOnClickListener(this);
             reachedoutlets.setOnClickListener(this);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -79,8 +79,8 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
             //String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List);
-            String OrdersTable= String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
-          // System.out.println("OUTLETLIST" + sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List));
+            String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+            // System.out.println("OUTLETLIST" + sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List));
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
             Retailer_Modal_ListFilter = gson.fromJson(OrdersTable, userType);
             //GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "2");

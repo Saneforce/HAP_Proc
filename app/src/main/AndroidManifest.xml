@@ -38,7 +38,9 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
-        <activity android:name=".Activity.FuleEntryActivity"></activity>
+        <activity android:name=".SFA_Activity.OrderHistoryActivity"></activity>
+        <activity android:name=".SFA_Activity.MapDirectionActivity" />
+        <activity android:name=".Activity.FuleEntryActivity" />
         <activity android:name=".Activity_Hap.DaExceptionStatus" />
         <activity android:name=".Activity_Hap.DaExceptionReject" />
         <activity android:name=".Activity_Hap.DAExcApproval" />
@@ -384,6 +386,7 @@
         <receiver
             android:name=".common.AlmReceiver"
             android:enabled="true" />
+        <receiver android:name=".SFA_Activity.GeofenceBroadcastReceiver" />
     </application>
 
 </manifest>

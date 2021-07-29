@@ -48,12 +48,18 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
             gson = new Gson();
             sharedCommonPref = new Shared_Common_Pref(Invoice_History.this);
             common_class = new Common_Class(this);
+
+
+            common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
+
             lin_order = findViewById(R.id.lin_order);
             outlet_name = findViewById(R.id.outlet_name);
             outlet_name.setText(Shared_Common_Pref.OutletName);
             lin_repeat_order = findViewById(R.id.lin_repeat_order);
             lin_invoice = findViewById(R.id.lin_invoice);
             lin_repeat_invoice = findViewById(R.id.lin_repeat_invoice);
+            lastinvoice = findViewById(R.id.lastinvoice);
+            lastinvoice.setOnClickListener(this);
             lin_order.setOnClickListener(this);
             invoicerecyclerview = (RecyclerView) findViewById(R.id.invoicerecyclerview);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -125,6 +131,10 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                 common_class.CommonIntentwithFinish(Order_Category_Select.class);
                 break;
             case R.id.lin_repeat_invoice:
+                break;
+            case R.id.lastinvoice:
+                common_class.CommonIntentwithoutFinish(OrderHistoryActivity.class);
+
                 break;
         }
     }

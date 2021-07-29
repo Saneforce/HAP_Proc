@@ -23,6 +23,7 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -185,9 +186,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
                     Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                     if (CheckIn == true) {
-                        Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
-                        Dashboard.putExtra("Mode", "CIN");
-                        startActivity(Dashboard);
+//                        Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+//                        Dashboard.putExtra("Mode", "CIN");
+//                        startActivity(Dashboard);
+                        common_class.CommonIntentwithoutFinish(SFA_Activity.class);
                     } else
                         startActivity(new Intent(getApplicationContext(), Dashboard.class));
                 }
@@ -229,8 +231,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
                     addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getMobileNumber());
                     retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getId());
-                    addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
-                    addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
+                    if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
+                        addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
+                    if (Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email() != null)
+                        addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
                     owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
                     edt_pin_codeedit.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getPin_code()));
                     edt_gst.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getGst()));
@@ -252,8 +256,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getMobileNumber());
                 retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getId());
                 routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
-                addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
-                addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
+                if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
+                    addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
+                if (Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email() != null)
+                    addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
                 owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
                 edt_pin_codeedit.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPin_code());
                 edt_gst.setText("" + Retailer_Modal_List.get(getOutletPosition()).getGst());
@@ -301,7 +307,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 addRetailerPhone.setText("" + jsonResult.optString("formatted_phone_number"));
                 addRetailerAddress.setText("" + jsonResult.optString("vicinity"));
                 addRetailerName.setText("" + jsonResult.getString("name"));
-                // addRetailerCity.setText("Chennai");
 
                 Log.e(TAG, "Address:" + jsonObject.optString("formatted_address"));
 
@@ -320,6 +325,20 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         if (typesArray.get(typesIndex).equals("locality"))
                             addRetailerCity.setText("" + jsonAddressObj.optString("long_name"));
                     }
+                }
+
+                ImageView ivShopPhoto = findViewById(R.id.ivShopPhoto);
+
+                if (shared_common_pref.getvalue(Constants.SHOP_PHOTO, "").equals("")) {
+                    ivShopPhoto.setImageResource(R.drawable.profile_img);
+                } else {
+                    Glide.with(this)
+                            .load(shared_common_pref.getvalue(Constants.SHOP_PHOTO, "")) // image url
+                            .placeholder(R.drawable.profile_img) // any placeholder to load at start
+                            .error(R.drawable.profile_img)  // any image in case of error
+                            .override(200, 200) // resizing
+                            .centerCrop()
+                            .into(ivShopPhoto);
                 }
 
 
@@ -387,39 +406,43 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     /*Route Class*/
     public void getRetailerClass() {
-        String routeMap = "{\"tableName\":\"Mas_Doc_Class\",\"coloumns\":\"[\\\"Doc_ClsCode as id\\\", \\\"Doc_ClsSName as name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", routeMap);
-        call.enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                JsonArray jsonArray = response.body();
-                Log.e("RESPONSE_VALUE", String.valueOf(jsonArray));
-                for (int a = 0; a < jsonArray.size(); a++) {
-                    JsonObject jsonObject = (JsonObject) jsonArray.get(a);
-                    String className = String.valueOf(jsonObject.get("name"));
-                    String id = String.valueOf(jsonObject.get("id"));
-                    String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
-                    Log.e("RETAILER_CLASS_NAME", retailerClass);
-                    if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
-                        if (id.equals(String.valueOf(Retailer_Modal_List.get(getOutletPosition()).getDocCatCode()))) {
-                            txtRetailerClass.setText(className.replace('"', ' '));
-                            classId = Integer.valueOf(String.valueOf(jsonObject.get("id")));
+        try {
+            String routeMap = "{\"tableName\":\"Mas_Doc_Class\",\"coloumns\":\"[\\\"Doc_ClsCode as id\\\", \\\"Doc_ClsSName as name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", routeMap);
+            call.enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    JsonArray jsonArray = response.body();
+                    Log.e("RESPONSE_VALUE", String.valueOf(jsonArray));
+                    for (int a = 0; a < jsonArray.size(); a++) {
+                        JsonObject jsonObject = (JsonObject) jsonArray.get(a);
+                        String className = String.valueOf(jsonObject.get("name"));
+                        String id = String.valueOf(jsonObject.get("id"));
+                        String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
+                        Log.e("RETAILER_CLASS_NAME", retailerClass);
+                        if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
+                            if (id.equals(String.valueOf(Retailer_Modal_List.get(getOutletPosition()).getDocCatCode()))) {
+                                txtRetailerClass.setText(className.replace('"', ' '));
+                                classId = Integer.valueOf(String.valueOf(jsonObject.get("id")));
+                            }
                         }
+                        mCommon_model_spinner = new Common_Model(id, retailerClass, "flag");
+                        Log.e("LeaveType_Request", retailerClass);
+                        modelRetailClass.add(mCommon_model_spinner);
                     }
-                    mCommon_model_spinner = new Common_Model(id, retailerClass, "flag");
-                    Log.e("LeaveType_Request", retailerClass);
-                    modelRetailClass.add(mCommon_model_spinner);
+
+
                 }
 
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
 
-            }
+                }
+            });
+        } catch (Exception e) {
 
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
-
-            }
-        });
+        }
     }
 
     /*Retailer Class Click*/
@@ -631,6 +654,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     @Override
     public void onBackPressed() {
 
+        finish();
     }
 
     public void onSuperBackPressed() {

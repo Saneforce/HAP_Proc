@@ -66,6 +66,7 @@
     </array>
     <string name="btnsummit">Submit For Approval</string>
 
+
     <!--Order Deatils-->
     <string name="Rep_orders">Reports</string>
     <string name="pri_orders">Orders</string>
@@ -90,5 +91,7 @@
     <string name="trv_exc_entry">Travel Mode Exception Entry</string>
     <string name="trv_exc_aprvl">Travel Mode Exception Approval</string>
     <string name="trv_exc_status">Travel Mode Exception Status</string>
+
+    <string name="map_api_key">AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU</string>
 
 </resources>

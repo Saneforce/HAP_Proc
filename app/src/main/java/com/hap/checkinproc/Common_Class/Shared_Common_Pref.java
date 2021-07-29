@@ -26,7 +26,7 @@ public class Shared_Common_Pref {
     public static Double Outletlat;
     public static Double Outletlong;
     public static String OutletAddress;
-    public static String Outler_AddFlag="";
+    public static String Outler_AddFlag = "";
     public static String OutletName = "OutletName";
     public static String OutletCode = "OutletCode";
 
@@ -74,8 +74,8 @@ public class Shared_Common_Pref {
     public static String Tp_Approvalflag = "Tp_Approvalflag";
     public static String Tp_Sf_name = "Tp_Sf_name";
     public static String Tp_Monthname = "Tp_Monthname";
-    public static String Tp_SFCode= "Tp_SFCode";
-    public static String DCRMode="DCRMode";
+    public static String Tp_SFCode = "Tp_SFCode";
+    public static String DCRMode = "DCRMode";
 
 
     public Shared_Common_Pref(Activity Ac) {
@@ -102,11 +102,18 @@ public class Shared_Common_Pref {
         editor.commit();
     }
 
-    public String getvalue(String key,String defValue) {
-        if(defValue==null) defValue = "";
+    public void save(String key, int value) {
+        editor.putInt(key, value);
+        editor.commit();
+    }
+
+
+    public String getvalue(String key, String defValue) {
+        if (defValue == null) defValue = "";
         String text = Common_pref.getString(key, defValue);
         return text;
     }
+
     public String getvalue(String key) {
         String text = Common_pref.getString(key, "");
         return text;
@@ -115,6 +122,11 @@ public class Shared_Common_Pref {
     public Boolean getBoolValue(String Key) {
         Boolean val = false;
         val = Common_pref.getBoolean(Key, false);
+        return val;
+    }
+
+    public int getIntValue(String Key) {
+        int val = Common_pref.getInt(Key, -1);
         return val;
     }
 
