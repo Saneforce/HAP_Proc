@@ -6,6 +6,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -120,6 +121,9 @@ public class Dashboard_Order_Reports extends AppCompatActivity implements Main_M
 
                 }
             }));
+
+            ImageView ivToolbarHome=findViewById(R.id.toolbar_home);
+            common_class.gotoHomeScreen(this,ivToolbarHome);
         } catch (Exception e) {
 
         }

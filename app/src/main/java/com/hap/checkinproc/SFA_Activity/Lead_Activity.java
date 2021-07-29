@@ -102,6 +102,9 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
                 new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();
                 recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
             }
+
+            ImageView ivToolbarHome=findViewById(R.id.toolbar_home);
+            common_class.gotoHomeScreen(this,ivToolbarHome);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }

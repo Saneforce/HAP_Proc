@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -233,6 +234,10 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     }
                 }
             });
+
+
+            ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
+            common_class.gotoHomeScreen(this, ivToolbarHome);
         } catch (Exception e) {
 
         }
@@ -366,113 +371,117 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     }
 
     private void SaveOrder() {
-        AlertDialogBox.showDialog(Order_Category_Select.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
-            @Override
-            public void PositiveMethod(DialogInterface dialog, int id) {
+        if (common_class.isNetworkAvailable(this)) {
 
-                JSONArray data = new JSONArray();
-                JSONObject ActivityData = new JSONObject();
+            AlertDialogBox.showDialog(Order_Category_Select.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
+                @Override
+                public void PositiveMethod(DialogInterface dialog, int id) {
 
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
-                Calendar calobj = Calendar.getInstance();
-                String dateTime = df.format(calobj.getTime());
+                    JSONArray data = new JSONArray();
+                    JSONObject ActivityData = new JSONObject();
 
-                String Cash_Discount = (cashdiscount.getText().toString().equals("") || cashdiscount.getText().toString() == null) ? "0" : cashdiscount.getText().toString();
-                try {
-                    JSONObject HeadItem = new JSONObject();
-                    HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
-                    HeadItem.put("Worktype_code", Worktype_code);
-                    HeadItem.put("Town_code", Route_Code);
-                    HeadItem.put("dcr_activity_date", dateTime);
-                    HeadItem.put("Daywise_Remarks", "");
-                    HeadItem.put("UKey", Ukey);
-                    HeadItem.put("orderValue", totalvalue.getText().toString());
-                    HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
-                    ActivityData.put("Activity_Report_Head", HeadItem);
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+                    Calendar calobj = Calendar.getInstance();
+                    String dateTime = df.format(calobj.getTime());
 
-                    JSONObject OutletItem = new JSONObject();
-                    OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
-                    OutletItem.put("modified_time", Common_Class.GetDate());
-                    OutletItem.put("stockist_code", Dirtributor_Cod);
-                    OutletItem.put("stockist_name", Distributor_Name);
-                    OutletItem.put("orderValue", totalvalue.getText().toString());
-                    OutletItem.put("CashDiscount", Cash_Discount);
-                    OutletItem.put("NetAmount", netamount.getText().toString());
-                    OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
-                    OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
-                    OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
-                    OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
-                    if (strLoc.length > 0) {
-                        OutletItem.put("Lat", strLoc[0]);
-                        OutletItem.put("Long", strLoc[1]);
-                    } else {
-                        OutletItem.put("Lat", "");
-                        OutletItem.put("Long", "");
+                    String Cash_Discount = (cashdiscount.getText().toString().equals("") || cashdiscount.getText().toString() == null) ? "0" : cashdiscount.getText().toString();
+                    try {
+                        JSONObject HeadItem = new JSONObject();
+                        HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
+                        HeadItem.put("Worktype_code", Worktype_code);
+                        HeadItem.put("Town_code", Route_Code);
+                        HeadItem.put("dcr_activity_date", dateTime);
+                        HeadItem.put("Daywise_Remarks", "");
+                        HeadItem.put("UKey", Ukey);
+                        HeadItem.put("orderValue", totalvalue.getText().toString());
+                        HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
+                        ActivityData.put("Activity_Report_Head", HeadItem);
+
+                        JSONObject OutletItem = new JSONObject();
+                        OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
+                        OutletItem.put("modified_time", Common_Class.GetDate());
+                        OutletItem.put("stockist_code", Dirtributor_Cod);
+                        OutletItem.put("stockist_name", Distributor_Name);
+                        OutletItem.put("orderValue", totalvalue.getText().toString());
+                        OutletItem.put("CashDiscount", Cash_Discount);
+                        OutletItem.put("NetAmount", netamount.getText().toString());
+                        OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
+                        OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
+                        OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
+                        OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
+                        if (strLoc.length > 0) {
+                            OutletItem.put("Lat", strLoc[0]);
+                            OutletItem.put("Long", strLoc[1]);
+                        } else {
+                            OutletItem.put("Lat", "");
+                            OutletItem.put("Long", "");
+                        }
+                        ActivityData.put("Activity_Doctor_Report", OutletItem);
+                        JSONArray Order_Details = new JSONArray();
+                        for (int z = 0; z < Getorder_Array_List.size(); z++) {
+                            JSONObject ProdItem = new JSONObject();
+                            ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
+                            ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
+                            ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
+                            //  ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
+                            ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getQty());
+                            ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() + Getorder_Array_List.get(z).getRegularQty());
+                            ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
+                            ProdItem.put("Rate", Getorder_Array_List.get(z).getRate());
+                            Order_Details.put(ProdItem);
+                        }
+                        ActivityData.put("Order_Details", Order_Details);
+                        data.put(ActivityData);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    ActivityData.put("Activity_Doctor_Report", OutletItem);
-                    JSONArray Order_Details = new JSONArray();
-                    for (int z = 0; z < Getorder_Array_List.size(); z++) {
-                        JSONObject ProdItem = new JSONObject();
-                        ProdItem.put("product_Name", Getorder_Array_List.get(z).getName());
-                        ProdItem.put("product_code", Getorder_Array_List.get(z).getId());
-                        ProdItem.put("Product_Qty", Getorder_Array_List.get(z).getQty());
-                        //  ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
-                        ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getQty());
-                        ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() + Getorder_Array_List.get(z).getRegularQty());
-                        ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
-                        ProdItem.put("Rate", Getorder_Array_List.get(z).getRate());
-                        Order_Details.put(ProdItem);
-                    }
-                    ActivityData.put("Order_Details", Order_Details);
-                    data.put(ActivityData);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                Call<JsonObject> responseBodyCall = apiInterface.saveCalls(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
-                responseBodyCall.enqueue(new Callback<JsonObject>() {
-                    @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                        if (response.isSuccessful()) {
-                            try {
-                                Log.e("JSON_VALUES", response.body().toString());
-                                JSONObject jsonObjects = new JSONObject(response.body().toString());
-                                String san = jsonObjects.getString("success");
-                                Log.e("Success_Message", san);
-                                if (san.equals("true")) {
-                                    if (Shared_Common_Pref.Invoicetoorder.equals("0")) {
-                                        Toast.makeText(Order_Category_Select.this, "Order Submitted Successfully", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        Toast.makeText(Order_Category_Select.this, "Invoice Submitted Successfully", Toast.LENGTH_SHORT).show();
-                                    }
-                                    Shared_Common_Pref.Sync_Flag = "2";
+                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                    Call<JsonObject> responseBodyCall = apiInterface.saveCalls(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                    responseBodyCall.enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            if (response.isSuccessful()) {
+                                try {
+                                    Log.e("JSON_VALUES", response.body().toString());
+                                    JSONObject jsonObjects = new JSONObject(response.body().toString());
+                                    String san = jsonObjects.getString("success");
+                                    Log.e("Success_Message", san);
+                                    if (san.equals("true")) {
+                                        if (Shared_Common_Pref.Invoicetoorder.equals("0")) {
+                                            Toast.makeText(Order_Category_Select.this, "Order Submitted Successfully", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(Order_Category_Select.this, "Invoice Submitted Successfully", Toast.LENGTH_SHORT).show();
+                                        }
+                                        Shared_Common_Pref.Sync_Flag = "2";
 //                                    startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
 //                                    finish();
 
-                                    startActivity(new Intent(getApplicationContext(), Invoice_History.class));
-                                    finish();
+                                        startActivity(new Intent(getApplicationContext(), Invoice_History.class));
+                                        finish();
+                                    }
+
+                                } catch (Exception e) {
+
                                 }
-
-                            } catch (Exception e) {
-
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-                        Log.e("SUBMIT_VALUE", "ERROR");
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                            Log.e("SUBMIT_VALUE", "ERROR");
+                        }
+                    });
 
-            }
+                }
 
-            @Override
-            public void NegativeMethod(DialogInterface dialog, int id) {
-                dialog.dismiss();
-            }
-        });
-
+                @Override
+                public void NegativeMethod(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+        } else {
+            Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void FilterProduct(String StringFlag, boolean flag) {

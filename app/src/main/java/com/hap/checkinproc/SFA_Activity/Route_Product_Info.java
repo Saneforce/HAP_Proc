@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -134,6 +135,9 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
                 Nextadd.setVisibility(View.GONE);
                 takeorder.setVisibility(View.VISIBLE);
             }
+
+            ImageView ivToolbarHome=findViewById(R.id.toolbar_home);
+            common_class.gotoHomeScreen(this,ivToolbarHome);
         } catch (Exception e) {
 
         }

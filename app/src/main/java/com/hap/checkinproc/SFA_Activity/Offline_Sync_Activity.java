@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -108,6 +109,10 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
             };
             t.start();
         }
+
+
+        ImageView ivToolbarHome=findViewById(R.id.toolbar_home);
+        common_class.gotoHomeScreen(this,ivToolbarHome);
     }
 
    /* @Override

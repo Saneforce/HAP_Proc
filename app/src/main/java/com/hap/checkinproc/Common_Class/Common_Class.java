@@ -7,6 +7,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -17,6 +18,7 @@ import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -25,6 +27,7 @@ import androidx.core.content.ContextCompat;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -50,6 +53,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
 import static com.hap.checkinproc.Common_Class.Constants.Category_List;
 import static com.hap.checkinproc.Common_Class.Constants.Competitor_List;
 import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
@@ -605,6 +609,29 @@ public class Common_Class {
         private boolean isInRange(int a, int b, int c) {
             return b > a ? c >= a && c <= b : c >= b && c <= a;
         }
+    }
+
+
+  public   void gotoHomeScreen(Context context, View ivToolbarHome) {
+
+
+        ivToolbarHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SharedPreferences CheckInDetails = context.getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                if (CheckIn == true) {
+//                        Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+//                        Dashboard.putExtra("Mode", "CIN");
+//                        startActivity(Dashboard);
+                    CommonIntentwithoutFinish(SFA_Activity.class);
+                } else
+                    context.startActivity(new Intent(context, Dashboard.class));
+
+            }
+        });
+
+
     }
 
 

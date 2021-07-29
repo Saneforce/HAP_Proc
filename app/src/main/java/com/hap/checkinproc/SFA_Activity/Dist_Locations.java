@@ -67,6 +67,7 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
     DatabaseHandler db;
+    Common_Class common_class;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,11 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
                     finish();
                 }
             });
+
+            common_class = new Common_Class(this);
+
+            ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
+            common_class.gotoHomeScreen(this, ivToolbarHome);
         } catch (Exception e) {
 
         }

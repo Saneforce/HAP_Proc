@@ -1,16 +1,18 @@
 package com.hap.checkinproc.SFA_Activity;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
@@ -20,16 +22,16 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.Dashboard_View_Model;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.inject.Inject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 public class Reports_Outler_Name extends AppCompatActivity {
     String Scode;
@@ -44,12 +46,13 @@ public class Reports_Outler_Name extends AppCompatActivity {
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
 
     Shared_Common_Pref shared_common_pref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reports__outler__name);
         shared_common_pref = new Shared_Common_Pref(this);
-       // ((MyApplication) getApplication()).getNetComponent().inject(this);
+        // ((MyApplication) getApplication()).getNetComponent().inject(this);
         recyclerView = findViewById(R.id.outletrecyclerview);
         headtext = findViewById(R.id.headtext);
         textViewname = findViewById(R.id.textViewname);
@@ -65,6 +68,9 @@ public class Reports_Outler_Name extends AppCompatActivity {
 
             }
         });
+
+        ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
+        common_class.gotoHomeScreen(this, ivToolbarHome);
     }
 
     private void GetAllDetails() {

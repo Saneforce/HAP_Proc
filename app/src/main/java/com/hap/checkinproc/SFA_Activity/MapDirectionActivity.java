@@ -39,7 +39,9 @@ import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONObject;
 
@@ -70,11 +72,6 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
     private double fromLatitude, fromLongitude;
     private double toLatitude, toLongitude;
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,19 +85,30 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
         imag_back.setOnClickListener(this);
         ReachedOutlet.setOnClickListener(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        fetchLocation();
 
-//        fromLatitude = Shared_Common_Pref.Outletlat;
-//        fromLongitude = Shared_Common_Pref.Outletlong;
-//        toLatitude = Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LAT));
-//        toLongitude = Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LNG));
-
-        DownloadTask downloadTask = new DownloadTask();
-        // Start downloading json data from Google Directions API
-        downloadTask.execute(getIntent().getStringExtra(Constants.MAP_ROUTE));
 
         // getDirection();
+        ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
+        common_class.gotoHomeScreen(this, ivToolbarHome);
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new LocationFinder(getApplication(), new LocationEvents() {
+            @Override
+            public void OnLocationRecived(Location location) {
+                // clocation=location;
+                currentLocation = location;
+                fetchLocation();
+                DownloadTask downloadTask = new DownloadTask();
+                // Start downloading json data from Google Directions API
+                downloadTask.execute(getIntent().getStringExtra(Constants.MAP_ROUTE));
+
+            }
+        });
 
     }
 
@@ -550,52 +558,56 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
         // Executes in UI thread, after the parsing process
         @Override
         protected void onPostExecute(List<List<HashMap<String, String>>> result) {
-            ArrayList<LatLng> points = null;
-            PolylineOptions lineOptions = null;
+            try {
+                ArrayList<LatLng> points = null;
+                PolylineOptions lineOptions = null;
 
-            // Traversing through all the routes
-            for (int i = 0; i < result.size(); i++) {
-                points = new ArrayList<LatLng>();
-                lineOptions = new PolylineOptions();
+                // Traversing through all the routes
+                for (int i = 0; i < result.size(); i++) {
+                    points = new ArrayList<LatLng>();
+                    lineOptions = new PolylineOptions();
 
-                // Fetching i-th route
-                List<HashMap<String, String>> path = result.get(i);
+                    // Fetching i-th route
+                    List<HashMap<String, String>> path = result.get(i);
 
-                // Fetching all the points in i-th route
-                for (int j = 0; j < path.size(); j++) {
-                    HashMap<String, String> point = path.get(j);
+                    // Fetching all the points in i-th route
+                    for (int j = 0; j < path.size(); j++) {
+                        HashMap<String, String> point = path.get(j);
 
-                    double lat = Double.parseDouble(point.get("lat"));
-                    double lng = Double.parseDouble(point.get("lng"));
-                    LatLng position = new LatLng(lat, lng);
+                        double lat = Double.parseDouble(point.get("lat"));
+                        double lng = Double.parseDouble(point.get("lng"));
+                        LatLng position = new LatLng(lat, lng);
 
-                    points.add(position);
+                        points.add(position);
 
-                    LatLng latLng = new LatLng(lat, lng);
+                        LatLng latLng = new LatLng(lat, lng);
+                    }
+
+                    // Adding all the points in the route to LineOptions
+                    lineOptions.addAll(points);
+                    lineOptions.width(8);
+                    lineOptions.color(Color.BLUE);
                 }
 
-                // Adding all the points in the route to LineOptions
-                lineOptions.addAll(points);
-                lineOptions.width(8);
-                lineOptions.color(Color.BLUE);
+                // Drawing polyline in the Google Map for the i-th route
+                if (lineOptions != null) {
+                    if (mPolyline != null) {
+                        mPolyline.remove();
+                    }
+                    mPolyline = mGoogleMap.addPolyline(lineOptions);
+
+
+                    LatLng latLng = new LatLng(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LAT)), Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LNG)));
+                    Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
+                            .title(getIntent().getStringExtra(Constants.DEST_NAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+
+
+                } else
+                    Toast.makeText(getApplicationContext(), "No route is found", Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
             }
-
-            // Drawing polyline in the Google Map for the i-th route
-            if (lineOptions != null) {
-                if (mPolyline != null) {
-                    mPolyline.remove();
-                }
-                mPolyline = mGoogleMap.addPolyline(lineOptions);
-
-
-                LatLng latLng = new LatLng(Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LAT)), Double.parseDouble(getIntent().getStringExtra(Constants.DEST_LNG)));
-                Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng)
-                        .title(getIntent().getStringExtra(Constants.DEST_NAME)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-
-
-            } else
-                Toast.makeText(getApplicationContext(), "No route is found", Toast.LENGTH_LONG).show();
         }
+
     }
 
 

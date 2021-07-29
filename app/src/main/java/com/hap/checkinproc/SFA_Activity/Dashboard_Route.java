@@ -74,6 +74,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     DatabaseHandler db;
 
     ImageView ivToolbarHome;
+    LinearLayout llDistributor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,6 +111,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             pendingview = findViewById(R.id.pendingview);
             btnCmbRoute = findViewById(R.id.btnCmbRoute);
             ivToolbarHome = findViewById(R.id.toolbar_home);
+            llDistributor = findViewById(R.id.llDistributor);
             Alltextview.setVisibility(View.VISIBLE);
             completeview.setVisibility(View.INVISIBLE);
             pendingview.setVisibility(View.INVISIBLE);
@@ -120,6 +122,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             distributor_text.setOnClickListener(this);
             route_text.setOnClickListener(this);
             ivToolbarHome.setOnClickListener(this);
+            btnCmbRoute.setOnClickListener(this);
+            llDistributor.setOnClickListener(this);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             gson = new Gson();
 

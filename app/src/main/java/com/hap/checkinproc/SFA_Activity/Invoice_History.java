@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -110,6 +111,10 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
             });
             invoicerecyclerview.setAdapter(mReportViewAdapter);
             lin_invoice.setOnClickListener(this);
+
+
+            ImageView ivToolbarHome=findViewById(R.id.toolbar_home);
+            common_class.gotoHomeScreen(this,ivToolbarHome);
         } catch (Exception e) {
 
         }

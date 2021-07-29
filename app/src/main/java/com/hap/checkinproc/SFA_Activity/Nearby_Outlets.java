@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Location;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -17,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -36,17 +39,21 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
+import com.hap.checkinproc.Activity_Hap.ImageCapture;
+import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.Dashboard_View_Model;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.adapters.ExploreMapAdapter;
 import com.hap.checkinproc.common.DatabaseHandler;
+import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -195,11 +202,21 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
 
                     if (!recyclerView.canScrollVertically(1)) {
-                        common_class.ProgressdialogShow(1, "");
-                        getExploreDr(true);
+                        if (common_class.isNetworkAvailable(Nearby_Outlets.this)) {
+                            common_class.ProgressdialogShow(1, "");
+                            getExploreDr(true);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Check your Internet Connection", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
+
+            ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
+            common_class.gotoHomeScreen(this, ivToolbarHome);
+
+
+
         } catch (Exception e) {
             Log.e(TAG, " onCreate: " + e.getMessage());
 
@@ -707,6 +724,14 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     public void onResume() {
         mapView.onResume();
         super.onResume();
+
+        new LocationFinder(getApplication(), new LocationEvents() {
+            @Override
+            public void OnLocationRecived(Location location) {
+                // clocation=location;
+            }
+        });
+
     }
 
 
