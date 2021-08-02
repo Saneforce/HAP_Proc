@@ -11,7 +11,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -133,7 +132,7 @@ public class New_Outlet_Map_creations extends FragmentActivity implements OnMapR
                         Shared_Common_Pref.Outletlat = currentLocation.getLatitude();
                         Shared_Common_Pref.Outletlong = currentLocation.getLongitude();
                         Shared_Common_Pref.OutletAddress = getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude());
-                        Toast.makeText(getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
                         SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
                         assert supportMapFragment != null;
                         supportMapFragment.getMapAsync(New_Outlet_Map_creations.this);

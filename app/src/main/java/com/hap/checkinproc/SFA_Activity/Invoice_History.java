@@ -113,8 +113,8 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
             lin_invoice.setOnClickListener(this);
 
 
-            ImageView ivToolbarHome=findViewById(R.id.toolbar_home);
-            common_class.gotoHomeScreen(this,ivToolbarHome);
+            ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
+            common_class.gotoHomeScreen(this, ivToolbarHome);
         } catch (Exception e) {
 
         }
@@ -139,6 +139,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.lastinvoice:
                 common_class.CommonIntentwithoutFinish(OrderHistoryActivity.class);
+                // common_class.CommonIntentwithoutFinish(More_Info_Activity.class);
 
                 break;
         }

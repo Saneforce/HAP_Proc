@@ -29,4 +29,6 @@ public class Constants {
     public static final String PLACE_ID_URL = "placeIdUrl";
     public static final String SHOP_PHOTO = "shopPhoto";
     public static String DirectionListPos = "directionListPos";
+    public static String Route_name = "routeName";
+    public static String Route_Id = "routeId";
 }
