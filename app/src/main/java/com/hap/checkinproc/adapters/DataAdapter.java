@@ -1,11 +1,11 @@
 package com.hap.checkinproc.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.LinearLayout;
@@ -14,10 +14,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Common_Class.Constants;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.Nearby_Outlets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +31,24 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
     private List<Common_Model> contactListFiltered;
     int typeName;
 
+    private static CheckBox lastChecked = null;
+    private static int lastCheckedPos = 0;
+
+    Context mContext;
+
+    Shared_Common_Pref shared_common_pref;
+
+
     public DataAdapter(List<Common_Model> myDataset, Context context, int type) {
         contactList = myDataset;
         typeName = type;
         contactListFiltered = myDataset;
-        updateUi = ((Master_Interface) context);
+        if (type != 1000)
+            updateUi = ((Master_Interface) context);
+
+        else
+            mContext = context;
+
     }
 
     @NonNull
@@ -45,13 +60,13 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
     @Override
     public void onBindViewHolder(FruitViewHolder fruitViewHolder, final int position) {
-        if(position>=contactListFiltered.size()) return;
+        if (position >= contactListFiltered.size()) return;
         final Common_Model contact = contactListFiltered.get(position);
         fruitViewHolder.mTextName.setText(contact.getName());
         String getAddress = contact.getAddress();
         String getPhone = contact.getPhone();
 
-        if (!isNullOrEmpty(getAddress)) {
+        if (!isNullOrEmpty(getAddress) && typeName != 1000) {
             fruitViewHolder.mTextAddress.setText(contact.getAddress());
             fruitViewHolder.mTextAddress.setVisibility(View.VISIBLE);
         } else {
@@ -63,6 +78,50 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
         } else {
             fruitViewHolder.mTextPhone.setVisibility(View.GONE);
         }
+
+        if (typeName == 1000) {
+            shared_common_pref = new Shared_Common_Pref(mContext);
+
+            fruitViewHolder.checkboxLin.setVisibility(View.VISIBLE);
+            fruitViewHolder.cbTextName.setText(contact.getName());
+            fruitViewHolder.mTextName.setVisibility(View.GONE);
+
+            if (shared_common_pref.getvalue(Constants.MAP_KEY).equals(contact.getName())) {
+                fruitViewHolder.checkBox_select.setChecked(true);
+                lastCheckedPos = position;
+                lastChecked = fruitViewHolder.checkBox_select;
+            }
+        }
+
+        fruitViewHolder.checkBox_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                CheckBox cb = (CheckBox) buttonView;
+                int clickedPos = position;
+
+
+                if (cb.isChecked()) {
+                    if (lastChecked != null) {
+                        lastChecked.setChecked(false);
+                        contactList.get(lastCheckedPos).setSelected(false);
+                    }
+
+                    lastChecked = cb;
+                    lastCheckedPos = clickedPos;
+
+                    contactList.get(clickedPos).setSelected(cb.isSelected());
+
+                    shared_common_pref.save(Constants.MAP_KEY, contactList.get(position).getName());
+                    Nearby_Outlets.nearby_outlets.getExploreDr(false);
+                } else {
+                    lastChecked = null;
+                    shared_common_pref.save(Constants.MAP_KEY, "");
+                    Nearby_Outlets.nearby_outlets.getExploreDr(false);
+                }
+
+
+            }
+        });
     }
 
     @Override
@@ -76,13 +135,13 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
                 String charString = charSequence.toString();
-                    List<Common_Model> filteredList = new ArrayList<>();
-                    for (Common_Model row : contactList) {
-                        if (row.getName().toLowerCase().trim().replaceAll("\\s", "").contains(charString.toLowerCase().trim().replaceAll("\\s", ""))) {
-                            filteredList.add(row);
-                        }
+                List<Common_Model> filteredList = new ArrayList<>();
+                for (Common_Model row : contactList) {
+                    if (row.getName().toLowerCase().trim().replaceAll("\\s", "").contains(charString.toLowerCase().trim().replaceAll("\\s", ""))) {
+                        filteredList.add(row);
                     }
-                    contactListFiltered = filteredList;
+                }
+                contactListFiltered = filteredList;
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = contactListFiltered;
                 return filterResults;
@@ -100,6 +159,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
         public TextView mTextName, mTextPhone, mTextAddress, Checkboxname;
         LinearLayout checkboxLin, linear_row;
         CheckBox checkBox_select;
+        TextView cbTextName;
 
         public FruitViewHolder(View v) {
             super(v);
@@ -109,13 +169,19 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
             mTextPhone = v.findViewById(R.id.txt_phone);
             mTextAddress = v.findViewById(R.id.txt_address);
             checkboxLin = v.findViewById(R.id.checkboxLin);
+            cbTextName = v.findViewById(R.id.Checkboxname);
             linear_row = v.findViewById(R.id.linear_row);
             v.setOnClickListener(this);
+
+
         }
 
         @Override
         public void onClick(View v) {
-            updateUi.OnclickMasterType(contactListFiltered, this.getAdapterPosition(), typeName);
+            if (typeName != 1000)
+                updateUi.OnclickMasterType(contactListFiltered, this.getAdapterPosition(), typeName);
+
+
         }
     }
 

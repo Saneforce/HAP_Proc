@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/orderbackroundcolor"
     android:orientation="vertical"
     android:padding="@dimen/C10dp">
 
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/orderbackroundcolor"
-        android:orientation="vertical"
-        android:weightSum="4">
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_whitebg"
+        android:orientation="vertical">
+
 
         <TextView
+
             android:id="@+id/productname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,144 +23,150 @@
             android:textColor="@color/Exit"
             android:textSize="18dp" />
 
+
+        <LinearLayout
+            android:id="@+id/lnlblRwEntry"
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+
+            android:orientation="horizontal"
+
+            >
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Regular"
+                android:textColor="@color/black"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/lblAddQty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Additional"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Amount"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lnRwEntry"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/RegularQty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/C3dp"
+                android:layout_weight="1"
+                android:background="@drawable/order_qty_backround"
+                android:gravity="center"
+                android:hint=""
+                android:inputType="number"
+                android:maxLength="4"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:visibility="visible" />
+
+            <EditText
+                android:id="@+id/Qty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/C3dp"
+                android:layout_weight="1"
+                android:background="@drawable/order_qty_backround"
+                android:gravity="center"
+                android:hint="0"
+                android:inputType="number"
+                android:maxLength="4"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/Amount"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="@dimen/C3dp"
+                android:layout_weight="1"
+                android:background="@drawable/order_amount_back"
+                android:gravity="center"
+                android:text="0.00"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/Rate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/C3dp"
+                android:layout_weight="1"
+                android:text="Rate:"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/tvPreOrderVal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/C3dp"
+                android:layout_weight="0.5"
+                android:text="Previous Order value:"
+                android:textColor="@color/black" />
+
+
+            <TextView
+                android:id="@+id/Disc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Disc:"
+                android:textColor="@color/black"
+                android:visibility="gone" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/C3dp"
+                android:gravity="start"
+                android:text="Free:"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/Free"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/C3dp"
+                android:gravity="start"
+                android:text=" 0"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+
     </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lnlblRwEntry"
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:background="@color/orderbackroundcolor"
-
-        android:orientation="horizontal"
-
-        android:weightSum="3">
-
-        <TextView
-            android:id="@+id/status"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Regular"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/lblAddQty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Additional"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Amount"
-            android:textColor="@color/black" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/lnRwEntry"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@color/orderbackroundcolor"
-        android:orientation="horizontal"
-        android:weightSum="3">
-        <TextView
-            android:id="@+id/RegularQty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/C3dp"
-            android:layout_weight="1"
-            android:background="@drawable/order_qty_backround"
-            android:gravity="center"
-            android:hint="0"
-            android:inputType="number"
-            android:textSize="14sp"
-            android:maxLength="4"
-            android:textColor="@color/black" />
-        <EditText
-            android:id="@+id/Qty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/C3dp"
-            android:layout_weight="1"
-            android:background="@drawable/order_qty_backround"
-            android:gravity="center"
-            android:hint="0"
-            android:inputType="number"
-            android:textSize="14sp"
-            android:maxLength="4"
-            android:textColor="@color/black" />
-        <TextView
-            android:id="@+id/Amount"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="@dimen/C3dp"
-            android:layout_weight="1"
-            android:background="@drawable/order_amount_back"
-            android:gravity="center"
-            android:text="0.00"
-            android:textColor="@color/black" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:weightSum="2">
-
-        <TextView
-            android:id="@+id/Rate"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/C3dp"
-            android:layout_weight="1"
-            android:text="Rate:"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/Disc"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="Disc:"
-            android:textColor="@color/black"
-            android:visibility="gone" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <TextView
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/C3dp"
-            android:gravity="start"
-            android:text="Free:"
-            android:textColor="@color/black" />
-
-        <TextView
-            android:id="@+id/Free"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/C3dp"
-            android:gravity="start"
-            android:text=" 0"
-            android:textColor="@color/black" />
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.45dp"
-        android:layout_marginTop="@dimen/C5dp"
-        android:background="@color/statuscolor"
-        android:outlineAmbientShadowColor="@color/statuscolor"></View>
 </LinearLayout>

@@ -114,6 +114,11 @@ public class Common_Model {
         this.id = id;
     }
 
+    public Common_Model(String name) {
+        this.name = name;
+    }
+
+
     public String getPhone() {
         return phone;
     }

@@ -6,9 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,12 +40,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         //3rd argument to be passed is CursorFactory instance
     }
+
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + TABLE_Track + "("
                 + Loc_Date + " TEXT PRIMARY KEY,"
-                + Loc_Lat + " TEXT," + Loc_Lng + " TEXT," + Speed+ " TEXT," + Bearing+ " TEXT,"
+                + Loc_Lat + " TEXT," + Loc_Lng + " TEXT," + Speed + " TEXT," + Bearing + " TEXT,"
                 + Accuracy + " TEXT,"
                 + ET + " TEXT,"
                 + Alt + " TEXT,"
@@ -74,12 +73,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Create tables again
         onCreate(db);
     }
-    public void deleteMasterData(String Key){
+
+    public void deleteMasterData(String Key) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String selectQuery = "delete from " + TABLE_Masters+" WHERE "+ID+" = '"+Key+"' ";
+        String selectQuery = "delete from " + TABLE_Masters + " WHERE " + ID + " = '" + Key + "' ";
         db.execSQL(selectQuery);
     }
-    public void addMasterData(String Key,JsonArray uData){
+
+    public void addMasterData(String Key, JsonArray uData) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(ID, Key);
@@ -88,19 +89,44 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void addMasterData(String Key, String uData) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ID, Key);
+        values.put(Data, uData);
+        db.insert(TABLE_Masters, null, values);
+        db.close();
+    }
+
+
     public JSONArray getMasterData(String Key) throws JSONException {
         // Select All Query
-        String selectQuery = "SELECT  "+Data+" FROM " + TABLE_Masters+" WHERE "+ID+"='"+Key+"'";
+        String selectQuery = "SELECT  " + Data + " FROM " + TABLE_Masters + " WHERE " + ID + "='" + Key + "'";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
-        JSONArray uData=new JSONArray();
+        JSONArray uData = new JSONArray();
         if (cursor.moveToFirst()) {
-            uData=new JSONArray(cursor.getString(0));
+            uData = new JSONArray(cursor.getString(0));
         }
 
         // return contact list
         return uData;
+    }
+
+    public boolean checkKeyExist(String key) {
+        String selectQuery = "SELECT  " + Data + " FROM " + TABLE_Masters + " WHERE " + ID + "='" + key + "'";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        int index = cursor.getColumnIndex(key);
+        if (index == -1) {
+            // Column doesn't exist
+            return false;
+        }
+
+        return true;
     }
 
     void addTrackDetails(JSONObject Location) {
@@ -133,8 +159,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             e.printStackTrace();
         }
     }
-    public void updateTrackDetails(JSONObject Location,int flag) {
-        try{
+
+    public void updateTrackDetails(JSONObject Location, int flag) {
+        try {
             SQLiteDatabase db = this.getWritableDatabase();
 
             ContentValues values = new ContentValues();
@@ -142,11 +169,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
             // updating row
             db.update(TABLE_Track, values, Loc_Date + " = ?",
-                    new String[] { Location.getString("Time") });
+                    new String[]{Location.getString("Time")});
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
     // Deleting single TrackDetails
     public void deleteTrackDetails(JSONObject Location) {
         try {
@@ -154,30 +182,32 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.delete(TABLE_Track, Loc_Date + " = ?",
                     new String[]{Location.getString("Time")});
             db.close();
-        }catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
     // Deleting single TrackDetails
     public void deleteAllTrackDetails() {
         try {
-            String selectQuery = "DELETE FROM " + TABLE_Track+" WHERE "+Flag+"=0";
+            String selectQuery = "DELETE FROM " + TABLE_Track + " WHERE " + Flag + "=0";
             SQLiteDatabase db = this.getWritableDatabase();
             db.rawQuery(selectQuery, null);
             db.close();
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     public JSONArray getAllPendingTrackDetails() {
-         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_Track+" WHERE "+Flag+"=0";
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_Track + " WHERE " + Flag + "=0";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list
-        JSONArray jsonArray=new JSONArray();
+        JSONArray jsonArray = new JSONArray();
         if (cursor.moveToFirst()) {
             do {
                 JSONObject item = new JSONObject();

@@ -4,13 +4,10 @@ import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -26,23 +23,23 @@ import android.widget.Toast;
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.ReatilRouteModel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
-import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
+import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -91,120 +88,182 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     Common_Class common_class;
     List<Retailer_Modal_List> Retailer_Modal_List;
     ImageView copypaste;
+    String TAG = "AddNewRetailer: ";
+    DatabaseHandler db;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_new_retailer);
-        linReatilerRoute = findViewById(R.id.linear_Retailer);
-        txtRetailerRoute = findViewById(R.id.retailer_type);
-        retailercode = findViewById(R.id.retailercode);
-        common_class = new Common_Class(this);
-        CurrentLocLin = findViewById(R.id.CurrentLocLin);
-        retailercodevisible = findViewById(R.id.retailercodevisible);
-        CurrentLocationsAddress = findViewById(R.id.CurrentLocationsAddress);
-        copypaste = findViewById(R.id.copypaste);
-        edt_gst = findViewById(R.id.edt_gst);
-        headtext = findViewById(R.id.headtext);
-        addRetailerName = findViewById(R.id.edt_new_name);
-        owner_name = findViewById(R.id.owner_name);
-        addRetailerAddress = findViewById(R.id.edt_new_address);
-        addRetailerCity = findViewById(R.id.edt_new_city);
-        addRetailerPhone = findViewById(R.id.edt_new_phone);
-        addRetailerEmail = findViewById(R.id.edt_new_email);
-        edt_pin_codeedit = findViewById(R.id.edt_pin_code);
-        copypaste.setOnClickListener(this);
-        gson = new Gson();
-        shared_common_pref = new Shared_Common_Pref(this);
-        service = ApiClient.getClient().create(ApiInterface.class);
-        mSubmit = findViewById(R.id.submit_button);
-        gson = new Gson();
-        userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
-        }.getType();
-        String OrdersTable = shared_common_pref.getvalue(Shared_Common_Pref.Outlet_List);
-        Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
-        if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
-            mSubmit.setVisibility(View.VISIBLE);
-            CurrentLocLin.setVisibility(View.VISIBLE);
-            retailercodevisible.setVisibility(View.GONE);
-            CurrentLocationsAddress.setVisibility(View.VISIBLE);
-            routeId = shared_common_pref.getvalue("RouteSelect");
-            txtRetailerRoute.setText(shared_common_pref.getvalue("RouteName"));
-            CurrentLocationsAddress.setText("" + Shared_Common_Pref.OutletAddress);
-            headtext.setText("Create Outlet");
-        } else {
-            retailercodevisible.setVisibility(View.VISIBLE);
-            CurrentLocLin.setVisibility(View.GONE);
-            CurrentLocationsAddress.setVisibility(View.GONE);
-            Shared_Common_Pref.Outler_AddFlag = "0";
-        }
-        if (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1")) {
-            mSubmit.setVisibility(View.GONE);
-            headtext.setText("Outlet Info");
-        }
-        getRouteDetails();
-        getRetailerClass();
-        getRetailerChannel();
-        TextView txtHelp = findViewById(R.id.toolbar_help);
-        ImageView imgHome = findViewById(R.id.toolbar_home);
-        txtHelp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
-            }
-        });
-        TextView txtErt = findViewById(R.id.toolbar_ert);
-        TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
-        txtErt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), ERT.class));
-            }
-        });
-        txtPlaySlip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-        ObjectAnimator textColorAnim;
-        textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
-        textColorAnim.setDuration(500);
-        textColorAnim.setEvaluator(new ArgbEvaluator());
-        textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
-        textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
-        textColorAnim.start();
-        imgHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
-                Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-                if (CheckIn == true) {
-                    Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
-                    Dashboard.putExtra("Mode", "CIN");
-                    startActivity(Dashboard);
-                } else
-                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
-            }
-        });
-        ImageView backView = findViewById(R.id.imag_back);
-        backView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
-            }
-        });
-        OnclickRoute();
-        onClickRetailerClass();
-        onClickRetailerChannel();
+        try {
 
 
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_add_new_retailer);
+            db = new DatabaseHandler(this);
+            linReatilerRoute = findViewById(R.id.linear_Retailer);
+            txtRetailerRoute = findViewById(R.id.retailer_type);
+            retailercode = findViewById(R.id.retailercode);
+            common_class = new Common_Class(this);
+            CurrentLocLin = findViewById(R.id.CurrentLocLin);
+            retailercodevisible = findViewById(R.id.retailercodevisible);
+            CurrentLocationsAddress = findViewById(R.id.CurrentLocationsAddress);
+            copypaste = findViewById(R.id.copypaste);
+            edt_gst = findViewById(R.id.edt_gst);
+            headtext = findViewById(R.id.headtext);
+            addRetailerName = findViewById(R.id.edt_new_name);
+            owner_name = findViewById(R.id.owner_name);
+            addRetailerAddress = findViewById(R.id.edt_new_address);
+            addRetailerCity = findViewById(R.id.edt_new_city);
+            addRetailerPhone = findViewById(R.id.edt_new_phone);
+            addRetailerEmail = findViewById(R.id.edt_new_email);
+            edt_pin_codeedit = findViewById(R.id.edt_pin_code);
+            copypaste.setOnClickListener(this);
+            gson = new Gson();
+            shared_common_pref = new Shared_Common_Pref(this);
+            service = ApiClient.getClient().create(ApiInterface.class);
+            mSubmit = findViewById(R.id.submit_button);
+            gson = new Gson();
+            userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
+            }.getType();
+            // String OrdersTable = shared_common_pref.getvalue(Shared_Common_Pref.Outlet_List);
+            String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
 
-        addRetailerName.clearFocus();
-        Intent i = getIntent();
-        Log.e("TestOutler_AddFlag", Shared_Common_Pref.Outler_AddFlag);
-        if (i != null && i.getExtras() != null) {
+            Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
             if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                mSubmit.setVisibility(View.VISIBLE);
+                CurrentLocLin.setVisibility(View.VISIBLE);
+                retailercodevisible.setVisibility(View.GONE);
+                CurrentLocationsAddress.setVisibility(View.VISIBLE);
+                routeId = shared_common_pref.getvalue("RouteSelect");
+                txtRetailerRoute.setText(shared_common_pref.getvalue("RouteName"));
+                CurrentLocationsAddress.setText("" + Shared_Common_Pref.OutletAddress);
+                headtext.setText("Create Outlet");
+            } else {
+                retailercodevisible.setVisibility(View.VISIBLE);
+                CurrentLocLin.setVisibility(View.GONE);
+                CurrentLocationsAddress.setVisibility(View.GONE);
+                Shared_Common_Pref.Outler_AddFlag = "0";
+            }
+            if (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1")) {
+                mSubmit.setVisibility(View.GONE);
+                headtext.setText("Outlet Info");
+            }
+            getRouteDetails();
+            getRetailerClass();
+            getRetailerChannel();
+            TextView txtHelp = findViewById(R.id.toolbar_help);
+            ImageView imgHome = findViewById(R.id.toolbar_home);
+            txtHelp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+                }
+            });
+            TextView txtErt = findViewById(R.id.toolbar_ert);
+            TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
+            txtErt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), ERT.class));
+                }
+            });
+            txtPlaySlip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            ObjectAnimator textColorAnim;
+            textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
+            textColorAnim.setDuration(500);
+            textColorAnim.setEvaluator(new ArgbEvaluator());
+            textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
+            textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
+            textColorAnim.start();
+            imgHome.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+                    Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
+                    if (CheckIn == true) {
+//                        Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
+//                        Dashboard.putExtra("Mode", "CIN");
+//                        startActivity(Dashboard);
+                        common_class.CommonIntentwithoutFinish(SFA_Activity.class);
+                    } else
+                        startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                }
+            });
+            ImageView backView = findViewById(R.id.imag_back);
+            backView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnBackPressedDispatcher.onBackPressed();
+                }
+            });
+            OnclickRoute();
+            onClickRetailerClass();
+            onClickRetailerChannel();
+
+
+            addRetailerName.clearFocus();
+            Intent i = getIntent();
+            Log.e("TestOutler_AddFlag", Shared_Common_Pref.Outler_AddFlag);
+            if (i != null && i.getExtras() != null) {
+                if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                    Compititor_Id = i.getExtras().getString("Compititor_Id");
+                    Compititor_Name = i.getExtras().getString("Compititor_Name");
+                    CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
+                    AvailUniverSelectId = i.getExtras().getString("AvailUniverSelectId");
+                    reason_category_remarks = i.getExtras().getString("reason_category");
+                    HatsunAvailswitch = i.getExtras().getString("HatsunAvailswitch");
+                    categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
+                    Log.e("HatsunAvailswitch", "" + HatsunAvailswitch);
+                    Log.e("categoryuniverseswitch", "" + categoryuniverseswitch);
+                    Log.e("reason_category", "" + reason_category_remarks);
+                    Log.e("CatUniverSelectId", "" + CatUniverSelectId);
+                    Log.e("AvailUniverSelectId", "" + AvailUniverSelectId);
+                    Log.e("Compititor_Name", "" + Compititor_Name);
+                    //The key argument here must match that used in the other activity
+                } else {
+                    addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
+                    addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
+                    txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
+                    addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getMobileNumber());
+                    retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getId());
+                    if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
+                        addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
+                    if (Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email() != null)
+                        addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
+                    owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
+                    edt_pin_codeedit.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getPin_code()));
+                    edt_gst.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getGst()));
+                    // txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
+                    Compititor_Id = i.getExtras().getString("Compititor_Id");
+                    Compititor_Name = i.getExtras().getString("Compititor_Name");
+                    CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
+                    AvailUniverSelectId = i.getExtras().getString("AvailUniverSelectId");
+                    reason_category_remarks = i.getExtras().getString("reason_category");
+                }
+            }
+
+
+            if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1")) {
+                mSubmit.setVisibility(View.VISIBLE);
+                addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
+                addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
+                txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
+                addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getMobileNumber());
+                retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getId());
+                routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
+                if (Retailer_Modal_List.get(getOutletPosition()).getCityname() != null)
+                    addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
+                if (Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email() != null)
+                    addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
+                owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
+                edt_pin_codeedit.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPin_code());
+                edt_gst.setText("" + Retailer_Modal_List.get(getOutletPosition()).getGst());
+                //  txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
                 Compititor_Id = i.getExtras().getString("Compititor_Id");
                 Compititor_Name = i.getExtras().getString("Compititor_Name");
                 CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
@@ -212,80 +271,82 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 reason_category_remarks = i.getExtras().getString("reason_category");
                 HatsunAvailswitch = i.getExtras().getString("HatsunAvailswitch");
                 categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
-                Log.e("HatsunAvailswitch", HatsunAvailswitch);
-                Log.e("categoryuniverseswitch", categoryuniverseswitch);
-                Log.e("reason_category", reason_category_remarks);
-                Log.e("CatUniverSelectId", CatUniverSelectId);
-                Log.e("AvailUniverSelectId", AvailUniverSelectId);
-                Log.e("Compititor_Name", Compititor_Name);
-                //The key argument here must match that used in the other activity
-            } else {
-                addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
-                addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
-                txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
-                addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getMobileNumber());
-                retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getId());
-                addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
-                addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
-                owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
-                edt_pin_codeedit.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getPin_code()));
-                edt_gst.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getGst()));
-                // txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
-                Compititor_Id = i.getExtras().getString("Compititor_Id");
-                Compititor_Name = i.getExtras().getString("Compititor_Name");
-                CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
-                AvailUniverSelectId = i.getExtras().getString("AvailUniverSelectId");
-                reason_category_remarks = i.getExtras().getString("reason_category");
             }
-        }
+            mSubmit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (txtRetailerRoute.getText().toString().matches("")) {
+                        Toast.makeText(getApplicationContext(), "Select route", Toast.LENGTH_SHORT).show();
+                    } else if (addRetailerName.getText().toString().matches("")) {
+                        Toast.makeText(getApplicationContext(), "Enter Outlet Name", Toast.LENGTH_SHORT).show();
+                    } else if (owner_name.getText().toString().equals("")) {
+                        Toast.makeText(getApplicationContext(), "Enter the owner Name", Toast.LENGTH_SHORT).show();
+                    } else if (addRetailerAddress.getText().toString().matches("")) {
+                        Toast.makeText(getApplicationContext(), "Enter Address", Toast.LENGTH_SHORT).show();
+                    } else if (addRetailerCity.getText().toString().matches("")) {
+                        Toast.makeText(getApplicationContext(), "Enter City", Toast.LENGTH_SHORT).show();
+                    } else if (addRetailerPhone.getText().toString().matches("")) {
+                        Toast.makeText(getApplicationContext(), "Enter Phone", Toast.LENGTH_SHORT).show();
+                    } else if (txtRetailerClass.getText().toString().matches("")) {
+                        Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
+                    } else {
+                        addNewRetailers();
+                        //Toast.makeText(AddNewRetailer.this, "New Retailer Added successfully", Toast.LENGTH_SHORT).show();
+                    }
 
+                }
+            });
 
-        if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1")) {
-            mSubmit.setVisibility(View.VISIBLE);
-            addRetailerName.setText("" + Retailer_Modal_List.get(getOutletPosition()).getName());
-            addRetailerAddress.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDrAddress1());
-            txtRetailerRoute.setText("" + Retailer_Modal_List.get(getOutletPosition()).getTownName());
-            addRetailerPhone.setText("" + Retailer_Modal_List.get(getOutletPosition()).getMobileNumber());
-            retailercode.setText("" + Retailer_Modal_List.get(getOutletPosition()).getId());
-            routeId = Retailer_Modal_List.get(getOutletPosition()).getTownCode();
-            addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
-            addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
-            owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
-            edt_pin_codeedit.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPin_code());
-            edt_gst.setText("" + Retailer_Modal_List.get(getOutletPosition()).getGst());
-            //  txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
-            Compititor_Id = i.getExtras().getString("Compititor_Id");
-            Compititor_Name = i.getExtras().getString("Compititor_Name");
-            CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
-            AvailUniverSelectId = i.getExtras().getString("AvailUniverSelectId");
-            reason_category_remarks = i.getExtras().getString("reason_category");
-            HatsunAvailswitch = i.getExtras().getString("HatsunAvailswitch");
-            categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
-        }
-        mSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (txtRetailerRoute.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Select route", Toast.LENGTH_SHORT).show();
-                } else if (addRetailerName.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Enter Outlet Name", Toast.LENGTH_SHORT).show();
-                } else if (owner_name.getText().toString().equals("")) {
-                    Toast.makeText(getApplicationContext(), "Enter the owner Name", Toast.LENGTH_SHORT).show();
-                } else if (addRetailerAddress.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Enter Address", Toast.LENGTH_SHORT).show();
-                } else if (addRetailerCity.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Enter City", Toast.LENGTH_SHORT).show();
-                } else if (addRetailerPhone.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Enter Phone", Toast.LENGTH_SHORT).show();
-                } else if (txtRetailerClass.getText().toString().matches("")) {
-                    Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
-                } else {
-                    addNewRetailers();
-                    //Toast.makeText(AddNewRetailer.this, "New Retailer Added successfully", Toast.LENGTH_SHORT).show();
+            String placeId = getIntent().getStringExtra(Constants.PLACE_ID);
+            if (placeId != null) {
+                //  Nearby_Outlets.
+
+                JSONObject jsonObject = new JSONObject(placeId);
+
+                JSONObject jsonResult = jsonObject.getJSONObject("result");
+                addRetailerPhone.setText("" + jsonResult.optString("formatted_phone_number"));
+                addRetailerAddress.setText("" + jsonResult.optString("vicinity"));
+                addRetailerName.setText("" + jsonResult.getString("name"));
+
+                Log.e(TAG, "Address:" + jsonObject.optString("formatted_address"));
+
+                JSONArray addressJsonArray = jsonResult.getJSONArray("address_components");
+                for (int addressIdex = 0; addressIdex < addressJsonArray.length(); addressIdex++) {
+
+                    JSONObject jsonAddressObj = addressJsonArray.getJSONObject(addressIdex);
+
+                    JSONArray typesArray = addressJsonArray.getJSONObject(addressIdex).getJSONArray("types");
+
+                    for (int typesIndex = 0; typesIndex < typesArray.length(); typesIndex++) {
+
+                        if (typesArray.get(typesIndex).equals("postal_code"))
+                            edt_pin_codeedit.setText("" + jsonAddressObj.optString("long_name"));
+
+                        if (typesArray.get(typesIndex).equals("locality"))
+                            addRetailerCity.setText("" + jsonAddressObj.optString("long_name"));
+                    }
                 }
 
+                ImageView ivShopPhoto = findViewById(R.id.ivShopPhoto);
+
+                if (shared_common_pref.getvalue(Constants.SHOP_PHOTO, "").equals("")) {
+                    ivShopPhoto.setImageResource(R.drawable.profile_img);
+                } else {
+                    Glide.with(this)
+                            .load(shared_common_pref.getvalue(Constants.SHOP_PHOTO, "")) // image url
+                            .placeholder(R.drawable.profile_img) // any placeholder to load at start
+                            .error(R.drawable.profile_img)  // any image in case of error
+                            .override(200, 200) // resizing
+                            .centerCrop()
+                            .into(ivShopPhoto);
+                }
+
+
             }
-        });
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+
+        }
 
 
     }
@@ -345,39 +406,43 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     /*Route Class*/
     public void getRetailerClass() {
-        String routeMap = "{\"tableName\":\"Mas_Doc_Class\",\"coloumns\":\"[\\\"Doc_ClsCode as id\\\", \\\"Doc_ClsSName as name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", routeMap);
-        call.enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                JsonArray jsonArray = response.body();
-                Log.e("RESPONSE_VALUE", String.valueOf(jsonArray));
-                for (int a = 0; a < jsonArray.size(); a++) {
-                    JsonObject jsonObject = (JsonObject) jsonArray.get(a);
-                    String className = String.valueOf(jsonObject.get("name"));
-                    String id = String.valueOf(jsonObject.get("id"));
-                    String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
-                    Log.e("RETAILER_CLASS_NAME", retailerClass);
-                    if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
-                        if (id.equals(String.valueOf(Retailer_Modal_List.get(getOutletPosition()).getDocCatCode()))) {
-                            txtRetailerClass.setText(className.replace('"', ' '));
-                            classId = Integer.valueOf(String.valueOf(jsonObject.get("id")));
+        try {
+            String routeMap = "{\"tableName\":\"Mas_Doc_Class\",\"coloumns\":\"[\\\"Doc_ClsCode as id\\\", \\\"Doc_ClsSName as name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonArray> call = apiInterface.retailerClass(shared_common_pref.getvalue(Shared_Common_Pref.Div_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), "24", routeMap);
+            call.enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    JsonArray jsonArray = response.body();
+                    Log.e("RESPONSE_VALUE", String.valueOf(jsonArray));
+                    for (int a = 0; a < jsonArray.size(); a++) {
+                        JsonObject jsonObject = (JsonObject) jsonArray.get(a);
+                        String className = String.valueOf(jsonObject.get("name"));
+                        String id = String.valueOf(jsonObject.get("id"));
+                        String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
+                        Log.e("RETAILER_CLASS_NAME", retailerClass);
+                        if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
+                            if (id.equals(String.valueOf(Retailer_Modal_List.get(getOutletPosition()).getDocCatCode()))) {
+                                txtRetailerClass.setText(className.replace('"', ' '));
+                                classId = Integer.valueOf(String.valueOf(jsonObject.get("id")));
+                            }
                         }
+                        mCommon_model_spinner = new Common_Model(id, retailerClass, "flag");
+                        Log.e("LeaveType_Request", retailerClass);
+                        modelRetailClass.add(mCommon_model_spinner);
                     }
-                    mCommon_model_spinner = new Common_Model(id, retailerClass, "flag");
-                    Log.e("LeaveType_Request", retailerClass);
-                    modelRetailClass.add(mCommon_model_spinner);
+
+
                 }
 
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
 
-            }
+                }
+            });
+        } catch (Exception e) {
 
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
-
-            }
-        });
+        }
     }
 
     /*Retailer Class Click*/
@@ -546,8 +611,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 } else if ((success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) || (success.equalsIgnoreCase("true") && Shared_Common_Pref.Editoutletflag.equals("1"))) {
                     Shared_Common_Pref.Outler_AddFlag = "0";
                     Shared_Common_Pref.Sync_Flag = "1";
-                    // startActivity(new Intent(getApplicationContext(), Dashboard_Route.class));
-                    startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
+                    startActivity(new Intent(getApplicationContext(), Dashboard_Route.class));
+                    // startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
                 }
             }
 
@@ -589,6 +654,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     @Override
     public void onBackPressed() {
 
+        finish();
     }
 
     public void onSuperBackPressed() {

@@ -1,11 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -20,33 +15,29 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity.AllowanceActivity;
-import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
-import com.hap.checkinproc.Activity_Hap.Mydayplan_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
+import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,12 +47,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
 import static com.hap.checkinproc.Common_Class.Common_Class.addquote;
 
@@ -78,33 +66,48 @@ public class Dist_Locations extends AppCompatActivity implements View.OnClickLis
     Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
+    DatabaseHandler db;
+    Common_Class common_class;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dist__locations);
-        selectdistributor = findViewById(R.id.selectdistributor);
-        progressbar = findViewById(R.id.progressbar);
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        submit_button = findViewById(R.id.submit_button);
-        distilatitude = findViewById(R.id.distilatitude);
-        distilongitude = findViewById(R.id.distilongitude);
-        capturelatlong = findViewById(R.id.capturelatlong);
-        distributor_Name = findViewById(R.id.distributor_Name);
-        sharedCommonPref = new Shared_Common_Pref(Dist_Locations.this);
-        submit_button.setOnClickListener(this);
-        capturelatlong.setOnClickListener(this);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_dist__locations);
+            db = new DatabaseHandler(this);
 
-        gson = new Gson();
-        String outletserializableob = sharedCommonPref.getvalue(Shared_Common_Pref.Distributor_List);
-        GetJsonData(outletserializableob, "1");
-        selectdistributor.setOnClickListener(this);
-        ImageView backView = findViewById(R.id.imag_back);
-        backView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+            selectdistributor = findViewById(R.id.selectdistributor);
+            progressbar = findViewById(R.id.progressbar);
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+            submit_button = findViewById(R.id.submit_button);
+            distilatitude = findViewById(R.id.distilatitude);
+            distilongitude = findViewById(R.id.distilongitude);
+            capturelatlong = findViewById(R.id.capturelatlong);
+            distributor_Name = findViewById(R.id.distributor_Name);
+            sharedCommonPref = new Shared_Common_Pref(Dist_Locations.this);
+            submit_button.setOnClickListener(this);
+            capturelatlong.setOnClickListener(this);
+
+            gson = new Gson();
+            // String outletserializableob = sharedCommonPref.getvalue(Shared_Common_Pref.Distributor_List);
+            String outletserializableob = String.valueOf(db.getMasterData(Constants.Distributor_List));
+            GetJsonData(outletserializableob, "1");
+            selectdistributor.setOnClickListener(this);
+            ImageView backView = findViewById(R.id.imag_back);
+            backView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });
+
+            common_class = new Common_Class(this);
+
+            ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
+            common_class.gotoHomeScreen(this, ivToolbarHome);
+        } catch (Exception e) {
+
+        }
     }
 
     private void GetJsonData(String jsonResponse, String type) {

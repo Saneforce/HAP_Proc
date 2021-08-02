@@ -243,7 +243,6 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="10dp"
                 android:text="Sync"
                 android:textAlignment="center" />
         </LinearLayout>
@@ -254,6 +253,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:visibility="invisible"
             android:orientation="vertical">
             <ImageView
                 android:id="@+id/RefreFriend"

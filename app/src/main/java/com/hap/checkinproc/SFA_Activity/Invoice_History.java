@@ -1,38 +1,31 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
-import com.hap.checkinproc.Interface.ApiClient;
-import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Interface.ViewReport;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Invoice_History_Adapter;
-import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
-import com.hap.checkinproc.SFA_Adapter.Outlet_Report_View_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
+import com.hap.checkinproc.common.DatabaseHandler;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Invoice_History extends AppCompatActivity implements View.OnClickListener {
     TextView outlet_name, lastinvoice;
@@ -45,69 +38,86 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
     Invoice_History_Adapter mReportViewAdapter;
     RecyclerView invoicerecyclerview;
     Shared_Common_Pref sharedCommonPref;
+    DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_invoice__history);
-        gson = new Gson();
-        sharedCommonPref = new Shared_Common_Pref(Invoice_History.this);
-        common_class = new Common_Class(this);
-        lin_order = findViewById(R.id.lin_order);
-        outlet_name = findViewById(R.id.outlet_name);
-        outlet_name.setText(Shared_Common_Pref.OutletName);
-        lin_repeat_order = findViewById(R.id.lin_repeat_order);
-        lin_invoice = findViewById(R.id.lin_invoice);
-        lin_repeat_invoice = findViewById(R.id.lin_repeat_invoice);
-        lin_order.setOnClickListener(this);
-        invoicerecyclerview = (RecyclerView) findViewById(R.id.invoicerecyclerview);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        invoicerecyclerview.setLayoutManager(layoutManager);
-       String DCRMode=sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
-        lin_invoice.setVisibility(View.VISIBLE);
-        if(!DCRMode.equalsIgnoreCase("")){
-            lin_invoice.setVisibility(View.GONE);
-        }
-        String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.GetTodayOrder_List);
-        userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
-        }.getType();
-        OutletReport_View_Modal = gson.fromJson(OrdersTable, userType);
-        System.out.println("Array_List_Size" + OrdersTable.toString());
-        System.out.println("Array_List_Sizee" + OutletReport_View_Modal.size());
-        System.out.println("Array_List_Outlet_Code" + Shared_Common_Pref.OutletCode);
-        if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
-            for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
-                if (filterlist.getOutletCode().equals(Shared_Common_Pref.OutletCode)) {
-                    FilterOrderList.add(filterlist);
-                }
-            }
-        }
-        System.out.println("LocalOrderValues" + OutletReport_View_Modal.toString());
-        mReportViewAdapter = new Invoice_History_Adapter(Invoice_History.this, FilterOrderList, new AdapterOnClick() {
-            @Override
-            public void onIntentClick(int position) {
-                Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
-                Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
-                Shared_Common_Pref.Invoicetoorder = "1";
-                if (FilterOrderList.get(position).getStatus().equals("ORDER")) {
-                    Intent intent = new Intent(getBaseContext(), Order_Category_Select.class);
-                    startActivity(intent);
-                } else {
-                    Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                    Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
-                    intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
-                    intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
-                    intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-                    intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
-                    intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
-                    intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
-                    startActivity(intent);
-                }
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_invoice__history);
+            db = new DatabaseHandler(this);
+            gson = new Gson();
+            sharedCommonPref = new Shared_Common_Pref(Invoice_History.this);
+            common_class = new Common_Class(this);
 
+
+            common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
+
+            lin_order = findViewById(R.id.lin_order);
+            outlet_name = findViewById(R.id.outlet_name);
+            outlet_name.setText(Shared_Common_Pref.OutletName);
+            lin_repeat_order = findViewById(R.id.lin_repeat_order);
+            lin_invoice = findViewById(R.id.lin_invoice);
+            lin_repeat_invoice = findViewById(R.id.lin_repeat_invoice);
+            lastinvoice = findViewById(R.id.lastinvoice);
+            lastinvoice.setOnClickListener(this);
+            lin_order.setOnClickListener(this);
+            invoicerecyclerview = (RecyclerView) findViewById(R.id.invoicerecyclerview);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            invoicerecyclerview.setLayoutManager(layoutManager);
+            String DCRMode = sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
+            lin_invoice.setVisibility(View.VISIBLE);
+            if (!DCRMode.equalsIgnoreCase("")) {
+                lin_invoice.setVisibility(View.GONE);
             }
-        });
-        invoicerecyclerview.setAdapter(mReportViewAdapter);
-        lin_invoice.setOnClickListener(this);
+            // String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.GetTodayOrder_List);
+            String OrdersTable = String.valueOf(db.getMasterData(Constants.GetTodayOrder_List));
+            userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
+            }.getType();
+            OutletReport_View_Modal = gson.fromJson(OrdersTable, userType);
+            System.out.println("Array_List_Size" + OrdersTable.toString());
+            System.out.println("Array_List_Sizee" + OutletReport_View_Modal.size());
+            System.out.println("Array_List_Outlet_Code" + Shared_Common_Pref.OutletCode);
+            if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
+                for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
+                    if (filterlist.getOutletCode().equals(Shared_Common_Pref.OutletCode)) {
+                        FilterOrderList.add(filterlist);
+                    }
+                }
+            }
+            System.out.println("LocalOrderValues" + OutletReport_View_Modal.toString());
+            mReportViewAdapter = new Invoice_History_Adapter(Invoice_History.this, FilterOrderList, new AdapterOnClick() {
+                @Override
+                public void onIntentClick(int position) {
+                    Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
+                    Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
+                    Shared_Common_Pref.Invoicetoorder = "1";
+                    if (FilterOrderList.get(position).getStatus().equals("ORDER")) {
+                        Intent intent = new Intent(getBaseContext(), Order_Category_Select.class);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
+                        Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
+                        intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
+                        intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
+                        intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
+                        intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
+                        intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
+                        intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
+                        startActivity(intent);
+                    }
+
+                }
+            });
+            invoicerecyclerview.setAdapter(mReportViewAdapter);
+            lin_invoice.setOnClickListener(this);
+
+
+            ImageView ivToolbarHome=findViewById(R.id.toolbar_home);
+            common_class.gotoHomeScreen(this,ivToolbarHome);
+        } catch (Exception e) {
+
+        }
 
     }
 
@@ -126,6 +136,10 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                 common_class.CommonIntentwithFinish(Order_Category_Select.class);
                 break;
             case R.id.lin_repeat_invoice:
+                break;
+            case R.id.lastinvoice:
+                common_class.CommonIntentwithoutFinish(OrderHistoryActivity.class);
+
                 break;
         }
     }

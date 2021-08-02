@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -45,6 +44,7 @@ import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -141,11 +141,16 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     ArrayList<Tp_Dynamic_Modal> dynamicarray = new ArrayList<>();
     Mydayplan_Activity.DynamicViewAdapter dynamicadapter;
     Integer count = 0;
-    boolean ExpNeed=false;
+    boolean ExpNeed = false;
+    Shared_Common_Pref sharedCommonPref;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mydayplan_);
+
+        sharedCommonPref = new Shared_Common_Pref(this);
+
         progressbar = findViewById(R.id.progressbar);
         shared_common_pref = new Shared_Common_Pref(this);
         common_class = new Common_Class(this);
@@ -265,7 +270,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         Log.e("ROUTE_MASTER_Object", String.valueOf(noticeArrayList));
         Log.e("TAG", "response Tbmydayplan: " + new Gson().toJson(noticeArrayList));
         if (position == 0) {
-            Log.e("SharedprefrenceVALUES", new Gson().toJson(noticeArrayList))  ;
+            Log.e("SharedprefrenceVALUES", new Gson().toJson(noticeArrayList));
             GetJsonData(new Gson().toJson(noticeArrayList), "0");
         } else if (position == 1) {
             GetJsonData(new Gson().toJson(noticeArrayList), "1");
@@ -577,7 +582,6 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         }
 
 
-
         return true;
     }
 
@@ -585,7 +589,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
                 public void run() {
-                  startActivity(new Intent(getApplicationContext(),Dashboard.class));
+                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
                 }
             });
 
@@ -606,8 +610,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                 Model_Pojo = new Common_Model(id, name, flag);
                 if (type.equals("0")) {
                     String PlInv = jsonObject1.optString("Place_Involved");
-                    boolean tExpNeed=(PlInv.equalsIgnoreCase("Y")?true:false);
-                    Model_Pojo = new Common_Model(id, name, flag, ETabs,tExpNeed);
+                    boolean tExpNeed = (PlInv.equalsIgnoreCase("Y") ? true : false);
+                    Model_Pojo = new Common_Model(id, name, flag, ETabs, tExpNeed);
                     worktypelist.add(Model_Pojo);
                     Log.e("WORK_TYPE", String.valueOf(worktypelist));
                 } else if (type.equals("1")) {
@@ -969,11 +973,13 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         private Context context;
         AdapterOnClick mAdapterOnClick;
         private int Categorycolor;
+
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView tpcaptions, Textspinnerview;
             EditText edittextid;
             RadioGroup radiogroup;
             LinearLayout worktypelayout;
+
             public MyViewHolder(View view) {
                 super(view);
                 tpcaptions = view.findViewById(R.id.tpcaptions);
@@ -1055,6 +1061,12 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     holder.Textspinnerview.setText(SEttextvalues);
                     holder.Textspinnerview.setVisibility(View.VISIBLE);
                     holder.edittextid.setVisibility(View.GONE);
+                    if (titlecaptions.equals("Distributor")) {
+                        shared_common_pref.save(Constants.Distributor_name, SEttextvalues);
+                        shared_common_pref.save(Constants.Distributor_Id,dynamicarray.get(position).getFilter_Text());
+                    }
+
+
                 } else if (dynamicarray.get(position).getControl_id().equals("10")) {
                     Log.e("ROute_Size", String.valueOf(dynamicarray.get(position).getA_list().size()));
                     holder.radiogroup.setVisibility(View.VISIBLE);

@@ -17,6 +17,8 @@
         android:weightSum="4">
 
         <TextView
+            android:padding="@dimen/C5dp"
+            android:layout_marginLeft="@dimen/C10dp"
             android:id="@+id/retailername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,9 +27,18 @@
             android:textSize="18dp" />
 
     </LinearLayout>
-    <View
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/C1dp"
-        android:background="@color/black"
-        android:outlineAmbientShadowColor="@color/black"></View>
+        android:layout_height="4dp"
+        android:layout_weight="1"
+        android:background="@drawable/bottom_border">
+
+    </RelativeLayout>
+
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="@dimen/C1dp"-->
+<!--        android:background="@color/black"-->
+<!--        android:outlineAmbientShadowColor="@color/black"></View>-->
 </LinearLayout>

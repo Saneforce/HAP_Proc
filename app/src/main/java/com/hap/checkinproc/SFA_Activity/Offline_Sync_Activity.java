@@ -1,39 +1,30 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import androidx.activity.OnBackPressedDispatcher;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Common_Class.Common_Class;
-import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.MVP.Main_Model;
-import com.hap.checkinproc.MVP.MasterSync_Implementations;
-import com.hap.checkinproc.MVP.Master_Sync_View;
-import com.hap.checkinproc.MVP.Offline_SyncView;
-import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
+import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 
-public class Offline_Sync_Activity extends AppCompatActivity implements View.OnClickListener, Main_Model.MasterSyncView {
+public class Offline_Sync_Activity extends AppCompatActivity implements View.OnClickListener/*, Main_Model.MasterSyncView*/ {
     private Main_Model.presenter presenter;
     Shared_Common_Pref sharedCommonPref;
     Type userType;
@@ -42,11 +33,14 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
     Common_Class common_class;
     TextView Backbuttontextview, lastsuccessync, Sf_UserId, distributornametext, SyncButton, totaloutlets, todayoutlet, invoicevalues, ordervalues;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
+    DatabaseHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_offline__sync_);
+        db = new DatabaseHandler(this);
+
         sharedCommonPref = new Shared_Common_Pref(Offline_Sync_Activity.this);
         Backbuttontextview = findViewById(R.id.Backbuttontextview);
         lastsuccessync = findViewById(R.id.lastsuccessync);
@@ -57,11 +51,11 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
         ordervalues = findViewById(R.id.ordervalues);
         totaloutlets = findViewById(R.id.totaloutlets);
         todayoutlet = findViewById(R.id.todayoutlet);
-        presenter = new MasterSync_Implementations(this, new Offline_SyncView());
+        //   presenter = new MasterSync_Implementations(this, new Offline_SyncView());
         Backbuttontextview.setOnClickListener(this);
         gson = new Gson();
         common_class = new Common_Class(this);
-        presenter.requestDataFromServer();
+//        presenter.requestDataFromServer();
         lastsuccessync.setText(Common_Class.GetDatemonthyearformat());
         Sf_UserId.setText(Shared_Common_Pref.Sf_Code);
 
@@ -115,9 +109,13 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
             };
             t.start();
         }
+
+
+        ImageView ivToolbarHome=findViewById(R.id.toolbar_home);
+        common_class.gotoHomeScreen(this,ivToolbarHome);
     }
 
-    @Override
+   /* @Override
     public void showProgress() {
 
     }
@@ -136,69 +134,90 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
         Log.e("Calling Position", String.valueOf(position));
         // Toast.makeText(this, "Position" + position, Toast.LENGTH_SHORT).show();
         String serializedData = gson.toJson(responsebody);
-        if (position == 0) {
-            //Outlet_List
-            System.out.println("GetOutlet_All" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Outlet_List, serializedData);
-            System.out.println("OUTLETLIST" + sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List));
-        } else if (position == 1) {
-            //Distributor_List
-            System.out.println("Distributor_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Distributor_List, serializedData);
-        } else if (position == 2) {
-            //Category_List
-            System.out.println("Category_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Category_List, serializedData);
-        } else if (position == 3) {
-            //Product_List
-            System.out.println("Product_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Product_List, serializedData);
-        } else if (position == 4) {
-            //GetTodayOrder_List
-            System.out.println("GetTodayOrder_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.GetTodayOrder_List, serializedData);
-        } else if (position == 5) {
-            //GetTodayOrderDetails
-            System.out.println("GetTodayOrderDetails_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.TodayOrderDetails_List, serializedData);
-        } else if (position == 6) {
-            System.out.println("Todaydayplanresult" + serializedData);
-            GetJsonData(serializedData, "dayplan");
-            sharedCommonPref.save(Shared_Common_Pref.Todaydayplanresult, serializedData);
-        } else if (position == 7) {
-            System.out.println("Town_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Rout_List, serializedData);
-        } else if (position == 8) {
-            System.out.println("Route_Dashboars_Orders" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Outlet_Total_Orders, serializedData);
-        } else if (position == 9) {
-            System.out.println("Route_Dashboars_AllDays" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Outlet_Total_AlldaysOrders, serializedData);
-        } else if (position == 10) {
-            sharedCommonPref.save(Shared_Common_Pref.TodaySfOrdervalues, serializedData);
-            GetJsonData(serializedData, "order");
-        } else {
-            if (progress != null)
-                progress.dismiss();
-            System.out.println("Compititor_List" + serializedData);
-            System.out.println("Compititor_SYncFlag" + sharedCommonPref.Sync_Flag);
-            sharedCommonPref.save(Shared_Common_Pref.Compititor_List, serializedData);
-            if (sharedCommonPref.Sync_Flag != null && sharedCommonPref.Sync_Flag.equals("1")) {
-                common_class.CommonIntentwithNEwTask(Dashboard_Route.class);
-            } else if (sharedCommonPref.Sync_Flag != null && sharedCommonPref.Sync_Flag.equals("2")) {
-                startActivity(new Intent(getApplicationContext(), Invoice_History.class));
-                finish();
-            } else if (sharedCommonPref.Sync_Flag != null && sharedCommonPref.Sync_Flag.equals("0")) {
-                common_class.CommonIntentwithFinish(SFA_Activity.class);
-            }
-        }
 
+
+        switch (position) {
+
+            case (0):
+                //Outlet_List
+                System.out.println("GetOutlet_All" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.Outlet_List, serializedData);
+                System.out.println("OUTLETLIST" + sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List));
+                getResponseFromserver(Constants.Retailer_OutletList, serializedData);
+                break;
+            case (1):
+                //Distributor_List
+                // System.out.println("Distributor_List" + serializedData);
+                // sharedCommonPref.save(Shared_Common_Pref.Distributor_List, serializedData);
+                // getResponseFromserver(Constants.Distributor_List, serializedData);
+                break;
+            case (2):
+                //Category_List
+                sharedCommonPref.save(Shared_Common_Pref.Category_List, serializedData);
+                System.out.println("Category_List" + serializedData);
+
+                break;
+            case (3):
+                //Product_List
+                System.out.println("Product_List" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.Product_List, serializedData);
+                break;
+            case (4):
+                //GetTodayOrder_List
+                System.out.println("GetTodayOrder_List" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.GetTodayOrder_List, serializedData);
+                break;
+            case (5):
+                //GetTodayOrderDetails
+                System.out.println("GetTodayOrderDetails_List" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.TodayOrderDetails_List, serializedData);
+                break;
+            case (6):
+                System.out.println("Todaydayplanresult" + serializedData);
+                GetJsonData(serializedData, "dayplan");
+                sharedCommonPref.save(Shared_Common_Pref.Todaydayplanresult, serializedData);
+                break;
+            case (7):
+                // System.out.println("Town_List" + serializedData);
+                //sharedCommonPref.save(Shared_Common_Pref.Rout_List, serializedData);
+                //  getResponseFromserver(Constants.Rout_List, serializedData);
+                break;
+            case (8):
+                System.out.println("Route_Dashboars_Orders" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.Outlet_Total_Orders, serializedData);
+                break;
+            case (9):
+                System.out.println("Route_Dashboars_AllDays" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.Outlet_Total_AlldaysOrders, serializedData);
+                break;
+            case (10):
+                sharedCommonPref.save(Shared_Common_Pref.TodaySfOrdervalues, serializedData);
+                GetJsonData(serializedData, "order");
+                break;
+            default:
+                if (progress != null)
+                    progress.dismiss();
+                System.out.println("Compititor_List" + serializedData);
+                System.out.println("Compititor_SYncFlag" + sharedCommonPref.Sync_Flag);
+                sharedCommonPref.save(Shared_Common_Pref.Compititor_List, serializedData);
+                if (sharedCommonPref.Sync_Flag != null && sharedCommonPref.Sync_Flag.equals("1")) {
+                    common_class.CommonIntentwithNEwTask(Dashboard_Route.class);
+                } else if (sharedCommonPref.Sync_Flag != null && sharedCommonPref.Sync_Flag.equals("2")) {
+                    startActivity(new Intent(getApplicationContext(), Invoice_History.class));
+                    finish();
+                } else if (sharedCommonPref.Sync_Flag != null && sharedCommonPref.Sync_Flag.equals("0")) {
+                    common_class.CommonIntentwithFinish(SFA_Activity.class);
+                }
+
+        }
     }
 
     @Override
     public void onResponseFailure(Throwable throwable) {
 
     }
+
+    */
 
     @Override
     public void onClick(View v) {
@@ -207,15 +226,16 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
                 common_class.CommonIntentwithFinish(SFA_Activity.class);
                 break;
             case R.id.SyncButton:
-                Shared_Common_Pref.Sync_Flag = "0";
-                common_class.CommonIntentwithFinish(Offline_Sync_Activity.class);
+//                Shared_Common_Pref.Sync_Flag = "0";
+//                common_class.CommonIntentwithFinish(Offline_Sync_Activity.class);
+                common_class.getDataFromApi(Constants.Retailer_OutletList, this, true);
                 break;
         }
 
 
     }
 
-    private void GetJsonData(String jsonResponse, String Name) {
+    public void GetJsonData(String jsonResponse, String Name) {
         try {
             JSONArray jsonArray = new JSONArray(jsonResponse);
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -226,7 +246,7 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
                     invoicevalues.setText("" + jsonObject1.optString("Invoicevalues"));
                     ordervalues.setText("" + jsonObject1.optString("Order_Value"));
                     todayoutlet.setText("" + jsonObject1.optString("Outlet_Fortheday"));
-                    totaloutlets.setText(""+  jsonObject1.optString("Orderoutlet_Count")+"/"+ jsonObject1.optString("Totaloutlet"));
+                    totaloutlets.setText("" + jsonObject1.optString("Orderoutlet_Count") + "/" + jsonObject1.optString("Totaloutlet"));
                 }
             }
             //spinner.setSelection(adapter.getPosition("select worktype"));
@@ -236,6 +256,13 @@ public class Offline_Sync_Activity extends AppCompatActivity implements View.OnC
         }
     }
 
+    //156
+    //Store Distributor_List values in local db
+    public void getResponseFromserver(String key, String jsonResponse) {
+        db.deleteMasterData(key);
+        db.addMasterData(key, jsonResponse);
+    }
 
+    //156
 
 }

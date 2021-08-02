@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -13,13 +12,12 @@ import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
-import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.MVP.Main_Model;
-import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
@@ -30,23 +28,30 @@ import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFADCRActivity;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
+import com.hap.checkinproc.common.DatabaseHandler;
+
+import org.json.JSONArray;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 
-public class SFA_Activity extends AppCompatActivity implements View.OnClickListener, Main_Model.MasterSyncView {
-    LinearLayout Lin_Route,Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders;
+public class SFA_Activity extends AppCompatActivity implements View.OnClickListener /*,Main_Model.MasterSyncView*/ {
+    LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders;
     Gson gson;
     Type userType;
     Common_Class common_class;
     private Main_Model.presenter presenter;
     Shared_Common_Pref sharedCommonPref;
+    DatabaseHandler db;
+
+    ImageView ivLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sfactivity);
+        db = new DatabaseHandler(this);
         sharedCommonPref = new Shared_Common_Pref(SFA_Activity.this);
+        ivLogout = findViewById(R.id.toolbar_home);
         Lin_Route = findViewById(R.id.Lin_Route);
         SyncButon = findViewById(R.id.SyncButon);
         DistLocation = findViewById(R.id.DistLocation);
@@ -68,6 +73,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         DistLocation.setOnClickListener(this);
         linorders.setOnClickListener(this);
         Logout.setOnClickListener(this);
+        ivLogout.setOnClickListener(this);
         //presenter = new MasterSync_Implementations(this, new Offline_SyncView());
         gson = new Gson();
         // presenter.requestDataFromServer();
@@ -80,6 +86,11 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 mOnBackPressedDispatcher.onBackPressed();
             }
         });*/
+
+        ivLogout.setImageResource(R.drawable.ic_baseline_logout_24);
+//        if (sharedCommonPref.getvalue(Constants.HAVE_VALUE, "").equals(""))
+//            common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
+
 
     }
 
@@ -115,7 +126,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             case R.id.Lin_Lead:
                 common_class.CommonIntentwithNEwTask(Lead_Activity.class);
                 break;
-            case R.id.Logout:
+            case R.id.toolbar_home:
                 AlertDialogBox.showDialog(SFA_Activity.this, "HAP SFA", "Are You Sure Want to Logout?", "OK", "Cancel", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
@@ -125,6 +136,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         startActivity(intent);
                         finish();
                     }
+
                     @Override
                     public void NegativeMethod(DialogInterface dialog, int id) {
                         dialog.dismiss();
@@ -134,7 +146,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    @Override
+
+
+   /* @Override
     public void showProgress() {
     }
 
@@ -153,36 +167,42 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         // Toast.makeText(this, "Position" + position, Toast.LENGTH_SHORT).show();
         Log.e("ResponseFromServer", String.valueOf(responsebody));
         String serializedData = gson.toJson(responsebody);
-        if (position == 0) {
-            //Outlet_List
-            System.out.println("GetTodayOrder_All" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Outlet_List, serializedData);
-        } else if (position == 1) {
-            //Distributor_List
-            System.out.println("Distributor_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Distributor_List, serializedData);
-        } else if (position == 2) {
-            //Category_List
-            System.out.println("Category_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Category_List, serializedData);
-        } else if (position == 3) {
-            //Product_List
-            System.out.println("Product_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Product_List, serializedData);
-        } else if (position == 4) {
-            //GetTodayOrder_List
-            System.out.println("GetTodayOrder_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.GetTodayOrder_List, serializedData);
-        } else {
-            System.out.println("Compititor_List" + serializedData);
-            sharedCommonPref.save(Shared_Common_Pref.Compititor_List, serializedData);
+        switch (position) {
+            case (0):
+                //Outlet_List
+                System.out.println("GetTodayOrder_All" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.Outlet_List, serializedData);
+                break;
+            case (1):
+                //Distributor_List
+                //  System.out.println("Distributor_List" + serializedData);
+                //  sharedCommonPref.save(Shared_Common_Pref.Distributor_List, serializedData);
+                break;
+            case (2):
+                //Category_List
+                System.out.println("Category_List" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.Category_List, serializedData);
+                break;
+            case (3):
+                //Product_List
+                System.out.println("Product_List" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.Product_List, serializedData);
+                break;
+            case (4):
+                //GetTodayOrder_List
+                System.out.println("GetTodayOrder_List" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.GetTodayOrder_List, serializedData);
+                break;
+            default:
+                System.out.println("Compititor_List" + serializedData);
+                sharedCommonPref.save(Shared_Common_Pref.Compititor_List, serializedData);
         }
     }
 
     @Override
     public void onResponseFailure(Throwable throwable) {
 
-    }
+    }*/
 
 /*
     @Override
