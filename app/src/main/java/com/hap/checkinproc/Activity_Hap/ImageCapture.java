@@ -281,7 +281,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fragment.takePicture(picWidth, picHeight, 80);//takePicture();
+                fragment.takePicture(dpWidth, dpHeight, 80);//takePicture();
             }
         });
         btnSwchCam.setOnClickListener(new View.OnClickListener() {

@@ -51,7 +51,7 @@
                 android:scrollbars="none">
 
                 <LinearLayout
-                    android:background="@drawable/button_whitebg"
+                    android:background="@drawable/round_white_backround"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">

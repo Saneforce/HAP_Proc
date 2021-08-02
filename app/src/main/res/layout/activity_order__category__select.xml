@@ -99,7 +99,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="@drawable/button_whitebg"
+                android:background="@drawable/round_white_backround"
                 android:gravity="center"
                 android:numColumns="3"
                 android:padding="@dimen/C5dp"

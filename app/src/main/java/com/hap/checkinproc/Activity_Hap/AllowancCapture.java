@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,12 +13,15 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -28,7 +33,7 @@ import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.common.TimerService;
+import com.hap.checkinproc.common.Camera.CameraActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -104,6 +109,54 @@ public class AllowancCapture extends AppCompatActivity implements SurfaceHolder.
             StartSelfiCamera();
         }
     }
+//    private boolean startCamera(int x, int y, int width, int height, String defaultCamera, Boolean tapToTakePicture, Boolean dragEnabled, final Boolean toBack, String alpha, boolean tapFocus, boolean disableExifHeaderStripping, boolean storeToFile) {
+//        Log.d(TAG, "start camera action");
+//
+//        if (fragment != null) {
+//            Log.d(TAG,"Camera already started");
+//            return true;
+//        }
+//
+//        final float opacity = Float.parseFloat(alpha);
+//
+//        fragment = new CameraActivity();
+//        fragment.setEventListener(this);
+//        fragment.defaultCamera = defaultCamera;
+//        fragment.tapToTakePicture = tapToTakePicture;
+//        fragment.dragEnabled = dragEnabled;
+//        fragment.tapToFocus = tapFocus;
+//        fragment.disableExifHeaderStripping = disableExifHeaderStripping;
+//        fragment.storeToFile = storeToFile;
+//        fragment.toBack = toBack;
+//
+//        DisplayMetrics metrics = getResources().getDisplayMetrics();
+//
+//        // offset
+//        int computedX = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, x, metrics);
+//        int computedY = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, y, metrics);
+//
+//        // size
+//        int computedWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, metrics);
+//        int computedHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, metrics);
+//
+//        fragment.setRect(computedX, computedY, computedWidth, computedHeight);
+//
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//
+//                //create or update the layout params for the container view
+//                FrameLayout containerView = (FrameLayout) findViewById(R.id.preview);
+//                //add the fragment to the container
+//                FragmentManager fragmentManager = getFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.add(containerView.getId(), fragment);
+//                fragmentTransaction.commit();
+//            }
+//        });
+//
+//        return true;
+//    }
 
 
     public void takePicture() {
