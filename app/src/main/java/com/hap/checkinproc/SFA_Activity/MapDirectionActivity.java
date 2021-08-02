@@ -162,7 +162,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                     Shared_Common_Pref.Outletlat = currentLocation.getLatitude();
                     Shared_Common_Pref.Outletlong = currentLocation.getLongitude();
                     Shared_Common_Pref.OutletAddress = getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude());
-                    Toast.makeText(getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
                     SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
                     assert supportMapFragment != null;
                     supportMapFragment.getMapAsync(MapDirectionActivity.this);

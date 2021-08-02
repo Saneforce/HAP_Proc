@@ -6,7 +6,9 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -14,10 +16,15 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
@@ -54,8 +61,15 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     Gson gson;
     private RecyclerView recyclerView;
     Type userType;
-    Common_Class common_class;
-    TextView headtext, textViewname, Alltextclick, Completeclick, Pendingclick, ReachedOutlet, distributor_text, route_text;
+    static Common_Class common_class;
+    TextView headtext;
+    TextView textViewname;
+    TextView Alltextclick;
+    TextView Completeclick;
+    TextView Pendingclick;
+    TextView ReachedOutlet;
+    static TextView distributor_text;
+    TextView route_text;
     View Alltextview, completeview, pendingview;
     LinearLayout btnCmbRoute;
     Common_Model Model_Pojo;
@@ -65,7 +79,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     List<Common_Model> Route_Masterlist = new ArrayList<>();
     CustomListViewDialog customDialog;
     List<Common_Model> FRoute_Master = new ArrayList<>();
-    String Route_id, Distributor_Id, DCRMode, sDeptType;
+    String Route_id;
+    String Distributor_Id;
+    String DCRMode;
+    String sDeptType;
 
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
@@ -76,10 +93,18 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     ImageView ivToolbarHome;
     LinearLayout llDistributor;
 
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+    public static Dashboard_Route dashboard_route;
+
+    TabAdapter adapter;
+    public int scrollPosition = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard__route);
+        dashboard_route = this;
         db = new DatabaseHandler(this);
         getDbstoreData(Constants.Distributor_List);
         getDbstoreData(Constants.Rout_List);
@@ -112,6 +137,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             btnCmbRoute = findViewById(R.id.btnCmbRoute);
             ivToolbarHome = findViewById(R.id.toolbar_home);
             llDistributor = findViewById(R.id.llDistributor);
+
+            viewPager = (ViewPager) findViewById(R.id.viewpager);
+            viewPager.setOffscreenPageLimit(3);
+            tabLayout = (TabLayout) findViewById(R.id.tabs);
+
             Alltextview.setVisibility(View.VISIBLE);
             completeview.setVisibility(View.INVISIBLE);
             pendingview.setVisibility(View.INVISIBLE);
@@ -181,7 +211,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             if (Distributor_Id == null) {
                 Retailer_Modal_ListFilter.addAll(Retailer_Modal_List);
             } else {
-                OutletFilter(Distributor_Id, "1");
+                OutletFilter(Distributor_Id, "1", true);
             }
             sDeptType = UserDetails.getString("DeptType", "");
             Log.d("DeptType", sDeptType);
@@ -225,28 +255,78 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 loadroute(shared_common_pref.getvalue(Constants.Distributor_Id));
             }
 
+            if (!shared_common_pref.getvalue(Constants.Route_name).equals("")) {
+                route_text.setText(shared_common_pref.getvalue(Constants.Route_name));
+                //OutletFilter(shared_common_pref.getvalue(Constants.Route_Id), "0");
+            }
+
+            createTabFragment();
+
+
+            viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                    Log.e("viewPager:", "onPageScrolled:" + position);
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    scrollPosition = position;
+                    Log.e("viewPager:", "onPageSelected:" + position);
+
+                    // OutletFilter("t", String.valueOf(position + 1), false);
+
+
+//                    adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
+//                    viewPager.setAdapter(adapter);
+//                    tabLayout.setupWithViewPager(viewPager);
+
+
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                    if (state == viewPager.SCROLL_STATE_IDLE) {
+                        // OutletFilter("t", String.valueOf(scrollPosition));
+                        //adapter.notifyDataSetChanged();
+
+
+                       // Toast.makeText(getApplicationContext(), "" + scrollPosition, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void createTabFragment() {
+
+        adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.Alltextclick:
-                OutletFilter("t", "1");
+                // OutletFilter("t", "1");
                 Alltextview.setVisibility(View.VISIBLE);
                 completeview.setVisibility(View.INVISIBLE);
                 pendingview.setVisibility(View.INVISIBLE);
                 break;
             case R.id.Completeclick:
-                OutletFilter("t", "2");
+                //  OutletFilter("t", "2");
                 Alltextview.setVisibility(View.INVISIBLE);
                 completeview.setVisibility(View.VISIBLE);
                 pendingview.setVisibility(View.INVISIBLE);
                 break;
             case R.id.Pendingclick:
-                OutletFilter("t", "3");
+                //OutletFilter("t", "3");
                 Alltextview.setVisibility(View.INVISIBLE);
                 completeview.setVisibility(View.INVISIBLE);
                 pendingview.setVisibility(View.VISIBLE);
@@ -309,16 +389,21 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             shared_common_pref.save(Constants.Distributor_name, myDataset.get(position).getName());
             shared_common_pref.save(Constants.Distributor_Id, myDataset.get(position).getId());
             loadroute(myDataset.get(position).getId());
-            OutletFilter(myDataset.get(position).getId(), "1");
+            OutletFilter(myDataset.get(position).getId(), "1", true);
+
 
         } else if (type == 3) {
             Route_id = myDataset.get(position).getId();
             route_text.setText(myDataset.get(position).getName());
-            OutletFilter(myDataset.get(position).getId(), "0");
+            shared_common_pref.save(Constants.Route_name, myDataset.get(position).getName());
+            shared_common_pref.save(Constants.Route_Id, myDataset.get(position).getId());
+            OutletFilter(myDataset.get(position).getId(), "0", true);
+
+
         }
     }
 
-    private void OutletFilter(String id, String flag) {
+    public void OutletFilter(String id, String flag, Boolean pagerUpdate) {
         Retailer_Modal_ListFilter.clear();
         Log.e("Retailer_Modal_ListSIZE", "" + Retailer_Modal_List.size());
     /*    if (flag.equals("1")) {
@@ -326,6 +411,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
         } else {
   */
+
+
+        //old
         for (int i = 0; i < Retailer_Modal_List.size(); i++) {
             if (flag.equals("0")) {
                 if (Retailer_Modal_List.get(i).getTownCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
@@ -349,7 +437,16 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             }
 
         }
+        if (pagerUpdate) {
+            adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
+            viewPager.setAdapter(adapter);
+            tabLayout.setupWithViewPager(viewPager);
 
+            adapter.notifyDataSetChanged();
+        }
+
+
+//old
 //        }
         recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
             @Override
@@ -369,6 +466,14 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 }
             }
         }));
+
+
+//        if (adapter == null) {
+//            adapter = new TabAdapter(getSupportFragmentManager(), tabLayout);
+//            viewPager.setAdapter(adapter);
+//        }
+//
+//        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -497,4 +602,186 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
     }
 
+
+    public static class AllDataFragment extends Fragment {
+        private Context context;
+        private RecyclerView recyclerView;
+        View mView;
+
+        String tabPosition = "";
+        List<Retailer_Modal_List> mRetailer_Modal_ListFilter;
+
+        public AllDataFragment(List<Retailer_Modal_List> retailer_Modal_ListFilter, int position) {
+
+
+            this.mRetailer_Modal_ListFilter = retailer_Modal_ListFilter;
+
+            // this.mRetailer_Modal_ListFilter = dashboard_route.Retailer_Modal_ListFilter;
+            this.tabPosition = String.valueOf(position);
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+
+
+            return inflater.inflate(R.layout.fragment_tab_outlet, container, false);
+        }
+
+        @Override
+        public void setUserVisibleHint(boolean isVisibleToUser) {
+            super.setUserVisibleHint(isVisibleToUser);
+            if (isVisibleToUser) {
+                // Refresh your fragment here
+                //   getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+
+                // updateData();
+
+
+            }
+        }
+
+
+
+
+        public void updateData() {
+
+
+            recyclerView.setAdapter(new Route_View_Adapter(mRetailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getActivity(), new AdapterOnClick() {
+                @Override
+                public void onIntentClick(int position) {
+                    if (dashboard_route.Distributor_Id == null || dashboard_route.Distributor_Id.equalsIgnoreCase("")) {
+                        Toast.makeText(getActivity(), "Select The Distributor", Toast.LENGTH_SHORT).show();
+                    } else if ((dashboard_route.Route_id == null || dashboard_route.Route_id.equalsIgnoreCase("")) && !dashboard_route.sDeptType.equalsIgnoreCase("2")) {
+                        Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Shared_Common_Pref.Outler_AddFlag = "0";
+                        Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase() + "~" + mRetailer_Modal_ListFilter.get(position).getId();
+                        Shared_Common_Pref.OutletCode = mRetailer_Modal_ListFilter.get(position).getId();
+                        Shared_Common_Pref.DistributorCode = dashboard_route.Distributor_Id;
+                        Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
+                        Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
+                        common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                    }
+                }
+            }));
+
+
+//            notifyAll();
+
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            this.context = getContext();
+            mView = view;
+            recyclerView = view.findViewById(R.id.recyclerView);
+
+            updateData();
+
+            // Dashboard_Route.dashboard_route.OutletFilter(Distributor_Id, "2");
+
+
+        }
+    }
+
+    public static class PendingFragment extends Fragment {
+        private Context context;
+        private RecyclerView recyclerView;
+
+        String tabPosition = "";
+
+        List<Retailer_Modal_List> mRetailer_Modal_ListFilter;
+
+        public PendingFragment(List<Retailer_Modal_List> retailer_Modal_ListFilter, int s) {
+            tabPosition = String.valueOf(s);
+            this.mRetailer_Modal_ListFilter = retailer_Modal_ListFilter;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_tab_outlet, container, false);
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            this.context = getContext();
+            recyclerView = view.findViewById(R.id.recyclerView);
+
+
+            //  dashboard_route.OutletFilter("t", "3", false);
+            recyclerView.setAdapter(new Route_View_Adapter(mRetailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getActivity(), new AdapterOnClick() {
+                @Override
+                public void onIntentClick(int position) {
+                    if (dashboard_route.Distributor_Id == null || dashboard_route.Distributor_Id.equalsIgnoreCase("")) {
+                        Toast.makeText(getActivity(), "Select The Distributor", Toast.LENGTH_SHORT).show();
+                    } else if ((dashboard_route.Route_id == null || dashboard_route.Route_id.equalsIgnoreCase("")) && !dashboard_route.sDeptType.equalsIgnoreCase("2")) {
+                        Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Shared_Common_Pref.Outler_AddFlag = "0";
+                        Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase() + "~" + dashboard_route.Retailer_Modal_ListFilter.get(position).getId();
+                        Shared_Common_Pref.OutletCode = mRetailer_Modal_ListFilter.get(position).getId();
+                        Shared_Common_Pref.DistributorCode = dashboard_route.Distributor_Id;
+                        Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
+                        Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
+                        common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                    }
+                }
+            }));
+
+        }
+    }
+
+    public static class CompleteFragment extends Fragment {
+        private Context context;
+        private RecyclerView recyclerView;
+
+        String tabPosition = "";
+        List<Retailer_Modal_List> mRetailer_Modal_ListFilter;
+
+        public CompleteFragment(List<Retailer_Modal_List> retailer_Modal_ListFilter, int s) {
+            tabPosition = String.valueOf(s);
+            this.mRetailer_Modal_ListFilter = retailer_Modal_ListFilter;
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            return inflater.inflate(R.layout.fragment_tab_outlet, container, false);
+        }
+
+        @Override
+        public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+            super.onViewCreated(view, savedInstanceState);
+            this.context = getContext();
+            recyclerView = view.findViewById(R.id.recyclerView);
+
+
+
+            recyclerView.setAdapter(new Route_View_Adapter(mRetailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getActivity(), new AdapterOnClick() {
+                @Override
+                public void onIntentClick(int position) {
+                    if (dashboard_route.Distributor_Id == null || dashboard_route.Distributor_Id.equalsIgnoreCase("")) {
+                        Toast.makeText(getActivity(), "Select The Distributor", Toast.LENGTH_SHORT).show();
+                    } else if ((dashboard_route.Route_id == null || dashboard_route.Route_id.equalsIgnoreCase("")) && !dashboard_route.sDeptType.equalsIgnoreCase("2")) {
+                        Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Shared_Common_Pref.Outler_AddFlag = "0";
+                        Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase() + "~" + dashboard_route.Retailer_Modal_ListFilter.get(position).getId();
+                        Shared_Common_Pref.OutletCode = mRetailer_Modal_ListFilter.get(position).getId();
+                        Shared_Common_Pref.DistributorCode = dashboard_route.Distributor_Id;
+                        Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
+                        Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
+                        common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                    }
+                }
+            }));
+
+        }
+    }
+
 }
+
