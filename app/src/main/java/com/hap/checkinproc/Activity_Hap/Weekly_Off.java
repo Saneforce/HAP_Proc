@@ -67,7 +67,7 @@ public class Weekly_Off extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weekly__off);
-        startService(new Intent(this, TimerService.class));
+
         TextView txtHelp = findViewById(R.id.toolbar_help);
         SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         CheckIn = CheckInDetails.getBoolean("CheckIn", false);
@@ -167,7 +167,7 @@ public class Weekly_Off extends AppCompatActivity {
         weeklySubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!eText.getText().toString().matches("") && !remark.getText().toString().matches("")) {
+                if (!eText.getText().toString().matches("")) {
                     weekOff();
                 } else if (eText.getText().toString().matches("")) {
                     Toast.makeText(Weekly_Off.this, "Enter Date", Toast.LENGTH_SHORT).show();
@@ -325,39 +325,4 @@ public class Weekly_Off extends AppCompatActivity {
     public void onBackPressed() {
 
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
-    }
-
 }

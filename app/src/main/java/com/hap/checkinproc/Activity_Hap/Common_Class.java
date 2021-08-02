@@ -12,7 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Common_Class {
-    public static String Version_Name="Ver 3.1.11-b";
+    public static String Version_Name="Ver 3.1.12-b";
     public static String Work_Type="0";
     public static Location location=null;
 
@@ -143,7 +143,8 @@ public class Common_Class {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return c.get(Calendar.HOUR);
+        return c.get(Calendar.HOUR_OF_DAY);
+
     }
     public int getMinute(String dateInString){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

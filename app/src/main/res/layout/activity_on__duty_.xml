@@ -17,9 +17,7 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/C60dp">
-
+            android:layout_height="match_parent">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -575,39 +573,39 @@
 
                         </LinearLayout>
                     </LinearLayout>
-
-                    <Button
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginTop="@dimen/C20dp">
+                        <Button
                         android:id="@+id/haplocationbutton"
                         style="@style/ButtonStyle"
                         android:background="@drawable/otherlocations"
-                        android:text="HAP Locations" />
-
-                    <Button
-                        android:id="@+id/otherlocationbutton"
-                        style="@style/ButtonStyle"
-                        android:background="@drawable/other_location"
-                        android:text="Other Location" />
-
+                            android:text="HAP Locations" />
+                        <Button
+                            android:id="@+id/otherlocationbutton"
+                            style="@style/ButtonStyle"
+                            android:background="@drawable/other_location"
+                            android:text="Other Location" />
+                        <Button
+                            android:id="@+id/exitclose"
+                            style="@style/ButtonStyle"
+                            android:background="@drawable/button_check_out"
+                            android:text="Exit" />
+                    </LinearLayout>
                     <Button
                         android:id="@+id/submitbutton"
                         style="@style/ButtonStyle"
                         android:background="@drawable/other_location"
                         android:text="Submit"
                         android:visibility="gone" />
-
                     <Button
                         android:id="@+id/closebutton"
                         style="@style/ButtonStyle"
                         android:background="@drawable/button_check_out"
-                        android:text="Close" />
-
-                    <Button
-                        android:id="@+id/exitclose"
-                        style="@style/ButtonStyle"
-                        android:background="@drawable/button_check_out"
                         android:text="Close"
                         android:visibility="gone" />
-
                 </LinearLayout>
 
 
@@ -620,7 +618,8 @@
         android:layout_height="wrap_content"
         android:background="#ECEAEA"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/imag_back"

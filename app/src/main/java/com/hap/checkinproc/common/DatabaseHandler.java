@@ -34,7 +34,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String Batt = "Batt";
     private static final String Flag = "Flag";
 
-
     private static final String TABLE_Masters = "HAP_Masters";
     private static final String ID = "ID";
     private static final String Data = "Data";

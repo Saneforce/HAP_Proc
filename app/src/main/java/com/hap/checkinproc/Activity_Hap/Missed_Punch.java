@@ -114,7 +114,6 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_missed__punch);
-        startService(new Intent(this, TimerService.class));
 
         sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
@@ -1049,7 +1048,6 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
     protected void onResume() {
         super.onResume();
 
-        startService(new Intent(this, TimerService.class));
 
         if (sharedpreferences.contains("SharedImages")) {
             EndedImage = sharedpreferences.getString("SharedImages", "");
@@ -1064,33 +1062,4 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
 
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
-    }
-
 }

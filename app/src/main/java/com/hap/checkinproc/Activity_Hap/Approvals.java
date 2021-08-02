@@ -62,7 +62,6 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_approvals);
         shared_common_pref = new Shared_Common_Pref(this);
-        startService(new Intent(this, TimerService.class));
 
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
@@ -344,7 +343,6 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onRestart() {
         super.onRestart();
-        startService(new Intent(this, TimerService.class));
         getcountdetails();
     }
 
@@ -353,10 +351,6 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
                 @Override
                 public void run() {
                     Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
-                    Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
-                    Shared_Common_Pref.Sf_Name = UserDetails.getString("SfName", "");
-                    Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
-                    Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
                     if (CheckIn == true) {
                         Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
                         Dashboard.putExtra("Mode", "CIN");
@@ -371,34 +365,6 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
     @Override
     public void onBackPressed() {
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
 

@@ -1,13 +1,18 @@
 package com.hap.checkinproc.common;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.text.Html;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
 
+import com.hap.checkinproc.Activity.TAClaimActivity;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 
@@ -26,6 +31,8 @@ import okhttp3.MediaType;
 public class FileUploadService extends JobIntentService {
     private static final String TAG = "FileUploadService";
     Disposable mDisposable;
+
+    String mFilePath,mSF,FileName,Mode;
     /**
      * Unique job ID for this service.
      */
@@ -45,13 +52,7 @@ public class FileUploadService extends JobIntentService {
     public void onCreate() {
         super.onCreate();
     }
-    @Override
-    protected void onHandleWork(@NonNull Intent intent) {
-
-        String mFilePath = intent.getStringExtra("mFilePath");
-        String mSF = intent.getStringExtra("SF");
-        String FileName=intent.getStringExtra("FileName");
-        String Mode=intent.getStringExtra("Mode");
+    private void UploadPhoto(){
         if (mFilePath == null) {
             Log.e(TAG, "onHandleWork: Invalid file URI");
             return;
@@ -67,8 +68,33 @@ public class FileUploadService extends JobIntentService {
                 .subscribe(progress -> onProgress(progress), throwable -> onErrors(throwable),
                         () -> onSuccess());
     }
+    @Override
+    protected void onHandleWork(@NonNull Intent intent) {
+
+        mFilePath = intent.getStringExtra("mFilePath");
+        mSF = intent.getStringExtra("SF");
+        FileName=intent.getStringExtra("FileName");
+        Mode=intent.getStringExtra("Mode");
+        UploadPhoto();
+        /*
+        if (mFilePath == null) {
+            Log.e(TAG, "onHandleWork: Invalid file URI");
+            return;
+        }
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Flowable<Double> fileObservable = Flowable.create(emitter -> {
+            apiInterface.onFileUpload(mSF,FileName,Mode,
+                    createMultipartBody(mFilePath, emitter)).blockingGet();
+            emitter.onComplete();
+        }, BackpressureStrategy.LATEST);
+        mDisposable = fileObservable.subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(progress -> onProgress(progress), throwable -> onErrors(throwable),
+                        () -> onSuccess());*/
+    }
     private void onErrors(Throwable throwable) {
-        //sendBroadcastMeaasge("Error in file upload " + throwable.getMessage());
+    //sendBroadcastMeaasge("Error in file upload " + throwable.getMessage());
+        UploadPhoto();
         Log.e(TAG, "onErrors: ", throwable);
     }
     private void onProgress(Double progress) {

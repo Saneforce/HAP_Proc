@@ -117,7 +117,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_leave__request);
-        startService(new Intent(this, TimerService.class));
 
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
@@ -130,7 +129,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                 startActivity(new Intent(getApplicationContext(), Help_Activity.class));
             }
         });
-
         TextView txtErt = findViewById(R.id.toolbar_ert);
         TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
 
@@ -170,6 +168,20 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         etext3 = (EditText) findViewById(R.id.no_of_days);
         Submit = (Button) findViewById(R.id.submitButton);
 
+         reasonForLeave = (EditText) findViewById(R.id.reason_leave);
+        mCheckHalf = (LinearLayout) findViewById(R.id.check_half_linear);
+        mShitTiming = (LinearLayout) findViewById(R.id.shit_linear);
+        mHalfDayType = (LinearLayout) findViewById(R.id.half_day_linear);
+        lin_coffWrk= (LinearLayout) findViewById(R.id.coffWrk);
+        mHalfCheck = (CheckBox) findViewById(R.id.check_half);
+
+        WrkDt_linear = findViewById(R.id.WrkDt_linear);
+        WrkDt = findViewById(R.id.WrkDt);
+        wrkCin = findViewById(R.id.wrkCin);
+        wrkCOut = findViewById(R.id.wrkCOut);
+        wrkHrs = findViewById(R.id.wrkHrs);
+        wrkEligi = findViewById(R.id.wrkEligi);
+
         Bundle params = getIntent().getExtras();
         if (params != null) {
             String Edt=params.getString("EDt","");
@@ -192,6 +204,7 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                 etext2.setText(sEdt);
             }
             difference();
+            mCheckHalf.setVisibility(View.GONE);
             //eText.setText(stDt[2]+"-"+stDt[1]+"-"+stDt[0]);
             eText.setEnabled(false);
             etext2.setEnabled(false);
@@ -204,19 +217,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
                 mOnBackPressedDispatcher.onBackPressed();
             }
         });
-        reasonForLeave = (EditText) findViewById(R.id.reason_leave);
-        mCheckHalf = (LinearLayout) findViewById(R.id.check_half_linear);
-        mShitTiming = (LinearLayout) findViewById(R.id.shit_linear);
-        mHalfDayType = (LinearLayout) findViewById(R.id.half_day_linear);
-        lin_coffWrk= (LinearLayout) findViewById(R.id.coffWrk);
-        mHalfCheck = (CheckBox) findViewById(R.id.check_half);
-
-        WrkDt_linear = findViewById(R.id.WrkDt_linear);
-        WrkDt = findViewById(R.id.WrkDt);
-        wrkCin = findViewById(R.id.wrkCin);
-        wrkCOut = findViewById(R.id.wrkCOut);
-        wrkHrs = findViewById(R.id.wrkHrs);
-        wrkEligi = findViewById(R.id.wrkEligi);
 
         lin_coffWrk.setVisibility(View.GONE);
 
@@ -905,41 +905,4 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
             }
         }
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
-    }
-
 }

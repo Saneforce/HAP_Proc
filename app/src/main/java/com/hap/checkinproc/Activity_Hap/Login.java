@@ -70,7 +70,7 @@ public class Login extends AppCompatActivity {
     Button btnLogin;
     ImageView profileImage;
     String photo;
-    String idToken, eMail;
+    String idToken, eMail,UserLastName,UserLastName1;
     Button signInButton, ReportsButton, ExitButton;
 
     Shared_Common_Pref shared_common_pref;
@@ -165,6 +165,8 @@ public class Login extends AppCompatActivity {
         deviceToken = shared_common_pref.getvalue(Shared_Common_Pref.Dv_ID);
 
         eMail = UserDetails.getString("email", "");
+        UserLastName = UserDetails.getString("DesigNm", "");
+        UserLastName1 = UserDetails.getString("DepteNm", "");
         name.setText(eMail);
 
         cameraPermission = new CameraPermission(Login.this, getApplicationContext());
@@ -258,6 +260,7 @@ public class Login extends AppCompatActivity {
                 SharedPreferences.Editor editor = UserDetails.edit();
                 editor.putBoolean("Login", false);
                 editor.apply();
+                CheckInDetails.edit().clear().commit();
                 finishAffinity();
             }
         });
@@ -371,6 +374,11 @@ public class Login extends AppCompatActivity {
             name.setText(account.getEmail());
             profile = (account.getPhotoUrl());
             eMail = account.getEmail();
+            UserLastName=account.getFamilyName().replace("- ","")
+                    .replace("(","")
+                    .replace(")","")
+                    .replace("/","-");
+            UserLastName1=account.getDisplayName();
             try {
                 Glide.with(this).load(account.getPhotoUrl()).into(profileImage);
                 photo = account.getPhotoUrl().toString();
@@ -493,15 +501,16 @@ public class Login extends AppCompatActivity {
             mProgress.dismiss();
             return;
         }
-
+        //eMail = "anbu@saneforce.com";
         //eMail = "kaviyarasu.m@hap.in";
         //eMail = "kannan.p@hap.in";
         //eMail = "ciadmin@hap.in";
-        //eMail = "haptest5@hap.in";
+        //eMail = "haptest4@hap.in";
         //eMail = "sajan@hap.in";
         //eMail = "1977ananthkumar@gmail.com";
         //eMail = "sivakumar.s@hap.in";
         //eMail = "test@saneforce.com";
+        //eMail = "krishna.ka@hap.in";
 
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
@@ -557,6 +566,8 @@ public class Login extends AppCompatActivity {
                         String div = response.body().getData().get(0).getDivisionCode();
                         Integer type = response.body().getData().get(0).getCheckCount();
                         String DesigNm =response.body().getData().get(0).getSfDesignationShortName();
+                        String SFRptCd=response.body().getData().get(0).getSfRptCode();;
+                        String SFRptNm=response.body().getData().get(0).getSfRptName();;
                         String DeptCd = response.body().getData().get(0).getSFDept();
                         String DeptNm =response.body().getData().get(0).getDeptName();
                         String DeptType = response.body().getData().get(0).getDeptType();
@@ -593,6 +604,8 @@ public class Login extends AppCompatActivity {
                         editor.putString("EmpId", empID);
                         editor.putString("SfName", sName);
                         editor.putString("SFDesig", DesigNm);
+                        editor.putString("SFRptCode", SFRptNm);
+                        editor.putString("SFRptName", SFRptNm);
                         editor.putString("SFHQ", SFHQ);
                         editor.putString("SFHQCode", SFHQCode);
                         editor.putString("SFHQID", SFHQID);
@@ -606,6 +619,11 @@ public class Login extends AppCompatActivity {
                         Log.d("DeptType", String.valueOf(DeptType));
                         editor.putString("State_Code", Sf_type);
                         editor.putString("email", eMail);
+                        if (!UserLastName.equalsIgnoreCase("")) {
+                            editor.putString("DesigNm", UserLastName);
+                            editor.putString("DepteNm", UserLastName1);
+                        }
+
                         editor.putString("url", String.valueOf(profile));
                         editor.putString("Profile", String.valueOf(mProfile));
                         editor.putString("ProfPath", String.valueOf(mProfPath));

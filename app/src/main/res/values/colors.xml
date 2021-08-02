@@ -30,6 +30,8 @@
     <color name="ApproveGreen">#4CAF50</color>
     <color name="Pending_yellow">#ff9819</color>
 
+    <color name="background">#dddddd</color>
+
     <color name="white">#fff</color>
     <color name="awhite">#A8FFFFFF</color>
     <color name="ablack">#5E1C1C1C</color>

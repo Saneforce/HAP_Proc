@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.crashlytics.internal.model.CrashlyticsReport;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -46,6 +47,7 @@ import com.hap.checkinproc.Status_Activity.View_All_Status_Activity;
 import com.hap.checkinproc.adapters.GateAdapter;
 import com.hap.checkinproc.adapters.HomeRptRecyler;
 import com.hap.checkinproc.common.AlmReceiver;
+import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
 
 import java.text.SimpleDateFormat;
@@ -70,7 +72,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     String viewMode = "", sSFType = "", mPriod = "0";
     int cModMnth = 1;
     Button viewButton;
-    Button StActivity, cardview3, cardview4, cardView5, btnCheckout, btnApprovals;
+    Button StActivity, cardview3, cardview4, cardView5, btnCheckout, btnApprovals,btnExit;
     String AllowancePrefernce = "";
     ImageView btMyQR;
 
@@ -99,14 +101,17 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     CardView cardGateDet;
     String dashMdeCnt = "";
     String datefrmt = "";
-    TextView TxtEmpId,txDesgName,txHQName,txDeptName;
+    TextView TxtEmpId,txDesgName,txHQName,txDeptName,txRptName;
 
     Common_Class DT = new Common_Class();
+    private ShimmerFrameLayout mShimmerViewContainer;
+    int LoadingCnt=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard__two);
-        startService(new Intent(this, TimerService.class));
+        mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
+        mShimmerViewContainer.startShimmerAnimation();
 
         mShared_common_pref = new Shared_Common_Pref(this);
         mShared_common_pref.save("Dashboard", "one");
@@ -134,13 +139,16 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
         TxtEmpId = findViewById(R.id.txt_emp_id);
-        TxtEmpId.setText(" - " + UserDetails.getString("EmpId",""));
+        TxtEmpId.setText(UserDetails.getString("EmpId",""));
         txHQName = findViewById(R.id.txHQName);
         txDesgName = findViewById(R.id.txDesgName);
         txDeptName = findViewById(R.id.txDeptName);
-        txHQName.setText(UserDetails.getString("SFHQ",""));
-        txDesgName.setText(UserDetails.getString("SFDesig",""));
-        txDeptName.setText(UserDetails.getString("DeptNm",""));
+        txRptName = findViewById(R.id.txRptName);
+        txHQName.setText(UserDetails.getString("DesigNm",""));
+//        txHQName.setText(UserDetails.getString("SFHQ",""));
+//        txDesgName.setText(UserDetails.getString("SFDesig",""));
+//        txDeptName.setText(UserDetails.getString("DepteNm",""));
+        //txRptName.setText(UserDetails.getString("SFRptName",""));
 
         TextView txtErt = findViewById(R.id.toolbar_ert);
         TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
@@ -241,11 +249,14 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
         StActivity = findViewById(R.id.StActivity);
         btnCheckout = findViewById(R.id.btnCheckout);
+        btnExit = findViewById(R.id.btnExit);
+
         cardview3.setOnClickListener(this);
         cardview4.setOnClickListener(this);
         cardView5.setOnClickListener(this);
         StActivity.setOnClickListener(this);
         btnCheckout.setOnClickListener(this);
+        btnExit.setOnClickListener(this);
         btnGateIn.setOnClickListener(this);
         btnGateOut.setOnClickListener(this);
         btnApprovals.setOnClickListener(this);
@@ -253,9 +264,11 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         btnGateOut.setVisibility(View.GONE);
         cardGateDet.setVisibility(View.GONE);
 
+        btnExit.setVisibility(View.GONE);
         if (getIntent().getExtras() != null) {
             Bundle params = getIntent().getExtras();
             viewMode = params.getString("Mode");
+
             if (viewMode.equalsIgnoreCase("CIN") || viewMode.equalsIgnoreCase("extended") ) {
                 cardview3.setVisibility(View.VISIBLE);
                 cardview4.setVisibility(View.VISIBLE);
@@ -269,7 +282,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 cardView5.setVisibility(View.GONE);
                 StActivity.setVisibility(View.GONE);
                 btnCheckout.setVisibility(View.GONE);
-                btnApprovals.setVisibility(View.GONE);
+                btnExit.setVisibility(View.VISIBLE);
+ //               btnApprovals.setVisibility(View.GONE);
             }
         } else {
             cardview3.setVisibility(View.GONE);
@@ -311,7 +325,12 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             }
         });
     }
-
+private void hideShimmer() {
+    if (LoadingCnt >= 2) {
+        mShimmerViewContainer.stopShimmerAnimation();
+        mShimmerViewContainer.setVisibility(View.GONE);
+    }
+}
     private void getNotify() {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/notify",
@@ -395,11 +414,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(mAdapter);
                 Log.d(Tag, String.valueOf(response.body()));
+                LoadingCnt++;hideShimmer();
+
             }
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
-                Log.d(Tag, String.valueOf(t));
+                Log.d(Tag, String.valueOf(t));LoadingCnt++;hideShimmer();
             }
         });
     }
@@ -410,7 +431,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/AttnDySty",
                 UserDetails.getString("Divcode", ""),
                 UserDetails.getString("Sfcode", ""), "", "", null);
-
         Log.v("View_Request", rptCall.request().toString());
         rptCall.enqueue(new Callback<JsonArray>() {
             @Override
@@ -419,7 +439,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 Log.v("View_Response", res.toString());
                 if (res.size() < 1) {
                     Toast.makeText(getApplicationContext(), "No Records Today", Toast.LENGTH_LONG).show();
-                    return;
+
+                    LoadingCnt++;hideShimmer();return;
                 }
                 JsonObject fItm = res.get(0).getAsJsonObject();
                 TextView txDyDet = findViewById(R.id.lTDyTx);
@@ -478,11 +499,14 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(mAdapter);
+                LoadingCnt++;hideShimmer();
+
             }
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
                 Log.d(Tag, String.valueOf(t));
+                LoadingCnt++;hideShimmer();
             }
         });
         ImageView backView = findViewById(R.id.imag_back);
@@ -674,6 +698,15 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 intent.putExtra("Status", "");
 
                 break;
+            case R.id.btnExit:
+                SharedPreferences.Editor editor = UserDetails.edit();
+                editor.putBoolean("Login", false);
+                editor.apply();
+                CheckInDetails.edit().clear().commit();
+                Intent playIntent = new Intent(this, SANGPSTracker.class);
+                stopService(playIntent);
+                finishAffinity();
+                break;
             case R.id.btnCheckout:
                 AlertDialogBox.showDialog(Dashboard_Two.this, "HAP Check-In", "Do you want to Checkout?", "Yes", "No", false, new AlertBox() {
                     @Override
@@ -754,38 +787,10 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-
         GetMissedPunch();
-        startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
-    }
     public void gatevalue(String Date) {
         Log.v("plantimeplantime", Date);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);

@@ -79,6 +79,13 @@ public class Datum {
     @Expose
     private String mProfPath;
 
+    @SerializedName("RptCode")
+    @Expose
+    private String SfRptCode;
+    @SerializedName("RptName")
+    @Expose
+    private String SfRptName;
+
     public String getSfUserName() {
         return sfUserName;
     }
@@ -110,7 +117,13 @@ public class Datum {
     public void setSfDesignationShortName(String sfDesignationShortName) {
         this.sfDesignationShortName = sfDesignationShortName;
     }
+    public String getSfRptCode() {
+        return SfRptCode;
+    }
 
+    public String getSfRptName() {
+        return SfRptName;
+    }
     public Integer getSFStatus() {
         return sFStatus;
     }

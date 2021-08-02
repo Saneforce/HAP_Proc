@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="0.2"
-            android:text="Travel Annexure C-1_1 Feb-21"
+            android:text="Travel Annexure C-1"
             android:textColor="@android:color/black"></TextView>
 
 

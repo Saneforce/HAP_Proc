@@ -107,7 +107,6 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_permission__request);
-        startService(new Intent(this, TimerService.class));
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
         Setups = getSharedPreferences(SetupsInfo, Context.MODE_PRIVATE);
@@ -237,15 +236,18 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
                                     StringFromTinme = clickedDate+" "+ String.format("%02d:%02d:00", sHour, sMinute);
                                     Date fTime=DT.getDate(StringFromTinme);
                                     int sftFHour=DT.getHour(shiftFromDate); int sftFMinute=DT.getMinute(shiftFromDate);
-                                    StringFromTinme = clickedDate+" "+ String.format("%02d:%02d:00", sftFHour, sftFMinute);
-                                    Date sftSTime=DT.getDate(StringFromTinme);
+                                    String sTime = clickedDate+" "+ String.format("%02d:%02d:00", sftFHour, sftFMinute);
+                                    Date sftSTime=DT.getDate(sTime);
                                     int sftTHour=DT.getHour(shiftToDate); int sftTMinute=DT.getMinute(shiftToDate);
-                                    StringFromTinme = clickedDate+" "+ String.format("%02d:%02d:00", sftTHour, sftTMinute);
-                                    Date sftETime=DT.getDate(StringFromTinme);
+                                    String sETime = clickedDate+" "+ String.format("%02d:%02d:00", sftTHour, sftTMinute);
+                                    Date sftETime=DT.getDate(sETime);
                                     if(sftFHour>sftTHour){
-                                        sftETime=DT.AddDays(StringFromTinme,1);
+                                        sftETime=DT.AddDays(sETime,1);
+                                        if(sftFHour>DT.getHour(StringFromTinme))
+                                            fTime=DT.AddDays(StringFromTinme,1);
                                     }
                                     if(sftSTime.getTime()<=fTime.getTime() && fTime.getTime()<=sftETime.getTime()){
+                                        StringFromTinme = clickedDate+" "+ String.format("%02d:%02d:00", sHour, sMinute);
                                         eText.setText(String.format("%02d:%02d", sHour, sMinute));
                                     }else{
                                         eText.setText("");
@@ -771,37 +773,4 @@ public class Permission_Request extends AppCompatActivity implements View.OnClic
             }
         });
     }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startService(new Intent(this, TimerService.class));
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        startService(new Intent(this, TimerService.class));
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
-    }
-
-
 }

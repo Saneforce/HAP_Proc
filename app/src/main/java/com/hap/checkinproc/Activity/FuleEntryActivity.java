@@ -298,35 +298,6 @@ public class FuleEntryActivity extends AppCompatActivity implements Master_Inter
             }
         });
     }
-/*
-    @Override
-    protected void onResume() {
-        super.onResume();
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        startService(new Intent(this, TimerService.class));
-        if (sharedpreferences.contains("SharedImage")) {
-            imageURI = sharedpreferences.getString("SharedImage", "");
-            if(!imageURI.equalsIgnoreCase("")) {
-                imageConvert = imageURI.substring(7);
-                imageServer=imageConvert.substring(imageConvert.lastIndexOf("/")+1);
-                getMulipart(imageConvert, 0);
-                attachedImage.setImageURI(Uri.parse(imageURI));
-                attachedImage.setRotation(90);
-            }
-        }
-
-        if (!imageURI.matches("")) {
-            attachedImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
-                    intent.putExtra("ImageUrl", imageURI);
-                    startActivity(intent);
-                }
-            });
-        }
-    }*/
-
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         switch (type){

@@ -228,7 +228,6 @@ public class TAViewStatus extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_t_a_view_status);
-        startService(new Intent(this, TimerService.class));
         mCommon_class = new Common_Class(this);
         appCompatEditText = findViewById(R.id.reason);
 

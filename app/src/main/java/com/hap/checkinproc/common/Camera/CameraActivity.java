@@ -1,6 +1,7 @@
 package com.hap.checkinproc.common.Camera;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.app.Fragment;
 import android.content.Context;
@@ -75,6 +76,10 @@ public class CameraActivity extends Fragment {
 
   private CameraPreviewListener eventListener;
   private static final String TAG = "CameraActivity";
+
+  SharedPreferences UserDetails;
+  public static final String UserInfo = "MyPrefs";
+
   public FrameLayout mainLayout;
   public FrameLayout frameContainerLayout;
 
@@ -251,16 +256,16 @@ public class CameraActivity extends Fragment {
 
         frameContainerLayout.setFocusableInTouchMode(true);
         frameContainerLayout.requestFocus();
-        frameContainerLayout.setOnKeyListener(new View.OnKeyListener() {
-          @Override
-          public boolean onKey(View v, int keyCode, android.view.KeyEvent event) {
-            if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
-              eventListener.onBackButton();
-              return true;
-            }
-            return false;
-          }
-        });
+//        frameContainerLayout.setOnKeyListener(new View.OnKeyListener() {
+//          @Override
+//          public boolean onKey(View v, int keyCode, android.view.KeyEvent event) {
+//            if (keyCode == android.view.KeyEvent.KEYCODE_BACK) {
+//              eventListener.onBackButton();
+//              return true;
+//            }
+//            return false;
+//          }
+//        });
       }
     });
   }
@@ -447,13 +452,20 @@ public class CameraActivity extends Fragment {
   }
 
     public String getImgFilename() {
+
        File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)+"/Attendance/Images");
         //File file = new File(Environment.getExternalStorageDirectory().getPath(), "Attendance/Images");
         if (!file.exists()) {
             file.mkdirs();
         }
         String ulrpath=file.getAbsolutePath();
-        String uriSting =  "cpcp_capture_" + UUID.randomUUID().toString().replace("-", "").substring(0, 8)+"_" + System.currentTimeMillis() + ".jpg";
+
+        UserDetails = getActivity().getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+        String SF_Code=UserDetails.getString("Sfcode","");
+
+        long tsLong = System.currentTimeMillis() / 1000;
+        String uriSting = SF_Code +"_"+Long.toString(tsLong) + ".jpg";
+        //String uriSting =  "cpcp_capture_" + UUID.randomUUID().toString().replace("-", "").substring(0, 8)+"_" + System.currentTimeMillis() + ".jpg";
        file = new File(ulrpath,uriSting);
        if (!file.exists()) {
             try {file.createNewFile();} catch (IOException e) {Log.d(TAG, "CameraPreview File Error");}

@@ -55,6 +55,7 @@ import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.DatabaseHandler;
+import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
@@ -309,14 +310,15 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                     return ;
                 }
                 if (startEnd.equals("1") || count.equals("1")) {
-
-                    if (StrToCode.equalsIgnoreCase("")) {
-                        Toast.makeText(On_Duty_Activity.this, "Select the To Location", Toast.LENGTH_SHORT).show();
-                        return ;
-                    }
-                    if (StrToCode.equalsIgnoreCase("-1") && txtOthPlc.getText().toString().equalsIgnoreCase("")) {
-                        Toast.makeText(On_Duty_Activity.this, "Enter Other To Location", Toast.LENGTH_SHORT).show();
-                        return ;
+                    if(!(dailyAllowance.getText().toString().equalsIgnoreCase("HQ"))){
+                        if (StrToCode.equalsIgnoreCase("")) {
+                            Toast.makeText(On_Duty_Activity.this, "Select the To Location", Toast.LENGTH_SHORT).show();
+                            return ;
+                        }
+                        if (StrToCode.equalsIgnoreCase("-1") && txtOthPlc.getText().toString().equalsIgnoreCase("")) {
+                            Toast.makeText(On_Duty_Activity.this, "Enter Other To Location", Toast.LENGTH_SHORT).show();
+                            return ;
+                        }
                     }
                     if (StartKm.getText().toString().matches("")) {
                         Toast.makeText(On_Duty_Activity.this, "Enter Start Km", Toast.LENGTH_SHORT).show();
@@ -391,7 +393,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
                     AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
                         @Override
                         public void OnImageURIPick(Bitmap image, String FileName,String fullPath) {
-                            getMulipart(fullPath, 0);
+                            //getMulipart(fullPath, 0);
                             imageServer = FileName;
                             imageURI=fullPath;
                             attachedImage.setImageBitmap(image);
@@ -763,6 +765,12 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             jj.put("HolidayFlag", (chkHlyDyFlg.isChecked()) ? "1" : "0");
             jj.put("vstPurpose", purposeofvisitedittext.getText().toString());
 
+            Intent mIntent = new Intent(this, FileUploadService.class);
+            mIntent.putExtra("mFilePath", imageURI);
+            mIntent.putExtra("SF", UserDetails.getString("Sfcode",""));
+            mIntent.putExtra("FileName", imageServer);
+            mIntent.putExtra("Mode", "Travel");
+            FileUploadService.enqueueWork(this, mIntent);
 
             //saveAllowance
             Intent intent = new Intent(getApplicationContext(), Checkin.class);

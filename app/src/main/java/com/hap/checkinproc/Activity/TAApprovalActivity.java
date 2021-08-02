@@ -51,7 +51,6 @@ public class TAApprovalActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_t_a_approval);
-        startService(new Intent(this, TimerService.class));
         mShared_common_pref = new Shared_Common_Pref(this);
         common_class = new Common_Class(this);
         getTAList();
@@ -127,23 +126,6 @@ public class TAApprovalActivity extends AppCompatActivity {
                     @Override
                     public void onIntentClick(int Name) {
                         JsonObject jsonObject = (JsonObject) jsonArray.get(Name);
-                        Log.v("LIST", jsonObject.toString());
-                         /*   Intent intent = new Intent(TAApprovalActivity.this, TaApprovalDisplay.class);
-                            intent.putExtra("date", jsonObject.get("id").getAsString());
-                            intent.putExtra("name", jsonObject.get("Sf_Name").getAsString());
-                            intent.putExtra("total_amount", jsonObject.get("Total_Amount").getAsString());
-                            intent.putExtra("head_quaters", jsonObject.get("HQ").getAsString());
-                            intent.putExtra("travel_mode", jsonObject.get("MOT_Name").getAsString());
-                            intent.putExtra("desig", jsonObject.get("sf_Designation_Short_Name").getAsString());
-                            intent.putExtra("dept", jsonObject.get("DeptName").getAsString());
-                            intent.putExtra("Sl_No", jsonObject.get("Sl_NoStart").getAsString());
-                            intent.putExtra("sfCode", jsonObject.get("Sf_code").getAsString());
-                            intent.putExtra("SF_Mobile", jsonObject.get("SF_Mobile").getAsString());
-                            intent.putExtra("sf_emp_id", jsonObject.get("sf_emp_id").getAsString());
-                            startActivity(intent);*/
-
-                        Log.v("TA_DATE", jsonObject.get("id").getAsString());
-
                         Intent intent = new Intent(getApplicationContext(), TAViewStatus.class);
                         intent.putExtra("TA_Date", jsonObject.get("id").getAsString());
                         intent.putExtra("name", jsonObject.get("Sf_Name").getAsString());
@@ -188,34 +170,6 @@ public class TAApprovalActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         getTAList();
-        startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
     }
 }

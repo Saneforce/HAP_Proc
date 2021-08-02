@@ -53,6 +53,7 @@ import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.DatabaseHandler;
+import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.TimerService;
 
@@ -91,12 +92,12 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     Common_Model mCommon_model_spinner;
     Common_Class common_class;
     List<Common_Model> modelRetailDetails = new ArrayList<>();
-Location mlocation;
+    Location mlocation;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allowance_two);
-        startService(new Intent(this, TimerService.class));
+
         sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
@@ -169,15 +170,8 @@ Location mlocation;
                     if (StartedKM < endKm) {
 
                         if(TextModeTravel.getText().toString().equalsIgnoreCase("Two Wheeler")){
-
-                            Log.v("EDITEXTCHECKING", String.valueOf(StartedKM));
-                            Log.v("EDITEXTCHECKING", String.valueOf(StartedKM + maxKM));
                             EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+maxKM)});
                         }else if(TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")){
-
-                            Log.v("EDITEXTCHECKING", String.valueOf(StartedKM));
-                            Log.v("EDITEXTCHECKING", String.valueOf(StartedKM + maxKM));
-
                             EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+maxKM)});
                         }
                         Log.e("STARTED_KM", "GREATER");
@@ -369,6 +363,14 @@ Location mlocation;
         }
 
         try {
+
+            Intent mIntent = new Intent(this, FileUploadService.class);
+            mIntent.putExtra("mFilePath", EndedImage);
+            mIntent.putExtra("SF", UserDetails.getString("Sfcode",""));
+            mIntent.putExtra("FileName", Photo_Name);
+            mIntent.putExtra("Mode", "Travel");
+            FileUploadService.enqueueWork(this, mIntent);
+
             JSONObject jj = new JSONObject();
             jj.put("km", EndedEditText.getText().toString());
             jj.put("rmk", ReasonMode.getText().toString());
@@ -739,7 +741,7 @@ Location mlocation;
     @Override
     protected void onResume() {
         super.onResume();
-        startService(new Intent(this, TimerService.class));
+
         Log.v("LOG_IN_LOCATION", "ONRESTART");
         sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         if (sharedpreferences.contains("SharedImages")) {
@@ -763,32 +765,5 @@ Location mlocation;
             });
 
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
     }
 }

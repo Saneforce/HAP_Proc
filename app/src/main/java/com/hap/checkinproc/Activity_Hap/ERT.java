@@ -45,7 +45,6 @@ public class ERT extends AppCompatActivity {
         setContentView(R.layout.activity_e_r_t);
         shared_common_pref = new Shared_Common_Pref(this);
 
-        startService(new Intent(this, TimerService.class));
         menuRecycler = findViewById(R.id.recylerview_ert);
         cacheMenuRes = new ArrayList<>();
 
@@ -124,38 +123,4 @@ public class ERT extends AppCompatActivity {
 
 
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
-    }
-
 }

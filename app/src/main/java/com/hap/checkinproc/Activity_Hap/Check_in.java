@@ -136,7 +136,7 @@ public class Check_in extends FragmentActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_in);
-        startService(new Intent(this, TimerService.class));
+
         Log.d(TAG, "onCreate: started.");
         //in itShift_Time();
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -527,8 +527,6 @@ public class Check_in extends FragmentActivity implements OnMapReadyCallback {
     @Override
     protected void onResume() {
         super.onResume();
-
-        startService(new Intent(this, TimerService.class));
         startBackgroundThread();
         if (textureView.isAvailable()) {
             try {
@@ -551,7 +549,7 @@ public class Check_in extends FragmentActivity implements OnMapReadyCallback {
     @Override
     protected void onPause() {
         try {
-            startService(new Intent(this, TimerService.class));
+
             stopBackgroundThread();
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -625,7 +623,7 @@ public class Check_in extends FragmentActivity implements OnMapReadyCallback {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-
+        super.onRequestPermissionsResult(requestCode,permissions,grantResults);
         switch (requestCode) {
             case REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -633,26 +631,5 @@ public class Check_in extends FragmentActivity implements OnMapReadyCallback {
                 }
                 break;
         }
-    }
-
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
     }
 }

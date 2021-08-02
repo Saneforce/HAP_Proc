@@ -39,7 +39,6 @@ public class PdfViewerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf_viewer);
-        startService(new Intent(this, TimerService.class));
         pdfView = (PDFView) findViewById(R.id.pdfView);
         pdfurl = String.valueOf(getIntent().getSerializableExtra("PDF_ONE"));
         pdfFile = String.valueOf(getIntent().getSerializableExtra("PDF_FILE"));
@@ -152,32 +151,5 @@ public class PdfViewerActivity extends AppCompatActivity {
             dialog.setMessage("please wait.");
             dialog.show();
         }
-    }  @Override
-    protected void onResume() {
-        super.onResume();
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
     }
 }

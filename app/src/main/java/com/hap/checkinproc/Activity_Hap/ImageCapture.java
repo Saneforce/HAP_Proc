@@ -2,6 +2,8 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
@@ -28,7 +30,10 @@ import android.os.Environment;
 import android.os.IBinder;
 import android.text.Html;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Display;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -37,6 +42,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -63,6 +69,7 @@ import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.AlmReceiver;
+import com.hap.checkinproc.common.Camera.CameraActivity;
 import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.LocationReceiver;
@@ -92,8 +99,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Callback {
+public class ImageCapture extends AppCompatActivity implements CameraActivity.CameraPreviewListener {
     private static final String TAG = "ImageCapture";
+    private CameraActivity fragment;
+
     Button button;
     TextureView textureView;
     ImageView btnFlash,btnWBal;
@@ -136,12 +145,14 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
     Location mlocation;
     String UKey="";
 
+    int dpHeight, dpWidth;
+    int picHeight, picWidth;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_capture);
-        startService(new Intent(this, TimerService.class));
         mShared_common_pref = new Shared_Common_Pref(this);
         sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         CheckInInf = new JSONObject();
@@ -214,21 +225,30 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         }
 
         CameraPermission cameraPermission = new CameraPermission(ImageCapture.this, getApplicationContext());
-
         if (!cameraPermission.checkPermission()) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 cameraPermission.requestPermission();
             }
             Log.v("PERMISSION_NOT", "PERMISSION_NOT");
-        } else {
-            Log.v("PERMISSION", "PERMISSION");
-            StartSelfiCamera();
         }
+        else {
+            Log.v("PERMISSION", "PERMISSION");
+//            StartSelfiCamera();
+            Display display = getWindowManager().getDefaultDisplay();
+            DisplayMetrics outMetrics = new DisplayMetrics ();
+            display.getMetrics(outMetrics);
 
+            picHeight = outMetrics.heightPixels;
+            picWidth  = outMetrics.widthPixels;
+            float density  = getResources().getDisplayMetrics().density;
+            dpHeight = (int)(outMetrics.heightPixels / density);
+            dpWidth  = (int) (outMetrics.widthPixels / density)+1;
+            startCamera(0,0,dpWidth,dpHeight,"front",false,false,false,"1",false,false,true);
+
+        }
 
         textureView = (TextureView) findViewById(R.id.ImagePreview);
         button = (Button) findViewById(R.id.button_capture);
-
         btnRtPrv = (Button) findViewById(R.id.btnRtPrv);
         btnOkPrv = (Button) findViewById(R.id.btnOkPrv);
         btnFlash = (ImageView) findViewById(R.id.button_flash);
@@ -239,71 +259,36 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         lstFlashMode = (ListView) findViewById(R.id.lstFlashMode);
         lstWBalance = (ListView) findViewById(R.id.lstWBalance);
 
-
-
         ArrayAdapter simpleAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, flashModes);
         lstFlashMode.setAdapter(simpleAdapter);//sets the adapter for listView
 
         //perform listView item click event
-
-        //  if (mCamId == 0) {
         lstFlashMode.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 lstModalFlash.setVisibility(View.GONE);
-                try {
-                    Camera.Parameters params = mCamera.getParameters();
-                    //params.setFlashMode(Parameters.FLASH_MODE_TORCH);
-                    params.set("flash-mode", flashModes[i].toLowerCase());
-                    mCamera.setParameters(params);
-                    if (i == 0) {
-                        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-                        try {
-                            String cameraId = cameraManager.getCameraIdList()[0];
-                            cameraManager.setTorchMode(cameraId, false);
-                            Log.e("ON_ITEM_CLICK", "False");
-                        } catch (CameraAccessException e) {
-                        }
-                    } else if (i == 1) {
-
-                    } else if (i == 2) {
-                        CameraManager cameraManager = (CameraManager) getSystemService(Context.CAMERA_SERVICE);
-                        try {
-                            String cameraId = cameraManager.getCameraIdList()[0];
-                            cameraManager.setTorchMode(cameraId, true);
-                            Log.e("ON_ITEM_CLICK", "TRUE");
-                        } catch (CameraAccessException e) {
-                        }
-                    } else if (i == 4) {
-
-                    }
-
-                } catch (Exception e) {
-                }
             }
         });
+                //  if (mCamId == 0) {
         lstWBalance.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 lstModalWBal.setVisibility(View.GONE);
-
                 setWhiteBalanceMode(WBModes[i]);
             }
         });
         //      }
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                takePicture();
-
+                fragment.takePicture(picWidth, picHeight, 80);//takePicture();
             }
         });
         btnSwchCam.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                CameraPermission cameraPermission = new CameraPermission(ImageCapture.this, getApplicationContext());
+                fragment.switchCamera();
+ /*               CameraPermission cameraPermission = new CameraPermission(ImageCapture.this, getApplicationContext());
 
                 if (!cameraPermission.checkPermission()) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -316,7 +301,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     mCamId = (mCamId == 1) ? 0 : 1;
                     StartSelfiCamera();
 
-                }
+                }*/
 
 
             }
@@ -338,7 +323,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 lstModalWBal.setVisibility(View.VISIBLE);
             }
         });
-
         btnRtPrv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -373,130 +357,206 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             }
         });
     }
+    private boolean startCamera(int x, int y, int width, int height, String defaultCamera, Boolean tapToTakePicture, Boolean dragEnabled, final Boolean toBack, String alpha, boolean tapFocus, boolean disableExifHeaderStripping, boolean storeToFile) {
+        Log.d(TAG, "start camera action");
 
-    private Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
-        final double ASPECT_TOLERANCE = 0.1;
-        double targetRatio = (double) w / h;
-        if (sizes == null) return null;
-        Size optimalSize = null;
-        double minDiff = Double.MAX_VALUE;
-        int targetHeight = h;
-        // Try to find an size match aspect ratio and size
-        for (Size size : sizes) {
-            double ratio = (double) size.width / size.height;
-            if (Math.abs(ratio - targetRatio) > ASPECT_TOLERANCE) continue;
-            if (Math.abs(size.height - targetHeight) < minDiff) {
-                optimalSize = size;
-                minDiff = Math.abs(size.height - targetHeight);
+        if (fragment != null) {
+            Log.d(TAG,"Camera already started");
+            return true;
+        }
+
+        final float opacity = Float.parseFloat(alpha);
+
+        fragment = new CameraActivity();
+        fragment.setEventListener(this);
+        fragment.defaultCamera = defaultCamera;
+        fragment.tapToTakePicture = tapToTakePicture;
+        fragment.dragEnabled = dragEnabled;
+        fragment.tapToFocus = tapFocus;
+        fragment.disableExifHeaderStripping = disableExifHeaderStripping;
+        fragment.storeToFile = storeToFile;
+        fragment.toBack = toBack;
+
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+
+        // offset
+        int computedX = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, x, metrics);
+        int computedY = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, y, metrics);
+
+        // size
+        int computedWidth = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, width, metrics);
+        int computedHeight = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, height, metrics);
+
+        fragment.setRect(computedX, computedY, computedWidth, computedHeight);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+
+                //create or update the layout params for the container view
+                FrameLayout containerView = (FrameLayout) findViewById(R.id.preview);
+                //add the fragment to the container
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(containerView.getId(), fragment);
+                fragmentTransaction.commit();
             }
-        }
-        // Cannot find the one match the aspect ratio, ignore the requirement
-        if (optimalSize == null) {
-            minDiff = Double.MAX_VALUE;
-            for (Size size : sizes) {
-                if (Math.abs(size.height - targetHeight) < minDiff) {
-                    optimalSize = size;
-                    minDiff = Math.abs(size.height - targetHeight);
-                }
-            }
-        }
-        return optimalSize;
+        });
+
+        return true;
     }
-
-    private void StartSelfiCamera() {
-
-        if (mCamera != null) {
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
-        }
-        preview = (SurfaceView) findViewById(R.id.PREVIEW);
-        mHolder = preview.getHolder();
-        mHolder.addCallback(this);
-        setDefaultCameraId((mCamId == 1) ? "front" : "back");
-        try {
-            mCamera = Camera.open(mCamId);
-            mCamera.setPreviewDisplay(mHolder);
-            setCameraDisplayOrientation();
-            mCamera.startPreview();
-        } catch (IOException e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
-            e.printStackTrace();
-        }
-
-        Log.e("mCAmer_id", String.valueOf(mCamId));
-
-    }
+//    private void StartSelfiCamera() {
+//
+//        if (mCamera != null) {
+//            mCamera.stopPreview();
+//            mCamera.release();
+//            mCamera = null;
+//        }
+//        preview = (SurfaceView) findViewById(R.id.PREVIEW);
+//        mHolder = preview.getHolder();
+//        mHolder.addCallback(this);
+//        setDefaultCameraId((mCamId == 1) ? "front" : "back");
+//        try {
+//            mCamera = Camera.open(mCamId);
+//            mCamera.setPreviewDisplay(mHolder);
+//            setCameraDisplayOrientation();
+//            mCamera.startPreview();
+//        } catch (IOException e) {
+//            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG);
+//            e.printStackTrace();
+//        }
+//
+//        Log.e("mCAmer_id", String.valueOf(mCamId));
+//
+//    }
 
     public static void setOnImagePickListener(OnImagePickListener mImagePickListener) {
         imagePickListener = mImagePickListener;
     }
-
-    public void takePicture() {
-
-        String usrNm=UserDetails.getString("Sfcode","");
-        long tsLong = System.currentTimeMillis() / 1000;
-        imageFileName = usrNm+"_"+Long.toString(tsLong) + ".jpg";
-        //file  = new File(Environment.getExternalStorageDirectory() + "/"+ts+".jpg");
-        imagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + imageFileName;
-        file = new File(imagePath);
-        try {
-            mCamera.takePicture(null, null,
-                    new Camera.PictureCallback() {
-                        @Override
-                        public void onPictureTaken(byte[] bytes, Camera camera) {
-                            Bitmap bm = null;
-                            try {
-                                if (bytes != null) {
-                                    int screenWidth = getResources().getDisplayMetrics().widthPixels;
-                                    int screenHeight = getResources().getDisplayMetrics().heightPixels;
-                                    bm = BitmapFactory.decodeByteArray(bytes, 0, (bytes != null) ? bytes.length : 0);
-
-                                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                                        // Notice that width and height are reversed
-                                        Bitmap scaled = Bitmap.createScaledBitmap(bm, screenHeight, screenWidth, true);
-                                        int w = scaled.getWidth();
-                                        int h = scaled.getHeight();
-                                        w = bm.getWidth();
-                                        h = bm.getHeight();
-                                        // Setting post rotate to 90
-                                        Matrix mtx = new Matrix();
-
-                                        int CameraEyeValue = setPhotoOrientation(ImageCapture.this, mCamId); // CameraID = 1 : front 0:back
-                                        if (mCamId == 1) { // As Front camera is Mirrored so Fliping the Orientation
-                                            if (CameraEyeValue == 270) {
-                                                mtx.postRotate(90);
-                                            } else if (CameraEyeValue == 90) {
-                                                mtx.postRotate(270);
-                                            }
-                                        } else {
-                                            mtx.postRotate(CameraEyeValue); // CameraEyeValue is default to Display Rotation
-                                        }
-                                        bm = applyMatrix(bm, mtx);
-                                        // bm = Bitmap.createBitmap(bm, 0, 0, w, h, mtx, true);
-                                    } else {// LANDSCAPE MODE
-                                        //No need to reverse width and height
-                                        Bitmap scaled = Bitmap.createScaledBitmap(bm, screenWidth, screenHeight, true);
-                                        bm = scaled;
-                                    }
-                                }
-
-                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                                bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                                byte[] byteArray = stream.toByteArray();
-
-                                save(byteArray);
-                                ShowImgPreview();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        super.onResume();
+    @Override
+    public void onPictureTaken(String originalPicture, String picData) {
+        //File imgFile=new File(originalPicture);
+        FrameLayout preview= findViewById(R.id.preview);
+        RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
+        ImageView imgPreview = findViewById(R.id.imgPreviewImg);
+        file = new File(originalPicture);
+        imagePath=originalPicture;
+        imageFileName=originalPicture.substring(originalPicture.lastIndexOf("/")+1);
+        imgPreview.setImageURI(Uri.fromFile(file));
+        vwPreview.setVisibility(View.VISIBLE);
+        imgPreview.setVisibility(View.VISIBLE);
+        button.setVisibility(View.GONE);
     }
+    @Override
+    public void onPictureTakenError(String message) {
+
+    }
+    @Override
+    public void onSnapshotTaken(String originalPicture) {
+
+    }
+    @Override
+    public void onSnapshotTakenError(String message) {
+
+    }
+    @Override
+    public void onFocusSet(int pointX, int pointY) {
+
+    }
+    @Override
+    public void onFocusSetError(String message) {
+
+    }
+    @Override
+    public void onBackButton() {
+Log.d(TAG,"Back button Pressed...");
+    }
+    @Override
+    public void onCameraStarted() {
+
+    }
+    @Override
+    public void onStartRecordVideo() {
+
+    }
+    @Override
+    public void onStartRecordVideoError(String message) {
+
+    }
+    @Override
+    public void onStopRecordVideo(String file) {
+
+    }
+    @Override
+    public void onStopRecordVideoError(String error) {
+
+    }
+
+    //    public void takePicture() {
+//
+//        String usrNm=UserDetails.getString("Sfcode","");
+//        long tsLong = System.currentTimeMillis() / 1000;
+//        imageFileName = usrNm+"_"+Long.toString(tsLong) + ".jpg";
+//        //file  = new File(Environment.getExternalStorageDirectory() + "/"+ts+".jpg");
+//        imagePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/" + imageFileName;
+//        file = new File(imagePath);
+//        try {
+//            mCamera.takePicture(null, null,
+//                    new Camera.PictureCallback() {
+//                        @Override
+//                        public void onPictureTaken(byte[] bytes, Camera camera) {
+//                            Bitmap bm = null;
+//                            try {
+//                                if (bytes != null) {
+//                                    int screenWidth = getResources().getDisplayMetrics().widthPixels;
+//                                    int screenHeight = getResources().getDisplayMetrics().heightPixels;
+//                                    bm = BitmapFactory.decodeByteArray(bytes, 0, (bytes != null) ? bytes.length : 0);
+//
+//                                    if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+//                                        // Notice that width and height are reversed
+//                                        Bitmap scaled = Bitmap.createScaledBitmap(bm, screenHeight, screenWidth, true);
+//                                        int w = scaled.getWidth();
+//                                        int h = scaled.getHeight();
+//                                        w = bm.getWidth();
+//                                        h = bm.getHeight();
+//                                        // Setting post rotate to 90
+//                                        Matrix mtx = new Matrix();
+//
+//                                        int CameraEyeValue = setPhotoOrientation(ImageCapture.this, mCamId); // CameraID = 1 : front 0:back
+//                                        if (mCamId == 1) { // As Front camera is Mirrored so Fliping the Orientation
+//                                            if (CameraEyeValue == 270) {
+//                                                mtx.postRotate(90);
+//                                            } else if (CameraEyeValue == 90) {
+//                                                mtx.postRotate(270);
+//                                            }
+//                                        } else {
+//                                            mtx.postRotate(CameraEyeValue); // CameraEyeValue is default to Display Rotation
+//                                        }
+//                                        bm = applyMatrix(bm, mtx);
+//                                        // bm = Bitmap.createBitmap(bm, 0, 0, w, h, mtx, true);
+//                                    } else {// LANDSCAPE MODE
+//                                        //No need to reverse width and height
+//                                        Bitmap scaled = Bitmap.createScaledBitmap(bm, screenWidth, screenHeight, true);
+//                                        bm = scaled;
+//                                    }
+//                                }
+//
+//                                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//                                bm.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+//                                byte[] byteArray = stream.toByteArray();
+//
+//                                save(byteArray);
+//                                ShowImgPreview();
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    });
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        super.onResume();
+//    }
 
     public int setPhotoOrientation(Activity activity, int cameraId) {
         android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
@@ -529,22 +589,9 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
         return result;
     }
-
     public static Bitmap applyMatrix(Bitmap source, Matrix matrix) {
         return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(), matrix, true);
     }
-
-    private static int exifToDegrees(int exifOrientation) {
-        if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
-            return 90;
-        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
-            return 180;
-        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
-            return 270;
-        }
-        return 0;
-    }
-
     private void ShowImgPreview() {
         RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
@@ -566,42 +613,11 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         }
 
     }
-
     private void CloseImgPreview() {
         vwPreview = findViewById(R.id.ImgPreview);
-        ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         vwPreview.setVisibility(View.GONE);
-        BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
         button.setVisibility(View.VISIBLE);
-        vwPreview.setBackground(drawableBitmap);
-        if (preview != null) {
-            preview = null;
-            mHolder.removeCallback(ImageCapture.this);
-            mCamera.setPreviewCallback(null);
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
-        }
-
-        preview = (SurfaceView) findViewById(R.id.PREVIEW);
-        mHolder = preview.getHolder();
-        mHolder.addCallback(ImageCapture.this);
-
-        Log.v("mCamId_VALUE", String.valueOf(mCamId));
-        setDefaultCameraId((mCamId == 1) ? "front" : "back");
-        mCamera = Camera.open(mCamId);
-        try {
-            mCamera.setPreviewDisplay(mHolder);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        setCameraDisplayOrientation();
-        mCamera.startPreview();
-
-        Log.e("mCAmer_id", String.valueOf(mCamId));
-
     }
-
     private void saveImgPreview() {
         vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
@@ -614,7 +630,7 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
         Intent mIntent = new Intent(this, FileUploadService.class);
         mIntent.putExtra("mFilePath", String.valueOf(file));
-        mIntent.putExtra("SF", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+        mIntent.putExtra("SF", UserDetails.getString("Sfcode",""));
         mIntent.putExtra("FileName", imageFileName);
         mIntent.putExtra("Mode", (mMode.equalsIgnoreCase("PF") ? "PROF" : "ATTN"));
         FileUploadService.enqueueWork(this, mIntent);
@@ -650,7 +666,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             }
         }
     }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -661,22 +676,20 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                     try {
                         mlocation = location;
 
-                        ImageCapture.vwPreview.setVisibility(View.GONE);
-                        // imgPreview.setImageURI(Uri.fromFile(file));
-                        button.setVisibility(View.GONE);
-                        saveCheckIn();
+//                        ImageCapture.vwPreview.setVisibility(View.GONE);
+//                        // imgPreview.setImageURI(Uri.fromFile(file));
+//                        button.setVisibility(View.GONE);
+//                        saveCheckIn();
                     } catch (Exception e) {
                     }
                 }
             });
         }
     }
-
     public void getMulipart(String path) {
         MultipartBody.Part imgg = convertimg("file", path);
-        CallApiImage(mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code), imgg);
+        CallApiImage(UserDetails.getString("Sfcode",""), imgg);
     }
-
     public MultipartBody.Part convertimg(String tag, String path) {
         MultipartBody.Part yy = null;
         Log.v("full_profile", path);
@@ -696,7 +709,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         Log.v("full_profile", yy + "");
         return yy;
     }
-
     public void CallApiImage(String values, MultipartBody.Part imgg) {
         Call<ResponseBody> Callto;
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -733,8 +745,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             }
         });
     }
-
-
     private void saveCheckIn() {
 
 
@@ -945,21 +955,23 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                         mProgress.dismiss();
                         if (response.isSuccessful()) {
                             Log.e("TOTAL_REPOSNEaaa", String.valueOf(response.body()));
-
+                            SharedPreferences.Editor loginsp = UserDetails.edit();
+                            loginsp.putBoolean("Login", false);
+                            loginsp.apply();
+                            Boolean Login = UserDetails.getBoolean("Login", false);
                             SharedPreferences.Editor editor = CheckInDetails.edit();
                             editor.putString("Logintime", "");
                             editor.putBoolean("CheckIn", false);
                             editor.apply();
 
                             JsonObject itm = response.body().getAsJsonObject();
-                            String mMessage = "Check in Time  : " + CheckInDetails.getString("FTime", "") + "<br>" +
+                            String mMessage = "Your Check-Out Submitted Successfully<br><br>Check in Time  : " + CheckInDetails.getString("FTime", "") + "<br>" +
                                     "Check Out Time : " + CTime;
 
                             try {
                                 mMessage = itm.get("Msg").getAsString();
                             } catch (Exception e) {
                             }
-
 
                             AlertDialogBox.showDialog(ImageCapture.this, "HAP Check-In", String.valueOf(Html.fromHtml(mMessage)), "Ok", "", false, new AlertBox() {
                                 @Override
@@ -988,14 +1000,12 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             e.printStackTrace();
         }
     }
-
     private void save(byte[] bytes) throws IOException {
         OutputStream outputStream = null;
         outputStream = new FileOutputStream(file);
         outputStream.write(bytes);
         outputStream.close();
     }
-
     private void setDefaultCameraId(String cam) {
         noOfCameras = Camera.getNumberOfCameras();
         int facing = cam.equalsIgnoreCase("front") ? Camera.CameraInfo.CAMERA_FACING_FRONT : Camera.CameraInfo.CAMERA_FACING_BACK;
@@ -1010,13 +1020,14 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
             }
         }
     }
-
     private boolean setExposureCompensation(int exposureCompensation) {
 
-        Camera.Parameters params = mCamera.getParameters();
 
-        int minExposureCompensation = mCamera.getParameters().getMinExposureCompensation();
-        int maxExposureCompensation = mCamera.getParameters().getMaxExposureCompensation();
+        Camera camera = fragment.getCamera();
+        Camera.Parameters params = camera.getParameters();
+
+        int minExposureCompensation = camera.getParameters().getMinExposureCompensation();
+        int maxExposureCompensation = camera.getParameters().getMaxExposureCompensation();
 
         if ( minExposureCompensation == 0 && maxExposureCompensation == 0) {
             Log.d("Cam Error","Can't set Exposure");
@@ -1027,20 +1038,21 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 exposureCompensation = maxExposureCompensation;
             }
             params.setExposureCompensation(exposureCompensation);
-            mCamera.setParameters(params);
+            camera.setParameters(params);
         }
 
         return true;
     }
     private String[] getSupportedWhiteBalanceModes() {
-        Camera.Parameters params = mCamera.getParameters();
+        Camera camera=fragment.getCamera();
+        Camera.Parameters params = camera.getParameters();
 
         List<String> supportedWhiteBalanceModes;
         supportedWhiteBalanceModes = params.getSupportedWhiteBalance();
 
         JSONArray jsonWhiteBalanceModes = new JSONArray();
         String[] lstModes = new String[supportedWhiteBalanceModes.size()];
-        if (mCamera.getParameters().isAutoWhiteBalanceLockSupported()) {
+        if (camera.getParameters().isAutoWhiteBalanceLockSupported()) {
             jsonWhiteBalanceModes.put(new String("lock"));
         }
         if (supportedWhiteBalanceModes != null) {
@@ -1053,20 +1065,20 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
        // callbackContext.success(jsonWhiteBalanceModes);
         return lstModes;
     }
-
     private boolean getWhiteBalanceMode() {
-        Camera.Parameters params = mCamera.getParameters();
+        Camera camera=fragment.getCamera();
+        Camera.Parameters params = camera.getParameters();
 
         String whiteBalanceMode;
 
-        if (mCamera.getParameters().isAutoWhiteBalanceLockSupported()) {
-            if (mCamera.getParameters().getAutoWhiteBalanceLock()) {
+        if (camera.getParameters().isAutoWhiteBalanceLockSupported()) {
+            if (camera.getParameters().getAutoWhiteBalanceLock()) {
                 whiteBalanceMode = "lock";
             } else {
-                whiteBalanceMode = mCamera.getParameters().getWhiteBalance();
+                whiteBalanceMode = camera.getParameters().getWhiteBalance();
             };
         } else {
-            whiteBalanceMode = mCamera.getParameters().getWhiteBalance();
+            whiteBalanceMode = camera.getParameters().getWhiteBalance();
         }
         if (whiteBalanceMode != null) {
             //callbackContext.success(whiteBalanceMode);
@@ -1076,14 +1088,13 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
 
         return true;
     }
-
     private boolean setWhiteBalanceMode(String whiteBalanceMode) {
-        Camera.Parameters params = mCamera.getParameters();
+        Camera.Parameters params = fragment.getCamera().getParameters();
 
         if (whiteBalanceMode.equals("lock")) {
-            if (mCamera.getParameters().isAutoWhiteBalanceLockSupported()) {
+            if (fragment.getCamera().getParameters().isAutoWhiteBalanceLockSupported()) {
                 params.setAutoWhiteBalanceLock(true);
-                mCamera.setParameters(params);
+                fragment.setCameraParameters(params);
             } else {
                 Log.e("Cam Error","White balance lock not supported");
             }
@@ -1096,14 +1107,13 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 whiteBalanceMode.equals("twilight") ||
                 whiteBalanceMode.equals("warm-fluorescent")) {
             params.setWhiteBalance(whiteBalanceMode);
-            mCamera.setParameters(params);
+            fragment.setCameraParameters(params);
         } else {
             Log.e("Cam Error","White balance parameter not supported");
         }
 
         return true;
     }
-
     public void setCameraDisplayOrientation() {
         Camera.CameraInfo info = new Camera.CameraInfo();
         Camera.getCameraInfo(mCamId, info);
@@ -1121,244 +1131,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
                 break;
         }
     }
-
-    @Override
-    public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
-        try {
-            // open the camera
-            mCamera = Camera.open(Camera.CameraInfo.CAMERA_FACING_FRONT);
-            mCamera.setDisplayOrientation(90);
-        } catch (RuntimeException e) {
-            // check for exceptions
-            System.err.println(e);
-            return;
-        }
-        Camera.Parameters param;
-        param = mCamera.getParameters();
-
-        int rotation = getWindowManager().getDefaultDisplay().getRotation();
-        param.setRotation(-rotation);
-        // modify parameter
-        /*        param.setPreviewSize(352, 288);*/
-        mCamera.setParameters(param);
-        try {
-            // The Surface has been created, now tell the camera where to draw
-            // the preview.
-            mCamera.setPreviewDisplay(surfaceHolder);
-            mCamera.startPreview();
-        } catch (Exception e) {
-            // check for exceptions
-            System.err.println(e);
-            return;
-        }
-
-
-    }
-
-    @Override
-    public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int format, int width, int height) {
-
-        if (surfaceHolder.getSurface() == null) {
-            // Return if preview surface does not exist
-            return;
-        }
-
-        if (mCamera != null) {
-            // Stop if preview surface is already running.
-            mCamera.stopPreview();
-            try {
-                // Set preview display
-                Camera.Size size = getOptimalPreviewSize(
-                        mCamera.getParameters().getSupportedPreviewSizes(),
-                        height, width);
-
-                if (size != null) {
-
-                    double screenRatio = (double) width / height;
-                    double previewRatio = (double) size.width / size.height;
-
-                    int targetWidth;
-                    int targetHeight;
-                    //the screen ratio should match the preview ratio
-                    if (screenRatio > previewRatio) {
-                        //then, the height must be increased,
-                        targetWidth = width;
-                        targetHeight = (int) (((double) width) / previewRatio);
-                    } else {
-                        //the width must be increased
-                        targetHeight = height;
-                        targetWidth = (int) (((double) height) * previewRatio);
-                    }
-                    Log.i(TAG, "Setting preview size to " + targetWidth + "x" + targetHeight +
-                            ", ratio=" + ((double) targetWidth / targetHeight));
-                    //vwPreview.setLayoutParams(new FrameLayout.LayoutParams(targetWidth, targetHeight));
-
-
-                    Camera.Parameters parameters = mCamera.getParameters();
-                    parameters.setPreviewSize(size.width, size.height);
-                    mCamera.setParameters(parameters);
-                }
-                mCamera.setPreviewDisplay(surfaceHolder);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            // Start the camera preview...
-            mCamera.startPreview();
-        }
-
-    }
-
-
-    @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder surfaceHolder) {
-        if (mCamera != null) {
-            mCamera.stopPreview();
-            mCamera.release();
-            mCamera = null;
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        startService(new Intent(this, TimerService.class));
-    }
-
-/*    private Preview mPreview;
-    Camera mCamera;
-    int numberOfCameras;
-    int cameraCurrentlyLocked;
-
-    // The first rear facing camera
-    int defaultCameraId;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // Hide the window title.
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        // Create a RelativeLayout container that will hold a SurfaceView,
-        // and set it as the content of our activity.
-        mPreview = new Preview(this);
-        setContentView(mPreview);
-
-        // Find the total number of cameras available
-        numberOfCameras = Camera.getNumberOfCameras();
-
-        // Find the ID of the default camera
-        CameraInfo cameraInfo = new CameraInfo();
-        for (int i = 0; i < numberOfCameras; i++) {
-            Camera.getCameraInfo(i, cameraInfo);
-            if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
-                defaultCameraId = i;
-            }
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // Open the default i.e. the first rear facing camera.
-        mCamera = Camera.open();
-        cameraCurrentlyLocked = defaultCameraId;
-        mPreview.setCamera(mCamera);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        // Because the Camera object is a shared resource, it's very
-        // important to release it when the activity is paused.
-        if (mCamera != null) {
-            mPreview.setCamera(null);
-            mCamera.release();
-            mCamera = null;
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-
-        // Inflate our menu which can gather user input for switching camera
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.camera_menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.switch_cam:
-                // check for availability of multiple cameras
-                if (numberOfCameras == 1) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                    builder.setMessage(this.getString(R.string.camera_alert))
-                            .setNeutralButton("Close", null);
-                    AlertDialog alert = builder.create();
-                    alert.show();
-                    return true;
-                }
-
-                // OK, we have multiple cameras.
-                // Release this camera -> cameraCurrentlyLocked
-                if (mCamera != null) {
-                    mCamera.stopPreview();
-                    mPreview.setCamera(null);
-                    mCamera.release();
-                    mCamera = null;
-                }
-
-                // Acquire the next camera and request Preview to reconfigure
-                // parameters.
-                mCamera = Camera
-                        .open((cameraCurrentlyLocked + 1) % numberOfCameras);
-                cameraCurrentlyLocked = (cameraCurrentlyLocked + 1)
-                        % numberOfCameras;
-                mPreview.switchCamera(mCamera);
-
-                // Start the preview
-                mCamera.startPreview();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-    */
-
     public void sendAlarmNotify(int AlmID,long AlmTm,String NotifyTitle,String NotifyMsg){
         /*AlmTm=AlmTm.replaceAll(" ","-").replaceAll("/","-").replaceAll(":","-");
         String[] sDts= AlmTm.split("-");
@@ -1373,8 +1145,6 @@ public class ImageCapture extends AppCompatActivity implements SurfaceHolder.Cal
         AlarmManager alarmManager=(AlarmManager) this.getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP,AlmTm,pIntent);
     }
-
-
     private final ServiceConnection mServiceConection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {

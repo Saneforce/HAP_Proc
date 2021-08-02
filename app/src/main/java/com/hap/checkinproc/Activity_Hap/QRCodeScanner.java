@@ -68,7 +68,7 @@ public class QRCodeScanner extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_q_r_code_scanner);
         initViews();
-        //startService(new Intent(this, TimerService.class));
+
         NameValue = String.valueOf(getIntent().getSerializableExtra("Name"));
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -311,41 +311,12 @@ public class QRCodeScanner extends AppCompatActivity {
             });
         }
     }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        //startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
         cameraSource.release();
-        //startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        //startService(new Intent(this, TimerService.class));
         Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        //startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-       // startService(new Intent(this, TimerService.class));
     }
 
     public static void bindEvents(GateEntryQREvents gateEntryQREvents){

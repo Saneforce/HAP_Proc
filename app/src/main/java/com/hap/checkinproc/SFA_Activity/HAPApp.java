@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks;
 import android.content.ComponentCallbacks2;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -20,6 +21,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.common.ConnectivityReceiver;
 import com.hap.checkinproc.common.DatabaseHandler;
+import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 
@@ -56,8 +58,12 @@ public class HAPApp extends Application {
             @Override
             public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
                 activeActivity = activity;
-
                 CommUserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+                try
+                {
+                    if(!CommUserDetails.getString("Sfcode","").equalsIgnoreCase(""))
+                    startService(new Intent(activeActivity, TimerService.class));
+                }catch (Exception e){}
                 Shared_Common_Pref.Sf_Code = CommUserDetails.getString("Sfcode", "");
                 Shared_Common_Pref.Sf_Name = CommUserDetails.getString("SfName", "");
                 Shared_Common_Pref.Div_Code = CommUserDetails.getString("Divcode", "");
@@ -74,6 +80,11 @@ public class HAPApp extends Application {
             @Override
             public void onActivityResumed(Activity activity) {
                 activeActivity = activity;
+                try
+                {
+                    if(!CommUserDetails.getString("Sfcode","").equalsIgnoreCase(""))
+                    startService(new Intent(activeActivity, TimerService.class));
+                }catch (Exception e){}
             }
 
             @Override

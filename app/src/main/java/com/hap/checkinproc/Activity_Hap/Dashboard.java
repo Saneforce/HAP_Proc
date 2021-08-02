@@ -79,7 +79,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
-        startService(new Intent(this, TimerService.class));
 
         db = new DatabaseHandler(this);
         username = findViewById(R.id.username);
@@ -101,9 +100,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         type = (UserDetails.getInt("CheckCount", 0));
 
         common_class = new Common_Class(this);
-
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
 
         String eMail = UserDetails.getString("email", "");
         String sSFName = UserDetails.getString("SfName", "");
@@ -572,8 +568,6 @@ Log.d("MDPError",t.getMessage());
     @Override
     protected void onResume() {
         super.onResume();
-        //  startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
         //Get_MydayPlan(1, "check/mydayplan");
 
         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
@@ -602,35 +596,5 @@ Log.d("MDPError",t.getMessage());
                 finish();
             }
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //  startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-        //   Get_MydayPlan(1, "check/mydayplan");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        // Get_MydayPlan(1, "check/mydayplan");
-        startService(new Intent(this, TimerService.class));
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Get_MydayPlan(1, "check/mydayplan");
-        startService(new Intent(this, TimerService.class));
     }
 }
