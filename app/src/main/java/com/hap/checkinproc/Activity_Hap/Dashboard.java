@@ -436,7 +436,14 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     ClosingKm = Integer.valueOf(jsonObject.getString("CheckEndKM"));
                     ClosingDate = jsonObject.getString("CheckEndDT");
 
-
+                    if (ClosingKm == 1) {
+                        Intent closingIntet = new Intent(Dashboard.this, AllowanceActivityTwo.class);
+                        closingIntet.putExtra("Cls_con", "cls");
+                        closingIntet.putExtra("Cls_dte", ClosingDate);
+                        startActivity(closingIntet);
+                        finish();
+                        return;
+                    }
                     Log.v("MOT_COUNT", String.valueOf(MotCount));
 
                     if (MotCount > 0)
@@ -516,7 +523,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
-Log.d("MDPError",t.getMessage());
+                Log.d("MDPError",t.getMessage());
             }
         });
     }

@@ -11,10 +11,15 @@ import androidx.annotation.NonNull;
 import androidx.core.app.JobIntentService;
 
 import com.hap.checkinproc.Activity.TAClaimActivity;
+import com.hap.checkinproc.Activity_Hap.Login;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 
@@ -27,6 +32,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.MediaType;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FileUploadService extends JobIntentService {
     private static final String TAG = "FileUploadService";
@@ -57,6 +66,7 @@ public class FileUploadService extends JobIntentService {
             Log.e(TAG, "onHandleWork: Invalid file URI");
             return;
         }
+
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Flowable<Double> fileObservable = Flowable.create(emitter -> {
             apiInterface.onFileUpload(mSF,FileName,Mode,
@@ -75,6 +85,10 @@ public class FileUploadService extends JobIntentService {
         mSF = intent.getStringExtra("SF");
         FileName=intent.getStringExtra("FileName");
         Mode=intent.getStringExtra("Mode");
+
+        DatabaseHandler db=new DatabaseHandler(FileUploadService.this);
+        db.addPhotoDetails(FileName.replaceAll(".jpg",""),mSF,Mode,FileName,mFilePath);
+
         UploadPhoto();
         /*
         if (mFilePath == null) {
@@ -95,6 +109,21 @@ public class FileUploadService extends JobIntentService {
     private void onErrors(Throwable throwable) {
     //sendBroadcastMeaasge("Error in file upload " + throwable.getMessage());
         UploadPhoto();
+
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        apiInterface.sendUpldPhotoErrorMsg("send/photouplerr",throwable.getMessage())
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
         Log.e(TAG, "onErrors: ", throwable);
     }
     private void onProgress(Double progress) {
@@ -102,6 +131,23 @@ public class FileUploadService extends JobIntentService {
         Log.i(TAG, "onProgress: " + progress);
     }
     private void onSuccess() {
+        DatabaseHandler db=new DatabaseHandler(FileUploadService.this);
+        db.deletePhotoDetails(FileName.replaceAll(".jpg",""));
+
+        JSONArray pendingPhotos=db.getAllPendingPhotos();
+        if(pendingPhotos.length()>0){
+            try {
+                JSONObject itm=pendingPhotos.getJSONObject(0);
+
+                mFilePath=itm.getString("FileURI");
+                mSF=itm.getString("SFCode");
+                FileName= itm.getString("FileName");
+                Mode= itm.getString("Mode");
+                UploadPhoto();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
         sendBroadcastMeaasge("File uploading successful ");
         Log.i(TAG, "onSuccess: File Uploaded");
 

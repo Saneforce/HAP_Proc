@@ -157,7 +157,6 @@ public class OrderCategoryActivity extends AppCompatActivity implements Master_I
 
         mHeaderNameValue = new ArrayList<>();
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
-        mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
         grandTotal = (TextView) findViewById(R.id.total_amount);

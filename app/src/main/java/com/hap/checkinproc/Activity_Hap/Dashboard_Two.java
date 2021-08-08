@@ -243,7 +243,6 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         btnGateOut = findViewById(R.id.btn_gate_out);
 
         mRecyclerView = findViewById(R.id.gate_recycle);
-        mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
         //mRecyclerView.stopScroll();
@@ -333,7 +332,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             }
         });
     }
-private void hideShimmer() {
+    private void hideShimmer() {
     if (LoadingCnt >= 2) {
         mShimmerViewContainer.stopShimmerAnimation();
         mShimmerViewContainer.setVisibility(View.GONE);
@@ -374,7 +373,6 @@ private void hideShimmer() {
             }
         });
     }
-
     private void getMnthReports(int m) {
         if (cModMnth == m) return;
         String[] mns = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -434,7 +432,6 @@ private void hideShimmer() {
             }
         });
     }
-
     private void getDyReports() {
         // appendDS = appendDS + "&divisionCode=" + userData.divisionCode + "&sfCode=" + sSF + "&rSF=" + userData.sfCode + "&State_Code=" + userData.State_Code;
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -527,12 +524,10 @@ private void hideShimmer() {
             }
         });
     }
-
     @Override
     public void onBackPressed() {
         Toast.makeText(Dashboard_Two.this, "There is no back action", Toast.LENGTH_LONG).show();
     }
-
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
@@ -544,7 +539,6 @@ private void hideShimmer() {
                     }
                 }
             });
-
     private void GetMissedPunch() {
         // appendDS = appendDS + "&divisionCode=" + userData.divisionCode + "&sfCode=" + sSF + "&rSF=" + userData.sfCode + "&State_Code=" + userData.State_Code;
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -646,8 +640,6 @@ private void hideShimmer() {
 
         });
     }
-
-
     @Override
     public void onClick(View v) {
         Intent intent = null;
@@ -730,7 +722,12 @@ private void hideShimmer() {
                 AlertDialogBox.showDialog(Dashboard_Two.this, "HAP Check-In", "Do you want to Checkout?", "Yes", "No", false, new AlertBox() {
                     @Override
                     public void PositiveMethod(DialogInterface dialog, int id) {
-                        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+
+                        Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
+                        takePhoto.putExtra("Mode", "COUT");
+                        startActivity(takePhoto);
+
+                        /*ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                         Call<JsonArray> Callto = apiInterface.getDataArrayList("get/CLSExp",
                                 UserDetails.getString("Divcode", ""),
                                 UserDetails.getString("Sfcode", ""), datefrmt);
@@ -786,7 +783,7 @@ private void hideShimmer() {
                             public void onFailure(Call<JsonArray> call, Throwable t) {
 
                             }
-                        });
+                        });*/
                     }
 
                     @Override
@@ -803,14 +800,12 @@ private void hideShimmer() {
             startActivity(intent);
         }
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         GetMissedPunch();
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
-
     public void gatevalue(String Date) {
         Log.v("plantimeplantime", Date);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -841,7 +836,6 @@ private void hideShimmer() {
 
 
     }
-
     public void sendAlarmNotify(int AlmID,long AlmTm,String NotifyTitle,String NotifyMsg){
 
         /*AlmTm=AlmTm.replaceAll(" ","-").replaceAll("/","-").replaceAll(":","-");

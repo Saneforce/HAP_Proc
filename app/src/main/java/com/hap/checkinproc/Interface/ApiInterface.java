@@ -456,7 +456,16 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("Db_v310.php?")
+    Call<JsonArray> getAndUpdate(@Query("axn") String axn, @Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?")
     Call<JsonArray> getLDGAllowance(@Query("axn") String axn, @Field("data") String body);
+
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?")
+    Call<ResponseBody> sendUpldPhotoErrorMsg(@Query("axn") String axn, @Field("data") String body);
 
 
 }

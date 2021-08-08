@@ -130,7 +130,6 @@ public class PayslipFtp extends AppCompatActivity {
         }
         bkFldrItems=new adBackFolders(FldrItems,this);
         mRecylPrvFldr = findViewById(R.id.prvFolder);
-        mRecylPrvFldr.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(RecyclerView.HORIZONTAL);
         mRecylPrvFldr.setLayoutManager(layoutManager);
@@ -145,7 +144,6 @@ public class PayslipFtp extends AppCompatActivity {
 
             listItems = new HAPListItem(lsFiles, this);
             mRecyclerView = findViewById(R.id.fileList);
-            mRecyclerView.setHasFixedSize(true);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(layoutManager);
 

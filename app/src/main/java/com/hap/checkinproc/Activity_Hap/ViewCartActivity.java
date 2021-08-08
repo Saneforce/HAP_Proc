@@ -248,7 +248,6 @@ public class ViewCartActivity extends AppCompatActivity {
             Log.i("Car__Data", cars.getProductname() + "-" + cars.getProductqty() + "__" + cars.getCatName() + "-" + cars.getProductcode());
         }*/
         viewRecyclerview = (RecyclerView) findViewById(R.id.report_list);
-        viewRecyclerview.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         viewRecyclerview.setLayoutManager(layoutManager);
 

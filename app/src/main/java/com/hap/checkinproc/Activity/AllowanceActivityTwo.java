@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
@@ -40,6 +41,7 @@ import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
 import com.hap.checkinproc.Activity_Hap.ERT;
 import com.hap.checkinproc.Activity_Hap.Help_Activity;
 import com.hap.checkinproc.Activity_Hap.ImageCapture;
+import com.hap.checkinproc.Activity_Hap.Login;
 import com.hap.checkinproc.Activity_Hap.Mydayplan_Activity;
 import com.hap.checkinproc.Activity_Hap.PayslipFtp;
 import com.hap.checkinproc.Activity_Hap.ProductImageView;
@@ -51,6 +53,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.FileUploadService;
@@ -101,6 +104,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+
         TextModeTravel = findViewById(R.id.txt_mode_travel);
         vwlblHead=findViewById(R.id.vwlblHead);
         TextDtTrv = findViewById(R.id.DtTrv);
@@ -123,9 +127,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         closingIntet.putExtra("Cls_con","cls");
         closingIntet.putExtra("Cls_dte","");*/
 
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.remove("SharedImages");
-        editor.commit();
         new LocationFinder(getApplication(), new LocationEvents() {
             @Override
             public void OnLocationRecived(Location location) {
@@ -174,37 +175,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                         }else if(TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")){
                             EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+maxKM)});
                         }
-                        Log.e("STARTED_KM", "GREATER");
-                    } else {
-                        Log.e("STARTED_KM", "Not GREATER");
                     }
-
-
-                 /*   try {
-                        stKM = Integer.valueOf(StartedKm);
-
-                    } catch (NumberFormatException ex) { // handle your exception
-
-                    }
-                    if (!EndedEditText.getText().toString().equals("")) {
-
-
-                        try {
-                            endKm = Integer.parseInt(EndedEditText.getText().toString());
-
-
-                        } catch (NumberFormatException ex) { // handle your exception
-
-                        }
-                    }
-                    Log.e("STARTED_KM", String.valueOf(endKm));
-                    if (stKM < endKm) {
-
-
-                        Log.e("STARTED_KM", "GREATER");
-                    } else {
-                        Log.e("STARTED_KM", "Not GREATER");
-                    }*/
                 }
 
 
@@ -264,6 +235,16 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                         cameraPermission.requestPermission();
                     }
                 } else {
+
+                    AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
+                        @Override
+                        public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
+                            Photo_Name = FileName;
+                            imageConvert=fullPath;
+                            EndedImage="file://"+fullPath;
+                            EndedKmImage.setImageBitmap(image);
+                        }
+                    });
                     Intent intent = new Intent(AllowanceActivityTwo.this, AllowancCapture.class);
                     intent.putExtra("allowance", "Two");
                     startActivity(intent);
@@ -280,7 +261,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                 if (EndedEditText.getText().toString().matches("")) {
                     Toast.makeText(AllowanceActivityTwo.this, "Choose End Km", Toast.LENGTH_SHORT).show();
                     return;
-                } else if (EndedImage.matches("")) { //if (EndedImage.matches("") && ((ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) )
+                } else if (imageConvert.matches("")) { //if (EndedImage.matches("") && ((ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) )
                     Toast.makeText(AllowanceActivityTwo.this, "Choose End photo", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
@@ -365,7 +346,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         try {
 
             Intent mIntent = new Intent(this, FileUploadService.class);
-            mIntent.putExtra("mFilePath", EndedImage);
+            mIntent.putExtra("mFilePath", imageConvert);
             mIntent.putExtra("SF", UserDetails.getString("Sfcode",""));
             mIntent.putExtra("FileName", Photo_Name);
             mIntent.putExtra("Mode", "Travel");
@@ -428,11 +409,10 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 shared_common_pref.clear_pref(Shared_Common_Pref.DAMode);
 
                                 //if (!ClosingCon.equals("")) {
-                                if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) {
+                                if (!(ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null")) && Common_Class.GetDate()!=ClosingDate) {
                                     startActivity(new Intent(getApplicationContext(), Mydayplan_Activity.class));
                                 } else {
-                                    Intent takePhoto = new Intent(AllowanceActivityTwo.this, ImageCapture.class);
-                                    takePhoto.putExtra("Mode", "COUT");
+                                    Intent takePhoto = new Intent(AllowanceActivityTwo.this, Login.class);
                                     startActivity(takePhoto);
                                 }
 
@@ -735,35 +715,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
             toPlace = myDataset.get(position).getName();
             StrToCode = myDataset.get(position).getId();
             Log.e("STRTOCOD", StrToCode);
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
-        if (sharedpreferences.contains("SharedImages")) {
-            EndedImage = sharedpreferences.getString("SharedImages", "");
-            Log.e("Privacypolicy", "Checking" + EndedImage);
-            EndedKmImage.setImageURI(Uri.parse(EndedImage));
-            imageConvert = EndedImage.substring(7);
-            Photo_Name=imageConvert.substring(imageConvert.lastIndexOf("/")+1);
-            Log.e("COnvert", EndedImage.substring(7));
-            Log.e("COnvert", imageConvert);
-            getMulipart(imageConvert, 0);
-
-            EndedKmImage.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.v("END_IAMGE", EndedImage);
-                    Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
-                    intent.putExtra("ImageUrl", EndedImage);
-                    startActivity(intent);
-                }
-            });
-
         }
     }
 }

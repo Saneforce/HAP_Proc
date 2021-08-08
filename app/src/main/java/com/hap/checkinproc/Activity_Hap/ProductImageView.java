@@ -31,10 +31,12 @@ public class ProductImageView extends Activity {
         ImageUrl = getIntent().getStringExtra("ImageUrl");
         ProductZoomImage = findViewById(R.id.product_image);
        // ProductZoomImage.setRotation(90);
-        if(ImageUrl.substring(0,1).equalsIgnoreCase("/")){
-            ImageUrl="file://"+ImageUrl;
+        if(ImageUrl.length()>4){
+            if(ImageUrl.substring(0,1).equalsIgnoreCase("/")){
+                ImageUrl="file://"+ImageUrl;
+            }
+            new DownLoadImageTask(ProductZoomImage).execute(ImageUrl);
         }
-        new DownLoadImageTask(ProductZoomImage).execute(ImageUrl);
     }
 
     public void CloseActivity(View v) {

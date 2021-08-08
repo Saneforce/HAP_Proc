@@ -19,11 +19,25 @@
             android:layout_marginBottom="@dimen/C100dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/C10dp"
             android:orientation="vertical">
+
+            <TextView
+                android:textStyle="bold"
+
+                android:text="Missed Punch Entry"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_yellow"
+                android:gravity="center"
+                android:padding="@dimen/C10dp"
+                android:textAllCaps="true"
+                android:textColor="@color/color_white"
+                android:textSize="@dimen/C14dp"/>
 
             <TextView
                 style="@style/TextStyle"

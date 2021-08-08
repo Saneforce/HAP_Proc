@@ -56,7 +56,6 @@ public class foodExp extends AppCompatActivity {
         txtempName.setText(UserDetails.getString("SfName",""));
         txtHQ.setText(UserDetails.getString("SFHQ",""));
         mRecyclerView = findViewById(R.id.foodExpList);
-        mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(layoutManager);
 
@@ -97,7 +96,7 @@ public class foodExp extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
-
+                Log.d("FoodExp","Error:" +t.getLocalizedMessage());
             }
         });
     }

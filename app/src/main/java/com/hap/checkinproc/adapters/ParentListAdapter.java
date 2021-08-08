@@ -126,7 +126,6 @@ public class ParentListAdapter extends RecyclerView.Adapter<ParentListAdapter.My
         }
         LinearLayoutManager layoutManager = new LinearLayoutManager(this.activity, LinearLayoutManager.VERTICAL, false);
         holder.subProductChild.setLayoutManager(layoutManager);
-        holder.subProductChild.setHasFixedSize(true);
         holder.subProductChild.setNestedScrollingEnabled(false);
         holder.subProductChild.setItemAnimator(new DefaultItemAnimator());
         ChildListAdapter eventListChildAdapter = new ChildListAdapter(this.activity, mProducts, myDataset, new ChildListInterface() {

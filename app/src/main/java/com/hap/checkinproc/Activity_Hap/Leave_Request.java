@@ -221,7 +221,6 @@ public class Leave_Request extends AppCompatActivity implements View.OnClickList
         lin_coffWrk.setVisibility(View.GONE);
 
         mRecycleLeaveRemaining = (RecyclerView) findViewById(R.id.leave_remaining);
-        mRecycleLeaveRemaining.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mRecycleLeaveRemaining.setLayoutManager(layoutManager);
 

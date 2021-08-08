@@ -58,7 +58,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity.AllowanceActivityTwo;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -746,9 +748,6 @@ Log.d(TAG,"Back button Pressed...");
         });
     }
     private void saveCheckIn() {
-
-
-
         try {
 
             Location location = mlocation;//Common_Class.location;//locationFinder.getLocation();
@@ -976,10 +975,35 @@ Log.d(TAG,"Back button Pressed...");
                             AlertDialogBox.showDialog(ImageCapture.this, "HAP Check-In", String.valueOf(Html.fromHtml(mMessage)), "Ok", "", false, new AlertBox() {
                                 @Override
                                 public void PositiveMethod(DialogInterface dialog, int id) {
-                                    Intent Dashboard = new Intent(ImageCapture.this, Login.class);
-                                    startActivity(Dashboard);
 
-                                    ((AppCompatActivity) ImageCapture.this).finish();
+                                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                                    Call<JsonArray> Callto = apiInterface.getDataArrayList("get/CLSExp",
+                                            UserDetails.getString("Divcode", ""),
+                                            UserDetails.getString("Sfcode", ""), CDate);
+
+                                    Log.v("DATE_REQUEST", Callto.request().toString());
+                                    Callto.enqueue(new Callback<JsonArray>() {
+                                        @Override
+                                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                                            if (response.body().size() > 0) {
+                                                Intent takePhoto = new Intent(ImageCapture.this, AllowanceActivityTwo.class);
+                                                takePhoto.putExtra("Mode", "COUT");
+                                                startActivity(takePhoto);
+                                            } else {
+
+                                                Intent Dashboard = new Intent(ImageCapture.this, Login.class);
+                                                startActivity(Dashboard);
+
+                                                ((AppCompatActivity) ImageCapture.this).finish();
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                                        }
+                                    });
                                 }
 
                                 @Override

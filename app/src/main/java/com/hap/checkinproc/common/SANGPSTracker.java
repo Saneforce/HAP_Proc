@@ -194,6 +194,7 @@ public class SANGPSTracker extends Service {
         Log.i(TAG, "Service started");
         boolean startedFromNotification =false;
         try {
+            if(intent!=null)
             startedFromNotification =intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
                     false);
             mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper());
@@ -458,11 +459,13 @@ public class SANGPSTracker extends Service {
         IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
         float batteryPct =-1;
         if(ifilter!=null) {
-            Intent batteryStatus = mContext.registerReceiver(new PowerConnectionReceiver(), ifilter);
+            BroadcastReceiver recvr=new PowerConnectionReceiver();
+            Intent batteryStatus = mContext.registerReceiver(recvr, ifilter);
 
             int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
             int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
              batteryPct = (level * 100) / (float) scale;
+             mContext.unregisterReceiver(recvr);
         }
         DatabaseHandler db = new DatabaseHandler(this);
         mLocation = location;

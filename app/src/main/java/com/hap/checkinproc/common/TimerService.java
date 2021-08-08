@@ -144,7 +144,6 @@ public class TimerService extends Service {
         Activity cAtivity = HAPApp.getActiveActivity();
         String sMsg = "";
         Context context = getApplicationContext();
-
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             LocationServices locationServices = new LocationServices(cAtivity, context);
             if (locationServices.checkPermission() == false) {
@@ -277,29 +276,23 @@ public class TimerService extends Service {
             }
 
             super.onTaskRemoved(rootIntent);
-
-
         } else {
             LocationServices locationServices = new LocationServices(cAtivity, context);
-
             if (locationServices.checkPermission1() == false) {
                 sMsg = "Lower Version";
-                //Log.v("KARTHIC_KUMAR", sMsg);
-
             } else {
-                   sMsg = "PERMISIN IS THERE";
-                //Log.v("KARTHIC_KUMAR", sMsg);
-
+                sMsg = "PERMISIN IS THERE";
             }
-
-
-            ViewGroup rootView = cAtivity.getWindow().getDecorView().findViewById(android.R.id.content);
+            ViewGroup rootView = null;
 
             try {
-                RelativeLayout el = rootView.findViewById(42311);
-                if (el.getVisibility() == View.VISIBLE) {
-                    rootView.removeView(el);
+                if(cAtivity.getWindow()!=null){
+                    rootView=cAtivity.getWindow().getDecorView().findViewById(android.R.id.content);
+                    RelativeLayout el = rootView.findViewById(42311);
+                    if (el.getVisibility() == View.VISIBLE) {
+                        rootView.removeView(el);
 
+                    }
                 }
             } catch (Exception e) {
             }
@@ -442,12 +435,15 @@ public class TimerService extends Service {
                     }else if(Connectivity.isConnectedFast(context)==false){
                         sMsg="Poor internet connectivity detected,access will take more time.";
                     }
-                    ViewGroup rootView = cAtivity.getWindow().getDecorView().findViewById(android.R.id.content);
+                    ViewGroup rootView = null;
 
                     try {
-                        RelativeLayout el=rootView.findViewById(4231);
-                        if(el.getVisibility()==View.VISIBLE){
-                            rootView.removeView(el);
+                        if(cAtivity.getWindow()!=null) {
+                            rootView = cAtivity.getWindow().getDecorView().findViewById(android.R.id.content);
+                            RelativeLayout el = rootView.findViewById(4231);
+                            if (el.getVisibility() == View.VISIBLE) {
+                                rootView.removeView(el);
+                            }
                         }
                     } catch(Exception e){}
 
@@ -461,10 +457,11 @@ public class TimerService extends Service {
                         }
                     }
 
+
                     SharedPreferences CheckInDetails = getSharedPreferences("CheckInDetail", Context.MODE_PRIVATE);
                     String ACutOff=CheckInDetails.getString("ShiftCutOff","");
                     if(!ACutOff.equalsIgnoreCase("")){
-
+                        DatabaseHandler db = new DatabaseHandler(context);
                         Common_Class Dt=new Common_Class();
                         Date CutOff=Dt.getDate(ACutOff);
                         String sDt=Dt.GetDateTime(getApplicationContext(),"yyyy-MM-dd HH:mm:ss");
@@ -475,7 +472,6 @@ public class TimerService extends Service {
                             sharedCommonPref.save("ActivityStart","false");
                             sharedCommonPref.save(sharedCommonPref.DCRMode, "");
                             ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                            DatabaseHandler db = new DatabaseHandler(context);
                             JSONArray locations=db.getAllPendingTrackDetails();
                             if(locations.length()>0 && UpdtFlag==false){
                                 try {
@@ -542,8 +538,8 @@ public class TimerService extends Service {
                         tv.setTextColor(Color.parseColor("#ffffff"));
                         relative.addView(tv);
 
-                        rootView.addView(relative);
-                        Log.d("service is ", "running" + cAtivity.getClass().getName());
+                       if (rootView!=null) rootView.addView(relative);
+                       // Log.d("service is ", "running" + cAtivity.getClass().getName());
                     }
 
                 }

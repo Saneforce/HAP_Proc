@@ -102,7 +102,6 @@ public class ViewReportActivity extends AppCompatActivity {
         //Log.e("productID1234567,", productId + "    " + orderDate);
 
         DateRecyclerView = (RecyclerView) findViewById(R.id.date_recycler);
-        DateRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         DateRecyclerView.setLayoutManager(layoutManager);
 

@@ -135,7 +135,6 @@ public class Outet_Report_Details extends AppCompatActivity {
         txtProductDate.setText(orderDate);
         TotalValue.setText("0");
         DateRecyclerView = (RecyclerView) findViewById(R.id.date_recycler);
-        DateRecyclerView.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         DateRecyclerView.setLayoutManager(layoutManager);
 

@@ -47,6 +47,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -57,12 +58,14 @@ import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.common.DatabaseHandler;
+import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -115,6 +118,20 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         db = new DatabaseHandler(this);
 
+        JSONArray pendingPhotos=db.getAllPendingPhotos();
+        if(pendingPhotos.length()>0){
+            try {
+                JSONObject itm=pendingPhotos.getJSONObject(0);
+                Intent mIntent = new Intent(Login.this, FileUploadService.class);
+                mIntent.putExtra("mFilePath", itm.getString("FileURI"));
+                mIntent.putExtra("SF", itm.getString("SFCode"));
+                mIntent.putExtra("FileName", itm.getString("FileName"));
+                mIntent.putExtra("Mode", itm.getString("Mode"));
+                FileUploadService.enqueueWork(Login.this, mIntent);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
         FirebaseMessaging.getInstance().getToken()
@@ -535,6 +552,7 @@ public class Login extends AppCompatActivity {
         //eMail = "sivakumar.s@hap.in";
         //eMail = "test@saneforce.com";
         //eMail = "krishna.ka@hap.in";
+        //eMail = "tamilarasan.vr@hap.in";
 
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {

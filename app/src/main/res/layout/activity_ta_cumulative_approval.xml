@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity_Hap.TACumulativeApproval">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <include layout="@layout/custom_toolbar_help" />
+
+        <TextView
+            android:textStyle="bold"
+
+            android:text="Travel Allowance Approval"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/button_yellow"
+            android:gravity="center"
+            android:layout_margin="@dimen/C10dp"
+            android:padding="@dimen/C10dp"
+            android:textAllCaps="true"
+            android:textColor="@color/color_white"
+            android:textSize="14sp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rclyApprLst"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/C10dp"
+                android:layout_marginRight="@dimen/C10dp">
+
+            </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
+</LinearLayout>

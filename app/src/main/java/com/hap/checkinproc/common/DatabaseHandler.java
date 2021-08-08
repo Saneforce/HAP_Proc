@@ -13,13 +13,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 4;
     private static final String DATABASE_NAME = "DBHAPCheckin";
     private static final String TABLE_Track = "Tracking_Location";
     private static final String Loc_Date = "Loc_Date";
     private static final String Loc_Lat = "Loc_Lat";
     private static final String Loc_Lng = "Loc_Lng";
-    private static final String SF_Code = "Loc_Lng";
+    private static final String SF_Code = "SF_Code";
     private static final String Speed = "Speed";
     private static final String Bearing = "Bearing";
     private static final String Accuracy = "Accuracy";
@@ -35,6 +35,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String TABLE_Masters = "HAP_Masters";
     private static final String ID = "ID";
     private static final String Data = "Data";
+
+    private static final String TABLE_Photos = "HAP_Photos";
+    private static final String ActionMode = "ActionMode";
+    private static final String PhFileNm = "FileName";
+    private static final String FileURI="FileURI";
+    private static final String SFCode="SFCode";
+
 
     public DatabaseHandler(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -62,6 +69,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 + ID + " TEXT PRIMARY KEY,"
                 + Data + " TEXT" + ")";
         db.execSQL(CREATE_Master_TABLE);
+
+        String CREATE_PHOTOS_TABLE = "CREATE TABLE " + TABLE_Photos + "("
+                + ID + " TEXT PRIMARY KEY,"
+                + ActionMode + " TEXT,"
+                + PhFileNm + " TEXT,"
+                + FileURI + " TEXT,"
+                + SFCode + " TEXT" + ")";
+        db.execSQL(CREATE_PHOTOS_TABLE);
     }
 
     // Upgrading database
@@ -70,6 +85,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_Track);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_Masters);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_Photos);
+
         // Create tables again
         onCreate(db);
     }
@@ -109,6 +126,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             uData = new JSONArray(cursor.getString(0));
         }
+        db.close();
 
         // return contact list
         return uData;
@@ -127,6 +145,63 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
         return true;
+    }
+
+
+    public void addPhotoDetails(String Key,String sSFCode, String uData,String FileName,String fileUri) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "SELECT  " + PhFileNm + " FROM " + TABLE_Photos + " WHERE " + ID + "='" + Key + "'";
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        if(cursor.getCount()<1){
+            ContentValues values = new ContentValues();
+            values.put(ID, Key);
+            values.put(ActionMode, uData);
+            values.put(PhFileNm, FileName);
+            values.put(FileURI,fileUri);
+            values.put(SFCode,sSFCode);
+            db.insert(TABLE_Photos, null, values);
+        }
+        db.close();
+    }
+    public void deletePhotoDetails(String Key) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TABLE_Photos, ID + " = ?",
+                new String[]{Key});
+        db.close();
+//        String selectQuery = "DELETE FROM " + TABLE_Photos + " WHERE " + ID + "='" + Key + "'";
+//        SQLiteDatabase db = this.getWritableDatabase();
+//        db.rawQuery(selectQuery, null);
+//        db.close();
+    }
+    public JSONArray getAllPendingPhotos() {
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_Photos;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        JSONArray jsonArray = new JSONArray();
+        if (cursor.moveToFirst()) {
+            do {
+                JSONObject item = new JSONObject();
+                try {
+                    item.put("ID", cursor.getString(0));
+                    item.put("Mode", cursor.getString(1));
+                    item.put("FileName", cursor.getString(2));
+                    item.put("FileURI", cursor.getString(3));
+                    item.put("SFCode", cursor.getString(4));
+                    } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                jsonArray.put(item);
+
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return jsonArray;
     }
 
     void addTrackDetails(JSONObject Location) {

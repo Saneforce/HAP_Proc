@@ -270,6 +270,7 @@ public class Approvals extends AppCompatActivity implements View.OnClickListener
 
             case R.id.lin_travel_allow:
                 startActivity(new Intent(Approvals.this, TAApprovalActivity.class));
+                //startActivity(new Intent(Approvals.this, TACumulativeApproval.class));
                 finish();
                 break;
 

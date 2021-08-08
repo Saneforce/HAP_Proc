@@ -38,7 +38,8 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
-        <activity android:name=".SFA_Activity.OrderHistoryActivity"></activity>
+        <activity android:name=".Activity_Hap.TACumulativeApproval"></activity>
+        <activity android:name=".SFA_Activity.OrderHistoryActivity" />
         <activity android:name=".SFA_Activity.MapDirectionActivity" />
         <activity android:name=".Activity.FuleEntryActivity" />
         <activity android:name=".Activity_Hap.DaExceptionStatus" />

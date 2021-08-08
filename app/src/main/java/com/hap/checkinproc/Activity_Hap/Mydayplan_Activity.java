@@ -563,10 +563,13 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         window.setGravity(Gravity.CENTER);
         window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         customDialog.show();
-
     }
 
     public boolean vali() {
+        if(worktype_text.getText().toString().equalsIgnoreCase("")){
+            Toast.makeText(this, "Select the worktype" , Toast.LENGTH_SHORT).show();
+            return false;
+        }
         for (int i = 0; i < dynamicarray.size(); i++) {
             if (dynamicarray.get(i).getFilter_Value() != null && dynamicarray.get(i).getFilter_Value().equals("") && dynamicarray.get(i).getFld_Mandatory().equals("1")) {
                 if (dynamicarray.get(i).getFld_Symbol().equals("JW")) {

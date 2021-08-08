@@ -123,7 +123,6 @@ public class EventCaptureActivity extends AppCompatActivity {
         Log.e("NEW_COUNT_VALULE", "Heeeee");
 
         mEventCapture = findViewById(R.id.event_capture_list);
-        mEventCapture.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mEventCapture.setLayoutManager(layoutManager);
         mEventCapture.setNestedScrollingEnabled(false);

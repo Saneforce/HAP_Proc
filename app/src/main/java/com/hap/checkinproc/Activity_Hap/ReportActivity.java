@@ -194,7 +194,6 @@ public class ReportActivity extends AppCompatActivity {
 
 
         mReportList = (RecyclerView) findViewById(R.id.report_list);
-        mReportList.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mReportList.setLayoutManager(layoutManager);
     }

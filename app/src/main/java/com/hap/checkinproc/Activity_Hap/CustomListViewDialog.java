@@ -86,8 +86,6 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
 
         }
 
-
-        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.setAdapter(da);
 

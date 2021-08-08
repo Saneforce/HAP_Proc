@@ -21,7 +21,6 @@ public class PDFActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_p_d_f);
         mPdfRecycler =  findViewById(R.id.pdf_recycler);
-        mPdfRecycler.setHasFixedSize(true);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         mPdfRecycler.setLayoutManager(layoutManager);
     }

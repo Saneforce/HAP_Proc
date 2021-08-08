@@ -83,6 +83,7 @@ import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.FuelListAdapter;
+import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.TimerService;
 
@@ -127,16 +128,18 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     Common_Class mCommon_class;
     GoogleMap mGoogleMap;
     ApiInterface apiInterface;
+    DatabaseHandler db;
     Uri outputFileUri;
     FuelListAdapter fuelListAdapter;
 
     LinearLayout Dynamicallowance, OtherExpense, localTotal, otherExpenseLayout, linAll, linRemarks,
-            linFareAmount, ldg_typ_sp, linLocalSpinner, linOtherSpinner,ldg_StylocSpinner, lodgCont, lodgContvw, ldg_stayloc, ldg_stayDt,
+            linFareAmount, ldg_typ_sp, linLocalSpinner, linOtherSpinner,ldg_StylocSpinner,DA_TypSpinner,DA_locSpinner, lodgCont, lodgContvw, ldg_stayloc, ldg_stayDt,
             lodgJoin, ldgEAra, ldgMyEAra, JNLdgEAra, drvldgEAra, jointLodging, vwBoarding, vwDrvBoarding,linAddplaces,
             linAddAllowance, diverAllowanceLinear, LDailyAllowance, LOtherExpense, LLocalConve, LinearOtherAllowance,
             linlocalCon, linBusMode, linBikeMode, linMode, travelDynamicLoaction,travelPlaces, linDailyAllowance, linback, lin,
             linImgPrv, TotalDays, stayDays, linEarly, linLate, linContinueStay, linCheckOut, vwldgBillAmt, linearConView;
     LinearLayout viewContinue, viewContinueTotal, ViewData;
+    RelativeLayout lnChangePlace;
     CardView card_date, TravelBike, crdDynamicLocation, ldg_ara,cardTrvPlcs;
 
     TextView txt_date, txt_ldg_type, TxtStartedKm, TxtClosingKm, modeTextView, travelTypeMode,
@@ -146,13 +149,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             fuelAmount, TextTotalAmount, editTexts, oeEditext, localText, OeText, grandTotal, txtallamt, txt_BrdAmt,
             txt_DrvBrdAmt, txtJointAdd, txtJNEligi, txtTAamt, txtDesig, txtDept, txtEmpId, txtName, oeTxtUKey, oeTxtUKeys,
             lcTxtUKey, lcTxtUKeys, tvTxtUKey, tvTxtUKeys, txtMaxKm, txtDrvrBrod, txtStyDays, txtLodgUKey,
-            txt_Styloc;
+            txt_Styloc,txt_DAStyloc,txt_DATyp,txtAllwType,txtCAllwType;
 
     EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt, edt1, edt_ldg_JnEmp,
             edt_ldg_bill, edtLcFare, lodgStyLocation, earCheckIn, earCheckOut, latCheckIn, latCheckOut, edtEarBill, edtLateBill;
 
     ImageView deleteButton, previewss, taAttach, lcAttach, oeAttach, lcPreview, oePreview, endkmimage, startkmimage,
-            img_lodg_prvw, img_lodg_atta, mapZoomIn, imgBck;
+            img_lodg_prvw, img_lodg_atta, mapZoomIn, imgBck,imgEdtPlace;
 
     String SF_code = "", div = "", State_Code = "", StartedKm = "", ClosingKm = "", ModeOfTravel = "", PersonalKm = "",
             DriverNeed = "", DateForAPi = "", DateTime = "", shortName = "", Exp_Name = "", Id = "", userEnter = "",
@@ -163,14 +166,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "", tvEditcnt = "", OeUKey = "",
             LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "",
             DATE = "", lodgEarly = "", lodgLate = "", tominYear = "", tominMonth = "", sty_date = "", tominDay = "", ConStay = "", ErlyStay = "", LteStay = "", ErlyChecIn = "", ErlyChecOut = "", ErlyAmt = "", LteAmt = "", LteChecIn = "", LteChecOut = "",
-            sLocId = "",sLocName ="";
+            sLocId = "",sLocName ="",sDALocId = "",sDALocName="",sDALType;
 
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
             oePosCnt = 0, lcPosCnt = 0, tvSize = 0, ttLod = 0, cnSty = 0, erlSty = 0, lteSty = 0;
 
     int size = 0, lcSize = 0, OeSize = 0, daysBetween = 0;
     long styDate = 0;
-
+ScrollView scrlMain;
     Double tofuel = 0.0, ldgEliAmt = 0.0, ldgDrvEligi = 0.0, gTotal = 0.0, TotLdging = 0.0,
             GrandTotalAllowance = 0.0, fAmount = 0.0, doubleAmount = 0.0, myBrdAmt = 0.0, drvBrdAmt = 0.0,
             otherExp = 0.0, localCov = 0.0, sum = 0.0, sumsTotss = 0.0, sumsTot = 0.0;
@@ -179,7 +182,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     float tJointAmt = 0;
 
     boolean changeStay=false;
-    Button btn_sub, buttonSave;
+    Button btn_sub, buttonSave,btnDAChange;
     int countLoding = 0;
 
     ArrayList<SelectionModel> array = new ArrayList<>();
@@ -190,11 +193,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     ArrayList<String> OEdynamicList, dynamicLabelList, attachCountList;
     ArrayList<String> lodgArrLst = new ArrayList<>();
 
+    List<Common_Model> listAllwType = new ArrayList<>();
     List<Common_Model> listOrderType = new ArrayList<>();
     List<Common_Model> modelRetailDetails = new ArrayList<>();
     List<Common_Model> OtherExpenseList = new ArrayList<>();
     List<Common_Model> ldgModes = new ArrayList<>();
     List<Common_Model> ldgLocations = new ArrayList<>();
+    List<Common_Model> ToPlaces = new ArrayList<>();
     List<Common_Model> modelTravelType = new ArrayList<>();
     List<ModeOfTravel> modelOfTravel;
     List<EditText> newEdt = new ArrayList<>();
@@ -317,6 +322,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         ldg_ara = findViewById(R.id.linear_loadge);
         ldg_typ_sp = findViewById(R.id.ldg_typ_spiner);
         ldg_StylocSpinner = findViewById(R.id.ldg_StylocSpinner);
+        DA_locSpinner = findViewById(R.id.DA_locSpinner);
+        DA_TypSpinner = findViewById(R.id.DA_TypSpinner);
+        lnChangePlace=findViewById(R.id.lnChangePlace);
+        imgEdtPlace=findViewById(R.id.img_edit);
+        scrlMain=findViewById(R.id.scrlMain);
 
         lodgCont = findViewById(R.id.lodgCont);
         lodgContvw = findViewById(R.id.lodgContvw);
@@ -364,6 +374,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         stayDays = findViewById(R.id.lin_stay_view);
         txtLodgUKey = findViewById(R.id.log_ukey);
         txt_Styloc=findViewById(R.id.txt_Styloc);
+        txt_DATyp=findViewById(R.id.txt_DATyp);
+        txtAllwType=findViewById(R.id.txtAllwType);
+        txtCAllwType=findViewById(R.id.cAllwType);
+
+        txt_DAStyloc=findViewById(R.id.txt_DAloc);
         earCheckIn = findViewById(R.id.early_check_in);
         earCheckOut = findViewById(R.id.early_check_out);
         latCheckIn = findViewById(R.id.late_check_in);
@@ -386,9 +401,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         viewContinueTotal = (LinearLayout) findViewById(R.id.lin_con_sty_amt);
         ViewData = findViewById(R.id.data);
         TextCheckInDate = findViewById(R.id.txt_hotel_date);
+        btnDAChange=findViewById(R.id.btnDAChange);
 
         mFuelRecycler = findViewById(R.id.recycler_fuel);
-        mFuelRecycler.setHasFixedSize(true);
         mFuelRecycler.setLayoutManager(new LinearLayoutManager(this));
         mFuelRecycler.setNestedScrollingEnabled(false);
 
@@ -481,6 +496,16 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         });
 
         drvldgEAra.setVisibility(View.VISIBLE);
+        lnChangePlace.setVisibility(View.GONE);
+
+        mCommon_model_spinner = new Common_Model("HQ", "HQ", "flag");
+        listAllwType.add(mCommon_model_spinner);
+        mCommon_model_spinner = new Common_Model("EXQ", "EXQ", "flag");
+        listAllwType.add(mCommon_model_spinner);
+        mCommon_model_spinner = new Common_Model("Out Station", "Out Station", "flag");
+        listAllwType.add(mCommon_model_spinner);
+
+
         ldgAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -507,6 +532,127 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 LDGType();
             }
         });
+        btnDAChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONObject data = new JSONObject();
+                try {
+                    if(txt_DATyp.getText().toString().equalsIgnoreCase("")){
+                        Toast.makeText(TAClaimActivity.this,"Select the DA Type",Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    if(sDALocId.toString().equalsIgnoreCase("")){
+                        Toast.makeText(TAClaimActivity.this,"Select the DA Type",Toast.LENGTH_LONG).show();
+                        return;
+                    }
+                    data.put("SF",UserDetails.getString("Sfcode",""));
+                    data.put("ExpDt",DateTime);
+                    data.put("DAType",txt_DATyp.getText());
+                    data.put("DALocId",sDALocId);
+                    data.put("DALoc",txt_DAStyloc.getText());
+
+                    apiInterface.getAndUpdate("update/DA",data.toString()).enqueue(new Callback<JsonArray>() {
+                        @Override
+                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                            JsonArray DADets=response.body();
+                            JsonObject jsonObject = DADets.get(0).getAsJsonObject();
+
+                            StrTo = jsonObject.get("To_Place").getAsString();
+                            StrDailyAllowance = jsonObject.get("dailyAllowance").getAsString();
+                            allowanceAmt = jsonObject.get("Allowance_Value").getAsString();
+                            myBrdEliAmt = jsonObject.get("myBrdAmt").getAsString();
+                            drvBrdEliAmt = jsonObject.get("drvBrdAmt").getAsString();
+                            DriverNeed = jsonObject.get("driverAllowance").getAsString();
+
+                            txtDailyAllowance.setText(StrDailyAllowance + " - " + StrTo);
+
+                            myBrdAmt = 0.0;
+                            //drvBrdAmt = 0.0;
+                            vwDrvBoarding.setVisibility(View.GONE);
+                            vwBoarding.setVisibility(View.VISIBLE);
+                            if (StrDailyAllowance.equals("Out Station")) {
+                                doubleAmount = 0.0;
+                                txtallamt.setText("");
+                                myBrdEliAmt = myBrdEliAmt.replaceAll("^[\"']+|[\"']+$", "");
+                                myBrdAmt = Double.valueOf(myBrdEliAmt);
+                                txt_BrdAmt.setText(" Rs." + new DecimalFormat("##0.00").format(myBrdAmt));
+                                if (DriverNeed.equalsIgnoreCase("true")) {
+                                    drvBrdEliAmt = drvBrdEliAmt.replaceAll("^[\"']+|[\"']+$", "");
+                                    drvBrdAmt = Double.valueOf(drvBrdEliAmt);
+                                    txt_DrvBrdAmt.setText(" Rs." + new DecimalFormat("##0.00").format(drvBrdAmt));
+
+                                    vwDrvBoarding.setVisibility(View.VISIBLE);
+                                    txtDrvrBrod.setText("Chauffer driven Boarding");
+                                } else {
+                                    txt_DrvBrdAmt.setText("");
+                                }
+
+                                vwBoarding.setVisibility(View.VISIBLE);
+                                SumOFDAAmount();
+                            }
+                            else {
+                                allowanceAmt = allowanceAmt.replaceAll("^[\"']+|[\"']+$", "");
+                                doubleAmount = Double.valueOf(allowanceAmt);
+                                myBrdAmt = 0.0;
+                                txtallamt.setText(" Rs." + new DecimalFormat("##0.00").format(doubleAmount));
+                                txt_BrdAmt.setText(" Rs.0.00");
+
+                                if (DriverNeed.equalsIgnoreCase("true")) {
+                                    drvBrdEliAmt = drvBrdEliAmt.replaceAll("^[\"']+|[\"']+$", "");
+                                    drvBrdAmt = Double.valueOf(drvBrdEliAmt);
+                                    txt_DrvBrdAmt.setText(" Rs." + new DecimalFormat("##0.00").format(drvBrdAmt));
+
+                                    vwDrvBoarding.setVisibility(View.VISIBLE);
+                                    txtDrvrBrod.setText("Chauffer driven Boarding");
+                                } else {
+                                    txt_DrvBrdAmt.setText("");
+                                }
+                                vwBoarding.setVisibility(View.GONE);
+                                SumOFDAAmount();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonArray> call, Throwable t) {
+Log.d("DACliam","Error : "+t.getMessage());
+                        }
+                    });
+
+                    lnChangePlace.setVisibility(View.GONE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        imgEdtPlace.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lnChangePlace.setVisibility(View.VISIBLE);
+            }
+        });
+        DA_locSpinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                customDialog = new CustomListViewDialog(TAClaimActivity.this, ToPlaces, 13);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+            }
+        });
+        DA_TypSpinner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                customDialog = new CustomListViewDialog(TAClaimActivity.this, listAllwType, 14);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+            }
+        });
+
         ldg_StylocSpinner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1582,6 +1728,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 }
                 mShimmerViewContainer.stopShimmerAnimation();
                 mShimmerViewContainer.setVisibility(View.GONE);
+                scrlMain.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -1717,6 +1864,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                             //myldgEliAmt = jsonObject.get("myLdgAmt").getAsString();
                             myBrdEliAmt = jsonObject.get("myBrdAmt").getAsString();
                             //drvldgEliAmt = jsonObject.get("drvLdgAmt").getAsString();
+                            sDALocId=jsonObject.get("To_Place").getAsString();
+                            sDALocName=jsonObject.get("To_Place_Id").getAsString();
+
                             drvBrdEliAmt = jsonObject.get("drvBrdAmt").getAsString();
                             start_Image = jsonObject.get("start_Photo").getAsString();
                             End_Imge = jsonObject.get("End_photo").getAsString();
@@ -1815,7 +1965,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
                             }*/
                             txtTaClaim.setText(StrDaName);
-
+                            txtAllwType.setText(jsonObject.get("HQ_Type").getAsString());
                             txtDailyAllowance.setText(StrDailyAllowance + " - " + StrTo);
                             myBrdAmt = 0.0;
                             drvBrdAmt = 0.0;
@@ -3581,6 +3731,23 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             }
             getStayAllow();
         }
+        if (type == 13){
+            sDALocId = myDataset.get(position).getId();
+            sDALocName = myDataset.get(position).getName();
+            JSONObject itm= myDataset.get(position).getJSONObject();
+
+            txt_DAStyloc.setText(sDALocName);
+            try {
+                txtAllwType.setText(itm.getString("HQ_Type"));
+                txtCAllwType.setText("Allowance : "+itm.getString("HQ_Type"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        if (type == 14){
+            sDALType = myDataset.get(position).getName();
+            txt_DATyp.setText(sDALType);
+        }
         if (type == 10) {
             txt_date.setText(myDataset.get(position).getName());
             Log.d("JSON_VALUE", myDataset.get(position).getId());
@@ -3771,6 +3938,21 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         });
     }
     public void loadLocations() {
+        db = new DatabaseHandler(this);
+        try {
+            JSONArray HAPLoca=db.getMasterData("HAPLocations");
+            for(int li=0;li<HAPLoca.length();li++){
+                JSONObject jItem=HAPLoca.getJSONObject(li);
+                Common_Model item=new Common_Model(jItem.getString("id"),jItem.getString("name"),jItem);
+                ldgLocations.add(item);
+                ToPlaces.add(item);
+            }
+            Common_Model itemOth = new Common_Model("-1","Other Location","");
+            ldgLocations.add(itemOth);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        /*
         JSONObject jj = new JSONObject();
         try {
             jj.put("sfCode", Shared_Common_Pref.Sf_Code);
@@ -3801,7 +3983,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             public void onFailure(Call<JsonArray> call, Throwable t) {
                 Log.d("LeaveTypeList", "Error");
             }
-        });
+        });*/
 
     }
     public void LDGType() {
