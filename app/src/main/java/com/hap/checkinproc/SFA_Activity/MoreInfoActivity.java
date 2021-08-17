@@ -2,7 +2,9 @@ package com.hap.checkinproc.SFA_Activity;
 
 
 import android.os.Bundle;
-import android.widget.Toolbar;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -11,41 +13,57 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
+import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class OrderHistoryActivity extends AppCompatActivity {
+public class MoreInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    TextView tvOutletName;
+
+    Common_Class common_class;
+    ImageView ivToolbarHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_history);
-
-//        toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
-
-        //   getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setContentView(R.layout.activity_more_info);
+        init();
+        tvOutletName.setText(Shared_Common_Pref.OutletName);
         setupViewPager(viewPager);
-
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+        common_class.gotoHomeScreen(this, ivToolbarHome);
+
+    }
+
+    void init() {
+        tvOutletName = findViewById(R.id.tvOutletName);
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        common_class = new Common_Class(this);
+        ivToolbarHome = (ImageView) findViewById(R.id.toolbar_home);
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new HistoryFragment("Jan"), "JAN");
-        adapter.addFragment(new HistoryFragment("Feb"), "FEB");
-        adapter.addFragment(new HistoryFragment("Mar"), "MAR");
+        adapter.addFragment(new MoreInfoFragmentThree("Mar"), "MAR");
+        adapter.addFragment(new MoreInfoFragmentTwo("Feb"), "FEB");
+        adapter.addFragment(new MoreInfoFragment("Jan"), "JAN");
         viewPager.setAdapter(adapter);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+
+        }
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {

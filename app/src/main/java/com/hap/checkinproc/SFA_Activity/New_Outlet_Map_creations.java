@@ -47,6 +47,8 @@ public class New_Outlet_Map_creations extends FragmentActivity implements OnMapR
     Common_Class common_class;
     private boolean permissionDenied = false;
 
+    Marker marker;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -152,7 +154,10 @@ public class New_Outlet_Map_creations extends FragmentActivity implements OnMapR
         mGoogleMap = googleMap;
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         mGoogleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-        Marker marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude())));
+
+        if (marker != null)
+            marker.remove();
+        marker = mGoogleMap.addMarker(new MarkerOptions().position(latLng).title(getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude())));
         AddressTextview.setText("" + getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude()));
 
 

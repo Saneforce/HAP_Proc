@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hap.checkinproc">
 
+     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -38,7 +41,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
-        <activity android:name=".SFA_Activity.OrderHistoryActivity"></activity>
+        <activity android:name=".SFA_Activity.MoreInfoActivity"></activity>
         <activity android:name=".SFA_Activity.MapDirectionActivity" />
         <activity android:name=".Activity.FuleEntryActivity" />
         <activity android:name=".Activity_Hap.DaExceptionStatus" />
@@ -90,7 +93,19 @@
         <activity android:name=".SFA_Activity.Dashboard_Order_Reports" />
         <activity android:name=".SFA_Activity.Offline_Sync_Activity" />
         <activity android:name=".SFA_Activity.Nearby_Outlets" />
-        <activity android:name=".SFA_Activity.Print_Invoice_Activity" />
+        <activity android:name=".SFA_Activity.Print_Invoice_Activity">
+
+
+            <intent-filter>
+                <action android:name="android.intent.action.PICK" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.OPENABLE" />
+
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
         <activity android:name=".SFA_Activity.Lead_Activity" />
         <activity android:name=".Activity_Hap.SFA_Activity" />
         <activity
@@ -387,6 +402,17 @@
             android:name=".common.AlmReceiver"
             android:enabled="true" />
         <receiver android:name=".SFA_Activity.GeofenceBroadcastReceiver" />
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.mydomain.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

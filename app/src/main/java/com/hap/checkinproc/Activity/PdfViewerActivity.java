@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ShareCompat;
+import androidx.core.content.FileProvider;
 
 import com.github.barteksc.pdfviewer.PDFView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -58,6 +60,21 @@ public class PdfViewerActivity extends AppCompatActivity {
                 shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://"+outputPath));
                 shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(Intent.createChooser(shareIntent, "Share it"));
+
+
+//                Uri fileUri = FileProvider.getUriForFile(getApplicationContext(), getApplicationContext().getPackageName() + ".provider",
+//                        outputPath);
+//
+//
+//                Intent intent = ShareCompat.IntentBuilder.from(PdfViewerActivity.this)
+//                        .setType("*/*")
+//                        .setStream(fileUri)
+//                        .setChooserTitle("Choose bar")
+//                        .createChooserIntent()
+//                        .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//
+//                startActivity(intent);
+
             }
         });
 

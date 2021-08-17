@@ -78,8 +78,8 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             gson = new Gson();
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
-            //String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List);
-            String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+            String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
+            // String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
             // System.out.println("OUTLETLIST" + sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List));
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
             Retailer_Modal_ListFilter = gson.fromJson(OrdersTable, userType);
@@ -103,8 +103,8 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
                 recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
             }
 
-            ImageView ivToolbarHome=findViewById(R.id.toolbar_home);
-            common_class.gotoHomeScreen(this,ivToolbarHome);
+            ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
+            common_class.gotoHomeScreen(this, ivToolbarHome);
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }

@@ -13,6 +13,7 @@
         tools:ignore="MissingConstraints">
 
         <LinearLayout
+            android:layout_margin="@dimen/C1dp"
             android:layout_width="match_parent"
 
             android:layout_height="wrap_content"
@@ -25,14 +26,13 @@
 
                 <TextView
                     android:id="@+id/productname"
-                    android:layout_width="@dimen/header_width1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
-                    android:layout_marginLeft="@dimen/sno"
                     android:gravity="left"
                     android:text="OrderID"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/C16dp"></TextView>
+                    android:textSize="@dimen/C13dp"></TextView>
             </LinearLayout>
 
 
@@ -46,10 +46,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/sno1"
-                    android:gravity="center"
+                    android:gravity="end"
                     android:text="54"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/C16dp"></TextView>
+                    android:textSize="@dimen/C13dp"></TextView>
             </LinearLayout>
 
             <LinearLayout
@@ -62,11 +62,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/sno1"
-                    android:gravity="center"
+                    android:gravity="end"
                     android:text="Value"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/C16dp"></TextView>
+                    android:textSize="@dimen/C13dp"></TextView>
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="@dimen/header_width2"
                 android:layout_height="wrap_content"
@@ -77,12 +78,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/sno1"
-                    android:gravity="center"
+                    android:gravity="end"
                     android:text="Value"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/C16dp"></TextView>
+                    android:textSize="@dimen/C13dp"></TextView>
             </LinearLayout>
         </LinearLayout>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_weight="1"
+            >
+
+        </RelativeLayout>
 
 
     </LinearLayout>

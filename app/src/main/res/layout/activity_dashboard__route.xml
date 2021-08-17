@@ -21,7 +21,9 @@
             android:layout_marginLeft="@dimen/C3dp"
             android:layout_marginRight="@dimen/C3dp"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:paddingTop="@dimen/C8dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="@dimen/C8dp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_date"
@@ -229,7 +231,8 @@
             android:layout_marginRight="@dimen/C3dp"
             android:layout_weight="0.8"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:paddingLeft="8dp"
+            android:paddingRight="@dimen/C8dp">
 
 
             <androidx.cardview.widget.CardView

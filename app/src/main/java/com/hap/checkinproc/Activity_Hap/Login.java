@@ -47,7 +47,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -55,7 +54,6 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
@@ -75,7 +73,7 @@ public class Login extends AppCompatActivity {
     Button btnLogin;
     ImageView profileImage;
     String photo;
-    String idToken, eMail,UserLastName,UserLastName1;
+    String idToken, eMail, UserLastName, UserLastName1;
     Button signInButton, ReportsButton, ExitButton;
 
     Shared_Common_Pref shared_common_pref;
@@ -323,25 +321,25 @@ public class Login extends AppCompatActivity {
                 Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
                 Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
 
-                String ActStarted=shared_common_pref.getvalue("ActivityStart");
-                if(ActStarted.equalsIgnoreCase("true")){
-                    Intent aIntent;
-                    String sDeptType = UserDetails.getString("DeptType", "");
-                    if (sDeptType.equalsIgnoreCase("1")) {
-                        aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
-                    } else {
-                        Shared_Common_Pref.Sync_Flag = "0";
-                        if (checkValueStore())
-                            aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
-                        else
-                            aIntent = new Intent(getApplicationContext(), Offline_Sync_Activity.class);
-                    }
-                    startActivity(aIntent);
-                }else{
-                    Intent Dashboard = new Intent(Login.this, Dashboard_Two.class);
-                    Dashboard.putExtra("Mode", "CIN");
-                    startActivity(Dashboard);
-                }
+                String ActStarted = shared_common_pref.getvalue("ActivityStart");
+//                if (ActStarted.equalsIgnoreCase("true")) {
+//                    Intent aIntent;
+//                    String sDeptType = UserDetails.getString("DeptType", "");
+//                    if (sDeptType.equalsIgnoreCase("1")) {
+//                        aIntent = new Intent(getApplicationContext(), ProcurementDashboardActivity.class);
+//                    } else {
+//                        Shared_Common_Pref.Sync_Flag = "0";
+//                        if (checkValueStore())
+//                            aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
+//                        else
+//                            aIntent = new Intent(getApplicationContext(), Offline_Sync_Activity.class);
+//                    }
+//                    startActivity(aIntent);
+//                } else {
+                Intent Dashboard = new Intent(Login.this, Dashboard_Two.class);
+                Dashboard.putExtra("Mode", "CIN");
+                startActivity(Dashboard);
+                // }
             }
         }
 
@@ -353,7 +351,7 @@ public class Login extends AppCompatActivity {
             JSONArray storeData = db.getMasterData(Constants.Distributor_List);
             if (storeData != null && storeData.length() > 0)
                 return true;
-        } catch (JSONException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -397,11 +395,11 @@ public class Login extends AppCompatActivity {
             name.setText(account.getEmail());
             profile = (account.getPhotoUrl());
             eMail = account.getEmail();
-            UserLastName=account.getFamilyName().replace("- ","")
-                    .replace("(","")
-                    .replace(")","")
-                    .replace("/","-");
-            UserLastName1=account.getDisplayName();
+            UserLastName = account.getFamilyName().replace("- ", "")
+                    .replace("(", "")
+                    .replace(")", "")
+                    .replace("/", "-");
+            UserLastName1 = account.getDisplayName();
             try {
                 Glide.with(this).load(account.getPhotoUrl()).into(profileImage);
                 photo = account.getPhotoUrl().toString();
@@ -519,6 +517,9 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(int requestCode) {
+        eMail = "ekumar.san@gmail.com";
+        // eMail="haptest5@hap.in";
+        // eMail="gunasekar.sa@hap.in";
         if (eMail.isEmpty()) {
             Toast.makeText(getApplicationContext(), "Invalid Email ID", Toast.LENGTH_LONG).show();
             mProgress.dismiss();
@@ -589,11 +590,13 @@ public class Login extends AppCompatActivity {
                         String sName = response.body().getData().get(0).getSfName();
                         String div = response.body().getData().get(0).getDivisionCode();
                         Integer type = response.body().getData().get(0).getCheckCount();
-                        String DesigNm =response.body().getData().get(0).getSfDesignationShortName();
-                        String SFRptCd=response.body().getData().get(0).getSfRptCode();;
-                        String SFRptNm=response.body().getData().get(0).getSfRptName();;
+                        String DesigNm = response.body().getData().get(0).getSfDesignationShortName();
+                        String SFRptCd = response.body().getData().get(0).getSfRptCode();
+                        ;
+                        String SFRptNm = response.body().getData().get(0).getSfRptName();
+                        ;
                         String DeptCd = response.body().getData().get(0).getSFDept();
-                        String DeptNm =response.body().getData().get(0).getDeptName();
+                        String DeptNm = response.body().getData().get(0).getDeptName();
                         String DeptType = response.body().getData().get(0).getDeptType();
                         String SFHQ = response.body().getData().get(0).getsFHQ();
                         String SFHQID = response.body().getData().get(0).getHQID();
@@ -681,7 +684,8 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Not Working", Toast.LENGTH_LONG).show();
                 try {
                     mProgress.dismiss();
-                } catch (Exception e) {
+                }
+                catch (Exception e) {
 
                 }
             }

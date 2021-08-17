@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -39,8 +38,6 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
-import com.hap.checkinproc.Activity_Hap.ImageCapture;
-import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -116,6 +113,8 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     private String dest_lat;
     private String dest_lng;
     private String dest_name;
+    private JSONArray oldData;
+    private Marker marker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,8 +150,8 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             gson = new Gson();
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
-            // String OrdersTable = shared_common_pref.getvalue(Shared_Common_Pref.Outlet_List);
-            String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+            String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
+            //  String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
             System.out.println("DISTANCE_CHECKING_Lat" + "---" + Shared_Common_Pref.Outletlat + "----->");
             System.out.println("DISTANCE_CHECKING_Long" + "---" + Shared_Common_Pref.Outletlong + "----->");
@@ -216,12 +215,12 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
 
-
         } catch (Exception e) {
             Log.e(TAG, " onCreate: " + e.getMessage());
 
         }
     }
+
 
     private void setClickListener() {
         ivFilterKeysMenu.setOnClickListener(this);
@@ -401,8 +400,18 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
         Log.v(TAG + " Doctor_detail_print", sb.toString());
 
-        if (!boolNextPage)
-            resData = new JSONArray();
+        if (!boolNextPage) {
+            oldData = null;
+            resData = null;
+            explore = null;
+
+            if (marker != null && map != null) {
+                for (int i = 0; i < mark.size(); i++) {
+                    mark.get(i).remove();
+                    //  marker.remove();
+                }
+            }
+        }
 
 
         if (common_class.isNetworkAvailable(this))
@@ -565,28 +574,18 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     public void getDrDetail(String placesdata) {
         try {
 
-            JSONArray oldData = null;
-            String oldKey;
 
             if (resData != null)
                 oldData = resData;
 
+
+            resData = new JSONArray();
+
+
             JSONObject jsonObject = new JSONObject(placesdata);
             resData = jsonObject.getJSONArray("results");
-            oldKey = nextPageToken;
             nextPageToken = jsonObject.optString("next_page_token");
             Log.e(TAG, "nextPageToken:" + nextPageToken);
-
-//            if (oldKey.length() > 1 && nextPageToken.equals("")) {
-//                return;
-//            }
-
-            if (oldData != null) {
-                for (int i = 0; i < oldData.length(); i++) {
-                    resData.put(oldData.get(i));
-
-                }
-            }
 
 
             for (int i = 0; i < resData.length(); i++) {
@@ -615,10 +614,13 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
                 Log.v("direction_latt", name + "phototss");
                 LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
-                Marker marker = map.addMarker(new MarkerOptions().position(latLng)
-                        .title(name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+//                marker = map.addMarker(new MarkerOptions().position(latLng)
+//                        .title(name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+
+                marker = map.addMarker(new MarkerOptions().position(latLng)
+                        .title((name)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
                 mark.add(marker);
-                mHashMap.put(marker, i);
+
 
             }
 
@@ -704,18 +706,34 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 
 
     public void drDetail() {
-        //if (explore == null) {
-        resData = removeDuplicateItem(resData);
-        explore = new ExploreMapAdapter(Nearby_Outlets.this, resData, String.valueOf(Shared_Common_Pref.Outletlat), String.valueOf(Shared_Common_Pref.Outletlong));
-        rclRetail.setAdapter(explore);
-        explore.notifyDataSetChanged();
+        try {
+            if (explore == null) {
+                explore = new ExploreMapAdapter(Nearby_Outlets.this, resData, String.valueOf(Shared_Common_Pref.Outletlat), String.valueOf(Shared_Common_Pref.Outletlong));
+                rclRetail.setAdapter(explore);
+                explore.notifyDataSetChanged();
 
-        common_class.ProgressdialogShow(0, "");
-//        } else {
-//            removeDuplicateItem(resData);
-//            explore = new ExploreMapAdapter(Nearby_Outlets.this, resData, String.valueOf(Shared_Common_Pref.Outletlat), String.valueOf(Shared_Common_Pref.Outletlong));
-//            explore.notifyDataSetChanged();
-//        }
+            } else {
+
+                if (oldData != null) {
+                    for (int i = 0; i < resData.length(); i++) {
+                        oldData.put(resData.get(i));
+
+                    }
+                }
+
+
+                resData = oldData;
+
+                resData = removeDuplicateItem(resData);
+
+                explore.notifyData(resData);
+
+            }
+
+            common_class.ProgressdialogShow(0, "");
+        } catch (Exception e) {
+
+        }
 
     }
 
@@ -773,7 +791,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onRestart() {
         super.onRestart();
-        drDetail();
+        // drDetail();
 
     }
 

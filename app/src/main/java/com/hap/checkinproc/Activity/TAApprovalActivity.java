@@ -113,44 +113,48 @@ public class TAApprovalActivity extends AppCompatActivity {
     }
 
     public void getTAList() {
+        try {
 
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> mTrave = apiInterface.getApprovalList(mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
-        mTrave.enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                JsonArray jsonArray = response.body();
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonArray> mTrave = apiInterface.getApprovalList(mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
+            mTrave.enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    JsonArray jsonArray = response.body();
 
-                Log.v("APPROVAL_LIST", jsonArray.toString());
-                recyclerView.setAdapter(new Travel_Approval_Adapter(jsonArray, R.layout.leave_approval_layout, getApplicationContext(), new AdapterOnClick() {
-                    @Override
-                    public void onIntentClick(int Name) {
-                        JsonObject jsonObject = (JsonObject) jsonArray.get(Name);
-                        Intent intent = new Intent(getApplicationContext(), TAViewStatus.class);
-                        intent.putExtra("TA_Date", jsonObject.get("id").getAsString());
-                        intent.putExtra("name", jsonObject.get("Sf_Name").getAsString());
-                        intent.putExtra("total_amount", jsonObject.get("Total_Amount").getAsString());
-                        intent.putExtra("head_quaters", jsonObject.get("HQ").getAsString());
-                        intent.putExtra("travel_mode", jsonObject.get("MOT_Name").getAsString());
-                        intent.putExtra("desig", jsonObject.get("sf_Designation_Short_Name").getAsString());
-                        intent.putExtra("dept", jsonObject.get("DeptName").getAsString());
-                        intent.putExtra("Sl_No", jsonObject.get("Sl_No").getAsString());
-                        intent.putExtra("sfCode", jsonObject.get("Sf_code").getAsString());
-                        intent.putExtra("SF_Mobile", jsonObject.get("SF_Mobile").getAsString());
-                        intent.putExtra("sf_emp_id", jsonObject.get("sf_emp_id").getAsString());
-                        intent.putExtra("TA_APPROVAL", "1");
-                        startActivity(intent);
+                    Log.v("APPROVAL_LIST", jsonArray.toString());
+                    recyclerView.setAdapter(new Travel_Approval_Adapter(jsonArray, R.layout.leave_approval_layout, getApplicationContext(), new AdapterOnClick() {
+                        @Override
+                        public void onIntentClick(int Name) {
+                            JsonObject jsonObject = (JsonObject) jsonArray.get(Name);
+                            Intent intent = new Intent(getApplicationContext(), TAViewStatus.class);
+                            intent.putExtra("TA_Date", jsonObject.get("id").getAsString());
+                            intent.putExtra("name", jsonObject.get("Sf_Name").getAsString());
+                            intent.putExtra("total_amount", jsonObject.get("Total_Amount").getAsString());
+                            intent.putExtra("head_quaters", jsonObject.get("HQ").getAsString());
+                            intent.putExtra("travel_mode", jsonObject.get("MOT_Name").getAsString());
+                            intent.putExtra("desig", jsonObject.get("sf_Designation_Short_Name").getAsString());
+                            intent.putExtra("dept", jsonObject.get("DeptName").getAsString());
+                            intent.putExtra("Sl_No", jsonObject.get("Sl_No").getAsString());
+                            intent.putExtra("sfCode", jsonObject.get("Sf_code").getAsString());
+                            intent.putExtra("SF_Mobile", jsonObject.get("SF_Mobile").getAsString());
+                            intent.putExtra("sf_emp_id", jsonObject.get("sf_emp_id").getAsString());
+                            intent.putExtra("TA_APPROVAL", "1");
+                            startActivity(intent);
 
-                    }
-                }));
-            }
+                        }
+                    }));
+                }
 
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
 
-            }
-        });
-
+                }
+            });
+        }
+        catch (Exception e){
+            Log.e("TAApproval: ",e.getMessage());
+        }
     }
 
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =

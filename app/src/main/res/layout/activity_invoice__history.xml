@@ -47,7 +47,8 @@
                 android:gravity="center"
                 android:text="Thirumalaivasan"
                 android:textColor="@color/black"
-                android:textSize="18dp" />
+                android:textSize="@dimen/C17dp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <RelativeLayout
@@ -82,11 +83,12 @@
 
             <LinearLayout
                 android:layout_width="@dimen/header_width1"
-                android:layout_height="@dimen/C45dp">
+                android:layout_height="@dimen/C45dp"
+                android:layout_weight="0.5">
 
                 <TextView
                     android:id="@+id/txt_order"
-                    android:layout_width="@dimen/header_width1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/sno"
@@ -99,7 +101,8 @@
 
             <LinearLayout
                 android:layout_width="@dimen/header_width2"
-                android:layout_height="@dimen/C45dp">
+                android:layout_height="@dimen/C45dp"
+                android:layout_weight="1">
 
                 <TextView
                     android:id="@+id/Itemcount"
@@ -114,7 +117,8 @@
 
             <LinearLayout
                 android:layout_width="@dimen/header_width2"
-                android:layout_height="@dimen/C45dp">
+                android:layout_height="@dimen/C45dp"
+                android:layout_weight="1">
 
                 <TextView
                     android:id="@+id/txt_total"
@@ -127,6 +131,24 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/C16dp"></TextView>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="@dimen/header_width2"
+                android:layout_height="@dimen/C45dp"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/txt_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:text="Type"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/C16dp"></TextView>
+            </LinearLayout>
+
         </LinearLayout>
 
 
@@ -138,8 +160,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/invoicerecyclerview"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/C60dp" />
+                android:layout_height="match_parent" />
         </LinearLayout>
 
         <LinearLayout
@@ -178,17 +199,17 @@
                 android:id="@+id/lin_repeat_order"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/C8dp"
+                android:layout_margin="@dimen/C7dp"
                 android:layout_weight="1"
                 android:background="@drawable/button_blueg"
-                android:gravity="center"
                 android:orientation="vertical"
                 android:visibility="gone">
 
                 <TextView
                     android:id="@+id/Completeclick"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="REPEAT   ORDER"

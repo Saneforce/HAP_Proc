@@ -29,7 +29,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.firebase.crashlytics.internal.model.CrashlyticsReport;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivityTwo;
@@ -48,7 +47,6 @@ import com.hap.checkinproc.adapters.HomeRptRecyler;
 import com.hap.checkinproc.common.AlmReceiver;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.SANGPSTracker;
-import com.hap.checkinproc.common.TimerService;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -74,7 +72,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     String viewMode = "", sSFType = "", mPriod = "0";
     int cModMnth = 1;
     Button viewButton;
-    Button StActivity, cardview3, cardview4, cardView5, btnCheckout, btnApprovals,btnExit;
+    Button StActivity, cardview3, cardview4, cardView5, btnCheckout, btnApprovals, btnExit;
     String AllowancePrefernce = "";
     ImageView btMyQR;
 
@@ -103,242 +101,248 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
     CardView cardGateDet;
     String dashMdeCnt = "";
     String datefrmt = "";
-    TextView TxtEmpId,txDesgName,txHQName,txDeptName,txRptName;
+    TextView TxtEmpId, txDesgName, txHQName, txDeptName, txRptName;
 
     Common_Class DT = new Common_Class();
     private ShimmerFrameLayout mShimmerViewContainer;
-    int LoadingCnt=0;
+    int LoadingCnt = 0;
     String TAG = "Dashboard_Two:LOG ";
     DatabaseHandler db;
     private String key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dashboard__two);
-        mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
-        mShimmerViewContainer.startShimmerAnimation();
-        db = new DatabaseHandler(this);
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_dashboard__two);
+            mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
+            mShimmerViewContainer.startShimmerAnimation();
+            db = new DatabaseHandler(this);
 
 
-        mShared_common_pref = new Shared_Common_Pref(this);
-        mShared_common_pref.save("Dashboard", "one");
-        sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
+            mShared_common_pref = new Shared_Common_Pref(this);
+            mShared_common_pref.save("Dashboard", "one");
+            sharedpreferences = getSharedPreferences(mypreference, Context.MODE_PRIVATE);
 
-        if (sharedpreferences.contains("SharedMode")) {
-            dashMdeCnt = sharedpreferences.getString("SharedMode", "");
-            Log.e("Privacypolicy_MODE", dashMdeCnt);
-        }
-
-        datefrmt = com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly();
-        Log.v("DATE_FORMAT_ONLY", datefrmt);
-
-        btMyQR = findViewById(R.id.myQR);
-        TextView txtHelp = findViewById(R.id.toolbar_help);
-        ImageView imgHome = findViewById(R.id.toolbar_home);
-        txtHelp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+            if (sharedpreferences.contains("SharedMode")) {
+                dashMdeCnt = sharedpreferences.getString("SharedMode", "");
+                Log.e("Privacypolicy_MODE", dashMdeCnt);
             }
-        });
 
-        CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
-        UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+            datefrmt = com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly();
+            Log.v("DATE_FORMAT_ONLY", datefrmt);
 
-        TxtEmpId = findViewById(R.id.txt_emp_id);
-        TxtEmpId.setText(UserDetails.getString("EmpId",""));
-        txHQName = findViewById(R.id.txHQName);
-        txDesgName = findViewById(R.id.txDesgName);
-        txDeptName = findViewById(R.id.txDeptName);
-        txRptName = findViewById(R.id.txRptName);
-        txHQName.setText(UserDetails.getString("DesigNm",""));
+            btMyQR = findViewById(R.id.myQR);
+            TextView txtHelp = findViewById(R.id.toolbar_help);
+            ImageView imgHome = findViewById(R.id.toolbar_home);
+            txtHelp.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), Help_Activity.class));
+                }
+            });
+
+            CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
+            UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+
+            TxtEmpId = findViewById(R.id.txt_emp_id);
+            TxtEmpId.setText(UserDetails.getString("EmpId", ""));
+            txHQName = findViewById(R.id.txHQName);
+            txDesgName = findViewById(R.id.txDesgName);
+            txDeptName = findViewById(R.id.txDeptName);
+            txRptName = findViewById(R.id.txRptName);
+            txHQName.setText(UserDetails.getString("DesigNm", ""));
 //        txHQName.setText(UserDetails.getString("SFHQ",""));
 //        txDesgName.setText(UserDetails.getString("SFDesig",""));
 //        txDeptName.setText(UserDetails.getString("DepteNm",""));
-        //txRptName.setText(UserDetails.getString("SFRptName",""));
+            //txRptName.setText(UserDetails.getString("SFRptName",""));
 
-        TextView txtErt = findViewById(R.id.toolbar_ert);
-        TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
-        txtErt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), ERT.class));
-            }
-        });
-        txtPlaySlip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
-            }
-        });
-
-        btMyQR.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Dashboard_Two.this, CateenToken.class);
-                startActivity(intent);
-            }
-        });
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");
-        String plantime = dpln.format(c.getTime());
-
-        gatevalue(plantime);
-        QRCodeScanner.bindEvents(new GateEntryQREvents() {
-            @Override
-            public void RefreshGateEntrys() {
-                gatevalue(plantime);
-            }
-        });
-        ObjectAnimator textColorAnim;
-        textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
-        textColorAnim.setDuration(500);
-        textColorAnim.setEvaluator(new ArgbEvaluator());
-        textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
-        textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
-        textColorAnim.start();
-
-        imgHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!viewMode.equalsIgnoreCase("CIN"))
-                    startActivity(new Intent(getApplicationContext(), Dashboard.class));
-            }
-        });
-
-        TextView txUserName = findViewById(R.id.txUserName);
-        String sUName = UserDetails.getString("SfName", "");
-        txUserName.setText("HI! " + sUName);
-        sSFType = UserDetails.getString("Sf_Type", "");
-        Log.d("CINDetails", CheckInDetails.toString());
-        cardview3 = findViewById(R.id.cardview3);
-        cardview4 = findViewById(R.id.btn_da_exp_entry);
-        cardView5 = findViewById(R.id.cardview5);
-        btnApprovals = findViewById(R.id.approvals);
-        mPriod = "0";
-        mvNxtMn = findViewById(R.id.nxtMn);
-        mvPrvMn = findViewById(R.id.prvMn);
-        mvNxtMn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mPriod == "-1") {
-                    mPriod = "0";
-                    getMnthReports(0);
+            TextView txtErt = findViewById(R.id.toolbar_ert);
+            TextView txtPlaySlip = findViewById(R.id.toolbar_play_slip);
+            txtErt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), ERT.class));
                 }
-            }
-        });
-
-        mvPrvMn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mPriod == "0") {
-                    mPriod = "-1";
-                    getMnthReports(-1);
+            });
+            txtPlaySlip.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), PayslipFtp.class));
                 }
-            }
-        });
-        cardGateDet = findViewById(R.id.cardGateDet);
-        btnGateIn = findViewById(R.id.btn_gate_in);
-        btnGateOut = findViewById(R.id.btn_gate_out);
+            });
 
-        mRecyclerView = findViewById(R.id.gate_recycle);
-        mRecyclerView.setHasFixedSize(true);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
-        //mRecyclerView.stopScroll();
+            btMyQR.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Dashboard_Two.this, CateenToken.class);
+                    startActivity(intent);
+                }
+            });
+            Calendar c = Calendar.getInstance();
+            SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");
+            String plantime = dpln.format(c.getTime());
 
-        if (UserDetails.getInt("CheckCount", 0) <= 0) {
-            btnApprovals.setVisibility(View.GONE);
-            //linApprovals.setVisibility(View.VISIBLE);
-        } else {
-            btnApprovals.setVisibility(View.VISIBLE);
-        }
+            gatevalue(plantime);
+            QRCodeScanner.bindEvents(new GateEntryQREvents() {
+                @Override
+                public void RefreshGateEntrys() {
+                    gatevalue(plantime);
+                }
+            });
+            ObjectAnimator textColorAnim;
+            textColorAnim = ObjectAnimator.ofInt(txtErt, "textColor", Color.WHITE, Color.TRANSPARENT);
+            textColorAnim.setDuration(500);
+            textColorAnim.setEvaluator(new ArgbEvaluator());
+            textColorAnim.setRepeatCount(ValueAnimator.INFINITE);
+            textColorAnim.setRepeatMode(ValueAnimator.REVERSE);
+            textColorAnim.start();
 
-        StActivity = findViewById(R.id.StActivity);
-        btnCheckout = findViewById(R.id.btnCheckout);
-        btnExit = findViewById(R.id.btnExit);
+            imgHome.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!viewMode.equalsIgnoreCase("CIN"))
+                        startActivity(new Intent(getApplicationContext(), Dashboard.class));
+                }
+            });
 
-        cardview3.setOnClickListener(this);
-        cardview4.setOnClickListener(this);
-        cardView5.setOnClickListener(this);
-        StActivity.setOnClickListener(this);
-        btnCheckout.setOnClickListener(this);
-        btnExit.setOnClickListener(this);
-        btnGateIn.setOnClickListener(this);
-        btnGateOut.setOnClickListener(this);
-        btnApprovals.setOnClickListener(this);
-        btnGateIn.setVisibility(View.GONE);
-        btnGateOut.setVisibility(View.GONE);
-        cardGateDet.setVisibility(View.GONE);
+            TextView txUserName = findViewById(R.id.txUserName);
+            String sUName = UserDetails.getString("SfName", "");
+            txUserName.setText("HI! " + sUName);
+            sSFType = UserDetails.getString("Sf_Type", "");
+            Log.d("CINDetails", CheckInDetails.toString());
+            cardview3 = findViewById(R.id.cardview3);
+            cardview4 = findViewById(R.id.btn_da_exp_entry);
+            cardView5 = findViewById(R.id.cardview5);
+            btnApprovals = findViewById(R.id.approvals);
+            mPriod = "0";
+            mvNxtMn = findViewById(R.id.nxtMn);
+            mvPrvMn = findViewById(R.id.prvMn);
+            mvNxtMn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mPriod == "-1") {
+                        mPriod = "0";
+                        getMnthReports(0);
+                    }
+                }
+            });
 
-        btnExit.setVisibility(View.GONE);
-        if (getIntent().getExtras() != null) {
-            Bundle params = getIntent().getExtras();
-            viewMode = params.getString("Mode");
+            mvPrvMn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mPriod == "0") {
+                        mPriod = "-1";
+                        getMnthReports(-1);
+                    }
+                }
+            });
+            cardGateDet = findViewById(R.id.cardGateDet);
+            btnGateIn = findViewById(R.id.btn_gate_in);
+            btnGateOut = findViewById(R.id.btn_gate_out);
 
-            if (viewMode.equalsIgnoreCase("CIN") || viewMode.equalsIgnoreCase("extended") ) {
-                cardview3.setVisibility(View.VISIBLE);
-                cardview4.setVisibility(View.VISIBLE);
-                //cardView5.setVisibility(View.VISIBLE);
-                StActivity.setVisibility(View.VISIBLE);
-                btnCheckout.setVisibility(View.VISIBLE);
+            mRecyclerView = findViewById(R.id.gate_recycle);
+            mRecyclerView.setHasFixedSize(true);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(layoutManager);
+            //mRecyclerView.stopScroll();
+
+            if (UserDetails.getInt("CheckCount", 0) <= 0) {
+                btnApprovals.setVisibility(View.GONE);
+                //linApprovals.setVisibility(View.VISIBLE);
+            } else {
                 btnApprovals.setVisibility(View.VISIBLE);
+            }
+
+            StActivity = findViewById(R.id.StActivity);
+            btnCheckout = findViewById(R.id.btnCheckout);
+            btnExit = findViewById(R.id.btnExit);
+
+            cardview3.setOnClickListener(this);
+            cardview4.setOnClickListener(this);
+            cardView5.setOnClickListener(this);
+            StActivity.setOnClickListener(this);
+            btnCheckout.setOnClickListener(this);
+            btnExit.setOnClickListener(this);
+            btnGateIn.setOnClickListener(this);
+            btnGateOut.setOnClickListener(this);
+            btnApprovals.setOnClickListener(this);
+            btnGateIn.setVisibility(View.GONE);
+            btnGateOut.setVisibility(View.GONE);
+            cardGateDet.setVisibility(View.GONE);
+
+            btnExit.setVisibility(View.GONE);
+            if (getIntent().getExtras() != null) {
+                Bundle params = getIntent().getExtras();
+                viewMode = params.getString("Mode");
+
+                if (viewMode.equalsIgnoreCase("CIN") || viewMode.equalsIgnoreCase("extended")) {
+                    cardview3.setVisibility(View.VISIBLE);
+                    cardview4.setVisibility(View.VISIBLE);
+                    //cardView5.setVisibility(View.VISIBLE);
+                    StActivity.setVisibility(View.VISIBLE);
+                    btnCheckout.setVisibility(View.VISIBLE);
+                    btnApprovals.setVisibility(View.VISIBLE);
+                } else {
+                    cardview3.setVisibility(View.GONE);
+                    // cardview4.setVisibility(View.GONE);
+                    cardView5.setVisibility(View.GONE);
+                    StActivity.setVisibility(View.GONE);
+                    btnCheckout.setVisibility(View.GONE);
+                    btnExit.setVisibility(View.VISIBLE);
+                    //               btnApprovals.setVisibility(View.GONE);
+                }
             } else {
                 cardview3.setVisibility(View.GONE);
-                // cardview4.setVisibility(View.GONE);
+                //cardview4.setVisibility(View.GONE);
                 cardView5.setVisibility(View.GONE);
                 StActivity.setVisibility(View.GONE);
                 btnCheckout.setVisibility(View.GONE);
-                btnExit.setVisibility(View.VISIBLE);
- //               btnApprovals.setVisibility(View.GONE);
             }
-        } else {
-            cardview3.setVisibility(View.GONE);
-            //cardview4.setVisibility(View.GONE);
-            cardView5.setVisibility(View.GONE);
-            StActivity.setVisibility(View.GONE);
-            btnCheckout.setVisibility(View.GONE);
-        }
-        if (sSFType.equals("0"))
-            StActivity.setVisibility(View.GONE);
+            if (sSFType.equals("0"))
+                StActivity.setVisibility(View.GONE);
 
-        getNotify();
-        getDyReports();
-        getMnthReports(0);
-        GetMissedPunch();
-        if (Integer.parseInt(CheckInDetails.getString("On_Duty_Flag", "0")) > 0 || sSFType.equals("1")) {
-            btnGateIn.setVisibility(View.VISIBLE);
-            btnGateOut.setVisibility(View.VISIBLE);
-            cardGateDet.setVisibility(View.VISIBLE);
-        }
-
-        String ChkOutTm=CheckInDetails.getString("ShiftEnd","");
-        if (!ChkOutTm.equalsIgnoreCase("")) {
-            long AlrmTime = DT.getDate(ChkOutTm).getTime();
-            long cTime=DT.GetCurrDateTime(Dashboard_Two.this).getTime();
-            if(AlrmTime>cTime){
-                sendAlarmNotify(1001, AlrmTime, "HAP Check-In", "Check-Out Alert !.");
+            getNotify();
+            getDyReports();
+            getMnthReports(0);
+            GetMissedPunch();
+            if (Integer.parseInt(CheckInDetails.getString("On_Duty_Flag", "0")) > 0 || sSFType.equals("1")) {
+                btnGateIn.setVisibility(View.VISIBLE);
+                btnGateOut.setVisibility(View.VISIBLE);
+                cardGateDet.setVisibility(View.VISIBLE);
             }
-        }
 
-
-        viewButton = findViewById(R.id.button3);
-        viewButton.setOnClickListener(this);
-        ImageView backView = findViewById(R.id.imag_back);
-        backView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
+            String ChkOutTm = CheckInDetails.getString("ShiftEnd", "");
+            if (!ChkOutTm.equalsIgnoreCase("")) {
+                long AlrmTime = DT.getDate(ChkOutTm).getTime();
+                long cTime = DT.GetCurrDateTime(Dashboard_Two.this).getTime();
+                if (AlrmTime > cTime) {
+                    sendAlarmNotify(1001, AlrmTime, "HAP Check-In", "Check-Out Alert !.");
+                }
             }
-        });
+
+
+            viewButton = findViewById(R.id.button3);
+            viewButton.setOnClickListener(this);
+            ImageView backView = findViewById(R.id.imag_back);
+            backView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mOnBackPressedDispatcher.onBackPressed();
+                }
+            });
+        } catch (Exception e) {
+
+        }
     }
-private void hideShimmer() {
-    if (LoadingCnt >= 2) {
-        mShimmerViewContainer.stopShimmerAnimation();
-        mShimmerViewContainer.setVisibility(View.GONE);
+
+    private void hideShimmer() {
+        if (LoadingCnt >= 2) {
+            mShimmerViewContainer.stopShimmerAnimation();
+            mShimmerViewContainer.setVisibility(View.GONE);
+        }
     }
-}
+
     private void getNotify() {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/notify",
@@ -424,13 +428,16 @@ private void hideShimmer() {
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(mAdapter);
                 Log.d(Tag, String.valueOf(response.body()));
-                LoadingCnt++;hideShimmer();
+                LoadingCnt++;
+                hideShimmer();
 
             }
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
-                Log.d(Tag, String.valueOf(t));LoadingCnt++;hideShimmer();
+                Log.d(Tag, String.valueOf(t));
+                LoadingCnt++;
+                hideShimmer();
             }
         });
     }
@@ -446,11 +453,13 @@ private void hideShimmer() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 JsonArray res = response.body();
-                Log.v(TAG + "getDyReports", res.toString());
+                //  Log.v(TAG + "getDyReports", res.toString());
                 if (res.size() < 1) {
                     Toast.makeText(getApplicationContext(), "No Records Today", Toast.LENGTH_LONG).show();
 
-                    LoadingCnt++;hideShimmer();return;
+                    LoadingCnt++;
+                    hideShimmer();
+                    return;
                 }
                 JsonObject fItm = res.get(0).getAsJsonObject();
                 TextView txDyDet = findViewById(R.id.lTDyTx);
@@ -509,14 +518,16 @@ private void hideShimmer() {
                 recyclerView.setLayoutManager(mLayoutManager);
                 recyclerView.setItemAnimator(new DefaultItemAnimator());
                 recyclerView.setAdapter(mAdapter);
-                LoadingCnt++;hideShimmer();
+                LoadingCnt++;
+                hideShimmer();
 
             }
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
                 Log.d(Tag, String.valueOf(t));
-                LoadingCnt++;hideShimmer();
+                LoadingCnt++;
+                hideShimmer();
             }
         });
         ImageView backView = findViewById(R.id.imag_back);
@@ -547,17 +558,18 @@ private void hideShimmer() {
 
     private void GetMissedPunch() {
         // appendDS = appendDS + "&divisionCode=" + userData.divisionCode + "&sfCode=" + sSF + "&rSF=" + userData.sfCode + "&State_Code=" + userData.State_Code;
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> modelCall = apiInterface.getDataList("CheckWeekofandmis",
-                UserDetails.getString("Divcode", ""),
-                UserDetails.getString("Sfcode", ""), "", "", null);
-        modelCall.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                Log.d(TAG + "GetMissedPunch", String.valueOf(response.body()));
-                JsonObject itm = response.body().getAsJsonObject();
-                String mMessage = "";
-                try {
+        try {
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonObject> modelCall = apiInterface.getDataList("CheckWeekofandmis",
+                    UserDetails.getString("Divcode", ""),
+                    UserDetails.getString("Sfcode", ""), "", "", null);
+            modelCall.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    Log.d(TAG + "GetMissedPunch", String.valueOf(response.body()));
+                    JsonObject itm = response.body().getAsJsonObject();
+                    String mMessage = "";
+
                     mMessage = itm.get("Msg").getAsString();
                     JsonArray MissedItems = itm.getAsJsonArray("GetMissed");
                     if (MissedItems.size() > 0) {
@@ -634,17 +646,18 @@ private void hideShimmer() {
                             }
                         }
                     }
-                } catch (Exception e) {
+
+
                 }
 
-            }
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
 
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
+                }
 
-            }
-
-        });
+            });
+        } catch (Exception e) {
+        }
     }
 
 
@@ -842,7 +855,7 @@ private void hideShimmer() {
 
     }
 
-    public void sendAlarmNotify(int AlmID,long AlmTm,String NotifyTitle,String NotifyMsg){
+    public void sendAlarmNotify(int AlmID, long AlmTm, String NotifyTitle, String NotifyMsg) {
 
         /*AlmTm=AlmTm.replaceAll(" ","-").replaceAll("/","-").replaceAll(":","-");
         String[] sDts= AlmTm.split("-");
@@ -850,11 +863,11 @@ private void hideShimmer() {
         cal.set(sDts[0],sDts[1],sDts[2],sDts[3],sDts[4]);*/
 
         Intent intent = new Intent(this, AlmReceiver.class);
-        intent.putExtra("ID",String.valueOf(AlmID));
-        intent.putExtra("Title",NotifyTitle);
-        intent.putExtra("Message",NotifyMsg);
-        PendingIntent pIntent=PendingIntent.getBroadcast(this.getApplicationContext(),AlmID,intent,0);
-        AlarmManager alarmManager=(AlarmManager) this.getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,AlmTm,pIntent);
+        intent.putExtra("ID", String.valueOf(AlmID));
+        intent.putExtra("Title", NotifyTitle);
+        intent.putExtra("Message", NotifyMsg);
+        PendingIntent pIntent = PendingIntent.getBroadcast(this.getApplicationContext(), AlmID, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, AlmTm, pIntent);
     }
 }

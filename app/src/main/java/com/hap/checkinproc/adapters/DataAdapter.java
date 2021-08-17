@@ -116,7 +116,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
                 } else {
                     lastChecked = null;
                     shared_common_pref.save(Constants.MAP_KEY, "");
-                    Nearby_Outlets.nearby_outlets.getExploreDr(false);
+                   // Nearby_Outlets.nearby_outlets.getExploreDr(false);
                 }
 
 

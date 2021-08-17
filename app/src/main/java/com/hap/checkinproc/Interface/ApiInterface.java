@@ -11,7 +11,6 @@ import com.hap.checkinproc.Model_Class.ReportDataList;
 import com.hap.checkinproc.Model_Class.RetailerViewDetails;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -141,7 +140,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=save/taexecptionapprove")
-    Call<JsonObject> DCRSaves( @Field("data") String body);
+    Call<JsonObject> DCRSaves(@Field("data") String body);
 
     @FormUrlEncoded
     @POST("Db_v300.php")
@@ -214,6 +213,7 @@ public interface ApiInterface {
     Call<Object> Getwe_Status(@Query("Priod") String Amod, @Query("sfCode") String sFCode,
                               @Query("axn") String axn, @Query("Status") String status,
                               @Field("data") String data);
+
     @FormUrlEncoded
     @POST("db_new_activity.php?axn=get/travelmode")
     Call<ResponseBody> getTravelMode(@Field("data") String userData);
@@ -243,7 +243,7 @@ public interface ApiInterface {
     Call<ResponseBody> getDailyAllowance(@Field("data") String userData);
 
     @FormUrlEncoded
-        @POST("db_new_activity.php?axn=get/startkmdetails")
+    @POST("db_new_activity.php?axn=get/startkmdetails")
     Call<ResponseBody> getStartKmDetails(@Field("data") String userData);
 
     @FormUrlEncoded
@@ -290,6 +290,7 @@ public interface ApiInterface {
     @POST("Db_v300.php?axn=dcr/save")
     Call<JSONArray> submitValueA(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode,
                                  @Field("data") String data);
+
     /*ReportView*/
     @POST("db_v14.php?axn=get/ViewReport")
     Call<ReportDataList> reportValues(@Query("Sf_code") String sFCode, @Query("fromdate") String fromdate, @Query("todate") String todate);
@@ -320,6 +321,10 @@ public interface ApiInterface {
     @POST("Db_v300.php")
     Call<JsonObject> addNewRetailer(@QueryMap Map<String, String> params, @Field("data") String body);
 
+//    @Multipart
+//    @POST("Db_v300.php")
+//    Call<JsonObject> addNewRetailer(@QueryMap Map<String, String> params, @Field("data") String body, @Part MultipartBody.Part file);
+
     @FormUrlEncoded
     @POST("Db_v300.php?axn=table/list")
     Call<JsonArray> retailerClass(@Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Field("data") String data);
@@ -344,7 +349,7 @@ public interface ApiInterface {
     Call<Object> getHolidayStatus(@Query("AMod") String Amod, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn, @Field("data") String data);
 
 
-   @FormUrlEncoded
+    @FormUrlEncoded
     @POST("db_new_activity.php")
     Call<Object> getHolidayStatuss(@Query("AMod") String Amod, @Query("divisionCode") String disvisonCode, @Query("sfCode") String sFCode, @Query("rSF") String rSF, @Query("State_Code") String StateCode, @Query("axn") String axn, @Field("data") String data);
 
@@ -387,6 +392,13 @@ public interface ApiInterface {
     Single<ResponseBody> onFileUpload(@Query("sfCode") String sfcode, @Query("FileName") String FileName, @Query("Mode") String Mode,
                                       @Part MultipartBody.Part file);
 
+
+    @Multipart
+    @POST("db_new_activity.php?axn=upload/checkinimage")
+    Call<ResponseBody> outletFileUpload(@Query("sfCode") String sfcode, @Query("FileName") String FileName, @Query("Mode") String Mode,
+                                        @Part MultipartBody.Part file);
+
+
     @POST("db_new_activity.php?axn=get/TA_Image")
     Call<JsonArray> allPreview(@Query("U_key") String keyCode,
                                @Query("HeadTravel") String HeadTravel,
@@ -414,7 +426,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("db_v310.php?axn=save/salescalls")
-    Call<JsonObject> saveCalls(@Query("divisionCode") String div_code, @Query("Sf_code")  String sf_code, @Field("data") String toString);
+    Call<JsonObject> saveCalls(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
     @POST("Db_v310.php?")
@@ -452,11 +464,15 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("Db_v310.php?")
-    Call<ResponseBody> updateAllowance(  @Query("axn") String axn,@Field("data") String userData);
+    Call<ResponseBody> updateAllowance(@Query("axn") String axn, @Field("data") String userData);
 
     @FormUrlEncoded
     @POST("Db_v310.php?")
     Call<JsonArray> getLDGAllowance(@Query("axn") String axn, @Field("data") String body);
 
 
+    @Multipart
+    @POST("db_new_activity.php?axn=upload/Taimg")
+    Call<ResponseBody> uploadOutletImage(
+            @Part MultipartBody.Part file);
 }

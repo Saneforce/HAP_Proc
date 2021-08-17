@@ -460,7 +460,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                         finish();
                                     }
 
-                                } catch (Exception e) {
+                                }
+                                catch (Exception e) {
 
                                 }
                             }
