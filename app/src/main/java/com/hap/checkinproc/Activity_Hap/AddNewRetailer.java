@@ -160,7 +160,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             gson = new Gson();
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
-             String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
+            String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
             //String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
 
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
@@ -382,11 +382,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     }
                 }
 
-                ImageView ivShopPhoto = findViewById(R.id.ivShopPhoto);
-
-                if (shared_common_pref.getvalue(Constants.SHOP_PHOTO, "").equals("")) {
-                    ivShopPhoto.setImageResource(R.drawable.profile_img);
-                } else {
+//                ImageView ivShopPhoto = findViewById(R.id.ivShopPhoto);
+//
+//                if (shared_common_pref.getvalue(Constants.SHOP_PHOTO, "").equals("")) {
+//                    ivShopPhoto.setImageResource(R.drawable.profile_img);
+//                } else {
 //                    Glide.with(this)
 //                            .load(shared_common_pref.getvalue(Constants.SHOP_PHOTO, "")) // image url
 //                            .placeholder(R.drawable.profile_img) // any placeholder to load at start
@@ -394,7 +394,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //                            .override(200, 200) // resizing
 //                            .centerCrop()
 //                            .into(ivShopPhoto);
-                }
+                // }
 
 
             }
@@ -522,7 +522,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
     public int getOutletPosition() {
-
         for (int i = 0; Retailer_Modal_List.size() > i; i++) {
             if (Retailer_Modal_List.get(i).getId().equals(Shared_Common_Pref.OutletCode)) {
                 return i;

@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.hap.checkinproc">
 
-     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <uses-permission android:name="android.permission.CAMERA" />
@@ -107,7 +107,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".SFA_Activity.Lead_Activity" />
-        <activity android:name=".Activity_Hap.SFA_Activity" />
+        <activity
+            android:name=".Activity_Hap.SFA_Activity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".Activity_Hap.AttachementActivity"
             android:screenOrientation="portrait"

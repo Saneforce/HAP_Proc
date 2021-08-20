@@ -116,5 +116,8 @@ dependencies {
     implementation 'com.mcxiaoke.volley:library-aar:1.0.0'
     implementation 'com.github.kenglxn.QRGen:android:2.6.0'
 
+    implementation 'com.google.android.material:material:1.0.0'
 
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation project(':MPChartLib')
 }

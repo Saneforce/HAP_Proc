@@ -425,11 +425,6 @@ public class Common_Class {
 //
 //        return false;
 //    }
-
-
-
-
-
    /* public void Reurnypeface(class cl,){
         userType = new TypeToken<ArrayList<Work_Type_Model>>() {
         }.getType();

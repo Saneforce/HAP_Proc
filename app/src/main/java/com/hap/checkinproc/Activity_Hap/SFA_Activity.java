@@ -2,23 +2,33 @@ package com.hap.checkinproc.Activity_Hap;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Switch;
+import android.widget.TextView;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.google.gson.Gson;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
-import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.MVP.Main_Model;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.CombinedChartFragment;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.Dist_Locations;
@@ -30,9 +40,9 @@ import com.hap.checkinproc.SFA_Activity.SFADCRActivity;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
 import com.hap.checkinproc.common.DatabaseHandler;
 
-import org.json.JSONArray;
-
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SFA_Activity extends AppCompatActivity implements View.OnClickListener /*,Main_Model.MasterSyncView*/ {
     LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders;
@@ -44,6 +54,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     DatabaseHandler db;
 
     ImageView ivLogout;
+    // private TabLayout tabLayout;
+    private ViewPager viewPager;
+    private RelativeLayout dotsLayout;
+    private TextView[] dots;
+
+    Switch switchGraphMode;
+    private ViewPagerAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +80,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         linorders = findViewById(R.id.linorders);
         lin_Reports = findViewById(R.id.lin_Reports);
         Logout = findViewById(R.id.Logout);
+        switchGraphMode = (Switch) findViewById(R.id.switchCumulativeMode);
+
         common_class = new Common_Class(this);
         SyncButon.setOnClickListener(this);
         Lin_Route.setOnClickListener(this);
@@ -92,6 +112,181 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 //            common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
 
 
+        init();
+
+
+        addBottomDots(0);
+
+
+        ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageSelected(int position) {
+                addBottomDots(position);
+
+//            // changing the next button text 'NEXT' / 'GOT IT'
+//            if (position == layouts.length - 1) {
+//                // last page. make button text to GOT IT
+//                btnNext.setText(getString(R.string.start));
+//                btnSkip.setVisibility(View.GONE);
+//            } else {
+//                // still pages are left
+//                btnNext.setText(getString(R.string.next));
+//                btnSkip.setVisibility(View.VISIBLE);
+//            }
+            }
+
+            @Override
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int arg0) {
+
+            }
+        };
+
+        switchGraphMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+
+                    setupViewPager(viewPager, true);
+                } else {
+
+                    setupViewPager(viewPager, false);
+                }
+            }
+        });
+
+        setupViewPager(viewPager, false);
+        viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+
+
+        // tabLayout.setupWithViewPager(viewPager);
+
+
+    }
+
+    private void addBottomDots(int currentPage) {
+        try {
+
+            TextView tvDot1 = findViewById(R.id.layoutDots1);
+            TextView tvDot2 = findViewById(R.id.layoutDots2);
+            TextView tvDot3 = findViewById(R.id.layoutDots3);
+
+            switch (currentPage) {
+                case 0:
+                    tvDot1.setTextColor(Color.BLUE);
+                    tvDot2.setTextColor(Color.LTGRAY);
+                    tvDot3.setTextColor(Color.LTGRAY);
+                    break;
+                case 1:
+                    tvDot1.setTextColor(Color.LTGRAY);
+                    tvDot2.setTextColor(Color.BLUE);
+                    tvDot3.setTextColor(Color.LTGRAY);
+
+                    break;
+                case 2:
+                    tvDot1.setTextColor(Color.LTGRAY);
+                    tvDot2.setTextColor(Color.LTGRAY);
+                    tvDot3.setTextColor(Color.BLUE);
+
+                    break;
+            }
+
+
+        } catch (Exception e) {
+            Log.e("SliderConcept: ", e.getMessage());
+        }
+    }
+
+    private void setupViewPager(ViewPager viewPager, boolean isGraphMode) {
+
+
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        if (isGraphMode) {
+            adapter.resetFragment();
+            adapter.addFragment(new CombinedChartFragment(this, "Table4"), "T4");
+
+            findViewById(R.id.llPagerDots).setVisibility(View.GONE);
+
+        } else {
+            adapter.resetFragment();
+            adapter.addFragment(new DashboardTableDataFrag(this, "Table1"), "T1");
+            adapter.addFragment(new DashboardBarDataFrag("Table2"), "T2");
+            adapter.addFragment(new DashboardBarDataFrag("Table3"), "T3");
+            findViewById(R.id.llPagerDots).setVisibility(View.VISIBLE);
+            addBottomDots(0);
+
+        }
+        viewPager.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+
+    }
+
+
+    public void init() {
+        viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+
+        //tabLayout = (TabLayout) findViewById(R.id.tabs);
+
+
+//        TableLayout stk = (TableLayout) findViewById(R.id.table_main);
+//        TableRow tbrow0 = new TableRow(this);
+//        TextView tv0 = new TextView(this);
+//        tv0.setText(" Description ");
+//        tv0.setTextColor(Color.WHITE);
+//        tbrow0.addView(tv0);
+//        TextView tv1 = new TextView(this);
+//        tv1.setText(" Existing ");
+//        tv1.setTextColor(Color.WHITE);
+//        tbrow0.addView(tv1);
+//        TextView tv2 = new TextView(this);
+//        tv2.setText(" New ");
+//        tv2.setTextColor(Color.WHITE);
+//        tbrow0.addView(tv2);
+//        TextView tv3 = new TextView(this);
+//        tv3.setText(" Total Milk \n Litres ");
+//        tv3.setTextColor(Color.WHITE);
+//        tbrow0.addView(tv3);
+//
+//        TextView tv4 = new TextView(this);
+//        tv4.setText(" New Milk Orders \n Litres ");
+//        tv4.setTextColor(Color.WHITE);
+//        tbrow0.addView(tv4);
+//
+//
+//        stk.addView(tbrow0);
+//        for (int i = 0; i < 25; i++) {
+//            TableRow tbrow = new TableRow(this);
+//            TextView t1v = new TextView(this);
+//            t1v.setText("" + i);
+//            t1v.setTextColor(Color.WHITE);
+//            t1v.setGravity(Gravity.CENTER);
+//            tbrow.addView(t1v);
+//            TextView t2v = new TextView(this);
+//            t2v.setText("Product " + i);
+//            t2v.setTextColor(Color.WHITE);
+//            t2v.setGravity(Gravity.CENTER);
+//            tbrow.addView(t2v);
+//            TextView t3v = new TextView(this);
+//            t3v.setText("Rs." + i);
+//            t3v.setTextColor(Color.WHITE);
+//            t3v.setGravity(Gravity.CENTER);
+//            tbrow.addView(t3v);
+//            TextView t4v = new TextView(this);
+//            t4v.setText("" + i * 15 / 32 * 10);
+//            t4v.setTextColor(Color.WHITE);
+//            t4v.setGravity(Gravity.CENTER);
+//            tbrow.addView(t4v);
+//            stk.addView(tbrow);
+//        }
+
     }
 
     @Override
@@ -102,6 +297,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.Lin_DCR:
                 common_class.CommonIntentwithNEwTask(SFADCRActivity.class);
+
                 break;
             case R.id.Lin_Route:
                 sharedCommonPref.save(sharedCommonPref.DCRMode, "");
@@ -228,4 +424,49 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     public void onBackPressed() {
         Log.v("CHECKING", "CHECKING");
     }
+
+
+    class ViewPagerAdapter extends FragmentStatePagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return PagerAdapter.POSITION_NONE;
+        }
+
+
+        public void resetFragment() {
+            mFragmentList.clear();
+            mFragmentTitleList.clear();
+
+        }
+
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
+    }
+
 }

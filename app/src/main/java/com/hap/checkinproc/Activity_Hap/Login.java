@@ -60,7 +60,6 @@ import com.hap.checkinproc.common.SANGPSTracker;
 import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -529,7 +528,7 @@ public class Login extends AppCompatActivity {
         //eMail="giritharan.d@hap.in";
         //eMail = "kaviyarasu.m@hap.in";
         //eMail = "kannan.p@hap.in";
-        //eMail = "ciadmin@hap.in";
+       // eMail = "ciadmin@hap.in";
         //eMail = "haptest4@hap.in";
         //eMail = "sajan@hap.in";
         //eMail = "1977ananthkumar@gmail.com";
@@ -684,8 +683,7 @@ public class Login extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Not Working", Toast.LENGTH_LONG).show();
                 try {
                     mProgress.dismiss();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
 
                 }
             }

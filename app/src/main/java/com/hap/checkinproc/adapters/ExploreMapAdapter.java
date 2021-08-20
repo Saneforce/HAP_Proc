@@ -77,7 +77,7 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
 
             String place_id = json.getString("place_id");
 
-            DatabaseHandler db = new DatabaseHandler(context);
+           // DatabaseHandler db = new DatabaseHandler(context);
 
             Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(context);
 

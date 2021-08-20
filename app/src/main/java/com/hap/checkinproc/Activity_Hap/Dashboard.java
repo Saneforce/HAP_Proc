@@ -32,6 +32,7 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.SANGPSTracker;
 
@@ -578,12 +579,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             if (ActStarted.equalsIgnoreCase("true")) {
                 Intent aIntent;
                 String sDeptType = UserDetails.getString("DeptType", "");
-                // if (sDeptType.equalsIgnoreCase("1")) {
+                 if (sDeptType.equalsIgnoreCase("1")) {
                 aIntent = new Intent(Dashboard.this, ProcurementDashboardActivity.class);
-//                } else {
-//                    Shared_Common_Pref.Sync_Flag = "0";
-//                    aIntent = new Intent(Dashboard.this, Offline_Sync_Activity.class);
-//                }
+                 } else {
+                     Shared_Common_Pref.Sync_Flag = "0";
+                     aIntent = new Intent(Dashboard.this, Offline_Sync_Activity.class);
+                 }
                 startActivity(aIntent);
                 finish();
             } else {
