@@ -38,7 +38,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FileUploadService extends JobIntentService {
-    private static final String TAG = "FileUploadService";
+    private static final String TAG = "FileUploadService: ";
     Disposable mDisposable;
 
     String mFilePath,mSF,FileName,Mode;
@@ -62,6 +62,7 @@ public class FileUploadService extends JobIntentService {
         super.onCreate();
     }
     private void UploadPhoto(){
+        try{
         if (mFilePath == null) {
             Log.e(TAG, "onHandleWork: Invalid file URI");
             return;
@@ -76,7 +77,10 @@ public class FileUploadService extends JobIntentService {
         mDisposable = fileObservable.subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(progress -> onProgress(progress), throwable -> onErrors(throwable),
-                        () -> onSuccess());
+                        () -> onSuccess());}
+        catch (Exception e){
+            Log.e(TAG,e.getMessage());
+        }
     }
     @Override
     protected void onHandleWork(@NonNull Intent intent) {

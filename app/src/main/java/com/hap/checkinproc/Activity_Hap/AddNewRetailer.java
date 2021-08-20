@@ -3,11 +3,16 @@ package com.hap.checkinproc.Activity_Hap;
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -20,10 +25,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedDispatcher;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -42,9 +47,9 @@ import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -54,6 +59,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -91,6 +99,28 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     String TAG = "AddNewRetailer: ";
     DatabaseHandler db;
 
+    ImageView ivPhotoShop;
+
+    String filePath;
+
+    File file;
+    private Uri outputFileUri;
+    private String finalPath = "";
+    private String place_id = "";
+
+
+//    @Override
+//    protected void onRestart() {
+//        super.onRestart();
+//
+//
+//        filePath = shared_common_pref.getvalue(Constants.Retailor_FilePath);
+//
+//        if (!filePath.isEmpty())
+//            ivPhotoShop.setImageURI(Uri.parse(filePath));
+//
+//
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +147,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             addRetailerPhone = findViewById(R.id.edt_new_phone);
             addRetailerEmail = findViewById(R.id.edt_new_email);
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
+            ivPhotoShop = findViewById(R.id.ivShopPhoto);
+
             copypaste.setOnClickListener(this);
+            ivPhotoShop.setOnClickListener(this);
+
+
             gson = new Gson();
             shared_common_pref = new Shared_Common_Pref(this);
             service = ApiClient.getClient().create(ApiInterface.class);
@@ -125,8 +160,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             gson = new Gson();
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
-            // String OrdersTable = shared_common_pref.getvalue(Shared_Common_Pref.Outlet_List);
-            String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+            String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
+            //String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
 
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
             if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
@@ -194,13 +229,13 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         startActivity(new Intent(getApplicationContext(), Dashboard.class));
                 }
             });
-            ImageView backView = findViewById(R.id.imag_back);
-            backView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mOnBackPressedDispatcher.onBackPressed();
-                }
-            });
+//            ImageView backView = findViewById(R.id.imag_back);
+//            backView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    mOnBackPressedDispatcher.onBackPressed();
+//                }
+//            });
             OnclickRoute();
             onClickRetailerClass();
             onClickRetailerChannel();
@@ -289,24 +324,41 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         Toast.makeText(getApplicationContext(), "Enter Phone", Toast.LENGTH_SHORT).show();
                     } else if (txtRetailerClass.getText().toString().matches("")) {
                         Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
+                    } else if (finalPath.isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
+
                     } else {
-                        addNewRetailers();
+
+//                        Intent mIntent = new Intent(AddNewRetailer.this, FileUploadService.class);
+//                        mIntent.putExtra("mFilePath", String.valueOf(file));
+//                        mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
+                        String filename = filePath.substring(filePath.lastIndexOf("/") + 1);
+//                        mIntent.putExtra("FileName", filename);
+//                        mIntent.putExtra("Mode", "outlet");
+//                        FileUploadService.enqueueWork(AddNewRetailer.this, mIntent);
+
+                        sendImageToServer(Shared_Common_Pref.Sf_Code, filename, "outlet");
+//
+
+                        //addNewRetailers();
                         //Toast.makeText(AddNewRetailer.this, "New Retailer Added successfully", Toast.LENGTH_SHORT).show();
                     }
 
                 }
             });
 
-            String placeId = getIntent().getStringExtra(Constants.PLACE_ID);
-            if (placeId != null) {
+            String placeIdData = getIntent().getStringExtra(Constants.PLACE_ID);
+            if (placeIdData != null) {
                 //  Nearby_Outlets.
 
-                JSONObject jsonObject = new JSONObject(placeId);
+                JSONObject jsonObject = new JSONObject(placeIdData);
 
                 JSONObject jsonResult = jsonObject.getJSONObject("result");
                 addRetailerPhone.setText("" + jsonResult.optString("formatted_phone_number"));
                 addRetailerAddress.setText("" + jsonResult.optString("vicinity"));
                 addRetailerName.setText("" + jsonResult.getString("name"));
+
+                place_id = jsonResult.getString("place_id");
 
                 Log.e(TAG, "Address:" + jsonObject.optString("formatted_address"));
 
@@ -319,30 +371,35 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                     for (int typesIndex = 0; typesIndex < typesArray.length(); typesIndex++) {
 
-                        if (typesArray.get(typesIndex).equals("postal_code"))
+                        if (typesArray.get(typesIndex).equals("postal_code")) {
                             edt_pin_codeedit.setText("" + jsonAddressObj.optString("long_name"));
+                        }
 
-                        if (typesArray.get(typesIndex).equals("locality"))
+                        if (typesArray.get(typesIndex).equals("locality")) {
+
                             addRetailerCity.setText("" + jsonAddressObj.optString("long_name"));
+                        }
                     }
                 }
 
-                ImageView ivShopPhoto = findViewById(R.id.ivShopPhoto);
-
-                if (shared_common_pref.getvalue(Constants.SHOP_PHOTO, "").equals("")) {
-                    ivShopPhoto.setImageResource(R.drawable.profile_img);
-                } else {
-                    Glide.with(this)
-                            .load(shared_common_pref.getvalue(Constants.SHOP_PHOTO, "")) // image url
-                            .placeholder(R.drawable.profile_img) // any placeholder to load at start
-                            .error(R.drawable.profile_img)  // any image in case of error
-                            .override(200, 200) // resizing
-                            .centerCrop()
-                            .into(ivShopPhoto);
-                }
+//                ImageView ivShopPhoto = findViewById(R.id.ivShopPhoto);
+//
+//                if (shared_common_pref.getvalue(Constants.SHOP_PHOTO, "").equals("")) {
+//                    ivShopPhoto.setImageResource(R.drawable.profile_img);
+//                } else {
+//                    Glide.with(this)
+//                            .load(shared_common_pref.getvalue(Constants.SHOP_PHOTO, "")) // image url
+//                            .placeholder(R.drawable.profile_img) // any placeholder to load at start
+//                            .error(R.drawable.profile_img)  // any image in case of error
+//                            .override(200, 200) // resizing
+//                            .centerCrop()
+//                            .into(ivShopPhoto);
+                // }
 
 
             }
+
+            shared_common_pref.save(Constants.Retailor_FilePath, "");
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
 
@@ -383,6 +440,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
                 Log.e("Route_response", "ERROR");
+
             }
         });
     }
@@ -464,7 +522,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
     public int getOutletPosition() {
-
         for (int i = 0; Retailer_Modal_List.size() > i; i++) {
             if (Retailer_Modal_List.get(i).getId().equals(Shared_Common_Pref.OutletCode)) {
                 return i;
@@ -527,15 +584,186 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
     /*Add New Retailer*/
-    public void addNewRetailers() {
-        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        Calendar calobjw = Calendar.getInstance();
-        KeyDate = shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code);
-        keyCodeValue = keyEk + KeyHyp + KeyDate + dfw.format(calobjw.getTime()).hashCode();
-        Log.e("KEY_CODE_HASH", keyCodeValue);
-        JSONObject reportObject = new JSONObject();
-        docMasterObject = new JSONObject();
+//    public void addNewRetailers() {
+//        DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+//        Calendar calobjw = Calendar.getInstance();
+//        KeyDate = shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code);
+//        keyCodeValue = keyEk + KeyHyp + KeyDate + dfw.format(calobjw.getTime()).hashCode();
+//        Log.e("KEY_CODE_HASH", keyCodeValue);
+//        JSONObject reportObject = new JSONObject();
+//        docMasterObject = new JSONObject();
+//        try {
+//            reportObject.put("town_code", "'" + routeId + "'");
+//            reportObject.put("wlkg_sequence", "null");
+//            reportObject.put("unlisted_doctor_name", "'" + addRetailerName.getText().toString() + "'");
+//            reportObject.put("unlisted_Owner_name", "'" + owner_name.getText().toString() + "'");
+//            reportObject.put("unlisted_doctor_pincode", "'" + edt_pin_codeedit.getText().toString() + "'");
+//            reportObject.put("unlisted_doctor_gst", "'" + edt_gst.getText().toString() + "'");
+//            reportObject.put("unlisted_doctor_address", "'" + addRetailerAddress.getText().toString().replace("\n", "") + "'");
+//            reportObject.put("unlisted_doctor_phone", "'" + addRetailerPhone.getText().toString() + "'");
+//            reportObject.put("unlisted_doctor_cityname", "'" + addRetailerCity.getText().toString() + "'");
+//            reportObject.put("unlisted_doctor_landmark", "''");
+//            reportObject.put("unlisted_doctor_mobiledate", common_class.addquote(Common_Class.GetDatewothouttime()));
+//            reportObject.put("reason_category", common_class.addquote(reason_category_remarks));
+//            reportObject.put("Compititor_Id", common_class.addquote(Compititor_Id));
+//            reportObject.put("Compititor_Name", common_class.addquote(Compititor_Name));
+//            reportObject.put("CatUniverSelectId", common_class.addquote(CatUniverSelectId));
+//            reportObject.put("AvailUniverSelectId", common_class.addquote(AvailUniverSelectId));
+//            reportObject.put("HatsunAvailswitch", common_class.addquote(HatsunAvailswitch));
+//            reportObject.put("categoryuniverseswitch", common_class.addquote(categoryuniverseswitch));
+//            reportObject.put("lat", common_class.addquote(String.valueOf(Shared_Common_Pref.Outletlat)));
+//            reportObject.put("long", common_class.addquote(String.valueOf(Shared_Common_Pref.Outletlong)));
+//            reportObject.put("unlisted_doctor_areaname", "''");
+//            reportObject.put("unlisted_doctor_Email", common_class.addquote(addRetailerEmail.getText().toString()));
+//            reportObject.put("unlisted_doctor_contactperson", "''");
+//            reportObject.put("unlisted_doctor_designation", "''");
+//            reportObject.put("unlisted_doctor_phone2", "''");
+//            reportObject.put("unlisted_doctor_phone3", "''");
+//            reportObject.put("unlisted_doctor_contactperson2", "''");
+//            reportObject.put("unlisted_doctor_contactperson3", "''");
+//            reportObject.put("unlisted_doctor_designation2", "''");
+//            reportObject.put("unlisted_cat_code", "null");
+//            reportObject.put("unlisted_specialty_code", channelID);
+//            reportObject.put("unlisted_qulifi", "'samp'");
+//            reportObject.put("unlisted_class", classId);
+//            reportObject.put("id", common_class.addquote(Shared_Common_Pref.OutletCode));
+//            reportObject.put("DrKeyId", "'" + keyCodeValue + "'");
+//            docMasterObject.put("unlisted_doctor_master", reportObject);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        mainArray = new JSONArray();
+//        mainArray.put(docMasterObject);
+//
+//        String totalValueString = "";
+//        Map<String, String> QueryString = new HashMap<>();
+//        if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+//            QueryString.put("axn", "dcr/save");
+//            totalValueString = mainArray.toString();
+//        } else {
+//            QueryString.put("axn", "upd/retailer");
+//            totalValueString = reportObject.toString();
+//        }
+//        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+//        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+//        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+//        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+//        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+//        // addNewRetailer
+//        Log.e("QueryString", totalValueString);
+//        Call<JsonObject> call = apiInterface.addNewRetailer(QueryString, totalValueString);
+//        call.enqueue(new Callback<JsonObject>() {
+//            @Override
+//            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+//                JsonObject jsonObject = response.body();
+//                Log.e("Add_Retailer_details", String.valueOf(jsonObject));
+//                String success = String.valueOf(jsonObject.get("success"));
+//                if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+//                    Toast.makeText(AddNewRetailer.this, "Outlet Added successfully", Toast.LENGTH_SHORT).show();
+//                } else {
+//                    Toast.makeText(AddNewRetailer.this, "Outlet Updated successfully", Toast.LENGTH_SHORT).show();
+//                }
+//                if (success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("0") && !Shared_Common_Pref.Editoutletflag.equals("1")) {
+//                    startActivity(new Intent(getApplicationContext(), SecondaryOrderActivity.class));
+//                } else if ((success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) || (success.equalsIgnoreCase("true") && Shared_Common_Pref.Editoutletflag.equals("1"))) {
+//                    Shared_Common_Pref.Outler_AddFlag = "0";
+//                    Shared_Common_Pref.Sync_Flag = "1";
+//                    startActivity(new Intent(getApplicationContext(), Dashboard_Route.class));
+//                    // startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<JsonObject> call, Throwable t) {
+//
+//            }
+//        });
+//    }
+
+
+    public MultipartBody.Part convertimg(String tag, String path) {
+        MultipartBody.Part yy = null;
+        Log.v("full_profile", path);
         try {
+            if (!TextUtils.isEmpty(path)) {
+                File file;
+                file = new File(path);
+//                if (path.contains(".png") || path.contains(".jpg") || path.contains(".jpeg"))
+//                    file = new Compressor(getApplicationContext()).compressToFile(file);
+//                else
+//                    file = new File(path);
+                RequestBody requestBody = RequestBody.create(MultipartBody.FORM, file);
+                yy = MultipartBody.Part.createFormData(tag, file.getPath(), requestBody);
+            }
+        } catch (Exception e) {
+        }
+        Log.v("full_profile", yy + "");
+        return yy;
+    }
+
+
+    private void sendImageToServer(String sfcode, String filename, String mode) {
+        try {
+            common_class.ProgressdialogShow(1, "File Uploading...");
+            MultipartBody.Part imgg = convertimg("file", filePath);
+
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<ResponseBody> mCall = apiInterface.outletFileUpload(sfcode, filename, mode, imgg);
+
+            Log.e("SEND_IMAGE_SERVER", mCall.request().toString());
+
+            mCall.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+                    try {
+                        String jsonData = response.body().string();
+                        Log.v(TAG + "request_data_upload", String.valueOf(jsonData));
+                        JSONObject js = new JSONObject(jsonData);
+                        if (js.getBoolean("success")) {
+                            Log.v("printing_dynamic_cou", js.getString("url"));
+                            Toast.makeText(getApplicationContext(), js.getString("url"), Toast.LENGTH_SHORT).show();
+                            common_class.ProgressdialogShow(0, "File Uploading...");
+
+                            // imgUrl = js.getString("url");
+                        } else {
+                            Toast.makeText(getApplicationContext(), js.getString("message"), Toast.LENGTH_SHORT).show();
+                            common_class.ProgressdialogShow(0, "File Uploading...");
+                        }
+
+                    } catch (Exception e) {
+                        Log.e(TAG, "response:catch" + e.getMessage());
+                        common_class.ProgressdialogShow(0, "File Uploading...");
+
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.e(TAG + "onfailure", "ERROR");
+                    common_class.ProgressdialogShow(0, "File Uploading...");
+
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG, "out catch: " + e.getMessage());
+            common_class.ProgressdialogShow(0, "File Uploading...");
+
+        }
+    }
+
+
+    public void addNewRetailers() {
+        try {
+            DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Calendar calobjw = Calendar.getInstance();
+            KeyDate = shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code);
+            keyCodeValue = keyEk + KeyHyp + KeyDate + dfw.format(calobjw.getTime()).hashCode();
+            Log.e("KEY_CODE_HASH", keyCodeValue);
+            JSONObject reportObject = new JSONObject();
+            docMasterObject = new JSONObject();
+
             reportObject.put("town_code", "'" + routeId + "'");
             reportObject.put("wlkg_sequence", "null");
             reportObject.put("unlisted_doctor_name", "'" + addRetailerName.getText().toString() + "'");
@@ -571,58 +799,73 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_class", classId);
             reportObject.put("id", common_class.addquote(Shared_Common_Pref.OutletCode));
             reportObject.put("DrKeyId", "'" + keyCodeValue + "'");
+
+            //for marked option in explore screen
+//            reportObject.put("place_id", place_id);
+//
+//            String imgName = filePath.substring(filePath.indexOf("/"));
+//            reportObject.put("img_name", imgName);
+
+            //
+
+
             docMasterObject.put("unlisted_doctor_master", reportObject);
-        } catch (JSONException e) {
+
+            mainArray = new JSONArray();
+            mainArray.put(docMasterObject);
+
+            String totalValueString = "";
+            Map<String, String> QueryString = new HashMap<>();
+            if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                QueryString.put("axn", "dcr/save");
+                totalValueString = mainArray.toString();
+            } else {
+                QueryString.put("axn", "upd/retailer");
+                totalValueString = reportObject.toString();
+            }
+            QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+            QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+            QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+            QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            // addNewRetailer
+            Log.e("QueryString", totalValueString);
+
+            //MultipartBody.Part imgg = convertimg("file", finalPath);
+
+            Call<JsonObject> call = apiInterface.addNewRetailer(QueryString, totalValueString);
+            call.enqueue(new Callback<JsonObject>() {
+                @Override
+                public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    JsonObject jsonObject = response.body();
+                    // Log.e("Add_Retailer_details", String.valueOf(jsonObject));
+                    String success = String.valueOf(jsonObject.get("success"));
+                    if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                        Toast.makeText(AddNewRetailer.this, "Outlet Added successfully", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(AddNewRetailer.this, "Outlet Updated successfully", Toast.LENGTH_SHORT).show();
+                    }
+                    if (success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("0") && !Shared_Common_Pref.Editoutletflag.equals("1")) {
+                        // startActivity(new Intent(getApplicationContext(), SecondaryOrderActivity.class));
+                        common_class.CommonIntentwithFinish(SecondaryOrderActivity.class);
+                    } else if ((success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) || (success.equalsIgnoreCase("true") && Shared_Common_Pref.Editoutletflag.equals("1"))) {
+                        Shared_Common_Pref.Outler_AddFlag = "0";
+                        Shared_Common_Pref.Sync_Flag = "1";
+                        //startActivity(new Intent(getApplicationContext(), Dashboard_Route.class));
+                        common_class.CommonIntentwithFinish(Dashboard_Route.class);
+                        // startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<JsonObject> call, Throwable t) {
+
+                }
+            });
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        mainArray = new JSONArray();
-        mainArray.put(docMasterObject);
-
-        String totalValueString = "";
-        Map<String, String> QueryString = new HashMap<>();
-        if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
-            QueryString.put("axn", "dcr/save");
-            totalValueString = mainArray.toString();
-        } else {
-            QueryString.put("axn", "upd/retailer");
-            totalValueString = reportObject.toString();
-        }
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
-        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        // addNewRetailer
-        Log.e("QueryString", totalValueString);
-        Call<JsonObject> call = apiInterface.addNewRetailer(QueryString, totalValueString);
-        call.enqueue(new Callback<JsonObject>() {
-            @Override
-            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                JsonObject jsonObject = response.body();
-                Log.e("Add_Retailer_details", String.valueOf(jsonObject));
-                String success = String.valueOf(jsonObject.get("success"));
-                if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
-                    Toast.makeText(AddNewRetailer.this, "Outlet Added successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(AddNewRetailer.this, "Outlet Updated successfully", Toast.LENGTH_SHORT).show();
-                }
-                if (success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("0") && !Shared_Common_Pref.Editoutletflag.equals("1")) {
-                    startActivity(new Intent(getApplicationContext(), SecondaryOrderActivity.class));
-                } else if ((success.equalsIgnoreCase("true") && Shared_Common_Pref.Outler_AddFlag.equals("1")) || (success.equalsIgnoreCase("true") && Shared_Common_Pref.Editoutletflag.equals("1"))) {
-                    Shared_Common_Pref.Outler_AddFlag = "0";
-                    Shared_Common_Pref.Sync_Flag = "1";
-                    startActivity(new Intent(getApplicationContext(), Dashboard_Route.class));
-                    // startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
-                }
-            }
-
-            @Override
-            public void onFailure(Call<JsonObject> call, Throwable t) {
-
-            }
-        });
     }
-
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
@@ -642,14 +885,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         }
     }
 
-    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
-            new OnBackPressedDispatcher(new Runnable() {
-                @Override
-                public void run() {
-
-                    finish();
-                }
-            });
+//    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
+//            new OnBackPressedDispatcher(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    finish();
+//                }
+//            });
 
     @Override
     public void onBackPressed() {
@@ -663,10 +906,41 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable @org.jetbrains.annotations.Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1000 && resultCode == Activity.RESULT_OK) {
+            finalPath = "/storage/emulated/0";
+            filePath = outputFileUri.getPath();
+            filePath = filePath.substring(1);
+            filePath = finalPath + filePath.substring(filePath.indexOf("/"));
+
+            file = new File(filePath);
+
+            ivPhotoShop.setImageURI(Uri.fromFile(file));
+
+
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.copypaste:
                 addRetailerAddress.setText(CurrentLocationsAddress.getText().toString());
+                break;
+
+            case R.id.ivShopPhoto:
+//                Intent takePhoto = new Intent(this, ImageCapture.class);
+//                takePhoto.putExtra("RetailorCapture", "NewRetailor");
+//                startActivity(takePhoto);
+
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                outputFileUri = FileProvider.getUriForFile(AddNewRetailer.this, getApplicationContext().getPackageName() + ".provider", new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "outlet" + "_" + System.currentTimeMillis() + ".jpeg"));
+                Log.v("FILE_PATH", String.valueOf(outputFileUri));
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivityForResult(intent, 1000);
                 break;
         }
     }

@@ -2,7 +2,6 @@ package com.hap.checkinproc.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,22 +15,32 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Constants;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Nearby_Outlets;
+import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.ViewHolder> {
 
     private LayoutInflater mInflater;
-    private final JSONArray array;
+    private JSONArray array;
     Context context;
     String laty, lngy;
     JSONObject json;
     StringBuilder bu;
+    Type userType;
+    List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
+
 
     public ExploreMapAdapter(Activity context, JSONArray array, String laty, String lngy) {
 
@@ -43,6 +52,7 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
 
     }
 
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,6 +60,11 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
         View itemView = mInflater.inflate(R.layout.explorelist, parent, false);
 
         return new ViewHolder(itemView);
+    }
+
+    public void notifyData(JSONArray array) {
+        this.array = array;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -60,46 +75,78 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
             holder.txt_dr.setText(json.getString("name"));
             holder.txt_add.setText(json.getString("vicinity"));
 
-            if (json.getString("name").equals(Nearby_Outlets.shared_common_pref.getvalue(Constants.DEST_NAME))) {
-                holder.btnAddToList.setText("Marked");
-                holder.btnAddToList.setBackgroundResource(R.drawable.button_greenbg);
-                Log.v("ExploreAdapter: ", position + ":Marked");
-            } else {
-                Log.v("ExploreAdapter: ", position + ":Direction");
+            String place_id = json.getString("place_id");
+
+           // DatabaseHandler db = new DatabaseHandler(context);
+
+            Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(context);
+
+            Retailer_Modal_List = new ArrayList<>();
+            // String outletserializableob = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+            String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
+
+            Gson gson = new Gson();
+
+            userType = new TypeToken<ArrayList<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List>>() {
+            }.getType();
+            Retailer_Modal_List = gson.fromJson(outletserializableob, userType);
+
+
+            for (int i = 0; i < Retailer_Modal_List.size(); i++) {
+                Retailer_Modal_List.get(i).setPlace_id("ChIJ6fBt_tVnUjoRVxxz1mgBipI");
+                if (Retailer_Modal_List.get(i).getPlace_id().equals(place_id)) {
+                    holder.btnAddToList.setText("Marked");
+                    holder.btnAddToList.setBackgroundResource(R.drawable.button_greenbg);
+                    Log.v("ExploreAdapter: ", position + ":Marked");
+                    break;
+                } else {
+                    holder.btnAddToList.setText("Direction");
+                    holder.btnAddToList.setBackgroundResource(R.drawable.button_blueg);
+                    Log.v("ExploreAdapter: ", position + ":Direction");
+                }
 
             }
 
-            JSONArray jsonA = json.getJSONArray("photos");
+
+            if (json.has("photos")) {
+                JSONArray jsonA = json.getJSONArray("photos");
 
 
-            if (jsonA.length() > 0) {
-                JSONObject jo = jsonA.getJSONObject(0);
-                JSONArray ja = jo.getJSONArray("html_attributions");
+                if (jsonA.length() > 0) {
+                    JSONObject jo = jsonA.getJSONObject(0);
+                    JSONArray ja = jo.getJSONArray("html_attributions");
 
-                StringBuilder bu = new StringBuilder("https://maps.googleapis.com/maps/api/place/photo?photoreference=");
-                bu.append(jo.getString("photo_reference"));
-                bu.append("&sensor=false");
-                bu.append("&maxheight=" + jo.getString("height"));
-                bu.append("&maxwidth=" + jo.getString("width"));
-                bu.append("&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
-                //https://maps.googleapis.com/maps/api/place/photo?photoreference=CmRaAAAAZGVKYoIApQ0FY9qrZcoSquyHJTmRzKG6cwIUAeDA7ARoddKmfSG9mb1KUYzBMkxj7IWR9efFGWhKLyyivm2gkWvdhWQZtqBc0GszOetFku_7MfjGyrhCJ5vgs2Il4U8vEhCwnDmXrtkrQWQYxUxKH_heGhSTiUC8g9jAdoZ0BJTMN5dEXXLJDA&sensor=false&maxheight=MAX_HEIGHT&maxwidth=MAX_WIDTH&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU
+                    StringBuilder bu = new StringBuilder("https://maps.googleapis.com/maps/api/place/photo?photoreference=");
+                    bu.append(jo.getString("photo_reference"));
+                    bu.append("&sensor=false");
+                    bu.append("&maxheight=" + jo.getString("height"));
+                    bu.append("&maxwidth=" + jo.getString("width"));
+                    bu.append("&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
+                    //https://maps.googleapis.com/maps/api/place/photo?photoreference=CmRaAAAAZGVKYoIApQ0FY9qrZcoSquyHJTmRzKG6cwIUAeDA7ARoddKmfSG9mb1KUYzBMkxj7IWR9efFGWhKLyyivm2gkWvdhWQZtqBc0GszOetFku_7MfjGyrhCJ5vgs2Il4U8vEhCwnDmXrtkrQWQYxUxKH_heGhSTiUC8g9jAdoZ0BJTMN5dEXXLJDA&sensor=false&maxheight=MAX_HEIGHT&maxwidth=MAX_WIDTH&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU
 
+                    Glide.with(context)
+                            .load(bu.toString()) // image url
+                            .placeholder(R.drawable.profile_img) // any placeholder to load at start
+                            .error(R.drawable.profile_img)  // any image in case of error
+                            .override(200, 200) // resizing
+                            .centerCrop()
+                            .into(holder.shopPhoto);
+
+
+                }
+            } else {
                 Glide.with(context)
-                        .load(bu.toString()) // image url
+                        .load(R.drawable.profile_img) // image url
                         .placeholder(R.drawable.profile_img) // any placeholder to load at start
                         .error(R.drawable.profile_img)  // any image in case of error
                         .override(200, 200) // resizing
                         .centerCrop()
                         .into(holder.shopPhoto);
-
-
             }
 
-            // if ((Nearby_Outlets.shared_common_pref.getIntValue(Constants.DirectionListPos) != -1) && Nearby_Outlets.shared_common_pref.getIntValue(Constants.DirectionListPos) == position) {
+        } catch (Exception e) {
 
-            // notifyDataSetChanged();
-            // }
-        } catch (JSONException e) {
+
             e.printStackTrace();
         }
 
@@ -117,14 +164,6 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
                 Nearby_Outlets.nearby_outlets.getPlaceIdValues(position);
 
 
-
-//                Intent intent = new Intent(context, AddNewRetailer.class);
-//                try {
-//                    intent.putExtra(Constants.PLACE_ID, json.getString("place_id"));
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//                context.startActivity(new Intent(context, AddNewRetailer.class));
             }
         });
 

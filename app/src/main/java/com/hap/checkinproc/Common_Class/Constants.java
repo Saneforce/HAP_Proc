@@ -31,4 +31,5 @@ public class Constants {
     public static String DirectionListPos = "directionListPos";
     public static String Route_name = "routeName";
     public static String Route_Id = "routeId";
+    public static String Retailor_FilePath="retailorFilePath";
 }

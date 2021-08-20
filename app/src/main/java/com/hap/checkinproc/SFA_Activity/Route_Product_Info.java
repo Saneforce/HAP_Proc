@@ -108,7 +108,9 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
 //            String Category_List = sharedCommonPref.getvalue(Shared_Common_Pref.Category_List);
 //            String Compititor_List = sharedCommonPref.getvalue(Shared_Common_Pref.Compititor_List);
 
-            String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+          //  String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+            String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
+
             String Category_List = String.valueOf(db.getMasterData(Constants.Category_List));
             String Compititor_List = String.valueOf(db.getMasterData(Constants.Competitor_List));
 
@@ -124,7 +126,9 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
                 takeorder.setVisibility(View.GONE);
                 Editoutlet.setVisibility(View.GONE);
             } else {
-                Compititorname.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCompititor_Name());
+                String val = Retailer_Modal_List.get(getOutletPosition()).getCompititor_Name();
+                if (!val.equals("null"))
+                    Compititorname.setText("" + val);
                 CompIDServer = "" + Retailer_Modal_List.get(getOutletPosition()).getCompititor_Id();
                 if (Retailer_Modal_List.get(getOutletPosition()).getHatsanavail_Switch().equals("1")) {
                     availablitygrid.setVisibility(View.GONE);
@@ -136,8 +140,8 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
                 takeorder.setVisibility(View.VISIBLE);
             }
 
-            ImageView ivToolbarHome=findViewById(R.id.toolbar_home);
-            common_class.gotoHomeScreen(this,ivToolbarHome);
+            ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
+            common_class.gotoHomeScreen(this, ivToolbarHome);
         } catch (Exception e) {
 
         }
@@ -312,7 +316,8 @@ public class Route_Product_Info extends AppCompatActivity implements View.OnClic
                 }
             }
             Log.e("IndexofPOSITION", String.valueOf(Compititor_List.indexOf(myDataset.get(position))));
-            Compititorname.setText("" + Compname);
+            if (Compname != null)
+                Compititorname.setText("" + Compname);
             CompIDServer = CompId.toString();
             Log.e("GOOGLEPOSITION", String.valueOf(type));
         }

@@ -85,6 +85,12 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                     }
                 }
             }
+
+            //testing
+
+            FilterOrderList.add(new OutletReport_View_Modal("15690","HAP4567","ST1890","TN8907",
+                    "OC16176","MG12567","8/6/2021",40.0,"PENDING"));
+            //testing
             System.out.println("LocalOrderValues" + OutletReport_View_Modal.toString());
             mReportViewAdapter = new Invoice_History_Adapter(Invoice_History.this, FilterOrderList, new AdapterOnClick() {
                 @Override
@@ -138,7 +144,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
             case R.id.lin_repeat_invoice:
                 break;
             case R.id.lastinvoice:
-                common_class.CommonIntentwithoutFinish(OrderHistoryActivity.class);
+                common_class.CommonIntentwithoutFinish(MoreInfoActivity.class);
                 // common_class.CommonIntentwithoutFinish(More_Info_Activity.class);
 
                 break;

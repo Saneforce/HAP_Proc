@@ -1,8 +1,6 @@
-
 apply plugin: 'com.android.application'
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
-
 
 
 android {
@@ -10,7 +8,7 @@ android {
     buildToolsVersion "30.0.2"
     defaultConfig {
         applicationId "com.hap.checkinproc"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 30
         versionCode 3114
         versionName "3.1.14"
@@ -22,11 +20,13 @@ android {
     buildTypes {
         release {
             multiDexKeepFile file('multidex-config.txt')
-            minifyEnabled false
+            minifyEnabled true
+            useProguard true
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-    compileOptions{
+    compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8;
         targetCompatibility JavaVersion.VERSION_1_8;
     }
@@ -114,6 +114,10 @@ dependencies {
     implementation 'com.google.maps.android:android-maps-utils:0.4+'
 
     implementation 'com.mcxiaoke.volley:library-aar:1.0.0'
+    implementation 'com.github.kenglxn.QRGen:android:2.6.0'
 
+    implementation 'com.google.android.material:material:1.0.0'
 
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
+    implementation project(':MPChartLib')
 }

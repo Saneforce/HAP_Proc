@@ -2,11 +2,18 @@ package com.hap.checkinproc.common;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.AbstractWindowedCursor;
 import android.database.Cursor;
+import android.database.CursorWindow;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
+import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import com.google.gson.JsonArray;
+import com.hap.checkinproc.Common_Class.Common_Class;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -67,7 +74,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
         String CREATE_Master_TABLE = "CREATE TABLE " + TABLE_Masters + "("
                 + ID + " TEXT PRIMARY KEY,"
-                + Data + " TEXT" + ")";
+                + Data + " BLOB" + ")";
         db.execSQL(CREATE_Master_TABLE);
 
         String CREATE_PHOTOS_TABLE = "CREATE TABLE " + TABLE_Photos + "("
@@ -98,39 +105,127 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void addMasterData(String Key, JsonArray uData) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(ID, Key);
-        values.put(Data, String.valueOf(uData));
-        db.insert(TABLE_Masters, null, values);
-        db.close();
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(ID, Key);
+            values.put(Data, String.valueOf(uData));
+            db.insert(TABLE_Masters, null, values);
+            db.close();
+
+            //  if (Key.equals(Constants.Retailer_OutletList))
+            Log.e("DB:RetailerList: " + Key, ":" + String.valueOf(values));
+
+        } catch (Exception e) {
+            Log.e("db: ", e.getMessage());
+        }
     }
 
     public void addMasterData(String Key, String uData) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(ID, Key);
-        values.put(Data, uData);
-        db.insert(TABLE_Masters, null, values);
-        db.close();
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(ID, Key);
+            values.put(Data, uData);
+            db.insert(TABLE_Masters, null, values);
+            db.close();
+
+            Log.e("DB:OUTLET Insert ", Key + " : " + values);
+
+        } catch (Exception e) {
+            Log.e("DB:OUTLET Insert Ex", e.getMessage());
+        }
     }
 
 
-    public JSONArray getMasterData(String Key) throws JSONException {
-        // Select All Query
-        String selectQuery = "SELECT  " + Data + " FROM " + TABLE_Masters + " WHERE " + ID + "='" + Key + "'";
+    public JSONArray getMasterData(String Key) {
+        JSONArray uData = new JSONArray();
+
+        try {
+
+            SQLiteDatabase db = this.getReadableDatabase();
+
+
+            String selectQuery = "SELECT  " + Data + " FROM " + TABLE_Masters + " WHERE " + ID + "='" + Key + "'" + " LIMIT 10";
+
+            // selectQuery = "SELECT substr(blobcolumn,       1, 1000000) FROM mytable WHERE id = 123\n";
+
+            int count = Common_Class.count;
+
+
+//            if (Key.equals(Constants.Retailer_OutletList)) {
+//
+//
+//                selectQuery = "SELECT substr(Data,       1, " + count / 10 + " ) FROM " + TABLE_Masters +
+//                        " WHERE " + ID + "='" + Key + "'";
+//
+//
+//                Cursor cursor = db.rawQuery(selectQuery, null);
+//                if (cursor.moveToFirst()) {
+//                    uData = new JSONArray(cursor.getString(0));
+//
+//
+//                }
+//
+//                selectQuery = "SELECT substr(Data,       " + (count / 10) + 1 + ", " + count + " ) FROM " + TABLE_Masters +
+//                        " WHERE " + ID + "='" + Key + "'";
+//
+//                cursor = db.rawQuery(selectQuery, null);
+//                if (cursor.moveToFirst()) {
+//                    uData = new JSONArray(cursor.getString(0));
+//
+//                    uData.put(cursor.getString(0));
+//
+//                }
+//            } else {
+//
+
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                uData = new JSONArray(cursor.getString(0));
+
+
+            }
+            // }
+            return uData;
+
+
+        } catch (Exception expected) {
+            Log.e("Dtabase: ", expected.getMessage());
+            //testRowTooBig(Key);
+        }
+
+        return null;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    public void testRowTooBig(String Key) {
+//        mDatabase.execSQL("CREATE TABLE Tst (Txt BLOB NOT NULL);");
+//        byte[] testArr = new byte[10000];
+//        Arrays.fill(testArr, (byte) 1);
+//        for (int i = 0; i < 10; i++) {
+//            mDatabase.execSQL("INSERT INTO Tst VALUES (?)", new Object[]{testArr});
+//        }
+        // Now reduce window size, so that no rows can fit
 
         SQLiteDatabase db = this.getWritableDatabase();
+        String selectQuery = "SELECT  " + Data + " FROM " + TABLE_Masters + " WHERE " + ID + "='" + Key + "'";
+
+
         Cursor cursor = db.rawQuery(selectQuery, null);
-        JSONArray uData = new JSONArray();
-        if (cursor.moveToFirst()) {
-            uData = new JSONArray(cursor.getString(0));
+        CursorWindow cw = new CursorWindow(Key, 5000);
+        AbstractWindowedCursor ac = (AbstractWindowedCursor) cursor;
+        ac.setWindow(cw);
+        try {
+            ac.moveToNext();
+            getMasterData(Key);
+            // fail("Exception is expected when row exceeds CursorWindow size");
+        } catch (Exception expected) {
         }
         db.close();
 
-        // return contact list
-        return uData;
     }
+
 
     public boolean checkKeyExist(String key) {
         String selectQuery = "SELECT  " + Data + " FROM " + TABLE_Masters + " WHERE " + ID + "='" + key + "'";

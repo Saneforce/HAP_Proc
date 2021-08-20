@@ -63,6 +63,7 @@ import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity.AllowanceActivityTwo;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.CameraPermission;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -76,13 +77,11 @@ import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.LocationReceiver;
 import com.hap.checkinproc.common.SANGPSTracker;
-import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -107,10 +106,10 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
 
     Button button;
     TextureView textureView;
-    ImageView btnFlash,btnWBal;
+    ImageView btnFlash, btnWBal;
     ImageView btnSwchCam;
-    ListView lstFlashMode,lstWBalance;
-    LinearLayout lstModalFlash,lstModalWBal;
+    ListView lstFlashMode, lstWBalance;
+    LinearLayout lstModalFlash, lstModalWBal;
     SeekBar skBarBright;
     String imagePath;
     String imageFileName;
@@ -133,7 +132,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
     SharedPreferences UserDetails;
     Common_Class DT = new Common_Class();
     String VistPurpose = "";
-    String sStatus,mMode, WrkType, onDutyPlcID, onDutyPlcNm, vstPurpose, UserInfo = "MyPrefs", imagvalue = "", mypreference = "mypref", PlaceId = "", PlaceName = "";
+    String sStatus, mMode, mModeRetailorCapture, WrkType, onDutyPlcID, onDutyPlcNm, vstPurpose, UserInfo = "MyPrefs", imagvalue = "", mypreference = "mypref", PlaceId = "", PlaceName = "";
     com.hap.checkinproc.Common_Class.Common_Class common_class;
 
     public static final String sCheckInDetail = "CheckInDetail";
@@ -145,7 +144,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
     private boolean mBound = false;
     private LocationReceiver myReceiver;
     Location mlocation;
-    String UKey="";
+    String UKey = "";
 
     int dpHeight, dpWidth;
     int picHeight, picWidth;
@@ -168,17 +167,18 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                 mlocation = location;
             }
         });
-        UKey=UserDetails.getString("Sfcode", "")+"-"+(new Date().getTime());
+        UKey = UserDetails.getString("Sfcode", "") + "-" + (new Date().getTime());
         Bundle params = getIntent().getExtras();
         try {
             mMode = params.getString("Mode");
+            mModeRetailorCapture = params.getString("RetailorCapture");
 
-            String exData = params.getString("data","");
-            if(!(exData.equalsIgnoreCase("")||exData.equalsIgnoreCase("null"))){
-                CheckInInf=new JSONObject(exData);
+            String exData = params.getString("data", "");
+            if (!(exData.equalsIgnoreCase("") || exData.equalsIgnoreCase("null"))) {
+                CheckInInf = new JSONObject(exData);
             }
 
-            if (!mMode.equalsIgnoreCase("PF")) {
+            if (mMode != null && !mMode.equalsIgnoreCase("PF")) {
                 CheckInInf.put("Mode", mMode);
                 CheckInInf.put("Divcode", UserDetails.getString("Divcode", ""));
                 CheckInInf.put("sfCode", UserDetails.getString("Sfcode", ""));
@@ -232,20 +232,19 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                 cameraPermission.requestPermission();
             }
             Log.v("PERMISSION_NOT", "PERMISSION_NOT");
-        }
-        else {
+        } else {
             Log.v("PERMISSION", "PERMISSION");
 //            StartSelfiCamera();
             Display display = getWindowManager().getDefaultDisplay();
-            DisplayMetrics outMetrics = new DisplayMetrics ();
+            DisplayMetrics outMetrics = new DisplayMetrics();
             display.getMetrics(outMetrics);
 
             picHeight = outMetrics.heightPixels;
-            picWidth  = outMetrics.widthPixels;
-            float density  = getResources().getDisplayMetrics().density;
-            dpHeight = (int)(outMetrics.heightPixels / density);
-            dpWidth  = (int) (outMetrics.widthPixels / density)+1;
-            startCamera(0,0,dpWidth,dpHeight,"front",false,false,false,"1",false,false,true);
+            picWidth = outMetrics.widthPixels;
+            float density = getResources().getDisplayMetrics().density;
+            dpHeight = (int) (outMetrics.heightPixels / density);
+            dpWidth = (int) (outMetrics.widthPixels / density) + 1;
+            startCamera(0, 0, dpWidth, dpHeight, "front", false, false, false, "1", false, false, true);
 
         }
 
@@ -271,7 +270,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                 lstModalFlash.setVisibility(View.GONE);
             }
         });
-                //  if (mCamId == 0) {
+        //  if (mCamId == 0) {
         lstWBalance.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -317,7 +316,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
         btnWBal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                WBModes=getSupportedWhiteBalanceModes();
+                WBModes = getSupportedWhiteBalanceModes();
 
                 ArrayAdapter simpleWBAdapter = new ArrayAdapter<String>(ImageCapture.this, android.R.layout.simple_list_item_1, WBModes);
                 lstWBalance.setAdapter(simpleWBAdapter);//sets the adapter for listView
@@ -343,8 +342,8 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
         skBarBright.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                int bright=(int)((Float.parseFloat(String.valueOf(progress)) / 100) * 40) - 20;
-                Log.d("Brightness",String.valueOf(bright));
+                int bright = (int) ((Float.parseFloat(String.valueOf(progress)) / 100) * 40) - 20;
+                Log.d("Brightness", String.valueOf(bright));
                 setExposureCompensation(bright);
             }
 
@@ -359,11 +358,12 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
             }
         });
     }
+
     private boolean startCamera(int x, int y, int width, int height, String defaultCamera, Boolean tapToTakePicture, Boolean dragEnabled, final Boolean toBack, String alpha, boolean tapFocus, boolean disableExifHeaderStripping, boolean storeToFile) {
         Log.d(TAG, "start camera action");
 
         if (fragment != null) {
-            Log.d(TAG,"Camera already started");
+            Log.d(TAG, "Camera already started");
             return true;
         }
 
@@ -435,15 +435,16 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
     public static void setOnImagePickListener(OnImagePickListener mImagePickListener) {
         imagePickListener = mImagePickListener;
     }
+
     @Override
     public void onPictureTaken(String originalPicture, String picData) {
         //File imgFile=new File(originalPicture);
-        FrameLayout preview= findViewById(R.id.preview);
+        FrameLayout preview = findViewById(R.id.preview);
         RelativeLayout vwPreview = findViewById(R.id.ImgPreview);
         ImageView imgPreview = findViewById(R.id.imgPreviewImg);
         file = new File(originalPicture);
-        imagePath=originalPicture;
-        imageFileName=originalPicture.substring(originalPicture.lastIndexOf("/")+1);
+        imagePath = originalPicture;
+        imageFileName = originalPicture.substring(originalPicture.lastIndexOf("/") + 1);
         imgPreview.setImageURI(Uri.fromFile(file));
         vwPreview.setVisibility(View.VISIBLE);
         imgPreview.setVisibility(View.VISIBLE);
@@ -471,7 +472,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
     }
     @Override
     public void onBackButton() {
-Log.d(TAG,"Back button Pressed...");
+        Log.d(TAG, "Back button Pressed...");
     }
     @Override
     public void onCameraStarted() {
@@ -621,53 +622,72 @@ Log.d(TAG,"Back button Pressed...");
         button.setVisibility(View.VISIBLE);
     }
     private void saveImgPreview() {
-        vwPreview = findViewById(R.id.ImgPreview);
-        ImageView imgPreview = findViewById(R.id.imgPreviewImg);
-        BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
+        try {
 
-        vwPreview.setBackground(drawableBitmap);
-        String filePath = String.valueOf(file);
-        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
-        imgPreview.setImageBitmap(bitmap);
 
-        Intent mIntent = new Intent(this, FileUploadService.class);
-        mIntent.putExtra("mFilePath", String.valueOf(file));
-        mIntent.putExtra("SF", UserDetails.getString("Sfcode",""));
-        mIntent.putExtra("FileName", imageFileName);
-        mIntent.putExtra("Mode", (mMode.equalsIgnoreCase("PF") ? "PROF" : "ATTN"));
-        FileUploadService.enqueueWork(this, mIntent);
-        Log.e("Image_Capture", Uri.fromFile(file).toString());
-        Log.e("Image_Capture", "IAMGE     " + bitmap);
-        if (mMode.equalsIgnoreCase("PF")) {
-            imagePickListener.OnImagePick(bitmap, imageFileName);
-            finish();
-        } else {
-            mProgress = new ProgressDialog(this);
-            String titleId = "Submiting";
-            mProgress.setTitle(titleId);
-            mProgress.setMessage("Preparing Please Wait...");
-            mProgress.show();
-            if(mlocation!=null){
-                mProgress.setMessage("Submiting Please Wait...");
-                vwPreview.setVisibility(View.GONE);
-                // imgPreview.setImageURI(Uri.fromFile(file));
-                button.setVisibility(View.GONE);
-                saveCheckIn();
-            }else {
-                new LocationFinder(getApplication(), new LocationEvents() {
-                    @Override
-                    public void OnLocationRecived(Location location) {
-                        mlocation=location;
-                        mProgress.setMessage("Submiting Please Wait...");
-                        vwPreview.setVisibility(View.GONE);
-                        // imgPreview.setImageURI(Uri.fromFile(file));
-                        button.setVisibility(View.GONE);
-                        saveCheckIn();
-                    }
-                });
+            vwPreview = findViewById(R.id.ImgPreview);
+            ImageView imgPreview = findViewById(R.id.imgPreviewImg);
+            BitmapDrawable drawableBitmap = new BitmapDrawable(String.valueOf(Uri.fromFile(file)));
+
+            vwPreview.setBackground(drawableBitmap);
+            String filePath = String.valueOf(file);
+            Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+            imgPreview.setImageBitmap(bitmap);
+
+            if (mModeRetailorCapture == null) {
+
+                Intent mIntent = new Intent(this, FileUploadService.class);
+                mIntent.putExtra("mFilePath", String.valueOf(file));
+                mIntent.putExtra("SF", UserDetails.getString("Sfcode", ""));
+                mIntent.putExtra("FileName", imageFileName);
+                mIntent.putExtra("Mode", (mMode.equalsIgnoreCase("PF") ? "PROF" : "ATTN"));
+                FileUploadService.enqueueWork(this, mIntent);
+                Log.e("Image_Capture", Uri.fromFile(file).toString());
+                Log.e("Image_Capture", "IAMGE     " + bitmap);
             }
+
+            if (mModeRetailorCapture != null && mModeRetailorCapture.equals("NewRetailor")) {
+//                Intent mIntent = new Intent(this, AddNewRetailer.class);
+//                mIntent.putExtra("mFilePath", Uri.fromFile(file).toString());
+//                startActivity(mIntent);
+
+                mShared_common_pref.save(Constants.Retailor_FilePath, Uri.fromFile(file).toString());
+
+                finish();
+            } else if (mMode.equalsIgnoreCase("PF")) {
+                imagePickListener.OnImagePick(bitmap, imageFileName);
+                finish();
+            } else {
+                mProgress = new ProgressDialog(this);
+                String titleId = "Submiting";
+                mProgress.setTitle(titleId);
+                mProgress.setMessage("Preparing Please Wait...");
+                mProgress.show();
+                if (mlocation != null) {
+                    mProgress.setMessage("Submiting Please Wait...");
+                    vwPreview.setVisibility(View.GONE);
+                    // imgPreview.setImageURI(Uri.fromFile(file));
+                    button.setVisibility(View.GONE);
+                    saveCheckIn();
+                } else {
+                    new LocationFinder(getApplication(), new LocationEvents() {
+                        @Override
+                        public void OnLocationRecived(Location location) {
+                            mlocation = location;
+                            mProgress.setMessage("Submiting Please Wait...");
+                            vwPreview.setVisibility(View.GONE);
+                            // imgPreview.setImageURI(Uri.fromFile(file));
+                            button.setVisibility(View.GONE);
+                            saveCheckIn();
+                        }
+                    });
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -690,7 +710,7 @@ Log.d(TAG,"Back button Pressed...");
     }
     public void getMulipart(String path) {
         MultipartBody.Part imgg = convertimg("file", path);
-        CallApiImage(UserDetails.getString("Sfcode",""), imgg);
+        CallApiImage(UserDetails.getString("Sfcode", ""), imgg);
     }
     public MultipartBody.Part convertimg(String tag, String path) {
         MultipartBody.Part yy = null;
@@ -772,10 +792,10 @@ Log.d(TAG,"Back button Pressed...");
             CheckInInf.put("Lattitude", lat);
             CheckInInf.put("Langitude", lng);
 
-            if(mMode.equalsIgnoreCase("onduty")) {
+            if (mMode.equalsIgnoreCase("onduty")) {
                 CheckInInf.put("PlcNm", PlaceName);
                 CheckInInf.put("PlcID", PlaceId);
-            }else{
+            } else {
                 CheckInInf.put("PlcNm", "");
                 CheckInInf.put("PlcID", "");
             }
@@ -819,7 +839,7 @@ Log.d(TAG,"Back button Pressed...");
                             JsonObject itm = response.body().getAsJsonObject();
                             Log.e("RESPONSE_FROM_SERVER", String.valueOf(response.body().getAsJsonObject()));
                             mProgress.dismiss();
-                            sStatus=itm.get("success").getAsString();
+                            sStatus = itm.get("success").getAsString();
                             if (sStatus.equalsIgnoreCase("true")) {
                                 SharedPreferences.Editor editor = CheckInDetails.edit();
                                 try {
@@ -830,11 +850,11 @@ Log.d(TAG,"Back button Pressed...");
                                         editor.putString("ShiftEnd", CheckInInf.getString("ShiftEnd"));
                                         editor.putString("ShiftCutOff", CheckInInf.getString("ShiftCutOff"));
 
-                                        long AlrmTime=DT.getDate(CheckInInf.getString("ShiftEnd")).getTime();
-                                        sendAlarmNotify(1001,AlrmTime,"HAP Check-In","Check-Out Alert !.");
+                                        long AlrmTime = DT.getDate(CheckInInf.getString("ShiftEnd")).getTime();
+                                        sendAlarmNotify(1001, AlrmTime, "HAP Check-In", "Check-Out Alert !.");
                                     }
 
-                                    if (mMode.equalsIgnoreCase("ONDuty")){
+                                    if (mMode.equalsIgnoreCase("ONDuty")) {
                                         mShared_common_pref.save(Shared_Common_Pref.DAMode, true);
 
                                         mLUService = new SANGPSTracker(ImageCapture.this);
@@ -1053,8 +1073,8 @@ Log.d(TAG,"Back button Pressed...");
         int minExposureCompensation = camera.getParameters().getMinExposureCompensation();
         int maxExposureCompensation = camera.getParameters().getMaxExposureCompensation();
 
-        if ( minExposureCompensation == 0 && maxExposureCompensation == 0) {
-            Log.d("Cam Error","Can't set Exposure");
+        if (minExposureCompensation == 0 && maxExposureCompensation == 0) {
+            Log.d("Cam Error", "Can't set Exposure");
         } else {
             if (exposureCompensation < minExposureCompensation) {
                 exposureCompensation = minExposureCompensation;
@@ -1068,7 +1088,7 @@ Log.d(TAG,"Back button Pressed...");
         return true;
     }
     private String[] getSupportedWhiteBalanceModes() {
-        Camera camera=fragment.getCamera();
+        Camera camera = fragment.getCamera();
         Camera.Parameters params = camera.getParameters();
 
         List<String> supportedWhiteBalanceModes;
@@ -1080,17 +1100,18 @@ Log.d(TAG,"Back button Pressed...");
             jsonWhiteBalanceModes.put(new String("lock"));
         }
         if (supportedWhiteBalanceModes != null) {
-            for (int i=0; i<supportedWhiteBalanceModes.size(); i++) {
+            for (int i = 0; i < supportedWhiteBalanceModes.size(); i++) {
                 jsonWhiteBalanceModes.put(new String(supportedWhiteBalanceModes.get(i)));
-                lstModes[i]=supportedWhiteBalanceModes.get(i);
+                lstModes[i] = supportedWhiteBalanceModes.get(i);
             }
         }
 
-       // callbackContext.success(jsonWhiteBalanceModes);
+        // callbackContext.success(jsonWhiteBalanceModes);
         return lstModes;
     }
+
     private boolean getWhiteBalanceMode() {
-        Camera camera=fragment.getCamera();
+        Camera camera = fragment.getCamera();
         Camera.Parameters params = camera.getParameters();
 
         String whiteBalanceMode;
@@ -1107,7 +1128,7 @@ Log.d(TAG,"Back button Pressed...");
         if (whiteBalanceMode != null) {
             //callbackContext.success(whiteBalanceMode);
         } else {
-            Log.e("Cam Error","White balance mode not supported");
+            Log.e("Cam Error", "White balance mode not supported");
         }
 
         return true;
@@ -1120,7 +1141,7 @@ Log.d(TAG,"Back button Pressed...");
                 params.setAutoWhiteBalanceLock(true);
                 fragment.setCameraParameters(params);
             } else {
-                Log.e("Cam Error","White balance lock not supported");
+                Log.e("Cam Error", "White balance lock not supported");
             }
         } else if (whiteBalanceMode.equals("auto") ||
                 whiteBalanceMode.equals("incandescent") ||
@@ -1133,7 +1154,7 @@ Log.d(TAG,"Back button Pressed...");
             params.setWhiteBalance(whiteBalanceMode);
             fragment.setCameraParameters(params);
         } else {
-            Log.e("Cam Error","White balance parameter not supported");
+            Log.e("Cam Error", "White balance parameter not supported");
         }
 
         return true;
@@ -1162,12 +1183,12 @@ Log.d(TAG,"Back button Pressed...");
         cal.set(sDts[0],sDts[1],sDts[2],sDts[3],sDts[4]);*/
 
         Intent intent = new Intent(this, AlmReceiver.class);
-        intent.putExtra("ID",String.valueOf(AlmID));
-        intent.putExtra("Title",NotifyTitle);
-        intent.putExtra("Message",NotifyMsg);
-        PendingIntent pIntent=PendingIntent.getBroadcast(this.getApplicationContext(),AlmID,intent,0);
-        AlarmManager alarmManager=(AlarmManager) this.getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,AlmTm,pIntent);
+        intent.putExtra("ID", String.valueOf(AlmID));
+        intent.putExtra("Title", NotifyTitle);
+        intent.putExtra("Message", NotifyMsg);
+        PendingIntent pIntent = PendingIntent.getBroadcast(this.getApplicationContext(), AlmID, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, AlmTm, pIntent);
     }
     private final ServiceConnection mServiceConection = new ServiceConnection() {
         @Override

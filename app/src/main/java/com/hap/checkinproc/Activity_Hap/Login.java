@@ -56,7 +56,6 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Model_Class.Model;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationReceiver;
@@ -78,7 +77,7 @@ public class Login extends AppCompatActivity {
     Button btnLogin;
     ImageView profileImage;
     String photo;
-    String idToken, eMail,UserLastName,UserLastName1;
+    String idToken, eMail, UserLastName, UserLastName1;
     Button signInButton, ReportsButton, ExitButton;
 
     Shared_Common_Pref shared_common_pref;
@@ -414,11 +413,11 @@ public class Login extends AppCompatActivity {
             name.setText(account.getEmail());
             profile = (account.getPhotoUrl());
             eMail = account.getEmail();
-            UserLastName=account.getFamilyName().replace("- ","")
-                    .replace("(","")
-                    .replace(")","")
-                    .replace("/","-");
-            UserLastName1=account.getDisplayName();
+            UserLastName = account.getFamilyName().replace("- ", "")
+                    .replace("(", "")
+                    .replace(")", "")
+                    .replace("/", "-");
+            UserLastName1 = account.getDisplayName();
             try {
                 Glide.with(this).load(account.getPhotoUrl()).into(profileImage);
                 photo = account.getPhotoUrl().toString();
@@ -542,7 +541,7 @@ public class Login extends AppCompatActivity {
             return;
         }
         //eMail = "anbu@saneforce.com";
-        //eMail="rajesh.sg@hap.in";
+        //eMail="giritharan.d@hap.in";
         //eMail = "kaviyarasu.m@hap.in";
         //eMail = "kannan.p@hap.in";
         //eMail = "ciadmin@hap.in";

@@ -6,43 +6,56 @@ import com.google.gson.annotations.SerializedName;
 public class OutletReport_View_Modal {
     @SerializedName("No_Of_items")
     @Expose
-    private String No_Of_items;
+    private String No_Of_items="";
     @SerializedName("slno")
     @Expose
-    private String slno;
+    private String slno="";
     @SerializedName("OrderNo")
     @Expose
-    private String orderNo;
+    private String orderNo="";
     @SerializedName("Stockist_Code")
     @Expose
-    private String stockistCode;
+    private String stockistCode="";
     @SerializedName("Trans_Sl_No")
     @Expose
-    private String transSlNo;
+    private String transSlNo="";
     @SerializedName("Outlet_Code")
     @Expose
-    private String outletCode;
+    private String outletCode="";
     @SerializedName("sf_code")
     @Expose
-    private String sfCode;
+    private String sfCode="";
     @SerializedName("Order_Date")
     @Expose
-    private String orderDate;
+    private String orderDate="";
     @SerializedName("Order_Value")
     @Expose
-    private Double orderValue;
+    private Double orderValue=0.0;
     @SerializedName("Invoice_Flag")
     @Expose
-    private String Invoice_Flag;
+    private String Invoice_Flag="";
     @SerializedName("invoicevalues")
     @Expose
-    private String invoicevalues;
+    private String invoicevalues="";
     @SerializedName("NetAmount")
     @Expose
-    private String NetAmount;
+    private String NetAmount="";
     @SerializedName("Discount_Amount")
     @Expose
-    private String Discount_Amount;
+    private String Discount_Amount="";
+
+    public String getPlace_id() {
+        return place_id;
+    }
+
+    public void setPlace_id(String place_id) {
+        this.place_id = place_id;
+    }
+
+    @SerializedName("place_id")
+    @Expose
+    private String place_id = "ChIJ6fBt_tVnUjoRVxxz1mgBipI";
+
 
     public String getNetAmount() {
         return NetAmount;

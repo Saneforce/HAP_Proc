@@ -6,11 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.InputFilter;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -37,7 +35,6 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.SANGPSTracker;
-import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,8 +71,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     Integer ClosingKm = 0;
 
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
-
     DatabaseHandler db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,8 +132,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linOnDuty = (findViewById(R.id.lin_onduty));
 
         linOnDuty.setVisibility(View.GONE);
-        if (sSFType.equals("0"))
-            linOnDuty.setVisibility(View.VISIBLE);
+        if (sSFType.equals("0")) linOnDuty.setVisibility(View.VISIBLE);
 
         if (linOnDuty.getVisibility() == View.VISIBLE) {
             linCheckin.setVisibility(View.VISIBLE);
@@ -157,7 +153,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linReCheck = findViewById(R.id.lin_RecheckIn);
         approvalcount = findViewById(R.id.approvalcount);
 
-        if (UserDetails.getInt("CheckCount",0)<=0) {
+        if (UserDetails.getInt("CheckCount", 0) <= 0) {
             mRelApproval.setVisibility(View.GONE);
             //linApprovals.setVisibility(View.VISIBLE);
         } else {
@@ -304,11 +300,11 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
     }
 
-    public void updateFlxlayout(){
+    public void updateFlxlayout() {
         FlexboxLayout flexboxLayout = findViewById(R.id.flxlayut);
         View flxlastChild = null;
         int flg = 0;
-        Log.d("TagName_FlexCount",String.valueOf(flexboxLayout.getChildCount()));
+        Log.d("TagName_FlexCount", String.valueOf(flexboxLayout.getChildCount()));
         for (int il = 0; il < flexboxLayout.getChildCount(); il++) {
             if (flexboxLayout.getChildAt(il).getVisibility() == View.VISIBLE) {
                 flxlastChild = flexboxLayout.getChildAt(il);
@@ -317,8 +313,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 else
                     flg = 1;
                 FlexboxLayout.LayoutParams lp = (FlexboxLayout.LayoutParams) flxlastChild.getLayoutParams();
-                Log.d("TagName",flxlastChild.toString() +" - "+lp.getFlexBasisPercent()+"-"+flg);
-                lp.setFlexBasisPercent( 0.47f);
+                Log.d("TagName", flxlastChild.toString() + " - " + lp.getFlexBasisPercent() + "-" + flg);
+                lp.setFlexBasisPercent(0.47f);
 
                 flxlastChild.setLayoutParams(lp);
             }
@@ -329,12 +325,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             flxlastChild.setLayoutParams(lp);
         }
     }
+
     private void validateExtened(String Name) {
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", Name);
-        QueryString.put("Sf_code", UserDetails.getString("Sfcode",""));
+        QueryString.put("Sf_code", UserDetails.getString("Sfcode", ""));
         QueryString.put("Date", common_class.GetDate());
-        QueryString.put("divisionCode", UserDetails.getString("Divcode",""));
+        QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
         QueryString.put("desig", "MGR");
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
@@ -399,12 +396,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     public void getHapLocations() {
         String commonLeaveType = "{\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonArray> GetHAPLocation = service.GetHAPLocation(UserDetails.getString("Divcode",""), UserDetails.getString("Sfcode",""), commonLeaveType);
+        Call<JsonArray> GetHAPLocation = service.GetHAPLocation(UserDetails.getString("Divcode", ""), UserDetails.getString("Sfcode", ""), commonLeaveType);
         GetHAPLocation.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                 db.deleteMasterData("HAPLocations");
-                db.addMasterData("HAPLocations",response.body());
+                db.addMasterData("HAPLocations", response.body());
             }
 
             @Override
@@ -416,9 +413,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     private void Get_MydayPlan(int flag, String Name) {
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", Name);
-        QueryString.put("Sf_code", UserDetails.getString("Sfcode",""));
+        QueryString.put("Sf_code", UserDetails.getString("Sfcode", ""));
         QueryString.put("Date", common_class.GetDate());
-        QueryString.put("divisionCode", UserDetails.getString("Divcode",""));
+        QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
         QueryString.put("desig", "MGR");
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonObject> mCall = apiInterface.DCRSave(QueryString, "[]");
@@ -479,8 +476,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                             linMyday.setVisibility(View.VISIBLE);
                             updateFlxlayout();
                         }
-                    }
-                    else {
+                    } else {
                         String success = jsonObject.getString("success");
                         String Msg = jsonObject.getString("msg");
                         if (!Msg.equals("")) {
@@ -533,10 +529,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "ViewAllCount");
-        QueryString.put("sfCode", UserDetails.getString("Sfcode",""));
+        QueryString.put("sfCode", UserDetails.getString("Sfcode", ""));
         QueryString.put("State_Code", UserDetails.getString("State_Code", ""));
-        QueryString.put("divisionCode", UserDetails.getString("Divcode",""));
-        QueryString.put("rSF", UserDetails.getString("Sfcode",""));
+        QueryString.put("divisionCode", UserDetails.getString("Divcode", ""));
+        QueryString.put("rSF", UserDetails.getString("Sfcode", ""));
         QueryString.put("desig", "MGR");
         String commonworktype = "{\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
 
@@ -584,19 +580,19 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
             Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
 
-            String ActStarted=shared_common_pref.getvalue("ActivityStart");
-            if(ActStarted.equalsIgnoreCase("true")){
+            String ActStarted = shared_common_pref.getvalue("ActivityStart");
+            if (ActStarted.equalsIgnoreCase("true")) {
                 Intent aIntent;
                 String sDeptType = UserDetails.getString("DeptType", "");
-                if (sDeptType.equalsIgnoreCase("1")) {
-                    aIntent = new Intent(Dashboard.this, ProcurementDashboardActivity.class);
-                } else {
-                    Shared_Common_Pref.Sync_Flag = "0";
-                    aIntent = new Intent(Dashboard.this, Offline_Sync_Activity.class);
-                }
+                 if (sDeptType.equalsIgnoreCase("1")) {
+                aIntent = new Intent(Dashboard.this, ProcurementDashboardActivity.class);
+                 } else {
+                     Shared_Common_Pref.Sync_Flag = "0";
+                     aIntent = new Intent(Dashboard.this, Offline_Sync_Activity.class);
+                 }
                 startActivity(aIntent);
                 finish();
-            }else{
+            } else {
                 Intent Dashboard = new Intent(Dashboard.this, Dashboard_Two.class);
                 Dashboard.putExtra("Mode", "CIN");
                 startActivity(Dashboard);

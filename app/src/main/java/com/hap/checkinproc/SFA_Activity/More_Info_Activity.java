@@ -114,7 +114,7 @@ public class More_Info_Activity extends AppCompatActivity implements View.OnClic
                     }
 
 
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

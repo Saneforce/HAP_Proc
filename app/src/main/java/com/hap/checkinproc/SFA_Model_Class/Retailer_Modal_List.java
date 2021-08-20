@@ -7,6 +7,7 @@ public class Retailer_Modal_List {
     @SerializedName("id")
     @Expose
     private String id;
+
     public String getStatusname() {
         return Statusname;
     }
@@ -71,7 +72,6 @@ public class Retailer_Modal_List {
     @SerializedName("name")
     @Expose
     private String name;
-
 
 
     @SerializedName("Distributor_Code")
@@ -195,6 +195,12 @@ public class Retailer_Modal_List {
     @Expose
     private String HatsanCategory_Switch;
 
+
+    @SerializedName("place_id")
+    @Expose
+    private String place_id = "ChIJ6fBt_tVnUjoRVxxz1mgBipI";
+
+
     public Retailer_Modal_List(String id, String name, String owner_Name, String statusname, String valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode, String invoice_Flag, String hatsun_AvailablityId, String listedDr_Email, String cityname, String compititor_Name, String compititor_Id, String lastUpdt_Date, String hatsanavail_Switch, String hatsanCategory_Switch, String pin_code, String gst, String reason_category, String category_Universe_Id) {
         this.id = id;
         this.name = name;
@@ -228,15 +234,19 @@ public class Retailer_Modal_List {
         this.reason_category = reason_category;
         Category_Universe_Id = category_Universe_Id;
     }
+
     @SerializedName("pin_code")
     @Expose
     private String pin_code;
+
     public String getPin_code() {
         return pin_code;
     }
+
     public void setPin_code(String pin_code) {
         this.pin_code = pin_code;
     }
+
     public String getGst() {
         return gst;
     }
@@ -248,6 +258,7 @@ public class Retailer_Modal_List {
     @SerializedName("gst")
     @Expose
     private String gst;
+
     public String getHatsanavail_Switch() {
         return Hatsanavail_Switch;
     }
@@ -271,6 +282,7 @@ public class Retailer_Modal_List {
     public void setReason_category(String reason_category) {
         this.reason_category = reason_category;
     }
+
     public String getDistCode() {
         return DistCode;
     }
@@ -278,9 +290,11 @@ public class Retailer_Modal_List {
     public void setDistCode(String distCode) {
         DistCode = distCode;
     }
+
     @SerializedName("reason_category")
     @Expose
     private String reason_category;
+
     public String getLastUpdt_Date() {
         return LastUpdt_Date;
     }
@@ -368,11 +382,11 @@ public class Retailer_Modal_List {
         this.id = id;
         this.name = name;
         this.Statusname = statusname;
-        this. Valuesinv = valuesinv;
+        this.Valuesinv = valuesinv;
         this.InvoiceValues = invoiceValues;
         this.InvoiceDate = invoiceDate;
         this.Invoice_Flag = invoice_Flag;
-        this. Hatsun_AvailablityId = hatsun_AvailablityId;
+        this.Hatsun_AvailablityId = hatsun_AvailablityId;
         this.Category_Universe_Id = category_Universe_Id;
         this.townCode = townCode;
         this.townName = townName;
@@ -503,5 +517,14 @@ public class Retailer_Modal_List {
     public void setDocSpecialCode(Integer docSpecialCode) {
         this.docSpecialCode = docSpecialCode;
     }
+
+    public String getPlace_id() {
+        return place_id;
+    }
+
+    public void setPlace_id(String place_id) {
+        this.place_id = place_id;
+    }
+
 
 }

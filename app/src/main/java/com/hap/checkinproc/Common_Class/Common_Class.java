@@ -18,7 +18,6 @@ import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -73,13 +72,13 @@ public class Common_Class {
     Shared_Common_Pref shared_common_pref;
     ProgressDialog nDialog;
     Type userType;
-    ;
     Gson gson;
 
     // Gson gson;
     String Result = "false";
     public static String Version_Name = "ver 3.1.14-b";
     public static String Work_Type = "0";
+    public static int count;
 
     public void CommonIntentwithFinish(Class classname) {
         intent = new Intent(activity, classname);
@@ -246,166 +245,186 @@ public class Common_Class {
     }
 
     public void getDataFromApi(String key, Activity activity, Boolean boolRefresh) {
-        String QuerySTring1 = "";
-        Map<String, String> QueryString = new HashMap<>();
-        String axnname = "table/list";
 
-        switch (key) {
+        if (isNetworkAvailable(activity)) {
+            String QuerySTring1 = "";
+            Map<String, String> QueryString = new HashMap<>();
+            String axnname = "table/list";
 
-            case (Retailer_OutletList):
-                ProgressdialogShow(1, "Data Syncing");
-                QuerySTring1 = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",  \\\"reason_category\\\", \\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"town_name\\\",\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\",\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\",  \\\"LastUpdt_Date\\\",    \\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" , \\\"Valuesinv\\\" , \\\"InvoiceDate\\\", \\\"Category_Universe_Id\\\", \\\"Hatsun_AvailablityId\\\",   \\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\",\\\"Distributor_Code\\\"]\",\"where\":\"[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                break;
-            case (Constants.Distributor_List):
-                QuerySTring1 = "{\"tableName\":\"vwstockiest_Master_APP\",\"coloumns\":\"[\\\"distributor_code as id\\\", \\\"stockiest_name as name\\\",\\\"town_code\\\",\\\"town_name\\\",\\\"Addr1\\\",\\\"Addr2\\\",\\\"City\\\",\\\"Pincode\\\",\\\"GSTN\\\",\\\"lat\\\",\\\"long\\\",\\\"addrs\\\",\\\"Tcode\\\",\\\"Dis_Cat_Code\\\"]\",\"where\":\"[\\\"isnull(Stockist_Status,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                break;
-            case (Constants.Category_List):
-                QuerySTring1 = "{\"tableName\":\"category_universe\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                break;
-            case (Constants.Product_List):
-                QuerySTring1 = "{\"tableName\":\"getproduct_details\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                break;
-            case (Constants.Rout_List):
-                QuerySTring1 = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                break;
+            switch (key) {
 
-            case Constants.GetTodayOrder_List:
-                QuerySTring1 = "{\"tableName\":\"gettotalorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
-                QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
-                break;
+                case (Retailer_OutletList):
+                    ProgressdialogShow(1, "Data Syncing");
+                    QuerySTring1 = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",  \\\"reason_category\\\", \\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"town_name\\\",\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\",\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\",  \\\"LastUpdt_Date\\\",    \\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" , \\\"Valuesinv\\\" , \\\"InvoiceDate\\\", \\\"Category_Universe_Id\\\", \\\"Hatsun_AvailablityId\\\",   \\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\",\\\"Distributor_Code\\\"]\",\"where\":\"[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    break;
+                case (Constants.Distributor_List):
+                    QuerySTring1 = "{\"tableName\":\"vwstockiest_Master_APP\",\"coloumns\":\"[\\\"distributor_code as id\\\", \\\"stockiest_name as name\\\",\\\"town_code\\\",\\\"town_name\\\",\\\"Addr1\\\",\\\"Addr2\\\",\\\"City\\\",\\\"Pincode\\\",\\\"GSTN\\\",\\\"lat\\\",\\\"long\\\",\\\"addrs\\\",\\\"Tcode\\\",\\\"Dis_Cat_Code\\\"]\",\"where\":\"[\\\"isnull(Stockist_Status,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    break;
+                case (Constants.Category_List):
+                    QuerySTring1 = "{\"tableName\":\"category_universe\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    break;
+                case (Constants.Product_List):
+                    QuerySTring1 = "{\"tableName\":\"getproduct_details\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    break;
+                case (Constants.Rout_List):
+                    QuerySTring1 = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    break;
 
-            case Constants.Outlet_Total_Orders:
-                QuerySTring1 = "{\"tableName\":\"gettotaloutletorders\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
-                QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
-                break;
-            case Constants.TodayOrderDetails_List:
-                QuerySTring1 = "{\"tableName\":\"GettotalOrderDetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                QueryString.put("fromdate", Common_Class.GetDatewothouttime());
-                QueryString.put("todate", Common_Class.GetDatewothouttime());
-                break;
+                case Constants.GetTodayOrder_List:
+                    QuerySTring1 = "{\"tableName\":\"gettotalorderbytoday\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                    break;
 
-            case Constants.Competitor_List:
-                QuerySTring1 = "{\"tableName\":\"get_compititordetails\"}";
+                case Constants.Outlet_Total_Orders:
+                    QuerySTring1 = "{\"tableName\":\"gettotaloutletorders\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", com.hap.checkinproc.Common_Class.Common_Class.GetDatewothouttime());
+                    break;
+                case Constants.TodayOrderDetails_List:
+                    QuerySTring1 = "{\"tableName\":\"GettotalOrderDetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    break;
 
-                break;
-            case Constants.Todaydayplanresult:
-                axnname = "Get/dayplanresult";
-                QueryString.put("Date", Common_Class.GetDatewothouttime());
-                break;
-            case Constants.Outlet_Total_AlldaysOrders:
-                QuerySTring1 = "{\"tableName\":\"gettotalalldaysoutletorders\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
-                QueryString.put("fromdate", Common_Class.GetDatewothouttime());
-                QueryString.put("todate", Common_Class.GetDatewothouttime());
-                break;
+                case Constants.Competitor_List:
+                    QuerySTring1 = "{\"tableName\":\"get_compititordetails\"}";
+
+                    break;
+                case Constants.Todaydayplanresult:
+                    axnname = "Get/dayplanresult";
+                    QueryString.put("Date", Common_Class.GetDatewothouttime());
+                    break;
+                case Constants.Outlet_Total_AlldaysOrders:
+                    QuerySTring1 = "{\"tableName\":\"gettotalalldaysoutletorders\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QueryString.put("fromdate", Common_Class.GetDatewothouttime());
+                    QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    break;
+            }
+
+            QueryString.put("axn", axnname);
+            QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
+            QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+            QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+            QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+
+            callAPI(QuerySTring1, QueryString, key, activity, boolRefresh);
+        } else {
+            Toast.makeText(activity, "Please check your internet connection.", Toast.LENGTH_SHORT).show();
         }
-
-        QueryString.put("axn", axnname);
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
-        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
-
-        callAPI(QuerySTring1, QueryString, key, activity, boolRefresh);
 
 
     }
 
     void callAPI(String QuerySTring1, Map<String, String> QueryString, String key, Activity activity, Boolean boolRefresh) {
-        DatabaseHandler db = new DatabaseHandler(activity);
+        try {
+            DatabaseHandler db = new DatabaseHandler(activity);
 
-        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+            ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
 
-        Call<Object> call = service.GetRouteObject(QueryString, QuerySTring1);
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
+            Call<Object> call = service.GetRouteObject(QueryString, QuerySTring1);
+            call.enqueue(new Callback<Object>() {
+                @Override
+                public void onResponse(Call<Object> call, Response<Object> response) {
+                    Gson gson = new Gson();
 
-                // Log.e(TAG + "Key: ", key);
-                Gson gson = new Gson();
-                db.deleteMasterData(key);
-                db.addMasterData(key, gson.toJson(response.body()));
+                    if (key.equals(Constants.Retailer_OutletList)) {
+                        shared_common_pref.save("count", gson.toJson(response.body()).length());
 
-                switch (key) {
-                    case Retailer_OutletList:
-                        getDataFromApi(Constants.Distributor_List, activity, boolRefresh);
-                        break;
-                    case Distributor_List:
-                        getDataFromApi(Category_List, activity, boolRefresh);
-                        break;
-                    case Category_List:
-                        getDataFromApi(Product_List, activity, boolRefresh);
-                        break;
-                    case Product_List:
-                        getDataFromApi(Rout_List, activity, boolRefresh);
-                        break;
-                    case Rout_List:
-                        if (boolRefresh)
-                            getDataFromApi(Constants.GetTodayOrder_List, activity, boolRefresh);
 
-                        else {
-                            ProgressdialogShow(0, "Data Syncing");
-                            activity.startActivity(new Intent(activity, SFA_Activity.class));
-                        }
-                        break;
+                        count = shared_common_pref.getIntValue("count");
+                    }
 
-                    case Constants.GetTodayOrder_List:
-                        if (boolRefresh)
-                            getDataFromApi(Constants.Outlet_Total_Orders, activity, boolRefresh);
-                        break;
-                    case Outlet_Total_Orders:
-                        if (boolRefresh)
-                            getDataFromApi(Constants.TodayOrderDetails_List, activity, boolRefresh);
-                        break;
-                    case TodayOrderDetails_List:
-                        if (boolRefresh)
-                            getDataFromApi(Constants.Competitor_List, activity, boolRefresh);
-                        break;
-                    case Competitor_List:
-                        if (boolRefresh)
-                            getDataFromApi(Constants.Outlet_Total_AlldaysOrders, activity, boolRefresh);
-                        break;
-                    case Constants.Outlet_Total_AlldaysOrders:
-                        if (boolRefresh)
-                            getDataFromApi(Constants.Todaydayplanresult, activity, boolRefresh);
-                        break;
-                    case Constants.Todaydayplanresult:
-                        if (boolRefresh)
-                            CommonIntentwithFinish(SFA_Activity.class);
-                        break;
+//
+//                    Log.e("onResponse: ", "key:" + key + " response: " + gson.toJson(response.body()));
+//
+                    if (shared_common_pref == null)
+                        shared_common_pref = new Shared_Common_Pref(activity);
+
+                    if (key.equals(Retailer_OutletList))
+                        shared_common_pref.save(key, gson.toJson(response.body()));
+
+                    // Log.e(TAG + "Key: ", key);
+                    db.deleteMasterData(key);
+                    db.addMasterData(key, gson.toJson(response.body()));
+
+                    switch (key) {
+                        case Retailer_OutletList:
+                            getDataFromApi(Constants.Distributor_List, activity, boolRefresh);
+                            break;
+                        case Distributor_List:
+                            getDataFromApi(Category_List, activity, boolRefresh);
+                            break;
+                        case Category_List:
+                            getDataFromApi(Product_List, activity, boolRefresh);
+                            break;
+                        case Product_List:
+                            getDataFromApi(Rout_List, activity, boolRefresh);
+                            break;
+                        case Rout_List:
+                            if (boolRefresh)
+                                getDataFromApi(Constants.GetTodayOrder_List, activity, boolRefresh);
+
+                            else {
+                                ProgressdialogShow(0, "Data Syncing");
+                                activity.startActivity(new Intent(activity, SFA_Activity.class));
+                            }
+                            break;
+
+                        case Constants.GetTodayOrder_List:
+                            if (boolRefresh)
+                                getDataFromApi(Constants.Outlet_Total_Orders, activity, boolRefresh);
+                            break;
+                        case Outlet_Total_Orders:
+                            if (boolRefresh)
+                                getDataFromApi(Constants.TodayOrderDetails_List, activity, boolRefresh);
+                            break;
+                        case TodayOrderDetails_List:
+                            if (boolRefresh)
+                                getDataFromApi(Constants.Competitor_List, activity, boolRefresh);
+                            break;
+                        case Competitor_List:
+                            if (boolRefresh)
+                                getDataFromApi(Constants.Outlet_Total_AlldaysOrders, activity, boolRefresh);
+                            break;
+                        case Constants.Outlet_Total_AlldaysOrders:
+                            if (boolRefresh)
+                                getDataFromApi(Constants.Todaydayplanresult, activity, boolRefresh);
+                            break;
+                        case Constants.Todaydayplanresult:
+                            if (boolRefresh)
+                                CommonIntentwithFinish(SFA_Activity.class);
+                            break;
+
+
+                    }
 
 
                 }
 
-
-            }
-
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-            }
-        });
-    }
-
-    public boolean checkValueStore(Activity activity, String key) {
-        DatabaseHandler db = new DatabaseHandler(activity);
-
-        try {
-            JSONArray storeData = db.getMasterData(key);
-            if (storeData != null && storeData.length() > 0)
-                return true;
+                @Override
+                public void onFailure(Call<Object> call, Throwable t) {
+                }
+            });
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("api response ex:", e.getMessage());
         }
-
-        return false;
     }
 
-
-
-
-
+//    public boolean checkValueStore(Activity activity, String key) {
+//        DatabaseHandler db = new DatabaseHandler(activity);
+//
+//        try {
+//            JSONArray storeData = db.getMasterData(key);
+//            if (storeData != null && storeData.length() > 0)
+//                return true;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return false;
+//    }
    /* public void Reurnypeface(class cl,){
         userType = new TypeToken<ArrayList<Work_Type_Model>>() {
         }.getType();
@@ -612,7 +631,7 @@ public class Common_Class {
     }
 
 
-  public   void gotoHomeScreen(Context context, View ivToolbarHome) {
+    public void gotoHomeScreen(Context context, View ivToolbarHome) {
 
 
         ivToolbarHome.setOnClickListener(new View.OnClickListener() {

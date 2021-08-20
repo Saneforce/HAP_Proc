@@ -13,6 +13,112 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginLeft="@dimen/C15dp"
+            android:layout_marginTop="@dimen/C15dp"
+            android:layout_marginRight="@dimen/C15dp"
+            app:cardCornerRadius="@dimen/C10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <RelativeLayout
+                    android:id="@+id/rlCumulativeMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/C5dp">
+
+                    <TextView
+                        android:id="@+id/tvCumulativeMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/C2dp"
+                        android:layout_marginRight="@dimen/C5dp"
+                        android:layout_toLeftOf="@+id/switchCumulativeMode"
+                        android:gravity="center"
+                        android:text="Graph Mode"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/C14dp"></TextView>
+
+                    <Switch
+                        android:id="@+id/switchCumulativeMode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"></Switch>
+
+
+                </RelativeLayout>
+
+
+                <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/viewpager"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rlCumulativeMode"
+                    android:layout_marginBottom="@dimen/C30dp"
+                    android:background="@color/white">
+
+                </androidx.viewpager.widget.ViewPager>
+
+                <LinearLayout
+                    android:id="@+id/llPagerDots"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/layoutDots1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:text="."
+                        android:textAlignment="center"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/C30dp">
+
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/layoutDots2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:text="."
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/C30dp">
+
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/layoutDots3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:text="."
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="@dimen/C30dp">
+
+
+                    </TextView>
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+
+        </androidx.cardview.widget.CardView>
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,6 +126,7 @@
             app:cardCornerRadius="@dimen/C10dp">
 
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/C5dp"
@@ -56,7 +163,7 @@
                             android:layout_marginTop="@dimen/C8dp"
                             android:layout_weight="1"
                             android:gravity="center"
-                            android:text="DCR"
+                            android:text="Activities"
                             android:textAlignment="center" />
                     </LinearLayout>
 
@@ -363,7 +470,5 @@
 
 
     </LinearLayout>
-    <!--
-        <include layout="@layout/back_arrow"></include>-->
 
 </LinearLayout>

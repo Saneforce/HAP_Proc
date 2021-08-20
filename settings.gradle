@@ -1,2 +1,3 @@
 include ':app'
 rootProject.name = "Checkin_proc"
+include ':MPChartLib'

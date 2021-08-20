@@ -49,6 +49,7 @@ public class Dashboard_View_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard__view_);
+
         recyclerView = findViewById(R.id.leaverecyclerview);
         headtext = findViewById(R.id.headtext);
         textViewname = findViewById(R.id.textViewname);
@@ -57,6 +58,7 @@ public class Dashboard_View_Activity extends AppCompatActivity {
         textViewname.setText(common_class.getintentValues("Name"));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         gson = new Gson();
+
         GetAllDetails(common_class.getintentValues("Servername"));
 
     }

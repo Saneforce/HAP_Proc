@@ -68,7 +68,8 @@ public class Outlet_Info_Activity extends AppCompatActivity implements View.OnCl
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
             // String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List);
-            String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+           // String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+            String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
 
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
             recyclerView.setAdapter(new Outlet_Info_Adapter(Retailer_Modal_List, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {

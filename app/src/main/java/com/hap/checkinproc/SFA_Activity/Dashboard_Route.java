@@ -174,10 +174,13 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
             Retailer_Modal_ListFilter = new ArrayList<>();
             Retailer_Modal_List = new ArrayList<>();
-            //  String outletserializableob = shared_common_pref.getvalue(Shared_Common_Pref.Outlet_List);
-            String outletserializableob = null;
+            String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
+            //  String outletserializableob = null;
+//
+            //      outletserializableob = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+//
 
-            outletserializableob = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+            Log.e("Retailor List: ", outletserializableob);
 
             Retailer_Modal_List.clear();
             Retailer_Modal_List = gson.fromJson(outletserializableob, userType);
@@ -294,14 +297,17 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                         //adapter.notifyDataSetChanged();
 
 
-                       // Toast.makeText(getApplicationContext(), "" + scrollPosition, Toast.LENGTH_SHORT).show();
+                        // Toast.makeText(getApplicationContext(), "" + scrollPosition, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         } catch (Exception e) {
+            Log.e("Retailor List:ex ", e.getMessage());
+
             e.printStackTrace();
         }
     }
+
 
     private void createTabFragment() {
 
@@ -642,8 +648,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         }
 
 
-
-
         public void updateData() {
 
 
@@ -758,7 +762,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             super.onViewCreated(view, savedInstanceState);
             this.context = getContext();
             recyclerView = view.findViewById(R.id.recyclerView);
-
 
 
             recyclerView.setAdapter(new Route_View_Adapter(mRetailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getActivity(), new AdapterOnClick() {
