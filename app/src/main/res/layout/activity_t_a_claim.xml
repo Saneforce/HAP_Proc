@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -86,12 +85,13 @@
         </LinearLayout>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" android:background="@color/white">
+            android:layout_height="match_parent"
+            android:background="@color/white">
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmer_view_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -268,7 +268,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="@dimen/C100dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -311,14 +311,12 @@
                             android:layout_marginLeft="@dimen/C5dp"
                             android:layout_marginTop="@dimen/C5dp"
                             android:orientation="horizontal">
-
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal"
                                 android:padding="@dimen/C2dp">
-
                                 <TextView
                                     android:id="@+id/txt_Name"
                                     android:layout_width="wrap_content"
@@ -330,7 +328,6 @@
                                     android:textSize="@dimen/C15dp"
                                     android:textStyle="bold"
                                     tools:ignore="RtlCompat" />
-
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -340,7 +337,6 @@
                                     android:textAllCaps="false"
                                     android:textColor="@android:color/black"
                                     android:textSize="14sp" />
-
                                 <TextView
                                     android:id="@+id/txt_emp_id"
                                     android:layout_width="match_parent"
@@ -349,9 +345,7 @@
                                     android:layout_weight="1"
                                     android:text=""
                                     android:textSize="12sp" />
-
                             </LinearLayout>
-
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -380,7 +374,6 @@
 
 
                             </LinearLayout>
-
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -396,14 +389,12 @@
 
                                 </ImageView>
                             </LinearLayout>
-
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/C5dp"
                             android:orientation="horizontal">
-
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -433,7 +424,6 @@
                                     tools:ignore="RtlCompat" />
 
                             </LinearLayout>
-
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -462,7 +452,6 @@
 
 
                             </LinearLayout>
-
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -479,7 +468,6 @@
 
                                 </ImageView>
                             </LinearLayout>
-
                         </LinearLayout>
                     </LinearLayout>
                     <LinearLayout
@@ -616,7 +604,7 @@
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/button_yellow"
                                     android:padding="@dimen/C8dp">
-    <!--                                android:background="@color/subExpHeader"-->
+                                    <!--                                android:background="@color/subExpHeader"-->
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -689,19 +677,19 @@
 
                                             </LinearLayout>
                                         </RelativeLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/C5dp"
-    android:layout_marginTop="-7dp">
-    <TextView
-        android:id="@+id/txtAllwType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="11sp"
-        />
-</LinearLayout>
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="@dimen/C5dp"
+                                            android:layout_marginTop="-7dp">
+                                            <TextView
+                                                android:id="@+id/txtAllwType"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:text=""
+                                                android:textSize="11sp"
+                                                />
+                                        </LinearLayout>
                                         <LinearLayout
                                             android:id="@+id/vwBoarding"
                                             android:layout_width="match_parent"
@@ -912,7 +900,7 @@
                                         android:overScrollMode="never"
                                         android:focusableInTouchMode="false">
 
-                                    <androidx.recyclerview.widget.RecyclerView
+                                        <androidx.recyclerview.widget.RecyclerView
                                             android:id="@+id/recycler_fuel"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
@@ -1471,7 +1459,8 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="1dp"
                                     android:layout_margin="@dimen/C10dp"
-                                    android:background="@color/grey_300"></View>
+                                    android:background="@color/grey_300"
+                                    android:visibility="gone"></View>
 
                                 <LinearLayout
                                     android:id="@+id/lin_tl"
@@ -1480,7 +1469,8 @@
                                     android:layout_marginLeft="@dimen/C10dp"
                                     android:layout_marginRight="@dimen/C10dp"
                                     android:layout_marginBottom="@dimen/C5dp"
-                                    android:orientation="horizontal">
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
 
                                     <TextView
                                         android:layout_width="match_parent"
@@ -1511,23 +1501,23 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/C8dp"
                             app:cardCornerRadius="@dimen/C5dp">
-
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:background="@color/white"
                                 android:orientation="vertical">
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/button_yellow"
+                                    android:visibility="visible"
                                     android:padding="@dimen/C8dp">
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:orientation="horizontal">
-
                                         <TextView
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
@@ -1540,7 +1530,6 @@
                                             android:textStyle="bold">
 
                                         </TextView>
-
                                         <TextView
                                             android:id="@+id/ldg_Add"
                                             android:layout_width="wrap_content"
@@ -1557,14 +1546,15 @@
                                     android:id="@+id/lodgContvw"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical">
-
+                                    android:orientation="vertical"
+                                    android:layout_marginTop="@dimen/C10dp"
+                                    android:visibility="gone">
                                     <TextView
-                                        style="@style/TextStyle"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_marginLeft="@dimen/C10dp"
                                         android:text="Type"
                                         android:textSize="10sp" />
-
-
                                     <LinearLayout
                                         android:id="@+id/ldg_typ_spiner"
                                         android:layout_width="match_parent"
@@ -1598,7 +1588,16 @@
                                         android:id="@+id/lodgCont"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:orientation="vertical">
+                                        android:orientation="vertical"
+                                        android:visibility="gone">
+                                        <LinearLayout
+                                            android:id="@+id/prm_linear_orders"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_weight="1"
+                                            android:orientation="vertical"
+                                            android:visibility="gone">
+                                        </LinearLayout>
                                         <LinearLayout
                                             android:id="@+id/ldg_stayloc"
                                             android:layout_width="match_parent"
@@ -1606,7 +1605,9 @@
                                             android:orientation="vertical">
 
                                             <TextView
-                                                style="@style/TextStyle"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginLeft="@dimen/C10dp"
                                                 android:text="Stay Location"
                                                 android:textSize="10sp" />
 
@@ -1651,8 +1652,6 @@
                                                 android:visibility="gone"
                                                 />
                                         </LinearLayout>
-
-
                                         <LinearLayout
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content">
@@ -1663,85 +1662,130 @@
                                             android:id="@+id/ldg_stayDt"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:orientation="vertical">
-
-
+                                            android:orientation="vertical"
+                                            android:background="@color/awhite"
+                                            android:layout_marginLeft="@dimen/C5dp"
+                                            android:layout_marginRight="@dimen/C5dp">
                                             <LinearLayout
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
                                                 android:layout_margin="@dimen/C5dp"
-                                                tools:ignore="UselessParent">
-
-
+                                                android:orientation="horizontal">
                                                 <LinearLayout
-                                                    android:id="@+id/prm_linear_orders"
-                                                    android:layout_width="wrap_content"
+                                                    android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
                                                     android:layout_weight="1"
                                                     android:orientation="vertical">
-
+                                                    <TextView
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:text="Hotel Check IN"
+                                                        android:textSize="10sp" />
                                                     <LinearLayout
                                                         android:layout_width="match_parent"
-                                                        android:layout_height="wrap_content">
-
+                                                        android:layout_height="wrap_content"
+                                                        android:orientation="horizontal">
                                                         <TextView
-                                                            android:layout_weight="1"
-                                                            style="@style/TextStyle"
-                                                            android:text="Hotel Check In"
-                                                            android:textSize="10sp" />
-
-                                                        <TextView
-                                                            style="@style/TextStyle"
-                                                            android:textColor="@android:color/holo_red_dark"
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:textColor="@android:color/black"
                                                             android:id="@+id/txt_hotel_date"
-                                                            android:text=""
-                                                            android:textSize="10sp" />
+                                                            android:text="10 Aug 2021"
+                                                            android:textSize="15sp"
+                                                            android:textStyle="bold"
+                                                            />
+                                                        <EditText
+                                                            android:id="@+id/from_picker"
+                                                            android:layout_width="match_parent"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_marginLeft="@dimen/C5dp"
+                                                            android:background="@drawable/item_border"
+                                                            android:layout_weight="1"
+                                                            android:focusable="false"
+                                                            android:text="00:00"
+                                                            android:hint="Time"
+                                                            android:inputType="date"
+                                                            android:textSize="12sp" />
+                                                    </LinearLayout>
+                                                </LinearLayout>
+                                                <LinearLayout
+                                                    android:layout_width="wrap_content"
+                                                    android:layout_height="match_parent"
+                                                    android:orientation="vertical"
+                                                    >
+                                                    <LinearLayout
+                                                        android:layout_width="@dimen/C90dp"
+                                                        android:layout_height="match_parent"
+                                                        android:layout_marginTop="@dimen/C10dp"
+                                                        android:orientation="vertical"
+                                                        android:gravity="center"
+                                                        android:layout_gravity="center"
+                                                        >
+                                                        <TextView
+                                                            android:id="@+id/NoofNight"
+                                                            android:layout_width="@dimen/C70dp"
+                                                            android:layout_height="wrap_content"
+                                                            android:text="- 1 Nights -"
+                                                            android:textSize="10sp"
+                                                            android:gravity="center"
+                                                            android:layout_gravity="center" />
 
                                                     </LinearLayout>
-
-                                                    <EditText
-                                                        android:id="@+id/from_picker"
-                                                        android:layout_width="match_parent"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_marginLeft="@dimen/C5dp"
-                                                        android:background="@drawable/item_border"
-                                                        android:focusable="false"
-                                                        android:hint="Hotel Check in"
-                                                        android:inputType="date"
-                                                        android:padding="@dimen/C10dp"
-                                                        android:textSize="@dimen/C13dp" />
-
-
                                                 </LinearLayout>
-
                                                 <LinearLayout
-                                                    android:id="@+id/lin_chck_out"
-                                                    android:layout_width="wrap_content"
+                                                    android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
-                                                    android:layout_marginLeft="@dimen/C5dp"
                                                     android:layout_weight="1"
                                                     android:orientation="vertical">
-
-                                                    <TextView
-                                                        style="@style/TextStyle"
-                                                        android:text="Hotel Check Out"
-                                                        android:textSize="10sp" />
-
-                                                    <EditText
-                                                        android:id="@+id/to_picker"
+                                                    <LinearLayout
+                                                        android:id="@+id/lin_chck_out"
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
-                                                        android:layout_marginRight="@dimen/C5dp"
-                                                        android:background="@drawable/item_border"
-                                                        android:focusable="false"
-                                                        android:hint="Hotel Check Out"
-                                                        android:inputType="date"
-                                                        android:padding="@dimen/C10dp"
-                                                        android:textSize="@dimen/C13dp" />
-
+                                                        android:orientation="vertical"
+                                                        >
+                                                        <TextView
+                                                            android:layout_width="match_parent"
+                                                            android:layout_height="wrap_content"
+                                                            android:text="Hotel Check Out"
+                                                            android:textSize="10sp" />
+                                                        <LinearLayout
+                                                            android:layout_width="match_parent"
+                                                            android:layout_height="match_parent"
+                                                            android:orientation="horizontal"
+                                                            >
+                                                            <TextView
+                                                                android:id="@+id/toDt_picker"
+                                                                android:layout_width="wrap_content"
+                                                                android:layout_height="wrap_content"
+                                                                android:focusable="false"
+                                                                android:hint="Date"
+                                                                android:inputType="date"
+                                                                android:text="10 Aug 2021"
+                                                                android:textSize="15sp"
+                                                                android:textStyle="bold"/>
+                                                            <EditText
+                                                                android:id="@+id/to_picker"
+                                                                android:layout_width="match_parent"
+                                                                android:layout_height="wrap_content"
+                                                                android:layout_marginLeft="@dimen/C5dp"
+                                                                android:background="@drawable/item_border"
+                                                                android:focusable="false"
+                                                                android:layout_weight="1"
+                                                                android:text="00:00"
+                                                                android:hint="Time"
+                                                                android:inputType="date"
+                                                                android:textSize="12sp" />
+                                                        </LinearLayout>
+                                                    </LinearLayout>
                                                 </LinearLayout>
                                             </LinearLayout>
 
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="horizontal">
+
+                                            </LinearLayout>
                                             <LinearLayout
                                                 android:id="@+id/total_days"
                                                 android:layout_width="match_parent"
@@ -1749,16 +1793,14 @@
                                                 android:orientation="horizontal"
                                                 android:visibility="gone">
 
-
                                                 <TextView
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
                                                     android:layout_marginLeft="@dimen/C10dp"
-                                                    android:text="No of days : "
+                                                    android:text="No of Stays : "
                                                     android:textColor="#000"
-                                                    android:textSize="8sp"></TextView>
-
-
+                                                    android:textSize="8sp"
+                                                    android:visibility="gone"/>
                                                 <TextView
                                                     android:id="@+id/txt_stay_total"
                                                     android:layout_width="wrap_content"
@@ -1766,299 +1808,10 @@
                                                     android:text=""
                                                     android:textAllCaps="true"
                                                     android:textColor="#000"
-                                                    android:textSize="8sp" />
+                                                    android:textSize="8sp"
+                                                    android:visibility="gone"/>
                                             </LinearLayout>
-
                                         </LinearLayout>
-
-                                        <LinearLayout
-                                            android:id="@+id/lin_indep_sty"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_margin="@dimen/C5dp"
-                                            android:orientation="vertical"
-                                            android:visibility="gone">
-
-                                            <CheckBox
-                                                android:id="@+id/chk_cnt_sty"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:layout_margin="@dimen/C2dp"
-                                                android:text="Continue Stay" />
-
-                                            <CheckBox
-                                                android:id="@+id/chk_early"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:layout_margin="@dimen/C2dp"
-                                                android:text="Early Check-in"
-                                                android:visibility="gone" />
-
-                                            <LinearLayout
-                                                android:id="@+id/lin_early"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:orientation="vertical"
-                                                android:visibility="gone">
-
-                                                <LinearLayout
-
-                                                    android:layout_width="match_parent"
-                                                    android:layout_height="wrap_content"
-                                                    android:background="@color/grey_100"
-                                                    android:gravity="center"
-                                                    android:orientation="horizontal"
-                                                    tools:ignore="UselessParent">
-
-
-                                                    <LinearLayout
-                                                        android:layout_width="wrap_content"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_weight="1"
-                                                        android:orientation="vertical">
-
-                                                        <TextView
-                                                            style="@style/TextStyle"
-                                                            android:text="Hotel Check In"
-                                                            android:textSize="10sp" />
-
-                                                        <EditText
-                                                            android:id="@+id/early_check_in"
-                                                            android:layout_width="match_parent"
-                                                            android:layout_height="wrap_content"
-                                                            android:layout_marginLeft="@dimen/C5dp"
-                                                            android:background="@drawable/item_border"
-                                                            android:focusable="false"
-                                                            android:hint="Hotel Check in"
-                                                            android:inputType="date"
-                                                            android:padding="@dimen/C10dp"
-                                                            android:textSize="@dimen/C13dp" />
-
-
-                                                    </LinearLayout>
-
-                                                    <LinearLayout
-                                                        android:layout_width="wrap_content"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_margin="5dp"
-                                                        android:layout_weight="1"
-                                                        android:orientation="vertical">
-
-                                                        <TextView
-                                                            style="@style/TextStyle"
-                                                            android:text="Hotel Check Out"
-                                                            android:textSize="10sp" />
-
-                                                        <EditText
-                                                            android:id="@+id/early_check_out"
-                                                            android:layout_width="match_parent"
-                                                            android:layout_height="wrap_content"
-                                                            android:layout_marginRight="@dimen/C5dp"
-                                                            android:background="@drawable/item_border"
-                                                            android:focusable="false"
-                                                            android:hint="Hotel Check Out"
-                                                            android:inputType="date"
-                                                            android:padding="@dimen/C10dp"
-                                                            android:textSize="@dimen/C13dp" />
-
-                                                    </LinearLayout>
-                                                </LinearLayout>
-
-                                                <LinearLayout
-                                                    android:layout_width="match_parent"
-                                                    android:layout_height="wrap_content"
-                                                    android:orientation="horizontal">
-
-                                                    <LinearLayout
-                                                        android:layout_width="match_parent"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_weight="1"
-                                                        android:orientation="vertical">
-
-                                                        <TextView
-                                                            style="@style/TextStyle"
-                                                            android:text="Bill Amount"
-                                                            android:textSize="10sp" />
-
-                                                        <EditText
-                                                            android:id="@+id/edt_earl_bil"
-                                                            android:layout_width="match_parent"
-                                                            android:layout_height="wrap_content"
-                                                            android:hint="0.00"
-                                                            android:inputType="number"
-                                                            android:maxLength="5"
-                                                            android:textColorHint="#C0C0C0"
-                                                            android:textSize="@dimen/C13dp"
-                                                            android:textStyle="bold" />
-
-                                                    </LinearLayout>
-
-
-                                                    <LinearLayout
-                                                        android:layout_width="wrap_content"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_gravity="bottom"
-                                                        android:orientation="horizontal">
-
-                                                        <ImageView
-                                                            android:id="@+id/ear_lod_attach"
-                                                            android:layout_width="@dimen/C40dp"
-                                                            android:layout_height="@dimen/C40dp"
-                                                            android:onClick="EarImage"
-                                                            android:padding="@dimen/C2dp"
-                                                            android:src="@drawable/attach_files" />
-
-
-                                                        <ImageView
-                                                            android:id="@+id/ear_lod__preview"
-                                                            android:layout_width="@dimen/C40dp"
-                                                            android:layout_height="@dimen/C40dp"
-                                                            android:layout_marginLeft="@dimen/C2dp"
-                                                            android:onClick="EarAttach"
-                                                            android:padding="@dimen/C2dp"
-                                                            android:src="@drawable/image_preview" />
-
-                                                    </LinearLayout>
-                                                </LinearLayout>
-                                            </LinearLayout>
-
-                                            <CheckBox
-                                                android:id="@+id/chk_late"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:layout_margin="@dimen/C2dp"
-                                                android:text="Late Check-Out"
-                                                android:visibility="gone" />
-
-                                            <LinearLayout
-                                                android:id="@+id/lin_late"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:orientation="vertical"
-                                                android:visibility="gone"
-                                                tools:ignore="UselessParent">
-
-                                                <LinearLayout
-                                                    android:layout_width="match_parent"
-                                                    android:layout_height="wrap_content"
-                                                    android:gravity="center"
-                                                    android:orientation="horizontal"
-                                                    tools:ignore="UselessParent">
-
-                                                    <LinearLayout
-                                                        android:layout_width="wrap_content"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_weight="1"
-                                                        android:orientation="vertical">
-
-                                                        <TextView
-                                                            style="@style/TextStyle"
-                                                            android:text="Hotel Check In"
-                                                            android:textSize="10sp" />
-
-                                                        <EditText
-                                                            android:id="@+id/late_check_in"
-                                                            android:layout_width="match_parent"
-                                                            android:layout_height="wrap_content"
-                                                            android:layout_marginLeft="@dimen/C5dp"
-                                                            android:background="@drawable/item_border"
-                                                            android:focusable="false"
-                                                            android:hint="Hotel Check in"
-                                                            android:inputType="date"
-                                                            android:padding="@dimen/C10dp"
-                                                            android:textSize="@dimen/C13dp" />
-
-                                                    </LinearLayout>
-
-                                                    <LinearLayout
-                                                        android:layout_width="wrap_content"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_margin="5dp"
-                                                        android:layout_weight="1"
-                                                        android:orientation="vertical">
-
-                                                        <TextView
-                                                            style="@style/TextStyle"
-                                                            android:text="Hotel Check Out"
-                                                            android:textSize="10sp" />
-
-                                                        <EditText
-                                                            android:id="@+id/late_check_out"
-                                                            android:layout_width="match_parent"
-                                                            android:layout_height="wrap_content"
-                                                            android:layout_marginRight="@dimen/C5dp"
-                                                            android:background="@drawable/item_border"
-                                                            android:focusable="false"
-                                                            android:hint="Hotel Check Out"
-                                                            android:inputType="date"
-                                                            android:padding="@dimen/C10dp"
-                                                            android:textSize="@dimen/C13dp" />
-
-                                                    </LinearLayout>
-                                                </LinearLayout>
-
-                                                <LinearLayout
-                                                    android:layout_width="match_parent"
-                                                    android:layout_height="wrap_content"
-                                                    android:orientation="horizontal">
-
-                                                    <LinearLayout
-                                                        android:layout_width="match_parent"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_weight="1"
-                                                        android:orientation="vertical">
-
-                                                        <TextView
-                                                            style="@style/TextStyle"
-                                                            android:text="Bill Amount"
-                                                            android:textSize="10sp" />
-
-                                                        <EditText
-                                                            android:id="@+id/lat_lod_bil"
-                                                            android:layout_width="match_parent"
-                                                            android:layout_height="wrap_content"
-                                                            android:hint="0.00"
-                                                            android:inputType="number"
-                                                            android:maxLength="5"
-                                                            android:textColorHint="#C0C0C0"
-                                                            android:textSize="@dimen/C13dp"
-                                                            android:textStyle="bold" />
-
-                                                    </LinearLayout>
-
-
-                                                    <LinearLayout
-                                                        android:layout_width="wrap_content"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_gravity="bottom"
-                                                        android:orientation="horizontal">
-
-                                                        <ImageView
-                                                            android:id="@+id/lat_lod_attach"
-                                                            android:layout_width="@dimen/C40dp"
-                                                            android:layout_height="@dimen/C40dp"
-                                                            android:onClick="LateImage"
-                                                            android:padding="@dimen/C2dp"
-                                                            android:src="@drawable/attach_files" />
-
-
-                                                        <ImageView
-                                                            android:id="@+id/lat_lod__preview"
-                                                            android:layout_width="@dimen/C40dp"
-                                                            android:layout_height="@dimen/C40dp"
-                                                            android:layout_marginLeft="@dimen/C2dp"
-                                                            android:onClick="LateAttach"
-                                                            android:padding="@dimen/C2dp"
-                                                            android:src="@drawable/image_preview" />
-
-                                                    </LinearLayout>
-                                                </LinearLayout>
-
-                                            </LinearLayout>
-
-                                        </LinearLayout>
-
-
                                         <LinearLayout
                                             android:id="@+id/lodgJoin"
                                             android:layout_width="match_parent"
@@ -2085,7 +1838,7 @@
                                                     android:textAllCaps="true"
                                                     android:textColor="@color/colorPrimary"
                                                     android:textSize="12sp"
-                                                    android:textStyle="bold"></TextView>
+                                                    android:textStyle="bold"/>
 
                                                 <TextView
                                                     android:id="@+id/txt_joint_add"
@@ -2094,7 +1847,7 @@
                                                     android:text="+ Add"
                                                     android:textAllCaps="true"
                                                     android:textColor="@color/colorPrimary"
-                                                    android:textSize="12sp"></TextView>
+                                                    android:textSize="12sp"/>
 
                                             </LinearLayout>
 
@@ -2107,7 +1860,7 @@
                                                 android:layout_marginBottom="@dimen/C5dp"
                                                 android:orientation="vertical"
                                                 android:visibility="gone"
-                                                tools:ignore="MissingPrefix"></LinearLayout>
+                                                tools:ignore="MissingPrefix"/>
                                         </LinearLayout>
 
                                         <LinearLayout
@@ -2117,10 +1870,289 @@
                                             android:orientation="vertical">
 
                                             <LinearLayout
+                                                android:id="@+id/lin_indep_sty"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_margin="@dimen/C5dp"
+                                                android:orientation="vertical"
+                                                android:visibility="gone">
+                                                <CheckBox
+                                                    android:id="@+id/chk_cnt_sty"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_margin="@dimen/C2dp"
+                                                    android:text="Continue Stay"/>
+                                                <CheckBox
+                                                    android:id="@+id/chk_early"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_margin="@dimen/C2dp"
+                                                    android:text="Early Check-in"
+                                                    android:visibility="gone" />
+                                                <LinearLayout
+                                                    android:id="@+id/lin_early"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="vertical"
+                                                    android:visibility="gone">
+
+                                                    <LinearLayout
+
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:background="@color/grey_100"
+                                                        android:gravity="center"
+                                                        android:orientation="horizontal"
+                                                        tools:ignore="UselessParent">
+
+
+                                                        <LinearLayout
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_weight="1"
+                                                            android:orientation="vertical">
+
+                                                            <TextView
+                                                                style="@style/TextStyle"
+                                                                android:text="Hotel Check In"
+                                                                android:textSize="10sp" />
+
+                                                            <EditText
+                                                                android:id="@+id/early_check_in"
+                                                                android:layout_width="match_parent"
+                                                                android:layout_height="wrap_content"
+                                                                android:layout_marginLeft="@dimen/C5dp"
+                                                                android:background="@drawable/item_border"
+                                                                android:focusable="false"
+                                                                android:hint="Hotel Check in"
+                                                                android:inputType="date"
+                                                                android:padding="@dimen/C10dp"
+                                                                android:textSize="@dimen/C13dp" />
+
+
+                                                        </LinearLayout>
+
+                                                        <LinearLayout
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_margin="5dp"
+                                                            android:layout_weight="1"
+                                                            android:orientation="vertical">
+
+                                                            <TextView
+                                                                style="@style/TextStyle"
+                                                                android:text="Hotel Check Out"
+                                                                android:textSize="10sp" />
+
+                                                            <EditText
+                                                                android:id="@+id/early_check_out"
+                                                                android:layout_width="match_parent"
+                                                                android:layout_height="wrap_content"
+                                                                android:layout_marginRight="@dimen/C5dp"
+                                                                android:background="@drawable/item_border"
+                                                                android:focusable="false"
+                                                                android:hint="Hotel Check Out"
+                                                                android:inputType="date"
+                                                                android:padding="@dimen/C10dp"
+                                                                android:textSize="@dimen/C13dp" />
+
+                                                        </LinearLayout>
+                                                    </LinearLayout>
+
+                                                    <LinearLayout
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:orientation="horizontal">
+
+                                                        <LinearLayout
+                                                            android:layout_width="match_parent"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_weight="1"
+                                                            android:orientation="vertical">
+
+                                                            <TextView
+                                                                style="@style/TextStyle"
+                                                                android:text="Bill Amount"
+                                                                android:textSize="10sp" />
+
+                                                            <EditText
+                                                                android:id="@+id/edt_earl_bil"
+                                                                android:layout_width="match_parent"
+                                                                android:layout_height="wrap_content"
+                                                                android:hint="0.00"
+                                                                android:inputType="number"
+                                                                android:maxLength="5"
+                                                                android:textColorHint="#C0C0C0"
+                                                                android:textSize="@dimen/C13dp"
+                                                                android:textStyle="bold" />
+
+                                                        </LinearLayout>
+
+
+                                                        <LinearLayout
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_gravity="bottom"
+                                                            android:orientation="horizontal">
+
+                                                            <ImageView
+                                                                android:id="@+id/ear_lod_attach"
+                                                                android:layout_width="@dimen/C40dp"
+                                                                android:layout_height="@dimen/C40dp"
+                                                                android:onClick="EarImage"
+                                                                android:padding="@dimen/C2dp"
+                                                                android:src="@drawable/attach_files" />
+
+
+                                                            <ImageView
+                                                                android:id="@+id/ear_lod__preview"
+                                                                android:layout_width="@dimen/C40dp"
+                                                                android:layout_height="@dimen/C40dp"
+                                                                android:layout_marginLeft="@dimen/C2dp"
+                                                                android:onClick="EarAttach"
+                                                                android:padding="@dimen/C2dp"
+                                                                android:src="@drawable/image_preview" />
+
+                                                        </LinearLayout>
+                                                    </LinearLayout>
+                                                </LinearLayout>
+                                                <CheckBox
+                                                    android:id="@+id/chk_late"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_margin="@dimen/C2dp"
+                                                    android:text="Late Check-Out"
+                                                    android:visibility="gone" />
+                                                <LinearLayout
+                                                    android:id="@+id/lin_late"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="vertical"
+                                                    android:visibility="gone"
+                                                    tools:ignore="UselessParent">
+
+                                                    <LinearLayout
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:gravity="center"
+                                                        android:orientation="horizontal"
+                                                        tools:ignore="UselessParent">
+
+                                                        <LinearLayout
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_weight="1"
+                                                            android:orientation="vertical">
+
+                                                            <TextView
+                                                                style="@style/TextStyle"
+                                                                android:text="Hotel Check In"
+                                                                android:textSize="10sp" />
+
+                                                            <EditText
+                                                                android:id="@+id/late_check_in"
+                                                                android:layout_width="match_parent"
+                                                                android:layout_height="wrap_content"
+                                                                android:layout_marginLeft="@dimen/C5dp"
+                                                                android:background="@drawable/item_border"
+                                                                android:focusable="false"
+                                                                android:hint="Hotel Check in"
+                                                                android:inputType="date"
+                                                                android:padding="@dimen/C10dp"
+                                                                android:textSize="@dimen/C13dp" />
+
+                                                        </LinearLayout>
+
+                                                        <LinearLayout
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_margin="5dp"
+                                                            android:layout_weight="1"
+                                                            android:orientation="vertical">
+
+                                                            <TextView
+                                                                style="@style/TextStyle"
+                                                                android:text="Hotel Check Out"
+                                                                android:textSize="10sp" />
+
+                                                            <EditText
+                                                                android:id="@+id/late_check_out"
+                                                                android:layout_width="match_parent"
+                                                                android:layout_height="wrap_content"
+                                                                android:layout_marginRight="@dimen/C5dp"
+                                                                android:background="@drawable/item_border"
+                                                                android:focusable="false"
+                                                                android:hint="Hotel Check Out"
+                                                                android:inputType="date"
+                                                                android:padding="@dimen/C10dp"
+                                                                android:textSize="@dimen/C13dp" />
+
+                                                        </LinearLayout>
+                                                    </LinearLayout>
+
+                                                    <LinearLayout
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:orientation="horizontal">
+
+                                                        <LinearLayout
+                                                            android:layout_width="match_parent"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_weight="1"
+                                                            android:orientation="vertical">
+
+                                                            <TextView
+                                                                style="@style/TextStyle"
+                                                                android:text="Bill Amount"
+                                                                android:textSize="10sp" />
+
+                                                            <EditText
+                                                                android:id="@+id/lat_lod_bil"
+                                                                android:layout_width="match_parent"
+                                                                android:layout_height="wrap_content"
+                                                                android:hint="0.00"
+                                                                android:inputType="number"
+                                                                android:maxLength="5"
+                                                                android:textColorHint="#C0C0C0"
+                                                                android:textSize="@dimen/C13dp"
+                                                                android:textStyle="bold" />
+
+                                                        </LinearLayout>
+
+
+                                                        <LinearLayout
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_gravity="bottom"
+                                                            android:orientation="horizontal">
+
+                                                            <ImageView
+                                                                android:id="@+id/lat_lod_attach"
+                                                                android:layout_width="@dimen/C40dp"
+                                                                android:layout_height="@dimen/C40dp"
+                                                                android:onClick="LateImage"
+                                                                android:padding="@dimen/C2dp"
+                                                                android:src="@drawable/attach_files" />
+
+
+                                                            <ImageView
+                                                                android:id="@+id/lat_lod__preview"
+                                                                android:layout_width="@dimen/C40dp"
+                                                                android:layout_height="@dimen/C40dp"
+                                                                android:layout_marginLeft="@dimen/C2dp"
+                                                                android:onClick="LateAttach"
+                                                                android:padding="@dimen/C2dp"
+                                                                android:src="@drawable/image_preview" />
+
+                                                        </LinearLayout>
+                                                    </LinearLayout>
+
+                                                </LinearLayout>
+                                            </LinearLayout>
+                                            <LinearLayout
                                                 android:id="@+id/ldgEAra"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginTop="@dimen/C15dp"
                                                 android:layout_marginBottom="@dimen/C10dp"
                                                 android:orientation="vertical">
 
@@ -2155,7 +2187,8 @@
                                                         android:textAlignment="textEnd"
                                                         android:textAllCaps="false"
                                                         android:textSize="12sp"
-                                                        android:textStyle="bold" />
+                                                        android:textStyle="bold"
+                                                        android:gravity="end" />
 
                                                 </LinearLayout>
 
@@ -2190,7 +2223,8 @@
                                                         android:textAlignment="textEnd"
                                                         android:textAllCaps="false"
                                                         android:textSize="12sp"
-                                                        android:textStyle="bold" />
+                                                        android:textStyle="bold"
+                                                        android:gravity="end" />
 
                                                 </LinearLayout>
 
@@ -2226,11 +2260,78 @@
                                                         android:textAlignment="textEnd"
                                                         android:textAllCaps="false"
                                                         android:textSize="12sp"
-                                                        android:textStyle="bold" />
+                                                        android:textStyle="bold"
+                                                        android:gravity="end" />
 
                                                 </LinearLayout>
                                             </LinearLayout>
 
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginTop="@dimen/C5dp"
+                                                android:layout_marginLeft="@dimen/C3dp"
+                                                android:layout_marginRight="@dimen/C3dp"
+                                                android:orientation="vertical">
+                                                <TextView
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:textSize="11sp"
+                                                    android:textStyle="bold"
+                                                    android:layout_marginLeft="@dimen/C5dp"
+                                                    android:text="Stay Allowance Details" />
+
+                                            <LinearLayout
+                                                android:id="@+id/linear_con"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:orientation="vertical"
+                                                android:visibility="visible">
+
+                                                <LinearLayout
+                                                    android:id="@+id/data"
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:orientation="horizontal">
+
+                                                    <LinearLayout
+                                                        android:id="@+id/lin_con_sty"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_weight="1"
+                                                        android:orientation="vertical"
+                                                        android:padding="5dp" />
+                                                    <LinearLayout
+                                                        android:id="@+id/lin_con_sty_amt"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:orientation="vertical"
+                                                        android:padding="5dp" />
+                                                </LinearLayout>
+                                            </LinearLayout>
+                                                <LinearLayout
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_marginLeft="@dimen/C5dp"
+                                                    android:orientation="horizontal">
+                                                    <TextView
+                                                        android:id="@+id/txEligDt"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_weight="1"
+                                                        android:textSize="12sp"
+                                                        />
+                                                    <TextView
+                                                        android:id="@+id/txldgTdyAmt"
+                                                        android:layout_width="match_parent"
+                                                        android:layout_height="wrap_content"
+                                                        android:layout_weight="1"
+                                                        android:textAlignment="textEnd"
+                                                        android:textSize="12sp"
+                                                        android:layout_marginRight="@dimen/C5dp"
+                                                        />
+                                                </LinearLayout>
+                                            </LinearLayout>
                                             <LinearLayout
                                                 android:id="@+id/vwldgBillAmt"
                                                 android:layout_width="match_parent"
@@ -2300,7 +2401,8 @@
                                                                 android:textAlignment="textStart"
                                                                 android:textAllCaps="true"
                                                                 android:textColor="#000"
-                                                                android:textSize="10sp" />
+                                                                android:textSize="10sp"
+                                                                android:gravity="start" />
 
 
                                                             <EditText
@@ -2389,49 +2491,11 @@
 
 
                                             <LinearLayout
-                                                android:id="@+id/linear_con"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginTop="@dimen/C5dp"
-                                                android:orientation="vertical"
-                                                android:visibility="gone">
-
-                                                <TextView
-                                                    style="@style/TextStyle"
-                                                    android:text="Continue Stay Balance" />
-
-                                                <LinearLayout
-                                                    android:id="@+id/data"
-                                                    android:layout_width="match_parent"
-                                                    android:layout_height="wrap_content"
-                                                    android:orientation="horizontal">
-
-                                                    <LinearLayout
-                                                        android:id="@+id/lin_con_sty"
-                                                        android:layout_width="wrap_content"
-                                                        android:layout_height="wrap_content"
-                                                        android:layout_weight="1"
-                                                        android:orientation="vertical"
-                                                        android:padding="5dp" />
-
-                                                    <LinearLayout
-                                                        android:id="@+id/lin_con_sty_amt"
-                                                        android:layout_width="wrap_content"
-                                                        android:layout_height="wrap_content"
-                                                        android:orientation="vertical"
-                                                        android:padding="5dp" />
-
-                                                </LinearLayout>
-
-                                            </LinearLayout>
-
-
-                                            <LinearLayout
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
+                                                android:layout_marginBottom="@dimen/C5dp"
                                                 android:layout_marginLeft="@dimen/C10dp"
                                                 android:layout_marginRight="@dimen/C10dp"
-                                                android:layout_marginBottom="@dimen/C5dp"
                                                 android:orientation="horizontal">
 
                                                 <TextView
@@ -2454,11 +2518,11 @@
                                             </LinearLayout>
 
                                         </LinearLayout>
-
-
                                     </LinearLayout>
                                 </LinearLayout>
                             </LinearLayout>
+
+
                         </androidx.cardview.widget.CardView>
                         <!-- Local Conveyance-->
                         <androidx.cardview.widget.CardView
@@ -2822,9 +2886,7 @@
                                 android:textColor="#FFF"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
-
                         </LinearLayout>
-
                         <TextView
                             android:id="@+id/grand_total"
                             android:layout_width="match_parent"
@@ -2837,13 +2899,9 @@
                             android:textColor="#333"
                             android:textSize="25sp"
                             android:textStyle="bold" />
-
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
-
-
             </LinearLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -2895,13 +2953,8 @@
                     android:visibility="gone"
                     tools:ignore="RtlCompat" />
             </LinearLayout>
-
-
         </LinearLayout>
-
-
     </LinearLayout>
-
     <LinearLayout
         android:id="@+id/lin_back"
         android:layout_width="match_parent"
@@ -2921,64 +2974,87 @@
 
 
     </LinearLayout>
-
     <RelativeLayout
         android:id="@+id/lnChangePlace"
         android:background="#700B0A0A"
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
-            <androidx.cardview.widget.CardView
+        android:visibility="gone">
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_margin="@dimen/C5dp"
+            app:cardCornerRadius="@dimen/C5dp">
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_margin="@dimen/C5dp"
-                app:cardCornerRadius="@dimen/C5dp">
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:background="@color/colorPrimaryDark">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textColor="#ffffff"
+                        android:text="Edit Daily Allowance"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:padding="@dimen/C8dp"/>
+                    <ImageView
+                        android:id="@+id/btnDAclose"
+                        android:layout_width="@dimen/C15dp"
+                        android:layout_height="@dimen/C15dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_margin="@dimen/C10dp"
+                        android:src="@drawable/close"/>
 
+                </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/C16dp"
                     android:orientation="vertical"
                     android:background="@color/white"
-                >
+                    >
                     <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginBottom="@dimen/C10dp">
+                        <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                        android:layout_marginBottom="@dimen/C10dp">
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Allowance Type"/>
-                    <LinearLayout
-                        android:id="@+id/DA_TypSpinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginBottom="@dimen/C5dp"
-                        android:background="@drawable/item_border"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
-
-
-                        <TextView
-                            android:id="@+id/txt_DATyp"
-                            android:layout_width="wrap_content"
+                            android:text="Allowance Type"/>
+                        <LinearLayout
+                            android:id="@+id/DA_TypSpinner"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:hint="Select the Allowance Type"
-                            android:textSize="@dimen/C13dp" />
+                            android:layout_centerVertical="true"
+                            android:layout_marginBottom="@dimen/C5dp"
+                            android:background="@drawable/item_border"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+                            <TextView
+                                android:id="@+id/txt_DATyp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="Select the Allowance Type"
+                                android:textSize="@dimen/C13dp" />
 
-                        <ImageView
-                            android:layout_width="@dimen/C20dp"
-                            android:layout_height="match_parent"
-                            android:padding="@dimen/C5dp"
-                            android:src="@drawable/spin_down_arrow" />
+                            <ImageView
+                                android:layout_width="@dimen/C20dp"
+                                android:layout_height="match_parent"
+                                android:padding="@dimen/C5dp"
+                                android:src="@drawable/spin_down_arrow" />
 
+                        </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -2989,31 +3065,39 @@
                             android:layout_height="wrap_content"
                             android:text="DA Location"/>
                         <LinearLayout
-                        android:id="@+id/DA_locSpinner"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginBottom="@dimen/C5dp"
-                        android:background="@drawable/item_border"
-                        android:orientation="horizontal"
-                        android:padding="5dp">
-
-
-                        <TextView
-                            android:id="@+id/txt_DAloc"
-                            android:layout_width="wrap_content"
+                            android:id="@+id/DA_locSpinner"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:hint="Select the DA Location"
-                            android:textSize="@dimen/C13dp" />
+                            android:layout_centerVertical="true"
+                            android:layout_marginBottom="@dimen/C5dp"
+                            android:background="@drawable/item_border"
+                            android:orientation="horizontal"
+                            android:padding="5dp">
+                            <TextView
+                                android:id="@+id/txt_DAloc"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="Select the DA Location"
+                                android:textSize="@dimen/C13dp" />
 
-                        <ImageView
-                            android:layout_width="@dimen/C20dp"
-                            android:layout_height="match_parent"
-                            android:padding="@dimen/C5dp"
-                            android:src="@drawable/spin_down_arrow" />
+                            <ImageView
+                                android:layout_width="@dimen/C20dp"
+                                android:layout_height="match_parent"
+                                android:padding="@dimen/C5dp"
+                                android:src="@drawable/spin_down_arrow" />
 
-                    </LinearLayout>
+                        </LinearLayout>
+                        <EditText
+                            android:visibility="gone"
+                            android:id="@+id/txDAOthName"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/C3dp"
+                            android:padding="8dp"
+                            android:textSize="13sp"
+                            android:hint="Enter the other location name"
+                            android:background="@drawable/item_border"/>
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -3023,7 +3107,7 @@
                             android:id="@+id/cAllwType"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Allowance : Metro"/>
+                            android:text="Allowance : " />
                     </LinearLayout>
                     <View
                         android:layout_width="match_parent"
@@ -3047,6 +3131,7 @@
                             />
                     </LinearLayout>
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
     </RelativeLayout>
 </RelativeLayout>

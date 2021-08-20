@@ -58,7 +58,7 @@
             android:layout_marginLeft="@dimen/C8dp"
             android:layout_weight="1"
             android:hint="Amount"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:textColorHint="#C0C0C0"
             android:textSize="@dimen/C14dp" />
 

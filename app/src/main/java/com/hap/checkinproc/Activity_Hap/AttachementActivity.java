@@ -21,8 +21,9 @@ import com.google.gson.JsonObject;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.OnImagePickListener;
+import com.hap.checkinproc.Interface.OnAttachmentDelete;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.common.TimerService;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -36,11 +37,13 @@ public class AttachementActivity extends AppCompatActivity {
     private GridLayout parentLinearLayout;
     FrameLayout frameLayout;
     ImageView deleteImage;
-    Integer position;
+    Integer position,ImgCount=0;
     RelativeLayout allRelative;
     Shared_Common_Pref shared_common_pref;
-    String ImageUKey = "", ImageUrl = "", DateTime = "";
+    String ImageUKey = "", ImageUrl = "", DateTime = "",sMode="";
 
+
+    static OnAttachmentDelete deleteListener;
 
     @SuppressLint("ResourceType")
     @Override
@@ -61,7 +64,7 @@ public class AttachementActivity extends AppCompatActivity {
                 String.valueOf(getIntent().getSerializableExtra("headTravel")),
                 String.valueOf(getIntent().getSerializableExtra("mode")),
                 String.valueOf(getIntent().getSerializableExtra("date")));
-
+        sMode=String.valueOf(getIntent().getSerializableExtra("mode"));
         parentLinearLayout = (GridLayout) findViewById(R.id.parent_linear_layout);
 
         parentLinearLayout.setColumnCount(3);
@@ -82,7 +85,7 @@ public class AttachementActivity extends AppCompatActivity {
 
                 JsonArray jsonArray = response.body();
                 Log.e("JSON_ARRAY", jsonArray.toString());
-
+                ImgCount=jsonArray.size();
                 for (int m = 0; m < jsonArray.size(); m++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(m);
 
@@ -136,6 +139,9 @@ public class AttachementActivity extends AppCompatActivity {
         });
     }
 
+    public static void setOnAttachmentDeleteListener(OnAttachmentDelete mOnAttachmentDelete) {
+        deleteListener = mOnAttachmentDelete;
+    }
     public void deleteImage(String ImageUKey, String ImageUrl, String DateTime) {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
@@ -147,6 +153,8 @@ public class AttachementActivity extends AppCompatActivity {
 
                 JsonObject jsonObject = response.body();
                 Log.e("RESPONSE", jsonObject.get("success").getAsString());
+                ImgCount--;
+                deleteListener.OnImageDelete(sMode,ImgCount);
                 if (jsonObject.get("success").getAsString().equals("true")) {
                     finish();
                 }

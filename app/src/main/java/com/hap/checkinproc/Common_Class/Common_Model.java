@@ -20,8 +20,7 @@ public class Common_Model {
      boolean isSelected;
      private Integer Pho;
      private String cont;
-
-    private Integer MaxDays;
+     private Integer MaxDays;
 
 
 
@@ -67,6 +66,12 @@ public class Common_Model {
         this.id = id;
         this.name = name;
         this.JSONobject = jsonObject;
+    }
+    public Common_Model(String id, String name, JSONObject jsonObject,Integer position) {
+        this.id = id;
+        this.name = name;
+        this.JSONobject = jsonObject;
+        this.Pho = position;
     }
     public Common_Model(String id, String name, String flag, String checkouttime) {
         this.id = id;

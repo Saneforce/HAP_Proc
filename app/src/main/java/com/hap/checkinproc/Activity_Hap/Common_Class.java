@@ -32,7 +32,7 @@ import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
 
 public class Common_Class {
-    public static String Version_Name="Ver 3.1.13-b";
+    public static String Version_Name="Ver 3.1.14-b";
     public static String Work_Type="0";
     public static Location location=null;
 
@@ -229,4 +229,18 @@ public class Common_Class {
         return resultdate;
 
     }
+    public long Daybetween(String date1,String date2)
+    {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date Date1 = null,Date2 = null;
+        try{
+            Date1 = sdf.parse(date1);
+            Date2 = sdf.parse(date2);
+        }catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        return (Date2.getTime() - Date1.getTime())/(24*60*60*1000);
+    }
+
 }

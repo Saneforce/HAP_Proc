@@ -764,14 +764,14 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             jj.put("driverAllowance", DriverNeed);
             jj.put("HolidayFlag", (chkHlyDyFlg.isChecked()) ? "1" : "0");
             jj.put("vstPurpose", purposeofvisitedittext.getText().toString());
-
-            Intent mIntent = new Intent(this, FileUploadService.class);
-            mIntent.putExtra("mFilePath", imageURI);
-            mIntent.putExtra("SF", UserDetails.getString("Sfcode",""));
-            mIntent.putExtra("FileName", imageServer);
-            mIntent.putExtra("Mode", "Travel");
-            FileUploadService.enqueueWork(this, mIntent);
-
+            if(!imageServer.equalsIgnoreCase("")) {
+                Intent mIntent = new Intent(this, FileUploadService.class);
+                mIntent.putExtra("mFilePath", imageURI);
+                mIntent.putExtra("SF", UserDetails.getString("Sfcode", ""));
+                mIntent.putExtra("FileName", imageServer);
+                mIntent.putExtra("Mode", "Travel");
+                FileUploadService.enqueueWork(this, mIntent);
+            }
             //saveAllowance
             Intent intent = new Intent(getApplicationContext(), Checkin.class);
             Bundle extras = new Bundle();
@@ -789,6 +789,7 @@ public class On_Duty_Activity extends AppCompatActivity implements View.OnClickL
             } else {
                 extras.putString("onDutyPlcNm", selecthaplocationss.getText().toString());
                 extras.putString("onDutyPlcID", hapLocid);
+
                 extras.putString("onDuty", "cba");
             }
             extras.putString("HolidayFlag", (chkHlyDyFlg.isChecked()) ? "1" : "0");

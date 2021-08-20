@@ -69,6 +69,7 @@ public class LocationFinder {
         mContext=context;
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         mlocEvents=locationEvents;
+        this.running=0;
         createLocationRequest();
         ShowLocationWarn();
     }
@@ -92,7 +93,7 @@ public class LocationFinder {
                 @Override
                 public void run() {
                     running++;
-                    Log.d("MapsActivity","calling Timeout "+running);
+                    Log.d("MapsActivity","calling Timeout "+running+"-"+timeout);
                     if(running>timeout){
                         Log.d("MapsActivity","Timeout Event Fired");
                         mlocEvents.OnLocationRecived(null);

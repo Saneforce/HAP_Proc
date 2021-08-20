@@ -1042,7 +1042,7 @@ public String ddmmyy(String srcdt){
                                     txt_DrvBrdAmt.setText(" Rs." + new DecimalFormat("##0.00").format(drvBrdAmt));
 
                                     vwDrvBoarding.setVisibility(View.VISIBLE);
-                                    txtDrvrBrod.setText("Chauffer driven Boarding");
+                                    txtDrvrBrod.setText("Driver Allowance Boarding");
                                 } else {
                                     txt_DrvBrdAmt.setText("");
                                 }
@@ -1063,7 +1063,7 @@ public String ddmmyy(String srcdt){
                                     txt_DrvBrdAmt.setText(" Rs." + new DecimalFormat("##0.00").format(drvBrdAmt));
 
                                     vwDrvBoarding.setVisibility(View.VISIBLE);
-                                    txtDrvrBrod.setText("Chauffer driven Boarding");
+                                    txtDrvrBrod.setText("Driver Allowance Boarding");
                                 } else {
                                     txt_DrvBrdAmt.setText("");
                                 }
@@ -1585,9 +1585,6 @@ public String ddmmyy(String srcdt){
 
             editTexts.setText(expCode);
             editLaFare.setText(expFare);
-            if (!lcUKey.equals("")) {
-                lcTxtUKey.setText(lcUKey);
-            }
 
 
             if (lcdraftJson.get("Attachments").getAsString().equals("1")) {
@@ -1601,6 +1598,9 @@ public String ddmmyy(String srcdt){
             Dynamicallowance = (LinearLayout) LcchildView.findViewById(R.id.lin_allowance_dynamic);
             lcTxtUKey = (TextView) (LcchildView.findViewById(R.id.txt_lc_ukey));
 
+            if (!lcUKey.equals("")) {
+                lcTxtUKey.setText(lcUKey);
+            }
             editLaFare.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {

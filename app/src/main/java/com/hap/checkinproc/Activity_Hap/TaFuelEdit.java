@@ -10,7 +10,10 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,7 +49,7 @@ import retrofit2.Response;
 
 public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
     EditText edtFrom, edtTo, edtPersonal,edtTraveled;
-    String SLNO = "", MOT = "", MOTNm = "", starEd = "", endEd = "";
+    String SLNO = "", MOT = "", MOTNm = "", starEd = "", DriverNeed = "false", startEnd = "",DriverMode = "", modeId = "" ;
     Shared_Common_Pref mShared_common_pref;
     Integer inEdtFrom, inEdtTo,intSum;
     CardView ModeTravel;
@@ -58,6 +61,10 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
     Gson gson;
     List<ModeOfTravel> modelOfTravel;
     Type userType;
+    ImageView btnFuelclose;
+    LinearLayout linCheckdriver;
+    CheckBox driverAllowance;
+
     /*Choosing Dynamic Mode*/
     public void dynamicMode() {
 
@@ -118,7 +125,16 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
         edtTo = findViewById(R.id.edt_to);
         edtPersonal = findViewById(R.id.edt_pers);
         edtTraveled = findViewById(R.id.edt_travelled);
+        driverAllowance = findViewById(R.id.da_driver_allowance);
+        linCheckdriver = findViewById(R.id.lin_check_driver);
+        btnFuelclose = findViewById(R.id.btnFuelclose);
 
+        btnFuelclose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         TextMode = findViewById(R.id.txt_mode);
         edtFrom.setText("" + getIntent().getSerializableExtra("Start"));
         edtTo.setText("" + getIntent().getSerializableExtra("End"));
@@ -206,7 +222,6 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
 
             @Override
             public void afterTextChanged(Editable s) {
-
                 if (edtFrom.getText().toString().equalsIgnoreCase("")) edtFrom.setText("0");
                 if (edtTo.getText().toString().equalsIgnoreCase("")) edtTo.setText("0");
                 if (edtPersonal.getText().toString().equalsIgnoreCase("")) edtPersonal.setText("0");
@@ -233,12 +248,13 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
 
                 inEdtFrom = Integer.valueOf(edtFrom.getText().toString());
                 inEdtTo = Integer.parseInt(edtTo.getText().toString());
-
+                String drvAllw= (driverAllowance.isChecked()?"true":"false");
                 if (inEdtFrom < inEdtTo) {
                     JSONObject jj = new JSONObject();
                     jj.put("sl_no", SLNO);
                     jj.put("mot", MOT);
                     jj.put("motnm", MOTNm);
+                    jj.put("driverAllow",drvAllw);
                     jj.put("sfCode", mShared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
                     jj.put("startKm", edtFrom.getText().toString());
                     jj.put("endKm", edtTo.getText().toString());
@@ -251,14 +267,9 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
                     Callto.enqueue(new Callback<JsonObject>() {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
-
                             JsonObject json = response.body();
-
                             Log.v("CHECKING", json.get("success").getAsString());
-
                             if(ReadingChanger!=null) ReadingChanger.onKilometerChange(jj);
-
                             if (json.get("success").getAsString().equalsIgnoreCase("true")) {
                                 finish();
                             }
@@ -266,7 +277,6 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
 
                         @Override
                         public void onFailure(Call<JsonObject> call, Throwable t) {
-
                         }
                     });
                 } else {
@@ -282,21 +292,22 @@ public class TaFuelEdit extends AppCompatActivity implements Master_Interface {
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
         if (type == 8) {
-
             TextMode.setText(myDataset.get(position).getName());
             MOTNm=myDataset.get(position).getName();
             MOT = myDataset.get(position).getFlag();
-//            startEnd = myDataset.get(position).getId();
-//            DriverMode = myDataset.get(position).getCheckouttime();
-//            modeId = myDataset.get(position).getFlag();
 
-//            if (DriverMode.equals("1")) {
-//                linCheckdriver.setVisibility(View.VISIBLE);
-//            } else {
-//                linCheckdriver.setVisibility(View.GONE);
-//            }
-//            DriverNeed = "";
-//            driverAllowance.setChecked(false);
+
+            startEnd = myDataset.get(position).getId();
+            DriverMode = myDataset.get(position).getCheckouttime();
+            modeId = myDataset.get(position).getFlag();
+
+            if (DriverMode.equals("1")) {
+                linCheckdriver.setVisibility(View.VISIBLE);
+            } else {
+                linCheckdriver.setVisibility(View.GONE);
+            }
+            DriverNeed = "";
+            driverAllowance.setChecked(false);
 
         }
     }

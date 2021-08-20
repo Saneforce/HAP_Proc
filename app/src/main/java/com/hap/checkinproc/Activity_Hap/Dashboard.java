@@ -74,6 +74,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     Integer ClosingKm = 0;
 
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
+
     DatabaseHandler db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +135,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         linOnDuty = (findViewById(R.id.lin_onduty));
 
         linOnDuty.setVisibility(View.GONE);
-        if (sSFType.equals("0")) linOnDuty.setVisibility(View.VISIBLE);
+        if (sSFType.equals("0"))
+            linOnDuty.setVisibility(View.VISIBLE);
 
         if (linOnDuty.getVisibility() == View.VISIBLE) {
             linCheckin.setVisibility(View.VISIBLE);
@@ -197,9 +199,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         switch (view.getId()) {
 
             case R.id.lin_check_in:
-
                 String ETime = CheckInDetails.getString("CINEnd", "");
-
                 if (!ETime.equalsIgnoreCase("")) {
                     String CutOFFDt = CheckInDetails.getString("ShiftCutOff", "0");
                     String SftId = CheckInDetails.getString("Shift_Selected_Id", "0");
