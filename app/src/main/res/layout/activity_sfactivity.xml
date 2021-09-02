@@ -9,6 +9,8 @@
 
 
     <LinearLayout
+        android:layout_margin="@dimen/C15dp"
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -17,10 +19,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_marginLeft="@dimen/C15dp"
-            android:layout_marginTop="@dimen/C15dp"
-            android:layout_marginRight="@dimen/C15dp"
-            app:cardCornerRadius="@dimen/C10dp">
+              app:cardCornerRadius="@dimen/C10dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -54,15 +53,30 @@
                 </RelativeLayout>
 
 
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/viewpager"
+                <com.google.android.material.appbar.AppBarLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/rlCumulativeMode"
-                    android:layout_marginBottom="@dimen/C30dp"
-                    android:background="@color/white">
+                    android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                    >
 
-                </androidx.viewpager.widget.ViewPager>
+
+                    <com.google.android.material.tabs.TabLayout
+                        android:id="@+id/tabs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/blue_bg"
+                        app:tabGravity="fill"
+                        app:tabIndicatorColor="@android:color/white"
+                        app:tabIndicatorHeight="2dp"
+                        app:tabMode="fixed" />
+
+                    <androidx.viewpager.widget.ViewPager
+                        android:id="@+id/viewpager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white" />
+
+                </com.google.android.material.appbar.AppBarLayout>
 
                 <LinearLayout
                     android:id="@+id/llPagerDots"
@@ -120,9 +134,9 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:layout_marginTop="@dimen/C15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/C15dp"
             app:cardCornerRadius="@dimen/C10dp">
 
             <LinearLayout

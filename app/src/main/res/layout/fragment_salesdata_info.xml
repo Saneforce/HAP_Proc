@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/headerTextStyle"
+            android:text="Sales Summary"></TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="200 Lts"></TextView>
+
+            <TextView
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="500 Lts"></TextView>
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Today's Total Order"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Previous Day's Total"
+                android:textStyle="bold"></TextView>
+
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="700 Lts"></TextView>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Cumulative Order as on day"
+                android:textStyle="bold"></TextView>
+
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

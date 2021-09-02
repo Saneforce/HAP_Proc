@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:padding="@dimen/C10dp"
+                android:src="@drawable/calender">
+
+            </ImageView>
+
+            <TextView
+                style="@style/headerTextStyle"
+                android:text="Outlet Summary"></TextView>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="11000"></TextView>
+
+            <TextView
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="10000"></TextView>
+
+            <TextView
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="1000"></TextView>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Total"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Existing"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="New"
+                android:textStyle="bold"></TextView>
+
+
+        </LinearLayout>
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/lin_gridOutlet"
+                    android:layout_width="500dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <GridView
+                        android:id="@+id/gvOutlet"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/C5dp"
+                        android:columnWidth="100dp"
+                        android:gravity="center"
+                        android:horizontalSpacing="1dp"
+                        android:scrollbarAlwaysDrawHorizontalTrack="true"
+                        android:scrollbarAlwaysDrawVerticalTrack="true"
+                        android:scrollbars="horizontal"
+                        android:stretchMode="none"
+                        android:verticalSpacing="1dp">
+
+                    </GridView>
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </HorizontalScrollView>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

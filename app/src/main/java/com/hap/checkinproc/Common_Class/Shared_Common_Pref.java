@@ -70,6 +70,8 @@ public class Shared_Common_Pref {
     public static String DistributorCode = "DistributorCode";
     public static String DistributorName = "DistributorName";
     public static String Route_Code = "Route_Code";
+    public static String Route_name = "Route_name";
+
     public static String Editoutletflag = "Editoutletflag";
     public static String Tp_Approvalflag = "Tp_Approvalflag";
     public static String Tp_Sf_name = "Tp_Sf_name";

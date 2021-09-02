@@ -75,12 +75,26 @@
     </style>
 
 
-    <style name="TABTextStyle">
+    <style name="headerTextStyle">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/C45dp</item>
+        <item name="android:layout_marginTop">@dimen/C5dp</item>
 
+        <item name="android:layout_marginLeft">@dimen/C5dp</item>
+        <item name="android:padding">@dimen/C1dp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textStyle">bold</item>
-
     </style>
 
+    <style name="mediumTextStyle">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/C3dp</item>
+        <item name="android:padding">@dimen/C1dp</item>
+        <item name="android:textSize">13sp</item>
+    </style>
 
 
     <style name="TextStyleNoM">

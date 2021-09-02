@@ -31,5 +31,8 @@ public class Constants {
     public static String DirectionListPos = "directionListPos";
     public static String Route_name = "routeName";
     public static String Route_Id = "routeId";
-    public static String Retailor_FilePath="retailorFilePath";
+    public static String Retailor_FilePath = "retailorFilePath";
+    public static String Retailor_Address = "retailor_address";
+    public static String Retailor_ERP_Code = "retailor_erp_code";
+    public static String Retailor_Name_ERP_Code = "retailor_name_erp_code";
 }

@@ -38,6 +38,7 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
     }
 
     public Activity activity;
+    public Context mContext;
     public Dialog dialog;
     public Button mBtnSave, no;
     EditText searchView;
@@ -61,6 +62,8 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
         this.da = new DataAdapter(mDataset, activity, type);
         setupLayout();
     }
+
+
 
     private void setupLayout() {
 
@@ -87,7 +90,7 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
         }
 
 
-        recyclerView.setHasFixedSize(true);
+        //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.setAdapter(da);
 

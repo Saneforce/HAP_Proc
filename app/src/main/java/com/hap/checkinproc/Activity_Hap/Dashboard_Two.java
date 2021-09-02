@@ -56,6 +56,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
 import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 
 public class Dashboard_Two extends AppCompatActivity implements View.OnClickListener/*, Main_Model.MasterSyncView*/ {
@@ -354,7 +355,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 JsonArray res = response.body();
                 Log.d(TAG + "getNotify", String.valueOf(response.body()));
 
-                Log.d("NotifyMsg", response.body().toString());
+              //  Log.d("NotifyMsg", response.body().toString());
                 TextView txt = findViewById(R.id.MRQtxt);
                 txt.setText("");
                 txt.setVisibility(View.GONE);
@@ -709,7 +710,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 //                                    if (common_class.checkValueStore(Dashboard_Two.this, Retailer_OutletList)) {
 //                                        startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
 //                                    } else {
-                                    common_class.getDataFromApi(Retailer_OutletList, Dashboard_Two.this, false);
+                                    common_class.getDataFromApi(Distributor_List, Dashboard_Two.this, false);
                                     // }
 
 

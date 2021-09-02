@@ -43,11 +43,12 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
         contactList = myDataset;
         typeName = type;
         contactListFiltered = myDataset;
-        if (type != 1000)
+        if (type == 1000 || type == 1001) {
+            mContext = context;
+        } else {
             updateUi = ((Master_Interface) context);
 
-        else
-            mContext = context;
+        }
 
     }
 
@@ -116,7 +117,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
                 } else {
                     lastChecked = null;
                     shared_common_pref.save(Constants.MAP_KEY, "");
-                   // Nearby_Outlets.nearby_outlets.getExploreDr(false);
+                    // Nearby_Outlets.nearby_outlets.getExploreDr(false);
                 }
 
 
@@ -178,7 +179,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
         @Override
         public void onClick(View v) {
-            if (typeName != 1000)
+            if (typeName != 1000 || typeName != 1001)
                 updateUi.OnclickMasterType(contactListFiltered, this.getAdapterPosition(), typeName);
 
 

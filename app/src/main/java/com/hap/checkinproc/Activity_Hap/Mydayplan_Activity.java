@@ -1064,6 +1064,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
                     if (titlecaptions.equals("Distributor")) {
                         shared_common_pref.save(Constants.Distributor_name, SEttextvalues);
                         shared_common_pref.save(Constants.Distributor_Id,dynamicarray.get(position).getFilter_Text());
+                        common_class.getDataFromApi(Constants.Retailer_OutletList,Mydayplan_Activity.this,false);
                     }
 
 

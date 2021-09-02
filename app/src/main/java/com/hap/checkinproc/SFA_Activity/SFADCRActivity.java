@@ -41,7 +41,7 @@ public class SFADCRActivity extends AppCompatActivity {
 
         MnuList = new JSONArray();
         addMnuitem("1", "SALES CALLS");
-        addMnuitem("2", "VAN ROUTE SUPPLY");
+        //addMnuitem("2", "VAN ROUTE SUPPLY");
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mAdapter = new HAPListItem(MnuList, this);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());

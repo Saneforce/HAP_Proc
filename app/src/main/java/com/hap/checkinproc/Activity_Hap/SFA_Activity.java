@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
@@ -28,7 +29,6 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.MVP.Main_Model;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.CombinedChartFragment;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Activity.Dist_Locations;
@@ -54,7 +54,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     DatabaseHandler db;
 
     ImageView ivLogout;
-    // private TabLayout tabLayout;
+    private TabLayout tabLayout;
     private ViewPager viewPager;
     private RelativeLayout dotsLayout;
     private TextView[] dots;
@@ -164,7 +164,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
 
 
-        // tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
 
 
     }
@@ -204,26 +204,42 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     private void setupViewPager(ViewPager viewPager, boolean isGraphMode) {
 
-
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-        if (isGraphMode) {
-            adapter.resetFragment();
-            adapter.addFragment(new CombinedChartFragment(this, "Table4"), "T4");
 
-            findViewById(R.id.llPagerDots).setVisibility(View.GONE);
+        adapter.addFragment(new DashboardOutletDataFrag(this, "Outlet"), "Outlet");
+        adapter.addFragment(new DashboardSalesDataFrag(this, "Sales"), "Sales");
+        adapter.addFragment(new DashboardTableDataFrag(this, "Table3"), "Volume");
+        adapter.addFragment(new DashboardVisitDataFrag(this, "Table4"), "Visit");
 
-        } else {
-            adapter.resetFragment();
-            adapter.addFragment(new DashboardTableDataFrag(this, "Table1"), "T1");
-            adapter.addFragment(new DashboardBarDataFrag("Table2"), "T2");
-            adapter.addFragment(new DashboardBarDataFrag("Table3"), "T3");
-            findViewById(R.id.llPagerDots).setVisibility(View.VISIBLE);
-            addBottomDots(0);
+        findViewById(R.id.llPagerDots).setVisibility(View.VISIBLE);
+        addBottomDots(0);
 
-        }
+
         viewPager.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+
+
+//        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+//
+//        if (isGraphMode) {
+//            adapter.resetFragment();
+//            adapter.addFragment(new CombinedChartFragment(this, "Table4"), "T4");
+//
+//            findViewById(R.id.llPagerDots).setVisibility(View.GONE);
+//
+//        } else {
+//            adapter.resetFragment();
+//            adapter.addFragment(new DashboardTableDataFrag(this, "Table1"), "T1");
+//            adapter.addFragment(new DashboardBarDataFrag("Table2"), "T2");
+//            adapter.addFragment(new DashboardBarDataFrag("Table3"), "T3");
+//            adapter.addFragment(new DashboardBarDataFrag("Table3"), "T3");
+//
+//            findViewById(R.id.llPagerDots).setVisibility(View.VISIBLE);
+//            addBottomDots(0);
+//
+//        }
+//        viewPager.setAdapter(adapter);
+//        adapter.notifyDataSetChanged();
 
 
     }
@@ -233,7 +249,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
 
-        //tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = (TabLayout) findViewById(R.id.tabs);
 
 
 //        TableLayout stk = (TableLayout) findViewById(R.id.table_main);

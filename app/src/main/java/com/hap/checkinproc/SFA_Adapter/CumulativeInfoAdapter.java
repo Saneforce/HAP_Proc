@@ -30,7 +30,7 @@ public class CumulativeInfoAdapter extends RecyclerView.Adapter<CumulativeInfoAd
     @Override
     public CumulativeInfoAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View listItem = layoutInflater.inflate(R.layout.cumulative_info_recyclerview, null, false);
+        View listItem = layoutInflater.inflate(R.layout.cumulative_info_recyclerview1, null, false);
         return new CumulativeInfoAdapter.MyViewHolder(listItem);
     }
 

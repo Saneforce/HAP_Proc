@@ -6,6 +6,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import com.google.android.material.tabs.TabLayout;
+import com.hap.checkinproc.Common_Class.Constants;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route.AllDataFragment;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route.CompleteFragment;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
@@ -38,16 +40,16 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
             // Dashboard_Route.dashboard_route.OutletFilter("t", "1",false);
 
-            OutletFilter("3");
+            OutletFilter("1");
             fragment = new AllDataFragment(Retailer_Modal_ListFilter, position);
         } else if (position == 1) {
             //  Dashboard_Route.dashboard_route.OutletFilter("t", "3",false);
-            OutletFilter("1");
+            OutletFilter("2");
             fragment = new Dashboard_Route.PendingFragment(Retailer_Modal_ListFilter, position);
         } else if (position == 2) {
             //Dashboard_Route.dashboard_route.OutletFilter("t", "2",false);
 
-            OutletFilter("2");
+            OutletFilter("3");
             fragment = new CompleteFragment(Retailer_Modal_ListFilter, position);
         }
         return fragment;
@@ -81,6 +83,8 @@ public class TabAdapter extends FragmentStatePagerAdapter {
         if (id == null)
             id = "t";
 
+        Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(Dashboard_Route.dashboard_route);
+
         Retailer_Modal_List = new ArrayList<>();
 
         Retailer_Modal_List.clear();
@@ -91,21 +95,59 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
         for (int i = 0; i < Retailer_Modal_List.size(); i++) {
 
+            String Route_id = shared_common_pref.getvalue(Constants.Route_Id);
+
             if (flag.equals("1")) {
-                if (Retailer_Modal_List.get(i).getDistCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
+
+                if (!Route_id.equals("")) {
+                    if (Route_id.equals(Retailer_Modal_List.get(i).getTownCode())) {
+                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                    }
+                } else {
                     Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+
+                }
+            } else if (flag.equals("2")) {
+
+                if (Retailer_Modal_List.get(i).getStatusname().equals("PENDING")) {
+                    if (!Route_id.equals("")) {
+                        if (Route_id.equals(Retailer_Modal_List.get(i).getTownCode())) {
+                            Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                        }
+                    } else {
+                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+
+                    }
+                }
+
+            } else if (flag.equals("3")) {
+                if (Retailer_Modal_List.get(i).getStatusname().equals("COMPLETED")) {
+                    if (!Route_id.equals("")) {
+                        if (Route_id.equals(Retailer_Modal_List.get(i).getTownCode())) {
+                            Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                        }
+                    } else {
+                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+
+                    }
                 }
             }
-            if (flag.equals("2")) {
-                if (Retailer_Modal_List.get(i).getInvoice_Flag().equals("2")) {
-                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-                }
-            }
-            if (flag.equals("3")) {
-                if (!Retailer_Modal_List.get(i).getInvoice_Flag().equals("2")) {
-                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-                }
-            }
+
+//            if (flag.equals("1")) {
+//                if (Retailer_Modal_List.get(i).getDistCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
+//                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+//                }
+//            }
+//            if (flag.equals("2")) {
+//                if (Retailer_Modal_List.get(i).getInvoice_Flag().equals("2")) {
+//                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+//                }
+//            }
+//            if (flag.equals("3")) {
+//                if (!Retailer_Modal_List.get(i).getInvoice_Flag().equals("2")) {
+//                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+//                }
+//            }
 
         }
 

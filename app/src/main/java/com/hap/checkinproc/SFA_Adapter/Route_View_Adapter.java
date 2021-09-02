@@ -25,7 +25,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
     int dummy;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView textviewname, textviewdate, status, invoice, values, invoicedate;
+        public TextView textviewname, textviewdate, status, invoice, values, invoicedate, tvRetailorCode;
         LinearLayout parent_layout;
 
         public MyViewHolder(View view) {
@@ -36,6 +36,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             invoice = view.findViewById(R.id.invoice);
             values = view.findViewById(R.id.values);
             invoicedate = view.findViewById(R.id.invoicedate);
+            tvRetailorCode = view.findViewById(R.id.retailorCode);
         }
     }
 
@@ -56,16 +57,17 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
     @Override
     public void onBindViewHolder(Route_View_Adapter.MyViewHolder holder, int position) {
         Retailer_Modal_List Retailer_Modal_List = Retailer_Modal_Listitem.get(position);
-        holder.textviewname.setText("" + Retailer_Modal_List.getName().toUpperCase() + "~" + Retailer_Modal_List.getId());
+        holder.textviewname.setText("" + Retailer_Modal_List.getName().toUpperCase());
+        holder.tvRetailorCode.setText("" + Retailer_Modal_List.getERP_Code());
         if (Retailer_Modal_List.getStatusname() != null) {
             holder.status.setText("Status :" + "\t\t" + Retailer_Modal_List.getStatusname().toUpperCase());
         } else {
             holder.status.setText("Status :" + "\t\t" + "");
         }
 
-        holder.invoice.setText("Last invoice value :" + "\t\t" + Retailer_Modal_List.getInvoiceValues());
+        holder.invoice.setText("Last inv value :" + "\t\t" + Retailer_Modal_List.getInvoiceValues());
         holder.values.setText("Value :" + "\t\t" + Retailer_Modal_List.getValuesinv());
-        holder.invoicedate.setText("Last invoice date :" + "\t\t" + Retailer_Modal_List.getInvoiceDate());
+        holder.invoicedate.setText("Last inv date :" + "\t\t" + Retailer_Modal_List.getInvoiceDate());
         Log.e("INVOICE_FLAG_Adapter", Retailer_Modal_List.getInvoice_Flag());
         if (Retailer_Modal_List.getInvoice_Flag().equals("0")) {
             holder.parent_layout.setBackgroundResource(R.color.white);

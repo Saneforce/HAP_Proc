@@ -68,7 +68,7 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView Statusinvoice, txtOrderDate, txtOrderID, txtValue, Itemcountinvoice;
         LinearLayout linearLayout;
-        ConstraintLayout parent_layout;
+        LinearLayout parent_layout;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);

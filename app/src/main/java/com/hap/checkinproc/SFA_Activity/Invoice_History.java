@@ -1,35 +1,59 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.AlertBox;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.LocationEvents;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Invoice_History_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
+import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
 import com.hap.checkinproc.common.DatabaseHandler;
+import com.hap.checkinproc.common.LocationFinder;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
-public class Invoice_History extends AppCompatActivity implements View.OnClickListener {
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class Invoice_History extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     TextView outlet_name, lastinvoice;
-    LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice;
+    LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder;
     Common_Class common_class;
     List<OutletReport_View_Modal> OutletReport_View_Modal;
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
@@ -39,6 +63,8 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
     RecyclerView invoicerecyclerview;
     Shared_Common_Pref sharedCommonPref;
     DatabaseHandler db;
+    private String[] strLoc;
+    private String Worktype_code;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +81,13 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 
             lin_order = findViewById(R.id.lin_order);
             outlet_name = findViewById(R.id.outlet_name);
-            outlet_name.setText(Shared_Common_Pref.OutletName);
+            outlet_name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             lin_repeat_order = findViewById(R.id.lin_repeat_order);
             lin_invoice = findViewById(R.id.lin_invoice);
             lin_repeat_invoice = findViewById(R.id.lin_repeat_invoice);
             lastinvoice = findViewById(R.id.lastinvoice);
+            lin_noOrder = findViewById(R.id.lin_noOrder);
+            lin_noOrder.setOnClickListener(this);
             lastinvoice.setOnClickListener(this);
             lin_order.setOnClickListener(this);
             invoicerecyclerview = (RecyclerView) findViewById(R.id.invoicerecyclerview);
@@ -86,12 +114,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                 }
             }
 
-            //testing
 
-            FilterOrderList.add(new OutletReport_View_Modal("15690","HAP4567","ST1890","TN8907",
-                    "OC16176","MG12567","8/6/2021",40.0,"PENDING"));
-            //testing
-            System.out.println("LocalOrderValues" + OutletReport_View_Modal.toString());
             mReportViewAdapter = new Invoice_History_Adapter(Invoice_History.this, FilterOrderList, new AdapterOnClick() {
                 @Override
                 public void onIntentClick(int position) {
@@ -118,6 +141,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
             invoicerecyclerview.setAdapter(mReportViewAdapter);
             lin_invoice.setOnClickListener(this);
 
+            GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6");
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
@@ -148,8 +172,202 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                 // common_class.CommonIntentwithoutFinish(More_Info_Activity.class);
 
                 break;
+            case R.id.lin_noOrder:
+                String sLoc = sharedCommonPref.getvalue("CurrLoc");
+                if (sLoc.equalsIgnoreCase("")) {
+                    new LocationFinder(getApplication(), new LocationEvents() {
+                        @Override
+                        public void OnLocationRecived(Location location) {
+                            strLoc = (location.getLatitude() + ":" + location.getLongitude()).split(":");
+                            SaveOrder();
+                        }
+                    });
+                } else {
+                    strLoc = sLoc.split(":");
+                    SaveOrder();
+                }
+                break;
         }
     }
+
+    private void GetJsonData(String jsonResponse, String type) {
+
+        //type =1 product category data values
+        try {
+            JSONArray jsonArray = new JSONArray(jsonResponse);
+            //Category_Modal.clear();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                if (type.equals("1")) {
+//                    String id = String.valueOf(jsonObject1.optInt("id"));
+//                    String name = jsonObject1.optString("name");
+//                    String Division_Code = jsonObject1.optString("Division_Code");
+//                    String Cat_Image = jsonObject1.optString("Cat_Image");
+//                    String sampleQty = jsonObject1.optString("sampleQty");
+//                    String colorflag = jsonObject1.optString("colorflag");
+//                    Category_Modal.add(new Category_Universe_Modal(id, name, Division_Code, Cat_Image, sampleQty, colorflag));
+                } else {
+//                    Route_Code = jsonObject1.optString("cluster");
+//                    Dirtributor_Cod = jsonObject1.optString("stockist");
+                    Worktype_code = jsonObject1.optString("wtype");
+                    // Distributor_Name = jsonObject1.optString("StkName");
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    private void SaveOrder() {
+        if (common_class.isNetworkAvailable(this)) {
+
+            AlertDialogBox.showDialog(Invoice_History.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
+                @Override
+                public void PositiveMethod(DialogInterface dialog, int id) {
+
+                    JSONArray data = new JSONArray();
+                    JSONObject ActivityData = new JSONObject();
+
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+                    Calendar calobj = Calendar.getInstance();
+                    String dateTime = df.format(calobj.getTime());
+
+                    try {
+                        JSONObject HeadItem = new JSONObject();
+                        HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
+                        HeadItem.put("Worktype_code", Worktype_code);
+                        HeadItem.put("Town_code", sharedCommonPref.getvalue(Constants.Route_Id));
+                        HeadItem.put("dcr_activity_date", dateTime);
+                        HeadItem.put("Daywise_Remarks", "");
+                        HeadItem.put("UKey", Common_Class.GetEkey());
+                        HeadItem.put("orderValue", "0");
+                        HeadItem.put("DataSF", Shared_Common_Pref.Sf_Code);
+                        ActivityData.put("Activity_Report_Head", HeadItem);
+
+                        JSONObject OutletItem = new JSONObject();
+                        OutletItem.put("Doc_Meet_Time", Common_Class.GetDate());
+                        OutletItem.put("modified_time", Common_Class.GetDate());
+                        OutletItem.put("stockist_code", Shared_Common_Pref.DistributorCode);
+                        OutletItem.put("stockist_name", Shared_Common_Pref.DistributorName);
+                        OutletItem.put("orderValue", "0");
+                        OutletItem.put("CashDiscount", "0");
+                        OutletItem.put("NetAmount", "0");
+                        OutletItem.put("No_Of_items", "0");
+                        OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
+                        OutletItem.put("TransSlNo", Shared_Common_Pref.TransSlNo);
+                        OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
+                        OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
+                        OutletItem.put("ordertype", "no order");
+                        if (strLoc.length > 0) {
+                            OutletItem.put("Lat", strLoc[0]);
+                            OutletItem.put("Long", strLoc[1]);
+                        } else {
+                            OutletItem.put("Lat", "");
+                            OutletItem.put("Long", "");
+                        }
+                        ActivityData.put("Activity_Doctor_Report", OutletItem);
+                        data.put(ActivityData);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                    Call<JsonObject> responseBodyCall = apiInterface.saveCalls(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                    responseBodyCall.enqueue(new Callback<JsonObject>() {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            if (response.isSuccessful()) {
+                                try {
+                                    Log.e("JSON_VALUES", response.body().toString());
+                                    JSONObject jsonObjects = new JSONObject(response.body().toString());
+                                    String san = jsonObjects.getString("success");
+                                    Log.e("Success_Message", san);
+                                    if (san.equals("true")) {
+
+                                        Toast.makeText(Invoice_History.this, "No Order Submitted Successfully", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                } catch (Exception e) {
+
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<JsonObject> call, Throwable t) {
+                            Log.e("SUBMIT_VALUE", "ERROR");
+                        }
+                    });
+
+                }
+
+                @Override
+                public void NegativeMethod(DialogInterface dialog, int id) {
+                    dialog.dismiss();
+                }
+            });
+        } else {
+            Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onLoadFilterData(List<Retailer_Modal_List> retailer_modal_list) {
+
+    }
+
+    @Override
+    public void onLoadTodayOrderList(List<com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal> outletReportViewModals) {
+        if (outletReportViewModals != null) {
+
+            OutletReport_View_Modal.clear();
+
+            OutletReport_View_Modal = outletReportViewModals;
+
+            FilterOrderList.clear();
+
+            if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
+                for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
+                    if (filterlist.getOutletCode().equals(Shared_Common_Pref.OutletCode)) {
+                        FilterOrderList.add(filterlist);
+                    }
+                }
+            }
+
+
+            mReportViewAdapter = new Invoice_History_Adapter(Invoice_History.this, FilterOrderList, new AdapterOnClick() {
+                @Override
+                public void onIntentClick(int position) {
+                    Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
+                    Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
+                    Shared_Common_Pref.Invoicetoorder = "1";
+                    if (FilterOrderList.get(position).getStatus().equals("ORDER")) {
+                        Intent intent = new Intent(getBaseContext(), Order_Category_Select.class);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
+                        Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
+                        intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
+                        intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
+                        intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
+                        intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
+                        intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
+                        intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
+                        startActivity(intent);
+                    }
+
+                }
+            });
+            invoicerecyclerview.setAdapter(mReportViewAdapter);
+        }
+
+    }
+
+    @Override
+    public void onLoadDataUpdateUI(String apiDataResponse) {
+
+    }
+
 
 
 

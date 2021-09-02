@@ -1,89 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/parent_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
     android:orientation="vertical">
 
-    <LinearLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:weightSum="4">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/C10dp"
+        app:cardCornerRadius="@dimen/C10dp">
 
-        <TextView
-            android:id="@+id/retailername"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/C10dp"
-            android:text="thirumalai"
-            android:textColor="@color/Exit"
-            android:textSize="16dp" />
+            android:layout_marginLeft="@dimen/C5dp"
+            android:layout_marginTop="@dimen/C5dp"
+            android:orientation="horizontal"
+            android:weightSum="1">
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.95">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:orientation="horizontal"
-        android:weightSum="2">
+                <ImageView
+                    android:layout_width="@dimen/C20dp"
+                    android:layout_height="@dimen/C20dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_baseline_shopping_cart_24"></ImageView>
+            </LinearLayout>
 
-        <TextView
-            android:id="@+id/status"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/C10dp"
-            android:layout_weight="1"
-            android:text="Pending"
-            android:textColor="@color/black"
-            android:textSize="@dimen/C12dp" />
 
-        <TextView
-            android:id="@+id/invoice"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.05"
+                android:orientation="vertical">
 
-            android:layout_weight="1"
-            android:text="12345"
-            android:textColor="@color/black"
-            android:textSize="@dimen/C12dp" />
-    </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="25dp"
-        android:orientation="horizontal"
-        android:weightSum="2">
+                    <TextView
+                        android:id="@+id/retailername"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/C10dp"
+                        android:text="thirumalai"
+                        android:textColor="@color/black"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/values"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/C10dp"
-            android:layout_weight="1"
-            android:text="Pending"
-            android:textColor="@color/black"
-            android:textSize="@dimen/C12dp" />
+                    <TextView
+                        android:id="@+id/retailorCode"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/C10dp"
+                        android:text="167892"
+                        android:textColor="@android:color/darker_gray"
+                        android:textSize="14dp">
 
-        <TextView
-            android:id="@+id/invoicedate"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:text="12345"
-            android:textColor="@color/black"
-            android:textSize="@dimen/C12dp" />
-    </LinearLayout>
+                    </TextView>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="4dp"
-        android:layout_weight="1"
-        android:background="@drawable/bottom_border">
+                </RelativeLayout>
 
-    </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="@dimen/C10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
+                    <TextView
+                        android:id="@+id/status"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Pending"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/C12dp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/invoice"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
+                        android:layout_weight="1"
+                        android:text="12345"
+                        android:textColor="@color/mdtp_dark_gray"
+                        android:textSize="@dimen/C12dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="@dimen/C10dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <TextView
+                        android:id="@+id/values"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="Pending"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/C12dp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/invoicedate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:text="12345"
+                        android:textColor="@color/mdtp_dark_gray"
+                        android:textSize="@dimen/C12dp" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bottom_border"
+                    android:visibility="gone">
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
     <!--    <View-->
     <!--        android:layout_width="match_parent"-->

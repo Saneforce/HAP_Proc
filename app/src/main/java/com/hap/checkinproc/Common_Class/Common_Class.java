@@ -26,11 +26,15 @@ import androidx.core.content.ContextCompat;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
@@ -79,6 +83,14 @@ public class Common_Class {
     public static String Version_Name = "ver 3.1.12-b";
     public static String Work_Type = "0";
     public static int count;
+
+    private List<Retailer_Modal_List> retailer_modal_list = new ArrayList<>();
+    private UpdateResponseUI updateUi;
+    Type userTypeRetailor;
+
+    List<OutletReport_View_Modal> outletReport_view_modalList = new ArrayList<>();
+    private Type userTypeGetTodayOrder;
+
 
     public void CommonIntentwithFinish(Class classname) {
         intent = new Intent(activity, classname);
@@ -254,17 +266,25 @@ public class Common_Class {
             switch (key) {
 
                 case (Retailer_OutletList):
-                    ProgressdialogShow(1, "Data Syncing");
-                    QuerySTring1 = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",  \\\"reason_category\\\", \\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"town_name\\\",\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\",\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\",  \\\"LastUpdt_Date\\\",    \\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" , \\\"Valuesinv\\\" , \\\"InvoiceDate\\\", \\\"Category_Universe_Id\\\", \\\"Hatsun_AvailablityId\\\",   \\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\",\\\"Distributor_Code\\\"]\",\"where\":\"[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QuerySTring1 = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\"," +
+                            "  \\\"reason_category\\\", \\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"ERP_Code\\\",\\\"town_name\\\"," +
+                            "\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\"," +
+                            "\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\", " +
+                            " \\\"LastUpdt_Date\\\",    \\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" ," +
+                            " \\\"Valuesinv\\\" , \\\"InvoiceDate\\\", \\\"Category_Universe_Id\\\", \\\"Hatsun_AvailablityId\\\",   " +
+                            "\\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\",\\\"Distributor_Code\\\"]\",\"where\":\"" +
+                            "[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"stockist\"}";
                     break;
                 case (Constants.Distributor_List):
+                    ProgressdialogShow(1, "Data Syncing");
                     QuerySTring1 = "{\"tableName\":\"vwstockiest_Master_APP\",\"coloumns\":\"[\\\"distributor_code as id\\\", \\\"stockiest_name as name\\\",\\\"town_code\\\",\\\"town_name\\\",\\\"Addr1\\\",\\\"Addr2\\\",\\\"City\\\",\\\"Pincode\\\",\\\"GSTN\\\",\\\"lat\\\",\\\"long\\\",\\\"addrs\\\",\\\"Tcode\\\",\\\"Dis_Cat_Code\\\"]\",\"where\":\"[\\\"isnull(Stockist_Status,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     break;
                 case (Constants.Category_List):
                     QuerySTring1 = "{\"tableName\":\"category_universe\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     break;
                 case (Constants.Product_List):
-                    QuerySTring1 = "{\"tableName\":\"getproduct_details\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QuerySTring1 = "{\"tableName\":\"getproduct_details\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0," +
+                            "\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     break;
                 case (Constants.Rout_List):
                     QuerySTring1 = "{\"tableName\":\"vwTown_Master_APP\",\"coloumns\":\"[\\\"town_code as id\\\", \\\"town_name as name\\\",\\\"target\\\",\\\"min_prod\\\",\\\"field_code\\\",\\\"stockist_code\\\"]\",\"where\":\"[\\\"isnull(Town_Activation_Flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
@@ -307,6 +327,8 @@ public class Common_Class {
             QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
             QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
             QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+            QueryString.put("desig", "stockist");
+            QueryString.put(Constants.Distributor_Id, shared_common_pref.getvalue(Constants.Distributor_Id));
 
             callAPI(QuerySTring1, QueryString, key, activity, boolRefresh);
         } else {
@@ -329,30 +351,53 @@ public class Common_Class {
                 public void onResponse(Call<Object> call, Response<Object> response) {
                     Gson gson = new Gson();
 
-                    if (key.equals(Constants.Retailer_OutletList)) {
-                        shared_common_pref.save("count", gson.toJson(response.body()).length());
 
-
-                        count = shared_common_pref.getIntValue("count");
-                    }
-
-//
-//                    Log.e("onResponse: ", "key:" + key + " response: " + gson.toJson(response.body()));
-//
-                    if (shared_common_pref == null)
-                        shared_common_pref = new Shared_Common_Pref(activity);
-
-                    if (key.equals(Retailer_OutletList))
-                        shared_common_pref.save(key, gson.toJson(response.body()));
-
-                    // Log.e(TAG + "Key: ", key);
                     db.deleteMasterData(key);
                     db.addMasterData(key, gson.toJson(response.body()));
 
+
+                    if (shared_common_pref == null)
+                        shared_common_pref = new Shared_Common_Pref(activity);
+
+                    if (key.equals(Retailer_OutletList)) {
+                        updateUi = ((UpdateResponseUI) activity);
+
+                        shared_common_pref.save(key, gson.toJson(response.body()));
+
+                        userTypeRetailor = new TypeToken<ArrayList<Retailer_Modal_List>>() {
+                        }.getType();
+                        retailer_modal_list = gson.fromJson(shared_common_pref.getvalue(Retailer_OutletList), userTypeRetailor);
+
+                        updateUi.onLoadFilterData(retailer_modal_list);
+
+                    }
+
+
+                    if (key.equals(Constants.GetTodayOrder_List)) {
+
+                        updateUi = ((UpdateResponseUI) activity);
+
+                        String OrdersTable = String.valueOf(db.getMasterData(Constants.GetTodayOrder_List));
+                        userTypeGetTodayOrder = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
+                        }.getType();
+                        outletReport_view_modalList = gson.fromJson(OrdersTable, userTypeGetTodayOrder);
+
+                        updateUi.onLoadTodayOrderList(outletReport_view_modalList);
+                    }
+
+                    if (key.equals(TodayOrderDetails_List)) {
+
+                        updateUi = ((UpdateResponseUI) activity);
+
+                        updateUi.onLoadDataUpdateUI(gson.toJson(response.body()));
+                    }
+
+
                     switch (key) {
-                        case Retailer_OutletList:
-                            getDataFromApi(Constants.Distributor_List, activity, boolRefresh);
-                            break;
+                        //case Retailer_OutletList:
+
+                        // getDataFromApi(Constants.Distributor_List, activity, boolRefresh);
+                        // break;
                         case Distributor_List:
                             getDataFromApi(Category_List, activity, boolRefresh);
                             break;
@@ -374,15 +419,15 @@ public class Common_Class {
 
                         case Constants.GetTodayOrder_List:
                             if (boolRefresh)
-                                getDataFromApi(Constants.Outlet_Total_Orders, activity, boolRefresh);
+                                getDataFromApi(Outlet_Total_Orders, activity, boolRefresh);
                             break;
                         case Outlet_Total_Orders:
                             if (boolRefresh)
-                                getDataFromApi(Constants.TodayOrderDetails_List, activity, boolRefresh);
+                                getDataFromApi(TodayOrderDetails_List, activity, boolRefresh);
                             break;
                         case TodayOrderDetails_List:
                             if (boolRefresh)
-                                getDataFromApi(Constants.Competitor_List, activity, boolRefresh);
+                                getDataFromApi(Competitor_List, activity, boolRefresh);
                             break;
                         case Competitor_List:
                             if (boolRefresh)

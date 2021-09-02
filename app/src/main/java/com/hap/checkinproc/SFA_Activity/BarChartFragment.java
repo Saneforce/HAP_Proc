@@ -158,9 +158,9 @@ public class BarChartFragment extends Fragment implements OnChartValueSelectedLi
         cumulative_order_modelList.clear();
 
 
-        cumulative_order_modelList.add(new Cumulative_Order_Model("DSO", 120, 40, 60, 20));
+        cumulative_order_modelList.add(new Cumulative_Order_Model("DSO", 120, 40, 60, 20,280,190));
 
-        cumulative_order_modelList.add(new Cumulative_Order_Model("DCO", 100, 60, 50, 30));
+        cumulative_order_modelList.add(new Cumulative_Order_Model("DCO", 100, 60, 50, 30,100,160));
 
         dataSets = new ArrayList();
         int xPos = 10;

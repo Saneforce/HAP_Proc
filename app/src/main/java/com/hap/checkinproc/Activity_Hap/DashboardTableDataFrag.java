@@ -48,11 +48,12 @@ public class DashboardTableDataFrag extends Fragment {
         cumulative_order_modelList.clear();
 
 
-        cumulative_order_modelList.add(new Cumulative_Order_Model("DSO", 20, 10, 30, 40));
+        cumulative_order_modelList.add(new Cumulative_Order_Model("DSO", 20, 10, 30, 40,20,20));
 
-        cumulative_order_modelList.add(new Cumulative_Order_Model("DCO", 30, 50, 70, 50));
+        cumulative_order_modelList.add(new Cumulative_Order_Model("DCO", 30, 50, 70, 50,100,120));
 
-        cumulative_order_modelList.add(new Cumulative_Order_Model("Total", 50, 60, 100, 90));
+        cumulative_order_modelList.add(new Cumulative_Order_Model("Veg Shop", 50, 60, 100, 90,170,150));
+        cumulative_order_modelList.add(new Cumulative_Order_Model("Modern Trade", 50, 60, 100, 90,100,67));
 
 
         cumulativeInfoAdapter = new CumulativeInfoAdapter(getActivity(), cumulative_order_modelList, new AdapterOnClick() {

@@ -1,7 +1,6 @@
 package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Activity.Route_Product_Info;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
 import java.util.List;
@@ -65,6 +63,10 @@ public class Outlet_Info_Adapter extends RecyclerView.Adapter<Outlet_Info_Adapte
 
     @Override
     public int getItemCount() {
-        return Retailer_Modal_Listitem.size();
+        if (Retailer_Modal_Listitem != null) {
+            return Retailer_Modal_Listitem.size();
+        } else {
+            return 0;
+        }
     }
 }

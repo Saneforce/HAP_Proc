@@ -209,7 +209,8 @@ public class Dashboard_Order_Reports extends AppCompatActivity implements Main_M
         recyclerView.setAdapter(new Complete_Order_Adapter(Retailer_Modal_ListFilter, R.layout.complete_orders_recyclerview, getApplicationContext(), new AdapterOnClick() {
             @Override
             public void onIntentClick(int position) {
-                Shared_Common_Pref.OutletName = Retailer_Modal_ListFilter.get(position).getOutletName().toUpperCase() + "~" + Retailer_Modal_ListFilter.get(position).getOutletCode();
+                Shared_Common_Pref.OutletName = Retailer_Modal_ListFilter.get(position).getOutletName().toUpperCase()
+                        + "~" + Retailer_Modal_ListFilter.get(position).getOutletCode();
                 Shared_Common_Pref.OutletCode = Retailer_Modal_ListFilter.get(position).getOutletCode();
                 common_class.CommonIntentwithFinish(Route_Product_Info.class);
 

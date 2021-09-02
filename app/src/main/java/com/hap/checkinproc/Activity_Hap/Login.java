@@ -516,7 +516,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(int requestCode) {
-        eMail = "ekumar.san@gmail.com";
+        //  eMail = "ekumar.san@gmail.com";
         // eMail="haptest5@hap.in";
         // eMail="gunasekar.sa@hap.in";
         if (eMail.isEmpty()) {

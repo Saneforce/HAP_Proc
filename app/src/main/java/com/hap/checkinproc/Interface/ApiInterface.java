@@ -429,6 +429,10 @@ public interface ApiInterface {
     Call<JsonObject> saveCalls(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
+    @POST("db_v310.php?axn=save/otherbrandentry")
+    Call<JsonObject> saveOtherBrand(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+
+    @FormUrlEncoded
     @POST("Db_v310.php?")
     Call<JsonArray> getDataArrayListA(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("sfCode") String Sf_code, @Query("State_Code") String State_code, @Query("desig") String desig, @Field("data") String body);
 
@@ -475,4 +479,9 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=upload/Taimg")
     Call<ResponseBody> uploadOutletImage(
             @Part MultipartBody.Part file);
+
+
+    @GET("db_v310.php?axn=get/qpsallocation")
+    Call<JSONArray> getQPSData(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code,
+                                @Query("retailorCode") String retailorCode, @Query("distributorcode") String distributorcode);
 }

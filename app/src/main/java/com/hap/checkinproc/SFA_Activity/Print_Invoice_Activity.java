@@ -28,19 +28,25 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Print_Invoice_Adapter;
+import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
-public class Print_Invoice_Activity extends AppCompatActivity implements View.OnClickListener {
+public class Print_Invoice_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     Print_Invoice_Adapter mReportViewAdapter;
     RecyclerView printrecyclerview;
     Shared_Common_Pref sharedCommonPref;
@@ -88,7 +94,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             retailerroute = findViewById(R.id.retailerroute);
             ok = findViewById(R.id.ok);
 
-            retailername.setText(Shared_Common_Pref.OutletName);
+            retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             ivPrint = findViewById(R.id.ivPrint);
             //command for testing purpose
 //            netamount.setText(getIntent().getStringExtra("NetAmount"));
@@ -102,6 +108,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             ok.setOnClickListener(this);
             ivPrint.setOnClickListener(this);
 
+
             if (Shared_Common_Pref.Invoicetoorder != null) {
                 if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
                     // String orderlist = sharedCommonPref.getvalue(Shared_Common_Pref.TodayOrderDetails_List);
@@ -111,41 +118,33 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     InvoiceorderDetails_List = gson.fromJson(orderlist, userType);
                     Order_Outlet_Filter = new ArrayList<>();
                     Order_Outlet_Filter.clear();
-                    int total_qtytext = 0;
+                    int total_qtytext = 0, subTotalVal = 0;
                     for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
                         if (ivl.getTransSlNo().equals(Shared_Common_Pref.TransSlNo)) {
                             Log.e("Product_Name", ivl.getProductName());
                             Log.e("Product_getQty", String.valueOf(ivl.getQuantity()));
                             // total_qtytext += ivl.getQty() + ivl.getQuantity();
                             total_qtytext += ivl.getQuantity();
+                            subTotalVal += ivl.getValue();
+
                             Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
                                     "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(), ivl.getQty(), ivl.getValue()));
                         }
                     }
 
 
-                    //testing
-
-                    Order_Outlet_Filter.add(new Product_Details_Modal("HAPH23100", "Hatsun Yogurt Drink Blueberry 175 ml", 19056, "1",
-                            "1", "5", "i", 7.99, 1.8, 20.00, 7, 3,
-                            200.00));
-                    Order_Outlet_Filter.add(new Product_Details_Modal("HAPH23144", "Hatsun Curd 5 Kg Pouch", 16781, "1",
-                            "1", "5", "i", 7.99, 1.8, 20.00, 70, 3,
-                            200.00));
-                    Order_Outlet_Filter.add(new Product_Details_Modal("HAPH23145", "Hatsun Cheese Spread 50gms CupX12", 1, "1",
-                            "1", "5", "i", 7.99, 1.8, 20.00, 777, 3,
-                            200.00));
-                    Order_Outlet_Filter.add(new Product_Details_Modal("16691", "Hatsun Shrikhand Elaichi 250gm Cup", 1, "1",
-                            "1", "5", "i", 7.99, 1.8, 2000.00, 97, 3,
-                            200.00));
-                    Order_Outlet_Filter.add(new Product_Details_Modal("HAPH23100", "Hatsun T-B Chiplet 8gx10x6 (480g)", 1, "1",
-                            "1", "5", "i", 7.99, 1.8, 2.00, 7, 3,
-                            200.00));
-
-
-                    //testing
+                    retailerroute.setText(sharedCommonPref.getvalue(Constants.Route_name));
+                    retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
 
                     totalqty.setText("" + String.valueOf(total_qtytext));
+                    totalitem.setText("" + Order_Outlet_Filter.size());
+                    subtotal.setText("" + subTotalVal);
+                    netamount.setText("₹ " + subTotalVal + ".00");
+
+                    DateFormat dfw = new SimpleDateFormat("dd/MM/yyyy");
+                    Calendar calobjw = Calendar.getInstance();
+                    invoicedate.setText("" + dfw.format(calobjw.getTime()));
+
                     mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, new AdapterOnClick() {
                         @Override
                         public void onIntentClick(int position) {
@@ -569,4 +568,63 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     }
 
 
+    @Override
+    public void onLoadFilterData(List<Retailer_Modal_List> retailer_modal_list) {
+
+    }
+
+    @Override
+    public void onLoadTodayOrderList(List<OutletReport_View_Modal> outletReportViewModals) {
+
+    }
+
+    @Override
+    public void onLoadDataUpdateUI(String apiDataResponse) {
+        if (apiDataResponse != null && !apiDataResponse.equals("")) {
+
+            if (Shared_Common_Pref.Invoicetoorder != null) {
+                if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
+                    // String orderlist = sharedCommonPref.getvalue(Shared_Common_Pref.TodayOrderDetails_List);
+                    //  String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
+                    userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
+                    }.getType();
+                    InvoiceorderDetails_List = gson.fromJson(apiDataResponse, userType);
+                    Order_Outlet_Filter = new ArrayList<>();
+                    Order_Outlet_Filter.clear();
+                    int total_qtytext = 0, subTotalVal = 0;
+                    for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
+                        if (ivl.getTransSlNo().equals(Shared_Common_Pref.TransSlNo)) {
+                            Log.e("Product_Name", ivl.getProductName());
+                            Log.e("Product_getQty", String.valueOf(ivl.getQuantity()));
+                            // total_qtytext += ivl.getQty() + ivl.getQuantity();
+                            total_qtytext += ivl.getQuantity();
+                            subTotalVal += ivl.getValue();
+
+                            Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
+                                    "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(), ivl.getQty(), ivl.getValue()));
+                        }
+                    }
+
+
+                    retailerroute.setText(sharedCommonPref.getvalue(Constants.Route_name));
+                    retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
+
+                    totalqty.setText("" + String.valueOf(total_qtytext));
+                    totalitem.setText("" + Order_Outlet_Filter.size());
+                    subtotal.setText("" + subTotalVal);
+                    netamount.setText("₹ " + subTotalVal + ".00");
+                    mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, new AdapterOnClick() {
+                        @Override
+                        public void onIntentClick(int position) {
+                        }
+                    });
+                    printrecyclerview.setAdapter(mReportViewAdapter);
+
+                } else {
+
+                }
+            }
+        }
+
+    }
 }

@@ -8,6 +8,11 @@ public class Retailer_Modal_List {
     @Expose
     private String id;
 
+    @SerializedName("ERP_Code")
+    @Expose
+    private String ERP_Code;
+
+
     public String getStatusname() {
         return Statusname;
     }
@@ -527,4 +532,11 @@ public class Retailer_Modal_List {
     }
 
 
+    public String getERP_Code() {
+        return ERP_Code;
+    }
+
+    public void setERP_Code(String ERP_Code) {
+        this.ERP_Code = ERP_Code;
+    }
 }

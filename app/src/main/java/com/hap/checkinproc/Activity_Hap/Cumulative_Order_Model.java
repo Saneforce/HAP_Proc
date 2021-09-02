@@ -4,6 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Cumulative_Order_Model {
+    @SerializedName("value")
+    @Expose
+    private String value;
     @SerializedName("desc")
     @Expose
     private String desc;
@@ -23,13 +26,27 @@ public class Cumulative_Order_Model {
     @Expose
     private Integer newOrderLtrs;
 
+    @SerializedName("totalCurd")
+    @Expose
+    private int totalCurd;
+    @SerializedName("desc")
+    @Expose
+    private int totalMilkProduct;
 
-    public Cumulative_Order_Model(String desc, Integer existing, Integer newCustomer, Integer totalLtrs, Integer newOrderLtrs) {
+
+    public Cumulative_Order_Model(String desc, Integer existing, Integer newCustomer, Integer totalLtrs, Integer newOrderLtrs, int totalCurd, int totalMilkProduct) {
         this.desc = desc;
         this.existing = existing;
         this.newCustomer = newCustomer;
         this.totalLtrs = totalLtrs;
         this.newOrderLtrs = newOrderLtrs;
+        this.totalCurd = totalCurd;
+        this.totalMilkProduct = totalMilkProduct;
+    }
+
+    public Cumulative_Order_Model(String desc, String value) {
+        this.desc = desc;
+        this.value = value;
     }
 
     public Integer getNewOrderLtrs() {
@@ -70,5 +87,13 @@ public class Cumulative_Order_Model {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }
