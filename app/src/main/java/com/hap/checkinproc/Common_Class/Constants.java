@@ -35,4 +35,5 @@ public class Constants {
     public static String Retailor_Address = "retailor_address";
     public static String Retailor_ERP_Code = "retailor_erp_code";
     public static String Retailor_Name_ERP_Code = "retailor_name_erp_code";
+    public static String PreOrderQtyList="preOrderQtyList";
 }

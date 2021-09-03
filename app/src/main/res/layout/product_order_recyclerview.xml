@@ -80,8 +80,8 @@
                             android:layout_alignParentRight="true"
                             android:layout_marginRight="@dimen/C10dp"
                             android:gravity="center_vertical"
-                            android:text="Free : 0"
-                            android:textColor="@color/txt_color_black" />
+                            android:textColor="@color/txt_color_black"
+                            android:visibility="gone" />
 
 
                     </RelativeLayout>

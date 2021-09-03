@@ -31,8 +31,8 @@ import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Invoice_History_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
-import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
 
@@ -40,6 +40,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -47,6 +49,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -145,6 +148,9 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
+
+
+            getPreOrderQty();
         } catch (Exception e) {
 
         }
@@ -367,6 +373,82 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
     public void onLoadDataUpdateUI(String apiDataResponse) {
 
     }
+
+
+    private void getPreOrderQty() {
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                JSONObject HeadItem = new JSONObject();
+
+                HeadItem.put("retailorCode", Shared_Common_Pref.OutletCode);
+                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
+
+
+                Call<ResponseBody> call = service.getPreOrderQty(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+
+                                if (jsonObject.getBoolean("success")) {
+
+                                    Gson gson = new Gson();
+                                    List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
+
+                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+
+                                        product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Detail_Code"),
+                                                "", "", jsonObject1.getInt("Qty"),""));
+
+
+                                    }
+
+                                    sharedCommonPref.save(Constants.PreOrderQtyList, gson.toJson(product_details_modalArrayList));
+                                }
+
+                            }
+
+                        } catch (Exception e) {
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>", t.toString());
+
+
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+
 
 
 

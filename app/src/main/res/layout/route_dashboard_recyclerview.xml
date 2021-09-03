@@ -39,26 +39,30 @@
                 android:layout_weight="0.05"
                 android:orientation="vertical">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
 
                     <TextView
                         android:id="@+id/retailername"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:maxLines="1"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/C10dp"
-                        android:text="thirumalai"
+                        android:text=""
                         android:textColor="@color/black"
                         android:textSize="16dp"
+                        android:ellipsize="end"
                         android:textStyle="bold" />
 
                     <TextView
+                        android:textAlignment="textEnd"
+                        android:layout_weight="0.8"
                         android:id="@+id/retailorCode"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
                         android:layout_marginRight="@dimen/C10dp"
                         android:text="167892"
                         android:textColor="@android:color/darker_gray"
@@ -66,7 +70,7 @@
 
                     </TextView>
 
-                </RelativeLayout>
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -113,6 +117,9 @@
                         android:textSize="@dimen/C12dp"
                         android:visibility="gone" />
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
                     <TextView
                         android:id="@+id/invoicedate"
                         android:layout_width="match_parent"
@@ -121,6 +128,18 @@
                         android:text="12345"
                         android:textColor="@color/mdtp_dark_gray"
                         android:textSize="@dimen/C12dp" />
+
+                        <ImageView
+                            android:layout_marginRight="@dimen/C10dp"
+
+                            android:scaleType="centerInside"
+                            android:layout_alignParentRight="true"
+                            android:src="@drawable/ic_air_conditioner_50"
+                            android:layout_width="@dimen/C20dp"
+                            android:layout_height="@dimen/C20dp"></ImageView>
+
+                    </RelativeLayout>
+
                 </LinearLayout>
 
                 <RelativeLayout

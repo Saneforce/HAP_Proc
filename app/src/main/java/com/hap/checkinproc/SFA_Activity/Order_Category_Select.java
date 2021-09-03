@@ -961,7 +961,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         }
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, lblAddQty, productQty;
+            public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, lblAddQty, productQty, preOrderVal;
 
             public LinearLayout lnRwEntry, lnlblRwEntry;
             EditText Qty;
@@ -981,6 +981,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 lnRwEntry = view.findViewById(R.id.lnRwEntry);
                 lnlblRwEntry = view.findViewById(R.id.lnlblRwEntry);
                 productQty = view.findViewById(R.id.productqty);
+                preOrderVal = view.findViewById(R.id.tvPreOrderVal);
+
 
                 assignValues();
 
@@ -1100,6 +1102,30 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 }
             });
 
+            String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
+
+            Type type = new TypeToken<ArrayList<Product_Details_Modal>>() {
+            }.getType();
+            List<Product_Details_Modal> product_details_modalArrayList = gson.fromJson(preOrderList, type);
+
+            boolean haveVal = false;
+            if (product_details_modalArrayList != null && product_details_modalArrayList.size() > 0) {
+
+                for (int i = 0; i < product_details_modalArrayList.size(); i++) {
+
+                    if (Product_Details_Modal.getId().equals(product_details_modalArrayList.get(i).getId())) {
+                        haveVal = true;
+                        holder.preOrderVal.setText("Previous Order value : " + product_details_modalArrayList.get(i).getQty());
+                        break;
+                    }
+
+                }
+            }
+
+            if (!haveVal)
+                holder.preOrderVal.setText("Previous Order value : 0");
+
+
         }
 
         @Override
@@ -1111,50 +1137,50 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     }
 
 
-    public void Get_regularqty() {
-        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        Map<String, String> QueryString = new HashMap<>();
-        QueryString.put("axn", "table/list");
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code.replace(",", ""));
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("OutletCode", Shared_Common_Pref.OutletCode);
-        QueryString.put("OrderDate", Common_Class.GetDate());
-        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
-        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
-        Log.e("GET_REGULAr_MAp", QueryString.toString());
-        Call<Object> call = service.GetRouteObject(QueryString, "{\"tableName\":\"getproductregularqty\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}");
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                Log.e("Product_Before_ToString", response.body() + "");
-                Log.e("Product_Regular_Qty", response.body().toString() + "");
-                System.out.println("Product_Details" + new Gson().toJson(response.body()));
-                System.out.println("Product_Details" + new Gson().toJson(response.body()));
-                userType = new TypeToken<ArrayList<RegularQty_Modal>>() {
-                }.getType();
-                RegularQty_Modal = gson.fromJson(new Gson().toJson(response.body()), userType);
-                int currentPosition = 0;
-                for (Product_Details_Modal PM : Product_Modal) {
-                    Product_Modal.get(currentPosition).setRegularQty(0);
-                    for (com.hap.checkinproc.SFA_Model_Class.RegularQty_Modal Rm : RegularQty_Modal) {
-                        if (PM.getId().equals(Rm.getProductCode())) {
-                            Product_Modal.get(currentPosition).setRegularQty(Rm.getQty());
-                            Product_Modal.get(currentPosition).setAmount(Double.valueOf(Rm.getQty()) * Product_Modal.get(currentPosition).getRate());
-                            System.out.println("Product_Regular_Qty" + Product_Modal.get(currentPosition).getRegularQty());
-                        }
-                    }
-                    currentPosition++;
-                }
-                Order_Category_Select.CategoryAdapter customAdapteravail = new Order_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
-                categorygrid.setAdapter(customAdapteravail);
-            }
-
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-
-            }
-        });
-    }
+//    public void Get_regularqty() {
+//        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+//        Map<String, String> QueryString = new HashMap<>();
+//        QueryString.put("axn", "table/list");
+//        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code.replace(",", ""));
+//        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
+//        QueryString.put("OutletCode", Shared_Common_Pref.OutletCode);
+//        QueryString.put("OrderDate", Common_Class.GetDate());
+//        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
+//        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+//        Log.e("GET_REGULAr_MAp", QueryString.toString());
+//        Call<Object> call = service.GetRouteObject(QueryString, "{\"tableName\":\"getproductregularqty\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}");
+//        call.enqueue(new Callback<Object>() {
+//            @Override
+//            public void onResponse(Call<Object> call, Response<Object> response) {
+//                Log.e("Product_Before_ToString", response.body() + "");
+//                Log.e("Product_Regular_Qty", response.body().toString() + "");
+//                System.out.println("Product_Details" + new Gson().toJson(response.body()));
+//                System.out.println("Product_Details" + new Gson().toJson(response.body()));
+//                userType = new TypeToken<ArrayList<RegularQty_Modal>>() {
+//                }.getType();
+//                RegularQty_Modal = gson.fromJson(new Gson().toJson(response.body()), userType);
+//                int currentPosition = 0;
+//                for (Product_Details_Modal PM : Product_Modal) {
+//                    Product_Modal.get(currentPosition).setRegularQty(0);
+//                    for (com.hap.checkinproc.SFA_Model_Class.RegularQty_Modal Rm : RegularQty_Modal) {
+//                        if (PM.getId().equals(Rm.getProductCode())) {
+//                            Product_Modal.get(currentPosition).setRegularQty(Rm.getQty());
+//                            Product_Modal.get(currentPosition).setAmount(Double.valueOf(Rm.getQty()) * Product_Modal.get(currentPosition).getRate());
+//                            System.out.println("Product_Regular_Qty" + Product_Modal.get(currentPosition).getRegularQty());
+//                        }
+//                    }
+//                    currentPosition++;
+//                }
+//                Order_Category_Select.CategoryAdapter customAdapteravail = new Order_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+//                categorygrid.setAdapter(customAdapteravail);
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Object> call, Throwable t) {
+//
+//            }
+//        });
+//    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

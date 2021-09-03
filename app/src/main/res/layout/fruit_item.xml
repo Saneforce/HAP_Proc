@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:text="Two"
             android:textColor="#80000000"
-            android:textSize="12dp"></TextView>
+            ></TextView>
 
         <TextView
             android:id="@+id/txt_address"
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:text="Three"
             android:textColor="#80000000"
-            android:textSize="12dp"></TextView>
+           ></TextView>
 
     </LinearLayout>
 </LinearLayout>

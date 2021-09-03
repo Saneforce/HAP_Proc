@@ -164,6 +164,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
                     try {
                         JSONObject HeadItem = new JSONObject();
                         HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
+                        HeadItem.put("divCode",Shared_Common_Pref.Div_Code);
                         HeadItem.put("CustCode", Shared_Common_Pref.OutletCode);
                         HeadItem.put("CustName", Shared_Common_Pref.OutletName);
                         HeadItem.put("StkCode", Shared_Common_Pref.DistributorCode);

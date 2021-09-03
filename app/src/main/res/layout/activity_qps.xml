@@ -50,6 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/C15dp"
         android:layout_marginTop="@dimen/C10dp"
+        android:ellipsize="end"
         android:text="AM SNACKS BAR"
         android:textColor="@android:color/black"
         android:textSize="14dp"
@@ -98,15 +99,17 @@
                                 <TextView
                                     style="@style/TextStyle"
                                     android:paddingTop="@dimen/C10dp"
-                                    android:text="Other Brand" />
+                                    android:text="Other Brand (ltr)" />
 
                                 <EditText
-                                    android:id="@+id/select_hours"
+                                    android:id="@+id/etQPSotherBrand"
                                     style="@style/TextStyle"
                                     android:layout_width="match_parent"
                                     android:background="@drawable/textbox_bg"
+                                    android:digits="0123456789."
                                     android:elevation="5dp"
                                     android:hint="Enter value here"
+                                    android:inputType="numberDecimal"
                                     android:padding="@dimen/C8dp" />
 
 
@@ -121,14 +124,15 @@
                                 <TextView
                                     style="@style/TextStyle"
                                     android:paddingTop="@dimen/C10dp"
-                                    android:text="HAP Brand" />
+                                    android:text="HAP Brand (ltr)" />
 
-                                <EditText
+                                <TextView
+
+                                    android:id="@+id/tvQPSHapBrand"
                                     style="@style/TextStyle"
                                     android:layout_width="match_parent"
                                     android:background="@drawable/textbox_bg"
                                     android:elevation="5dp"
-                                    android:hint="Enter value here"
                                     android:padding="@dimen/C8dp" />
 
 
@@ -143,15 +147,37 @@
                                 <TextView
                                     style="@style/TextStyle"
                                     android:paddingTop="@dimen/C10dp"
-                                    android:text="New Order" />
+                                    android:text="New Order (ltr)" />
 
-                                <EditText
-                                    style="@style/TextStyle"
+                                <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:background="@drawable/textbox_bg"
-                                    android:elevation="5dp"
-                                    android:hint="Enter value here"
-                                    android:padding="@dimen/C8dp" />
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+
+                                    >
+
+                                    <EditText
+                                        android:id="@+id/etNewOrder"
+                                        style="@style/TextStyle"
+                                        android:layout_width="0dp"
+                                        android:layout_weight="1"
+                                        android:background="@drawable/textbox_bg"
+                                        android:digits="0123456789."
+                                        android:elevation="5dp"
+                                        android:hint="Enter value here"
+                                        android:inputType="numberDecimal"
+                                        android:padding="@dimen/C8dp" />
+
+                                    <ImageView
+                                        android:id="@+id/ivQPSComboData"
+                                        style="@style/TextStyle"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center_vertical"
+                                        android:layout_weight="0.1"
+                                        android:scaleType="centerInside"
+                                        android:src="@drawable/eye" />
+                                </LinearLayout>
 
 
                             </LinearLayout>
@@ -165,14 +191,14 @@
                                 <TextView
                                     style="@style/TextStyle"
                                     android:paddingTop="@dimen/C10dp"
-                                    android:text="Period" />
+                                    android:text="Period (days)" />
 
-                                <EditText
+                                <TextView
+                                    android:id="@+id/tvQPSPeriodDays"
                                     style="@style/TextStyle"
                                     android:layout_width="match_parent"
                                     android:background="@drawable/textbox_bg"
                                     android:elevation="5dp"
-                                    android:hint="Enter value here"
                                     android:padding="@dimen/C8dp" />
 
 
@@ -189,12 +215,12 @@
                                     android:paddingTop="@dimen/C10dp"
                                     android:text="Gift" />
 
-                                <EditText
+                                <TextView
+                                    android:id="@+id/tvQPSGift"
                                     style="@style/TextStyle"
                                     android:layout_width="match_parent"
                                     android:background="@drawable/textbox_bg"
                                     android:elevation="5dp"
-                                    android:hint="Enter value here"
                                     android:padding="@dimen/C8dp" />
 
 
@@ -211,13 +237,29 @@
                                     android:paddingTop="@dimen/C10dp"
                                     android:text="Acheive" />
 
-                                <EditText
-                                    style="@style/TextStyle"
+                                <LinearLayout
                                     android:layout_width="match_parent"
-                                    android:background="@drawable/textbox_bg"
-                                    android:elevation="5dp"
-                                    android:hint="Enter value here"
-                                    android:padding="@dimen/C8dp" />
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <TextView
+                                        android:id="@+id/tvQpsCurrentAcheive"
+                                        style="@style/TextStyle"
+                                        android:layout_weight="1"
+                                        android:background="@drawable/textbox_bg"
+                                        android:elevation="5dp"
+                                        android:padding="@dimen/C8dp" />
+
+                                    <TextView
+                                        android:id="@+id/tvQpsAcheive"
+                                        style="@style/TextStyle"
+                                        android:layout_weight="1"
+                                        android:background="@drawable/textbox_bg"
+                                        android:elevation="5dp"
+                                        android:padding="@dimen/C8dp" />
+
+
+                                </LinearLayout>
 
 
                             </LinearLayout>
@@ -239,7 +281,7 @@
                                     android:layout_width="match_parent"
                                     android:background="@drawable/textbox_bg"
                                     android:elevation="5dp"
-                                    android:hint="Enter value here"
+                                    android:hint="Enter date here"
                                     android:padding="@dimen/C8dp" />
 
 

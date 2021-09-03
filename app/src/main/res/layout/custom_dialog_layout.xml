@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical"
-  >
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/llHeader"
@@ -24,8 +23,7 @@
             android:paddingLeft="@dimen/C10dp"
             android:text="Select Item"
             android:textColor="@color/white"
-            android:textStyle="bold"
-            />
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/ivAddKey"
@@ -44,11 +42,12 @@
 
 
     <EditText
-        android:layout_margin="@dimen/C5dp"
+
         android:id="@+id/searchView"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_below="@+id/llHeader"
+        android:layout_margin="@dimen/C5dp"
         android:background="@drawable/search_backround"
         android:drawableLeft="@drawable/ic_search_icon"
         android:paddingLeft="5dp"
@@ -61,11 +60,11 @@
         tools:ignore="RtlCompat" />
 
     <EditText
-        android:layout_margin="@dimen/C5dp"
         android:id="@+id/et_addMapKey"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_below="@+id/llHeader"
+        android:layout_margin="@dimen/C5dp"
         android:layout_marginTop="@dimen/C10dp"
         android:background="@drawable/search_backround"
         android:hint="Enter key here..."
@@ -80,44 +79,44 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginLeft="@dimen/C5dp"
-        android:layout_marginRight="@dimen/C5dp"
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/travel_allowance"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/C80dp"
+        android:layout_margin="@dimen/C5dp"
         android:fadeScrollbars="false"
         android:scrollbarSize="5dip"
         android:scrollbarThumbVertical="@color/colorAccent"
         android:scrollbars="vertical" />
 
-    <Button
-        android:layout_margin="@dimen/C5dp"
-        android:id="@+id/btn_save"
-        android:layout_width="@dimen/C100dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/recycler_view"
-        android:layout_alignParentLeft="true"
-        android:layout_marginTop="@dimen/C10dp"
-        android:background="@drawable/button_blueg"
-        android:padding="@dimen/C8dp"
-        android:text="Save"
-        android:textColor="@color/color_white"
-        android:visibility="gone" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="@dimen/C100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_margin="@dimen/C5dp"
+            android:layout_marginTop="@dimen/C10dp"
+            android:background="@drawable/button_blueg"
+            android:padding="@dimen/C8dp"
+            android:text="Save"
+            android:textColor="@color/color_white"
+            android:visibility="gone" />
 
 
-    <Button
-        android:layout_margin="@dimen/C5dp"
-        android:id="@+id/no"
-        android:layout_width="@dimen/C100dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/recycler_view"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="@dimen/C10dp"
-        android:background="@drawable/button_blueg"
-        android:padding="@dimen/C8dp"
-        android:text="Close"
-        android:textColor="@color/color_white" />
-
-</RelativeLayout>
+        <Button
+            android:id="@+id/no"
+            android:layout_width="@dimen/C100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_margin="@dimen/C5dp"
+            android:layout_marginTop="@dimen/C10dp"
+            android:background="@drawable/button_blueg"
+            android:padding="@dimen/C8dp"
+            android:text="Close"
+            android:textColor="@color/color_white" />
+    </RelativeLayout>
+</LinearLayout>

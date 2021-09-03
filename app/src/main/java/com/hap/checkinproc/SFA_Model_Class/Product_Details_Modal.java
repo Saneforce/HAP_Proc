@@ -4,6 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Product_Details_Modal {
+    @SerializedName("POP_UOM")
+    @Expose
+    private String UOM;
     @SerializedName("id")
     @Expose
     private String id;
@@ -100,10 +103,12 @@ public class Product_Details_Modal {
     }
 
 
-    public Product_Details_Modal(String popMaterial, String bookingDate, int Qty) {
-        this.popMaterial = popMaterial;
+    public Product_Details_Modal(String id, String name, String bookingDate, int Qty, String UOM) {
+        this.id = id;
+        this.name = name;
         this.bookingDate = bookingDate;
         this.Qty = Qty;
+        this.UOM = UOM;
 
     }
 
@@ -233,5 +238,13 @@ public class Product_Details_Modal {
 
     public void setScheme(String scheme) {
         this.scheme = scheme;
+    }
+
+    public String getUOM() {
+        return UOM;
+    }
+
+    public void setUOM(String UOM) {
+        this.UOM = UOM;
     }
 }

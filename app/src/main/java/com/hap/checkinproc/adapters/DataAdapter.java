@@ -1,6 +1,7 @@
 package com.hap.checkinproc.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,7 +64,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
     public void onBindViewHolder(FruitViewHolder fruitViewHolder, final int position) {
         if (position >= contactListFiltered.size()) return;
         final Common_Model contact = contactListFiltered.get(position);
-        fruitViewHolder.mTextName.setText(contact.getName());
+        fruitViewHolder.mTextName.setText("" + contact.getName());
         String getAddress = contact.getAddress();
         String getPhone = contact.getPhone();
 
@@ -92,6 +93,17 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
                 lastCheckedPos = position;
                 lastChecked = fruitViewHolder.checkBox_select;
             }
+        } else if (typeName == 500) {
+
+            fruitViewHolder.mTextPhone.setVisibility(View.VISIBLE);
+            fruitViewHolder.mTextAddress.setVisibility(View.VISIBLE);
+
+            fruitViewHolder.mTextName.setText("Days Periodm : " + contact.getName() + "days");
+            fruitViewHolder.mTextPhone.setText("Total Ltrs   : " + contact.getTotal_Ltrs() + "ltrs");
+            fruitViewHolder.mTextAddress.setText("Gift         : " + contact.getQPS_Name());
+            //fruitViewHolder.mTextAddress.setTypeface(fruitViewHolder.mTextAddress.getTypeface(), Typeface.BOLD);
+
+            fruitViewHolder.mTextAddress.setTextColor(Color.parseColor("#72D043"));
         }
 
         fruitViewHolder.checkBox_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

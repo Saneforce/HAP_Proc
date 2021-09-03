@@ -64,7 +64,6 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
     }
 
 
-
     private void setupLayout() {
 
     }
@@ -88,7 +87,9 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
             tvtitle.setText("Map KeyList");
 
         }
-
+        if (type == 500) {
+            searchView.setVisibility(View.GONE);
+        }
 
         //recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
@@ -133,8 +134,6 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
                 }
             }
         });
-
-
 
 
     }

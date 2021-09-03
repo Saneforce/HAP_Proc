@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.POPActivity;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 
 import java.util.Calendar;
@@ -33,8 +36,8 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        EditText Qty, etPopMaterial;
-        TextView etBookingDate;
+        EditText Qty;
+        TextView etBookingDate, etPopMaterial, etUOM;
         RelativeLayout rlOtherBrand;
         ImageView rlDeletePOP;
 
@@ -42,6 +45,7 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
         public MyViewHolder(View view) {
             super(view);
             Qty = view.findViewById(R.id.etQty);
+            etUOM = view.findViewById(R.id.tvUOM);
             etPopMaterial = view.findViewById(R.id.etPopMaterial);
             etBookingDate = view.findViewById(R.id.etBookingDate);
             rlDeletePOP = view.findViewById(R.id.rlDeletePOP);
@@ -79,9 +83,33 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
             Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
 
 
-//            holder.Amount.setText("₹ " + Product_Details_Modal.getAmount());
-//            holder.etPrice.setText("" + Product_Details_Modal.getPrice());
-//            holder.Free.setText("" + Product_Details_Modal.getScheme());
+            holder.etPopMaterial.setText("" + Product_Details_Modal.getName());
+            holder.etUOM.setText("" + Product_Details_Modal.getUOM());
+            holder.Qty.setText("" + Product_Details_Modal.getQty());
+            holder.etBookingDate.setText("" + Product_Details_Modal.getBookingDate());
+
+
+            holder.Qty.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    if (s.toString().equals(""))
+                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty(0);
+                    else
+                        Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty(Integer.parseInt(s.toString()));
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+
 //            holder.sku.setText("" + Product_Details_Modal.getSku());
 //            holder.Qty.setText("" + Product_Details_Modal.getQty());
 
@@ -126,20 +154,20 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
 //            });
 //
 //
-//            holder.rlOtherBrand.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    try {
-//
-//                        selectdPos = position;
-//                        //   OtherBrandActivity.otherBrandActivity.showBrandDialog(position);
-//
-//
-//                    } catch (Exception e) {
-//                        Log.e("otherbrandAdapter: ", e.getMessage());
-//                    }
-//                }
-//            });
+            holder.etPopMaterial.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+
+                        selectdPos = position;
+                        POPActivity.popActivity.showBrandDialog(position);
+
+
+                    } catch (Exception e) {
+                        Log.e("otherbrandAdapter: ", e.getMessage());
+                    }
+                }
+            });
 //
 //            holder.etPrice.addTextChangedListener(new TextWatcher() {
 //                @Override
@@ -224,7 +252,9 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
 
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
-                            holder.etBookingDate.setText("" + dayOfMonth + "/" + monthOfYear + "/" + year);
+                            holder.etBookingDate.setText("" + year + "-" + monthOfYear + "-" + dayOfMonth);
+
+                            Product_Details_Modalitem.get(holder.getAdapterPosition()).setBookingDate(holder.etBookingDate.getText().toString());
                         }
                     }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
                     fromDatePickerDialog.show();
