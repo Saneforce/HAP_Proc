@@ -14,6 +14,18 @@ public class ModeOfTravel {
     @SerializedName("StEndNeed")
     @Expose
     private Integer stEndNeed;
+
+    @SerializedName("Attachment")
+    @Expose
+    private String Attachemnt;
+
+
+
+    @SerializedName("Max_Allowance")
+    @Expose
+    private int Max_Allowance;
+
+
     @SerializedName("DriverNeed")
     @Expose
     private Integer driverNeed;
@@ -22,6 +34,24 @@ public class ModeOfTravel {
     @Expose
     private Integer Eligible;
 
+    public String getAttachemnt() {
+        return Attachemnt;
+    }
+
+    public int getMax_Allowance() {
+        return Max_Allowance;
+    }
+    public void setAttachemnt(String attachemnt) {
+        Attachemnt = attachemnt;
+    }
+
+    public void setMax_Allowance(int max_Allowance) {
+        Max_Allowance = max_Allowance;
+    }
+
+    public void setEligible(Integer eligible) {
+        Eligible = eligible;
+    }
     public Integer getId() {
         return id;
     }

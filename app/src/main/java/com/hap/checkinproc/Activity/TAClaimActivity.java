@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.net.Uri;
@@ -26,6 +27,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewParent;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -63,6 +65,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity.Util.ImageFilePath;
 import com.hap.checkinproc.Activity.Util.SelectionModel;
+import com.hap.checkinproc.Activity_Hap.AllowancCapture;
 import com.hap.checkinproc.Activity_Hap.AttachementActivity;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
@@ -76,6 +79,7 @@ import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Common_Class.CtrlsListModel;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -84,10 +88,12 @@ import com.hap.checkinproc.Interface.DistanceMeterWatcher;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.OnAttachmentDelete;
+import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.FuelListAdapter;
 import com.hap.checkinproc.common.DatabaseHandler;
+import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.TimerService;
 
@@ -153,7 +159,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             fuelAmount, TextTotalAmount, editTexts, oeEditext, localText, OeText, grandTotal, txtallamt, txt_BrdAmt,
             txt_DrvBrdAmt, txtJointAdd, txtJNEligi, txtTAamt, txtDesig, txtDept, txtEmpId, txtName, oeTxtUKey, oeTxtUKeys,
             lcTxtUKey, lcTxtUKeys, tvTxtUKey, tvTxtUKeys, txtMaxKm, txtDrvrBrod, txtStyDays, txtLodgUKey,
-            txt_Styloc,txt_DAStyloc,txt_DATyp,txtAllwType,txtCAllwType,txEligDt,NoofNight,txldgTdyAmt;
+            txt_Styloc,txt_DAStyloc,txt_DATyp,txtAllwType,txtCAllwType,txEligDt,NoofNight,txldgTdyAmt,
+            edtRwID;
 
     EditText enterMode, enterFrom, enterTo, enterFare, etrTaFr, etrTaTo, editTextRemarks, editLaFare, edtOE, edt, edt1, edt_ldg_JnEmp,
             edt_ldg_bill, edtLcFare, lodgStyLocation, earCheckIn, earCheckOut, latCheckIn, latCheckOut, edtEarBill, edtLateBill,txDAOthName;
@@ -165,7 +172,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
             DriverNeed = "", DateForAPi = "", DateTime = "", shortName = "", Exp_Name = "", Id = "", userEnter = "",
             attachment = "", maxAllowonce = "", strRetriveType = "", StrToEnd = "", StrBus = "", StrTo = "", StrDaName = "",
             OEdynamicLabel = "", strFuelAmount = "", StrModeValue = "", dynamicLabel = "", StrDailyAllowance = "", ldgEmpName = "",
-            witOutBill = "", ValCd = "", fullPath = "", filePath = "", editMode = "", allowanceAmt = "", myldgEliAmt = "", myBrdEliAmt = "",
+            witOutBill = "", ValCd = "", fullPath = "", filePath = "", editMode = "",editModeId = "", allowanceAmt = "", myldgEliAmt = "", myBrdEliAmt = "",
             drvldgEliAmt = "", drvBrdEliAmt = "", strGT = "", totLodgAmt = "", start_Image = "", End_Imge = "", finalPath = "",
             attach_Count = "", ImageURl = "", keyEk = "EK", oeEditCnt = "", lcEditcnt = "", tvEditcnt = "", OeUKey = "",
             LcUKey = "", TlUKey = "", lcUKey = "", oeUKey = "", ImageUKey = "", taAmt = "", stayTotal = "", lodUKey = "",
@@ -175,8 +182,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     Integer totalkm = 0, totalPersonalKm = 0, Pva, C = 0, S = 0, editTextPositionss,
             oePosCnt = 0, lcPosCnt = 0, tvSize = 0, ttLod = 0, cnSty = 0, erlSty = 0, lteSty = 0;
 
-    int size = 0, lcSize = 0, OeSize = 0, daysBetween = 0;
-    long styDate = 0;
+    int size = 0, lcSize = 0, OeSize = 0, daysBetween = 0,OnlyNight=0,transferflg=0,TWMax_Km=300,FWMax_Km=1000;
+    long styDate = 0,nofNght=0;
     ScrollView scrlMain;
     Double tofuel = 0.0, ldgEliAmt = 0.0, ldgDrvEligi = 0.0, gTotal = 0.0, TotLdging = 0.0,
             GrandTotalAllowance = 0.0, fAmount = 0.0, doubleAmount = 0.0, myBrdAmt = 0.0, drvBrdAmt = 0.0,
@@ -188,6 +195,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     boolean changeStay=false;
     Button btn_sub, buttonSave,btnDAChange;
     int countLoding = 0;
+
+    //ArrayList<CtrlsListModel> uLCItems,uOEItems;
 
     ArrayList<SelectionModel> array = new ArrayList<>();
     ArrayList<String> DA = new ArrayList<>();
@@ -207,8 +216,9 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     List<ModeOfTravel> modelOfTravel;
     List<EditText> newEdt = new ArrayList<>();
 
-    Map<String, List<EditText>> usersByCountry = new HashMap<String, List<EditText>>();
-    Map<String, List<EditText>> userOtherExpense = new HashMap<String, List<EditText>>();
+    Map<String, CtrlsListModel> uTAItems = new HashMap<String, CtrlsListModel>();
+    Map<String, CtrlsListModel> uLCItems = new HashMap<String, CtrlsListModel>();
+    Map<String, CtrlsListModel> uOEItems = new HashMap<String, CtrlsListModel>();
     Map<String, String> AttachmentImg = new HashMap<String, String>();
     public static final String CheckInfo = "CheckInDetail";
     CustomListViewDialog customDialog;
@@ -417,6 +427,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
 
         ldgLocations.clear();
         loadLocations();
+        dynamicDate();
         if(ldgLocations.size()<2){
             getHapLocations();
         }
@@ -497,6 +508,14 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
         img_lodg_prvw.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
+                    @Override
+                    public void OnImageDelete(String Mode, int ImgCount) {
+                    if(ImgCount<1){
+                        txtLodgUKey.setText("");
+                    }
+                    }
+                });
                 DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
                 Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
                 stat.putExtra("position", txtLodgUKey.getText().toString());
@@ -714,16 +733,6 @@ Log.d("DACliam","Error : "+t.getMessage());
                 ShowDatePicker("LCO");
             }
         });
-        AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
-            @Override
-            public void OnImageDelete(String Mode, int ImgCount) {
-                if(Mode.equalsIgnoreCase("room")){
-                    if(ImgCount<1){
-                        txtLodgUKey.setText("");
-                    }
-                }
-            }
-        });
 
         earCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -901,6 +910,16 @@ Log.d("DACliam","Error : "+t.getMessage());
                         oeTxtUKeys = (TextView) (view.findViewById(R.id.txt_oe_ukey));
                         editMode = oeEditext.getText().toString();
                         OeUKey = oeTxtUKeys.getText().toString();
+
+                        AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
+                            @Override
+                            public void OnImageDelete(String Mode, int ImgCount) {
+                                if(ImgCount<1){
+                                    oeTxtUKeys.setText("");
+                                }
+                            }
+                        });
+
                         DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
                         Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
                         stat.putExtra("position", OeUKey);
@@ -1044,7 +1063,14 @@ Log.d("DACliam","Error : "+t.getMessage());
                         lcTxtUKeys = (TextView) (view.findViewById(R.id.txt_lc_ukey));
                         editMode = editTexts.getText().toString();
                         LcUKey = lcTxtUKeys.getText().toString();
-
+                        AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
+                            @Override
+                            public void OnImageDelete(String Mode, int ImgCount) {
+                                if(ImgCount<1){
+                                    lcTxtUKeys.setText("");
+                                }
+                            }
+                        });
                         DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
 
                         Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
@@ -1139,7 +1165,14 @@ Log.d("DACliam","Error : "+t.getMessage());
                             tvTxtUKeys = (TextView) (view.findViewById(R.id.txt_tv_ukey));
                             editMode = editText.getText().toString();
                             TlUKey = tvTxtUKeys.getText().toString();
-
+                            AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
+                                @Override
+                                public void OnImageDelete(String Mode, int ImgCount) {
+                                    if(ImgCount<1){
+                                        tvTxtUKeys.setText("");
+                                    }
+                                }
+                            });
                             DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
 
                             Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
@@ -1211,7 +1244,6 @@ Log.d("DACliam","Error : "+t.getMessage());
         if (TaSharedPrefernce.contains(MOT)) {
             ModeOfTravel = TaSharedPrefernce.getString(MOT, "");
         }
-        dynamicDate();
 
         btn_sub.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1296,6 +1328,7 @@ Log.d("DACliam","Error : "+t.getMessage());
             @Override
             public void onKilometerChange(JSONObject KMDetails) {
                 Toast.makeText(TAClaimActivity.this,"Fule Changed",Toast.LENGTH_SHORT).show();
+                changeDate(DateTime);
                 SumOFTAAmount();
             }
         });
@@ -1323,7 +1356,7 @@ Log.d("DACliam","Error : "+t.getMessage());
     }
     public void clearAll(){
     StartedKm = ""; ClosingKm = ""; ModeOfTravel = ""; PersonalKm = "";
-    DriverNeed = ""; DateForAPi = ""; DateTime = ""; shortName = ""; Exp_Name = ""; Id = ""; userEnter = "";
+    DriverNeed = ""; DateForAPi = ""; shortName = ""; Exp_Name = ""; Id = ""; userEnter = "";
     attachment = ""; maxAllowonce = ""; strRetriveType = ""; StrToEnd = ""; StrBus = ""; StrTo = ""; StrDaName = "";
     OEdynamicLabel = ""; strFuelAmount = ""; StrModeValue = ""; dynamicLabel = ""; StrDailyAllowance = ""; ldgEmpName = "";
     witOutBill = ""; ValCd = ""; fullPath = ""; filePath = ""; editMode = ""; allowanceAmt = ""; myldgEliAmt = ""; myBrdEliAmt = "";
@@ -1405,6 +1438,7 @@ Log.d("DACliam","Error : "+t.getMessage());
     SumOFLodging(0);
 
 }
+
     public void LateImage(View v) {
         CameraPermission cameraPermission = new CameraPermission(TAClaimActivity.this, getApplicationContext());
 
@@ -1494,6 +1528,7 @@ Log.d("DACliam","Error : "+t.getMessage());
     }
     public void ShowDatePicker(String str) {
         Calendar mcurrentTime = Calendar.getInstance();
+        Log.d("SelDt",DateTime);
         String[] sDtPart=DateTime.split("-");
         int day = Integer.parseInt(sDtPart[2]);
         int mnth = Integer.parseInt(sDtPart[1])-1;
@@ -1503,9 +1538,10 @@ Log.d("DACliam","Error : "+t.getMessage());
                 @Override
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     ldg_coutDt.setText(year+"-"+((monthOfYear<9)?"0":"")+(monthOfYear+1)+"-"+((dayOfMonth<10)?"0":"")+dayOfMonth);//(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                    long nofNght=DT.Daybetween( DateTime+" 00:00:00",year+"-"+((monthOfYear<9)?"0":"")+(monthOfYear+1)+"-"+((dayOfMonth<10)?"0":"")+dayOfMonth+" 00:00:00");
-                    if(nofNght==0) nofNght=1;
+                    nofNght=DT.Daybetween( DateTime+" 00:00:00",year+"-"+((monthOfYear<9)?"0":"")+(monthOfYear+1)+"-"+((dayOfMonth<10)?"0":"")+dayOfMonth+" 00:00:00");
+                    //if(nofNght==0) nofNght=1;
                     NoofNight.setText(" - "+ String.valueOf(nofNght)+" Nights - ");
+                    getStayAllow();
                 }
         }, yr, mnth, day);
         Calendar calendarmin = Calendar.getInstance();
@@ -1582,8 +1618,13 @@ Log.d("DACliam","Error : "+t.getMessage());
 //        }
     }
     public void onLCDelete(View v) {
-        linlocalCon.removeView((View) v.getParent());
+        LinearLayout pv=(LinearLayout) v.getParent().getParent();
 
+        edtRwID=pv.findViewById(R.id.lcRwID);
+        if(!edtRwID.getText().toString().equalsIgnoreCase(""))
+            uLCItems.remove(edtRwID.getText().toString());
+
+        linlocalCon.removeView(pv);
         LayoutTransition transition = new LayoutTransition();
         linlocalCon.setLayoutTransition(transition);
 
@@ -1594,7 +1635,13 @@ Log.d("DACliam","Error : "+t.getMessage());
 
     }
     public void onOEDelete(View v) {
-        LinearOtherAllowance.removeView((View) v.getParent());
+        LinearLayout pv=(LinearLayout) v.getParent().getParent();
+
+        edtRwID=pv.findViewById(R.id.oeRwID);
+        if(!edtRwID.getText().toString().equalsIgnoreCase(""))
+            uOEItems.remove(edtRwID.getText().toString());
+
+        LinearOtherAllowance.removeView(pv);
         LayoutTransition transition = new LayoutTransition();
         LinearOtherAllowance.setLayoutTransition(transition);
 
@@ -1812,17 +1859,23 @@ Log.d("DACliam","Error : "+t.getMessage());
         if(!mChckCont.isChecked())
             tTotAmt = continueStay +Double.parseDouble(sMyAmt)+ ldgDrvEligi + Float.parseFloat(sJnAmt) + Double.parseDouble(sErlyAmt) + Double.parseDouble(sLateAmt);
 
-        SumWOBLodging();
         int IntValue = (int) tTotAmt;
+
         edt_ldg_bill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue)});
         edtEarBill.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, IntValue)});
 
+
+        SumWOBLodging();
+        String sBillAmt = edt_ldg_bill.getText().toString().replaceAll("Rs.", "");
+        if (sBillAmt.isEmpty()) sBillAmt = "0";
+        if((nofNght<1 && OnlyNight==1) || transferflg==1) tTotAmt=Float.parseFloat(sBillAmt);
         totLodgAmt = String.valueOf(tTotAmt);
         //  lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
 
         //tTotAmt = Double.parseDouble(sMyAmt) + ldgDrvEligi + Float.parseFloat(sJnAmt)+Double.parseDouble(sErlyAmt) +Double.parseDouble(sLateAmt) ;
 
         lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
+        if((nofNght<1 && OnlyNight==1) || transferflg==1) txldgTdyAmt.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
 
 
         Log.v("COunt_stay", String.valueOf(count));
@@ -1844,29 +1897,24 @@ Log.d("DACliam","Error : "+t.getMessage());
         Double tBillTotAmt = Double.parseDouble(sMyAmt) + ldgDrvEligi + Float.parseFloat(sJnAmt);
 
         String sBillAmt = edt_ldg_bill.getText().toString().replaceAll("Rs.", "");
-        String sEarBillAmt = edtEarBill.getText().toString().replaceAll("Rs.", "");
-
-        if (sEarBillAmt.isEmpty()) sEarBillAmt = "0";
-
-        double tBalAmts = tTotAmt - Float.parseFloat(sEarBillAmt);
-        witOutBill = String.valueOf(tBalAmts);
-
-        Log.v("TOTAL_LODG_AMT", sldgAmt);
-        Log.v("TOTAL_LODG_BILL", sBillAmt);
-        Log.v("TOTAL_LODG_TOTAL", String.valueOf(tBalAmts));
-
-       // if (tBalAmts > 0) {
-            ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(tBalAmts));
-       // }
 
         if (sBillAmt.isEmpty()) sBillAmt = "0";
         double tBalAmt = tTotAmt - Float.parseFloat(sBillAmt);
+        if((nofNght<1 && OnlyNight==1) || transferflg==1) {
+            tBalAmt = 0;
+
+            tTotAmt = Float.parseFloat(sBillAmt);
+            lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
+            txldgTdyAmt.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
+        }
         witOutBill = String.valueOf(tBalAmt);
        // if (tBalAmt > 0) {
-            ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(tBalAmt));
-       // }
+        ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(tBalAmt));
+
+        // }
 
     }
+
     private void calOverAllTotal(Double localCov, Double otherExp, double tTotAmt) {
         Log.v("tTotAmt", String.valueOf(tTotAmt));
 
@@ -2004,10 +2052,15 @@ Log.d("DACliam","Error : "+t.getMessage());
                     linMode.setVisibility(View.GONE);
                     linBusMode.setVisibility(View.GONE);
                     linBikeMode.setVisibility(View.GONE);
+                    JsonObject itmSetup=ExpSetup.get(0).getAsJsonObject();
+                    OnlyNight=itmSetup.get("NgtOnlyFlag").getAsInt();
+                    transferflg=itmSetup.get("TRFlag").getAsInt();
+                    TWMax_Km=itmSetup.get("TWMax_Km").getAsInt();
+                    FWMax_Km=itmSetup.get("FWMax_Km").getAsInt();
 
                     if (jsonFuelAllowance != null || jsonFuelAllowance.size() != 0) {
                         Log.v("jsonFuelAllowance_IN", jsonFuelAllowance.toString());
-                        fuelListAdapter = new FuelListAdapter(getApplicationContext(), jsonFuelAllowance);
+                        fuelListAdapter = new FuelListAdapter(getApplicationContext(), jsonFuelAllowance,TWMax_Km,FWMax_Km);
                         mFuelRecycler.setAdapter(fuelListAdapter);
                         JsonObject jsFuel;
                         linMode.setVisibility(View.VISIBLE);
@@ -2027,9 +2080,9 @@ Log.d("DACliam","Error : "+t.getMessage());
                                     Integer Total = Integer.valueOf(total);
 
                                     if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler")){
-                                        if (Total >= 200) Total = 200;
+                                        if (Total >= TWMax_Km) Total = TWMax_Km;
                                     }else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
-                                        if (Total >= 1000)  Total = 1000;
+                                        if (Total >= FWMax_Km)  Total = FWMax_Km;
                                     }
                                     Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
                                     String TotalPersonal = String.valueOf(Total - Personal);
@@ -2320,7 +2373,14 @@ Log.d("DACliam","Error : "+t.getMessage());
                                         editMode = editText.getText().toString();
                                         TlUKey = tvTxtUKeys.getText().toString();
                                         Log.v("Travel_Location_preview", editMode);
-
+                                        AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
+                                            @Override
+                                            public void OnImageDelete(String Mode, int ImgCount) {
+                                                if(ImgCount<1){
+                                                    tvTxtUKeys.setText("");
+                                                }
+                                            }
+                                        });
                                         DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
                                         Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
                                         stat.putExtra("position", TlUKey);
@@ -2361,11 +2421,38 @@ Log.d("DACliam","Error : "+t.getMessage());
                             enterTo = tvchildView.findViewById(R.id.enter_to);
                             enterFare = tvchildView.findViewById(R.id.enter_fare);
                             tvTxtUKey = (TextView) (tvchildView.findViewById(R.id.txt_tv_ukey));
+                            TextView txRwID=tvchildView.findViewById(R.id.TARwID);
+                            ImageView imgAtt= tvchildView.findViewById(R.id.image_attach);
+                            ImageView imgPrv= tvchildView.findViewById(R.id.image_preview);
 
                             editText.setText("" + tldraftJson.get("Mode").getAsString());
                             enterFrom.setText(tldraftJson.get("From_P").getAsString());
                             enterTo.setText(tldraftJson.get("To_P").getAsString());
                             enterFare.setText(tldraftJson.get("Fare").getAsString());
+
+                            String sRWID=tldraftJson.get("Mode").getAsString()+"_"+System.nanoTime();
+                            txRwID.setText(sRWID);
+
+                            String AttFlg = tldraftJson.get("Attachments").getAsString();
+                            int maxVal = tldraftJson.get("Max_Allowance").getAsInt();
+                            if(maxVal==0) maxVal=50000;
+
+                            enterFare.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, maxVal)});
+
+                            List<CtrlsListModel.Ctrls> users = new ArrayList<>();
+                            CtrlsListModel.Ctrls Ctrl=new CtrlsListModel.Ctrls("From",enterFrom);
+                            users.add(Ctrl);
+                            Ctrl=new CtrlsListModel.Ctrls("To",enterTo);
+                            users.add(Ctrl);
+                            CtrlsListModel UTAItem=new CtrlsListModel(users,AttFlg);
+                            uTAItems.put(sRWID,UTAItem);
+                            if (AttFlg.equals("1")) {
+                                imgAtt.setVisibility(View.VISIBLE);
+                                imgPrv.setVisibility(View.VISIBLE);
+                            } else {
+                                imgAtt.setVisibility(View.GONE);
+                                imgPrv.setVisibility(View.GONE);
+                            }
 
 
                             if (!tldraftJson.get("Ukey").getAsString().equals("") &&
@@ -2443,7 +2530,14 @@ Log.d("DACliam","Error : "+t.getMessage());
                                     editMode = editText.getText().toString();
                                     TlUKey = tvTxtUKeys.getText().toString();
                                     Log.v("Travel_Location_preview", editMode);
-
+                                    AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
+                                        @Override
+                                        public void OnImageDelete(String Mode, int ImgCount) {
+                                            if(ImgCount<1){
+                                                tvTxtUKeys.setText("");
+                                            }
+                                        }
+                                    });
                                     DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
                                     Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
                                     stat.putExtra("position", TlUKey);
@@ -2553,8 +2647,8 @@ Log.d("DACliam","Error : "+t.getMessage());
                         ldg_cout.setText(StayDate.get(0).getAsJsonObject().get("COutTm").getAsString());
                         ldg_coutDt.setText(StayDate.get(0).getAsJsonObject().get("uCOutDate").getAsString());
 
-                        long nofNght=DT.Daybetween( CInDate+" 00:00:00",COutDate+" 00:00:00");
-                        if(nofNght==0) nofNght=1;
+                        nofNght=DT.Daybetween( CInDate+" 00:00:00",COutDate+" 00:00:00");
+                        //if(nofNght==0) nofNght=1;
                         NoofNight.setText(" - "+ String.valueOf(nofNght)+" Nights - ");
 
                         sLocId=StayDate.get(0).getAsJsonObject().get("LocId").getAsString();
@@ -2683,14 +2777,14 @@ Log.d("DACliam","Error : "+t.getMessage());
             jsonAddition = ldraft.getAsJsonArray("Additional");
 
            // ldg_cin.setText(ldraft.get("Stay_Date").getAsString());
-
-           // sLocId=ldraft.get("LocId").getAsString();
-           // sLocName=ldraft.get("Ldg_Stay_Loc").getAsString();
-           // lodgStyLocation.setText(sLocName);
-          //  if(sLocId.equalsIgnoreCase("-1"))
-          //      sLocName="Other Location";
-          //  txt_Styloc.setText(sLocName);
-
+            if(ContSty.size()<1) {
+                 sLocId=ldraft.get("LocId").getAsString();
+                 sLocName=ldraft.get("Ldg_Stay_Loc").getAsString();
+                 lodgStyLocation.setText(sLocName);
+                  if(sLocId.equalsIgnoreCase("-1"))
+                      sLocName="Other Location";
+                  txt_Styloc.setText(sLocName);
+            }
             Double drvAmt=Double.valueOf(ldraft.get("Driver_Ldg_Amount").getAsString());
             txtDrivEligi.setVisibility(View.GONE);
             if(drvAmt!=0) {
@@ -2843,6 +2937,8 @@ Log.d("DACliam","Error : "+t.getMessage());
 
             View LcchildView = linlocalCon.getChildAt(lcSize);
             localTotal.setVisibility(View.VISIBLE);
+
+            edtRwID=LcchildView.findViewById(R.id.lcRwID);
             editTexts = (TextView) (LcchildView.findViewById(R.id.local_enter_mode));
             editLaFare = (EditText) (LcchildView.findViewById(R.id.edt_la_fare));
             linLocalSpinner = (LinearLayout) LcchildView.findViewById(R.id.lin_loc_spiner);
@@ -2850,6 +2946,10 @@ Log.d("DACliam","Error : "+t.getMessage());
             lcPreview = (ImageView) (LcchildView.findViewById(R.id.img_prvw_lc));
             Dynamicallowance = (LinearLayout) LcchildView.findViewById(R.id.lin_allowance_dynamic);
             lcTxtUKey = (TextView) (LcchildView.findViewById(R.id.txt_lc_ukey));
+
+            String sRWID=expCode+"_"+System.nanoTime();
+            edtRwID.setText(sRWID);
+
             editTexts.setText(expCode);
             editLaFare.setText(expFare);
             if (!lcUKey.equals("")) {
@@ -2864,6 +2964,8 @@ Log.d("DACliam","Error : "+t.getMessage());
                 lcAttach.setVisibility(View.GONE);
                 lcPreview.setVisibility(View.GONE);
             }
+            int maxVal=lcdraftJson.get("Max_Allowance").getAsInt();
+            editLaFare.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, maxVal)});
             editLaFare.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -2923,14 +3025,21 @@ Log.d("DACliam","Error : "+t.getMessage());
             lcPreview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                     Integer valuelc = linlocalCon.indexOfChild(rowView);
                     View view = linlocalCon.getChildAt(valuelc);
+
                     editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
                     lcTxtUKeys = (TextView) (view.findViewById(R.id.txt_lc_ukey));
                     editMode = editTexts.getText().toString();
                     LcUKey = lcTxtUKeys.getText().toString();
-
+                    AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
+                        @Override
+                        public void OnImageDelete(String Mode, int ImgCount) {
+                            if(ImgCount<1){
+                                lcTxtUKeys.setText("");
+                            }
+                        }
+                    });
                     DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
 
                     Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
@@ -2941,7 +3050,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                     startActivity(stat);
                 }
             });
-            localConDisplay(expCode, jsonAddition, lcSize);
+            localConDisplay(sRWID, jsonAddition, lcSize,lcdraftJson.get("Attachments").getAsString());
 
 
         }
@@ -2957,12 +3066,10 @@ Log.d("DACliam","Error : "+t.getMessage());
             String expFare = lcdraftJson.get("Exp_Amt").getAsString();
             oeUKey = lcdraftJson.get("Ukey").getAsString();
 
-
             LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             otherExpenseLayout.setVisibility(View.VISIBLE);
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT);
-
             layoutParams.setMargins(15, 15, 15, 15);
 
             final View rowView = inflater.inflate(R.layout.activity_other_expense, null);
@@ -2972,6 +3079,8 @@ Log.d("DACliam","Error : "+t.getMessage());
             oePosCnt = LinearOtherAllowance.indexOfChild(rowView);
             View childView = LinearOtherAllowance.getChildAt(oePosCnt);
             otherExpenseLayout.setVisibility(View.VISIBLE);
+
+            edtRwID=childView.findViewById(R.id.oeRwID);
             oeEditext = (TextView) (childView.findViewById(R.id.other_enter_mode));
             edtOE = (EditText) (childView.findViewById(R.id.oe_fre_amt));
             oeAttach = (ImageView) (childView.findViewById(R.id.oe_attach_img));
@@ -2979,13 +3088,18 @@ Log.d("DACliam","Error : "+t.getMessage());
             linOtherSpinner = (LinearLayout) (childView.findViewById(R.id.lin_othr_spiner));
             oeTxtUKey = (TextView) (childView.findViewById(R.id.txt_oe_ukey));
 
-            if (lcdraftJson.get("Attachments").getAsString().equals("1")) {
+            String sRWID=expCode+"_"+System.nanoTime();
+            edtRwID.setText(sRWID);
+            String AttFlg=lcdraftJson.get("Attachments").getAsString();
+            int maxVal=lcdraftJson.get("Max_Allowance").getAsInt();
+            if (AttFlg.equals("1")) {
                 oeAttach.setVisibility(View.VISIBLE);
                 oePreview.setVisibility(View.VISIBLE);
             } else {
                 oeAttach.setVisibility(View.GONE);
                 oePreview.setVisibility(View.GONE);
             }
+
             oeEditext.setText(expCode);
             edtOE.setText(expFare);
             if (!oeUKey.equals("") && oeUKey != "" && !oeUKey.isEmpty() && oeUKey != null) {
@@ -3036,7 +3150,15 @@ Log.d("DACliam","Error : "+t.getMessage());
                     Log.v("OE_UKEY", OeUKey);
                     Log.v("OE_mode", editMode);
                     Log.v("OE_date", DateTime);
+                    AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
+                        @Override
+                        public void OnImageDelete(String Mode, int ImgCount) {
+                            if(ImgCount<1){
+                                oeTxtUKeys.setText("");
+                            }
+                        }
 
+                    });
                     Intent stat = new Intent(getApplicationContext(), AttachementActivity.class);
                     stat.putExtra("position", OeUKey);
                     stat.putExtra("headTravel", "OE");
@@ -3046,6 +3168,8 @@ Log.d("DACliam","Error : "+t.getMessage());
 
                 }
             });
+
+            edtOE.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, maxVal)});
             edtOE.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -3073,7 +3197,7 @@ Log.d("DACliam","Error : "+t.getMessage());
 
                 }
             });
-            OtherexpAdDisplay(expCode, jsonAddition, oePosCnt);
+            OtherexpAdDisplay(sRWID, jsonAddition, oePosCnt,AttFlg);
 
 
 
@@ -3115,40 +3239,47 @@ Log.d("DACliam","Error : "+t.getMessage());
             }
         } catch (Exception e) { }
     }
-    public void OtherexpAdDisplay(String modeName, JsonArray jsonAddition, int position) {
+    public void OtherexpAdDisplay(String modeName, JsonArray jsonAddition, int position,String flag) {
 
         JsonObject jsonObjectAdd = null;
-        List<EditText> users = new ArrayList<>();
+        List<CtrlsListModel.Ctrls> users = new ArrayList<>();
         for (int l = 0; l < jsonAddition.size(); l++) {
             jsonObjectAdd = (JsonObject) jsonAddition.get(l);
             String edtValueb = String.valueOf(jsonObjectAdd.get("Ref_Value"));
+            String valHint = String.valueOf(jsonObjectAdd.get("Ref_Code"));
             RelativeLayout childRel = new RelativeLayout(getApplicationContext());
             RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_START);
             layoutparams_3.setMargins(20, -10, 0, 0);
+
             edt1 = new EditText(getApplicationContext());
             edt1.setLayoutParams(layoutparams_3);
             edt1.setText(edtValueb.replaceAll("^[\"']+|[\"']+$", ""));
             edt1.setTextSize(13);
             childRel.addView(edt1);
-            users.add(edt1);
-            OEdynamicList.add(jsonObjectAdd.get("Ref_Code").getAsString());
-            if (l == jsonAddition.size() - 1) {
-                userOtherExpense.put(modeName, users);
-            }
+
+            OEdynamicList.add(valHint);
+
+            CtrlsListModel.Ctrls Ctrl=new CtrlsListModel.Ctrls(valHint,edt1);
+            users.add(Ctrl);
+
             View view = LinearOtherAllowance.getChildAt(position);
             OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
             OtherExpense.addView(childRel);
 
         }
+        CtrlsListModel UOEItem=new CtrlsListModel(users,flag);
+        uOEItems.put(modeName,UOEItem);
     }
-    public void localConDisplay(String modeName, JsonArray jsonAddition, int position) {
+    public void localConDisplay(String modeName, JsonArray jsonAddition, int position,String flag) {
 
         JsonObject jsonObjectAdd = null;
-        List<EditText> users = new ArrayList<>();
+        List<CtrlsListModel.Ctrls> users = new ArrayList<>();
         for (int l = 0; l < jsonAddition.size(); l++) {
             jsonObjectAdd = (JsonObject) jsonAddition.get(l);
             String edtValueb = String.valueOf(jsonObjectAdd.get("Ref_Value"));
+            String valHint = String.valueOf(jsonObjectAdd.get("Ref_Code"));
+
             RelativeLayout childRel = new RelativeLayout(getApplicationContext());
             RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_START);
@@ -3157,17 +3288,24 @@ Log.d("DACliam","Error : "+t.getMessage());
             edt1.setLayoutParams(layoutparams_3);
             edt1.setText(edtValueb.replaceAll("^[\"']+|[\"']+$", ""));
             edt1.setTextSize(13);
+            edt1.setHint(valHint);
             childRel.addView(edt1);
-            users.add(edt1);
-            dynamicLabelList.add(jsonObjectAdd.get("Ref_Code").getAsString());
-            if (l == jsonAddition.size() - 1) {
-                usersByCountry.put(modeName, users);
-            }
+
+            CtrlsListModel.Ctrls Ctrl=new CtrlsListModel.Ctrls(valHint,edt1);
+            users.add(Ctrl);
+
             View view = linlocalCon.getChildAt(position);
             Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
             Dynamicallowance.addView(childRel);
 
         }
+
+        dynamicLabelList.add(jsonObjectAdd.get("Ref_Code").getAsString());
+
+        CtrlsListModel ULCItem=new CtrlsListModel(users,flag);
+        uLCItems.put(modeName,ULCItem);
+        //usersByCountry.put(modeName, users);
+
     }
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
@@ -3445,19 +3583,46 @@ Log.d("DACliam","Error : "+t.getMessage());
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), attachName + 1);
 
     }
-    public void captureFile(Integer positionC) {
+    public void captureFile(Integer reqCode) {
         dialog.dismiss();
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
+            @Override
+            public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
+                String sMode="";
+
+                long nano_startTime = System.nanoTime();
+                ImageUKey = keyEk + UserDetails.getString("Sfcode","") + nano_startTime;
+                switch (reqCode){
+                    case 143: sMode="LOD;"+DateTime+";"+lodUKey+";Room;"+ImageUKey;break;
+                    case 123: sMode="TL;"+DateTime+";"+TlUKey+";"+editMode+";"+ImageUKey;break;
+                    case 99: sMode="OE;"+DateTime+";"+OeUKey+";"+editMode+";"+ImageUKey;break;
+                    case 786: sMode="LC;"+DateTime+";"+LcUKey+";"+editMode+";"+ImageUKey;break;
+                }
+
+                Intent mIntent = new Intent(TAClaimActivity.this, FileUploadService.class);
+                mIntent.putExtra("mFilePath", fullPath);
+                mIntent.putExtra("SF", UserDetails.getString("Sfcode",""));
+                mIntent.putExtra("FileName", FileName);
+                mIntent.putExtra("Mode", "ExpClaim;"+sMode);
+                FileUploadService.enqueueWork(TAClaimActivity.this, mIntent);
+
+            }
+        });
+        Intent intent = new Intent(TAClaimActivity.this, AllowancCapture.class);
+        intent.putExtra("allowance", "TAClaim");
+        startActivity(intent);
+       /* Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         outputFileUri = FileProvider.getUriForFile(TAClaimActivity.this, getApplicationContext().getPackageName() + ".provider", new File(getExternalCacheDir().getPath(), Shared_Common_Pref.Sf_Code + "_" + System.currentTimeMillis() + ".jpeg"));
         Log.v("FILE_PATH", String.valueOf(outputFileUri));
         intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        startActivityForResult(intent, positionC);
+        startActivityForResult(intent, reqCode);*/
+
 
     }
     public boolean validate() {
         String sMsg="";
-        if(lodgContvw.getVisibility()==View.VISIBLE){
+        if(lodgContvw.getVisibility()==View.VISIBLE){ /// && mChckCont.isChecked()==false
             if(txt_ldg_type.getText().toString().equalsIgnoreCase("")){
                 sMsg="Select the Lodging Type";
             }
@@ -3469,10 +3634,10 @@ Log.d("DACliam","Error : "+t.getMessage());
             else if(ldg_cin.getText().toString().equalsIgnoreCase("") && !txt_ldg_type.getText().toString().equalsIgnoreCase("Stay At Relative's House")) {
                 sMsg="Select the Check-In Time";
             }
-            else if(ldg_coutDt.getText().toString().equalsIgnoreCase("") && mChckCont.isChecked()==false && !txt_ldg_type.getText().toString().equalsIgnoreCase("Stay At Relative's House")) {
+            else if(ldg_coutDt.getText().toString().equalsIgnoreCase("") && !txt_ldg_type.getText().toString().equalsIgnoreCase("Stay At Relative's House")) {
                 sMsg="Select the Check-Out Date";
             }
-            else if(ldg_cout.getText().toString().equalsIgnoreCase("") && mChckCont.isChecked()==false && !txt_ldg_type.getText().toString().equalsIgnoreCase("Stay At Relative's House")) {
+            else if(ldg_cout.getText().toString().equalsIgnoreCase("") && !txt_ldg_type.getText().toString().equalsIgnoreCase("Stay At Relative's House")) {
                 sMsg="Select the Check-Out Time";
             }
             else if(!mChckCont.isChecked() && !txt_ldg_type.getText().toString().equalsIgnoreCase("Stay At Relative's House")){
@@ -3624,13 +3789,33 @@ Log.d("DACliam","Error : "+t.getMessage());
                 deleteButton = views.findViewById(R.id.delete_button);
                 tvTxtUKeys = views.findViewById(R.id.txt_tv_ukey);
                 editMode = editText.getText().toString();
+
+                edtRwID=views.findViewById(R.id.TARwID);
+                editModeId=edtRwID.getText().toString();
+
+                CtrlsListModel UTAItem=uTAItems.get(editModeId);
                 if(editMode.equalsIgnoreCase("")){
                     Toast.makeText(TAClaimActivity.this,"Select the Travel Mode",Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(AttachmentImg.get(editMode)!=null){
-                    if(AttachmentImg.get(editMode).equalsIgnoreCase("1") && tvTxtUKeys.getText().toString().equalsIgnoreCase("")){
-                        Toast.makeText(TAClaimActivity.this,"Please attach supporting files for "+editMode,Toast.LENGTH_LONG).show();
+                if(enterFrom.getText().toString().equalsIgnoreCase("")){
+                    Toast.makeText(TAClaimActivity.this,"Enter the From",Toast.LENGTH_LONG).show();
+                    enterFrom.requestFocus();
+                    return;
+                }
+                if(enterTo.getText().toString().equalsIgnoreCase("")){
+                    Toast.makeText(TAClaimActivity.this,"Enter the To",Toast.LENGTH_LONG).show();
+                    enterTo.requestFocus();
+                    return;
+                }
+                if(enterFare.getText().toString().equalsIgnoreCase("")){
+                    Toast.makeText(TAClaimActivity.this,"Enter the "+editMode+" Amount",Toast.LENGTH_LONG).show();
+                    enterFare.requestFocus();
+                    return;
+                }
+                if(UTAItem!=null) {
+                    if (UTAItem.getAttachNeed().equalsIgnoreCase("1") && tvTxtUKeys.getText().toString().equalsIgnoreCase("")) {
+                        Toast.makeText(TAClaimActivity.this, "Please attach supporting files for " + editMode, Toast.LENGTH_LONG).show();
                         return;
                     }
                 }
@@ -3641,6 +3826,8 @@ Log.d("DACliam","Error : "+t.getMessage());
                 jsonTrLoc.put("u_key", tvTxtUKeys.getText().toString());
                 jsonTrLoc.put("attach_count", AttachmentImg.get(editMode));
                 trvLoc.put(jsonTrLoc);
+
+
             }
             Log.v("TRAVEl_LOCATION", "0");
 
@@ -3662,41 +3849,54 @@ Log.d("DACliam","Error : "+t.getMessage());
 
             for (int lc = 0; lc < addExpSize; lc++) {
                 View view = linlocalCon.getChildAt(lc);
+                edtRwID=view.findViewById(R.id.lcRwID);
                 editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
                 editLaFare = (EditText) (view.findViewById(R.id.edt_la_fare));
                 Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
                 lcTxtUKeys = (TextView) (view.findViewById(R.id.txt_lc_ukey));
                 editMode = editTexts.getText().toString();
-                newEdt = usersByCountry.get(editMode);
-
-                JSONObject lcMode = new JSONObject();
-                lcMode.put("type", editMode);
-                lcMode.put("attach_count", AttachmentImg.get(editMode));
-                lcMode.put("total_amount", editLaFare.getText().toString());
-                lcMode.put("u_key", lcTxtUKeys.getText().toString());
-                lcMode.put("exp_type", "LC");
+                editModeId=edtRwID.getText().toString();
 
                 if(editMode.equalsIgnoreCase("")){
                     Toast.makeText(TAClaimActivity.this,"Select the Convenyance",Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(AttachmentImg.get(editMode)!=null){
-                    if(AttachmentImg.get(editMode).equalsIgnoreCase("1") && lcTxtUKeys.getText().toString().equalsIgnoreCase("")){
+                CtrlsListModel ULCItem=uLCItems.get(editModeId);
+                JSONArray lcModeRef = new JSONArray();
+                JSONObject lcMode = new JSONObject();
+                if(ULCItem!=null)
+                {
+                    lcMode.put("type", editMode);
+                    lcMode.put("attach_count", ULCItem.getAttachNeed());
+                    lcMode.put("total_amount", editLaFare.getText().toString());
+                    lcMode.put("u_key", lcTxtUKeys.getText().toString());
+                    lcMode.put("exp_type", "LC");
+
+                    List<CtrlsListModel.Ctrls> lstCtrl = ULCItem.getCtrlsList();
+                    for (int da = 0; da < lstCtrl.size(); da++) {
+                        String lblDetCap=lstCtrl.get(da).getTxtLabel();
+                        EditText txlcDet=lstCtrl.get(da).getTxtValue();
+                        if(txlcDet.getText().toString().equalsIgnoreCase("")){
+                            Toast.makeText(TAClaimActivity.this,"Enter the "+lblDetCap,Toast.LENGTH_LONG).show();
+                            txlcDet.requestFocus();
+                            return;
+                        }
+                        JSONObject AditionallLocalConvenyance = new JSONObject();
+                        AditionallLocalConvenyance.put("KEY", lblDetCap);
+                        AditionallLocalConvenyance.put("VALUE", txlcDet.getText().toString());
+                        lcModeRef.put(AditionallLocalConvenyance);
+                    }
+
+                    if(editLaFare.getText().toString().equalsIgnoreCase("")){
+                        Toast.makeText(TAClaimActivity.this,"Enter the "+editMode+" Amount",Toast.LENGTH_LONG).show();
+                        editLaFare.requestFocus();
+                        return;
+                    }
+                    if(ULCItem.getAttachNeed().equalsIgnoreCase("1") && lcTxtUKeys.getText().toString().equalsIgnoreCase("")){
                         Toast.makeText(TAClaimActivity.this,"Please attach supporting files for "+editMode,Toast.LENGTH_LONG).show();
                         return;
                     }
                 }
-                JSONArray lcModeRef = new JSONArray();
-                Log.e("ADD_SIZE", String.valueOf(newEdt.size()));
-
-                for (int da = 0; da < newEdt.size(); da++) {
-
-                    JSONObject AditionallLocalConvenyance = new JSONObject();
-                    AditionallLocalConvenyance.put("KEY", dynamicLabelList.get(da));
-                    AditionallLocalConvenyance.put("VALUE", newEdt.get(da).getText().toString());
-                    lcModeRef.put(AditionallLocalConvenyance);
-                }
-
                 lcMode.put("ad_exp", lcModeRef);
                 addExp.put(lcMode);
             }
@@ -3707,37 +3907,55 @@ Log.d("DACliam","Error : "+t.getMessage());
 
             for (int OC = 0; OC < addOtherExp; OC++) {
                 View view = LinearOtherAllowance.getChildAt(OC);
+
+                edtRwID=view.findViewById(R.id.oeRwID);
                 oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
                 edtOE = (EditText) (view.findViewById(R.id.oe_fre_amt));
                 OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
                 editMode = oeEditext.getText().toString();
                 oeTxtUKey = (TextView) (view.findViewById(R.id.txt_oe_ukey));
-
-                newEdt = userOtherExpense.get(editMode);
-                JSONObject lcModes2 = new JSONObject();
-                lcModes2.put("type", editMode);
-                lcModes2.put("attach_count", AttachmentImg.get(editMode));
-                lcModes2.put("total_amount", edtOE.getText().toString());
-                lcModes2.put("u_key", oeTxtUKey.getText().toString());
-                lcModes2.put("exp_type", "OE");
+                editModeId=edtRwID.getText().toString();
 
                 if(editMode.equalsIgnoreCase("")){
-                    Toast.makeText(TAClaimActivity.this,"Select the Convenyance",Toast.LENGTH_LONG).show();
+                    Toast.makeText(TAClaimActivity.this,"Select the Other Expense",Toast.LENGTH_LONG).show();
                     return;
                 }
-                if(AttachmentImg.get(editMode).equalsIgnoreCase("1") && oeTxtUKey.getText().toString().equalsIgnoreCase("")){
-                    Toast.makeText(TAClaimActivity.this,"Please attach supporting files for "+editMode,Toast.LENGTH_LONG).show();
-                    return;
-                }
-
+                CtrlsListModel UOEItem=uOEItems.get(editModeId);
                 JSONArray lcModeRef1 = new JSONArray();
-                for (int da = 0; da < newEdt.size(); da++) {
-                    JSONObject AditionallLocalConvenyance = new JSONObject();
-                    AditionallLocalConvenyance.put("KEY", OEdynamicList.get(da));
-                    AditionallLocalConvenyance.put("VALUE", newEdt.get(da).getText().toString());
+                JSONObject lcModes2 = new JSONObject();
+                if(UOEItem!=null){
+                    lcModes2.put("type", editMode);
+                    lcModes2.put("attach_count", UOEItem.getAttachNeed());
+                    lcModes2.put("total_amount", edtOE.getText().toString());
+                    lcModes2.put("u_key", oeTxtUKey.getText().toString());
+                    lcModes2.put("exp_type", "OE");
 
-                    lcModeRef1.put(AditionallLocalConvenyance);
+                    List<CtrlsListModel.Ctrls> lstCtrl = UOEItem.getCtrlsList();
+                    for (int da = 0; da < lstCtrl.size(); da++) {
+                        String lblDetCap=lstCtrl.get(da).getTxtLabel();
+                        EditText txoeDet=lstCtrl.get(da).getTxtValue();
+                        if(txoeDet.getText().toString().equalsIgnoreCase("")){
+                            Toast.makeText(TAClaimActivity.this,"Enter the "+lblDetCap,Toast.LENGTH_LONG).show();
+                            txoeDet.requestFocus();
+                            return;
+                        }
+                        JSONObject AditionallLocalConvenyance = new JSONObject();
+                        AditionallLocalConvenyance.put("KEY", lblDetCap);
+                        AditionallLocalConvenyance.put("VALUE", txoeDet.getText().toString());
+
+                        lcModeRef1.put(AditionallLocalConvenyance);
+                    }
+                    if(edtOE.getText().toString().equalsIgnoreCase("")){
+                        Toast.makeText(TAClaimActivity.this,"Enter the "+editMode+" Amount",Toast.LENGTH_LONG).show();
+                        edtOE.requestFocus();
+                        return;
+                    }
+                    if(UOEItem.getAttachNeed().equalsIgnoreCase("1") && oeTxtUKey.getText().toString().equalsIgnoreCase("")){
+                        Toast.makeText(TAClaimActivity.this,"Please attach supporting files for "+editMode,Toast.LENGTH_LONG).show();
+                        return;
+                    }
                 }
+
                 lcModes2.put("ad_exp", lcModeRef1);
                 othrExp.put(lcModes2);
                 Log.v("OE_EXPENSE", lcModes2.toString());
@@ -4021,6 +4239,13 @@ Log.d("DACliam","Error : "+t.getMessage());
         }
         if (type == 10) {
             clearAll();
+
+            txt_date.setText(myDataset.get(position).getName());
+            Log.d("JSON_VALUE", myDataset.get(position).getId());
+            DateTime = myDataset.get(position).getId();
+            DateTime = DateTime.replaceAll("^[\"']+|[\"']+$", "");
+            changeDate(DateTime);
+            /*
             txt_date.setText(myDataset.get(position).getName());
             Log.d("JSON_VALUE", myDataset.get(position).getId());
             DateTime = myDataset.get(position).getId();
@@ -4037,43 +4262,100 @@ Log.d("DACliam","Error : "+t.getMessage());
             linAll.setVisibility(View.VISIBLE);
             linRemarks.setVisibility(View.VISIBLE);
             linFareAmount.setVisibility(View.VISIBLE);
-            linback.setVisibility(View.GONE);
+            linback.setVisibility(View.GONE);*/
 
         } else if (type == 11) {
             modeTextView.setText(myDataset.get(position).getName());
-        } else if (type == 8) {
+        }
+        else if (type == 8) {
 
             Integer editTextPosition = myDataset.get(position).getPho();
             View view = travelDynamicLoaction.getChildAt(editTextPosition);
             editText = (TextView) (view.findViewById(R.id.enter_mode));
+            EditText txtTAFrom = (EditText) (view.findViewById(R.id.enter_from));
+            EditText txtTATo = (EditText) (view.findViewById(R.id.enter_to));
+            EditText txtTAFare = (EditText) (view.findViewById(R.id.enter_fare));
+
+            ImageView imgAtt= view.findViewById(R.id.image_attach);
+            ImageView imgPrv= view.findViewById(R.id.image_preview);
             editText.setText(myDataset.get(position).getName());
 
+            TextView txRwID=view.findViewById(R.id.TARwID);
+            if(!txRwID.getText().toString().equalsIgnoreCase(""))
+                uTAItems.remove(txRwID.getText().toString());
+
+            String sRWID=myDataset.get(position).getName()+"_"+System.nanoTime();
+            txRwID.setText(sRWID);
+
+            JSONObject Selitem=myDataset.get(position).getJSONObject();
+            int maxVal=50000;
+            String AttFlg="0";
+            try {
+                AttFlg = Selitem.getString("Attachemnt");
+                maxVal = Selitem.getInt("Max_Allowance");
+                if(maxVal==0) maxVal=50000;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            txtTAFare.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, maxVal)});
+
+            List<CtrlsListModel.Ctrls> users = new ArrayList<>();
+            CtrlsListModel.Ctrls Ctrl=new CtrlsListModel.Ctrls("From",txtTAFrom);
+            users.add(Ctrl);
+            Ctrl=new CtrlsListModel.Ctrls("To",txtTATo);
+            users.add(Ctrl);
+            CtrlsListModel UTAItem=new CtrlsListModel(users,AttFlg);
+            uTAItems.put(sRWID,UTAItem);
+            if (AttFlg.equals("1")) {
+                imgAtt.setVisibility(View.VISIBLE);
+                imgPrv.setVisibility(View.VISIBLE);
+            } else {
+                imgAtt.setVisibility(View.GONE);
+                imgPrv.setVisibility(View.GONE);
+            }
         }
         else if (type == 80) {
             editTextPositionss = myDataset.get(position).getPho();
             View view = linlocalCon.getChildAt(editTextPositionss);
+
+            edtRwID=view.findViewById(R.id.lcRwID);
             editTexts = (TextView) (view.findViewById(R.id.local_enter_mode));
             edtLcFare = (EditText) (view.findViewById(R.id.edt_la_fare));
             lcAttach = (ImageView) (view.findViewById(R.id.la_attach_iamg));
             lcPreview = (ImageView) (view.findViewById(R.id.img_prvw_lc));
+
             edtLcFare.setText("");
+
+            if(!edtRwID.getText().toString().equalsIgnoreCase(""))
+                uLCItems.remove(edtRwID.getText().toString());
+
+            String sRWID=myDataset.get(position).getName()+"_"+System.nanoTime();
+            edtRwID.setText(sRWID);
+
             editTexts.setText(myDataset.get(position).getName());
             StrModeValue = myDataset.get(position).getName();
             Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
             Dynamicallowance.removeAllViews();
+
             JSONObject Selitem=myDataset.get(position).getJSONObject();
             JSONArray AddFlds= null;
             int maxVal=1000;
+            String AttFlg="0";
             try {
                 AddFlds = Selitem.getJSONArray("value");
+                AttFlg = Selitem.getString("Attachemnt");
                 maxVal = Selitem.getInt("Max_Allowance");
                 if(maxVal==0) maxVal=1000;
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
             edtLcFare.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, maxVal)});
-            LocalConvenyanceApi(StrModeValue,AddFlds);
-            if (AttachmentImg.get(StrModeValue).equals("1")) {
+
+            LocalConvenyanceApi(sRWID,AddFlds,AttFlg);
+
+            if (AttFlg.equals("1")) {
                 lcAttach.setVisibility(View.VISIBLE);
                 lcPreview.setVisibility(View.VISIBLE);
             } else {
@@ -4081,10 +4363,13 @@ Log.d("DACliam","Error : "+t.getMessage());
                 lcPreview.setVisibility(View.GONE);
             }
 
-        } else if (type == 90) {
+        }
+        else if (type == 90) {
 
             editTextPositionss = myDataset.get(position).getPho();
             View view = LinearOtherAllowance.getChildAt(editTextPositionss);
+
+            edtRwID=view.findViewById(R.id.oeRwID);
             oeEditext = (TextView) (view.findViewById(R.id.other_enter_mode));
             edtOE=(EditText) (view.findViewById(R.id.oe_fre_amt));
             oeAttach = (ImageView) (view.findViewById(R.id.oe_attach_img));
@@ -4092,14 +4377,22 @@ Log.d("DACliam","Error : "+t.getMessage());
             OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
             oeEditext.setText(myDataset.get(position).getName());
             StrModeValue = myDataset.get(position).getName();
-            Log.e("StrMode", StrModeValue);
+
+            if(!edtRwID.getText().toString().equalsIgnoreCase(""))
+                uOEItems.remove(edtRwID.getText().toString());
+
+            String sRWID=myDataset.get(position).getName()+"_"+System.nanoTime();
+            edtRwID.setText(sRWID);
+
             OtherExpense.removeAllViews();
 
             JSONObject Selitem=myDataset.get(position).getJSONObject();
             JSONArray AddFlds= null;
             int maxVal=1000;
+            String AttFlg="0";
             try {
                 AddFlds = Selitem.getJSONArray("value");
+                AttFlg = Selitem.getString("Attachemnt");
                 maxVal = Selitem.getInt("Max_Allowance");
                 if(maxVal==0) maxVal=1000;
             } catch (JSONException e) {
@@ -4107,13 +4400,11 @@ Log.d("DACliam","Error : "+t.getMessage());
             }
             edtOE.setText("");
             edtOE.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0, maxVal)});
-            OtherExpenseApi(StrModeValue,AddFlds);
+            OtherExpenseApi(sRWID,AddFlds,AttFlg);
 
             attachCountList.add(AttachmentImg.get(StrModeValue));
-            Log.e("COUNTATTACH", attachCountList.toString());
-            Log.e("COUNTATTACH", AttachmentImg.get(StrModeValue));
 
-            if (AttachmentImg.get(StrModeValue).equals("1")) {
+            if (AttFlg.equals("1")) {
                 oeAttach.setVisibility(View.VISIBLE);
                 oePreview.setVisibility(View.VISIBLE);
             } else {
@@ -4122,7 +4413,8 @@ Log.d("DACliam","Error : "+t.getMessage());
             }
 
 
-        } else if (type == 100) {
+        }
+        else if (type == 100) {
             String TrTyp = myDataset.get(position).getName();
             travelTypeMode.setText(TrTyp);
 
@@ -4134,10 +4426,26 @@ Log.d("DACliam","Error : "+t.getMessage());
                 diverAllowanceLinear.setVisibility(View.GONE);
             }
 
-        } else if (type == 1) {
+        }
+        else if (type == 1) {
             enterMode.setText(myDataset.get(position).getName());
         }
 
+    }
+    public void changeDate(String chooseDate){
+        displayTravelMode(chooseDate);
+        travelDynamicLoaction.removeAllViews();
+        linAddAllowance.setVisibility(View.VISIBLE);
+        linlocalCon.removeAllViews();
+        LinearOtherAllowance.removeAllViews();
+        localText.setText("");
+        OeText.setText("");
+        localTotal.setVisibility(View.GONE);
+        otherExpenseLayout.setVisibility(View.GONE);
+        linAll.setVisibility(View.VISIBLE);
+        linRemarks.setVisibility(View.VISIBLE);
+        linFareAmount.setVisibility(View.VISIBLE);
+        linback.setVisibility(View.GONE);
     }
     public void getStayAllow(){
 
@@ -4214,8 +4522,19 @@ Log.d("DACliam","Error : "+t.getMessage());
                     String name = modelOfTravel.get(i).getName();
                     String modeId = String.valueOf(modelOfTravel.get(i).getId());
                     String driverMode = String.valueOf(modelOfTravel.get(i).getDriverNeed());
+                    JSONObject item=new JSONObject();
+                    try {
+                        item.put("id",id);
+                        item.put("name",name);
+                        item.put("modeId",modeId);
+                        item.put("Attachemnt",modelOfTravel.get(i).getAttachemnt());
+                        item.put("Max_Allowance",modelOfTravel.get(i).getMax_Allowance());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-                    Model_Pojo = new Common_Model(name, id, modeId, "", countPosition);
+                    Model_Pojo = new Common_Model(id, name, item,countPosition);
+                    //Model_Pojo = new Common_Model(name, id, modeId, "", countPosition);
                     if (id.equals("0")) {
                         modelTravelType.add(Model_Pojo);
                     }
@@ -4334,10 +4653,10 @@ Log.d("DACliam","Error : "+t.getMessage());
     }
 
     @SuppressLint("ResourceType")
-    public void LocalConvenyanceApi(String Exp_Name, JSONArray additionArray) {
+    public void LocalConvenyanceApi(String Exp_Name, JSONArray additionArray,String flag) {
         try{
-            List<EditText> users = new ArrayList<>();
-            for (int l = 0; l <= additionArray.length(); l++) {
+            List<CtrlsListModel.Ctrls> users = new ArrayList<>();
+            for (int l = 0; l < additionArray.length(); l++) {
                 JSONObject json_in = additionArray.getJSONObject(l);
                 dynamicLabel = json_in.getString("Ad_Fld_Name");
                 dynamicLabelList.add(dynamicLabel);
@@ -4350,24 +4669,22 @@ Log.d("DACliam","Error : "+t.getMessage());
                 edt.setHint(dynamicLabel);
                 edt.setId(12345);
                 edt.setTextSize(13);
-                /*int sizeInDp=15;
-                float scale = getResources().getDisplayMetrics().density;
-                int dpAsPixels = 160;//(int) (sizeInDp*scale + 0.5f);
-                edt.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);*/
+
                 edt.setTextColor(getResources().getColor( R.color.black));
-                //edt.setBackgroundResource(R.drawable.item_border);
-
                 childRel.addView(edt);
-                users.add(edt);
 
-                if (l == additionArray.length() - 1) {
-                    usersByCountry.put(Exp_Name, users);
-                }
+                CtrlsListModel.Ctrls Ctrl=new CtrlsListModel.Ctrls(dynamicLabel,edt);
+                users.add(Ctrl);
+
                 View view = linlocalCon.getChildAt(editTextPositionss);
                 Dynamicallowance = (LinearLayout) view.findViewById(R.id.lin_allowance_dynamic);
                 Dynamicallowance.addView(childRel);
             }
+            CtrlsListModel ULCItem=new CtrlsListModel(users,flag);
+            uLCItems.put(Exp_Name,ULCItem);
+            //usersByCountry.put(Exp_Name, users);
         } catch (Exception e) {
+
         }
     }
     /*public void LocalConvenyanceApi(String sss) {
@@ -4523,40 +4840,42 @@ Log.d("DACliam","Error : "+t.getMessage());
     }*/
 
     @SuppressLint("ResourceType")
-    public void OtherExpenseApi(String Exp_Name, JSONArray additionArray) {
+    public void OtherExpenseApi(String Exp_Name, JSONArray additionArray,String flag) {
         try {
-            List<EditText> otherExpenseEdit = new ArrayList<>();
-            for (int l = 0; l <= additionArray.length(); l++) {
-                            JSONObject json_in = additionArray.getJSONObject(l);
-                            OEdynamicLabel = json_in.getString("Ad_Fld_Name");
-                            OEdynamicList.add(OEdynamicLabel);
+            List<CtrlsListModel.Ctrls> otherExpenseEdit = new ArrayList<>();
+            for (int l = 0; l < additionArray.length(); l++) {
+                JSONObject json_in = additionArray.getJSONObject(l);
+                OEdynamicLabel = json_in.getString("Ad_Fld_Name");
+                OEdynamicList.add(OEdynamicLabel);
 
-                            RelativeLayout childRel = new RelativeLayout(getApplicationContext());
-                            RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                            layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_END);
-                            layoutparams_3.setMargins(0, 10, 0, 10);
-                            edt = new EditText(getApplicationContext());
-                            edt.setLayoutParams(layoutparams_3);
-                            for (int da = 0; da < OEdynamicList.size(); da++) {
-                                edt.setHint(OEdynamicList.get(da));
-                            }
-                            /*int sizeInDp=15;
-                            float scale = getResources().getDisplayMetrics().density;
-                            int dpAsPixels = (int) (sizeInDp*scale + 0.5f);
-                            edt.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);*/
-                            edt.setId(12345);
-                            edt.setTextSize(13);
-                            edt.setTextColor(getResources().getColor( R.color.black));
-                            //edt.setBackgroundResource(R.drawable.item_border);
-                            childRel.addView(edt);
-                            otherExpenseEdit.add(edt);
-                            if (l == additionArray.length() - 1) {
-                                userOtherExpense.put(Exp_Name, otherExpenseEdit);
-                            }
-                            View view = LinearOtherAllowance.getChildAt(editTextPositionss);
-                            OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
-                            OtherExpense.addView(childRel);
-                        }
+                RelativeLayout childRel = new RelativeLayout(getApplicationContext());
+                RelativeLayout.LayoutParams layoutparams_3 = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                layoutparams_3.addRule(RelativeLayout.ALIGN_PARENT_END);
+                layoutparams_3.setMargins(0, 10, 0, 10);
+                edt = new EditText(getApplicationContext());
+                edt.setLayoutParams(layoutparams_3);
+
+                edt.setHint(OEdynamicLabel);
+                /*int sizeInDp=15;
+                float scale = getResources().getDisplayMetrics().density;
+                int dpAsPixels = (int) (sizeInDp*scale + 0.5f);
+                edt.setPadding(dpAsPixels,dpAsPixels,dpAsPixels,dpAsPixels);*/
+                edt.setId(12345);
+                edt.setTextSize(13);
+                edt.setTextColor(getResources().getColor( R.color.black));
+                //edt.setBackgroundResource(R.drawable.item_border);
+                childRel.addView(edt);
+
+                CtrlsListModel.Ctrls Ctrl=new CtrlsListModel.Ctrls(OEdynamicLabel,edt);
+                otherExpenseEdit.add(Ctrl);
+
+                View view = LinearOtherAllowance.getChildAt(editTextPositionss);
+                OtherExpense = (LinearLayout) view.findViewById(R.id.lin_other_expense_dynamic);
+                OtherExpense.addView(childRel);
+            }
+
+            CtrlsListModel ULCItem=new CtrlsListModel(otherExpenseEdit,flag);
+            uOEItems.put(Exp_Name,ULCItem);
         } catch (Exception e) {
         }
     }
@@ -4648,7 +4967,7 @@ Log.d("DACliam","Error : "+t.getMessage());
 
                     if (jsonFuelAllowance != null || jsonFuelAllowance.size() != 0) {
                         Log.v("jsonFuelAllowance_IN", jsonFuelAllowance.toString());
-                        fuelListAdapter = new FuelListAdapter(getApplicationContext(), jsonFuelAllowance);
+                        fuelListAdapter = new FuelListAdapter(getApplicationContext(), jsonFuelAllowance,TWMax_Km,FWMax_Km);
                         mFuelRecycler.setAdapter(fuelListAdapter);
                         JsonObject jsFuel;
 
@@ -4660,8 +4979,8 @@ Log.d("DACliam","Error : "+t.getMessage());
                                 if (end != 0) {
                                     String total = String.valueOf(end - start);
                                     Integer Total = Integer.valueOf(total);
-                                    if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler") && Total >= 200) Total = 200;
-                                    if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler") && Total >= 1000) Total = 1000;
+                                    if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler") && Total >= TWMax_Km) Total = TWMax_Km;
+                                    if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler") && Total >= FWMax_Km) Total = FWMax_Km;
 
                                     Integer Personal = Integer.valueOf("" + jsFuel.get("Personal_Km").getAsString());
                                     String TotalPersonal = String.valueOf(Total - Personal);

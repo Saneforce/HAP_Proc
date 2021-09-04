@@ -585,7 +585,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 Intent aIntent;
                 String sDeptType = UserDetails.getString("DeptType", "");
                  if (sDeptType.equalsIgnoreCase("1")) {
-                aIntent = new Intent(Dashboard.this, ProcurementDashboardActivity.class);
+                    aIntent = new Intent(Dashboard.this, ProcurementDashboardActivity.class);
                  } else {
                      Shared_Common_Pref.Sync_Flag = "0";
                      aIntent = new Intent(Dashboard.this, Offline_Sync_Activity.class);

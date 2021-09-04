@@ -360,9 +360,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Deleting single TrackDetails
     public void deleteAllTrackDetails() {
         try {
+//            SQLiteDatabase db = this.getWritableDatabase();
+//            db.delete(TABLE_Track, Loc_Date + " = ?",
+//                    new String[]{"0"});
+//            db.close();
             String selectQuery = "DELETE FROM " + TABLE_Track + " WHERE " + Flag + "=0";
             SQLiteDatabase db = this.getWritableDatabase();
-            db.rawQuery(selectQuery, null);
+            db.execSQL(selectQuery);
             db.close();
         } catch (Exception e) {
             e.printStackTrace();

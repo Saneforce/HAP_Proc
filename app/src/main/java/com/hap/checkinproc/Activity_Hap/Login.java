@@ -350,7 +350,7 @@ public class Login extends AppCompatActivity {
                         if (checkValueStore())
                             aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
                         else
-                            aIntent = new Intent(getApplicationContext(), Offline_Sync_Activity.class);
+                            aIntent = new Intent(getApplicationContext(), Dashboard_Two.class);
                     }
                     startActivity(aIntent);
                 }else{
@@ -369,7 +369,7 @@ public class Login extends AppCompatActivity {
             JSONArray storeData = db.getMasterData(Constants.Distributor_List);
             if (storeData != null && storeData.length() > 0)
                 return true;
-        } catch (JSONException e) {
+        } catch (Exception  e) {
             e.printStackTrace();
         }
 
@@ -540,6 +540,9 @@ public class Login extends AppCompatActivity {
             mProgress.dismiss();
             return;
         }
+
+        eMail = "arjun.s@hap.in";
+        // eMail = "nalliappan.r@hap.in";
         //eMail = "anbu@saneforce.com";
         //eMail="giritharan.d@hap.in";
         //eMail = "kaviyarasu.m@hap.in";

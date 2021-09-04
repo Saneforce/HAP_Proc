@@ -105,7 +105,11 @@
             android:layout_height="wrap_content"></TextView>
     </LinearLayout>
 
-
+<TextView
+    android:id="@+id/TARwID"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:visibility="gone"/>
     <ImageView
         android:id="@+id/delete_button"
         android:layout_width="30dp"

@@ -24,16 +24,28 @@ import java.text.DecimalFormat;
 public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyViewHolder> {
     Context context;
     JsonArray jsonArray;
+    int TWMax_Km,FWMax_Km;
     boolean editMode;
-    public FuelListAdapter(Context context, JsonArray jsonArray) {
+    public FuelListAdapter(Context context, JsonArray jsonArray,int twMax_Km,int fwMax_Km) {
         this.context = context;
         this.jsonArray = jsonArray;
         this.editMode=true;
+        this.TWMax_Km=twMax_Km;
+        this.FWMax_Km=fwMax_Km;
     }
     public FuelListAdapter(Context context, JsonArray jsonArray,boolean editMode) {
         this.context = context;
         this.jsonArray = jsonArray;
         this.editMode=editMode;
+        this.TWMax_Km=300;
+        this.FWMax_Km=1000;
+    }
+    public FuelListAdapter(Context context, JsonArray jsonArray,boolean editMode,int twMax_Km,int fwMax_Km) {
+        this.context = context;
+        this.jsonArray = jsonArray;
+        this.editMode=editMode;
+        this.TWMax_Km=twMax_Km;
+        this.FWMax_Km=fwMax_Km;
     }
 
 
@@ -73,8 +85,8 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
 
                 if (jsFuel.get("MOT_Name").getAsString().equals("Two Wheeler")) {
 
-                    if (Total >= 200) {
-                        Total = 200;
+                    if (Total >= TWMax_Km) {
+                        Total = TWMax_Km;
                         Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
                         String TotalPersonal = String.valueOf(Total - Personal);
                         holder.PersonalTextKM.setText(TotalPersonal);
@@ -106,8 +118,8 @@ public class FuelListAdapter extends RecyclerView.Adapter<FuelListAdapter.MyView
                         holder.TextTotalAmount.setText("Rs. " + qz);
                     }
                 } else if (jsFuel.get("MOT_Name").getAsString().equals("Four Wheeler")) {
-                    if (Total >= 1000) {
-                        Total = 1000;
+                    if (Total >= FWMax_Km) {
+                        Total = FWMax_Km;
                         Integer Personal = Integer.valueOf(jsFuel.get("Personal_Km").getAsString());
                         String TotalPersonal = String.valueOf(Total - Personal);
                         holder.PersonalTextKM.setText(TotalPersonal);

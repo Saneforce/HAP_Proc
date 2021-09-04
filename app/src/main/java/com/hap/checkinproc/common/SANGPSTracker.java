@@ -51,6 +51,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.JsonObject;
 import com.hap.checkinproc.Activity_Hap.Block_Information;
+import com.hap.checkinproc.Activity_Hap.Common_Class;
 import com.hap.checkinproc.Activity_Hap.MainActivity;
 import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -147,8 +148,10 @@ public class SANGPSTracker extends Service {
     /**
      * The current location.
      */
+    private Location preLocation=null;
     private Location mLocation;
     private Boolean mShownSettings;
+    private Date pDtTm=new Date();
     public SANGPSTracker() {
 
     }
@@ -474,10 +477,24 @@ public class SANGPSTracker extends Service {
         latitude = mLocation.getLatitude();
 
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date currDt=new Date(mLocation.getTime());
+        float cDis=0;
+        if(preLocation!=null)
+        {
+            cDis=preLocation.distanceTo(mLocation);
+            Log.d("Location_Dist", String.valueOf(cDis));
+            Common_Class DtClass=new Common_Class();
+            if(DtClass.minutesBetween(dateFormat.format(new Date(pDtTm.getTime())),dateFormat.format(new Date(currDt.getTime())))<5)
+                return;
+           // if(cDis>150 && cDis<2500)
+           //     return;
+        }
+        pDtTm.setTime(currDt.getTime());
+        preLocation=mLocation;
         String strTime = dateFormat.format(new Date(mLocation.getTime()));
 
         String strBatt=Float.toString(batteryPct);
-        String strSpeed = String.valueOf(mLocation.getSpeed()) + " km/h";
+        String strSpeed = String.valueOf(mLocation.getSpeed()) + "-"+cDis+" km/h";
         String strHAcc = String.valueOf(mLocation.getAccuracy());
         String strBear = String.valueOf(mLocation.getBearing());
         String strEt = String.valueOf(mLocation.getElapsedRealtimeNanos());

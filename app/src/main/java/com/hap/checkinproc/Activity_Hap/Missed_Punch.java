@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -48,8 +49,10 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Model_Class.MissedPunch;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.FileUploadService;
 import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
@@ -502,6 +505,16 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
 
 
                     editor.commit();
+
+                    AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
+                        @Override
+                        public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
+                            Photo_Name = FileName;
+                            imageConvert=fullPath;
+                            EndedImage="file://"+fullPath;
+                            EndedKmImage.setImageBitmap(image);
+                        }
+                    });
                     Intent intent = new Intent(Missed_Punch.this, AllowancCapture.class);
                     intent.putExtra("allowance", "Missed");
                     startActivity(intent);
@@ -712,6 +725,13 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
     public void missedPunchSubmit() {
 
 
+        Intent mIntent = new Intent(this, FileUploadService.class);
+        mIntent.putExtra("mFilePath", imageConvert);
+        mIntent.putExtra("SF", UserDetails.getString("Sfcode",""));
+        mIntent.putExtra("FileName", Photo_Name);
+        mIntent.putExtra("Mode", "Travel");
+        FileUploadService.enqueueWork(this, mIntent);
+        
         JSONObject jsonleaveType = new JSONObject();
         JSONObject jsonleaveTypeS = new JSONObject();
         JSONArray jsonArray1 = new JSONArray();
@@ -1041,25 +1061,5 @@ public class Missed_Punch extends AppCompatActivity implements DatePickerDialog.
                 Log.v("print_failure", "ggg" + t.getMessage());
             }
         });
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-
-        if (sharedpreferences.contains("SharedImages")) {
-            EndedImage = sharedpreferences.getString("SharedImages", "");
-            Log.e("Privacypolicy", "Checking" + EndedImage);
-            EndedKmImage.setImageURI(Uri.parse(EndedImage));
-            imageConvert = EndedImage.substring(7);
-            Log.e("COnvert", EndedImage.substring(7));
-            Log.e("COnvert", imageConvert);
-            getMulipart(imageConvert, 0);
-
-        }
-
-        Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
 }

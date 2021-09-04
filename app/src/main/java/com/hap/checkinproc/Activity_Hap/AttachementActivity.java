@@ -112,11 +112,11 @@ public class AttachementActivity extends AppCompatActivity {
                     }
 
 
+                    int finalIndex = m;
                     deleteImage.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
-                            deleteImage(jsonObject.get("Img_U_key").getAsString(), jsonObject.get("lat").getAsString(), jsonObject.get("Insert_Date_Time").getAsString());
+                            deleteImage(jsonObject.get("Img_U_key").getAsString(), jsonObject.get("lat").getAsString(), jsonObject.get("Insert_Date_Time").getAsString(), (View) v.getParent());
 
                         }
                     });
@@ -142,7 +142,7 @@ public class AttachementActivity extends AppCompatActivity {
     public static void setOnAttachmentDeleteListener(OnAttachmentDelete mOnAttachmentDelete) {
         deleteListener = mOnAttachmentDelete;
     }
-    public void deleteImage(String ImageUKey, String ImageUrl, String DateTime) {
+    public void deleteImage(String ImageUKey, String ImageUrl, String DateTime,View view) {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         Call<JsonObject> mCall = apiInterface.dltePrvws(ImageUrl, ImageUKey, DateTime, shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
@@ -150,14 +150,15 @@ public class AttachementActivity extends AppCompatActivity {
         mCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-
                 JsonObject jsonObject = response.body();
                 Log.e("RESPONSE", jsonObject.get("success").getAsString());
+                //parentLinearLayout.removeViewAt(Position);
+                parentLinearLayout.removeView(view);
                 ImgCount--;
                 deleteListener.OnImageDelete(sMode,ImgCount);
-                if (jsonObject.get("success").getAsString().equals("true")) {
-                    finish();
-                }
+//                if (jsonObject.get("success").getAsString().equals("true")) {
+//                    finish();
+//                }
             }
 
             @Override
