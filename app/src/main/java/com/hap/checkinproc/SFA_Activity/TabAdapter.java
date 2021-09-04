@@ -79,9 +79,6 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
     public void OutletFilter(String flag) {
 
-        String id = Dashboard_Route.dashboard_route.Distributor_Id;
-        if (id == null)
-            id = "t";
 
         Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(Dashboard_Route.dashboard_route);
 
@@ -92,24 +89,15 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
         Retailer_Modal_ListFilter = new ArrayList<>();
 
+        String Route_id = shared_common_pref.getvalue(Constants.Route_Id);
 
-        for (int i = 0; i < Retailer_Modal_List.size(); i++) {
 
-            String Route_id = shared_common_pref.getvalue(Constants.Route_Id);
+        if (Retailer_Modal_List != null) {
+            for (int i = 0; i < Retailer_Modal_List.size(); i++) {
 
-            if (flag.equals("1")) {
 
-                if (!Route_id.equals("")) {
-                    if (Route_id.equals(Retailer_Modal_List.get(i).getTownCode())) {
-                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-                    }
-                } else {
-                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                if (flag.equals("1")) {
 
-                }
-            } else if (flag.equals("2")) {
-
-                if (Retailer_Modal_List.get(i).getStatusname().equals("PENDING")) {
                     if (!Route_id.equals("")) {
                         if (Route_id.equals(Retailer_Modal_List.get(i).getTownCode())) {
                             Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
@@ -118,39 +106,35 @@ public class TabAdapter extends FragmentStatePagerAdapter {
                         Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
 
                     }
-                }
+                } else if (flag.equals("2")) {
 
-            } else if (flag.equals("3")) {
-                if (Retailer_Modal_List.get(i).getStatusname().equals("COMPLETED")) {
-                    if (!Route_id.equals("")) {
-                        if (Route_id.equals(Retailer_Modal_List.get(i).getTownCode())) {
+                    if (Retailer_Modal_List.get(i).getStatusname().equals("PENDING")) {
+                        if (!Route_id.equals("")) {
+                            if (Route_id.equals(Retailer_Modal_List.get(i).getTownCode())) {
+                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                            }
+                        } else {
                             Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-                        }
-                    } else {
-                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
 
+                        }
+                    }
+
+                } else if (flag.equals("3")) {
+                    if (Retailer_Modal_List.get(i).getStatusname().equals("COMPLETED")) {
+                        if (!Route_id.equals("")) {
+                            if (Route_id.equals(Retailer_Modal_List.get(i).getTownCode())) {
+                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                            }
+                        } else {
+                            Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+
+                        }
                     }
                 }
+
+
             }
-
-//            if (flag.equals("1")) {
-//                if (Retailer_Modal_List.get(i).getDistCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-//                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-//                }
-//            }
-//            if (flag.equals("2")) {
-//                if (Retailer_Modal_List.get(i).getInvoice_Flag().equals("2")) {
-//                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-//                }
-//            }
-//            if (flag.equals("3")) {
-//                if (!Retailer_Modal_List.get(i).getInvoice_Flag().equals("2")) {
-//                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-//                }
-//            }
-
         }
-
         notifyDataSetChanged();
     }
 

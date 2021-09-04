@@ -86,8 +86,8 @@ public class Reports_Outler_Name extends AppCompatActivity {
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
-                Log.e("MAsterSyncView_Result", response.body() + "");
-                Log.e("TAG", "response 33: " + new Gson().toJson(response.body()));
+//                Log.e("MAsterSyncView_Result", response.body() + "");
+//                Log.e("TAG", "response 33: " + new Gson().toJson(response.body()));
                 userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
                 }.getType();
                 Retailer_Modal_List = gson.fromJson(new Gson().toJson(response.body()), userType);

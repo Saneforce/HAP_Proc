@@ -98,6 +98,8 @@
 
                                 <TextView
                                     style="@style/TextStyle"
+                                    android:drawableRight="@drawable/mandatory"
+                                    android:drawablePadding="@dimen/C3dp"
                                     android:paddingTop="@dimen/C10dp"
                                     android:text="Other Brand (ltr)" />
 
@@ -123,6 +125,8 @@
 
                                 <TextView
                                     style="@style/TextStyle"
+                                    android:drawableRight="@drawable/mandatory"
+                                    android:drawablePadding="@dimen/C3dp"
                                     android:paddingTop="@dimen/C10dp"
                                     android:text="HAP Brand (ltr)" />
 
@@ -146,6 +150,8 @@
 
                                 <TextView
                                     style="@style/TextStyle"
+                                    android:drawableRight="@drawable/mandatory"
+                                    android:drawablePadding="@dimen/C3dp"
                                     android:paddingTop="@dimen/C10dp"
                                     android:text="New Order (ltr)" />
 
@@ -190,6 +196,8 @@
 
                                 <TextView
                                     style="@style/TextStyle"
+                                    android:drawableRight="@drawable/mandatory"
+                                    android:drawablePadding="@dimen/C3dp"
                                     android:paddingTop="@dimen/C10dp"
                                     android:text="Period (days)" />
 
@@ -212,6 +220,8 @@
 
                                 <TextView
                                     style="@style/TextStyle"
+                                    android:drawableRight="@drawable/mandatory"
+                                    android:drawablePadding="@dimen/C3dp"
                                     android:paddingTop="@dimen/C10dp"
                                     android:text="Gift" />
 
@@ -232,10 +242,53 @@
                                 android:layout_height="wrap_content"
                                 android:orientation="vertical">
 
-                                <TextView
-                                    style="@style/TextStyle"
-                                    android:paddingTop="@dimen/C10dp"
-                                    android:text="Acheive" />
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                                    android:paddingTop="@dimen/C8dp">
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1">
+
+                                        <RelativeLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content">
+
+                                            <TextView
+                                                style="@style/TextStyle"
+                                                android:layout_weight="1"
+                                                android:drawableRight="@drawable/mandatory"
+                                                android:drawablePadding="@dimen/C3dp"
+                                                android:text="Acheived" />
+
+                                        </RelativeLayout>
+                                    </LinearLayout>
+
+
+                                    <LinearLayout
+                                       android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_weight="1">
+
+                                        <RelativeLayout
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content">
+
+                                            <TextView
+                                                style="@style/TextStyle"
+                                                android:layout_weight="1"
+                                                android:drawableRight="@drawable/mandatory"
+                                                android:drawablePadding="@dimen/C3dp"
+                                                android:text="Target" />
+
+                                        </RelativeLayout>
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
 
                                 <LinearLayout
                                     android:layout_width="match_parent"
@@ -272,6 +325,8 @@
 
                                 <TextView
                                     style="@style/TextStyle"
+                                    android:drawableRight="@drawable/mandatory"
+                                    android:drawablePadding="@dimen/C3dp"
                                     android:paddingTop="@dimen/C10dp"
                                     android:text="Booking Date" />
 

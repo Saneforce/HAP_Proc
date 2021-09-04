@@ -82,12 +82,14 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
         tvQPS = (TextView) findViewById(R.id.tvQPS);
         tvCoolerInfo = (TextView) findViewById(R.id.tvCoolerInfo);
         tvAddBrand = (TextView) findViewById(R.id.tvAddBrand);
-        tvSubmit = (TextView) findViewById(R.id.submit_other_brand);
+        tvSubmit = (TextView) findViewById(R.id.btnSubmit);
 
         TextView tvRetailorName = findViewById(R.id.Category_Nametext);
+        TextView tvRetailorCode = findViewById(R.id.retailorCode);
         Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(this);
 
-        tvRetailorName.setText(shared_common_pref.getvalue(Constants.Retailor_Name_ERP_Code));
+        tvRetailorName.setText(Shared_Common_Pref.OutletName);
+        tvRetailorCode.setText(shared_common_pref.getvalue(Constants.Retailor_ERP_Code));
 
 
         tvOrder.setOnClickListener(this);
@@ -108,7 +110,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
         otherBrandList = gson.fromJson(Compititor_List, userTypeCompetitor);
 
 
-        Getorder_Array_List.add(new Product_Details_Modal("Select the Other Brand", "", 0, 0, 0, ""));
+        Getorder_Array_List.add(new Product_Details_Modal("", "Select the Other Brand", "", 0, 0, 0, ""));
 
         otherBrandAdapter = new OtherBrandAdapter(Getorder_Array_List, R.layout.other_brand_order_recyclerview,
                 this);
@@ -138,95 +140,117 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
                 break;
 
             case R.id.tvAddBrand:
-                Getorder_Array_List.add(new Product_Details_Modal("Select the Other Brand", "", 0, 0, 0, ""));
+                Getorder_Array_List.add(new Product_Details_Modal("", "Select the Other Brand", "", 0, 0, 0, ""));
                 otherBrandAdapter.notifyData(Getorder_Array_List);
                 break;
-            case R.id.submit_other_brand:
+            case R.id.btnSubmit:
                 SaveOrder();
                 break;
         }
     }
 
     private void SaveOrder() {
-        if (common_class.isNetworkAvailable(this)) {
+        List<Product_Details_Modal> submitBrandList = new ArrayList<>();
 
-            AlertDialogBox.showDialog(OtherBrandActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
-                @Override
-                public void PositiveMethod(DialogInterface dialog, int id) {
+        submitBrandList.clear();
 
-                    JSONArray data = new JSONArray();
-                    JSONObject ActivityData = new JSONObject();
+        for (int i = 0; i < Getorder_Array_List.size(); i++) {
+            if (!Getorder_Array_List.get(i).getName().equals("") && !Getorder_Array_List.get(i).getSku().equals("") &&
+                    Getorder_Array_List.get(i).getAmount() > 0 &&
+                    !Getorder_Array_List.get(i).getScheme().equals("")) {
+                submitBrandList.add(Getorder_Array_List.get(i));
 
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
-                    Calendar calobj = Calendar.getInstance();
-                    String dateTime = df.format(calobj.getTime());
-
-                    try {
-                        JSONObject HeadItem = new JSONObject();
-                        HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
-                        HeadItem.put("divCode",Shared_Common_Pref.Div_Code);
-                        HeadItem.put("CustCode", Shared_Common_Pref.OutletCode);
-                        HeadItem.put("CustName", Shared_Common_Pref.OutletName);
-                        HeadItem.put("StkCode", Shared_Common_Pref.DistributorCode);
-                        HeadItem.put("Datetime", dateTime);
-                        ActivityData.put("Json_Head", HeadItem);
+            }
+        }
 
 
-                        JSONArray Order_Details = new JSONArray();
-                        for (int z = 0; z < Getorder_Array_List.size(); z++) {
-                            JSONObject ProdItem = new JSONObject();
-                            ProdItem.put("BrandNm", Getorder_Array_List.get(z).getName());
-                            ProdItem.put("BrandSKU", Getorder_Array_List.get(z).getSku());
-                            ProdItem.put("Qty", Getorder_Array_List.get(z).getQty());
-                            //  ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
-                            ProdItem.put("Price", Getorder_Array_List.get(z).getPrice());
-                            ProdItem.put("Amt", Getorder_Array_List.get(z).getAmount());
-                            ProdItem.put("Sch", Getorder_Array_List.get(z).getScheme());
-                            Order_Details.put(ProdItem);
+        if (submitBrandList.size() > 0) {
+
+
+            if (common_class.isNetworkAvailable(this)) {
+
+                AlertDialogBox.showDialog(OtherBrandActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
+                    @Override
+                    public void PositiveMethod(DialogInterface dialog, int id) {
+
+                        JSONArray data = new JSONArray();
+                        JSONObject ActivityData = new JSONObject();
+
+                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+                        Calendar calobj = Calendar.getInstance();
+                        String dateTime = df.format(calobj.getTime());
+
+                        try {
+                            JSONObject HeadItem = new JSONObject();
+                            HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
+                            HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
+                            HeadItem.put("CustCode", Shared_Common_Pref.OutletCode);
+                            HeadItem.put("CustName", Shared_Common_Pref.OutletName);
+                            HeadItem.put("StkCode", Shared_Common_Pref.DistributorCode);
+                            HeadItem.put("Datetime", dateTime);
+                            ActivityData.put("Json_Head", HeadItem);
+
+
+                            JSONArray Order_Details = new JSONArray();
+                            for (int z = 0; z < Getorder_Array_List.size(); z++) {
+                                JSONObject ProdItem = new JSONObject();
+                                ProdItem.put("id", submitBrandList.get(z).getId());
+                                ProdItem.put("BrandNm", submitBrandList.get(z).getName());
+                                ProdItem.put("BrandSKU", submitBrandList.get(z).getSku());
+                                ProdItem.put("Qty", submitBrandList.get(z).getQty());
+                                //  ProdItem.put("Product_RegularQty", Getorder_Array_List.get(z).getRegularQty());
+                                ProdItem.put("Price", submitBrandList.get(z).getPrice());
+                                ProdItem.put("Amt", submitBrandList.get(z).getAmount());
+                                ProdItem.put("Sch", submitBrandList.get(z).getScheme());
+                                Order_Details.put(ProdItem);
+                            }
+                            ActivityData.put("Entry_Details", Order_Details);
+                            data.put(ActivityData);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        ActivityData.put("Entry_Details", Order_Details);
-                        data.put(ActivityData);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<JsonObject> responseBodyCall = apiInterface.saveOtherBrand(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
-                    responseBodyCall.enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            if (response.isSuccessful()) {
-                                try {
-                                    Log.e("JSON_VALUES", response.body().toString());
-                                    JSONObject jsonObjects = new JSONObject(response.body().toString());
-                                    String san = jsonObjects.getString("success");
-                                    Log.e("Success_Message", san);
-                                    if (san.equals("true")) {
-                                        Toast.makeText(OtherBrandActivity.this, "Other brand Submitted Successfully", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(getApplicationContext(), Invoice_History.class));
-                                        finish();
+                        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                        Call<JsonObject> responseBodyCall = apiInterface.saveOtherBrand(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                        responseBodyCall.enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                if (response.isSuccessful()) {
+                                    try {
+                                        Log.e("JSON_VALUES", response.body().toString());
+                                        JSONObject jsonObjects = new JSONObject(response.body().toString());
+                                        String san = jsonObjects.getString("success");
+                                        Log.e("Success_Message", san);
+                                        if (san.equals("true")) {
+                                            Toast.makeText(OtherBrandActivity.this, "Other brand Submitted Successfully", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(getApplicationContext(), Invoice_History.class));
+                                            finish();
+                                        }
+
+                                    } catch (Exception e) {
+
                                     }
-
-                                } catch (Exception e) {
-
                                 }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                            Log.e("SUBMIT_VALUE", "ERROR");
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<JsonObject> call, Throwable t) {
+                                Log.e("SUBMIT_VALUE", "ERROR");
+                            }
+                        });
 
-                }
+                    }
 
-                @Override
-                public void NegativeMethod(DialogInterface dialog, int id) {
-                    dialog.dismiss();
-                }
-            });
+                    @Override
+                    public void NegativeMethod(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+            } else {
+                Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
+            common_class.showMsg(this, "Other Brand is empty");
+
         }
     }
 
@@ -246,7 +270,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         if (selectedPos >= 0) {
             customDialog.dismiss();
-            Getorder_Array_List.set(selectedPos, new Product_Details_Modal(myDataset.get(position).getName(), "", 0, 0, 0, ""));
+            Getorder_Array_List.set(selectedPos, new Product_Details_Modal(myDataset.get(position).getId(), myDataset.get(position).getName(), "", 0, 0, 0, ""));
             otherBrandAdapter.notifyData(Getorder_Array_List);
 
         }

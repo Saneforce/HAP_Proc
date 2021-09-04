@@ -93,7 +93,8 @@ public class Product_Details_Modal {
         this.Amount = Amount;
     }
 
-    public Product_Details_Modal(String name, String sku, int price, int Qty, double amount, String scheme) {
+    public Product_Details_Modal(String id,String name, String sku, int price, int Qty, double amount, String scheme) {
+        this.id=id;
         this.name = name;
         this.sku = sku;
         this.price = price;

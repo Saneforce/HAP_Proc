@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -349,103 +350,110 @@ public class Common_Class {
             call.enqueue(new Callback<Object>() {
                 @Override
                 public void onResponse(Call<Object> call, Response<Object> response) {
-                    Gson gson = new Gson();
+                    try { Gson gson = new Gson();
 
 
-                    db.deleteMasterData(key);
-                    db.addMasterData(key, gson.toJson(response.body()));
+                        if (shared_common_pref == null)
+                            shared_common_pref = new Shared_Common_Pref(activity);
+
+                        if (key.equals(Retailer_OutletList)) {
+                            updateUi = ((UpdateResponseUI) activity);
+
+                            shared_common_pref.save(key, gson.toJson(response.body()));
+
+                            userTypeRetailor = new TypeToken<ArrayList<Retailer_Modal_List>>() {
+                            }.getType();
+
+                            retailer_modal_list = new ArrayList<>();
+                            retailer_modal_list.clear();
+                            retailer_modal_list = gson.fromJson(shared_common_pref.getvalue(Retailer_OutletList), userTypeRetailor);
+                            if (retailer_modal_list != null)
+                                updateUi.onLoadFilterData(retailer_modal_list);
+
+                        } else {
+
+                            db.deleteMasterData(key);
+                            db.addMasterData(key, gson.toJson(response.body()));
+
+                        }
 
 
-                    if (shared_common_pref == null)
-                        shared_common_pref = new Shared_Common_Pref(activity);
+                        if (key.equals(Constants.GetTodayOrder_List)) {
 
-                    if (key.equals(Retailer_OutletList)) {
-                        updateUi = ((UpdateResponseUI) activity);
+                            updateUi = ((UpdateResponseUI) activity);
 
-                        shared_common_pref.save(key, gson.toJson(response.body()));
+                            String OrdersTable = String.valueOf(db.getMasterData(Constants.GetTodayOrder_List));
+                            userTypeGetTodayOrder = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
+                            }.getType();
+                            outletReport_view_modalList = gson.fromJson(OrdersTable, userTypeGetTodayOrder);
 
-                        userTypeRetailor = new TypeToken<ArrayList<Retailer_Modal_List>>() {
-                        }.getType();
-                        retailer_modal_list = gson.fromJson(shared_common_pref.getvalue(Retailer_OutletList), userTypeRetailor);
+                            updateUi.onLoadTodayOrderList(outletReport_view_modalList);
+                        }
 
-                        updateUi.onLoadFilterData(retailer_modal_list);
+                        if (key.equals(TodayOrderDetails_List)) {
 
+                            updateUi = ((UpdateResponseUI) activity);
+
+                            updateUi.onLoadDataUpdateUI(gson.toJson(response.body()));
+                        }
+
+
+                        switch (key) {
+                            //case Retailer_OutletList:
+
+                            // getDataFromApi(Constants.Distributor_List, activity, boolRefresh);
+                            // break;
+                            case Distributor_List:
+                                getDataFromApi(Category_List, activity, boolRefresh);
+                                break;
+                            case Category_List:
+                                getDataFromApi(Product_List, activity, boolRefresh);
+                                break;
+                            case Product_List:
+                                getDataFromApi(Rout_List, activity, boolRefresh);
+                                break;
+                            case Rout_List:
+                                if (boolRefresh)
+                                    getDataFromApi(Constants.GetTodayOrder_List, activity, boolRefresh);
+
+                                else {
+                                    ProgressdialogShow(0, "Data Syncing");
+                                    activity.startActivity(new Intent(activity, SFA_Activity.class));
+                                }
+                                break;
+
+                            case Constants.GetTodayOrder_List:
+                                if (boolRefresh)
+                                    getDataFromApi(Outlet_Total_Orders, activity, boolRefresh);
+                                break;
+                            case Outlet_Total_Orders:
+                                if (boolRefresh)
+                                    getDataFromApi(TodayOrderDetails_List, activity, boolRefresh);
+                                break;
+                            case TodayOrderDetails_List:
+                                if (boolRefresh)
+                                    getDataFromApi(Competitor_List, activity, boolRefresh);
+                                break;
+                            case Competitor_List:
+                                if (boolRefresh)
+                                    getDataFromApi(Constants.Outlet_Total_AlldaysOrders, activity, boolRefresh);
+                                break;
+                            case Constants.Outlet_Total_AlldaysOrders:
+                                if (boolRefresh)
+                                    getDataFromApi(Constants.Todaydayplanresult, activity, boolRefresh);
+                                break;
+                            case Constants.Todaydayplanresult:
+                                if (boolRefresh)
+                                    CommonIntentwithFinish(SFA_Activity.class);
+                                break;
+
+
+                        }
+
+                    } catch (Exception e) {
+
+                        Log.e("Common class:", key + " response: " + e.getMessage());
                     }
-
-
-                    if (key.equals(Constants.GetTodayOrder_List)) {
-
-                        updateUi = ((UpdateResponseUI) activity);
-
-                        String OrdersTable = String.valueOf(db.getMasterData(Constants.GetTodayOrder_List));
-                        userTypeGetTodayOrder = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
-                        }.getType();
-                        outletReport_view_modalList = gson.fromJson(OrdersTable, userTypeGetTodayOrder);
-
-                        updateUi.onLoadTodayOrderList(outletReport_view_modalList);
-                    }
-
-                    if (key.equals(TodayOrderDetails_List)) {
-
-                        updateUi = ((UpdateResponseUI) activity);
-
-                        updateUi.onLoadDataUpdateUI(gson.toJson(response.body()));
-                    }
-
-
-                    switch (key) {
-                        //case Retailer_OutletList:
-
-                        // getDataFromApi(Constants.Distributor_List, activity, boolRefresh);
-                        // break;
-                        case Distributor_List:
-                            getDataFromApi(Category_List, activity, boolRefresh);
-                            break;
-                        case Category_List:
-                            getDataFromApi(Product_List, activity, boolRefresh);
-                            break;
-                        case Product_List:
-                            getDataFromApi(Rout_List, activity, boolRefresh);
-                            break;
-                        case Rout_List:
-                            if (boolRefresh)
-                                getDataFromApi(Constants.GetTodayOrder_List, activity, boolRefresh);
-
-                            else {
-                                ProgressdialogShow(0, "Data Syncing");
-                                activity.startActivity(new Intent(activity, SFA_Activity.class));
-                            }
-                            break;
-
-                        case Constants.GetTodayOrder_List:
-                            if (boolRefresh)
-                                getDataFromApi(Outlet_Total_Orders, activity, boolRefresh);
-                            break;
-                        case Outlet_Total_Orders:
-                            if (boolRefresh)
-                                getDataFromApi(TodayOrderDetails_List, activity, boolRefresh);
-                            break;
-                        case TodayOrderDetails_List:
-                            if (boolRefresh)
-                                getDataFromApi(Competitor_List, activity, boolRefresh);
-                            break;
-                        case Competitor_List:
-                            if (boolRefresh)
-                                getDataFromApi(Constants.Outlet_Total_AlldaysOrders, activity, boolRefresh);
-                            break;
-                        case Constants.Outlet_Total_AlldaysOrders:
-                            if (boolRefresh)
-                                getDataFromApi(Constants.Todaydayplanresult, activity, boolRefresh);
-                            break;
-                        case Constants.Todaydayplanresult:
-                            if (boolRefresh)
-                                CommonIntentwithFinish(SFA_Activity.class);
-                            break;
-
-
-                    }
-
-
                 }
 
                 @Override
@@ -457,6 +465,12 @@ public class Common_Class {
         }
     }
 
+
+    public void showMsg(Activity activity, String msg) {
+        Toast toast = Toast.makeText(activity, msg, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
 //    public boolean checkValueStore(Activity activity, String key) {
 //        DatabaseHandler db = new DatabaseHandler(activity);
 //

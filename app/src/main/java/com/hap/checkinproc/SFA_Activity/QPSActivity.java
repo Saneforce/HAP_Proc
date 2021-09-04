@@ -151,8 +151,6 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
             }
         });
 
-        getHapBrandFromAPI();
-
 
         etNewOrder.addTextChangedListener(new TextWatcher() {
             @Override
@@ -163,13 +161,18 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 try {
-                    float value;
+                    float value, period;
                     if (s.toString().equals(""))
                         value = 0;
                     else
                         value = Float.parseFloat(s.toString());
 
-                    tvAvailble.setText("" + (Float.parseFloat(tvHapBrand.getText().toString()) + value) * Float.parseFloat(tvPeriod.getText().toString()));
+                    if (tvPeriod.getText().toString().equals(""))
+                        period = 0;
+                    else
+                        period = Float.parseFloat(tvPeriod.getText().toString());
+
+                    tvAvailble.setText("" + value * period);
 
                 } catch (Exception e) {
 
@@ -183,6 +186,10 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
         });
 
 
+        if (common_class.isNetworkAvailable(this))
+            getHapBrandFromAPI();
+        else
+            common_class.showMsg(this, "Please check your internet connection.");
     }
 
 
@@ -356,35 +363,30 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
 
                             JSONObject jsonObject = new JSONObject(is.toString());
 
-                            JSONArray jsonArray = jsonObject.getJSONArray("Data");
 
-                            qpsComboList.clear();
+                            if (jsonObject.getBoolean("success")) {
 
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                JSONArray jsonArray = jsonObject.getJSONArray("Data");
 
-                                qpsComboList.add(new Common_Model(jsonObject1.getString("Days_Period")
-                                        , jsonObject1.getInt("Total_Ltrs"), jsonObject1.getString("QPS_Name"), jsonObject1.getString("QPS_Code")));
+                                qpsComboList.clear();
+
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+                                    qpsComboList.add(new Common_Model(jsonObject1.getString("Days_Period")
+                                            , jsonObject1.getInt("Total_Ltrs"), jsonObject1.getString("QPS_Name"), jsonObject1.getString("QPS_Code")));
+                                }
+
+
+                                customDialog = new CustomListViewDialog(QPSActivity.this, qpsComboList, 500);
+                                Window windoww = customDialog.getWindow();
+                                windoww.setGravity(Gravity.CENTER);
+                                windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                                customDialog.show();
+                            } else {
+                                common_class.showMsg(QPSActivity.this, jsonObject.getString("Msg"));
                             }
 
-
-                            customDialog = new CustomListViewDialog(QPSActivity.this, qpsComboList, 500);
-                            Window windoww = customDialog.getWindow();
-                            windoww.setGravity(Gravity.CENTER);
-                            windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                            customDialog.show();
-
-//                                JSONObject jsonObject = new JSONObject(is.toString());
-//
-//                                JSONArray jsonArray = jsonObject.getJSONArray("Data");
-//
-//
-//                                for(int i=0;i<jsonArray.length();i++){
-//                                    JSONObject jsonObject1=jsonArray.getJSONObject(i);
-//
-//                                    int val=jsonObject1.getInt("HapLtr");
-//                                    tvHapBrand.setText(""+val);
-//                                }
 
                         }
 
@@ -426,50 +428,76 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
                 common_class.CommonIntentwithFinish(CoolerInfoActivity.class);
                 break;
             case R.id.ivQPSComboData:
-                getdataFromAPI();
+                if (common_class.isNetworkAvailable(this)) {
+                    getdataFromAPI();
+                } else {
+                    common_class.showMsg(this, "Please check your internet connection.");
+                }
                 break;
             case R.id.btnSubmit:
-                float acheive, target;
-                float hapBrand, newOrder;
-                float period = 0;
+                if (isValiddata()) {
 
-                if (tvPeriod.getText().toString().equals(""))
-                    period = 0;
-                else
-                    period = Float.parseFloat(tvPeriod.getText().toString());
+                    float acheive, target;
+                    float hapBrand, newOrder;
+                    float period = 0;
 
-                if (tvAvailble.getText().toString().equals(""))
-                    acheive = 0;
-                else
-                    acheive = Float.parseFloat(tvAvailble.getText().toString());
-                if (tvTarget.getText().toString().equals(""))
-                    target = 0;
-                else
-                    target = Float.parseFloat(tvTarget.getText().toString());
-
-                if (acheive >= target) {
-                    submitQPSData();
-                } else {
-
-
-                    if (tvHapBrand.getText().toString().equals(""))
-                        hapBrand = 0;
+                    if (tvPeriod.getText().toString().equals(""))
+                        period = 0;
                     else
-                        hapBrand = Float.parseFloat(tvHapBrand.getText().toString());
-                    if (etNewOrder.getText().toString().equals(""))
-                        newOrder = 0;
+                        period = Float.parseFloat(tvPeriod.getText().toString());
+
+                    if (tvAvailble.getText().toString().equals(""))
+                        acheive = 0;
                     else
-                        newOrder = Float.parseFloat(etNewOrder.getText().toString());
+                        acheive = Float.parseFloat(tvAvailble.getText().toString());
+                    if (tvTarget.getText().toString().equals(""))
+                        target = 0;
+                    else
+                        target = Float.parseFloat(tvTarget.getText().toString());
 
-                    float minVal = target / period;
+                    if (acheive >= target) {
+                        submitQPSData();
+                    } else {
 
 
-                    float expectVal = minVal - (hapBrand + newOrder);
+//                        if (tvHapBrand.getText().toString().equals(""))
+//                            hapBrand = 0;
+//                        else
+//                            hapBrand = Float.parseFloat(tvHapBrand.getText().toString());
+                        if (etNewOrder.getText().toString().equals(""))
+                            newOrder = 0;
+                        else
+                            newOrder = Float.parseFloat(etNewOrder.getText().toString());
 
-                    Toast.makeText(getApplicationContext(), "Please given above " + expectVal + " in New Order(ltr)", Toast.LENGTH_SHORT).show();
+
+                        float minVal = target / period;
+
+
+                        // float expectVal = minVal - (newOrder);
+
+                        Toast.makeText(getApplicationContext(), "Please given above " + minVal + " in New Order(ltr)", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 break;
         }
+    }
+
+    private boolean isValiddata() {
+        if (etOtherBrand.getText().toString().equals("")) {
+            common_class.showMsg(this, "Enter Other Brand");
+            return false;
+        } else if (etNewOrder.getText().toString().equals("")) {
+            common_class.showMsg(this, "Enter New Order");
+            return false;
+        } else if (tvPeriod.getText().toString().equals("") || tvGift.getText().toString().equals("") || tvTarget.getText().toString().equals("")) {
+            common_class.showMsg(this, "Please choose any scheme from eye icon");
+            return false;
+        } else if (etBookingDate.getText().toString().equals("")) {
+            common_class.showMsg(this, "Enter Booking Date");
+            return false;
+        }
+
+        return true;
     }
 
     @Override

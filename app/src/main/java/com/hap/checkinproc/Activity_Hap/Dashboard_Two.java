@@ -57,7 +57,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
-import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 
 public class Dashboard_Two extends AppCompatActivity implements View.OnClickListener/*, Main_Model.MasterSyncView*/ {
     private static String Tag = "HAP_Check-In";
@@ -355,7 +354,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                 JsonArray res = response.body();
                 Log.d(TAG + "getNotify", String.valueOf(response.body()));
 
-              //  Log.d("NotifyMsg", response.body().toString());
+                //  Log.d("NotifyMsg", response.body().toString());
                 TextView txt = findViewById(R.id.MRQtxt);
                 txt.setText("");
                 txt.setVisibility(View.GONE);
@@ -453,74 +452,80 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         rptCall.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                JsonArray res = response.body();
-                //  Log.v(TAG + "getDyReports", res.toString());
-                if (res.size() < 1) {
-                    Toast.makeText(getApplicationContext(), "No Records Today", Toast.LENGTH_LONG).show();
 
-                    LoadingCnt++;
-                    hideShimmer();
-                    return;
-                }
-                JsonObject fItm = res.get(0).getAsJsonObject();
-                TextView txDyDet = findViewById(R.id.lTDyTx);
-                txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br><small>" + fItm.get("AttDtNm").getAsString() + "</small>"));
-                JsonArray dyRpt = new JsonArray();
-                JsonObject newItem = new JsonObject();
-                newItem.addProperty("name", "Shift");
-                newItem.addProperty("value", fItm.get("SFT_Name").getAsString());
-                newItem.addProperty("Link", false);
-                newItem.addProperty("color", "#333333");
-                dyRpt.add(newItem);
-                newItem = new JsonObject();
-                newItem.addProperty("name", "Status");
-                newItem.addProperty("value", fItm.get("DayStatus").getAsString());
-                newItem.addProperty("color", fItm.get("StaColor").getAsString());
-                dyRpt.add(newItem);
+                try {
+                    JsonArray res = response.body();
+                    //  Log.v(TAG + "getDyReports", res.toString());
+                    if (res.size() < 1) {
+                        Toast.makeText(getApplicationContext(), "No Records Today", Toast.LENGTH_LONG).show();
 
-                if (!fItm.get("HQNm").getAsString().equalsIgnoreCase("")) {
-                    newItem = new JsonObject();
-                    newItem.addProperty("name", "Location");
-                    newItem.addProperty("value", fItm.get("HQNm").getAsString());
-                    newItem.addProperty("color", fItm.get("StaColor").getAsString());
-                    newItem.addProperty("type", "geo");
-                    dyRpt.add(newItem);
-                }
-                newItem = new JsonObject();
-                newItem.addProperty("name", "Check-In");
-                newItem.addProperty("value", fItm.get("AttTm").getAsString());
-                newItem.addProperty("color", "#333333");
-                dyRpt.add(newItem);
-                if (!fItm.get("ET").isJsonNull()) {
-                    newItem = new JsonObject();
-                    newItem.addProperty("name", "Last Check-Out");
-                    newItem.addProperty("value", fItm.get("ET").getAsString());
+                        LoadingCnt++;
+                        hideShimmer();
+                        return;
+                    }
+                    JsonObject fItm = res.get(0).getAsJsonObject();
+                    TextView txDyDet = findViewById(R.id.lTDyTx);
+                    txDyDet.setText(Html.fromHtml(fItm.get("AttDate").getAsString() + "<br><small>" + fItm.get("AttDtNm").getAsString() + "</small>"));
+                    JsonArray dyRpt = new JsonArray();
+                    JsonObject newItem = new JsonObject();
+                    newItem.addProperty("name", "Shift");
+                    newItem.addProperty("value", fItm.get("SFT_Name").getAsString());
+                    newItem.addProperty("Link", false);
                     newItem.addProperty("color", "#333333");
                     dyRpt.add(newItem);
+                    newItem = new JsonObject();
+                    newItem.addProperty("name", "Status");
+                    newItem.addProperty("value", fItm.get("DayStatus").getAsString());
+                    newItem.addProperty("color", fItm.get("StaColor").getAsString());
+                    dyRpt.add(newItem);
+
+                    if (!fItm.get("HQNm").getAsString().equalsIgnoreCase("")) {
+                        newItem = new JsonObject();
+                        newItem.addProperty("name", "Location");
+                        newItem.addProperty("value", fItm.get("HQNm").getAsString());
+                        newItem.addProperty("color", fItm.get("StaColor").getAsString());
+                        newItem.addProperty("type", "geo");
+                        dyRpt.add(newItem);
+                    }
+                    newItem = new JsonObject();
+                    newItem.addProperty("name", "Check-In");
+                    newItem.addProperty("value", fItm.get("AttTm").getAsString());
+                    newItem.addProperty("color", "#333333");
+                    dyRpt.add(newItem);
+                    if (!fItm.get("ET").isJsonNull()) {
+                        newItem = new JsonObject();
+                        newItem.addProperty("name", "Last Check-Out");
+                        newItem.addProperty("value", fItm.get("ET").getAsString());
+                        newItem.addProperty("color", "#333333");
+                        dyRpt.add(newItem);
+                    }
+                    newItem = new JsonObject();
+                    newItem.addProperty("name", "Geo In");
+                    newItem.addProperty("value", fItm.get("GeoIn").getAsString());
+                    newItem.addProperty("color", "#333333");
+                    /*newItem.addProperty("type", "geo");*/
+                    dyRpt.add(newItem);
+
+                    newItem = new JsonObject();
+                    newItem.addProperty("name", "Geo Out");
+                    newItem.addProperty("value", fItm.get("GeoOut").getAsString());//"<a href=\"https://www.google.com/maps?q="+fItm.get("GeoOut").getAsString()+"\">"+fItm.get("GeoOut").getAsString()+"</a>");
+                    newItem.addProperty("color", "#333333");
+                    /*newItem.addProperty("type", "geo");*/
+                    dyRpt.add(newItem);
+                    recyclerView = (RecyclerView) findViewById(R.id.Rv_DyRpt);
+
+                    Log.v("Lat_Long", fItm.get("lat_long").getAsString());
+                    mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this, fItm.get("lat_long").getAsString());
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                    recyclerView.setLayoutManager(mLayoutManager);
+                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+                    recyclerView.setAdapter(mAdapter);
+                    LoadingCnt++;
+                    hideShimmer();
+
+                } catch (Exception e) {
+
                 }
-                newItem = new JsonObject();
-                newItem.addProperty("name", "Geo In");
-                newItem.addProperty("value", fItm.get("GeoIn").getAsString());
-                newItem.addProperty("color", "#333333");
-                /*newItem.addProperty("type", "geo");*/
-                dyRpt.add(newItem);
-
-                newItem = new JsonObject();
-                newItem.addProperty("name", "Geo Out");
-                newItem.addProperty("value", fItm.get("GeoOut").getAsString());//"<a href=\"https://www.google.com/maps?q="+fItm.get("GeoOut").getAsString()+"\">"+fItm.get("GeoOut").getAsString()+"</a>");
-                newItem.addProperty("color", "#333333");
-                /*newItem.addProperty("type", "geo");*/
-                dyRpt.add(newItem);
-                recyclerView = (RecyclerView) findViewById(R.id.Rv_DyRpt);
-
-                Log.v("Lat_Long", fItm.get("lat_long").getAsString());
-                mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this, fItm.get("lat_long").getAsString());
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                recyclerView.setLayoutManager(mLayoutManager);
-                recyclerView.setItemAnimator(new DefaultItemAnimator());
-                recyclerView.setAdapter(mAdapter);
-                LoadingCnt++;
-                hideShimmer();
 
             }
 

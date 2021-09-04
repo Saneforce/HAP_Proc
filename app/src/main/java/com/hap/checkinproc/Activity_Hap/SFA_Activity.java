@@ -312,8 +312,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 common_class.CommonIntentwithNEwTask(SFA_Dashboard.class);
                 break;
             case R.id.Lin_DCR:
-                common_class.CommonIntentwithNEwTask(SFADCRActivity.class);
-
+              //  common_class.CommonIntentwithNEwTask(SFADCRActivity.class);
+                Intent intent = new Intent(SFA_Activity.this, Dashboard_Route.class);
+                startActivity(intent);
                 break;
             case R.id.Lin_Route:
                 sharedCommonPref.save(sharedCommonPref.DCRMode, "");

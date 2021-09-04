@@ -27,7 +27,6 @@ import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Lead_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
-import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
@@ -101,28 +100,30 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
             // String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
             // System.out.println("OUTLETLIST" + sharedCommonPref.getvalue(Shared_Common_Pref.Outlet_List));
-            if (!OrdersTable.equals("")) {
-                Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
+            // if (!OrdersTable.equals("")) {
+            Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
+            if (Retailer_Modal_List != null) {
                 Retailer_Modal_ListFilter = gson.fromJson(OrdersTable, userType);
-            }
-            //GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "2");
-            // GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Rout_List), "1");
-            //  GetJsonData(String.valueOf(db.getMasterData(Constants.Rout_List)), "1");
-            GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "2");
+
+                //GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "2");
+                // GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Rout_List), "1");
+                //  GetJsonData(String.valueOf(db.getMasterData(Constants.Rout_List)), "1");
+                GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "2");
 
 
-            TotalOutlets.setText("Total Outlets:" + "\t" + Retailer_Modal_List.size());
-            int todaycount = 0;
-            for (Retailer_Modal_List lm : Retailer_Modal_List) {
-                if (lm.getLastUpdt_Date() != null && lm.getLastUpdt_Date().equals(Common_Class.GetDatewothouttime())) {
-                    todaycount++;
+                TotalOutlets.setText("Total Outlets:" + "\t" + Retailer_Modal_List.size());
+                int todaycount = 0;
+                for (Retailer_Modal_List lm : Retailer_Modal_List) {
+                    if (lm.getLastUpdt_Date() != null && lm.getLastUpdt_Date().equals(Common_Class.GetDatewothouttime())) {
+                        todaycount++;
+                    }
                 }
+                todayoutlets.setText("Today Outlets:" + "\t" + todaycount);
             }
-            todayoutlets.setText("Today Outlets:" + "\t" + todaycount);
             if (Retailer_Modal_ListFilter != null && Retailer_Modal_ListFilter.size() > 0) {
                 recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
                 new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();
-                recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
+                // recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
             }
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
@@ -133,15 +134,16 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             route_text.setText(sharedCommonPref.getvalue(Constants.Route_name));
 
 
-            OutletFilter(sharedCommonPref.getvalue(Constants.Distributor_Id), "1");
-
-
-            if (distributor_text.getText().toString().equals(""))
-                findViewById(R.id.btnCmbRoute).setVisibility(View.GONE);
-            else {
+            if (!sharedCommonPref.getvalue(Constants.Distributor_Id).equals("")) {
+                OutletFilter(sharedCommonPref.getvalue(Constants.Distributor_Id), "1");
                 findViewById(R.id.btnCmbRoute).setVisibility(View.VISIBLE);
                 loadroute(sharedCommonPref.getvalue(Constants.Distributor_Id));
+
+            } else {
+                findViewById(R.id.btnCmbRoute).setVisibility(View.GONE);
+
             }
+
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
@@ -256,25 +258,17 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
     }
 
     private void OutletFilter(String id, String flag) {
-     /*   Retailer_Modal_ListFilter.clear();
-        if (Retailer_Modal_List != null && Retailer_Modal_List.size() > 0) {
-            for (int i = 0; i < Retailer_Modal_List.size(); i++) {
-                if (Retailer_Modal_List.get(i).getTownCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-                }
-            }
-            recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
-            new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();
-            recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
-        }*/
 
 
         try {
 
-
             if (flag.equals("0")) {
 
-                Retailer_Modal_ListFilter.clear();
+                Log.e("Lead Size of reta:11 ",""+Retailer_Modal_List.size());
+
+                 Retailer_Modal_ListFilter.clear();
+
+                Log.e("Lead Size of reta:22 ",""+Retailer_Modal_List.size());
 
                 for (int i = 0; i < Retailer_Modal_List.size(); i++) {
                     if (id.equals(Retailer_Modal_List.get(i).getTownCode()))
@@ -350,13 +344,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
 
             Retailer_Modal_ListFilter.clear();
 
-
-            //old
-            for (int i = 0; i < Retailer_Modal_List.size(); i++) {
-
-                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-
-            }
+            Retailer_Modal_ListFilter = Retailer_Modal_List;
 
             recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
             new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();

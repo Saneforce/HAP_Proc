@@ -97,13 +97,17 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
             fruitViewHolder.mTextPhone.setVisibility(View.VISIBLE);
             fruitViewHolder.mTextAddress.setVisibility(View.VISIBLE);
+            fruitViewHolder.tvPerDay.setVisibility(View.VISIBLE);
 
-            fruitViewHolder.mTextName.setText("Days Periodm : " + contact.getName() + "days");
-            fruitViewHolder.mTextPhone.setText("Total Ltrs   : " + contact.getTotal_Ltrs() + "ltrs");
-            fruitViewHolder.mTextAddress.setText("Gift         : " + contact.getQPS_Name());
+            fruitViewHolder.mTextPhone.setText("Period : " + contact.getName() + " days");
+            fruitViewHolder.mTextAddress.setText("Target : " + contact.getTotal_Ltrs() + " ltrs");
+            fruitViewHolder.mTextName.setText("Gift   : " + contact.getQPS_Name());
+
+            float perday = (contact.getTotal_Ltrs() / Float.parseFloat(contact.getName()));
+            fruitViewHolder.tvPerDay.setText("Per Day : " + perday+" ltrs");
             //fruitViewHolder.mTextAddress.setTypeface(fruitViewHolder.mTextAddress.getTypeface(), Typeface.BOLD);
 
-            fruitViewHolder.mTextAddress.setTextColor(Color.parseColor("#72D043"));
+            fruitViewHolder.mTextName.setTextColor(Color.parseColor("#72D043"));
         }
 
         fruitViewHolder.checkBox_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -172,7 +176,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
         public TextView mTextName, mTextPhone, mTextAddress, Checkboxname;
         LinearLayout checkboxLin, linear_row;
         CheckBox checkBox_select;
-        TextView cbTextName;
+        TextView cbTextName, tvPerDay;
 
         public FruitViewHolder(View v) {
             super(v);
@@ -184,6 +188,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
             checkboxLin = v.findViewById(R.id.checkboxLin);
             cbTextName = v.findViewById(R.id.Checkboxname);
             linear_row = v.findViewById(R.id.linear_row);
+            tvPerDay = v.findViewById(R.id.txt_per_day);
             v.setOnClickListener(this);
 
 

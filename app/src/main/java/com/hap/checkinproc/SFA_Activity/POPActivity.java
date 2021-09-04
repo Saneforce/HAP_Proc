@@ -132,7 +132,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         rvQps.setAdapter(qpsAdapter);
 
 
-        popAddList.add(new Product_Details_Modal("", "", "", 0,""));
+        popAddList.add(new Product_Details_Modal("", "", "", 0, ""));
 
         popAddAdapter = new PopAddAdapter(popAddList, R.layout.popup_add_recyclerview,
                 this);
@@ -144,7 +144,11 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         common_class.gotoHomeScreen(this, ivToolbarHome);
 
 
-        getPOPMasterData();
+        if (common_class.isNetworkAvailable(this))
+            getPOPMasterData();
+        else
+            common_class.showMsg(this, "Please check your internet connection.");
+
     }
 
     private void getPOPMasterData() {
@@ -185,8 +189,8 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                             for (int i = 0; i < jsonArray.length(); i++) {
                                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
-                                popMaterialList.add(new Common_Model(jsonObject1.getString("POP_Code"),jsonObject1.getString("POP_Name"),
-                                         jsonObject1.getString("POP_UOM")));
+                                popMaterialList.add(new Common_Model(jsonObject1.getString("POP_Code"), jsonObject1.getString("POP_Name"),
+                                        jsonObject1.getString("POP_UOM")));
                             }
 
 
@@ -230,7 +234,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                 common_class.CommonIntentwithFinish(CoolerInfoActivity.class);
                 break;
             case R.id.tvAddPOP:
-                popAddList.add(new Product_Details_Modal("", "", "", 0,""));
+                popAddList.add(new Product_Details_Modal("", "", "", 0, ""));
                 popAddAdapter.notifyData(popAddList);
 
                 break;
@@ -242,84 +246,102 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
 
 
     private void SaveOrder() {
-        if (common_class.isNetworkAvailable(this)) {
 
-            AlertDialogBox.showDialog(POPActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
-                @Override
-                public void PositiveMethod(DialogInterface dialog, int id) {
+        List<Product_Details_Modal> submitPOPList = new ArrayList<>();
 
-                    JSONArray data = new JSONArray();
-                    JSONObject ActivityData = new JSONObject();
+        submitPOPList.clear();
 
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    Calendar calobj = Calendar.getInstance();
-                    String dateTime = df.format(calobj.getTime());
+        for (int i = 0; i < popAddList.size(); i++) {
+            if (!popAddList.get(i).getName().equals("") && !popAddList.get(i).getBookingDate().equals("") && popAddList.get(i).getQty() > 0 &&
+                    !popAddList.get(i).getUOM().equals("")) {
+                submitPOPList.add(popAddList.get(i));
 
-                    try {
-                        JSONObject HeadItem = new JSONObject();
-                        HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
-                        HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
-                        HeadItem.put("CustCode", Shared_Common_Pref.OutletCode);
-                        HeadItem.put("CustName", Shared_Common_Pref.OutletName);
-                        HeadItem.put("StkCode", Shared_Common_Pref.DistributorCode);
-                        HeadItem.put("Datetime", dateTime);
-                        ActivityData.put("Json_Head", HeadItem);
+            }
+        }
 
 
-                        JSONArray Order_Details = new JSONArray();
-                        for (int z = 0; z < popAddList.size(); z++) {
-                            JSONObject ProdItem = new JSONObject();
-                            ProdItem.put("id", popAddList.get(z).getId());
-                            ProdItem.put("material", popAddList.get(z).getName());
-                            ProdItem.put("date", popAddList.get(z).getBookingDate());
-                            ProdItem.put("Qty", popAddList.get(z).getQty());
-                            ProdItem.put("uom",popAddList.get(z).getUOM());
+        if (submitPOPList.size() > 0) {
+            if (common_class.isNetworkAvailable(this)) {
 
-                            Order_Details.put(ProdItem);
+                AlertDialogBox.showDialog(POPActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
+                    @Override
+                    public void PositiveMethod(DialogInterface dialog, int id) {
+
+                        JSONArray data = new JSONArray();
+                        JSONObject ActivityData = new JSONObject();
+
+                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Calendar calobj = Calendar.getInstance();
+                        String dateTime = df.format(calobj.getTime());
+
+                        try {
+                            JSONObject HeadItem = new JSONObject();
+                            HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
+                            HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
+                            HeadItem.put("CustCode", Shared_Common_Pref.OutletCode);
+                            HeadItem.put("CustName", Shared_Common_Pref.OutletName);
+                            HeadItem.put("StkCode", Shared_Common_Pref.DistributorCode);
+                            HeadItem.put("Datetime", dateTime);
+                            ActivityData.put("Json_Head", HeadItem);
+
+
+                            JSONArray Order_Details = new JSONArray();
+                            for (int z = 0; z < submitPOPList.size(); z++) {
+                                JSONObject ProdItem = new JSONObject();
+                                ProdItem.put("id", submitPOPList.get(z).getId());
+                                ProdItem.put("material", submitPOPList.get(z).getName());
+                                ProdItem.put("date", submitPOPList.get(z).getBookingDate());
+                                ProdItem.put("Qty", submitPOPList.get(z).getQty());
+                                ProdItem.put("uom", submitPOPList.get(z).getUOM());
+
+                                Order_Details.put(ProdItem);
+                            }
+                            ActivityData.put("Entry_Details", Order_Details);
+                            data.put(ActivityData);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        ActivityData.put("Entry_Details", Order_Details);
-                        data.put(ActivityData);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                    Call<JsonObject> responseBodyCall = apiInterface.savePOP(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
-                    responseBodyCall.enqueue(new Callback<JsonObject>() {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            if (response.isSuccessful()) {
-                                try {
-                                    Log.e("JSON_VALUES", response.body().toString());
-                                    JSONObject jsonObjects = new JSONObject(response.body().toString());
-                                    String san = jsonObjects.getString("success");
-                                    Log.e("Success_Message", san);
-                                    if (san.equals("true")) {
-                                        Toast.makeText(POPActivity.this, "Submitted Successfully", Toast.LENGTH_SHORT).show();
-                                        startActivity(new Intent(getApplicationContext(), Invoice_History.class));
-                                        finish();
+                        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+                        Call<JsonObject> responseBodyCall = apiInterface.savePOP(Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, data.toString());
+                        responseBodyCall.enqueue(new Callback<JsonObject>() {
+                            @Override
+                            public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                if (response.isSuccessful()) {
+                                    try {
+                                        Log.e("JSON_VALUES", response.body().toString());
+                                        JSONObject jsonObjects = new JSONObject(response.body().toString());
+                                        String san = jsonObjects.getString("success");
+                                        Log.e("Success_Message", san);
+                                        if (san.equals("true")) {
+                                            Toast.makeText(POPActivity.this, "Submitted Successfully", Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(getApplicationContext(), Invoice_History.class));
+                                            finish();
+                                        }
+
+                                    } catch (Exception e) {
+
                                     }
-
-                                } catch (Exception e) {
-
                                 }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                            Log.e("SUBMIT_VALUE", "ERROR");
-                        }
-                    });
+                            @Override
+                            public void onFailure(Call<JsonObject> call, Throwable t) {
+                                Log.e("SUBMIT_VALUE", "ERROR");
+                            }
+                        });
 
-                }
+                    }
 
-                @Override
-                public void NegativeMethod(DialogInterface dialog, int id) {
-                    dialog.dismiss();
-                }
-            });
+                    @Override
+                    public void NegativeMethod(DialogInterface dialog, int id) {
+                        dialog.dismiss();
+                    }
+                });
+            } else {
+                Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(this, "Check your Internet connection", Toast.LENGTH_SHORT).show();
+            common_class.showMsg(this, "POP is empty");
         }
     }
 

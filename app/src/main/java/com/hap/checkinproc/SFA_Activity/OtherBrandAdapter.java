@@ -253,7 +253,13 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                     public void onClick(DialogInterface dialog, int id) {
 
                         Product_Details_Modalitem.remove(pos);
+
+                        if(Product_Details_Modalitem.size()==0){
+                            Product_Details_Modalitem.add(new Product_Details_Modal("", "Select the Other Brand", "", 0, 0, 0, ""));
+                        }
+
                         notifyDataSetChanged();
+
 
                     }
                 })

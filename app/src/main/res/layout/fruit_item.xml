@@ -28,9 +28,9 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:padding="5dp"
-            android:textStyle="bold"
             android:text="thirumalaivasan"
-            android:textColor="@android:color/black" />
+            android:textColor="@android:color/black"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
@@ -54,17 +54,29 @@
             android:id="@+id/txt_phone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Two"
-            android:textColor="#80000000"
-            ></TextView>
+            android:textColor="#80000000"></TextView>
 
-        <TextView
-            android:id="@+id/txt_address"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Three"
-            android:textColor="#80000000"
-           ></TextView>
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/txt_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#80000000"></TextView>
+
+
+            <TextView
+                android:id="@+id/txt_per_day"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/C10dp"
+                android:textColor="#80000000"
+                android:visibility="gone"></TextView>
+
+        </RelativeLayout>
 
     </LinearLayout>
 </LinearLayout>
