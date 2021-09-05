@@ -55,7 +55,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Invoice_History extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
-    TextView outlet_name, lastinvoice;
+    TextView outlet_name, lastinvoice,tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo,tvOrder;
     LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder;
     Common_Class common_class;
     List<OutletReport_View_Modal> OutletReport_View_Modal;
@@ -90,9 +90,25 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
             lin_repeat_invoice = findViewById(R.id.lin_repeat_invoice);
             lastinvoice = findViewById(R.id.lastinvoice);
             lin_noOrder = findViewById(R.id.lin_noOrder);
+            tvOrder = (TextView) findViewById(R.id.tvOrder);
+
+
+
+
+            tvOtherBrand = (TextView) findViewById(R.id.tvOtherBrand);
+            tvPOP = (TextView) findViewById(R.id.tvPOP);
+            tvQPS = (TextView) findViewById(R.id.tvQPS);
+            tvCoolerInfo = (TextView) findViewById(R.id.tvCoolerInfo);
+
+
             lin_noOrder.setOnClickListener(this);
             lastinvoice.setOnClickListener(this);
             lin_order.setOnClickListener(this);
+            tvOtherBrand.setOnClickListener(this);
+            tvQPS.setOnClickListener(this);
+            tvPOP.setOnClickListener(this);
+            tvOrder.setOnClickListener(this);
+            tvCoolerInfo.setOnClickListener(this);
             invoicerecyclerview = (RecyclerView) findViewById(R.id.invoicerecyclerview);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             invoicerecyclerview.setLayoutManager(layoutManager);
@@ -160,6 +176,19 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tvOtherBrand:
+                common_class.CommonIntentwithFinish(OtherBrandActivity.class);
+                break;
+            case R.id.tvQPS:
+                common_class.CommonIntentwithFinish(QPSActivity.class);
+                break;
+            case R.id.tvPOP:
+                common_class.CommonIntentwithFinish(POPActivity.class);
+                break;
+            case R.id.tvCoolerInfo:
+                common_class.CommonIntentwithFinish(CoolerInfoActivity.class);
+                break;
+
             case R.id.lin_order:
                 Shared_Common_Pref.Invoicetoorder = "0";
                 //Shared_Common_Pref.TransSlNo = "0";
@@ -192,6 +221,10 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                     strLoc = sLoc.split(":");
                     SaveOrder();
                 }
+                break;
+
+            case R.id.tvOrder:
+                common_class.CommonIntentwithFinish(Order_Category_Select.class);
                 break;
         }
     }
@@ -410,19 +443,25 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                                     Gson gson = new Gson();
                                     List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
 
+
                                     JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
 
                                         product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Detail_Code"),
-                                                "", "", jsonObject1.getInt("Qty"),""));
+                                                "", "", jsonObject1.getInt("Qty"), ""));
 
 
                                     }
 
                                     sharedCommonPref.save(Constants.PreOrderQtyList, gson.toJson(product_details_modalArrayList));
+
+                                } else {
+                                    sharedCommonPref.clear_pref(Constants.PreOrderQtyList);
                                 }
+
 
                             }
 

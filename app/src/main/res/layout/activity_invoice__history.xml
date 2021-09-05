@@ -13,6 +13,11 @@
 
         <include layout="@layout/custom_toolbar_help"></include>
 
+        <include
+            android:id="@+id/orderTypesLayout"
+            layout="@layout/procuct_category_types"></include>
+
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content">

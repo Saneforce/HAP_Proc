@@ -2,6 +2,7 @@ package com.hap.checkinproc.SFA_Activity;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -100,6 +101,17 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
         });
 
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            common_class.CommonIntentwithFinish(Invoice_History.class);
+
+            return true;
+        }
+        return false;
     }
 
     @Override

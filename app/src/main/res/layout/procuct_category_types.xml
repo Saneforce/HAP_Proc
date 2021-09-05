@@ -16,12 +16,13 @@
         <TextView
             android:id="@+id/tvOrder"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/C3dp"
             android:layout_weight="1"
             android:gravity="center"
             android:padding="10dp"
+            android:background="@color/a80white"
             android:text="Order"
             android:textColor="@color/white"
             android:textSize="11sp" />
@@ -29,9 +30,10 @@
         <TextView
             android:id="@+id/tvOtherBrand"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/C3dp"
+            android:background="@color/a80white"
             android:layout_weight="1"
             android:gravity="center"
             android:padding="10dp"
@@ -43,32 +45,36 @@
         <TextView
             android:id="@+id/tvQPS"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/C3dp"
             android:layout_weight="1"
             android:gravity="center"
             android:padding="10dp"
             android:text="QPS"
             android:textColor="@color/white"
+            android:background="@color/a80white"
             android:textSize="11sp" />
 
         <TextView
             android:id="@+id/tvPOP"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/C3dp"
             android:layout_weight="1"
             android:gravity="center"
             android:padding="10dp"
             android:text="POP"
             android:textColor="@color/white"
+            android:background="@color/a80white"
             android:textSize="11sp" />
 
         <TextView
             android:id="@+id/tvCoolerInfo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/C3dp"
+            android:layout_marginRight="@dimen/C3dp"
+            android:background="@color/a80white"
             android:layout_weight="1"
             android:gravity="center"
             android:padding="10dp"

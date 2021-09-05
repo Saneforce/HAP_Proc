@@ -36,7 +36,6 @@ import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
-import com.hap.checkinproc.SFA_Activity.SFADCRActivity;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
 import com.hap.checkinproc.common.DatabaseHandler;
 
@@ -124,16 +123,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             public void onPageSelected(int position) {
                 addBottomDots(position);
 
-//            // changing the next button text 'NEXT' / 'GOT IT'
-//            if (position == layouts.length - 1) {
-//                // last page. make button text to GOT IT
-//                btnNext.setText(getString(R.string.start));
-//                btnSkip.setVisibility(View.GONE);
-//            } else {
-//                // still pages are left
-//                btnNext.setText(getString(R.string.next));
-//                btnSkip.setVisibility(View.VISIBLE);
-//            }
             }
 
             @Override
@@ -312,7 +301,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 common_class.CommonIntentwithNEwTask(SFA_Dashboard.class);
                 break;
             case R.id.Lin_DCR:
-              //  common_class.CommonIntentwithNEwTask(SFADCRActivity.class);
+                //  common_class.CommonIntentwithNEwTask(SFADCRActivity.class);
+                sharedCommonPref.save(Shared_Common_Pref.DCRMode, "SC");
                 Intent intent = new Intent(SFA_Activity.this, Dashboard_Route.class);
                 startActivity(intent);
                 break;

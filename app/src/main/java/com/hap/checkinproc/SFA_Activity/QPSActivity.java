@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -272,6 +273,16 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            common_class.CommonIntentwithFinish(Invoice_History.class);
+
+            return true;
+        }
+        return false;
+    }
 
     private void getHapBrandFromAPI() {
         try {

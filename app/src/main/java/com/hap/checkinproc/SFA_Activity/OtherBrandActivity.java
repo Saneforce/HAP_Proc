@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -252,6 +253,17 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
             common_class.showMsg(this, "Other Brand is empty");
 
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            common_class.CommonIntentwithFinish(Invoice_History.class);
+
+            return true;
+        }
+        return false;
     }
 
     public void showBrandDialog(int position) {
