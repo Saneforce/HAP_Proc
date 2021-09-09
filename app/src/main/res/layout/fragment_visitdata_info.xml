@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,13 +10,12 @@
         android:orientation="vertical">
 
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/C3dp"
-           >
+            android:padding="@dimen/C3dp">
+
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -34,8 +32,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Today"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/C15dp"
+                style="@style/mediumTextStyle"
+
                 android:textStyle="bold"></TextView>
 
             <TextView
@@ -44,8 +42,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Cum"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/C15dp"
+                style="@style/mediumTextStyle"
+
                 android:textStyle="bold"></TextView>
 
             <TextView
@@ -54,8 +52,8 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Cum New"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/C15dp"
+                style="@style/mediumTextStyle"
+
                 android:textStyle="bold"></TextView>
 
 
@@ -73,147 +71,147 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/C3dp"
-            >
+            android:padding="@dimen/C3dp">
+
             <TextView
+                android:layout_width="0dp"
+
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Calls Made"
-
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/C15dp"
+                style="@style/mediumTextStyle"
                 android:textStyle="bold"></TextView>
 
 
             <TextView
-                android:text="20"
+                style="@style/mediumTextStyle"
+                android:id="@+id/tvTodayCalls"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/C15dp"
+                android:text="0"
+               ></TextView>
+
+            <TextView
+                android:id="@+id/tvCumTodayCalls"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="0"
+                style="@style/mediumTextStyle"
                 ></TextView>
 
             <TextView
-                android:text="50"
+                android:id="@+id/tvNewTodayCalls"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/C15dp"
-                ></TextView>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="30"
-                android:textColor="@color/black"
-                android:textSize="@dimen/C15dp"
+                android:text="0"
+                style="@style/mediumTextStyle"
                 ></TextView>
 
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/C3dp"
-            >
+            android:padding="@dimen/C3dp">
+
             <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="Eff calls"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/C15dp"
+                style="@style/mediumTextStyle"
                 android:textStyle="bold"></TextView>
 
 
             <TextView
-                android:text="18"
+                android:id="@+id/tvProCalls"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="@dimen/C15dp"
+                android:text="0"
+                style="@style/mediumTextStyle"
                 ></TextView>
 
             <TextView
+                android:id="@+id/tvCumProCalls"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="40"
-                android:textColor="@color/black"
-                android:textSize="@dimen/C15dp"
+                android:text="0"
+                style="@style/mediumTextStyle"
                 ></TextView>
 
             <TextView
+                android:id="@+id/tvNewProCalls"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="28"
-                android:textColor="@color/black"
-                android:textSize="@dimen/C15dp"
+                android:text="0"
+                style="@style/mediumTextStyle"
                 ></TextView>
 
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/C3dp"
-            >
+            android:padding="@dimen/C3dp">
+
             <TextView
-                android:text="Eff Calls%"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="@dimen/C15dp"
+                android:text="Eff Calls%"
+                style="@style/mediumTextStyle"
                 android:textStyle="bold"></TextView>
 
 
             <TextView
+                android:id="@+id/tvAvgTodayCalls"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="50"
-                android:textColor="@color/black"
-                android:textSize="@dimen/C15dp"
+                android:text="0"
+                style="@style/mediumTextStyle"
                 ></TextView>
 
             <TextView
+                android:id="@+id/tvAvgCumCalls"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="60"
-                android:textColor="@color/black"
-                android:textSize="@dimen/C15dp"
-               ></TextView>
+                android:text="0"
+                style="@style/mediumTextStyle"
+                ></TextView>
 
             <TextView
+                android:id="@+id/tvAvgNewCalls"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="40"
-                android:textColor="@color/black"
-                android:textSize="@dimen/C15dp"
-               ></TextView>
+                android:text="0"
+                style="@style/mediumTextStyle"
+                ></TextView>
 
 
         </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
@@ -221,8 +219,6 @@
             android:background="@color/background">
 
         </RelativeLayout>
-
-
 
 
     </LinearLayout>

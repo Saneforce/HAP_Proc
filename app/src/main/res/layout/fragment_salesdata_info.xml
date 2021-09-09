@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -9,24 +10,32 @@
 
         <TextView
             style="@style/headerTextStyle"
-            android:text="Sales Summary"></TextView>
+            android:text="Service Outlets"></TextView>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/tvTotalServiceOutlet"
                 style="@style/mediumTextStyle"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="200 Lts"></TextView>
+                android:text="0"></TextView>
 
             <TextView
+                android:id="@+id/tvExistServiceOutlet"
                 style="@style/mediumTextStyle"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="500 Lts"></TextView>
+                android:text="0"></TextView>
 
+            <TextView
+                android:id="@+id/tvNewServiceOutlet"
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="0"></TextView>
 
 
         </LinearLayout>
@@ -40,50 +49,26 @@
                 style="@style/mediumTextStyle"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Today's Total Order"
+                android:text="Total"
                 android:textStyle="bold"></TextView>
 
             <TextView
                 style="@style/mediumTextStyle"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Previous Day's Total"
+                android:text="Existing"
                 android:textStyle="bold"></TextView>
-
-
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
 
             <TextView
                 style="@style/mediumTextStyle"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="700 Lts"></TextView>
-
-
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                style="@style/mediumTextStyle"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Cumulative Order as on day"
+                android:text="New"
                 android:textStyle="bold"></TextView>
 
 
-
         </LinearLayout>
+
 
 
     </LinearLayout>

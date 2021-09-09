@@ -105,6 +105,8 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                 // Start downloading json data from Google Directions API
                 downloadTask.execute(getIntent().getStringExtra(Constants.MAP_ROUTE));
 
+
+
             }
         });
 
@@ -129,6 +131,9 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                     Shared_Common_Pref.Outletlong = currentLocation.getLongitude();
                     Shared_Common_Pref.OutletAddress = getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude());
                     // Toast.makeText(getApplicationContext(), currentLocation.getLatitude() + "" + currentLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+
+                    AddressTextview.setText("" + getCompleteAddressString(currentLocation.getLatitude(), currentLocation.getLongitude()));
+
                     SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.myMap);
                     assert supportMapFragment != null;
                     supportMapFragment.getMapAsync(MapDirectionActivity.this);

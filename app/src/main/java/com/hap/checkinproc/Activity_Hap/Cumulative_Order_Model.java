@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 public class Cumulative_Order_Model {
     @SerializedName("value")
     @Expose
-    private String value;
+    private int value;
     @SerializedName("desc")
     @Expose
     private String desc;
@@ -44,7 +44,7 @@ public class Cumulative_Order_Model {
         this.totalMilkProduct = totalMilkProduct;
     }
 
-    public Cumulative_Order_Model(String desc, String value) {
+    public Cumulative_Order_Model(String desc, int value) {
         this.desc = desc;
         this.value = value;
     }
@@ -89,11 +89,11 @@ public class Cumulative_Order_Model {
         this.desc = desc;
     }
 
-    public String getValue() {
+    public int getValue() {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(int value) {
         this.value = value;
     }
 }

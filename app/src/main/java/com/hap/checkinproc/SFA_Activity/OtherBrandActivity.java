@@ -30,8 +30,11 @@ import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
@@ -49,11 +52,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OtherBrandActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface {
+public class OtherBrandActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface, UpdateResponseUI {
 
     List<Product_Details_Modal> Getorder_Array_List;
     TextView tvOrder, tvQPS, tvPOP, tvCoolerInfo, tvAddBrand;
-    private List<Product_Details_Modal> GetPurchaseOrderList;
     public static OtherBrandActivity otherBrandActivity;
     OtherBrandAdapter otherBrandAdapter;
     private List<Common_Model> otherBrandList = new ArrayList<>();
@@ -102,13 +104,6 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
 
 
         Getorder_Array_List = new ArrayList<>();
-
-        DatabaseHandler db = new DatabaseHandler(OtherBrandActivity.otherBrandActivity);
-        String Compititor_List = String.valueOf(db.getMasterData(Constants.Competitor_List));
-        Gson gson = new Gson();
-        userTypeCompetitor = new TypeToken<ArrayList<Common_Model>>() {
-        }.getType();
-        otherBrandList = gson.fromJson(Compititor_List, userTypeCompetitor);
 
 
         Getorder_Array_List.add(new Product_Details_Modal("", "Select the Other Brand", "", 0, 0, 0, ""));
@@ -269,7 +264,6 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
     public void showBrandDialog(int position) {
 
         selectedPos = position;
-
         customDialog = new CustomListViewDialog(this, otherBrandList, 1);
         Window windoww = customDialog.getWindow();
         windoww.setGravity(Gravity.CENTER);
@@ -286,6 +280,30 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
             otherBrandAdapter.notifyData(Getorder_Array_List);
 
         }
+    }
+
+    @Override
+    public void onLoadFilterData(List<Retailer_Modal_List> retailer_modal_list) {
+
+    }
+
+    @Override
+    public void onLoadTodayOrderList(List<OutletReport_View_Modal> outletReportViewModals) {
+
+    }
+
+    @Override
+    public void onLoadDataUpdateUI(String apiDataResponse) {
+
+        if (apiDataResponse != null && !apiDataResponse.equals("")) {
+            DatabaseHandler db = new DatabaseHandler(OtherBrandActivity.otherBrandActivity);
+            String Compititor_List = String.valueOf(db.getMasterData(Constants.Competitor_List));
+            Gson gson = new Gson();
+            userTypeCompetitor = new TypeToken<ArrayList<Common_Model>>() {
+            }.getType();
+            otherBrandList = gson.fromJson(Compititor_List, userTypeCompetitor);
+        }
+
     }
 
 

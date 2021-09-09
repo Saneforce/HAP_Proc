@@ -11,13 +11,17 @@
         android:orientation="vertical">
 
         <TextView
+            android:maxLines="1"
+            android:ellipsize="end"
             android:id="@+id/tvValue"
             style="@style/mediumTextStyle"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="800/10"></TextView>
+            android:text="80/10"></TextView>
 
         <TextView
+            android:maxLines="2"
+            android:ellipsize="end"
             android:id="@+id/tvDesc"
             style="@style/mediumTextStyle"
             android:layout_weight="1"

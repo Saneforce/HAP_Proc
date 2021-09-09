@@ -55,7 +55,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Invoice_History extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
-    TextView outlet_name, lastinvoice,tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo,tvOrder;
+    TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder;
     LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder;
     Common_Class common_class;
     List<OutletReport_View_Modal> OutletReport_View_Modal;
@@ -91,8 +91,6 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
             lastinvoice = findViewById(R.id.lastinvoice);
             lin_noOrder = findViewById(R.id.lin_noOrder);
             tvOrder = (TextView) findViewById(R.id.tvOrder);
-
-
 
 
             tvOtherBrand = (TextView) findViewById(R.id.tvOtherBrand);
@@ -458,8 +456,12 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 
                                     sharedCommonPref.save(Constants.PreOrderQtyList, gson.toJson(product_details_modalArrayList));
 
+                                    Log.v("PreOrderList: ", "" + product_details_modalArrayList.size());
+
                                 } else {
                                     sharedCommonPref.clear_pref(Constants.PreOrderQtyList);
+                                    Log.v("PreOrderList: ", "" + "not success");
+
                                 }
 
 

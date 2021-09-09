@@ -292,6 +292,11 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
                     public void onClick(DialogInterface dialog, int id) {
 
                         Product_Details_Modalitem.remove(pos);
+
+                        if (Product_Details_Modalitem.size() == 0)
+                            Product_Details_Modalitem.add(new Product_Details_Modal("", "", "", 0, ""));
+
+
                         notifyDataSetChanged();
 
                     }

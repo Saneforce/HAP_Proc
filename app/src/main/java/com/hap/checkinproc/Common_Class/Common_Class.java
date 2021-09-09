@@ -42,6 +42,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -52,6 +54,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -65,6 +68,7 @@ import static com.hap.checkinproc.Common_Class.Constants.Outlet_Total_Orders;
 import static com.hap.checkinproc.Common_Class.Constants.Product_List;
 import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
+import static com.hap.checkinproc.Common_Class.Constants.SFA_CUMULATIVE;
 import static com.hap.checkinproc.Common_Class.Constants.TodayOrderDetails_List;
 
 
@@ -350,7 +354,8 @@ public class Common_Class {
             call.enqueue(new Callback<Object>() {
                 @Override
                 public void onResponse(Call<Object> call, Response<Object> response) {
-                    try { Gson gson = new Gson();
+                    try {
+                        Gson gson = new Gson();
 
 
                         if (shared_common_pref == null)
@@ -390,7 +395,7 @@ public class Common_Class {
                             updateUi.onLoadTodayOrderList(outletReport_view_modalList);
                         }
 
-                        if (key.equals(TodayOrderDetails_List)) {
+                        if (key.equals(TodayOrderDetails_List) || key.equals(Competitor_List)) {
 
                             updateUi = ((UpdateResponseUI) activity);
 
@@ -463,6 +468,99 @@ public class Common_Class {
         } catch (Exception e) {
             Log.e("api response ex:", e.getMessage());
         }
+    }
+
+
+    public void getDashboarddata(String key, Activity activity) {
+        try {
+            if (isNetworkAvailable(activity)) {
+                Map<String, String> QueryString = new HashMap<>();
+                String axnname = "";
+
+                switch (key) {
+
+
+                    case SFA_CUMULATIVE:
+                        axnname = "get/cumulativevalues";
+                        break;
+
+                    default:
+                        throw new IllegalStateException("Unexpected value: " + key);
+                }
+
+                QueryString.put("axn", axnname);
+
+
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
+                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
+                HeadItem.put("dt", GetDatewothouttime());
+
+
+                Call<ResponseBody> call = service.GetRouteObject310(QueryString, HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+
+                                //   {"success":true,"Data":[{"CTC":31,"CPC":28,"TC":0,"PC":0,"NTC":0,"NPC":0}]}
+
+                                if (jsonObject.getBoolean("success")) {
+
+                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                                    int todayCall = 0, cumTodayCall = 0, newTodayCall = 0, proCall = 0, cumProCall = 0, newProCall = 0;
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+
+                                    }
+
+
+                                }
+
+
+                            }
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
+
+
+                    }
+                });
+            } else {
+                showMsg(activity, "Please check your internet connection.");
+            }
+        } catch (Exception e) {
+
+        }
+
     }
 
 

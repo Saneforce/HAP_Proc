@@ -52,7 +52,10 @@ public class GateAdapter extends RecyclerView.Adapter<GateAdapter.MyViewHolder> 
 
     @Override
     public int getItemCount() {
+        if(jsonArray!=null)
         return jsonArray.size();
+        else
+            return 0;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {

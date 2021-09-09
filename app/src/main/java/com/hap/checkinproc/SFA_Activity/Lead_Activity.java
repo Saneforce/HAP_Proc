@@ -45,8 +45,8 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
     Type userType;
     Common_Class common_class;
     TextView route_text, todayoutlets, TotalOutlets, reachedoutlets;
-    List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List = new ArrayList<>();
-    List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_ListFilter = new ArrayList<>();
+    List<Retailer_Modal_List> Retailer_Modal_List = new ArrayList<>();
+    List<Retailer_Modal_List> Retailer_Modal_ListFilter = new ArrayList<>();
     Shared_Common_Pref sharedCommonPref;
     Common_Model Model_Pojo;
     String Route_id;
@@ -264,11 +264,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
 
             if (flag.equals("0")) {
 
-                Log.e("Lead Size of reta:11 ",""+Retailer_Modal_List.size());
-
-                 Retailer_Modal_ListFilter.clear();
-
-                Log.e("Lead Size of reta:22 ",""+Retailer_Modal_List.size());
+                Retailer_Modal_ListFilter = new ArrayList<>();
 
                 for (int i = 0; i < Retailer_Modal_List.size(); i++) {
                     if (id.equals(Retailer_Modal_List.get(i).getTownCode()))
@@ -276,11 +272,11 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
                 }
 
 
-                recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
-                new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();
-                recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
+                recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter,
+                        R.layout.lead_recyclerview, getApplicationContext()));
 
-                TotalOutlets.setText("Total Outlets:" + "\t" + Retailer_Modal_List.size());
+                TotalOutlets.setText("Total Outlets:" + "\t" + Retailer_Modal_ListFilter.size());
+
 
             } else {
 

@@ -10,14 +10,13 @@
         android:orientation="vertical">
 
 
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:text="12|₹450"
-            android:textSize="@dimen/C12dp"
-            android:textStyle="bold">
+            android:text="10|100"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/C12dp">
 
 
         </TextView>
@@ -26,28 +25,34 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:text="Curd"
-            android:textSize="@dimen/C12dp"
-            />
+            android:text="10|₹300"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/C12dp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:text="200|₹750"
-            android:textSize="@dimen/C12dp"
-            android:textStyle="bold">
+            android:text="50|₹500"
+            android:textColor="@color/black_80"
+            android:textSize="@dimen/C12dp">
 
 
         </TextView>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/grey_200"></LinearLayout>
+
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
-            android:text="Total"
+            android:text="70|₹900"
             android:textSize="@dimen/C12dp"
-           >
+            android:textStyle="bold">
 
 
         </TextView>

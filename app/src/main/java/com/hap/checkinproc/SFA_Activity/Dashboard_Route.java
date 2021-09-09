@@ -34,6 +34,8 @@ import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
@@ -51,9 +53,16 @@ import com.hap.checkinproc.common.LocationFinder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 
@@ -110,10 +119,141 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         getDbstoreData(Constants.Rout_List);
 
         common_class = new Common_Class(this);
+        shared_common_pref = new Shared_Common_Pref(this);
+
         common_class.getDataFromApi(Constants.Outlet_Total_Orders, this, false);
 
 
+        if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals(""))
+            getLastInvoiceData();
+
+
     }
+
+    private void getLastInvoiceData() {
+        try {
+
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("distributorCode", shared_common_pref.getvalue(Constants.Distributor_Id));
+
+                String div_code = Shared_Common_Pref.Div_Code.replaceAll(",", "");
+                HeadItem.put("divisionCode", div_code);
+
+
+                Call<ResponseBody> call = service.getLastThreeMnthsData(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+
+
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+                                ArrayList<Retailer_Modal_List> todayRetailorData = new ArrayList<>();
+
+                                ArrayList<Retailer_Modal_List> previousRetailorData = new ArrayList<>();
+
+
+                                if (jsonObject.getBoolean("success")) {
+
+                                    JSONArray previousdata = jsonObject.getJSONArray("data");
+
+                                    JSONArray todaydata = jsonObject.getJSONArray("todaydata");
+
+                                    int todayCall = 0, cumTodayCall = 0, newTodayCall = 0, proCall = 0, cumProCall = 0, newProCall = 0;
+
+                                    if (todaydata != null && todaydata.length() > 0) {
+
+                                        for (int i = 0; i < todaydata.length(); i++) {
+                                            JSONObject tdObj = todaydata.getJSONObject(i);
+
+                                            todayRetailorData.add(new Retailer_Modal_List(tdObj.getString("Cust_Code"),
+                                                    tdObj.getInt("Others"), tdObj.getInt("OthersVal")
+                                                    , tdObj.getInt("Curd"), tdObj.getInt("CurdVal"), tdObj.getInt("Milk"), tdObj.getInt("MilkVal")));
+
+                                            shared_common_pref.save(Constants.RetailorTodayData, gson.toJson(todayRetailorData));
+
+
+                                        }
+                                    } else {
+                                        shared_common_pref.save(Constants.RetailorTodayData, "");
+
+                                    }
+
+                                    if (previousdata != null && previousdata.length() > 0) {
+
+                                        for (int i = 0; i < previousdata.length(); i++) {
+                                            JSONObject preObj = previousdata.getJSONObject(i);
+                                            int others = 0, othersVal = 0;
+
+                                            if (preObj.has("Others"))
+                                                others = preObj.getInt("Others");
+
+                                            if (preObj.has("OthersVal"))
+                                                othersVal = preObj.getInt("OthersVal");
+
+
+                                            previousRetailorData.add(new Retailer_Modal_List(preObj.getString("Cust_Code"), preObj.getString("Mnth"),
+                                                    others, othersVal
+                                                    , preObj.getInt("Curd"), preObj.getInt("CurdVal"),
+                                                    preObj.getInt("Milk"), preObj.getInt("MilkVal")));
+
+                                            shared_common_pref.save(Constants.RetailorPreviousData, gson.toJson(previousRetailorData));
+
+
+                                        }
+                                    } else {
+                                        shared_common_pref.save(Constants.RetailorPreviousData, "");
+
+                                    }
+
+
+                                } else {
+                                    shared_common_pref.save(Constants.RetailorTodayData, "");
+                                    shared_common_pref.save(Constants.RetailorPreviousData, "");
+                                }
+
+
+                            }
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
+
+
+                    }
+                });
+            } else {
+                common_class.showMsg(Dashboard_Route.dashboard_route, "Please check your internet connection");
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+
 
     @Override
     public void onResume() {
@@ -122,7 +262,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             recyclerView = findViewById(R.id.leaverecyclerview);
             presenter = new MasterSync_Implementations(this, new Master_Sync_View());
             presenter.requestDataFromServer();
-            shared_common_pref = new Shared_Common_Pref(this);
             headtext = findViewById(R.id.headtext);
             route_text = findViewById(R.id.route_text);
             distributor_text = findViewById(R.id.distributor_text);
@@ -419,6 +558,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             distributor_text.setText(myDataset.get(position).getName());
             shared_common_pref.save(Constants.Distributor_name, myDataset.get(position).getName());
             shared_common_pref.save(Constants.Distributor_Id, myDataset.get(position).getId());
+            getLastInvoiceData();
+
+
             loadroute(myDataset.get(position).getId());
             OutletFilter(myDataset.get(position).getId(), "1", true);
 
@@ -442,7 +584,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
             if (flag.equals("0")) {
 
-                Retailer_Modal_ListFilter.clear();
+                Retailer_Modal_ListFilter = new ArrayList<>();
 
                 for (int i = 0; i < Retailer_Modal_List.size(); i++) {
                     if (id.equals(Retailer_Modal_List.get(i).getTownCode()))

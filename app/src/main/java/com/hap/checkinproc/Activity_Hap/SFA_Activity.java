@@ -1,32 +1,27 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
+import android.widget.DatePicker;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentStatePagerAdapter;
-import androidx.viewpager.widget.PagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
-import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.MVP.Main_Model;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Order_Reports;
@@ -37,11 +32,25 @@ import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
+import com.hap.checkinproc.SFA_Adapter.OutletDashboardInfoAdapter;
 import com.hap.checkinproc.common.DatabaseHandler;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SFA_Activity extends AppCompatActivity implements View.OnClickListener /*,Main_Model.MasterSyncView*/ {
     LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders;
@@ -52,14 +61,23 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     Shared_Common_Pref sharedCommonPref;
     DatabaseHandler db;
 
-    ImageView ivLogout;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    private RelativeLayout dotsLayout;
-    private TextView[] dots;
+    ImageView ivLogout, ivCalendar;
 
-    Switch switchGraphMode;
-    private ViewPagerAdapter adapter;
+    LinearLayout llGridParent;
+
+    OutletDashboardInfoAdapter cumulativeInfoAdapter;
+    private List<Cumulative_Order_Model> cumulative_order_modelList = new ArrayList<>();
+    GridView recyclerView;
+
+
+//    RecyclerView recyclerView2;
+//
+//    CumulativeInfoAdapter cumulativeInfoAdapter2;
+//    private List<Cumulative_Order_Model> cumulative_order_modelList2 = new ArrayList<>();
+//
+
+    TextView tvServiceOutlet, tvUniverseOutlet, tvNewSerOutlet, tvTotSerOutlet, tvExistSerOutlet, tvDate, tvTodayCalls, tvProCalls, tvCumTodayCalls, tvNewTodayCalls, tvCumProCalls, tvNewProCalls, tvAvgNewCalls, tvAvgTodayCalls, tvAvgCumCalls;
+    private DatePickerDialog fromDatePickerDialog;
 
 
     @Override
@@ -79,7 +97,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         linorders = findViewById(R.id.linorders);
         lin_Reports = findViewById(R.id.lin_Reports);
         Logout = findViewById(R.id.Logout);
-        switchGraphMode = (Switch) findViewById(R.id.switchCumulativeMode);
+        //switchGraphMode = (Switch) findViewById(R.id.switchCumulativeMode);
 
         common_class = new Common_Class(this);
         SyncButon.setOnClickListener(this);
@@ -112,133 +130,586 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
 
         init();
+        setOnClickListener();
 
 
-        addBottomDots(0);
+//        addBottomDots(0);
+//
+//
+//        ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                addBottomDots(position);
+//
+//            }
+//
+//            @Override
+//            public void onPageScrolled(int arg0, float arg1, int arg2) {
+//
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int arg0) {
+//
+//            }
+//        };
+//
+//        switchGraphMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//
+//                    setupViewPager(viewPager, true);
+//                } else {
+//
+//                    setupViewPager(viewPager, false);
+//                }
+//            }
+//        });
+//
+//        setupViewPager(viewPager, false);
+//        viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+//
+//
+//        tabLayout.setupWithViewPager(viewPager);
 
 
-        ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+        recyclerView = findViewById(R.id.gvOutlet);
 
-            @Override
-            public void onPageSelected(int position) {
-                addBottomDots(position);
-
-            }
-
-            @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int arg0) {
-
-            }
-        };
-
-        switchGraphMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-
-                    setupViewPager(viewPager, true);
-                } else {
-
-                    setupViewPager(viewPager, false);
-                }
-            }
-        });
-
-        setupViewPager(viewPager, false);
-        viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
+        llGridParent = findViewById(R.id.lin_gridOutlet);
 
 
-        tabLayout.setupWithViewPager(viewPager);
+//        recyclerView2 = findViewById(R.id.recyclerView2);
+//
+//        cumulative_order_modelList2.clear();
+//
+//
+//        cumulative_order_modelList2.add(new Cumulative_Order_Model("DSO", 20, 10, 30, 40, 20, 20));
+//
+//        cumulative_order_modelList2.add(new Cumulative_Order_Model("DCO", 30, 50, 70, 50, 100, 120));
+//
+//        cumulative_order_modelList2.add(new Cumulative_Order_Model("Veg Shop", 50, 60, 100, 90, 170, 150));
+//        cumulative_order_modelList2.add(new Cumulative_Order_Model("Modern Trade", 50, 60, 100, 90, 100, 67));
+//
+//
+//        cumulativeInfoAdapter2 = new CumulativeInfoAdapter(this, cumulative_order_modelList2, new AdapterOnClick() {
+//            @Override
+//            public void onIntentClick(int position) {
+//            }
+//        });
+//        recyclerView2.setAdapter(cumulativeInfoAdapter2);
 
+
+        getCumulativeDataFromAPI();
+
+        getServiceOutletSummary();
+        getOutletSummary();
+
+        getDashboarddata();
+
+
+        //    common_class.getDashboarddata(Constants.SFA_CUMULATIVE, this);
 
     }
 
-    private void addBottomDots(int currentPage) {
+    private void setOnClickListener() {
+        ivCalendar.setOnClickListener(this);
+    }
+
+    private void getCumulativeDataFromAPI() {
         try {
 
-            TextView tvDot1 = findViewById(R.id.layoutDots1);
-            TextView tvDot2 = findViewById(R.id.layoutDots2);
-            TextView tvDot3 = findViewById(R.id.layoutDots3);
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
-            switch (currentPage) {
-                case 0:
-                    tvDot1.setTextColor(Color.BLUE);
-                    tvDot2.setTextColor(Color.LTGRAY);
-                    tvDot3.setTextColor(Color.LTGRAY);
-                    break;
-                case 1:
-                    tvDot1.setTextColor(Color.LTGRAY);
-                    tvDot2.setTextColor(Color.BLUE);
-                    tvDot3.setTextColor(Color.LTGRAY);
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calobj = Calendar.getInstance();
+                String dateTime = df.format(calobj.getTime());
 
-                    break;
-                case 2:
-                    tvDot1.setTextColor(Color.LTGRAY);
-                    tvDot2.setTextColor(Color.LTGRAY);
-                    tvDot3.setTextColor(Color.BLUE);
 
-                    break;
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
+                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
+                HeadItem.put("dt", dateTime);
+
+
+                Call<ResponseBody> call = service.getCumulativeValues(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+
+                                //   {"success":true,"Data":[{"CTC":31,"CPC":28,"TC":0,"PC":0,"NTC":0,"NPC":0}]}
+
+                                if (jsonObject.getBoolean("success")) {
+
+                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                                    int todayCall = 0, cumTodayCall = 0, newTodayCall = 0, proCall = 0, cumProCall = 0, newProCall = 0;
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+                                        todayCall = jsonObject1.getInt("TC");
+                                        cumTodayCall = jsonObject1.getInt("CTC");
+                                        newTodayCall = jsonObject1.getInt("NTC");
+                                        proCall = jsonObject1.getInt("PC");
+                                        cumProCall = jsonObject1.getInt("CPC");
+                                        newProCall = jsonObject1.getInt("NPC");
+
+                                        tvTodayCalls.setText("" + todayCall);
+                                        tvCumTodayCalls.setText("" + cumTodayCall);
+                                        tvNewTodayCalls.setText("" + newTodayCall);
+                                        tvProCalls.setText("" + proCall);
+                                        tvCumProCalls.setText("" + cumProCall);
+                                        tvNewProCalls.setText("" + newProCall);
+
+
+                                    }
+
+
+                                    if (todayCall > 0 || proCall > 0)
+                                        tvAvgTodayCalls.setText("" + (todayCall + proCall) / 2);
+
+                                    if (cumTodayCall > 0 || cumProCall > 0)
+                                        tvAvgCumCalls.setText("" + (cumTodayCall + cumProCall) / 2);
+                                    if (newTodayCall > 0 || newProCall > 0)
+                                        tvAvgNewCalls.setText("" + (newTodayCall + newProCall) / 2);
+
+                                }
+
+
+                            }
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
+
+
+                    }
+                });
+            } else {
+                common_class.showMsg(this, "Please check your internet connection");
             }
-
-
         } catch (Exception e) {
-            Log.e("SliderConcept: ", e.getMessage());
+            Log.v("fail>>", e.getMessage());
+
+
         }
     }
 
-    private void setupViewPager(ViewPager viewPager, boolean isGraphMode) {
 
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
-
-        adapter.addFragment(new DashboardOutletDataFrag(this, "Outlet"), "Outlet");
-        adapter.addFragment(new DashboardSalesDataFrag(this, "Sales"), "Sales");
-        adapter.addFragment(new DashboardTableDataFrag(this, "Table3"), "Volume");
-        adapter.addFragment(new DashboardVisitDataFrag(this, "Table4"), "Visit");
-
-        findViewById(R.id.llPagerDots).setVisibility(View.VISIBLE);
-        addBottomDots(0);
+    private void getDashboardDataFromAPI() {
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
 
-        viewPager.setAdapter(adapter);
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calobj = Calendar.getInstance();
+                String dateTime = df.format(calobj.getTime());
 
 
-//        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
+                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
+                HeadItem.put("dt", dateTime);
+
+
+                Call<ResponseBody> call = service.getDashboardValues(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+
+                                //   {"success":true,"Data":[{"CTC":31,"CPC":28,"TC":0,"PC":0,"NTC":0,"NPC":0}]}
+
+                                if (jsonObject.getBoolean("success")) {
+
+                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+
+                                    }
+
+
+                                }
+
+
+//                            popMaterialList.clear();
 //
-//        if (isGraphMode) {
-//            adapter.resetFragment();
-//            adapter.addFragment(new CombinedChartFragment(this, "Table4"), "T4");
+//                            for (int i = 0; i < jsonArray.length(); i++) {
+//                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 //
-//            findViewById(R.id.llPagerDots).setVisibility(View.GONE);
-//
-//        } else {
-//            adapter.resetFragment();
-//            adapter.addFragment(new DashboardTableDataFrag(this, "Table1"), "T1");
-//            adapter.addFragment(new DashboardBarDataFrag("Table2"), "T2");
-//            adapter.addFragment(new DashboardBarDataFrag("Table3"), "T3");
-//            adapter.addFragment(new DashboardBarDataFrag("Table3"), "T3");
-//
-//            findViewById(R.id.llPagerDots).setVisibility(View.VISIBLE);
-//            addBottomDots(0);
-//
-//        }
-//        viewPager.setAdapter(adapter);
-//        adapter.notifyDataSetChanged();
+//                                popMaterialList.add(new Common_Model(jsonObject1.getString("POP_Code"), jsonObject1.getString("POP_Name"),
+//                                        jsonObject1.getString("POP_UOM")));
+//                            }
 
 
+                            }
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
+
+
+                    }
+                });
+            } else {
+                common_class.showMsg(this, "Please check your internet connection");
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+
+    private void getServiceOutletSummary() {
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calobj = Calendar.getInstance();
+                String dateTime = df.format(calobj.getTime());
+
+
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
+                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
+                HeadItem.put("dt", dateTime);
+
+
+                Call<ResponseBody> call = service.getServiceOutletsummary(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+
+                                //   {"success":true,"Data":[{"CTC":31,"CPC":28,"TC":0,"PC":0,"NTC":0,"NPC":0}]}
+
+                                if (jsonObject.getBoolean("success")) {
+
+                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+                                        tvTotSerOutlet.setText("" + jsonObject1.getInt("totalcnt"));
+                                        tvNewSerOutlet.setText("" + jsonObject1.getInt("newcnt"));
+
+                                        tvExistSerOutlet.setText("" +
+                                                (jsonObject1.getInt("totalcnt") - jsonObject1.getInt("newcnt")));
+
+                                    }
+
+
+                                }
+
+
+//                            popMaterialList.clear();
+//
+//                            for (int i = 0; i < jsonArray.length(); i++) {
+//                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//
+//                                popMaterialList.add(new Common_Model(jsonObject1.getString("POP_Code"), jsonObject1.getString("POP_Name"),
+//                                        jsonObject1.getString("POP_UOM")));
+//                            }
+
+
+                            }
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
+
+
+                    }
+                });
+            } else {
+                common_class.showMsg(this, "Please check your internet connection");
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+
+
+    private void getOutletSummary() {
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calobj = Calendar.getInstance();
+                String dateTime = df.format(calobj.getTime());
+
+
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
+                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
+                HeadItem.put("dt", dateTime);
+
+
+                Call<ResponseBody> call = service.getOutletsummary(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+                                if (jsonObject.getBoolean("success")) {
+
+                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                        tvServiceOutlet.setText("" + jsonObject1.getInt("ServiceOutlets"));
+                                        tvUniverseOutlet.setText("" + jsonObject1.getInt("UniverseOutlets"));
+
+                                    }
+
+
+                                }
+
+
+                            }
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
+
+
+                    }
+                });
+            } else {
+                common_class.showMsg(this, "Please check your internet connection");
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+
+
+    private void getDashboarddata() {
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calobj = Calendar.getInstance();
+                String dateTime = df.format(calobj.getTime());
+
+
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
+                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
+                HeadItem.put("dt", dateTime);
+
+
+                Call<ResponseBody> call = service.getDashboardData(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+                                if (jsonObject.getBoolean("success")) {
+
+                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                                    cumulative_order_modelList.clear();
+
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+
+                                        cumulative_order_modelList.add(new Cumulative_Order_Model(jsonObject1.getString("Doc_Special_SName"),
+                                                jsonObject1.getInt("cnt")));
+
+
+                                    }
+
+
+                                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llGridParent.getLayoutParams();
+// Changes the height and width to the specified *pixels*
+                                    params.height = 200;
+                                    params.width = cumulative_order_modelList.size() * 200;
+                                    llGridParent.setLayoutParams(params);
+
+
+                                    cumulativeInfoAdapter = new OutletDashboardInfoAdapter(SFA_Activity.this, cumulative_order_modelList);
+                                    recyclerView.setNumColumns(cumulative_order_modelList.size());
+
+                                    recyclerView.setAdapter(cumulativeInfoAdapter);
+
+
+                                }
+
+
+                            }
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
+
+
+                    }
+                });
+            } else {
+                common_class.showMsg(this, "Please check your internet connection");
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
     }
 
 
     public void init() {
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
+//visitData
+        tvTodayCalls = findViewById(R.id.tvTodayCalls);
+        tvCumTodayCalls = findViewById(R.id.tvCumTodayCalls);
+        tvNewTodayCalls = findViewById(R.id.tvNewTodayCalls);
+
+        tvProCalls = findViewById(R.id.tvProCalls);
+        tvCumProCalls = findViewById(R.id.tvCumProCalls);
+        tvNewProCalls = findViewById(R.id.tvNewProCalls);
+
+        tvAvgTodayCalls = findViewById(R.id.tvAvgTodayCalls);
+        tvAvgCumCalls = findViewById(R.id.tvAvgCumCalls);
+        tvAvgNewCalls = findViewById(R.id.tvAvgNewCalls);
 
 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        //outlet
+
+        ivCalendar = (ImageView) findViewById(R.id.ivSFACalendar);
+        tvDate = (TextView) findViewById(R.id.tvSFADate);
+
+
+        tvServiceOutlet = (TextView) findViewById(R.id.tvServiceOutlet);
+        tvUniverseOutlet = (TextView) findViewById(R.id.tvUniverseOutlet);
+
+        tvNewSerOutlet = (TextView) findViewById(R.id.tvNewServiceOutlet);
+        tvTotSerOutlet = (TextView) findViewById(R.id.tvTotalServiceOutlet);
+        tvExistSerOutlet = (TextView) findViewById(R.id.tvExistServiceOutlet);
+
+//        viewPager = (ViewPager) findViewById(R.id.viewpager);
+//
+//
+//        tabLayout = (TabLayout) findViewById(R.id.tabs);
 
 
 //        TableLayout stk = (TableLayout) findViewById(R.id.table_main);
@@ -297,6 +768,20 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.ivSFACalendar:
+
+                Calendar newCalendar = Calendar.getInstance();
+                fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                        tvDate.setText("" + year + "-" + monthOfYear + "-" + dayOfMonth);
+
+                    }
+                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+                fromDatePickerDialog.show();
+
+                break;
             case R.id.Lin_Dashboard:
                 common_class.CommonIntentwithNEwTask(SFA_Dashboard.class);
                 break;
@@ -433,47 +918,47 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    class ViewPagerAdapter extends FragmentStatePagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
-
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
-
-        public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public int getItemPosition(Object object) {
-            return PagerAdapter.POSITION_NONE;
-        }
-
-
-        public void resetFragment() {
-            mFragmentList.clear();
-            mFragmentTitleList.clear();
-
-        }
-
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-        }
-    }
+//    class ViewPagerAdapter extends FragmentStatePagerAdapter {
+//        private final List<Fragment> mFragmentList = new ArrayList<>();
+//        private final List<String> mFragmentTitleList = new ArrayList<>();
+//
+//        public ViewPagerAdapter(FragmentManager manager) {
+//            super(manager);
+//        }
+//
+//        @Override
+//        public Fragment getItem(int position) {
+//            return mFragmentList.get(position);
+//        }
+//
+//        @Override
+//        public int getCount() {
+//            return mFragmentList.size();
+//        }
+//
+//        public void addFragment(Fragment fragment, String title) {
+//            mFragmentList.add(fragment);
+//            mFragmentTitleList.add(title);
+//            notifyDataSetChanged();
+//        }
+//
+//        @Override
+//        public int getItemPosition(Object object) {
+//            return PagerAdapter.POSITION_NONE;
+//        }
+//
+//
+//        public void resetFragment() {
+//            mFragmentList.clear();
+//            mFragmentTitleList.clear();
+//
+//        }
+//
+//
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            return mFragmentTitleList.get(position);
+//        }
+//    }
 
 }

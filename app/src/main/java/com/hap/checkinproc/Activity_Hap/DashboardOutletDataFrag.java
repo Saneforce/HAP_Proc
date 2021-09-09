@@ -54,12 +54,12 @@ public class DashboardOutletDataFrag extends Fragment {
         cumulative_order_modelList.clear();
 
 
-        cumulative_order_modelList.add(new Cumulative_Order_Model("DSO", "800/10"));
-
-        cumulative_order_modelList.add(new Cumulative_Order_Model("DCO", "30/190"));
-
-        cumulative_order_modelList.add(new Cumulative_Order_Model("VS", "50/100"));
-        cumulative_order_modelList.add(new Cumulative_Order_Model("MT", "80/100"));
+//        cumulative_order_modelList.add(new Cumulative_Order_Model("DSO", "800/10"));
+//
+//        cumulative_order_modelList.add(new Cumulative_Order_Model("DCO", "30/190"));
+//
+//        cumulative_order_modelList.add(new Cumulative_Order_Model("VS", "50/100"));
+//        cumulative_order_modelList.add(new Cumulative_Order_Model("MT", "80/100"));
 
 
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llGridParent.getLayoutParams();

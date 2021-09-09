@@ -44,6 +44,7 @@ import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.LocationEvents;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.Dashboard_View_Model;
@@ -69,7 +70,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Nearby_Outlets extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, OnMapReadyCallback {
+public class Nearby_Outlets extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, OnMapReadyCallback, Master_Interface {
     List<Dashboard_View_Model> approvalList;
     Gson gson;
     private RecyclerView recyclerView, rclRetail;
@@ -508,20 +509,20 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             String dest = jsonLatLongObj.getString("lat") + "," + jsonLatLongObj.getString("lng");
 
             drawRoute(dest);
-//            sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?");
-//
-//            try {
-//                sb.append("place_id=" + resData.getJSONObject(position).getString("place_id"));
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//
-//            //   sb.append("&fields=name,rating,formatted_phone_number,vicinity,formatted_address");
-//            // sb.append("&sensor=false&mode=walking&alternatives=true");
-//
-//            sb.append("&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
-//
-//            shared_common_pref.save(Constants.PLACE_ID_URL, sb.toString());
+            sb = new StringBuilder("https://maps.googleapis.com/maps/api/place/details/json?");
+
+            try {
+                sb.append("place_id=" + resData.getJSONObject(position).getString("place_id"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            //   sb.append("&fields=name,rating,formatted_phone_number,vicinity,formatted_address");
+            // sb.append("&sensor=false&mode=walking&alternatives=true");
+
+            sb.append("&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU");
+
+            shared_common_pref.save(Constants.PLACE_ID_URL, sb.toString());
 //
 //
 //            JSONArray jsonA = resData.getJSONObject(position).getJSONArray("photos");
@@ -543,9 +544,14 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 //
 //            }
         } catch (Exception e) {
+            shared_common_pref.save(Constants.PLACE_ID_URL, "");
            // shared_common_pref.save(Constants.SHOP_PHOTO, "");
-
         }
+    }
+
+    @Override
+    public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
+
     }
 
     class findDrDetail extends AsyncTask<Void, Void, Void> {

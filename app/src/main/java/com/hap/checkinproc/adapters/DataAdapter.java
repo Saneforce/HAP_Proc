@@ -2,6 +2,7 @@ package com.hap.checkinproc.adapters;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
         contactList = myDataset;
         typeName = type;
         contactListFiltered = myDataset;
-        if (type == 1000 || type == 1001) {
+        if (type == 1000) {
             mContext = context;
         } else {
             updateUi = ((Master_Interface) context);
@@ -104,7 +105,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
             fruitViewHolder.mTextName.setText("Gift   : " + contact.getQPS_Name());
 
             float perday = (contact.getTotal_Ltrs() / Float.parseFloat(contact.getName()));
-            fruitViewHolder.tvPerDay.setText("Per Day : " + perday+" ltrs");
+            fruitViewHolder.tvPerDay.setText("Per Day : " + perday + " ltrs");
             //fruitViewHolder.mTextAddress.setTypeface(fruitViewHolder.mTextAddress.getTypeface(), Typeface.BOLD);
 
             fruitViewHolder.mTextName.setTextColor(Color.parseColor("#72D043"));
@@ -196,10 +197,18 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
         @Override
         public void onClick(View v) {
-            if (typeName != 1000 || typeName != 1001)
-                updateUi.OnclickMasterType(contactListFiltered, this.getAdapterPosition(), typeName);
+            try {
 
 
+                if (typeName == 1000) {
+
+                } else {
+                    updateUi.OnclickMasterType(contactListFiltered, this.getAdapterPosition(), typeName);
+                }
+
+            } catch (Exception e) {
+                Log.v("dataAdapter:click:", e.getMessage());
+            }
         }
     }
 

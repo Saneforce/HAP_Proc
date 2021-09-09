@@ -4,6 +4,126 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Retailer_Modal_List {
+
+
+    @SerializedName("Cust_Code")
+    @Expose
+    private String Cust_Code;
+
+
+    @SerializedName("Mnth")
+    @Expose
+    private String Mnth;
+
+    @SerializedName("Others")
+    @Expose
+    private int Others;
+
+    @SerializedName("OthersVal")
+    @Expose
+    private int OthersVal;
+
+    @SerializedName("Curd")
+    @Expose
+    private int Curd;
+    @SerializedName("CurdVal")
+    @Expose
+    private int CurdVal;
+
+    public Retailer_Modal_List(String cust_Code, String mnth, int others, int othersVal, int curd, int curdVal, int milk, int milkVal) {
+        Cust_Code = cust_Code;
+        Mnth = mnth;
+        Others = others;
+        OthersVal = othersVal;
+        Curd = curd;
+        CurdVal = curdVal;
+        Milk = milk;
+        MilkVal = milkVal;
+    }
+
+    public Retailer_Modal_List(String cust_Code, int others, int othersVal, int curd, int curdVal, int milk, int milkVal) {
+        Cust_Code = cust_Code;
+        Others = others;
+        OthersVal = othersVal;
+        Curd = curd;
+        CurdVal = curdVal;
+        Milk = milk;
+        MilkVal = milkVal;
+    }
+
+    @SerializedName("Milk")
+    @Expose
+    private int Milk;
+
+    public String getCust_Code() {
+        return Cust_Code;
+    }
+
+    public void setCust_Code(String cust_Code) {
+        Cust_Code = cust_Code;
+    }
+
+    public String getMnth() {
+        return Mnth;
+    }
+
+    public void setMnth(String mnth) {
+        Mnth = mnth;
+    }
+
+    public int getOthers() {
+        return Others;
+    }
+
+    public void setOthers(int others) {
+        Others = others;
+    }
+
+    public int getOthersVal() {
+        return OthersVal;
+    }
+
+    public void setOthersVal(int othersVal) {
+        OthersVal = othersVal;
+    }
+
+    public int getCurd() {
+        return Curd;
+    }
+
+    public void setCurd(int curd) {
+        Curd = curd;
+    }
+
+    public int getCurdVal() {
+        return CurdVal;
+    }
+
+    public void setCurdVal(int curdVal) {
+        CurdVal = curdVal;
+    }
+
+    public int getMilk() {
+        return Milk;
+    }
+
+    public void setMilk(int milk) {
+        Milk = milk;
+    }
+
+    public int getMilkVal() {
+        return MilkVal;
+    }
+
+    public void setMilkVal(int milkVal) {
+        MilkVal = milkVal;
+    }
+
+    @SerializedName("MilkVal")
+    @Expose
+    private int MilkVal;
+
+
     @SerializedName("id")
     @Expose
     private String id;
@@ -539,4 +659,6 @@ public class Retailer_Modal_List {
     public void setERP_Code(String ERP_Code) {
         this.ERP_Code = ERP_Code;
     }
+
+
 }

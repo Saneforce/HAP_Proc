@@ -351,22 +351,26 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         rptCall.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                JsonArray res = response.body();
-                Log.d(TAG + "getNotify", String.valueOf(response.body()));
+                try {
+                    JsonArray res = response.body();
+                    Log.d(TAG + "getNotify", String.valueOf(response.body()));
 
-                //  Log.d("NotifyMsg", response.body().toString());
-                TextView txt = findViewById(R.id.MRQtxt);
-                txt.setText("");
-                txt.setVisibility(View.GONE);
-                String sMsg = "";
-                txt.setSelected(true);
-                for (int il = 0; il < res.size(); il++) {
-                    JsonObject Itm = res.get(il).getAsJsonObject();
-                    sMsg += Itm.get("NtfyMsg").getAsString();
-                }
-                if (!sMsg.equalsIgnoreCase("")) {
-                    txt.setText(Html.fromHtml(sMsg));
-                    txt.setVisibility(View.VISIBLE);
+                    //  Log.d("NotifyMsg", response.body().toString());
+                    TextView txt = findViewById(R.id.MRQtxt);
+                    txt.setText("");
+                    txt.setVisibility(View.GONE);
+                    String sMsg = "";
+                    txt.setSelected(true);
+                    for (int il = 0; il < res.size(); il++) {
+                        JsonObject Itm = res.get(il).getAsJsonObject();
+                        sMsg += Itm.get("NtfyMsg").getAsString();
+                    }
+                    if (!sMsg.equalsIgnoreCase("")) {
+                        txt.setText(Html.fromHtml(sMsg));
+                        txt.setVisibility(View.VISIBLE);
+                    }
+                } catch (Exception e) {
+
                 }
 
             }
@@ -406,30 +410,34 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         rptMnCall.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                JsonArray res = response.body();
-                Log.d(TAG + "getMnthReports", String.valueOf(response.body()));
-                JsonArray dyRpt = new JsonArray();
-                for (int il = 0; il < res.size(); il++) {
-                    JsonObject Itm = res.get(il).getAsJsonObject();
-                    JsonObject newItem = new JsonObject();
-                    newItem.addProperty("name", Itm.get("Status").getAsString());
-                    newItem.addProperty("value", Itm.get("StatusCnt").getAsString());
-                    newItem.addProperty("Link", true);
-                    newItem.addProperty("Priod", m);
-                    newItem.addProperty("color", Itm.get("StusClr").getAsString().replace(" !important", ""));
-                    dyRpt.add(newItem);
+                try {
+                    JsonArray res = response.body();
+                    Log.d(TAG + "getMnthReports", String.valueOf(response.body()));
+                    JsonArray dyRpt = new JsonArray();
+                    for (int il = 0; il < res.size(); il++) {
+                        JsonObject Itm = res.get(il).getAsJsonObject();
+                        JsonObject newItem = new JsonObject();
+                        newItem.addProperty("name", Itm.get("Status").getAsString());
+                        newItem.addProperty("value", Itm.get("StatusCnt").getAsString());
+                        newItem.addProperty("Link", true);
+                        newItem.addProperty("Priod", m);
+                        newItem.addProperty("color", Itm.get("StusClr").getAsString().replace(" !important", ""));
+                        dyRpt.add(newItem);
+                    }
+
+                    recyclerView = (RecyclerView) findViewById(R.id.Rv_MnRpt);
+                    mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this);
+
+                    RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+                    recyclerView.setLayoutManager(mLayoutManager);
+                    recyclerView.setItemAnimator(new DefaultItemAnimator());
+                    recyclerView.setAdapter(mAdapter);
+                    Log.d(Tag, String.valueOf(response.body()));
+                    LoadingCnt++;
+                    hideShimmer();
+                } catch (Exception e) {
+
                 }
-
-                recyclerView = (RecyclerView) findViewById(R.id.Rv_MnRpt);
-                mAdapter = new HomeRptRecyler(dyRpt, Dashboard_Two.this);
-
-                RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-                recyclerView.setLayoutManager(mLayoutManager);
-                recyclerView.setItemAnimator(new DefaultItemAnimator());
-                recyclerView.setAdapter(mAdapter);
-                Log.d(Tag, String.valueOf(response.body()));
-                LoadingCnt++;
-                hideShimmer();
 
             }
 
@@ -572,85 +580,91 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             modelCall.enqueue(new Callback<JsonObject>() {
                 @Override
                 public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                    Log.d(TAG + "GetMissedPunch", String.valueOf(response.body()));
-                    JsonObject itm = response.body().getAsJsonObject();
-                    String mMessage = "";
-
-                    mMessage = itm.get("Msg").getAsString();
-                    JsonArray MissedItems = itm.getAsJsonArray("GetMissed");
-                    if (MissedItems.size() > 0) {
-                        AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
-                                .setTitle("HAP Check-In")
-                                .setMessage(Html.fromHtml(mMessage))
-                                .setCancelable(false)
-                                .setPositiveButton("Missed Punch Request", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        JsonObject mItem = MissedItems.get(0).getAsJsonObject();
-                                        Intent mIntent = new Intent(Dashboard_Two.this, Missed_Punch.class);
-                                        mIntent.putExtra("EDt", mItem.get("name").getAsString());
-                                        mIntent.putExtra("Shift", mItem.get("name1").getAsString());
-                                        mIntent.putExtra("CInTm", mItem.get("CInTm").getAsString());
-                                        mIntent.putExtra("COutTm", mItem.get("COutTm").getAsString());
-                                        mIntent.putExtra("Aflag", mItem.get("Aflag").getAsString());
-                                        Dashboard_Two.this.startActivity(mIntent);
-                                    }
-                                })
-                                .show();
-
-                    } else {
-
-                        JsonArray WKItems = itm.getAsJsonArray("CheckWK");
-                        if (WKItems.size() > 0) {
-                            if (itm.get("WKFlg").getAsInt() == 1) {
-                                Log.d("WEEKOFF", String.valueOf(itm.get("WKFlg").getAsInt()));
-                                AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
-                                        .setTitle("HAP Check-In")
-                                        .setMessage(Html.fromHtml(mMessage))
-                                        .setCancelable(false)
-                                        .setPositiveButton("Weekoff", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-                                                JsonObject mItem = WKItems.get(0).getAsJsonObject();
-                                                Intent iWeekOff = new Intent(Dashboard_Two.this, Weekly_Off.class);
-                                                iWeekOff.putExtra("EDt", mItem.get("EDt").getAsString());
-                                                Dashboard_Two.this.startActivity(iWeekOff);
-                                                ((AppCompatActivity) Dashboard_Two.this).finish();
-                                            }
-                                        }).setNegativeButton("Others", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
-
-                                                JsonObject mItem = WKItems.get(0).getAsJsonObject();
-                                                Intent iLeave = new Intent(Dashboard_Two.this, Leave_Request.class);
-                                                iLeave.putExtra("EDt", mItem.get("EDt").getAsString());
-                                                Dashboard_Two.this.startActivity(iLeave);
-
-                                                ((AppCompatActivity) Dashboard_Two.this).finish();
-                                            }
-                                        })
-                                        .show();
-                            } else {
-                                AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
-                                        .setTitle("HAP Check-In")
-                                        .setMessage(Html.fromHtml(mMessage))
-                                        .setCancelable(false)
-                                        .setPositiveButton("Others", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialogInterface, int i) {
+                    try {
 
 
-                                                JsonObject mItem = WKItems.get(0).getAsJsonObject();
-                                                Intent iLeave = new Intent(Dashboard_Two.this, Leave_Request.class);
-                                                iLeave.putExtra("EDt", mItem.get("EDt").getAsString());
-                                                Dashboard_Two.this.startActivity(iLeave);
+                        Log.d(TAG + "GetMissedPunch", String.valueOf(response.body()));
+                        JsonObject itm = response.body().getAsJsonObject();
+                        String mMessage = "";
 
-                                                ((AppCompatActivity) Dashboard_Two.this).finish();
-                                            }
-                                        })
-                                        .show();
+                        mMessage = itm.get("Msg").getAsString();
+                        JsonArray MissedItems = itm.getAsJsonArray("GetMissed");
+                        if (MissedItems.size() > 0) {
+                            AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
+                                    .setTitle("HAP Check-In")
+                                    .setMessage(Html.fromHtml(mMessage))
+                                    .setCancelable(false)
+                                    .setPositiveButton("Missed Punch Request", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                            JsonObject mItem = MissedItems.get(0).getAsJsonObject();
+                                            Intent mIntent = new Intent(Dashboard_Two.this, Missed_Punch.class);
+                                            mIntent.putExtra("EDt", mItem.get("name").getAsString());
+                                            mIntent.putExtra("Shift", mItem.get("name1").getAsString());
+                                            mIntent.putExtra("CInTm", mItem.get("CInTm").getAsString());
+                                            mIntent.putExtra("COutTm", mItem.get("COutTm").getAsString());
+                                            mIntent.putExtra("Aflag", mItem.get("Aflag").getAsString());
+                                            Dashboard_Two.this.startActivity(mIntent);
+                                        }
+                                    })
+                                    .show();
+
+                        } else {
+
+                            JsonArray WKItems = itm.getAsJsonArray("CheckWK");
+                            if (WKItems.size() > 0) {
+                                if (itm.get("WKFlg").getAsInt() == 1) {
+                                    Log.d("WEEKOFF", String.valueOf(itm.get("WKFlg").getAsInt()));
+                                    AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
+                                            .setTitle("HAP Check-In")
+                                            .setMessage(Html.fromHtml(mMessage))
+                                            .setCancelable(false)
+                                            .setPositiveButton("Weekoff", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+                                                    JsonObject mItem = WKItems.get(0).getAsJsonObject();
+                                                    Intent iWeekOff = new Intent(Dashboard_Two.this, Weekly_Off.class);
+                                                    iWeekOff.putExtra("EDt", mItem.get("EDt").getAsString());
+                                                    Dashboard_Two.this.startActivity(iWeekOff);
+                                                    ((AppCompatActivity) Dashboard_Two.this).finish();
+                                                }
+                                            }).setNegativeButton("Others", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                    JsonObject mItem = WKItems.get(0).getAsJsonObject();
+                                                    Intent iLeave = new Intent(Dashboard_Two.this, Leave_Request.class);
+                                                    iLeave.putExtra("EDt", mItem.get("EDt").getAsString());
+                                                    Dashboard_Two.this.startActivity(iLeave);
+
+                                                    ((AppCompatActivity) Dashboard_Two.this).finish();
+                                                }
+                                            })
+                                            .show();
+                                } else {
+                                    AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
+                                            .setTitle("HAP Check-In")
+                                            .setMessage(Html.fromHtml(mMessage))
+                                            .setCancelable(false)
+                                            .setPositiveButton("Others", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialogInterface, int i) {
+
+
+                                                    JsonObject mItem = WKItems.get(0).getAsJsonObject();
+                                                    Intent iLeave = new Intent(Dashboard_Two.this, Leave_Request.class);
+                                                    iLeave.putExtra("EDt", mItem.get("EDt").getAsString());
+                                                    Dashboard_Two.this.startActivity(iLeave);
+
+                                                    ((AppCompatActivity) Dashboard_Two.this).finish();
+                                                }
+                                            })
+                                            .show();
+                                }
                             }
                         }
+                    } catch (Exception e) {
+
                     }
 
 
@@ -758,45 +772,49 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                         Callto.enqueue(new Callback<JsonArray>() {
                             @Override
                             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                                //if (PrivacyScreen.equals("True") && dashMdeCnt.equals("1")) {
-                                Log.d("CHECK_OUT_RESPONSE", String.valueOf(response.body()));
-                                Log.d(TAG + "btnCheckout", String.valueOf(response.body()));
+                                try {
+                                    //if (PrivacyScreen.equals("True") && dashMdeCnt.equals("1")) {
+                                    Log.d("CHECK_OUT_RESPONSE", String.valueOf(response.body()));
+                                    Log.d(TAG + "btnCheckout", String.valueOf(response.body()));
 
-                                SharedPreferences.Editor editor = sharedpreferences.edit();
-                                editor.remove(Name);
-                                editor.remove(MOT);
-                                editor.remove("SharedImage");
-                                editor.remove("Sharedallowance");
-                                //editor.remove("SharedMode");
-                                editor.remove("StartedKM");
-                                editor.remove("SharedFromKm");
-                                editor.remove("SharedToKm");
-                                editor.remove("SharedFare");
-                                editor.remove("SharedImages");
-                                editor.remove("Closing");
-                                editor.remove(hapLocation);
-                                editor.remove(otherLocation);
-                                editor.remove(visitPurpose);
-                                editor.remove(modeTravelId);
-                                editor.remove(modeTypeVale);
-                                editor.remove(modeFromKm);
-                                editor.remove(modeToKm);
-                                editor.remove(StartedKm);
-                                editor.remove("SharedDailyAllowancess");
-                                editor.remove("SharedDriverss");
-                                editor.remove("ShareModeIDs");
-                                editor.remove("StoreId");
-                                editor.commit();
+                                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                                    editor.remove(Name);
+                                    editor.remove(MOT);
+                                    editor.remove("SharedImage");
+                                    editor.remove("Sharedallowance");
+                                    //editor.remove("SharedMode");
+                                    editor.remove("StartedKM");
+                                    editor.remove("SharedFromKm");
+                                    editor.remove("SharedToKm");
+                                    editor.remove("SharedFare");
+                                    editor.remove("SharedImages");
+                                    editor.remove("Closing");
+                                    editor.remove(hapLocation);
+                                    editor.remove(otherLocation);
+                                    editor.remove(visitPurpose);
+                                    editor.remove(modeTravelId);
+                                    editor.remove(modeTypeVale);
+                                    editor.remove(modeFromKm);
+                                    editor.remove(modeToKm);
+                                    editor.remove(StartedKm);
+                                    editor.remove("SharedDailyAllowancess");
+                                    editor.remove("SharedDriverss");
+                                    editor.remove("ShareModeIDs");
+                                    editor.remove("StoreId");
+                                    editor.commit();
 
-                                //if (dashMdeCnt.equals("1"))
-                                if (response.body().size() > 0) {
-                                    Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
-                                    takePhoto.putExtra("Mode", "COUT");
-                                    startActivity(takePhoto);
-                                } else {
-                                    Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
-                                    takePhoto.putExtra("Mode", "COUT");
-                                    startActivity(takePhoto);
+                                    //if (dashMdeCnt.equals("1"))
+                                    if (response.body().size() > 0) {
+                                        Intent takePhoto = new Intent(Dashboard_Two.this, AllowanceActivityTwo.class);
+                                        takePhoto.putExtra("Mode", "COUT");
+                                        startActivity(takePhoto);
+                                    } else {
+                                        Intent takePhoto = new Intent(Dashboard_Two.this, ImageCapture.class);
+                                        takePhoto.putExtra("Mode", "COUT");
+                                        startActivity(takePhoto);
+                                    }
+                                } catch (Exception e) {
+
                                 }
 
                             }
@@ -837,11 +855,12 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         Callto.enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                JsonArray jsonArray = response.body();
-                Log.d(TAG + "gatevalue", String.valueOf(response.body()));
+                try {
+                    JsonArray jsonArray = response.body();
+                    Log.d(TAG + "gatevalue", String.valueOf(response.body()));
 
-                gateAdap = new GateAdapter(Dashboard_Two.this, jsonArray);
-                mRecyclerView.setAdapter(gateAdap);
+                    gateAdap = new GateAdapter(Dashboard_Two.this, jsonArray);
+                    mRecyclerView.setAdapter(gateAdap);
                /* for (int l = 0; l < jsonArray.size(); l++) {
                     JsonObject jsonObjectAdd = jsonArray.get(l).getAsJsonObject();
 
@@ -850,6 +869,9 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
                 }
 */
+                } catch (Exception e) {
+
+                }
             }
 
             @Override
