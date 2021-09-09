@@ -47,6 +47,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
 
     Gson gson = new Gson();
 
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname, tvPreOtherVal, tvTdOtherVal, tvPreMilkVal, tvTdMilkVal, tvTdTotVal, tvPreTotVal, tvPreCurdVal, tvTdCurdVal,
                 textviewdate, status, invoice, values, invoicedate, tvRetailorCode, tvFirstMonth, tvSecondMnth, tvThirdMnth;
@@ -110,49 +111,6 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
 //            RetailorAdapter adapter = new RetailorAdapter(common_models, context);
 //
 //            listView.setAdapter(adapter);
-
-
-                tvFirstMonth.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        tvFirstMonth.setTypeface(null, Typeface.BOLD);
-                        tvFirstMonth.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
-
-                        tvSecondMnth.setTypeface(null, Typeface.NORMAL);
-                        tvSecondMnth.setTextColor(context.getResources().getColor(R.color.black_80));
-
-                        tvThirdMnth.setTypeface(null, Typeface.NORMAL);
-                        tvThirdMnth.setTextColor(context.getResources().getColor(R.color.black_80));
-
-                    }
-                });
-//                tvSecondMnth.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View v) {
-//                        tvFirstMonth.setTypeface(null, Typeface.NORMAL);
-//                        tvFirstMonth.setTextColor(context.getResources().getColor(R.color.black_80));
-//
-//                        tvSecondMnth.setTypeface(null, Typeface.BOLD);
-//                        tvSecondMnth.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
-//
-//                        tvThirdMnth.setTypeface(null, Typeface.NORMAL);
-//                        tvThirdMnth.setTextColor(context.getResources().getColor(R.color.black_80));
-//
-//
-//                    }
-//                });
-                tvThirdMnth.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        tvFirstMonth.setTypeface(null, Typeface.NORMAL);
-                        tvFirstMonth.setTextColor(context.getResources().getColor(R.color.black_80));
-                        tvSecondMnth.setTypeface(null, Typeface.NORMAL);
-                        tvSecondMnth.setTextColor(context.getResources().getColor(R.color.black_80));
-                        tvThirdMnth.setTypeface(null, Typeface.BOLD);
-                        tvThirdMnth.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
-
-                    }
-                });
 
 
             } catch (Exception e) {
@@ -262,13 +220,10 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             }
 
 
-            if (!shared_common_pref.getvalue(Constants.RetailorPreviousData).equals("")) {
+            if (!shared_common_pref.getvalue(Constants.RetailorPreviousData).equals("") && holder.tvFirstMonth.getText().toString().equals("")) {
                 if (preList != null && preList.size() > 0) {
-
-
                     for (int i = 0; i < preList.size(); i++) {
                         if (preList.get(i).getCust_Code().equals(Retailer_Modal_List.getId())) {
-
                             isHavePre = true;
 
                             Log.v("PreList: ", Retailer_Modal_List.getName());
@@ -286,7 +241,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                                 holder.tvFirstMonth.setText("" + str.substring(0, 3));
 
 
-                            } else if (holder.tvFirstMonth.getText().toString().equals("")) {
+                            } else if (holder.tvSecondMnth.getText().toString().equals("")) {
                                 holder.tvSecondMnth.setText("" + str.substring(0, 3));
 
 
@@ -301,6 +256,8 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     if (!isHavePre) {
                         holder.tvFirstMonth.setText("");
 
+                        holder.tvSecondMnth.setText("");
+                        holder.tvThirdMnth.setText("");
 
                         holder.tvPreMilkVal.setText("0|₹0");
                         holder.tvPreCurdVal.setText("0|₹0");
@@ -314,58 +271,203 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             }
 
 
-            holder.tvSecondMnth.setOnClickListener(new View.OnClickListener() {
+            holder.tvFirstMonth.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    holder.tvFirstMonth.setTypeface(null, Typeface.BOLD);
+                    holder.tvFirstMonth.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+
+                    holder.tvSecondMnth.setTypeface(null, Typeface.NORMAL);
+                    holder.tvSecondMnth.setTextColor(context.getResources().getColor(R.color.black_80));
+
+                    holder.tvThirdMnth.setTypeface(null, Typeface.NORMAL);
+                    holder.tvThirdMnth.setTextColor(context.getResources().getColor(R.color.black_80));
 
                     boolean isHavePre = false;
 
-                    for (int i = 0; i < preList.size(); i++) {
-                        if (preList.get(i).getCust_Code().equals(Retailer_Modal_List.getId())) {
+                    if (!shared_common_pref.getvalue(Constants.RetailorPreviousData).equals("")) {
+                        if (preList != null && preList.size() > 0) {
+                            for (int i = 0; i < preList.size(); i++) {
+                                if (preList.get(i).getCust_Code().equals(Retailer_Modal_List.getId())) {
+                                    isHavePre = true;
 
-                            isHavePre = true;
+                                    String str = preList.get(i).getMnth().substring(0, 3);
 
-                            String str = preList.get(i).getMnth();
-
-                            Log.v("PreList:Mnth ", str);
-
-
-                            if (holder.tvSecondMnth.getText().toString().equals(str)) {
-                                holder.tvPreMilkVal.setText("" + preList.get(i).getMilk() + "|₹" + preList.get(i).getMilkVal());
-                                holder.tvPreCurdVal.setText("" + preList.get(i).getCurd() + "|₹" + preList.get(i).getCurdVal());
-                                holder.tvPreOtherVal.setText("" + preList.get(i).getOthers() + "|₹" + preList.get(i).getOthersVal());
-
-                                holder.tvPreTotVal.setText("" + (preList.get(i).getMilk() + preList.get(i).getCurd() +
-                                        preList.get(i).getOthers()) + "|₹" + (
-                                        preList.get(i).getMilkVal() + preList.get(i).getCurdVal() + preList.get(i).getOthersVal()));
+                                    Log.v("PreList: ", Retailer_Modal_List.getName() + " mnth: " + str);
 
 
+                                    if (holder.tvFirstMonth.getText().toString().equals(str)) {
+                                        holder.tvPreMilkVal.setText("" + preList.get(i).getMilk() + "|₹" + preList.get(i).getMilkVal());
+                                        holder.tvPreCurdVal.setText("" + preList.get(i).getCurd() + "|₹" + preList.get(i).getCurdVal());
+                                        holder.tvPreOtherVal.setText("" + preList.get(i).getOthers() + "|₹" + preList.get(i).getOthersVal());
+
+                                        holder.tvPreTotVal.setText("" + (preList.get(i).getMilk() + preList.get(i).getCurd() +
+                                                preList.get(i).getOthers()) + "|₹" + (
+                                                preList.get(i).getMilkVal() + preList.get(i).getCurdVal() + preList.get(i).getOthersVal()));
+
+
+                                    }
+
+                                }
                             }
+
+                            if (!isHavePre) {
+                                holder.tvFirstMonth.setText("");
+
+                                holder.tvSecondMnth.setText("");
+                                holder.tvThirdMnth.setText("");
+
+                                holder.tvPreMilkVal.setText("0|₹0");
+                                holder.tvPreCurdVal.setText("0|₹0");
+                                holder.tvPreOtherVal.setText("0|₹0");
+
+                                holder.tvPreTotVal.setText("0|₹0");
+                            }
+
                         }
-                    }
 
-                    if (!isHavePre) {
-                        holder.tvFirstMonth.setText("");
-
-
-                        holder.tvPreMilkVal.setText("0|₹0");
-                        holder.tvPreCurdVal.setText("0|₹0");
-                        holder.tvPreOtherVal.setText("0|₹0");
-
-                        holder.tvPreTotVal.setText("0|₹0");
                     }
 
                     notifyDataSetChanged();
 
+
                 }
+            });
+            holder.tvSecondMnth.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.tvFirstMonth.setTypeface(null, Typeface.NORMAL);
+                    holder.tvFirstMonth.setTextColor(context.getResources().getColor(R.color.black_80));
+
+                    holder.tvSecondMnth.setTypeface(null, Typeface.BOLD);
+                    holder.tvSecondMnth.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+
+                    holder.tvThirdMnth.setTypeface(null, Typeface.NORMAL);
+                    holder.tvThirdMnth.setTextColor(context.getResources().getColor(R.color.black_80));
 
 
+                    boolean isHavePre = false;
+
+                    if (!shared_common_pref.getvalue(Constants.RetailorPreviousData).equals("")) {
+                        if (preList != null && preList.size() > 0) {
+                            for (int i = 0; i < preList.size(); i++) {
+                                if (preList.get(i).getCust_Code().equals(Retailer_Modal_List.getId())) {
+                                    isHavePre = true;
+
+                                    String str = preList.get(i).getMnth().substring(0, 3);
+                                    Log.v("PreList: ", Retailer_Modal_List.getName() + " mnth: " + str);
+
+
+                                    if (holder.tvSecondMnth.getText().toString().equals(str)) {
+                                        holder.tvPreMilkVal.setText("" + preList.get(i).getMilk() + "|₹" + preList.get(i).getMilkVal());
+                                        holder.tvPreCurdVal.setText("" + preList.get(i).getCurd() + "|₹" + preList.get(i).getCurdVal());
+                                        holder.tvPreOtherVal.setText("" + preList.get(i).getOthers() + "|₹" + preList.get(i).getOthersVal());
+
+                                        holder.tvPreTotVal.setText("" + (preList.get(i).getMilk() + preList.get(i).getCurd() +
+                                                preList.get(i).getOthers()) + "|₹" + (
+                                                preList.get(i).getMilkVal() + preList.get(i).getCurdVal() + preList.get(i).getOthersVal()));
+
+
+                                    }
+
+                                }
+                            }
+
+                            if (!isHavePre) {
+                                holder.tvFirstMonth.setText("");
+
+                                holder.tvSecondMnth.setText("");
+                                holder.tvThirdMnth.setText("");
+
+                                holder.tvPreMilkVal.setText("0|₹0");
+                                holder.tvPreCurdVal.setText("0|₹0");
+                                holder.tvPreOtherVal.setText("0|₹0");
+
+                                holder.tvPreTotVal.setText("0|₹0");
+                            }
+
+                        }
+
+                    }
+
+                    notifyDataSetChanged();
+
+
+                }
+            });
+            holder.tvThirdMnth.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    holder.tvFirstMonth.setTypeface(null, Typeface.NORMAL);
+                    holder.tvFirstMonth.setTextColor(context.getResources().getColor(R.color.black_80));
+                    holder.tvSecondMnth.setTypeface(null, Typeface.NORMAL);
+                    holder.tvSecondMnth.setTextColor(context.getResources().getColor(R.color.black_80));
+                    holder.tvThirdMnth.setTypeface(null, Typeface.BOLD);
+                    holder.tvThirdMnth.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+                    boolean isHavePre = false;
+
+                    if (!shared_common_pref.getvalue(Constants.RetailorPreviousData).equals("")) {
+                        if (preList != null && preList.size() > 0) {
+                            for (int i = 0; i < preList.size(); i++) {
+                                if (preList.get(i).getCust_Code().equals(Retailer_Modal_List.getId())) {
+                                    isHavePre = true;
+
+                                    String str = preList.get(i).getMnth().substring(0, 3);
+                                    Log.v("PreList: ", Retailer_Modal_List.getName() + " mnth: " + str);
+
+
+                                    if (holder.tvThirdMnth.getText().toString().equals(str)) {
+                                        holder.tvPreMilkVal.setText("" + preList.get(i).getMilk() + "|₹" + preList.get(i).getMilkVal());
+                                        holder.tvPreCurdVal.setText("" + preList.get(i).getCurd() + "|₹" + preList.get(i).getCurdVal());
+                                        holder.tvPreOtherVal.setText("" + preList.get(i).getOthers() + "|₹" + preList.get(i).getOthersVal());
+
+                                        holder.tvPreTotVal.setText("" + (preList.get(i).getMilk() + preList.get(i).getCurd() +
+                                                preList.get(i).getOthers()) + "|₹" + (
+                                                preList.get(i).getMilkVal() + preList.get(i).getCurdVal() + preList.get(i).getOthersVal()));
+
+
+                                    }
+
+                                }
+                            }
+
+                            if (!isHavePre) {
+                                holder.tvFirstMonth.setText("");
+
+                                holder.tvSecondMnth.setText("");
+                                holder.tvThirdMnth.setText("");
+
+                                holder.tvPreMilkVal.setText("0|₹0");
+                                holder.tvPreCurdVal.setText("0|₹0");
+                                holder.tvPreOtherVal.setText("0|₹0");
+
+                                holder.tvPreTotVal.setText("0|₹0");
+                            }
+
+                        }
+
+                    }
+
+                    notifyDataSetChanged();
+
+
+                }
             });
 
 
         } catch (Exception e) {
             Log.v("RouteAdapter: ", e.getMessage());
         }
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
     @Override

@@ -516,7 +516,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void login(int requestCode) {
-        eMail = "ekumar.san@gmail.com";
+        //eMail = "ekumar.san@gmail.com";
         // eMail="haptest5@hap.in";
         // eMail="gunasekar.sa@hap.in";
         if (eMail.isEmpty()) {
@@ -528,7 +528,7 @@ public class Login extends AppCompatActivity {
         //eMail="giritharan.d@hap.in";
         //eMail = "kaviyarasu.m@hap.in";
         //eMail = "kannan.p@hap.in";
-        // eMail = "ciadmin@hap.in";
+        //eMail = "ciadmin@hap.in";
         //eMail = "haptest4@hap.in";
         //eMail = "sajan@hap.in";
         //eMail = "1977ananthkumar@gmail.com";

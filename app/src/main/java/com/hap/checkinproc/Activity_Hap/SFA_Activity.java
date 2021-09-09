@@ -777,6 +777,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                         tvDate.setText("" + year + "-" + monthOfYear + "-" + dayOfMonth);
 
+                        getCumulativeDataFromAPI();
+
+                        getServiceOutletSummary();
+                        getOutletSummary();
+
+                        getDashboarddata();
+
+
                     }
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
                 fromDatePickerDialog.show();

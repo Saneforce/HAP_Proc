@@ -266,7 +266,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                     JSONArray data = new JSONArray();
                     JSONObject ActivityData = new JSONObject();
 
-                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd 00:00:00");
+                    DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
                     Calendar calobj = Calendar.getInstance();
                     String dateTime = df.format(calobj.getTime());
 
