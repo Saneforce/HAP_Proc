@@ -180,10 +180,31 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
                                         for (int i = 0; i < todaydata.length(); i++) {
                                             JSONObject tdObj = todaydata.getJSONObject(i);
+                                            int others = 0, othersVal = 0, curd = 0, curdVal = 0, milk = 0, milkVal = 0;
+
+                                            if (tdObj.has("Others"))
+                                                others = tdObj.getInt("Others");
+
+                                            if (tdObj.has("OthersVal"))
+                                                othersVal = tdObj.getInt("OthersVal");
+
+
+                                            if (tdObj.has("Milk"))
+                                                milk = tdObj.getInt("Milk");
+
+                                            if (tdObj.has("MilkVal"))
+                                                milkVal = tdObj.getInt("MilkVal");
+
+                                            if (tdObj.has("Curd"))
+                                                curd = tdObj.getInt("Curd");
+
+                                            if (tdObj.has("CurdVal"))
+                                                curdVal = tdObj.getInt("CurdVal");
+
 
                                             todayRetailorData.add(new Retailer_Modal_List(tdObj.getString("Cust_Code"),
-                                                    tdObj.getInt("Others"), tdObj.getInt("OthersVal")
-                                                    , tdObj.getInt("Curd"), tdObj.getInt("CurdVal"), tdObj.getInt("Milk"), tdObj.getInt("MilkVal")));
+                                                    others, othersVal, curd, curdVal,
+                                                    milk, milkVal));
 
                                             shared_common_pref.save(Constants.RetailorTodayData, gson.toJson(todayRetailorData));
 
@@ -198,7 +219,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
                                         for (int i = 0; i < previousdata.length(); i++) {
                                             JSONObject preObj = previousdata.getJSONObject(i);
-                                            int others = 0, othersVal = 0;
+                                            int others = 0, othersVal = 0, curd = 0, curdVal = 0, milk = 0, milkVal = 0;
 
                                             if (preObj.has("Others"))
                                                 others = preObj.getInt("Others");
@@ -207,10 +228,24 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                                                 othersVal = preObj.getInt("OthersVal");
 
 
-                                            previousRetailorData.add(new Retailer_Modal_List(preObj.getString("Cust_Code"), preObj.getString("Mnth"),
+                                            if (preObj.has("Milk"))
+                                                milk = preObj.getInt("Milk");
+
+                                            if (preObj.has("MilkVal"))
+                                                milkVal = preObj.getInt("MilkVal");
+
+                                            if (preObj.has("Curd"))
+                                                curd = preObj.getInt("Curd");
+
+                                            if (preObj.has("CurdVal"))
+                                                curdVal = preObj.getInt("CurdVal");
+
+
+                                            previousRetailorData.add(new Retailer_Modal_List(preObj.getString("Cust_Code"),
+                                                    preObj.getString("Mnth"),
                                                     others, othersVal
-                                                    , preObj.getInt("Curd"), preObj.getInt("CurdVal"),
-                                                    preObj.getInt("Milk"), preObj.getInt("MilkVal")));
+                                                    , curd, curdVal,
+                                                    milk, milkVal));
 
                                             shared_common_pref.save(Constants.RetailorPreviousData, gson.toJson(previousRetailorData));
 
