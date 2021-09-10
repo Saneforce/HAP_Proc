@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -55,6 +56,8 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
         private com.ogaclejapan.smarttablayout.SmartTabLayout tabLayout;
         private ViewPager viewPager;
 
+        LinearLayout cdParent;
+
 
         RecyclerView listView;
 
@@ -95,6 +98,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 llTdParent = view.findViewById(R.id.llTdDataParent);
                 llPreParent = view.findViewById(R.id.llPreDataParent);
                 llDataParent = view.findViewById(R.id.llDataParent);
+                cdParent = view.findViewById(R.id.cdParent);
 
 
                 Calendar c = Calendar.getInstance();
@@ -207,11 +211,14 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     }
 
                     if (!isHaveToday) {
-                        holder.tvTdMilkVal.setText("0|₹0");
+                      holder.tvTdMilkVal.setText("0|₹0");
                         holder.tvTdCurdVal.setText("0|₹0");
                         holder.tvTdOtherVal.setText("0|₹0");
 
                         holder.tvTdTotVal.setText("0|₹0");
+                    } else {
+
+
                     }
 
 
@@ -254,6 +261,8 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     }
 
                     if (!isHavePre) {
+                        holder.cdParent.setBackgroundColor(Color.WHITE);
+                        holder.textviewname.setTextColor(context.getResources().getColor(R.color.black));
                         holder.tvFirstMonth.setText("");
 
                         holder.tvSecondMnth.setText("");
@@ -264,6 +273,11 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                         holder.tvPreOtherVal.setText("0|₹0");
 
                         holder.tvPreTotVal.setText("0|₹0");
+                    }
+                    else {
+                        holder.cdParent.setBackgroundColor(context.getResources().getColor(R.color.greentrans));
+                        holder.textviewname.setTextColor(context.getResources().getColor(R.color.greentext));
+
                     }
 
                 }

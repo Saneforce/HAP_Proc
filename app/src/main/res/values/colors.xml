@@ -62,6 +62,10 @@
 
 
     <color name="greeninvoicecolor">#C5EBC4</color>
+    <color name="greentrans">#80C5EBC4</color>
+    <color name="greentext">#145A32</color>
+
+
     <color name="invoiceordercolor">#FFD2B5</color>
 
     <!--button Colors-->

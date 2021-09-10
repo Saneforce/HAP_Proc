@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,6 +14,8 @@
         app:cardCornerRadius="@dimen/C10dp">
 
         <LinearLayout
+            android:id="@+id/cdParent"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -227,14 +230,14 @@
                             </TextView>
 
                             <TextView
-                                android:textStyle="bold"
                                 android:id="@+id/tvTodayTotVal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:fontFamily="sans-serif"
                                 android:text="0|₹0"
-                                android:textSize="@dimen/C12dp">
+                                android:textSize="@dimen/C12dp"
+                                android:textStyle="bold">
 
 
                             </TextView>
@@ -598,6 +601,7 @@
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
+
 
     <!--    <View-->
     <!--        android:layout_width="match_parent"-->
