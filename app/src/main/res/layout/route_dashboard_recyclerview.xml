@@ -15,10 +15,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/C5dp"
-            android:layout_marginTop="@dimen/C5dp"
             android:orientation="horizontal"
-            android:padding="@dimen/C10dp"
+            android:padding="@dimen/C3dp"
             android:weightSum="1">
 
             <LinearLayout
@@ -103,140 +101,156 @@
 
                         </TextView>
 
+
                         <LinearLayout
-                            android:id="@+id/llTodayOrder"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:visibility="visible">
+                            android:orientation="horizontal">
 
-                            <LinearLayout
+                            <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.5"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:ellipsize="end"
-                                    android:fontFamily="sans-serif"
-                                    android:text="Milk"
-                                    android:textSize="@dimen/C12dp"
-                                    android:textStyle="bold">
+                                android:ellipsize="end"
+                                android:fontFamily="sans-serif"
+                                android:text="Milk"
+                                android:textSize="@dimen/C12dp"
+                                android:textStyle="bold">
 
 
-                                </TextView>
+                            </TextView>
 
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:ellipsize="end"
-                                    android:fontFamily="sans-serif"
-                                    android:text="Curd"
-                                    android:textSize="@dimen/C12dp"
-                                    android:textStyle="bold" />
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:ellipsize="end"
-                                    android:fontFamily="sans-serif"
-                                    android:text="Others"
-                                    android:textSize="@dimen/C12dp"
-                                    android:textStyle="bold">
-
-
-                                </TextView>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:background="@color/grey_200"></LinearLayout>
-
-
-                                <TextView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:ellipsize="end"
-                                    android:fontFamily="sans-serif"
-                                    android:text="Total"
-                                    android:textSize="@dimen/C12dp"
-                                    android:textStyle="bold">
-
-
-                                </TextView>
-                            </LinearLayout>
-
-                            <LinearLayout
+                            <TextView
+                                android:id="@+id/tvTodayMilkVal"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:orientation="vertical">
-
-                                <TextView
-                                    android:id="@+id/tvTodayMilkVal"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif"
-                                    android:text="0|₹0"
-                                    android:textSize="@dimen/C12dp">
+                                android:fontFamily="sans-serif"
+                                android:text="0|₹0"
+                                android:textSize="@dimen/C12dp">
 
 
-                                </TextView>
-
-                                <TextView
-                                    android:id="@+id/tvTodayCurdVal"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif"
-                                    android:text="0|₹0"
-                                    android:textSize="@dimen/C12dp" />
-
-                                <TextView
-                                    android:id="@+id/tvTodayOtherVal"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif"
-                                    android:text="0|₹0"
-                                    android:textSize="@dimen/C12dp">
-
-
-                                </TextView>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:layout_marginRight="@dimen/C5dp"
-                                    android:background="@color/grey_200"></LinearLayout>
-
-
-                                <TextView
-                                    android:id="@+id/tvTodayTotVal"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif"
-                                    android:text="0|₹0"
-                                    android:textSize="@dimen/C12dp"
-                                    android:textStyle="bold">
-
-
-                                </TextView>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:id="@+id/llLine"
-                                android:layout_width="0dp"
-                                android:layout_height="match_parent"
-                                android:layout_marginRight="@dimen/C10dp"
-                                android:layout_weight="0.01"
-                                android:background="@color/grey_200"
-                                android:orientation="horizontal"></LinearLayout>
+                            </TextView>
 
 
                         </LinearLayout>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:ellipsize="end"
+                                android:fontFamily="sans-serif"
+                                android:text="Curd"
+                                android:textSize="@dimen/C12dp"
+                                android:textStyle="bold">
+
+
+                            </TextView>
+
+                            <TextView
+                                android:id="@+id/tvTodayCurdVal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="sans-serif"
+                                android:text="0|₹0"
+                                android:textSize="@dimen/C12dp">
+
+
+                            </TextView>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:ellipsize="end"
+                                android:fontFamily="sans-serif"
+                                android:text="Others"
+                                android:textSize="@dimen/C12dp"
+                                android:textStyle="bold">
+
+
+                            </TextView>
+
+                            <TextView
+                                android:id="@+id/tvTodayOtherVal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="sans-serif"
+                                android:text="0|₹0"
+                                android:textSize="@dimen/C12dp">
+
+
+                            </TextView>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginRight="@dimen/C5dp"
+                            android:background="@color/grey_200"></LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:ellipsize="end"
+                                android:fontFamily="sans-serif"
+                                android:text="Total"
+                                android:textSize="@dimen/C12dp"
+                                android:textStyle="bold">
+
+
+                            </TextView>
+
+                            <TextView
+                                android:textStyle="bold"
+                                android:id="@+id/tvTodayTotVal"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="sans-serif"
+                                android:text="0|₹0"
+                                android:textSize="@dimen/C12dp">
+
+
+                            </TextView>
+
+
+                        </LinearLayout>
+
+
                     </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginRight="@dimen/C5dp"
+                        android:background="@color/grey_200"></LinearLayout>
 
 
                     <LinearLayout
@@ -341,10 +355,10 @@
                                 android:orientation="vertical">
 
                                 <TextView
-                                    android:maxLines="1"
                                     android:layout_width="match_parent"
                                     android:layout_height="25dp"
                                     android:ellipsize="end"
+                                    android:maxLines="1"
                                     android:text="Previous Month"
                                     android:textSize="@dimen/C10dp"
                                     android:textStyle="bold">
@@ -456,6 +470,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="sans-serif"
+                                        android:maxLines="1"
                                         android:text="0|₹0"
                                         android:textSize="@dimen/C12dp">
 
@@ -467,15 +482,17 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="sans-serif"
+                                        android:maxLines="1"
                                         android:text="0|₹0"
                                         android:textSize="@dimen/C12dp" />
 
                                     <TextView
                                         android:id="@+id/tvPreOthersVal"
-
                                         android:layout_width="match_parent"
+
                                         android:layout_height="wrap_content"
                                         android:fontFamily="sans-serif"
+                                        android:maxLines="1"
                                         android:text="0|₹0"
                                         android:textSize="@dimen/C12dp">
 

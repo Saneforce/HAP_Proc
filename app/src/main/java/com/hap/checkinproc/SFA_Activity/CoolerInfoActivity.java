@@ -92,8 +92,9 @@ public class CoolerInfoActivity extends AppCompatActivity implements View.OnClic
                 fromDatePickerDialog = new DatePickerDialog(CoolerInfoActivity.this, new DatePickerDialog.OnDateSetListener() {
 
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        int month = monthOfYear + 1;
 
-                        tvReceivedDate.setText("" + dayOfMonth + "/" + monthOfYear + "/" + year);
+                        tvReceivedDate.setText("" + dayOfMonth + "/" + month + "/" + year);
                     }
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
                 fromDatePickerDialog.show();

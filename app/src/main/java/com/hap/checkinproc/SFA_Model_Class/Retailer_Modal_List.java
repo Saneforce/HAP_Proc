@@ -6,31 +6,7 @@ import com.google.gson.annotations.SerializedName;
 public class Retailer_Modal_List {
 
 
-    @SerializedName("Cust_Code")
-    @Expose
-    private String Cust_Code;
-
-
-    @SerializedName("Mnth")
-    @Expose
-    private String Mnth;
-
-    @SerializedName("Others")
-    @Expose
-    private int Others;
-
-    @SerializedName("OthersVal")
-    @Expose
-    private int OthersVal;
-
-    @SerializedName("Curd")
-    @Expose
-    private int Curd;
-    @SerializedName("CurdVal")
-    @Expose
-    private int CurdVal;
-
-    public Retailer_Modal_List(String cust_Code, String mnth, int others, int othersVal, int curd, int curdVal, int milk, int milkVal) {
+    public Retailer_Modal_List(String cust_Code, String mnth, double others, double othersVal, double curd, double curdVal, double milk, double milkVal) {
         Cust_Code = cust_Code;
         Mnth = mnth;
         Others = others;
@@ -40,20 +16,6 @@ public class Retailer_Modal_List {
         Milk = milk;
         MilkVal = milkVal;
     }
-
-    public Retailer_Modal_List(String cust_Code, int others, int othersVal, int curd, int curdVal, int milk, int milkVal) {
-        Cust_Code = cust_Code;
-        Others = others;
-        OthersVal = othersVal;
-        Curd = curd;
-        CurdVal = curdVal;
-        Milk = milk;
-        MilkVal = milkVal;
-    }
-
-    @SerializedName("Milk")
-    @Expose
-    private int Milk;
 
     public String getCust_Code() {
         return Cust_Code;
@@ -71,57 +33,89 @@ public class Retailer_Modal_List {
         Mnth = mnth;
     }
 
-    public int getOthers() {
+    public double getOthers() {
         return Others;
     }
 
-    public void setOthers(int others) {
+    public void setOthers(double others) {
         Others = others;
     }
 
-    public int getOthersVal() {
+    public double getOthersVal() {
         return OthersVal;
     }
 
-    public void setOthersVal(int othersVal) {
+    public void setOthersVal(double othersVal) {
         OthersVal = othersVal;
     }
 
-    public int getCurd() {
+    public double getCurd() {
         return Curd;
     }
 
-    public void setCurd(int curd) {
+    public void setCurd(double curd) {
         Curd = curd;
     }
 
-    public int getCurdVal() {
+    public double getCurdVal() {
         return CurdVal;
     }
 
-    public void setCurdVal(int curdVal) {
+    public void setCurdVal(double curdVal) {
         CurdVal = curdVal;
     }
 
-    public int getMilk() {
+    public double getMilk() {
         return Milk;
     }
 
-    public void setMilk(int milk) {
+    public void setMilk(double milk) {
         Milk = milk;
     }
 
-    public int getMilkVal() {
+    public double getMilkVal() {
         return MilkVal;
     }
 
-    public void setMilkVal(int milkVal) {
+    public void setMilkVal(double milkVal) {
         MilkVal = milkVal;
     }
 
+    @SerializedName("Cust_Code")
+    @Expose
+    private String Cust_Code;
+
+
+    @SerializedName("Mnth")
+    @Expose
+    private String Mnth;
+
+    @SerializedName("Others")
+    @Expose
+    private double Others;
+
+    @SerializedName("OthersVal")
+    @Expose
+    private double OthersVal;
+
+    @SerializedName("Curd")
+    @Expose
+    private double Curd;
+
+
+    @SerializedName("CurdVal")
+    @Expose
+    private double CurdVal;
+
+
+    @SerializedName("Milk")
+    @Expose
+    private double Milk;
+
+
     @SerializedName("MilkVal")
     @Expose
-    private int MilkVal;
+    private double MilkVal;
 
 
     @SerializedName("id")
@@ -171,6 +165,17 @@ public class Retailer_Modal_List {
 
     public void set_long(String _long) {
         this._long = _long;
+    }
+
+
+    public Retailer_Modal_List(String cust_Code, double others, double othersVal, double curd, double curdVal, double milk, double milkVal) {
+        Cust_Code = cust_Code;
+        Others = others;
+        OthersVal = othersVal;
+        Curd = curd;
+        CurdVal = curdVal;
+        Milk = milk;
+        MilkVal = milkVal;
     }
 
 

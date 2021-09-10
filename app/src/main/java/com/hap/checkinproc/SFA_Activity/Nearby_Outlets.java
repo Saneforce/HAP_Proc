@@ -624,7 +624,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 //                        .title(name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
                 marker = map.addMarker(new MarkerOptions().position(latLng)
-                        .title((name)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                        .title((name)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                 mark.add(marker);
 
 

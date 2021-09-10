@@ -774,8 +774,8 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-
-                        tvDate.setText("" + year + "-" + monthOfYear + "-" + dayOfMonth);
+                        int month = monthOfYear + 1;
+                        tvDate.setText("" + year + "-" + month + "-" + dayOfMonth);
 
                         getCumulativeDataFromAPI();
 

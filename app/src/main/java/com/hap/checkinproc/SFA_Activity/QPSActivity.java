@@ -144,8 +144,9 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
                 fromDatePickerDialog = new DatePickerDialog(QPSActivity.this, new DatePickerDialog.OnDateSetListener() {
 
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        int month = monthOfYear + 1;
 
-                        etBookingDate.setText("" + year + "-" + monthOfYear + "-" + dayOfMonth);
+                        etBookingDate.setText("" + year + "-" + month + "-" + dayOfMonth);
                     }
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
                 fromDatePickerDialog.show();

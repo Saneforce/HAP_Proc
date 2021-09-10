@@ -251,8 +251,9 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
                     fromDatePickerDialog = new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
 
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            int mnth = monthOfYear + 1;
 
-                            holder.etBookingDate.setText("" + year + "-" + monthOfYear + "-" + dayOfMonth);
+                            holder.etBookingDate.setText("" + year + "-" + mnth + "-" + dayOfMonth);
 
                             Product_Details_Modalitem.get(holder.getAdapterPosition()).setBookingDate(holder.etBookingDate.getText().toString());
                         }

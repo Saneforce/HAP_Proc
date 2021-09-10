@@ -56,6 +56,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,6 +109,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     private Main_Model.presenter presenter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    private static DecimalFormat df2 = new DecimalFormat("#.##");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,26 +183,26 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
                                         for (int i = 0; i < todaydata.length(); i++) {
                                             JSONObject tdObj = todaydata.getJSONObject(i);
-                                            int others = 0, othersVal = 0, curd = 0, curdVal = 0, milk = 0, milkVal = 0;
+                                            double others = 0, othersVal = 0, curd = 0, curdVal = 0, milk = 0, milkVal = 0;
 
                                             if (tdObj.has("Others"))
-                                                others = tdObj.getInt("Others");
+                                                others = Double.parseDouble(df2.format(tdObj.getDouble("Others")));
 
                                             if (tdObj.has("OthersVal"))
-                                                othersVal = tdObj.getInt("OthersVal");
+                                                othersVal = Double.parseDouble(df2.format(tdObj.getDouble("OthersVal")));
 
 
                                             if (tdObj.has("Milk"))
-                                                milk = tdObj.getInt("Milk");
+                                                milk = Double.parseDouble(df2.format(tdObj.getDouble("Milk")));
 
                                             if (tdObj.has("MilkVal"))
-                                                milkVal = tdObj.getInt("MilkVal");
+                                                milkVal = Double.parseDouble(df2.format(tdObj.getDouble("MilkVal")));
 
                                             if (tdObj.has("Curd"))
-                                                curd = tdObj.getInt("Curd");
+                                                curd = Double.parseDouble(df2.format(tdObj.getDouble("Curd")));
 
                                             if (tdObj.has("CurdVal"))
-                                                curdVal = tdObj.getInt("CurdVal");
+                                                curdVal = Double.parseDouble(df2.format(tdObj.getDouble("CurdVal")));
 
 
                                             todayRetailorData.add(new Retailer_Modal_List(tdObj.getString("Cust_Code"),
@@ -219,26 +222,26 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
                                         for (int i = 0; i < previousdata.length(); i++) {
                                             JSONObject preObj = previousdata.getJSONObject(i);
-                                            int others = 0, othersVal = 0, curd = 0, curdVal = 0, milk = 0, milkVal = 0;
+                                            double others = 0, othersVal = 0, curd = 0, curdVal = 0, milk = 0, milkVal = 0;
 
                                             if (preObj.has("Others"))
-                                                others = preObj.getInt("Others");
+                                                others = Double.parseDouble(df2.format(preObj.getDouble("Others")));
 
                                             if (preObj.has("OthersVal"))
-                                                othersVal = preObj.getInt("OthersVal");
+                                                othersVal = Double.parseDouble(df2.format(preObj.getDouble("OthersVal")));
 
 
                                             if (preObj.has("Milk"))
-                                                milk = preObj.getInt("Milk");
+                                                milk = Double.parseDouble(df2.format(preObj.getDouble("Milk")));
 
                                             if (preObj.has("MilkVal"))
-                                                milkVal = preObj.getInt("MilkVal");
+                                                milkVal = Double.parseDouble(df2.format(preObj.getDouble("MilkVal")));
 
                                             if (preObj.has("Curd"))
-                                                curd = preObj.getInt("Curd");
+                                                curd = Double.parseDouble(df2.format(preObj.getDouble("Curd")));
 
                                             if (preObj.has("CurdVal"))
-                                                curdVal = preObj.getInt("CurdVal");
+                                                curdVal = Double.parseDouble(df2.format(preObj.getDouble("CurdVal")));
 
 
                                             previousRetailorData.add(new Retailer_Modal_List(preObj.getString("Cust_Code"),
