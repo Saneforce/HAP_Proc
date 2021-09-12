@@ -1,6 +1,8 @@
 package com.hap.checkinproc.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,11 +45,12 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
         contactList = myDataset;
         typeName = type;
         contactListFiltered = myDataset;
-        if (type != 1000)
+        if (type == 1000) {
+            mContext = context;
+        } else {
             updateUi = ((Master_Interface) context);
 
-        else
-            mContext = context;
+        }
 
     }
 
@@ -62,7 +65,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
     public void onBindViewHolder(FruitViewHolder fruitViewHolder, final int position) {
         if (position >= contactListFiltered.size()) return;
         final Common_Model contact = contactListFiltered.get(position);
-        fruitViewHolder.mTextName.setText(contact.getName());
+        fruitViewHolder.mTextName.setText("" + contact.getName());
         String getAddress = contact.getAddress();
         String getPhone = contact.getPhone();
 
@@ -91,6 +94,21 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
                 lastCheckedPos = position;
                 lastChecked = fruitViewHolder.checkBox_select;
             }
+        } else if (typeName == 500) {
+
+            fruitViewHolder.mTextPhone.setVisibility(View.VISIBLE);
+            fruitViewHolder.mTextAddress.setVisibility(View.VISIBLE);
+            fruitViewHolder.tvPerDay.setVisibility(View.VISIBLE);
+
+            fruitViewHolder.mTextPhone.setText("Period : " + contact.getName() + " days");
+            fruitViewHolder.mTextAddress.setText("Target : " + contact.getTotal_Ltrs() + " ltrs");
+            fruitViewHolder.mTextName.setText("Gift   : " + contact.getQPS_Name());
+
+            float perday = (contact.getTotal_Ltrs() / Float.parseFloat(contact.getName()));
+            fruitViewHolder.tvPerDay.setText("Per Day : " + perday + " ltrs");
+            //fruitViewHolder.mTextAddress.setTypeface(fruitViewHolder.mTextAddress.getTypeface(), Typeface.BOLD);
+
+            fruitViewHolder.mTextName.setTextColor(Color.parseColor("#72D043"));
         }
 
         fruitViewHolder.checkBox_select.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -116,7 +134,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
                 } else {
                     lastChecked = null;
                     shared_common_pref.save(Constants.MAP_KEY, "");
-                   // Nearby_Outlets.nearby_outlets.getExploreDr(false);
+                    // Nearby_Outlets.nearby_outlets.getExploreDr(false);
                 }
 
 
@@ -159,7 +177,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
         public TextView mTextName, mTextPhone, mTextAddress, Checkboxname;
         LinearLayout checkboxLin, linear_row;
         CheckBox checkBox_select;
-        TextView cbTextName;
+        TextView cbTextName, tvPerDay;
 
         public FruitViewHolder(View v) {
             super(v);
@@ -171,6 +189,7 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
             checkboxLin = v.findViewById(R.id.checkboxLin);
             cbTextName = v.findViewById(R.id.Checkboxname);
             linear_row = v.findViewById(R.id.linear_row);
+            tvPerDay = v.findViewById(R.id.txt_per_day);
             v.setOnClickListener(this);
 
 
@@ -178,10 +197,18 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
 
         @Override
         public void onClick(View v) {
-            if (typeName != 1000)
-                updateUi.OnclickMasterType(contactListFiltered, this.getAdapterPosition(), typeName);
+            try {
 
 
+                if (typeName == 1000) {
+
+                } else {
+                    updateUi.OnclickMasterType(contactListFiltered, this.getAdapterPosition(), typeName);
+                }
+
+            } catch (Exception e) {
+                Log.v("dataAdapter:click:", e.getMessage());
+            }
         }
     }
 

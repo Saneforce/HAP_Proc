@@ -2,11 +2,7 @@ package com.hap.checkinproc.Interface;
 
 
 import com.hap.checkinproc.Common_Class.Common_Model;
-import com.hap.checkinproc.Model_Class.Distributor_Master;
-import com.hap.checkinproc.Model_Class.Route_Master;
-import com.hap.checkinproc.Model_Class.Work_Type_Model;
-
-import java.util.List;
+import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
 public interface Master_Interface {
 

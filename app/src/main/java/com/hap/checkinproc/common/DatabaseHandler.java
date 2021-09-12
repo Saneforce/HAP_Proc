@@ -130,7 +130,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             db.insert(TABLE_Masters, null, values);
             db.close();
 
-            Log.e("DB:OUTLET Insert ", Key + " : " + values);
+//            Log.e("DB:OUTLET Insert ", Key + " : " + values);
 
         } catch (Exception e) {
             Log.e("DB:OUTLET Insert Ex", e.getMessage());

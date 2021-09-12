@@ -96,7 +96,7 @@ public class Offline_SyncView implements Main_Model.GetRoutemastersyncResult {
                     String value = String.valueOf(response.body());
                     Log.e("test", value + "");
 
-                    Log.e("MAsterSyncView_Result", response.body() + "");
+                 //   Log.e("MAsterSyncView_Result", response.body() + "");
                     //approvalList=response.body();
                     onFinishedListener.onFinishedrouteObject(response.body(), ii);
                 }

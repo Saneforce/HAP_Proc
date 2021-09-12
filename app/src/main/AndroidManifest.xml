@@ -41,10 +41,14 @@
         android:theme="@style/AppTheme"
         tools:replace="android:allowBackup"
         tools:targetApi="n">
+        <activity
+            android:name=".SFA_Activity.MoreInfoActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".SFA_Activity.MapDirectionActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".Activity_Hap.TACumulativeApproval"></activity>
         <activity android:name=".SFA_Activity.OrderHistoryActivity" />
-        <activity android:name=".SFA_Activity.MoreInfoActivity"></activity>
-        <activity android:name=".SFA_Activity.MapDirectionActivity" />
         <activity android:name=".Activity.FuleEntryActivity" />
         <activity android:name=".Activity_Hap.DaExceptionStatus" />
         <activity android:name=".Activity_Hap.DaExceptionReject" />
@@ -82,20 +86,50 @@
         <activity android:name=".SFA_Activity.Outet_Report_Details" />
         <activity android:name=".SFA_Activity.Outlet_Report_View" />
         <activity android:name=".SFA_Activity.Reports_Outler_Name" />
-        <activity android:name=".SFA_Activity.Order_Category_Select" />
-        <activity android:name=".SFA_Activity.Invoice_History" />
-        <activity android:name=".SFA_Activity.More_Info_Activity" />
-        <activity android:name=".SFA_Activity.Dist_Locations" />
-        <activity android:name=".SFA_Activity.Route_Product_Info" />
-        <activity android:name=".SFA_Activity.Outlet_Info_Activity" />
-        <activity android:name=".SFA_Activity.Dashboard_Route" />
-        <activity android:name=".SFA_Activity.Dashboard_View_Activity" />
-        <activity android:name=".SFA_Activity.SFA_Dashboard" />
-        <activity android:name=".SFA_Activity.New_Outlet_Map_creations" />
-        <activity android:name=".SFA_Activity.Dashboard_Order_Reports" />
-        <activity android:name=".SFA_Activity.Offline_Sync_Activity" />
-        <activity android:name=".SFA_Activity.Nearby_Outlets" />
-        <activity android:name=".SFA_Activity.Print_Invoice_Activity">
+        <activity
+            android:name=".SFA_Activity.Order_Category_Select"
+
+
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".SFA_Activity.Invoice_History"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.More_Info_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.Dist_Locations"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.Route_Product_Info"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.Outlet_Info_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.Dashboard_Route"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.Dashboard_View_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.SFA_Dashboard"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.New_Outlet_Map_creations"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.Dashboard_Order_Reports"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.Offline_Sync_Activity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.Nearby_Outlets"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.Print_Invoice_Activity"
+            android:screenOrientation="portrait">
 
 
             <intent-filter>
@@ -359,6 +393,23 @@
         <activity
             android:name=".Activity.ProcurementDashboardActivity"
             android:screenOrientation="portrait" />
+
+        <activity android:name=".SFA_Activity.OrderCategoriesTypesActivity"></activity>
+
+        <activity
+            android:name=".SFA_Activity.CoolerInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.POPActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.QPSActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".SFA_Activity.OtherBrandActivity"
+            android:screenOrientation="portrait" />
+
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

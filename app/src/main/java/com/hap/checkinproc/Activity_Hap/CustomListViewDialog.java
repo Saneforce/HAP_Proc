@@ -38,6 +38,7 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
     }
 
     public Activity activity;
+    public Context mContext;
     public Dialog dialog;
     public Button mBtnSave, no;
     EditText searchView;
@@ -85,6 +86,9 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
             tvtitle.setText("Map KeyList");
 
         }
+        if (type == 500) {
+            searchView.setVisibility(View.GONE);
+        }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.setAdapter(da);
@@ -128,8 +132,6 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
                 }
             }
         });
-
-
 
 
     }

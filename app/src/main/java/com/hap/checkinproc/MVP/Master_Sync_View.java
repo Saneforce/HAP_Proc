@@ -66,7 +66,7 @@ public class Master_Sync_View implements Main_Model.GetRoutemastersyncResult {
                 @Override
                 public void onResponse(Call<Object> call, Response<Object> response) {
                     //approvalList=response.body();
-                    Log.e("MAsterSyncView_Result", response.body() + "");
+                  //  Log.e("MAsterSyncView_Result", response.body() + "");
                     onFinishedListener.onFinishedrouteObject(response.body(), ii);
                 }
 

@@ -4,12 +4,17 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Product_Details_Modal {
+    @SerializedName("POP_UOM")
+    @Expose
+    private String UOM;
     @SerializedName("id")
     @Expose
     private String id;
     @SerializedName("name")
     @Expose
     private String name;
+    private String sku;
+    private int price;
     @SerializedName("Product_Cat_Code")
     @Expose
     private Integer productCatCode;
@@ -40,11 +45,39 @@ public class Product_Details_Modal {
     @SerializedName("Qty")
     @Expose
     private Integer Qty;
+    private String scheme;
     @SerializedName("RegularQty")
     @Expose
     private Integer RegularQty;
 
-    public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit, String unitCode, Double defaultUOMQty, Double defaultUOM, Double Rate, Integer Qty, Integer RegularQty, Double Amount) {
+    public String getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(String bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
+    public String getPopMaterial() {
+        return popMaterial;
+    }
+
+    public void setPopMaterial(String popMaterial) {
+        this.popMaterial = popMaterial;
+    }
+
+    @SerializedName("bookingDate")
+    @Expose
+    private String bookingDate;
+
+    @SerializedName("popMaterial")
+    @Expose
+    private String popMaterial;
+
+
+    public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
+                                 String unitCode, Double defaultUOMQty, Double defaultUOM, Double Rate, Integer Qty,
+                                 Integer RegularQty, Double Amount) {
         this.id = id;
         this.name = name;
         this.productCatCode = productCatCode;
@@ -58,6 +91,26 @@ public class Product_Details_Modal {
         this.Qty = Qty;
         this.RegularQty = RegularQty;
         this.Amount = Amount;
+    }
+
+    public Product_Details_Modal(String id,String name, String sku, int price, int Qty, double amount, String scheme) {
+        this.id=id;
+        this.name = name;
+        this.sku = sku;
+        this.price = price;
+        this.Qty = Qty;
+        this.scheme = scheme;
+        this.Amount = amount;
+    }
+
+
+    public Product_Details_Modal(String id, String name, String bookingDate, int Qty, String UOM) {
+        this.id = id;
+        this.name = name;
+        this.bookingDate = bookingDate;
+        this.Qty = Qty;
+        this.UOM = UOM;
+
     }
 
     public Integer getRegularQty() {
@@ -162,5 +215,37 @@ public class Product_Details_Modal {
 
     public void setDefaultUOM(Double defaultUOM) {
         this.defaultUOM = defaultUOM;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
+    public String getScheme() {
+        return scheme;
+    }
+
+    public void setScheme(String scheme) {
+        this.scheme = scheme;
+    }
+
+    public String getUOM() {
+        return UOM;
+    }
+
+    public void setUOM(String UOM) {
+        this.UOM = UOM;
     }
 }

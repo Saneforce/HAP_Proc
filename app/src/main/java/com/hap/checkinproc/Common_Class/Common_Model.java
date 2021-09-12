@@ -5,6 +5,36 @@ import com.google.gson.JsonObject;
 import org.json.JSONObject;
 
 public class Common_Model {
+    private String QPS_Code;
+    private String QPS_Name;
+    private int Total_Ltrs;
+    private int Per_Day_Ltrs;
+    private String Days_Period;
+
+    public int getTotal_Ltrs() {
+        return Total_Ltrs;
+    }
+
+    public void setTotal_Ltrs(int total_Ltrs) {
+        Total_Ltrs = total_Ltrs;
+    }
+
+    public int getPer_Day_Ltrs() {
+        return Per_Day_Ltrs;
+    }
+
+    public void setPer_Day_Ltrs(int per_Day_Ltrs) {
+        Per_Day_Ltrs = per_Day_Ltrs;
+    }
+
+    public String getDays_Period() {
+        return Days_Period;
+    }
+
+    public void setDays_Period(String days_Period) {
+        Days_Period = days_Period;
+    }
+
     private String name;
     private String id;
     private String flag;
@@ -23,8 +53,6 @@ public class Common_Model {
      private Integer MaxDays;
 
 
-
-
     public Common_Model(String name, String id, String flag, String address, String phone) {
         this.name = name;
         this.id = id;
@@ -41,32 +69,35 @@ public class Common_Model {
         this.Pho = phone;
     }
 
-    public Common_Model(String name, String id, String flag, String address, String phone,String cont) {
+    public Common_Model(String name, String id, String flag, String address, String phone, String cont) {
         this.name = name;
         this.id = id;
         this.flag = flag;
         this.address = address;
         this.phone = phone;
-        this.cont= cont;
+        this.cont = cont;
     }
 
-    public Common_Model(String id, String name, String flag, String checkouttime,Boolean ExpNeed) {
+    public Common_Model(String id, String name, String flag, String checkouttime, Boolean ExpNeed) {
         this.id = id;
         this.name = name;
         this.flag = flag;
         this.checkouttime = checkouttime;
-        this.ExpNeed=ExpNeed;
+        this.ExpNeed = ExpNeed;
     }
+
     public Common_Model(String id, String name, JsonObject jsonObject) {
         this.id = id;
         this.name = name;
         this.jsonObject = jsonObject;
     }
+
     public Common_Model(String id, String name, JSONObject jsonObject) {
         this.id = id;
         this.name = name;
         this.JSONobject = jsonObject;
     }
+
     public Common_Model(String id, String name, JSONObject jsonObject,Integer position) {
         this.id = id;
         this.name = name;
@@ -107,11 +138,19 @@ public class Common_Model {
         this.name = name;
         this.flag = flag;
     }
-    public Common_Model(String id, String name, String flag,Integer MaxDays) {
+
+    public Common_Model(String name, int Total_Ltrs, String QPS_Name, String QPS_Code) {
+        this.name = name;
+        this.QPS_Name = QPS_Name;
+        this.Total_Ltrs = Total_Ltrs;
+        this.QPS_Code = QPS_Code;
+    }
+
+    public Common_Model(String id, String name, String flag, Integer MaxDays) {
         this.id = id;
         this.name = name;
         this.flag = flag;
-        this.MaxDays=MaxDays;
+        this.MaxDays = MaxDays;
     }
 
     public Common_Model(String name, String id) {
@@ -157,6 +196,7 @@ public class Common_Model {
     public Integer getMaxDays() {
         return MaxDays;
     }
+
     public void setFlag(String flag) {
         this.flag = flag;
     }
@@ -165,6 +205,7 @@ public class Common_Model {
     public boolean getExpNeed() {
         return ExpNeed;
     }
+
     public String getId() {
         return id;
     }
@@ -188,10 +229,28 @@ public class Common_Model {
     public void setPho(Integer pho) {
         Pho = pho;
     }
+
     public JsonObject getJsonObject() {
         return jsonObject;
     }
+
     public JSONObject getJSONObject() {
         return JSONobject;
+    }
+
+    public String getQPS_Name() {
+        return QPS_Name;
+    }
+
+    public void setQPS_Name(String QPS_Name) {
+        this.QPS_Name = QPS_Name;
+    }
+
+    public String getQPS_Code() {
+        return QPS_Code;
+    }
+
+    public void setQPS_Code(String QPS_Code) {
+        this.QPS_Code = QPS_Code;
     }
 }

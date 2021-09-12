@@ -14,6 +14,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 
@@ -29,13 +30,16 @@ public class MoreInfoActivity extends AppCompatActivity implements View.OnClickL
 
     Common_Class common_class;
     ImageView ivToolbarHome;
+    Shared_Common_Pref shared_common_pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more_info);
         init();
-        tvOutletName.setText(Shared_Common_Pref.OutletName);
+
+        shared_common_pref=new Shared_Common_Pref(this);
+        tvOutletName.setText(shared_common_pref.getvalue(Constants.Retailor_Name_ERP_Code));
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         common_class.gotoHomeScreen(this, ivToolbarHome);

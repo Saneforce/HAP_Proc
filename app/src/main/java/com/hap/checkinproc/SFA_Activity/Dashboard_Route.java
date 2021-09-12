@@ -34,8 +34,11 @@ import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.MVP.Main_Model;
 import com.hap.checkinproc.MVP.MasterSync_Implementations;
 import com.hap.checkinproc.MVP.Master_Sync_View;
@@ -50,31 +53,43 @@ import com.hap.checkinproc.common.LocationFinder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Dashboard_Route extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface {
-    List<Retailer_Modal_List> Retailer_Modal_List;
-    List<Retailer_Modal_List> Retailer_Modal_ListFilter;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
+
+public class Dashboard_Route extends AppCompatActivity implements Main_Model.MasterSyncView, View.OnClickListener, Master_Interface, UpdateResponseUI {
+    public static final String CheckInDetail = "CheckInDetail";
+    public static final String UserDetail = "MyPrefs";
+    public static Dashboard_Route dashboard_route;
+    static Common_Class common_class;
+    static TextView distributor_text;
+    static Shared_Common_Pref shared_common_pref;
+    public int scrollPosition = 0;
+    List<Retailer_Modal_List> Retailer_Modal_List = new ArrayList<>();
+    List<Retailer_Modal_List> Retailer_Modal_ListFilter = new ArrayList<>();
     List<OutletReport_View_Modal> Retailer_Order_List;
     Gson gson;
-    private RecyclerView recyclerView;
-    Type userType;
-    static Common_Class common_class;
+    Type userTypeRetailor, userTypeReport;
     TextView headtext;
     TextView textViewname;
     TextView Alltextclick;
     TextView Completeclick;
     TextView Pendingclick;
     TextView ReachedOutlet;
-    static TextView distributor_text;
     TextView route_text;
     View Alltextview, completeview, pendingview;
     LinearLayout btnCmbRoute;
     Common_Model Model_Pojo;
-    Shared_Common_Pref shared_common_pref;
-    private Main_Model.presenter presenter;
     List<Common_Model> distributor_master = new ArrayList<>();
     List<Common_Model> Route_Masterlist = new ArrayList<>();
     CustomListViewDialog customDialog;
@@ -83,22 +98,19 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     String Distributor_Id;
     String DCRMode;
     String sDeptType;
-
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
-    public static final String CheckInDetail = "CheckInDetail";
-    public static final String UserDetail = "MyPrefs";
     DatabaseHandler db;
 
     ImageView ivToolbarHome;
     LinearLayout llDistributor;
-
+    TabAdapter adapter;
+    private RecyclerView recyclerView;
+    private Main_Model.presenter presenter;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    public static Dashboard_Route dashboard_route;
+    private static DecimalFormat df2 = new DecimalFormat("#.##");
 
-    TabAdapter adapter;
-    public int scrollPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,10 +122,187 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         getDbstoreData(Constants.Rout_List);
 
         common_class = new Common_Class(this);
+        shared_common_pref = new Shared_Common_Pref(this);
+
         common_class.getDataFromApi(Constants.Outlet_Total_Orders, this, false);
 
 
+        if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals(""))
+            getLastInvoiceData();
+
+
     }
+
+    private void getLastInvoiceData() {
+        try {
+
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("distributorCode", shared_common_pref.getvalue(Constants.Distributor_Id));
+
+                String div_code = Shared_Common_Pref.Div_Code.replaceAll(",", "");
+                HeadItem.put("divisionCode", div_code);
+
+
+                Call<ResponseBody> call = service.getLastThreeMnthsData(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+
+
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+                                ArrayList<Retailer_Modal_List> todayRetailorData = new ArrayList<>();
+                                ArrayList<Retailer_Modal_List> todayRetailorDataDynamic = new ArrayList<>();
+                                ArrayList<Retailer_Modal_List> tdRetailorDataDynamicVal = new ArrayList<>();
+
+                                ArrayList<Retailer_Modal_List> previousRetailorData = new ArrayList<>();
+
+
+                                if (jsonObject.getBoolean("success")) {
+
+                                    JSONArray previousdata = jsonObject.getJSONArray("data");
+
+                                    JSONArray todaydata = jsonObject.getJSONArray("todaydata");
+
+
+                                    if (todaydata != null && todaydata.length() > 0) {
+
+                                        for (int i = 0; i < todaydata.length(); i++) {
+                                            JSONObject tdObj = todaydata.getJSONObject(i);
+                                            double others = 0, othersVal = 0, curd = 0, curdVal = 0, milk = 0, milkVal = 0;
+
+                                            if (tdObj.has("Others"))
+                                                others = Double.parseDouble(df2.format(tdObj.getDouble("Others")));
+
+                                            if (tdObj.has("OthersVal"))
+                                                othersVal = Double.parseDouble(df2.format(tdObj.getDouble("OthersVal")));
+
+
+                                            if (tdObj.has("Milk"))
+                                                milk = Double.parseDouble(df2.format(tdObj.getDouble("Milk")));
+
+                                            if (tdObj.has("MilkVal"))
+                                                milkVal = Double.parseDouble(df2.format(tdObj.getDouble("MilkVal")));
+
+                                            if (tdObj.has("Curd"))
+                                                curd = Double.parseDouble(df2.format(tdObj.getDouble("Curd")));
+
+                                            if (tdObj.has("CurdVal"))
+                                                curdVal = Double.parseDouble(df2.format(tdObj.getDouble("CurdVal")));
+
+
+                                            todayRetailorData.add(new Retailer_Modal_List(tdObj.getString("Cust_Code"),
+                                                    others, othersVal, curd, curdVal,
+                                                    milk, milkVal));
+
+
+                                            shared_common_pref.save(Constants.RetailorTodayData, gson.toJson(todayRetailorData));
+
+
+//                                            tdRetailorDataDynamicVal.add(new Retailer_Modal_List("Milk", milk, milkVal));
+//                                            tdRetailorDataDynamicVal.add(new Retailer_Modal_List("Curd", curd, curdVal));
+//                                            tdRetailorDataDynamicVal.add(new Retailer_Modal_List("Others", others, othersVal));
+                                            //    todayRetailorDataDynamic.add(new Retailer_Modal_List(tdObj.getString("Cust_Code"), tdRetailorDataDynamicVal));
+
+//
+//                                            shared_common_pref.save(Constants.RetailorTodayDataDynamic, gson.toJson(todayRetailorDataDynamic));
+
+
+                                        }
+                                    } else {
+                                        shared_common_pref.save(Constants.RetailorTodayData, "");
+
+                                    }
+
+                                    if (previousdata != null && previousdata.length() > 0) {
+
+                                        for (int i = 0; i < previousdata.length(); i++) {
+                                            JSONObject preObj = previousdata.getJSONObject(i);
+                                            double others = 0, othersVal = 0, curd = 0, curdVal = 0, milk = 0, milkVal = 0;
+
+                                            if (preObj.has("Others"))
+                                                others = Double.parseDouble(df2.format(preObj.getDouble("Others")));
+
+                                            if (preObj.has("OthersVal"))
+                                                othersVal = Double.parseDouble(df2.format(preObj.getDouble("OthersVal")));
+
+
+                                            if (preObj.has("Milk"))
+                                                milk = Double.parseDouble(df2.format(preObj.getDouble("Milk")));
+
+                                            if (preObj.has("MilkVal"))
+                                                milkVal = Double.parseDouble(df2.format(preObj.getDouble("MilkVal")));
+
+                                            if (preObj.has("Curd"))
+                                                curd = Double.parseDouble(df2.format(preObj.getDouble("Curd")));
+
+                                            if (preObj.has("CurdVal"))
+                                                curdVal = Double.parseDouble(df2.format(preObj.getDouble("CurdVal")));
+
+
+                                            previousRetailorData.add(new Retailer_Modal_List(preObj.getString("Cust_Code"),
+                                                    preObj.getString("Mnth"),
+                                                    others, othersVal
+                                                    , curd, curdVal,
+                                                    milk, milkVal));
+
+                                            shared_common_pref.save(Constants.RetailorPreviousData, gson.toJson(previousRetailorData));
+
+
+                                        }
+                                    } else {
+                                        shared_common_pref.save(Constants.RetailorPreviousData, "");
+
+                                    }
+
+
+                                } else {
+                                    shared_common_pref.save(Constants.RetailorTodayData, "");
+                                    shared_common_pref.save(Constants.RetailorPreviousData, "");
+                                }
+
+
+                            }
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
+
+
+                    }
+                });
+            } else {
+                common_class.showMsg(Dashboard_Route.dashboard_route, "Please check your internet connection");
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+
 
     @Override
     public void onResume() {
@@ -122,7 +311,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             recyclerView = findViewById(R.id.leaverecyclerview);
             presenter = new MasterSync_Implementations(this, new Master_Sync_View());
             presenter.requestDataFromServer();
-            shared_common_pref = new Shared_Common_Pref(this);
             headtext = findViewById(R.id.headtext);
             route_text = findViewById(R.id.route_text);
             distributor_text = findViewById(R.id.distributor_text);
@@ -138,9 +326,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             ivToolbarHome = findViewById(R.id.toolbar_home);
             llDistributor = findViewById(R.id.llDistributor);
 
-            viewPager = (ViewPager) findViewById(R.id.viewpager);
+            viewPager = findViewById(R.id.viewpager);
             viewPager.setOffscreenPageLimit(3);
-            tabLayout = (TabLayout) findViewById(R.id.tabs);
+            tabLayout = findViewById(R.id.tabs);
 
             Alltextview.setVisibility(View.VISIBLE);
             completeview.setVisibility(View.INVISIBLE);
@@ -160,7 +348,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
             UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
-            userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
+
+            userTypeRetailor = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
             // GetJsonData(shared_common_pref.getvalue(Shared_Common_Pref.Todaydayplanresult), "6");
             DCRMode = shared_common_pref.getvalue(Shared_Common_Pref.DCRMode);
@@ -174,97 +363,118 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
             Retailer_Modal_ListFilter = new ArrayList<>();
             Retailer_Modal_List = new ArrayList<>();
-            String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
-            //  String outletserializableob = null;
+
+            if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
+
+                String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
+                //  String outletserializableob = null;
 //
-            //      outletserializableob = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
+                //      outletserializableob = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
 //
 
-            Log.e("Retailor List: ", outletserializableob);
+                Log.e("Retailor List: ", outletserializableob);
+                Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
 
-            Retailer_Modal_List.clear();
-            Retailer_Modal_List = gson.fromJson(outletserializableob, userType);
-            // String todayorderliost = shared_common_pref.getvalue(Shared_Common_Pref.Outlet_Total_Orders);
-            String todayorderliost = String.valueOf(db.getMasterData(Constants.Outlet_Total_Orders));
 
-            userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
-            }.getType();
-            Retailer_Order_List = gson.fromJson(todayorderliost, userType);
-            if (Retailer_Modal_List != null && Retailer_Modal_List.size() > 0) {
-                for (int i = 0; Retailer_Modal_List.size() > i; i++) {
-                    for (int j = 0; Retailer_Order_List.size() > j; j++) {
-                        if (Retailer_Modal_List.get(i).getId().equals(Retailer_Order_List.get(j).getOutletCode())) {
-                            Log.e("Invoice_Flag", Retailer_Order_List.get(j).getInvoice_Flag());
-                            if (Retailer_Order_List.get(j).getInvoice_Flag().equals("2")) {
-                                Retailer_Modal_List.get(i).setInvoiceDate(Retailer_Order_List.get(j).getOrderDate());
-                                Retailer_Modal_List.get(i).setInvoiceValues(String.valueOf(Retailer_Order_List.get(j).getInvoicevalues()));
-                                Retailer_Modal_List.get(i).setStatusname(String.valueOf(Retailer_Order_List.get(j).getStatus()));
-                                Retailer_Modal_List.get(i).setInvoice_Flag(Retailer_Order_List.get(j).getInvoice_Flag());
-                                //Log.e("INVOICE_Refrence", Retailer_Modal_ListFilter.get(j).getInvoice_Flag()+"Outlet_Code"+Retailer_Order_List.get(j).getOutletCode());
-                                Retailer_Modal_List.get(i).setValuesinv("" + Retailer_Order_List.get(j).getOrderValue());
-                            } else {
-                                Log.e("Invoice_Flag", Retailer_Order_List.get(j).getInvoice_Flag());
-                                Retailer_Modal_List.get(i).setInvoice_Flag(Retailer_Order_List.get(j).getInvoice_Flag());
+                distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
+
+
+                Distributor_Id = shared_common_pref.getvalue(Constants.Distributor_Id);
+                loadroute(shared_common_pref.getvalue(Constants.Distributor_Id));
+
+
+                if (!shared_common_pref.getvalue(Constants.Route_name).equals("")) {
+                    route_text.setText(shared_common_pref.getvalue(Constants.Route_name));
+                    Route_id = shared_common_pref.getvalue(Constants.Route_Id);
+                    //OutletFilter(shared_common_pref.getvalue(Constants.Route_Id), "0");
+                }
+
+                if (Retailer_Modal_List != null) {
+
+
+                    // String todayorderliost = shared_common_pref.getvalue(Shared_Common_Pref.Outlet_Total_Orders);
+                    String todayorderliost = String.valueOf(db.getMasterData(Constants.Outlet_Total_Orders));
+
+                    userTypeReport = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
+                    }.getType();
+                    Retailer_Order_List = gson.fromJson(todayorderliost, userTypeReport);
+                    if (Retailer_Modal_List != null && Retailer_Modal_List.size() > 0) {
+                        for (int i = 0; Retailer_Modal_List.size() > i; i++) {
+                            for (int j = 0; Retailer_Order_List.size() > j; j++) {
+                                if (Retailer_Modal_List.get(i).getId().equals(Retailer_Order_List.get(j).getOutletCode())) {
+                                    Log.e("Invoice_Flag", Retailer_Order_List.get(j).getInvoice_Flag());
+                                    if (Retailer_Order_List.get(j).getInvoice_Flag().equals("2")) {
+                                        Retailer_Modal_List.get(i).setInvoiceDate(Retailer_Order_List.get(j).getOrderDate());
+                                        Retailer_Modal_List.get(i).setInvoiceValues(String.valueOf(Retailer_Order_List.get(j).getInvoicevalues()));
+                                        Retailer_Modal_List.get(i).setStatusname(String.valueOf(Retailer_Order_List.get(j).getStatus()));
+                                        Retailer_Modal_List.get(i).setInvoice_Flag(Retailer_Order_List.get(j).getInvoice_Flag());
+                                        //Log.e("INVOICE_Refrence", Retailer_Modal_ListFilter.get(j).getInvoice_Flag()+"Outlet_Code"+Retailer_Order_List.get(j).getOutletCode());
+                                        Retailer_Modal_List.get(i).setValuesinv("" + Retailer_Order_List.get(j).getOrderValue());
+                                    } else {
+                                        Log.e("Invoice_Flag", Retailer_Order_List.get(j).getInvoice_Flag());
+                                        Retailer_Modal_List.get(i).setInvoice_Flag(Retailer_Order_List.get(j).getInvoice_Flag());
+                                    }
+                                }
                             }
                         }
                     }
-                }
-            }
-            Retailer_Modal_ListFilter.clear();
-            if (Distributor_Id == null) {
-                Retailer_Modal_ListFilter.addAll(Retailer_Modal_List);
-            } else {
-                OutletFilter(Distributor_Id, "1", true);
-            }
-            sDeptType = UserDetails.getString("DeptType", "");
-            Log.d("DeptType", sDeptType);
-            btnCmbRoute.setVisibility(View.VISIBLE);
-            if (sDeptType.equalsIgnoreCase("2")) {
-                btnCmbRoute.setVisibility(View.GONE);
-            }
-            recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
-                @Override
-                public void onIntentClick(int position) {
-                    Shared_Common_Pref.Outler_AddFlag = "0";
-                    Log.e("Route_Outlet_Info", Retailer_Modal_List.get(position).getId());
-                    Shared_Common_Pref.OutletName = Retailer_Modal_List.get(position).getName().toUpperCase() + "~" + Retailer_Modal_List.get(position).getId();
-                    Shared_Common_Pref.OutletCode = Retailer_Modal_List.get(position).getId();
-                    Shared_Common_Pref.OutletAvail = Retailer_Modal_List.get(position).getHatsun_AvailablityId();
-                    Shared_Common_Pref.OutletUniv = Retailer_Modal_List.get(position).getCategory_Universe_Id();
-                    shared_common_pref.save("CurrLoc", "");
-                    new LocationFinder(getApplication(), new LocationEvents() {
+                    Retailer_Modal_ListFilter.clear();
+//                    if (Distributor_Id == null) {
+//                        Retailer_Modal_ListFilter.addAll(Retailer_Modal_List);
+//                    } else {
+                    if (shared_common_pref.getvalue(Constants.Route_Id).equals(""))
+                        OutletFilter(Distributor_Id, "1", true);
+                    else
+                        OutletFilter(Distributor_Id, "0", true);
+
+                    //}
+                    sDeptType = UserDetails.getString("DeptType", "");
+                    sDeptType = "1";
+                    btnCmbRoute.setVisibility(View.VISIBLE);
+//                    if (sDeptType.equalsIgnoreCase("2")) {
+//                        btnCmbRoute.setVisibility(View.GONE);
+//                    }
+                    recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
                         @Override
-                        public void OnLocationRecived(Location location) {
-                            shared_common_pref.save("CurrLoc", String.valueOf(location.getLatitude()) + ":" + String.valueOf(location.getLongitude()));
+                        public void onIntentClick(int position) {
+                            Shared_Common_Pref.Outler_AddFlag = "0";
+                            Log.e("Route_Outlet_Info", Retailer_Modal_List.get(position).getId());
+                            Shared_Common_Pref.OutletName = Retailer_Modal_List.get(position).getName().toUpperCase();
+                            Shared_Common_Pref.OutletCode = Retailer_Modal_List.get(position).getId();
+                            Shared_Common_Pref.OutletAvail = Retailer_Modal_List.get(position).getHatsun_AvailablityId();
+                            Shared_Common_Pref.OutletUniv = Retailer_Modal_List.get(position).getCategory_Universe_Id();
+                            shared_common_pref.save("CurrLoc", "");
+                            new LocationFinder(getApplication(), new LocationEvents() {
+                                @Override
+                                public void OnLocationRecived(Location location) {
+                                    shared_common_pref.save("CurrLoc", location.getLatitude() + ":" + location.getLongitude());
+                                }
+                            });
+
+                            shared_common_pref.save(Constants.Retailor_Address, Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
+                            shared_common_pref.save(Constants.Retailor_ERP_Code, Retailer_Modal_ListFilter.get(position).getERP_Code());
+                            shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_List.get(position).getName().toUpperCase() + "~" + Retailer_Modal_List.get(position).getERP_Code());
+
+                            if (!DCRMode.equalsIgnoreCase("")) {
+                                common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                            } else {
+                                //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                                common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                            }
+
+
                         }
-                    });
-                    if (!DCRMode.equalsIgnoreCase("")) {
-                        common_class.CommonIntentwithoutFinish(Invoice_History.class);
-                    } else {
-                        common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-                    }
+                    }));
+
+
                 }
-            }));
 
 
-            distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
-
-
-            if (distributor_text.getText().toString().equals(""))
+            } else {
                 btnCmbRoute.setVisibility(View.GONE);
-            else {
-                Distributor_Id = shared_common_pref.getvalue(Constants.Distributor_Id);
-                btnCmbRoute.setVisibility(View.VISIBLE);
-                loadroute(shared_common_pref.getvalue(Constants.Distributor_Id));
-            }
-
-            if (!shared_common_pref.getvalue(Constants.Route_name).equals("")) {
-                route_text.setText(shared_common_pref.getvalue(Constants.Route_name));
-                //OutletFilter(shared_common_pref.getvalue(Constants.Route_Id), "0");
             }
 
             createTabFragment();
-
 
             viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
@@ -292,7 +502,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 @Override
                 public void onPageScrollStateChanged(int state) {
 
-                    if (state == viewPager.SCROLL_STATE_IDLE) {
+                    if (state == ViewPager.SCROLL_STATE_IDLE) {
                         // OutletFilter("t", String.valueOf(scrollPosition));
                         //adapter.notifyDataSetChanged();
 
@@ -341,7 +551,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 //if (Distributor_Id == null || Distributor_Id.equals("")) {
                 if (distributor_text.getText().toString().equals("")) {
                     Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
-                } else if ((Route_id == null || Route_id.equals("")) && !sDeptType.equalsIgnoreCase("2")) {
+                } else if (route_text.getText().toString().equals("")) {
                     Toast.makeText(this, "Select The Route", Toast.LENGTH_SHORT).show();
                 } else {
                     shared_common_pref.save("RouteSelect", Route_id);
@@ -358,11 +568,13 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 customDialog.show();
                 break;
             case R.id.route_text:
-                customDialog = new CustomListViewDialog(Dashboard_Route.this, FRoute_Master, 3);
-                Window windowww = customDialog.getWindow();
-                windowww.setGravity(Gravity.CENTER);
-                windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
+                if (FRoute_Master != null && FRoute_Master.size() > 1) {
+                    customDialog = new CustomListViewDialog(Dashboard_Route.this, FRoute_Master, 3);
+                    Window windowww = customDialog.getWindow();
+                    windowww.setGravity(Gravity.CENTER);
+                    windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    customDialog.show();
+                }
                 break;
             case R.id.toolbar_home:
                 common_class.CommonIntentwithoutFinish(SFA_Activity.class);
@@ -389,11 +601,15 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         customDialog.dismiss();
         if (type == 2) {
             route_text.setText("");
+            shared_common_pref.save(Constants.Route_Id, "");
             Distributor_Id = myDataset.get(position).getId();
             btnCmbRoute.setVisibility(View.VISIBLE);
             distributor_text.setText(myDataset.get(position).getName());
             shared_common_pref.save(Constants.Distributor_name, myDataset.get(position).getName());
             shared_common_pref.save(Constants.Distributor_Id, myDataset.get(position).getId());
+            getLastInvoiceData();
+
+
             loadroute(myDataset.get(position).getId());
             OutletFilter(myDataset.get(position).getId(), "1", true);
 
@@ -403,84 +619,120 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             route_text.setText(myDataset.get(position).getName());
             shared_common_pref.save(Constants.Route_name, myDataset.get(position).getName());
             shared_common_pref.save(Constants.Route_Id, myDataset.get(position).getId());
+            Route_id = myDataset.get(position).getId();
             OutletFilter(myDataset.get(position).getId(), "0", true);
 
 
         }
     }
 
+
     public void OutletFilter(String id, String flag, Boolean pagerUpdate) {
-        Retailer_Modal_ListFilter.clear();
-        Log.e("Retailer_Modal_ListSIZE", "" + Retailer_Modal_List.size());
-    /*    if (flag.equals("1")) {
-            Retailer_Modal_ListFilter.addAll(Retailer_Modal_List);
-
-        } else {
-  */
+        try {
 
 
-        //old
-        for (int i = 0; i < Retailer_Modal_List.size(); i++) {
             if (flag.equals("0")) {
-                if (Retailer_Modal_List.get(i).getTownCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+
+                Retailer_Modal_ListFilter = new ArrayList<>();
+
+                for (int i = 0; i < Retailer_Modal_List.size(); i++) {
+                    if (id.equals(Retailer_Modal_List.get(i).getTownCode()))
+                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
                 }
-            }
-            if (flag.equals("1")) {
-                if (Retailer_Modal_List.get(i).getDistCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-                }
-            }
-            if (flag.equals("2")) {
-                if (Retailer_Modal_List.get(i).getInvoice_Flag().equals("2")) {
-                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-                }
-            }
-            if (flag.equals("3")) {
-                if (!Retailer_Modal_List.get(i).getInvoice_Flag().equals("2")) {
-                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-                }
-            }
-
-        }
-        if (pagerUpdate) {
-            adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
-            viewPager.setAdapter(adapter);
-            tabLayout.setupWithViewPager(viewPager);
-
-            adapter.notifyDataSetChanged();
-        }
 
 
-//old
-//        }
-        recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
-            @Override
-            public void onIntentClick(int position) {
-                if (Distributor_Id == null || Distributor_Id.equalsIgnoreCase("")) {
-                    Toast.makeText(Dashboard_Route.this, "Select The Distributor", Toast.LENGTH_SHORT).show();
-                } else if ((Route_id == null || Route_id.equalsIgnoreCase("")) && !sDeptType.equalsIgnoreCase("2")) {
-                    Toast.makeText(Dashboard_Route.this, "Select The Route", Toast.LENGTH_SHORT).show();
-                } else {
-                    Shared_Common_Pref.Outler_AddFlag = "0";
-                    Shared_Common_Pref.OutletName = Retailer_Modal_ListFilter.get(position).getName().toUpperCase() + "~" + Retailer_Modal_ListFilter.get(position).getId();
-                    Shared_Common_Pref.OutletCode = Retailer_Modal_ListFilter.get(position).getId();
-                    Shared_Common_Pref.DistributorCode = Distributor_Id;
-                    Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
-                    Shared_Common_Pref.Route_Code = Route_id;
-                    common_class.CommonIntentwithFinish(Route_Product_Info.class);
-                }
-            }
-        }));
+                // shared_common_pref.save(Retailer_OutletList, gson.toJson(Retailer_Modal_ListFilter));
+                TabAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
+                viewPager.setAdapter(adapter);
+                tabLayout.setupWithViewPager(viewPager);
 
+                adapter.notifyDataSetChanged();
 
-//        if (adapter == null) {
-//            adapter = new TabAdapter(getSupportFragmentManager(), tabLayout);
-//            viewPager.setAdapter(adapter);
-//        }
+                recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
+                    @Override
+                    public void onIntentClick(int position) {
+                        try {
+                            if (Distributor_Id == null || Distributor_Id.equalsIgnoreCase("")) {
+                                Toast.makeText(Dashboard_Route.this, "Select The Distributor", Toast.LENGTH_SHORT).show();
+                            } else if ((Route_id == null || Route_id.equalsIgnoreCase("")) && !sDeptType.equalsIgnoreCase("2")) {
+                                Toast.makeText(Dashboard_Route.this, "Select The Route", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Shared_Common_Pref.Outler_AddFlag = "0";
+                                Shared_Common_Pref.OutletName = Retailer_Modal_ListFilter.get(position).getName().toUpperCase()
+
+                                ;
+                                Shared_Common_Pref.OutletCode = Retailer_Modal_ListFilter.get(position).getId();
+                                Shared_Common_Pref.DistributorCode = Distributor_Id;
+                                Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
+                                Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
+                                //common_class.CommonIntentwithFinish(Route_Product_Info.class);
+                                shared_common_pref.save(Constants.Retailor_Address, Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
+                                shared_common_pref.save(Constants.Retailor_ERP_Code, Retailer_Modal_ListFilter.get(position).getERP_Code());
+                                shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_List.get(position).getName().toUpperCase() + "~" + Retailer_Modal_List.get(position).getERP_Code());
+                                common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                            }
+                        } catch (Exception e) {
+                            Log.e("DR:RetailorClick: ", e.getMessage());
+                        }
+                    }
+                }));
+
+            } else {
+
+                common_class.getDataFromApi(Retailer_OutletList, this, false);
+                //  getDataFromApi(Retailer_OutletList, this, false);
+//                Retailer_Modal_ListFilter.clear();
+//                Log.e("Retailer_Modal_ListSIZE", "" + Retailer_Modal_List.size());
 //
-//        adapter.notifyDataSetChanged();
+//                common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
+//
+//
+//                String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
+//
+//                Log.e("Retailor List: ", outletserializableob);
+//
+//                Retailer_Modal_List.clear();
+//                Retailer_Modal_ListFilter.clear();
+//
+//                Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
+//
+//
+//                for (int i = 0; i < Retailer_Modal_List.size(); i++) {
+//
+//                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+////                        if (flag.equals("0")) {
+////                            if (Retailer_Modal_List.get(i).getTownCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
+////                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+////                            }
+////                        }
+////                        if (flag.equals("1")) {
+////                            if (Retailer_Modal_List.get(i).getDistCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
+////                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+////                            }
+////                        }
+////                        if (flag.equals("2")) {
+////                            if (Retailer_Modal_List.get(i).getInvoice_Flag().equals("2")) {
+////                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+////                            }
+////                        }
+////                        if (flag.equals("3")) {
+////                            if (!Retailer_Modal_List.get(i).getInvoice_Flag().equals("2")) {
+////                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+////                            }
+////                        }
+//
+//                }
+
+
+            }
+
+
+        } catch (Exception e) {
+            Log.e("DR:RetailorFilter: ", e.getMessage());
+        }
+
     }
+
 
     @Override
     public void setDataToRouteObject(Object noticeArrayList, int position) {
@@ -518,15 +770,27 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     }
 
     public void loadroute(String id) {
-        if (common_class.isNullOrEmpty(String.valueOf(id))) {
+        if (Common_Class.isNullOrEmpty(String.valueOf(id))) {
             Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
         }
         FRoute_Master.clear();
         for (int i = 0; i < Route_Masterlist.size(); i++) {
             if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-                Log.e("Route_Masterlist", String.valueOf(id) + "STOCKIST" + Route_Masterlist.get(i).getFlag());
+                Log.e("Route_Masterlist", id + "STOCKIST" + Route_Masterlist.get(i).getFlag());
                 FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
             }
+        }
+
+        if (FRoute_Master.size() == 1) {
+            findViewById(R.id.ivRouteSpinner).setVisibility(View.INVISIBLE);
+            route_text.setText(FRoute_Master.get(0).getName());
+            shared_common_pref.save(Constants.Route_name, FRoute_Master.get(0).getName());
+            shared_common_pref.save(Constants.Route_Id, FRoute_Master.get(0).getId());
+            Route_id = FRoute_Master.get(0).getId();
+
+        } else {
+            findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
+
         }
     }
 
@@ -609,13 +873,76 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     }
 
 
-    public static class AllDataFragment extends Fragment {
-        private Context context;
-        private RecyclerView recyclerView;
-        View mView;
+    @Override
+    public void onLoadFilterData(List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> retailer_modal_list) {
 
+        if (retailer_modal_list != null) {
+
+            Retailer_Modal_List = new ArrayList<>();
+            Retailer_Modal_ListFilter = new ArrayList<>();
+
+
+            Retailer_Modal_List.clear();
+
+            Retailer_Modal_ListFilter.clear();
+
+            Retailer_Modal_List = retailer_modal_list;
+
+
+            Retailer_Modal_ListFilter = Retailer_Modal_List;
+
+
+            TabAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
+            viewPager.setAdapter(adapter);
+            tabLayout.setupWithViewPager(viewPager);
+
+            adapter.notifyDataSetChanged();
+
+            recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
+                @Override
+                public void onIntentClick(int position) {
+                    if (Distributor_Id == null || Distributor_Id.equalsIgnoreCase("")) {
+                        Toast.makeText(Dashboard_Route.this, "Select The Distributor", Toast.LENGTH_SHORT).show();
+                    } else if ((Route_id == null || Route_id.equalsIgnoreCase("")) && !sDeptType.equalsIgnoreCase("2")) {
+                        Toast.makeText(Dashboard_Route.this, "Select The Route", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Shared_Common_Pref.Outler_AddFlag = "0";
+                        Shared_Common_Pref.OutletName = Retailer_Modal_ListFilter.get(position).getName().toUpperCase()
+                        ;
+                        Shared_Common_Pref.OutletCode = Retailer_Modal_ListFilter.get(position).getId();
+                        Shared_Common_Pref.DistributorCode = Distributor_Id;
+                        Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
+                        Shared_Common_Pref.Route_Code = Route_id;
+
+                        shared_common_pref.save(Constants.Retailor_Address, Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
+                        shared_common_pref.save(Constants.Retailor_ERP_Code, Retailer_Modal_ListFilter.get(position).getERP_Code());
+                        shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_List.get(position).getName().toUpperCase() + "~" + Retailer_Modal_List.get(position).getERP_Code());
+                        //common_class.CommonIntentwithFinish(Route_Product_Info.class);
+                        common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                    }
+                }
+            }));
+        }
+
+    }
+
+    @Override
+    public void onLoadTodayOrderList(List<OutletReport_View_Modal> outletReportViewModals) {
+
+    }
+
+    @Override
+    public void onLoadDataUpdateUI(String apiDataResponse) {
+
+    }
+
+
+    public static class AllDataFragment extends Fragment {
+        View mView;
         String tabPosition = "";
         List<Retailer_Modal_List> mRetailer_Modal_ListFilter;
+        private Context context;
+        private RecyclerView recyclerView;
 
         public AllDataFragment(List<Retailer_Modal_List> retailer_Modal_ListFilter, int position) {
 
@@ -654,18 +981,29 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             recyclerView.setAdapter(new Route_View_Adapter(mRetailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getActivity(), new AdapterOnClick() {
                 @Override
                 public void onIntentClick(int position) {
-                    if (dashboard_route.Distributor_Id == null || dashboard_route.Distributor_Id.equalsIgnoreCase("")) {
-                        Toast.makeText(getActivity(), "Select The Distributor", Toast.LENGTH_SHORT).show();
-                    } else if ((dashboard_route.Route_id == null || dashboard_route.Route_id.equalsIgnoreCase("")) && !dashboard_route.sDeptType.equalsIgnoreCase("2")) {
-                        Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Shared_Common_Pref.Outler_AddFlag = "0";
-                        Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase() + "~" + mRetailer_Modal_ListFilter.get(position).getId();
-                        Shared_Common_Pref.OutletCode = mRetailer_Modal_ListFilter.get(position).getId();
-                        Shared_Common_Pref.DistributorCode = dashboard_route.Distributor_Id;
-                        Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
-                        Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
-                        common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                    try {
+
+                        if (dashboard_route.Distributor_Id == null || dashboard_route.Distributor_Id.equalsIgnoreCase("")) {
+                            Toast.makeText(getActivity(), "Select The Distributor", Toast.LENGTH_SHORT).show();
+                        } else if ((dashboard_route.Route_id == null || dashboard_route.Route_id.equalsIgnoreCase("")) && !dashboard_route.sDeptType.equalsIgnoreCase("2")) {
+                            Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Shared_Common_Pref.Outler_AddFlag = "0";
+                            Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase();
+                            Shared_Common_Pref.OutletCode = mRetailer_Modal_ListFilter.get(position).getId();
+                            Shared_Common_Pref.DistributorCode = dashboard_route.Distributor_Id;
+                            Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
+                            Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
+                            // common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                            shared_common_pref.save(Constants.Retailor_Address, mRetailer_Modal_ListFilter.get(position).getListedDrAddress1());
+                            shared_common_pref.save(Constants.Retailor_ERP_Code, mRetailer_Modal_ListFilter.get(position).getERP_Code());
+                            shared_common_pref.save(Constants.Retailor_Name_ERP_Code, mRetailer_Modal_ListFilter.get(position).getName().toUpperCase() + "~"
+                                    + mRetailer_Modal_ListFilter.get(position).getERP_Code());
+                            common_class.CommonIntentwithoutFinish(Invoice_History.class);
+
+                        }
+                    } catch (Exception e) {
+
                     }
                 }
             }));
@@ -684,19 +1022,15 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
             updateData();
 
-            // Dashboard_Route.dashboard_route.OutletFilter(Distributor_Id, "2");
-
 
         }
     }
 
     public static class PendingFragment extends Fragment {
+        String tabPosition = "";
+        List<Retailer_Modal_List> mRetailer_Modal_ListFilter;
         private Context context;
         private RecyclerView recyclerView;
-
-        String tabPosition = "";
-
-        List<Retailer_Modal_List> mRetailer_Modal_ListFilter;
 
         public PendingFragment(List<Retailer_Modal_List> retailer_Modal_ListFilter, int s) {
             tabPosition = String.valueOf(s);
@@ -726,12 +1060,18 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                         Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
                     } else {
                         Shared_Common_Pref.Outler_AddFlag = "0";
-                        Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase() + "~" + dashboard_route.Retailer_Modal_ListFilter.get(position).getId();
+                        Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase()
+                        ;
                         Shared_Common_Pref.OutletCode = mRetailer_Modal_ListFilter.get(position).getId();
                         Shared_Common_Pref.DistributorCode = dashboard_route.Distributor_Id;
                         Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
                         Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
-                        common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                        //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                        shared_common_pref.save(Constants.Retailor_Address, mRetailer_Modal_ListFilter.get(position).getListedDrAddress1());
+                        shared_common_pref.save(Constants.Retailor_ERP_Code, mRetailer_Modal_ListFilter.get(position).getERP_Code());
+                        shared_common_pref.save(Constants.Retailor_Name_ERP_Code, mRetailer_Modal_ListFilter.get(position).getName().toUpperCase() + "~" +
+                                mRetailer_Modal_ListFilter.get(position).getERP_Code());
+                        common_class.CommonIntentwithoutFinish(Invoice_History.class);
                     }
                 }
             }));
@@ -740,11 +1080,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     }
 
     public static class CompleteFragment extends Fragment {
-        private Context context;
-        private RecyclerView recyclerView;
-
         String tabPosition = "";
         List<Retailer_Modal_List> mRetailer_Modal_ListFilter;
+        private Context context;
+        private RecyclerView recyclerView;
 
         public CompleteFragment(List<Retailer_Modal_List> retailer_Modal_ListFilter, int s) {
             tabPosition = String.valueOf(s);
@@ -773,12 +1112,17 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                         Toast.makeText(getActivity(), "Select The Route", Toast.LENGTH_SHORT).show();
                     } else {
                         Shared_Common_Pref.Outler_AddFlag = "0";
-                        Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase() + "~" + dashboard_route.Retailer_Modal_ListFilter.get(position).getId();
+                        Shared_Common_Pref.OutletName = mRetailer_Modal_ListFilter.get(position).getName().toUpperCase();
                         Shared_Common_Pref.OutletCode = mRetailer_Modal_ListFilter.get(position).getId();
                         Shared_Common_Pref.DistributorCode = dashboard_route.Distributor_Id;
                         Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
                         Shared_Common_Pref.Route_Code = dashboard_route.Route_id;
-                        common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                        //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                        shared_common_pref.save(Constants.Retailor_Address, mRetailer_Modal_ListFilter.get(position).getListedDrAddress1());
+                        shared_common_pref.save(Constants.Retailor_ERP_Code, mRetailer_Modal_ListFilter.get(position).getERP_Code());
+                        shared_common_pref.save(Constants.Retailor_Name_ERP_Code, mRetailer_Modal_ListFilter.get(position).getName().toUpperCase() + "~"
+                                + mRetailer_Modal_ListFilter.get(position).getERP_Code());
+                        common_class.CommonIntentwithoutFinish(Invoice_History.class);
                     }
                 }
             }));

@@ -152,6 +152,7 @@
 
 
                             <TextView
+                                android:visibility="gone"
                                 android:id="@+id/retailerroute"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -193,7 +194,7 @@
                                 android:id="@+id/billnumber"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Bill no : 12345678"
+                                android:text="Bill no : 674523"
                                 android:textAlignment="textStart"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/C15dp"></TextView>
@@ -415,7 +416,7 @@
                                 android:id="@+id/gstrate"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="0.04"
+                                android:text="0.00"
                                 android:textAlignment="viewEnd"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/C15dp"></TextView>
@@ -437,7 +438,7 @@
                                 android:id="@+id/cashdiscount"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="10.00"
+                                android:text="0.00"
                                 android:textAlignment="viewEnd"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/C15dp"></TextView>
@@ -463,6 +464,7 @@
                                 android:textStyle="bold"></TextView>
 
                             <TextView
+                                android:fontFamily="sans-serif"
                                 android:id="@+id/netamount"
 
                                 android:layout_width="match_parent"

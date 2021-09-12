@@ -3,10 +3,194 @@ package com.hap.checkinproc.SFA_Model_Class;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Retailer_Modal_List {
+
+
+    public Retailer_Modal_List(String cust_Code, String mnth, double others, double othersVal, double curd, double curdVal, double milk, double milkVal) {
+        Cust_Code = cust_Code;
+        Mnth = mnth;
+        Others = others;
+        OthersVal = othersVal;
+        Curd = curd;
+        CurdVal = curdVal;
+        Milk = milk;
+        MilkVal = milkVal;
+    }
+
+
+    public String getCust_Code() {
+        return Cust_Code;
+    }
+
+    public void setCust_Code(String cust_Code) {
+        Cust_Code = cust_Code;
+    }
+
+    public String getMnth() {
+        return Mnth;
+    }
+
+    public void setMnth(String mnth) {
+        Mnth = mnth;
+    }
+
+    public double getOthers() {
+        return Others;
+    }
+
+    public void setOthers(double others) {
+        Others = others;
+    }
+
+    public double getOthersVal() {
+        return OthersVal;
+    }
+
+    public void setOthersVal(double othersVal) {
+        OthersVal = othersVal;
+    }
+
+    public double getCurd() {
+        return Curd;
+    }
+
+    public void setCurd(double curd) {
+        Curd = curd;
+    }
+
+    public double getCurdVal() {
+        return CurdVal;
+    }
+
+    public void setCurdVal(double curdVal) {
+        CurdVal = curdVal;
+    }
+
+    public double getMilk() {
+        return Milk;
+    }
+
+    public void setMilk(double milk) {
+        Milk = milk;
+    }
+
+    public double getMilkVal() {
+        return MilkVal;
+    }
+
+    public void setMilkVal(double milkVal) {
+        MilkVal = milkVal;
+    }
+
+    @SerializedName("Cust_Code")
+    @Expose
+    private String Cust_Code;
+
+
+    @SerializedName("Mnth")
+    @Expose
+    private String Mnth;
+
+    @SerializedName("Others")
+    @Expose
+    private double Others;
+
+    @SerializedName("OthersVal")
+    @Expose
+    private double OthersVal;
+
+    @SerializedName("Curd")
+    @Expose
+    private double Curd;
+
+
+    @SerializedName("CurdVal")
+    @Expose
+    private double CurdVal;
+
+
+    @SerializedName("Milk")
+    @Expose
+    private double Milk;
+
+
+    @SerializedName("MilkVal")
+    @Expose
+    private double MilkVal;
+
+
     @SerializedName("id")
     @Expose
     private String id;
+
+    @SerializedName("ERP_Code")
+    @Expose
+    private String ERP_Code;
+
+    public Retailer_Modal_List getRetailer_modal_list() {
+        return retailer_modal_list;
+    }
+
+    public void setRetailer_modal_list(Retailer_Modal_List retailer_modal_list) {
+        this.retailer_modal_list = retailer_modal_list;
+    }
+
+    public double getProductQty() {
+        return productQty;
+    }
+
+    public void setProductQty(double productQty) {
+        this.productQty = productQty;
+    }
+
+    public double getProductRate() {
+        return productRate;
+    }
+
+    public void setProductRate(double productRate) {
+        this.productRate = productRate;
+    }
+
+    Retailer_Modal_List retailer_modal_list;
+
+
+    public Retailer_Modal_List(String cust_Code, List<Retailer_Modal_List> retailer_modal_lists) {
+        this.Cust_Code = cust_Code;
+        this.retailer_modal_list = (Retailer_Modal_List) retailer_modal_lists;
+
+    }
+
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public Retailer_Modal_List(String productName, double productQty, double productRate) {
+        this.productName = productName;
+        this.productQty = productQty;
+        this.productRate = productRate;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    @SerializedName("productName")
+    @Expose
+    private String productName;
+
+
+    @SerializedName("productQty")
+    @Expose
+    private double productQty;
+
+
+    @SerializedName("productRate")
+    @Expose
+    private double productRate;
+
 
     public String getStatusname() {
         return Statusname;
@@ -46,6 +230,17 @@ public class Retailer_Modal_List {
 
     public void set_long(String _long) {
         this._long = _long;
+    }
+
+
+    public Retailer_Modal_List(String cust_Code, double others, double othersVal, double curd, double curdVal, double milk, double milkVal) {
+        Cust_Code = cust_Code;
+        Others = others;
+        OthersVal = othersVal;
+        Curd = curd;
+        CurdVal = curdVal;
+        Milk = milk;
+        MilkVal = milkVal;
     }
 
 
@@ -524,6 +719,15 @@ public class Retailer_Modal_List {
 
     public void setPlace_id(String place_id) {
         this.place_id = place_id;
+    }
+
+
+    public String getERP_Code() {
+        return ERP_Code;
+    }
+
+    public void setERP_Code(String ERP_Code) {
+        this.ERP_Code = ERP_Code;
     }
 
 

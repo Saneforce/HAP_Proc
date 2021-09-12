@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ivSFACalendar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/C5dp"
+                android:src="@drawable/calender">
+
+            </ImageView>
+
+            <TextView
+                style="@style/headerTextStyle"
+                android:text="Outlet Summary"></TextView>
+
+            <TextView
+                android:id="@+id/tvSFADate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/ivSFACalendar"
+                android:layout_alignParentRight="true"
+                android:layout_margin="@dimen/C3dp"
+                android:text="2021-09-07"
+                android:textColor="@color/black"
+                android:textSize="@dimen/C10dp"
+                android:textStyle="bold"></TextView>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tvServiceOutlet"
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="10000"></TextView>
+
+            <TextView
+                android:id="@+id/tvUniverseOutlet"
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="1000"></TextView>
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Service Outlets"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+                style="@style/mediumTextStyle"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Universe Outlets"
+                android:textStyle="bold"></TextView>
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

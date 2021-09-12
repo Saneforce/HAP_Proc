@@ -429,6 +429,14 @@ public interface ApiInterface {
     Call<JsonObject> saveCalls(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
+    @POST("db_v310.php?axn=save/otherbrandentry")
+    Call<JsonObject> saveOtherBrand(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+
+    @FormUrlEncoded
+    @POST("db_v310.php?axn=save/popentry")
+    Call<JsonObject> savePOP(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+
+    @FormUrlEncoded
     @POST("Db_v310.php?")
     Call<JsonArray> getDataArrayListA(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("sfCode") String Sf_code, @Query("State_Code") String State_code, @Query("desig") String desig, @Field("data") String body);
 
@@ -481,6 +489,62 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?")
     Call<ResponseBody> sendUpldPhotoErrorMsg(@Query("axn") String axn, @Field("data") String body);
+
+
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/qpsallocation")
+    Call<ResponseBody> getQPSData(@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/qpshaplitres")
+    Call<ResponseBody> getHapBrand(@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=save/qpsentry")
+    Call<ResponseBody> submitQPSData(@Field("data") String body);
+
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/prevorderqty")
+    Call<ResponseBody> getPreOrderQty(@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/popmaster ")
+    Call<ResponseBody> getPOPMaster(@Field("data") String body);
+
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/categorywiseretailerdata")
+    Call<ResponseBody> getLastThreeMnthsData(@Field("data") String body);
+
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/cumulativevalues")
+    Call<ResponseBody> getCumulativeValues(@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/dashboardvalues")
+    Call<ResponseBody> getDashboardValues(@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/outletsummary")
+    Call<ResponseBody> getOutletsummary(@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/serviceoutletsummary")
+    Call<ResponseBody> getServiceOutletsummary(@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/outletsummary")
+    Call<ResponseBody> getDashboardData(@Field("data") String body);
+
+
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?")
+    Call<ResponseBody> GetRouteObject310(@QueryMap Map<String, String> params,
+                                         @Field("data") String data);
 
 
 }
