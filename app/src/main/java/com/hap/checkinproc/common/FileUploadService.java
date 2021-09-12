@@ -112,22 +112,24 @@ public class FileUploadService extends JobIntentService {
     }
     private void onErrors(Throwable throwable) {
     //sendBroadcastMeaasge("Error in file upload " + throwable.getMessage());
-        UploadPhoto();
+        if(throwable.getMessage().indexOf("No such file or directory")>-1){
+            sendOtherPhotos();
+        }else {
+            UploadPhoto();
+        }
 
-
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        apiInterface.sendUpldPhotoErrorMsg("send/photouplerr",throwable.getMessage())
+        //ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        /*apiInterface.sendUpldPhotoErrorMsg("send/photouplerr",throwable.getMessage())
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
 
                     }
-                });
+                });*/
         Log.e(TAG, "onErrors: ", throwable);
     }
     private void onProgress(Double progress) {
@@ -135,28 +137,31 @@ public class FileUploadService extends JobIntentService {
         Log.i(TAG, "onProgress: " + progress);
     }
     private void onSuccess() {
-        DatabaseHandler db=new DatabaseHandler(FileUploadService.this);
-        db.deletePhotoDetails(FileName.replaceAll(".jpg",""));
+        sendOtherPhotos();
 
-        JSONArray pendingPhotos=db.getAllPendingPhotos();
-        if(pendingPhotos.length()>0){
-            try {
-                JSONObject itm=pendingPhotos.getJSONObject(0);
-
-                mFilePath=itm.getString("FileURI");
-                mSF=itm.getString("SFCode");
-                FileName= itm.getString("FileName");
-                Mode= itm.getString("Mode");
-                UploadPhoto();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
         sendBroadcastMeaasge("File uploading successful ");
         Log.i(TAG, "onSuccess: File Uploaded");
 
     }
+public void sendOtherPhotos(){
+    DatabaseHandler db=new DatabaseHandler(FileUploadService.this);
+    db.deletePhotoDetails(FileName.replaceAll(".jpg",""));
 
+    JSONArray pendingPhotos=db.getAllPendingPhotos();
+    if(pendingPhotos.length()>0){
+        try {
+            JSONObject itm=pendingPhotos.getJSONObject(0);
+
+            mFilePath=itm.getString("FileURI");
+            mSF=itm.getString("SFCode");
+            FileName= itm.getString("FileName");
+            Mode= itm.getString("Mode");
+            UploadPhoto();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+}
     public void sendBroadcastMeaasge(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
      //   Intent localIntent = new Intent("my.own.broadcast");

@@ -4557,10 +4557,12 @@ Log.d("DACliam","Error : "+t.getMessage());
         db = new DatabaseHandler(this);
         try {
             JSONArray HAPLoca=db.getMasterData("HAPLocations");
-            for(int li=0;li<HAPLoca.length();li++){
-                JSONObject jItem=HAPLoca.getJSONObject(li);
-                Common_Model item=new Common_Model(jItem.getString("id"),jItem.getString("name"),jItem);
-                ldgLocations.add(item);
+            if(HAPLoca!=null){
+                for(int li=0;li<HAPLoca.length();li++){
+                    JSONObject jItem=HAPLoca.getJSONObject(li);
+                    Common_Model item=new Common_Model(jItem.getString("id"),jItem.getString("name"),jItem);
+                    ldgLocations.add(item);
+                }
             }
             Common_Model itemOth = new Common_Model("-1","Other Location","");
             ldgLocations.add(itemOth);
