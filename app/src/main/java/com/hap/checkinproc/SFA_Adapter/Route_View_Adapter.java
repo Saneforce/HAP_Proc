@@ -42,7 +42,9 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
     int dummy;
     private TabAdapter adapter;
 
-    List<Common_Model> common_models = new ArrayList<>();
+    List<Retailer_Modal_List> common_models = new ArrayList<>();
+    List<Retailer_Modal_List> Retailor_model_list_today = new ArrayList<>();
+
     private Common_Class common_class;
     Shared_Common_Pref shared_common_pref;
 
@@ -107,15 +109,41 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 textviewdate.setText("" + plantime);
 
 
-//            common_models.clear();
-//
-//            common_models.add(new Common_Model("Milk", "0"));
-//
-//
-//            RetailorAdapter adapter = new RetailorAdapter(common_models, context);
-//
-//            listView.setAdapter(adapter);
+             //   common_models.clear();
 
+
+//                for (int rt = 0; rt < Retailer_Modal_Listitem.size(); rt++) {
+//
+//                    if (!shared_common_pref.getvalue(Constants.RetailorTodayData).equals("")) {
+//                        if (tdList != null && tdList.size() > 0) {
+//                            boolean isHaveToday = false;
+//
+//                            for (int i = 0; i < tdList.size(); i++) {
+//
+//
+//                                if (tdList.get(i).getCust_Code().equals(Retailer_Modal_Listitem.get(rt).getId())) {
+//                                    isHaveToday = true;
+//
+//
+//                                }
+//                            }
+//
+//                            if (!isHaveToday) {
+//
+//                            }
+//
+//
+//                        }
+//
+//                    }
+//
+//                }
+
+
+//                RetailorAdapter adapter = new RetailorAdapter(Retailer_Modal_Listitem, context);
+//
+//                listView.setAdapter(adapter);
+//
 
             } catch (Exception e) {
                 Log.e("RouteAdapter:holder ", e.getMessage());
@@ -211,7 +239,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     }
 
                     if (!isHaveToday) {
-                      holder.tvTdMilkVal.setText("0|₹0");
+                        holder.tvTdMilkVal.setText("0|₹0");
                         holder.tvTdCurdVal.setText("0|₹0");
                         holder.tvTdOtherVal.setText("0|₹0");
 
@@ -273,8 +301,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                         holder.tvPreOtherVal.setText("0|₹0");
 
                         holder.tvPreTotVal.setText("0|₹0");
-                    }
-                    else {
+                    } else {
                         holder.cdParent.setBackgroundColor(context.getResources().getColor(R.color.greentrans));
                         holder.textviewname.setTextColor(context.getResources().getColor(R.color.greentext));
 

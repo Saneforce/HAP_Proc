@@ -43,4 +43,5 @@ public class Constants {
 
     public static final String RetailorPreviousData = "retailorPreviousData";
 
+    public static String RetailorTodayDataDynamic = "retailorTodayDataDynamic";
 }

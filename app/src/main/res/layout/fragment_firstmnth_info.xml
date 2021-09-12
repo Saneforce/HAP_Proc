@@ -6,53 +6,30 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical">
-
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="match_parent"
+            android:id="@+id/tvProductName"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:ellipsize="end"
             android:fontFamily="sans-serif"
-            android:text="10|100"
-            android:textColor="@color/black_80"
-            android:textSize="@dimen/C12dp">
-
-
-        </TextView>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="10|₹300"
-            android:textColor="@color/black_80"
-            android:textSize="@dimen/C12dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="50|₹500"
-            android:textColor="@color/black_80"
-            android:textSize="@dimen/C12dp">
-
-
-        </TextView>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/grey_200"></LinearLayout>
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="70|₹900"
+            android:text="Milk"
             android:textSize="@dimen/C12dp"
             android:textStyle="bold">
+
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/tvProductValue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif"
+            android:text="0|₹0"
+            android:textSize="@dimen/C12dp">
 
 
         </TextView>

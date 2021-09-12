@@ -167,6 +167,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                                 JSONObject jsonObject = new JSONObject(is.toString());
 
                                 ArrayList<Retailer_Modal_List> todayRetailorData = new ArrayList<>();
+                                ArrayList<Retailer_Modal_List> todayRetailorDataDynamic = new ArrayList<>();
+                                ArrayList<Retailer_Modal_List> tdRetailorDataDynamicVal = new ArrayList<>();
 
                                 ArrayList<Retailer_Modal_List> previousRetailorData = new ArrayList<>();
 
@@ -177,7 +179,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
                                     JSONArray todaydata = jsonObject.getJSONArray("todaydata");
 
-                                    int todayCall = 0, cumTodayCall = 0, newTodayCall = 0, proCall = 0, cumProCall = 0, newProCall = 0;
 
                                     if (todaydata != null && todaydata.length() > 0) {
 
@@ -209,7 +210,17 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                                                     others, othersVal, curd, curdVal,
                                                     milk, milkVal));
 
+
                                             shared_common_pref.save(Constants.RetailorTodayData, gson.toJson(todayRetailorData));
+
+
+//                                            tdRetailorDataDynamicVal.add(new Retailer_Modal_List("Milk", milk, milkVal));
+//                                            tdRetailorDataDynamicVal.add(new Retailer_Modal_List("Curd", curd, curdVal));
+//                                            tdRetailorDataDynamicVal.add(new Retailer_Modal_List("Others", others, othersVal));
+                                            //    todayRetailorDataDynamic.add(new Retailer_Modal_List(tdObj.getString("Cust_Code"), tdRetailorDataDynamicVal));
+
+//
+//                                            shared_common_pref.save(Constants.RetailorTodayDataDynamic, gson.toJson(todayRetailorDataDynamic));
 
 
                                         }

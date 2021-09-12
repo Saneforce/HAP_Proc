@@ -143,7 +143,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                     DateFormat dfw = new SimpleDateFormat("dd/MM/yyyy");
                     Calendar calobjw = Calendar.getInstance();
-                    invoicedate.setText("" + dfw.format(calobjw.getTime()));
+                    invoicedate.setText("Date : " + dfw.format(calobjw.getTime()));
 
                     mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, new AdapterOnClick() {
                         @Override
@@ -334,13 +334,15 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
         try {
 
 
+            int hgt = 500+(Order_Outlet_Filter.size()*40);
+
             // create a new document
             PdfDocument document = new PdfDocument();
 
 
-            int widthSize = getWallpaperDesiredMinimumWidth();
+            int widthSize = 500;
             // crate a page description
-            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(widthSize, getWallpaperDesiredMinimumHeight(), 1).create();
+            PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(widthSize, hgt, 1).create();
             // start a page
             PdfDocument.Page page = document.startPage(pageInfo);
             Canvas canvas = page.getCanvas();
@@ -394,8 +396,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             y = y + 35;
             paint.setColor(Color.BLACK);
             paint.setTextSize(15);
-            canvas.drawText("Bill no:567893", x, y, paint);
-            canvas.drawText("Date : 12/08/2021", (widthSize / 2) + 200, y, paint);
+            canvas.drawText("" + billnumber.getText().toString(), x, y, paint);
+            canvas.drawText("" + invoicedate.getText().toString(), (widthSize / 2) + 100, y, paint);
 
             y = y + 25;
             paint.setColor(Color.BLACK);
@@ -416,9 +418,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             // canvas.drawText(item + qty1 + rate1 + amt1, x, y, paint);
             canvas.drawText("Item", x, y, paint);
-            canvas.drawText(" Qty ", widthSize / 2, y, paint);
-            canvas.drawText(" Rate ", (widthSize / 2) + 100, y, paint);
-            canvas.drawText(" Total ", (widthSize / 2) + 200, y, paint);
+            canvas.drawText(" Qty ", (widthSize / 2)+20, y, paint);
+            canvas.drawText(" Rate ", (widthSize / 2) + 70, y, paint);
+            canvas.drawText(" Total ", (widthSize / 2) + 150, y, paint);
 
 
             //  Log.e("Header length: ", "item: " + item.length() + " qty: " + qty1.length() + " rate: " + rate1.length() + " amt : " + amt1.length());
@@ -457,9 +459,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
 
                 canvas.drawText("" + Order_Outlet_Filter.get(i).getName(), x, y, paint);
-                canvas.drawText("" + Order_Outlet_Filter.get(i).getQty(), widthSize / 2, y, paint);
-                canvas.drawText("" + Order_Outlet_Filter.get(i).getRate(), (widthSize / 2) + 100, y, paint);
-                canvas.drawText("" + Order_Outlet_Filter.get(i).getAmount(), (widthSize / 2) + 200, y, paint);
+                canvas.drawText("" + Order_Outlet_Filter.get(i).getQty(), (widthSize / 2)+20, y, paint);
+                canvas.drawText("" + Order_Outlet_Filter.get(i).getRate(), (widthSize / 2) + 70, y, paint);
+                canvas.drawText("" + Order_Outlet_Filter.get(i).getAmount(), (widthSize / 2) + 150, y, paint);
 
 
             }
@@ -473,20 +475,20 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             y = y + 30;
             canvas.drawText("SubTotal", x, y, paint);
-            canvas.drawText(subtotal.getText().toString(), (widthSize / 2) + 200, y, paint);
+            canvas.drawText(subtotal.getText().toString(), (widthSize / 2) + 150, y, paint);
 
             y = y + 30;
             canvas.drawText("Total Item", x, y, paint);
-            canvas.drawText(totalitem.getText().toString(), (widthSize / 2) + 200, y, paint);
+            canvas.drawText(totalitem.getText().toString(), (widthSize / 2) + 150, y, paint);
             y = y + 30;
             canvas.drawText("Total Qty", x, y, paint);
-            canvas.drawText(totalqty.getText().toString(), (widthSize / 2) + 200, y, paint);
+            canvas.drawText(totalqty.getText().toString(), (widthSize / 2) + 150, y, paint);
             y = y + 30;
             canvas.drawText("Gst Rate", x, y, paint);
-            canvas.drawText(gstrate.getText().toString(), (widthSize / 2) + 200, y, paint);
+            canvas.drawText(gstrate.getText().toString(), (widthSize / 2) + 150, y, paint);
             y = y + 30;
             canvas.drawText("Cash Discount", x, y, paint);
-            canvas.drawText(cashdiscount.getText().toString(), (widthSize / 2) + 200, y, paint);
+            canvas.drawText(cashdiscount.getText().toString(), (widthSize / 2) + 150, y, paint);
 
 
             y = y + 20;
@@ -497,7 +499,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             paint.setTextSize(16);
             y = y + 30;
             canvas.drawText("Net Amount", x, y, paint);
-            canvas.drawText(netamount.getText().toString(), (widthSize / 2) + 200, y, paint);
+            canvas.drawText(netamount.getText().toString(), (widthSize / 2) + 150, y, paint);
 
 
             y = y + 20;

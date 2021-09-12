@@ -3,6 +3,8 @@ package com.hap.checkinproc.SFA_Model_Class;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class Retailer_Modal_List {
 
 
@@ -16,6 +18,7 @@ public class Retailer_Modal_List {
         Milk = milk;
         MilkVal = milkVal;
     }
+
 
     public String getCust_Code() {
         return Cust_Code;
@@ -125,6 +128,68 @@ public class Retailer_Modal_List {
     @SerializedName("ERP_Code")
     @Expose
     private String ERP_Code;
+
+    public Retailer_Modal_List getRetailer_modal_list() {
+        return retailer_modal_list;
+    }
+
+    public void setRetailer_modal_list(Retailer_Modal_List retailer_modal_list) {
+        this.retailer_modal_list = retailer_modal_list;
+    }
+
+    public double getProductQty() {
+        return productQty;
+    }
+
+    public void setProductQty(double productQty) {
+        this.productQty = productQty;
+    }
+
+    public double getProductRate() {
+        return productRate;
+    }
+
+    public void setProductRate(double productRate) {
+        this.productRate = productRate;
+    }
+
+    Retailer_Modal_List retailer_modal_list;
+
+
+    public Retailer_Modal_List(String cust_Code, List<Retailer_Modal_List> retailer_modal_lists) {
+        this.Cust_Code = cust_Code;
+        this.retailer_modal_list = (Retailer_Modal_List) retailer_modal_lists;
+
+    }
+
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public Retailer_Modal_List(String productName, double productQty, double productRate) {
+        this.productName = productName;
+        this.productQty = productQty;
+        this.productRate = productRate;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    @SerializedName("productName")
+    @Expose
+    private String productName;
+
+
+    @SerializedName("productQty")
+    @Expose
+    private double productQty;
+
+
+    @SerializedName("productRate")
+    @Expose
+    private double productRate;
 
 
     public String getStatusname() {
