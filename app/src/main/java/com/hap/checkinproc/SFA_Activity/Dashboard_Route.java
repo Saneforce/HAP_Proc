@@ -172,6 +172,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
                                 ArrayList<Retailer_Modal_List> previousRetailorData = new ArrayList<>();
 
+                                ArrayList<Retailer_Modal_List> previousRetailorDataDynamic = new ArrayList<>();
+
+                                ArrayList<Retailer_Modal_List> retailor_valuesProduct = new ArrayList<>();
 
                                 if (jsonObject.getBoolean("success")) {
 
@@ -235,7 +238,51 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                                             JSONObject preObj = previousdata.getJSONObject(i);
                                             double others = 0, othersVal = 0, curd = 0, curdVal = 0, milk = 0, milkVal = 0;
 
-                                            if (preObj.has("Others"))
+
+                                            String cus_code = preObj.getString("Cust_Code");
+                                            String Mnth = preObj.getString("Mnth");
+
+                                            JSONArray itemArray = preObj.getJSONArray("Items");
+
+                                            for (int item = 0; item < itemArray.length(); item++) {
+                                                JSONObject itemObj = itemArray.getJSONObject(item);
+
+                                                String productName = itemObj.getString("name");
+
+                                                JSONArray valArray = itemObj.getJSONArray("Vals");
+
+                                                ArrayList<Retailer_Modal_List> retailor_values = new ArrayList<>();
+
+                                                retailor_valuesProduct = new ArrayList<>();
+
+
+                                                if (valArray.length() > 0) {
+
+                                                    for (int val = 0; val < valArray.length(); val++) {
+
+                                                        JSONObject valObj = valArray.getJSONObject(val);
+                                                        double qty = valObj.getDouble("Qty");
+                                                        double value = valObj.getDouble("Val");
+
+
+                                                        retailor_values.add(new Retailer_Modal_List(qty, value));
+
+
+                                                    }
+
+                                                    retailor_valuesProduct.add(new Retailer_Modal_List(productName, retailor_values));
+                                                }
+
+
+                                            }
+
+
+                                            previousRetailorDataDynamic.add(new Retailer_Modal_List(cus_code, Mnth, retailor_valuesProduct));
+
+
+                                            shared_common_pref.save(Constants.RetailorPreviousDataDynamic, gson.toJson(previousRetailorDataDynamic));
+
+                                           /* if (preObj.has("Others"))
                                                 others = Double.parseDouble(df2.format(preObj.getDouble("Others")));
 
                                             if (preObj.has("OthersVal"))
@@ -261,12 +308,12 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                                                     , curd, curdVal,
                                                     milk, milkVal));
 
-                                            shared_common_pref.save(Constants.RetailorPreviousData, gson.toJson(previousRetailorData));
+                                            shared_common_pref.save(Constants.RetailorPreviousData, gson.toJson(previousRetailorData));*/
 
 
                                         }
                                     } else {
-                                        shared_common_pref.save(Constants.RetailorPreviousData, "");
+                                        /*   shared_common_pref.save(Constants.RetailorPreviousData, "");*/
 
                                     }
 

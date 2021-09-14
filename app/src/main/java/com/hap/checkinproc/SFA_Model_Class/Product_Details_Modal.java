@@ -45,6 +45,33 @@ public class Product_Details_Modal {
     @SerializedName("Qty")
     @Expose
     private Integer Qty;
+
+
+    @SerializedName("free")
+    @Expose
+    private Double free;
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Double discount) {
+        this.discount = discount;
+    }
+
+    @SerializedName("discount")
+    @Expose
+    private Double discount;
+
+
+    public Double getFree() {
+        return free;
+    }
+
+    public void setFree(Double free) {
+        this.free = free;
+    }
+
     private String scheme;
     @SerializedName("RegularQty")
     @Expose
@@ -93,8 +120,8 @@ public class Product_Details_Modal {
         this.Amount = Amount;
     }
 
-    public Product_Details_Modal(String id,String name, String sku, int price, int Qty, double amount, String scheme) {
-        this.id=id;
+    public Product_Details_Modal(String id, String name, String sku, int price, int Qty, double amount, String scheme) {
+        this.id = id;
         this.name = name;
         this.sku = sku;
         this.price = price;

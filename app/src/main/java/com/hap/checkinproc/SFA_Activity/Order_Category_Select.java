@@ -1070,14 +1070,38 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         }
 
         @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
         public void onBindViewHolder(Prodct_Adapter.MyViewHolder holder, int position) {
-            Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
+            try {
 
 
-            holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-            holder.Rate.setText("₹" + Product_Details_Modal.getRate());
-            holder.Amount.setText("₹" + Product_Details_Modal.getAmount());
-            holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(position).getRegularQty()) + (Product_Details_Modalitem.get(position).getQty())));
+                Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
+
+
+                holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
+                holder.Rate.setText("₹" + Product_Details_Modal.getRate());
+                holder.Amount.setText("₹" + Product_Details_Modal.getAmount());
+                holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(position).getRegularQty()) + (Product_Details_Modalitem.get(position).getQty())));
+
+
+                if (Product_Details_Modal.getFree() != null)
+                    holder.Free.setText("" + Product_Details_Modal.getFree());
+                else
+                    holder.Free.setText("0");
+
+                if (Product_Details_Modal.getDiscount() != null)
+                    holder.Disc.setText("₹" + Product_Details_Modal.getDiscount());
+                else
+                    holder.Disc.setText("₹0");
 
 
 //            if (common_class.isNullOrEmpty(String.valueOf(Product_Details_Modal.getRegularQty()))) {
@@ -1086,12 +1110,12 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 //                holder.RegularQty.setText("Regular : " + Product_Details_Modal.getRegularQty());
 //            }
 
-            holder.Disc.setText("Disc :" + 0);
-            if (Categorycolor == -1) {
-                holder.Qty.setEnabled(false);
-            } else {
-                holder.Qty.setEnabled(true);
-            }
+                //  holder.Disc.setText("" + 0);
+                if (Categorycolor == -1) {
+                    holder.Qty.setEnabled(false);
+                } else {
+                    holder.Qty.setEnabled(true);
+                }
 //            String DCRMode = sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
 //            holder.Qty.setVisibility(View.VISIBLE);
 //            holder.lblAddQty.setVisibility(View.VISIBLE);
@@ -1107,117 +1131,141 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 //                holder.lblAddQty.setVisibility(View.GONE);
 //                holder.Qty.setVisibility(View.GONE);
 //            }
-            if (Product_Details_Modal.getQty() > 0) {
-                holder.Qty.setText("" + Product_Details_Modal.getQty());
-                holder.QtyAmt.setText("₹" + Product_Details_Modal.getRate() * Product_Details_Modal.getQty());
-                holder.productQty.setText("" + Product_Details_Modal.getQty());
-                holder.totalQty.setText("" + Product_Details_Modal.getRegularQty() + Product_Details_Modal.getQty());
+                if (Product_Details_Modal.getQty() > 0) {
+                    holder.Qty.setText("" + Product_Details_Modal.getQty());
+                    holder.QtyAmt.setText("₹" + Product_Details_Modal.getRate() * Product_Details_Modal.getQty());
+                    holder.productQty.setText("" + Product_Details_Modal.getQty());
+                    holder.totalQty.setText("" + Product_Details_Modal.getRegularQty() + Product_Details_Modal.getQty());
 
-            }
-            holder.Qty.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void onTextChanged(CharSequence charSequence, int start,
-                                          int before, int count) {
-
-
-                    if (!charSequence.toString().equals("")) {
-                        if (Double.valueOf(charSequence.toString()) > 0)
-                            listt.get(Categorycolor).setColorFlag("1");
-                        Product_Details_Modalitem.get(position).setQty(Integer.valueOf(charSequence.toString()));
-                        holder.Amount.setText("₹" + String.valueOf((Double.valueOf(charSequence.toString())
-                                + Product_Details_Modalitem.get(position).getRegularQty()) * Product_Details_Modalitem.get(position).getRate()));
-                        Product_Details_Modalitem.get(position).setAmount(((Double.valueOf(charSequence.toString()) +
-                                Product_Details_Modalitem.get(position).getRegularQty()) * Product_Details_Modalitem.get(position).getRate()));
-                        tvAmount.set(position, holder.Qty.getText().toString());
+                }
+                holder.Qty.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void onTextChanged(CharSequence charSequence, int start,
+                                              int before, int count) {
 
 
-                        holder.QtyAmt.setText("₹" + (Float.parseFloat(charSequence.toString()) * Product_Details_Modalitem.get(position).getRate()));
-                        holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(position).getRegularQty()) + Integer.parseInt(
-                                charSequence.toString())));
+                        if (!charSequence.toString().equals("")) {
+                            if (Double.valueOf(charSequence.toString()) > 0)
+                                listt.get(Categorycolor).setColorFlag("1");
+                            Product_Details_Modalitem.get(position).setQty(Integer.valueOf(charSequence.toString()));
+                            holder.Amount.setText("₹" + String.valueOf((Double.valueOf(charSequence.toString())
+                                    + Product_Details_Modalitem.get(position).getRegularQty()) * Product_Details_Modalitem.get(position).getRate()));
+                            Product_Details_Modalitem.get(position).setAmount(((Double.valueOf(charSequence.toString()) +
+                                    Product_Details_Modalitem.get(position).getRegularQty()) * Product_Details_Modalitem.get(position).getRate()));
+                            tvAmount.set(position, holder.Qty.getText().toString());
 
 
-                    } else {
-                        holder.Amount.setText("₹" + String.valueOf(Product_Details_Modalitem.get(position).getRegularQty() * Product_Details_Modalitem.get(position).getRate()));
-                        Product_Details_Modalitem.get(position).setQty((Integer) 0);
-                        Product_Details_Modalitem.get(position).setAmount(Product_Details_Modalitem.get(position).getRegularQty() *
-                                Product_Details_Modalitem.get(position).getRate());
+                            holder.QtyAmt.setText("₹" + (Float.parseFloat(charSequence.toString()) * Product_Details_Modalitem.get(position).getRate()));
+                            holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(position).getRegularQty()) + Integer.parseInt(
+                                    charSequence.toString())));
 
-                        tvAmount.set(position, "0");
 
-                        holder.QtyAmt.setText("₹0");
-                        holder.totalQty.setText("Total Qty : " + Product_Details_Modalitem.get(position).getRegularQty() + Product_Details_Modal.getQty());
+                            int[] free = {5, 20, 35};
+
+                            int enterQty = Integer.parseInt(charSequence.toString());
+
+                            for (int freeqty = 0; freeqty < free.length; freeqty++) {
+                                if (enterQty >= free[freeqty]) {
+                                    holder.Free.setText("" + (freeqty + 1));
+
+                                    holder.Disc.setText("₹" + Double.valueOf((enterQty / free[freeqty]) * (freeqty + 1)));
+
+                                    Product_Details_Modalitem.get(position).setFree(Double.valueOf(freeqty + 1));
+                                }
+                            }
+
+
+                        } else {
+                            holder.Amount.setText("₹" + String.valueOf(Product_Details_Modalitem.get(position).getRegularQty() * Product_Details_Modalitem.get(position).getRate()));
+                            Product_Details_Modalitem.get(position).setQty((Integer) 0);
+                            Product_Details_Modalitem.get(position).setAmount(Product_Details_Modalitem.get(position).getRegularQty() *
+                                    Product_Details_Modalitem.get(position).getRate());
+
+                            tvAmount.set(position, "0");
+
+                            holder.QtyAmt.setText("₹0");
+                            holder.totalQty.setText("Total Qty : " + Product_Details_Modalitem.get(position).getRegularQty() + Product_Details_Modal.getQty());
+
+
+                            Product_Details_Modalitem.get(position).setFree(Double.valueOf(0));
+
+                            holder.Free.setText("0");
+                            holder.Disc.setText("₹0");
+
+
+                        }
+
+
+                        updateToTALITEMUI();
 
 
                     }
 
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start,
+                                                  int count, int after) {
 
-                    updateToTALITEMUI();
-
-
-                }
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start,
-                                              int count, int after) {
-
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
-
-            String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
-
-            Type type = new TypeToken<ArrayList<Product_Details_Modal>>() {
-            }.getType();
-            List<Product_Details_Modal> product_details_modalArrayList = gson.fromJson(preOrderList, type);
-
-            boolean haveVal = false;
-            if (product_details_modalArrayList != null && product_details_modalArrayList.size() > 0) {
-
-                for (int i = 0; i < product_details_modalArrayList.size(); i++) {
-
-                    if (Product_Details_Modal.getId().equals(product_details_modalArrayList.get(i).getId())) {
-                        haveVal = true;
-                        holder.RegularQty.setText("" + product_details_modalArrayList.get(i).getQty());
-                        Product_Details_Modalitem.get(position).setRegularQty(product_details_modalArrayList.get(i).getQty());
-                        Product_Details_Modalitem.get(position).setAmount((Product_Details_Modalitem.get(position).getQty() +
-                                Product_Details_Modalitem.get(position).getRegularQty()) *
-                                Product_Details_Modalitem.get(position).getRate());
-
-
-                        holder.totalQty.setText("Total Qty : " + (Product_Details_Modalitem.get(position).getRegularQty() +
-                                Product_Details_Modalitem.get(position).getQty()));
-
-                        holder.regularAmt.setText("₹" + (Product_Details_Modalitem.get(position).getRate() * product_details_modalArrayList.get(i).getQty()));
-
-                        holder.Amount.setText("₹" + (Product_Details_Modalitem.get(position).getQty() +
-                                Product_Details_Modalitem.get(position).getRegularQty()) *
-                                Product_Details_Modalitem.get(position).getRate());
 
                     }
 
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
+                String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
+
+                Type type = new TypeToken<ArrayList<Product_Details_Modal>>() {
+                }.getType();
+                List<Product_Details_Modal> product_details_modalArrayList = gson.fromJson(preOrderList, type);
+
+                boolean haveVal = false;
+                if (product_details_modalArrayList != null && product_details_modalArrayList.size() > 0) {
+
+                    for (int i = 0; i < product_details_modalArrayList.size(); i++) {
+
+                        if (Product_Details_Modal.getId().equals(product_details_modalArrayList.get(i).getId())) {
+                            haveVal = true;
+                            holder.RegularQty.setText("" + product_details_modalArrayList.get(i).getQty());
+                            Product_Details_Modalitem.get(position).setRegularQty(product_details_modalArrayList.get(i).getQty());
+                            Product_Details_Modalitem.get(position).setAmount((Product_Details_Modalitem.get(position).getQty() +
+                                    Product_Details_Modalitem.get(position).getRegularQty()) *
+                                    Product_Details_Modalitem.get(position).getRate());
+
+
+                            holder.totalQty.setText("Total Qty : " + (Product_Details_Modalitem.get(position).getRegularQty() +
+                                    Product_Details_Modalitem.get(position).getQty()));
+
+                            holder.regularAmt.setText("₹" + (Product_Details_Modalitem.get(position).getRate() * product_details_modalArrayList.get(i).getQty()));
+
+                            holder.Amount.setText("₹" + (Product_Details_Modalitem.get(position).getQty() +
+                                    Product_Details_Modalitem.get(position).getRegularQty()) *
+                                    Product_Details_Modalitem.get(position).getRate());
+
+                        }
+
+                    }
                 }
-            }
 //            else {
 //                holder.RegularQty.setText("Regular  : 0");
 //            }
 
-            if (!haveVal) {
-                holder.RegularQty.setText("0");
-                Product_Details_Modalitem.get(position).setRegularQty(0);
+                if (!haveVal) {
+                    holder.RegularQty.setText("0");
+                    Product_Details_Modalitem.get(position).setRegularQty(0);
 
-                holder.totalQty.setText("Total Qty : 0");
+                    holder.totalQty.setText("Total Qty : 0");
 
-                holder.regularAmt.setText("₹0");
+                    holder.regularAmt.setText("₹0");
 
 
+                }
+
+                updateToTALITEMUI();
+            } catch (Exception e) {
+                Log.e(TAG, "adapterProduct: " + e.getMessage());
             }
-
-            updateToTALITEMUI();
 
 
         }

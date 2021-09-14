@@ -418,9 +418,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             // canvas.drawText(item + qty1 + rate1 + amt1, x, y, paint);
             canvas.drawText("Item", x, y, paint);
-            canvas.drawText(" Qty ", (widthSize / 2)+20, y, paint);
-            canvas.drawText(" Rate ", (widthSize / 2) + 70, y, paint);
-            canvas.drawText(" Total ", (widthSize / 2) + 150, y, paint);
+            canvas.drawText("Qty", (widthSize / 2)+20, y, paint);
+            canvas.drawText("Rate", (widthSize / 2) + 70, y, paint);
+            canvas.drawText("Total", (widthSize / 2) + 150, y, paint);
 
 
             //  Log.e("Header length: ", "item: " + item.length() + " qty: " + qty1.length() + " rate: " + rate1.length() + " amt : " + amt1.length());

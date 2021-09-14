@@ -248,9 +248,28 @@
                                     android:gravity="left"
                                     android:text="Item"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C14dp"
+                                    android:textSize="@dimen/C12dp"
                                     android:textStyle="bold"></TextView>
                             </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="@dimen/header_width2"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1">
+
+                                <TextView
+                                    android:id="@+id/FreeQty"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="end"
+                                    android:layout_marginRight="@dimen/C5dp"
+                                    android:gravity="end"
+                                    android:text="Free"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C12dp"
+                                    android:textStyle="bold"></TextView>
+                            </LinearLayout>
+
 
                             <LinearLayout
                                 android:layout_width="@dimen/header_width2"
@@ -265,7 +284,7 @@
                                     android:gravity="end"
                                     android:text="Regular"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C14dp"
+                                    android:textSize="@dimen/C12dp"
                                     android:textStyle="bold"></TextView>
                             </LinearLayout>
 
@@ -283,7 +302,7 @@
                                     android:gravity="end"
                                     android:text="Qty"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C14dp"
+                                    android:textSize="@dimen/C12dp"
                                     android:textStyle="bold"></TextView>
                             </LinearLayout>
 
@@ -299,7 +318,7 @@
                                     android:text="Rate"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C14dp"
+                                    android:textSize="@dimen/C12dp"
                                     android:textStyle="bold"></TextView>
                             </LinearLayout>
 
@@ -315,7 +334,7 @@
                                     android:text="Total"
                                     android:textAlignment="textEnd"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C14dp"
+                                    android:textSize="@dimen/C12dp"
                                     android:textStyle="bold"></TextView>
                             </LinearLayout>
                         </LinearLayout>
@@ -536,6 +555,8 @@
 
         </ScrollView>
 
+
+
         <LinearLayout
             android:id="@+id/totalorderbottom"
             android:layout_width="match_parent"
@@ -678,7 +699,10 @@
 
         </LinearLayout>
 
+
+
         <RelativeLayout
+
             android:id="@+id/rlTakeOrder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

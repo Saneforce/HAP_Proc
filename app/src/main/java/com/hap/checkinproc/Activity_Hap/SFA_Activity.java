@@ -5,11 +5,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedDispatcher;
@@ -79,6 +81,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     TextView tvServiceOutlet, tvUniverseOutlet, tvNewSerOutlet, tvTotSerOutlet, tvExistSerOutlet, tvDate, tvTodayCalls, tvProCalls, tvCumTodayCalls, tvNewTodayCalls, tvCumProCalls, tvNewProCalls, tvAvgNewCalls, tvAvgTodayCalls, tvAvgCumCalls;
     private DatePickerDialog fromDatePickerDialog;
 
+    ProgressBar pbSFA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,6 +100,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         linorders = findViewById(R.id.linorders);
         lin_Reports = findViewById(R.id.lin_Reports);
         Logout = findViewById(R.id.Logout);
+        pbSFA = findViewById(R.id.pbSFA);
         //switchGraphMode = (Switch) findViewById(R.id.switchCumulativeMode);
 
         common_class = new Common_Class(this);
@@ -213,14 +217,25 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+
+    void loadingUI(int visibility) {
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                // Do stuff
+            }
+        });
+    }
+
     private void setOnClickListener() {
         ivCalendar.setOnClickListener(this);
     }
 
     private void getCumulativeDataFromAPI() {
+
         try {
 
             if (common_class.isNetworkAvailable(this)) {
+                pbSFA.setVisibility(View.VISIBLE);
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -238,6 +253,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
                         InputStreamReader ip = null;
                         StringBuilder is = new StringBuilder();
                         String line = null;
@@ -585,6 +601,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     private void getDashboarddata() {
         try {
             if (common_class.isNetworkAvailable(this)) {
+
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
 
@@ -603,6 +620,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        pbSFA.setVisibility(View.GONE);
                         InputStreamReader ip = null;
                         StringBuilder is = new StringBuilder();
                         String line = null;
@@ -637,12 +655,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                                     LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llGridParent.getLayoutParams();
 // Changes the height and width to the specified *pixels*
-                                    params.height = 200;
-                                    params.width = cumulative_order_modelList.size() * 200;
+                                    params.height = 180;
+                                    params.width = cumulative_order_modelList.size() * 150;
+                                    params.gravity = Gravity.CENTER_HORIZONTAL;
                                     llGridParent.setLayoutParams(params);
 
 
-                                    cumulativeInfoAdapter = new OutletDashboardInfoAdapter(SFA_Activity.this, cumulative_order_modelList);
+                                    cumulativeInfoAdapter = new OutletDashboardInfoAdapter(SFA_Activity.this,
+                                            cumulative_order_modelList);
                                     recyclerView.setNumColumns(cumulative_order_modelList.size());
 
                                     recyclerView.setAdapter(cumulativeInfoAdapter);
@@ -654,6 +674,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                             }
 
                         } catch (Exception e) {
+                            pbSFA.setVisibility(View.GONE);
 
                             Log.v("fail>>1", e.getMessage());
 
@@ -662,6 +683,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        pbSFA.setVisibility(View.GONE);
                         Log.v("fail>>2", t.toString());
 
 

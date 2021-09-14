@@ -156,9 +156,24 @@ public class Retailer_Modal_List {
     Retailer_Modal_List retailer_modal_list;
 
 
-    public Retailer_Modal_List(String cust_Code, List<Retailer_Modal_List> retailer_modal_lists) {
+    public Retailer_Modal_List(String cust_Code, String mnth, List<Retailer_Modal_List> retailer_modal_lists) {
         this.Cust_Code = cust_Code;
+        this.Mnth = mnth;
         this.retailer_modal_list = (Retailer_Modal_List) retailer_modal_lists;
+
+    }
+
+
+    public Retailer_Modal_List(String productName, List<Retailer_Modal_List> retailer_modal_lists) {
+        this.productName = productName;
+        this.retailer_modal_list = (Retailer_Modal_List) retailer_modal_lists;
+
+    }
+
+
+    public Retailer_Modal_List(double productQty, double productRate) {
+        this.productQty = productQty;
+        this.productRate = productRate;
 
     }
 
