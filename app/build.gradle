@@ -26,8 +26,8 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8;
-        targetCompatibility JavaVersion.VERSION_1_8;
+        sourceCompatibility JavaVersion.VERSION_11;
+        targetCompatibility JavaVersion.VERSION_11;
     }
 }
 
@@ -119,8 +119,8 @@ dependencies {
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
     implementation project(':MPChartLib')
 
-    compile 'com.ogaclejapan.smarttablayout:library:2.0.0@aar'
+    implementation 'com.ogaclejapan.smarttablayout:library:2.0.0@aar'
 
     //Optional: see how to use the utility.
-    compile 'com.ogaclejapan.smarttablayout:utils-v4:2.0.0@aar'
+    implementation 'com.ogaclejapan.smarttablayout:utils-v4:2.0.0@aar'
 }

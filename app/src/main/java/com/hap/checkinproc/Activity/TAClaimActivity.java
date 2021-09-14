@@ -550,7 +550,7 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                 } else {
                     ldgAdd.setText("+ Add");
                     lodgContvw.setVisibility(View.GONE);
-                    txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(Double.valueOf("0.00")));
+                    txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(Double.valueOf("0.00")));
 
                 }
                 SumOFLodging(0);
@@ -614,11 +614,11 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 txtallamt.setText("");
                                 myBrdEliAmt = myBrdEliAmt.replaceAll("^[\"']+|[\"']+$", "");
                                 myBrdAmt = Double.valueOf(myBrdEliAmt);
-                                txt_BrdAmt.setText(" Rs." + new DecimalFormat("##0.00").format(myBrdAmt));
+                                txt_BrdAmt.setText("₹" + new DecimalFormat("##0.00").format(myBrdAmt));
                                 if (DriverNeed.equalsIgnoreCase("true")) {
                                     drvBrdEliAmt = drvBrdEliAmt.replaceAll("^[\"']+|[\"']+$", "");
                                     drvBrdAmt = Double.valueOf(drvBrdEliAmt);
-                                    txt_DrvBrdAmt.setText(" Rs." + new DecimalFormat("##0.00").format(drvBrdAmt));
+                                    txt_DrvBrdAmt.setText("₹" + new DecimalFormat("##0.00").format(drvBrdAmt));
 
                                     vwDrvBoarding.setVisibility(View.VISIBLE);
                                     txtDrvrBrod.setText("Driver Allowance Boarding");
@@ -633,13 +633,13 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                                 allowanceAmt = allowanceAmt.replaceAll("^[\"']+|[\"']+$", "");
                                 doubleAmount = Double.valueOf(allowanceAmt);
                                 myBrdAmt = 0.0;
-                                txtallamt.setText(" Rs." + new DecimalFormat("##0.00").format(doubleAmount));
-                                txt_BrdAmt.setText(" Rs.0.00");
+                                txtallamt.setText("₹" + new DecimalFormat("##0.00").format(doubleAmount));
+                                txt_BrdAmt.setText("₹0.00");
 
                                 if (DriverNeed.equalsIgnoreCase("true")) {
                                     drvBrdEliAmt = drvBrdEliAmt.replaceAll("^[\"']+|[\"']+$", "");
                                     drvBrdAmt = Double.valueOf(drvBrdEliAmt);
-                                    txt_DrvBrdAmt.setText(" Rs." + new DecimalFormat("##0.00").format(drvBrdAmt));
+                                    txt_DrvBrdAmt.setText("₹" + new DecimalFormat("##0.00").format(drvBrdAmt));
 
                                     vwDrvBoarding.setVisibility(View.VISIBLE);
                                     txtDrvrBrod.setText("Driver Allowance Boarding");
@@ -1417,16 +1417,16 @@ Log.d("DACliam","Error : "+t.getMessage());
     myldgEliAmt = myldgEliAmt.replaceAll("^[\"']+|[\"']+$", "");
     jointLodging.removeAllViews();
     ldgEliAmt = Double.valueOf(myldgEliAmt);
-    txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
+    txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(ldgEliAmt));
 
     mChckCont.setChecked(false);
     mChckLate.setChecked(false);
     mChckEarly.setChecked(false);
     ttLod = 1;
 
-    txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
-    ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
-    lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
+    txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(ldgEliAmt));
+    ldgWOBBal.setText("₹" + new DecimalFormat("##0.00").format(ldgEliAmt));
+    lbl_ldg_eligi.setText("₹" + new DecimalFormat("##0.00").format(ldgEliAmt));
     img_lodg_prvw.setVisibility(View.VISIBLE);
     ldg_cout.setText("");
     ldg_coutDt.setText("");
@@ -1704,7 +1704,7 @@ Log.d("DACliam","Error : "+t.getMessage());
             Log.v("Allowance_Amount", String.valueOf(sum));
             ldgEmpName = String.valueOf(sum);
 
-            txtJNMyEli.setText("Rs." + new DecimalFormat("##0.00").format(sum));
+            txtJNMyEli.setText("₹" + new DecimalFormat("##0.00").format(sum));
         }
         SumOFJointLodging();
     }
@@ -1755,7 +1755,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                     Log.v("Allowance_Amount", String.valueOf(sum));
                     ldgEmpName = String.valueOf(sum);
 
-                    txtJNMyEli.setText("Rs." + new DecimalFormat("##0.00").format(sum));
+                    txtJNMyEli.setText("₹" + new DecimalFormat("##0.00").format(sum));
                     SumOFJointLodging();
                 }
 
@@ -1778,7 +1778,7 @@ Log.d("DACliam","Error : "+t.getMessage());
             BusAmount = BusAmount + Double.parseDouble(str);
         }
         sumsTa = GrandTotalAllowance + BusAmount;
-        txtTAamt.setText("Rs." + new DecimalFormat("##0.00").format(BusAmount));
+        txtTAamt.setText("₹" + new DecimalFormat("##0.00").format(BusAmount));
 
         calOverAllTotal(localCov, otherExp, tTotAmt);
     }
@@ -1792,7 +1792,7 @@ Log.d("DACliam","Error : "+t.getMessage());
             if (str.matches("")) str = "0";
             sum = sum + Double.parseDouble(str);
         }
-        localText.setText("Rs." + new DecimalFormat("##0.00").format(sum));
+        localText.setText("₹" + new DecimalFormat("##0.00").format(sum));
         localCov = sum;
 
         localTotal.setVisibility(View.VISIBLE);
@@ -1813,21 +1813,21 @@ Log.d("DACliam","Error : "+t.getMessage());
             //sTotal = GrandTotalAllowance + sumsTot;
 
         }
-        OeText.setText("Rs." + new DecimalFormat("##0.00").format(sumsTot));
+        OeText.setText("₹" + new DecimalFormat("##0.00").format(sumsTot));
 
         otherExp = sumsTot;
         calOverAllTotal(localCov, otherExp, tTotAmt);
     }
     public void SumOFDAAmount() {
-        String sAmt = txtallamt.getText().toString().replaceAll("Rs.", "");
-        String sBrdAmt = txt_BrdAmt.getText().toString().replaceAll("Rs.", "");
-        String sDrvBrdAmt = txt_DrvBrdAmt.getText().toString().replaceAll("Rs.", "");
+        String sAmt = txtallamt.getText().toString().replaceAll("₹", "");
+        String sBrdAmt = txt_BrdAmt.getText().toString().replaceAll("₹", "");
+        String sDrvBrdAmt = txt_DrvBrdAmt.getText().toString().replaceAll("₹", "");
         Log.e("STRDAILY", StrDailyAllowance);
         if (sAmt.equalsIgnoreCase("")) sAmt = "0.00";
         if (sBrdAmt.equalsIgnoreCase("")) sBrdAmt = "0.00";
         if (sDrvBrdAmt.equalsIgnoreCase("")) sDrvBrdAmt = "0.00";
         TotDA = Double.parseDouble(sAmt) + Double.parseDouble(sBrdAmt) + Double.parseDouble(sDrvBrdAmt);
-        txt_totDA.setText("Rs." + new DecimalFormat("##0.00").format(TotDA));
+        txt_totDA.setText("₹" + new DecimalFormat("##0.00").format(TotDA));
         calOverAllTotal(localCov, otherExp, tTotAmt);
     }
     public void SumOFJointLodging() {
@@ -1835,26 +1835,26 @@ Log.d("DACliam","Error : "+t.getMessage());
         for (int i = 0; i < jointLodging.getChildCount(); i++) {
             View childView = jointLodging.getChildAt(i);
             TextView jLdgEli = (TextView) childView.findViewById(R.id.txtJNMyEli);
-            String sAmt = jLdgEli.getText().toString().replaceAll("Rs.", "");
+            String sAmt = jLdgEli.getText().toString().replaceAll("₹", "");
             tJointAmt = tJointAmt + Float.parseFloat(sAmt);
         }
-        txtJNEligi.setText("Rs." + new DecimalFormat("##0.00").format(tJointAmt));
+        txtJNEligi.setText("₹" + new DecimalFormat("##0.00").format(tJointAmt));
         SumOFLodging(0);
     }
     public void SumOFLodging(Integer count) {
 
-        String sMyAmt = txtMyEligi.getText().toString().replaceAll("Rs.", "");
-        String sJnAmt = txtJNEligi.getText().toString().replaceAll("Rs.", "");
-        String sDrivAmt = txtDrivEligi.getText().toString().replaceAll("Rs.", "");
-        String sErlyAmt = edtEarBill.getText().toString().replaceAll("Rs.", "");
-        String sLateAmt = edtLateBill.getText().toString().replaceAll("Rs.", "");
+        String sMyAmt = txtMyEligi.getText().toString().replaceAll("₹", "");
+        String sJnAmt = txtJNEligi.getText().toString().replaceAll("₹", "");
+        String sDrivAmt = txtDrivEligi.getText().toString().replaceAll("₹", "");
+        String sErlyAmt = edtEarBill.getText().toString().replaceAll("₹", "");
+        String sLateAmt = edtLateBill.getText().toString().replaceAll("₹", "");
 
         if (sErlyAmt.equalsIgnoreCase("")) sErlyAmt = "0";
         if (sLateAmt.equalsIgnoreCase("")) sLateAmt = "0";
         tTotAmt = Double.parseDouble(sMyAmt) + ldgDrvEligi + Float.parseFloat(sJnAmt) + Double.parseDouble(sErlyAmt) + Double.parseDouble(sLateAmt);
 
-        txldgTdyAmt.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
-        //ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
+        txldgTdyAmt.setText("₹" + new DecimalFormat("##0.00").format(tTotAmt));
+        //ldgWOBBal.setText("₹" + new DecimalFormat("##0.00").format(ldgEliAmt));
 
         if(!mChckCont.isChecked())
             tTotAmt = continueStay +Double.parseDouble(sMyAmt)+ ldgDrvEligi + Float.parseFloat(sJnAmt) + Double.parseDouble(sErlyAmt) + Double.parseDouble(sLateAmt);
@@ -1866,16 +1866,16 @@ Log.d("DACliam","Error : "+t.getMessage());
 
 
         SumWOBLodging();
-        String sBillAmt = edt_ldg_bill.getText().toString().replaceAll("Rs.", "");
+        String sBillAmt = edt_ldg_bill.getText().toString().replaceAll("₹", "");
         if (sBillAmt.isEmpty()) sBillAmt = "0";
         if((nofNght<1 && OnlyNight==1) || transferflg==1) tTotAmt=Float.parseFloat(sBillAmt);
         totLodgAmt = String.valueOf(tTotAmt);
-        //  lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
+        //  lbl_ldg_eligi.setText("₹" + new DecimalFormat("##0.00").format(tTotAmt));
 
         //tTotAmt = Double.parseDouble(sMyAmt) + ldgDrvEligi + Float.parseFloat(sJnAmt)+Double.parseDouble(sErlyAmt) +Double.parseDouble(sLateAmt) ;
 
-        lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
-        if((nofNght<1 && OnlyNight==1) || transferflg==1) txldgTdyAmt.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
+        lbl_ldg_eligi.setText("₹" + new DecimalFormat("##0.00").format(tTotAmt));
+        if((nofNght<1 && OnlyNight==1) || transferflg==1) txldgTdyAmt.setText("₹" + new DecimalFormat("##0.00").format(tTotAmt));
 
 
         Log.v("COunt_stay", String.valueOf(count));
@@ -1890,13 +1890,13 @@ Log.d("DACliam","Error : "+t.getMessage());
 
     }
     public void SumWOBLodging() {
-        String sMyAmt = txtMyEligi.getText().toString().replaceAll("Rs.", "");
-        String sJnAmt = txtJNEligi.getText().toString().replaceAll("Rs.", "");
-        String sldgAmt = txtDrivEligi.getText().toString().replaceAll("Rs.", "");
+        String sMyAmt = txtMyEligi.getText().toString().replaceAll("₹", "");
+        String sJnAmt = txtJNEligi.getText().toString().replaceAll("₹", "");
+        String sldgAmt = txtDrivEligi.getText().toString().replaceAll("₹", "");
 
         Double tBillTotAmt = Double.parseDouble(sMyAmt) + ldgDrvEligi + Float.parseFloat(sJnAmt);
 
-        String sBillAmt = edt_ldg_bill.getText().toString().replaceAll("Rs.", "");
+        String sBillAmt = edt_ldg_bill.getText().toString().replaceAll("₹", "");
 
         if (sBillAmt.isEmpty()) sBillAmt = "0";
         double tBalAmt = tTotAmt - Float.parseFloat(sBillAmt);
@@ -1904,12 +1904,12 @@ Log.d("DACliam","Error : "+t.getMessage());
             tBalAmt = 0;
 
             tTotAmt = Float.parseFloat(sBillAmt);
-            lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
-            txldgTdyAmt.setText("Rs." + new DecimalFormat("##0.00").format(tTotAmt));
+            lbl_ldg_eligi.setText("₹" + new DecimalFormat("##0.00").format(tTotAmt));
+            txldgTdyAmt.setText("₹" + new DecimalFormat("##0.00").format(tTotAmt));
         }
         witOutBill = String.valueOf(tBalAmt);
        // if (tBalAmt > 0) {
-        ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(tBalAmt));
+        ldgWOBBal.setText("₹" + new DecimalFormat("##0.00").format(tBalAmt));
 
         // }
 
@@ -1935,7 +1935,7 @@ Log.d("DACliam","Error : "+t.getMessage());
         }*/
 
        // gTotal= Double.valueOf(Math.round(gTotal));
-        grandTotal.setText("Rs." + new DecimalFormat("##0.00").format(gTotal));
+        grandTotal.setText("₹" + new DecimalFormat("##0.00").format(gTotal));
 
     }
     /*Toolbar*/
@@ -2092,9 +2092,9 @@ Log.d("DACliam","Error : "+t.getMessage());
                                     Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
 
                                     fuelAmt =  fuelAmt + (q * z);
-                                    fuelAmount.setText("Rs ." + fuelAmt);
+                                    fuelAmount.setText("₹" + fuelAmt);
 
-                                    TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+                                    TextTotalAmount.setText("₹" + new DecimalFormat("##0.00").format(fuelAmt));
                                 }else{
                                     btn_sub.setVisibility(View.GONE);
                                     buttonSave.setVisibility(View.GONE);
@@ -2149,7 +2149,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                                 if (js != null) {
                                     js = (JsonObject) travelDetails.get(l);
                                     taAmt = js.get("ta_total_amount").getAsString();
-                                    txtTAamt.setText("Rs." + taAmt + ".00");
+                                    txtTAamt.setText("₹" + taAmt + ".00");
                                 }
                             }
 
@@ -2189,7 +2189,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                                 S = Integer.valueOf(StartedKm);
                                 TxtStartedKm.setText(StartedKm);
                                 fAmount = Double.valueOf(strFuelAmount);
-                                fuelAmount.setText(" Rs." + new DecimalFormat("##0.00").format(fAmount) + " / KM ");
+                                fuelAmount.setText("₹" + new DecimalFormat("##0.00").format(fAmount) + " / KM ");
 
                                 btn_sub.setVisibility(View.GONE);
                                 buttonSave.setVisibility(View.GONE);
@@ -2244,11 +2244,11 @@ Log.d("DACliam","Error : "+t.getMessage());
                                 txtallamt.setText("");
                                 myBrdEliAmt = myBrdEliAmt.replaceAll("^[\"']+|[\"']+$", "");
                                 myBrdAmt = Double.valueOf(myBrdEliAmt);
-                                txt_BrdAmt.setText(" Rs." + new DecimalFormat("##0.00").format(myBrdAmt));
+                                txt_BrdAmt.setText("₹" + new DecimalFormat("##0.00").format(myBrdAmt));
                                 if (DriverNeed.equalsIgnoreCase("true")) {
                                     drvBrdEliAmt = drvBrdEliAmt.replaceAll("^[\"']+|[\"']+$", "");
                                     drvBrdAmt = Double.valueOf(drvBrdEliAmt);
-                                    txt_DrvBrdAmt.setText(" Rs." + new DecimalFormat("##0.00").format(drvBrdAmt));
+                                    txt_DrvBrdAmt.setText("₹" + new DecimalFormat("##0.00").format(drvBrdAmt));
 
                                     vwDrvBoarding.setVisibility(View.VISIBLE);
                                     txtDrvrBrod.setText("Driver Allowance Boarding");
@@ -2263,13 +2263,13 @@ Log.d("DACliam","Error : "+t.getMessage());
                                 allowanceAmt = allowanceAmt.replaceAll("^[\"']+|[\"']+$", "");
                                 doubleAmount = Double.valueOf(allowanceAmt);
                                 myBrdAmt = 0.0;
-                                txtallamt.setText(" Rs." + new DecimalFormat("##0.00").format(doubleAmount));
-                                txt_BrdAmt.setText(" Rs.0.00");
+                                txtallamt.setText("₹" + new DecimalFormat("##0.00").format(doubleAmount));
+                                txt_BrdAmt.setText("₹0.00");
 
                                 if (DriverNeed.equalsIgnoreCase("true")) {
                                     drvBrdEliAmt = drvBrdEliAmt.replaceAll("^[\"']+|[\"']+$", "");
                                     drvBrdAmt = Double.valueOf(drvBrdEliAmt);
-                                    txt_DrvBrdAmt.setText(" Rs." + new DecimalFormat("##0.00").format(drvBrdAmt));
+                                    txt_DrvBrdAmt.setText("₹" + new DecimalFormat("##0.00").format(drvBrdAmt));
 
                                     vwDrvBoarding.setVisibility(View.VISIBLE);
                                     txtDrvrBrod.setText("Driver Allowance Boarding");
@@ -2618,7 +2618,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                     for (int i = 0; i < ldArray.size(); i++) {
                         ldraft = (JsonObject) ldArray.get(i);
                         elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
-                        txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(elibs));
+                        txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(elibs));
                         TextCheckInDate.setText(ldraft.get("Tadate").getAsString());
                         // changes chk
                         ldg_coutDt.setText(ldraft.get("Tadate").getAsString());
@@ -2684,7 +2684,7 @@ Log.d("DACliam","Error : "+t.getMessage());
 
                             TextView customOptionsNames = new TextView(TAClaimActivity.this);
                             customOptionsNames.setPadding(0, 15, 0, 15);
-                            customOptionsNames.setText("Rs." + eachData.get("Amt").getAsString() + ".00");
+                            customOptionsNames.setText("₹" + eachData.get("Amt").getAsString() + ".00");
                             viewContinueTotal.addView(customOptionsNames);
                             continueStay = continueStay + Double.parseDouble(eachData.get("Amt").getAsString());
                             Log.v("TOTAL_DATE", String.valueOf(continueStay));
@@ -2692,7 +2692,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                     }
 
                     //continueStay = continueStay + elibs;
-                   // lbl_ldg_eligi.setText("Rs. " + continueStay);
+                   // lbl_ldg_eligi.setText("₹" + continueStay);
                     Log.v("TOTAL_DATE_Outer", String.valueOf(continueStay));
                     Log.v("LODGING_ARRAY", String.valueOf(ldArray.size()));
                     if (ldArray != null || ldArray.size() != 0) {
@@ -2708,9 +2708,9 @@ Log.d("DACliam","Error : "+t.getMessage());
                             //ldgAdd.setText("+ Add");
 
                             lodgContvw.setVisibility(View.VISIBLE);
-                            txtMyEligi.setText("Rs." + 0.00);
-                            ldgWOBBal.setText("Rs." + 0.00);
-                            //  lbl_ldg_eligi.setText("Rs." + 0.00);
+                            txtMyEligi.setText("₹" + 0.00);
+                            ldgWOBBal.setText("₹" + 0.00);
+                            //  lbl_ldg_eligi.setText("₹" + 0.00);
                             edt_ldg_bill.setText("");
                             txt_ldg_type.setText("");
                             TotalDays.setVisibility(View.GONE);
@@ -2732,8 +2732,8 @@ Log.d("DACliam","Error : "+t.getMessage());
                         ldg_cin.setText("");
                         ldg_cout.setText("");
                         //ldg_coutDt.setText("");
-                        txtMyEligi.setText("Rs." + 0.00);
-                        ldgWOBBal.setText("Rs." + 0.00);
+                        txtMyEligi.setText("₹" + 0.00);
+                        ldgWOBBal.setText("₹" + 0.00);
                         edt_ldg_bill.setText("");
                         txt_ldg_type.setText("");
                         TotalDays.setVisibility(View.GONE);
@@ -2789,7 +2789,7 @@ Log.d("DACliam","Error : "+t.getMessage());
             txtDrivEligi.setVisibility(View.GONE);
             if(drvAmt!=0) {
                 txtDrivEligi.setVisibility(View.VISIBLE);
-                txtDrivEligi.setText("Rs." + new DecimalFormat("##0.00").format(drvAmt));
+                txtDrivEligi.setText("₹" + new DecimalFormat("##0.00").format(drvAmt));
                 ldgDrvEligi=drvAmt;
             }
             ConStay = ldraft.get("Continuous_Stay").getAsString();
@@ -2841,14 +2841,14 @@ Log.d("DACliam","Error : "+t.getMessage());
             double elibs = Integer.valueOf(ldraft.get("Eligible").getAsString());
 
 
-            txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(elibs));
+            txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(elibs));
 
             double srtjdgAmt = Integer.valueOf(ldraft.get("Joining_Ldg_Amount").getAsString());
-            txtJNEligi.setText("Rs." + new DecimalFormat("##0.00").format(srtjdgAmt));
+            txtJNEligi.setText("₹" + new DecimalFormat("##0.00").format(srtjdgAmt));
             Double wobal = Double.valueOf(ldraft.get("WOB_Amt").getAsString());
 
             Log.v("ldgWOBBal", String.valueOf(wobal));
-            ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(wobal));
+            ldgWOBBal.setText("₹" + new DecimalFormat("##0.00").format(wobal));
             Log.v("ldgWOBBal_______", ldgWOBBal.getText().toString());
 
             edt_ldg_bill.setText(ldraft.get("Bill_Amt").getAsString());
@@ -2901,7 +2901,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                 txtJNMob.setText(jsonObjectAdd.get("Sf_Mobile").getAsString());
 
                 float sum = jsonObjectAdd.get("Ldg_Amount").getAsFloat();
-                txtJNMyEli.setText("Rs." + new DecimalFormat("##0.00").format(sum));
+                txtJNMyEli.setText("₹" + new DecimalFormat("##0.00").format(sum));
 
             }
         }
@@ -3710,7 +3710,7 @@ Log.d("DACliam","Error : "+t.getMessage());
             ldgSave.put("sty_dte", sty_date + " " + ldg_cin.getText().toString());
             ldgSave.put("to_dte", ldg_cout.getText().toString());
             ldgSave.put("toout_dte", ldg_coutDt.getText().toString());
-            ldgSave.put("elgble", txtMyEligi.getText().toString().replaceAll("Rs.", ""));
+            ldgSave.put("elgble", txtMyEligi.getText().toString().replaceAll("₹", ""));
             ldgSave.put("LocID", sLocId);
             if(sLocId.equalsIgnoreCase("-1")){
                 ldgSave.put("ldg_type_sty", lodgStyLocation.getText().toString());
@@ -3728,10 +3728,10 @@ Log.d("DACliam","Error : "+t.getMessage());
             ldgSave.put("lat_chec_in", latCheckIn.getText().toString());
             ldgSave.put("lat_check_out", latCheckOut.getText().toString());
             ldgSave.put("lat_bill_amt", edtLateBill.getText().toString());
-            ldgSave.put("wob_amt", ldgWOBBal.getText().toString().replaceAll("Rs.", ""));
-            ldgSave.put("drv_ldg_amt", txtDrivEligi.getText().toString().replaceAll("Rs.", ""));
-            ldgSave.put("jnt_ldg_amt", txtJNEligi.getText().toString().replaceAll("Rs.", ""));
-            ldgSave.put("total_ldg_amt", lbl_ldg_eligi.getText().toString().replaceAll("Rs.", ""));
+            ldgSave.put("wob_amt", ldgWOBBal.getText().toString().replaceAll("₹", ""));
+            ldgSave.put("drv_ldg_amt", txtDrivEligi.getText().toString().replaceAll("₹", ""));
+            ldgSave.put("jnt_ldg_amt", txtJNEligi.getText().toString().replaceAll("₹", ""));
+            ldgSave.put("total_ldg_amt", lbl_ldg_eligi.getText().toString().replaceAll("₹", ""));
             ldgSave.put("attch_bill", "");
             ldgSave.put("u_key", txtLodgUKey.getText().toString());
 
@@ -4143,7 +4143,7 @@ Log.d("DACliam","Error : "+t.getMessage());
             myldgEliAmt = myldgEliAmt.replaceAll("^[\"']+|[\"']+$", "");
             jointLodging.removeAllViews();
             ldgEliAmt = Double.valueOf(myldgEliAmt);
-            txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
+            txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(ldgEliAmt));
 
             Log.e("TXT_MY_ELIGIBLE", txtMyEligi.getText().toString().substring(3, 7));
 
@@ -4160,7 +4160,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                 viewBilling.setVisibility(View.VISIBLE);
                 /*tTotAmt = 0;*/
                 ttLod = 1;
-                txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
+                txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(ldgEliAmt));
                 lodingView();
             } else if (ValCd.equalsIgnoreCase("RS")) {
                 linContinueStay.setVisibility(View.GONE);
@@ -4181,9 +4181,9 @@ Log.d("DACliam","Error : "+t.getMessage());
                 ttLod = 1;
                 /*tTotAmt = 0;*/
 
-                txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
-                ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
-                lbl_ldg_eligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
+                txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(ldgEliAmt));
+                ldgWOBBal.setText("₹" + new DecimalFormat("##0.00").format(ldgEliAmt));
+                lbl_ldg_eligi.setText("₹" + new DecimalFormat("##0.00").format(ldgEliAmt));
                 img_lodg_prvw.setVisibility(View.VISIBLE);
             }
             ldg_cout.setText("");
@@ -4466,15 +4466,15 @@ Log.d("DACliam","Error : "+t.getMessage());
                 JsonArray AlwDets= response.body();
                 drvldgEAra.setVisibility(View.GONE);
                 ldgDrvEligi = 0.0;
-                txtDrivEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgDrvEligi));
+                txtDrivEligi.setText("₹" + new DecimalFormat("##0.00").format(ldgDrvEligi));
                 if(AlwDets.size()>0){
                     JsonObject item=AlwDets.get(0).getAsJsonObject();
                     ldgEliAmt=item.get("myLdgAmt").getAsDouble();
-                    txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgEliAmt));
+                    txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(ldgEliAmt));
                     if (DriverNeed.equalsIgnoreCase("true")) {
                         drvldgEAra.setVisibility(View.VISIBLE);
                         ldgDrvEligi = item.get("DrvLdgAmt").getAsDouble();
-                        txtDrivEligi.setText("Rs." + new DecimalFormat("##0.00").format(ldgDrvEligi));
+                        txtDrivEligi.setText("₹" + new DecimalFormat("##0.00").format(ldgDrvEligi));
                     }
                     SumOFLodging(0);
                     Log.d("Alwance:",String.valueOf(AlwDets));
@@ -4991,9 +4991,9 @@ Log.d("DACliam","Error : "+t.getMessage());
                                     String qz = String.valueOf(q * z);
                                     Log.v("TA_FUEL_TOTAL", String.valueOf(qz));
                                     fuelAmt = fuelAmt + (q * z);
-                                    fuelAmount.setText("Rs ." + fuelAmt);
+                                    fuelAmount.setText("₹" + fuelAmt);
 
-                                    TextTotalAmount.setText("Rs." + new DecimalFormat("##0.00").format(fuelAmt));
+                                    TextTotalAmount.setText("₹" + new DecimalFormat("##0.00").format(fuelAmt));
                                 }
                             }
                         }
@@ -5028,8 +5028,8 @@ Log.d("DACliam","Error : "+t.getMessage());
 
         stayEgTotal = 1 * ldgEliAmt;
 
-        txtMyEligi.setText("Rs." + new DecimalFormat("##0.00").format(stayEgTotal));
-        ldgWOBBal.setText("Rs." + new DecimalFormat("##0.00").format(stayEgTotal));
+        txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(stayEgTotal));
+        ldgWOBBal.setText("₹" + new DecimalFormat("##0.00").format(stayEgTotal));
 
         SumOFLodging(0);
 

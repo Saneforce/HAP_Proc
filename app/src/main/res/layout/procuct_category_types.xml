@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/white"
     android:orientation="horizontal"
     android:paddingBottom="5dp">
 
@@ -10,7 +10,7 @@
         android:id="@+id/llParentForms"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/white"
         android:orientation="horizontal">
 
         <TextView
@@ -19,10 +19,12 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/C3dp"
+            android:layout_marginTop="@dimen/C5dp"
+            android:layout_marginBottom="@dimen/C5dp"
             android:layout_weight="1"
             android:gravity="center"
             android:padding="10dp"
-            android:background="@color/a80white"
+            android:background="@drawable/button_blueg"
             android:text="Order"
             android:textColor="@color/white"
             android:textSize="11sp" />
@@ -33,7 +35,9 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:layout_marginLeft="@dimen/C3dp"
-            android:background="@color/a80white"
+            android:layout_marginTop="@dimen/C5dp"
+            android:layout_marginBottom="@dimen/C5dp"
+            android:background="@drawable/button_blueg"
             android:layout_weight="1"
             android:gravity="center"
             android:padding="10dp"
@@ -52,7 +56,9 @@
             android:padding="10dp"
             android:text="QPS"
             android:textColor="@color/white"
-            android:background="@color/a80white"
+            android:layout_marginTop="@dimen/C5dp"
+            android:layout_marginBottom="@dimen/C5dp"
+            android:background="@drawable/button_blueg"
             android:textSize="11sp" />
 
         <TextView
@@ -60,12 +66,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/C3dp"
+            android:layout_marginTop="@dimen/C5dp"
+            android:layout_marginBottom="@dimen/C5dp"
+            android:background="@drawable/button_blueg"
             android:layout_weight="1"
             android:gravity="center"
             android:padding="10dp"
             android:text="POP"
             android:textColor="@color/white"
-            android:background="@color/a80white"
             android:textSize="11sp" />
 
         <TextView
@@ -74,7 +82,9 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/C3dp"
             android:layout_marginRight="@dimen/C3dp"
-            android:background="@color/a80white"
+            android:layout_marginTop="@dimen/C5dp"
+            android:layout_marginBottom="@dimen/C5dp"
+            android:background="@drawable/button_blueg"
             android:layout_weight="1"
             android:gravity="center"
             android:padding="10dp"

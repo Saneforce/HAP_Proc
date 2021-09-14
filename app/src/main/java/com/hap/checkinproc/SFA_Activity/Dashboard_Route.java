@@ -163,8 +163,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                                     Log.v("Res>>", is.toString());
                                 }
 
-
-                                JSONObject jsonObject = new JSONObject(is.toString());
+                                shared_common_pref.save(Constants.RetailorTodayData, is.toString());
+                                //recyclerView.getAdapter().notifyDataSetChanged();
+                                /*JSONObject jsonObject = new JSONObject();
 
                                 ArrayList<Retailer_Modal_List> todayRetailorData = new ArrayList<>();
                                 ArrayList<Retailer_Modal_List> todayRetailorDataDynamic = new ArrayList<>();
@@ -274,7 +275,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                                 } else {
                                     shared_common_pref.save(Constants.RetailorTodayData, "");
                                     shared_common_pref.save(Constants.RetailorPreviousData, "");
-                                }
+                                }*/
 
 
                             }
@@ -309,8 +310,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         try {
             super.onResume();  // Always call the superclass method first
             recyclerView = findViewById(R.id.leaverecyclerview);
+
             presenter = new MasterSync_Implementations(this, new Master_Sync_View());
             presenter.requestDataFromServer();
+
             headtext = findViewById(R.id.headtext);
             route_text = findViewById(R.id.route_text);
             distributor_text = findViewById(R.id.distributor_text);
