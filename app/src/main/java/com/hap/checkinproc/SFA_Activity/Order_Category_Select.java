@@ -770,11 +770,13 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
                     cashDiscount += discount;
-                    totalvalues += (Product_Modal.get(pm).getQty() + Product_Modal.get(pm).getRegularQty()) * Product_Modal.get(pm).getRate();
+                    totalvalues += (((Product_Modal.get(pm).getQty() + Product_Modal.get(pm).getRegularQty())
+                            * Product_Modal.get(pm).getRate()) - discount);
 
                     totalQty += Product_Modal.get(pm).getQty() + Product_Modal.get(pm).getRegularQty();
 
-                    Product_Modal.get(pm).setAmount((Product_Modal.get(pm).getQty() + Product_Modal.get(pm).getRegularQty()) * Product_Modal.get(pm).getRate());
+                    Product_Modal.get(pm).setAmount(((Product_Modal.get(pm).getQty() + Product_Modal.get(pm).getRegularQty())
+                            * Product_Modal.get(pm).getRate()) - discount);
 
                     Getorder_Array_List.add(Product_Modal.get(pm));
 
@@ -1123,6 +1125,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     holder.Disc.setText("₹0");
                 else {
                     holder.Disc.setText("₹" + Product_Details_Modal.getDiscount());
+
                 }
 
 
