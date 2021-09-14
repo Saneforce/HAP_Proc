@@ -236,6 +236,7 @@
                             android:hint=""
                             android:inputType="number"
                             android:text="0"
+                            android:textStyle="bold"
                             android:textColor="@color/green"
                             android:visibility="visible" />
 
@@ -263,7 +264,7 @@
 
                             android:inputType="number"
                             android:text="₹0"
-                            android:textColor="@color/green"
+                            android:textColor="@color/color_red"
                             android:textStyle="bold"
                             android:visibility="visible" />
 

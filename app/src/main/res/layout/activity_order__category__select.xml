@@ -499,12 +499,13 @@
                                 android:textSize="@dimen/C15dp"></TextView>
 
                             <TextView
+                                android:fontFamily="sans-serif"
                                 android:id="@+id/tvcashdiscount"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="0.00"
                                 android:textAlignment="viewEnd"
-                                android:textColor="@color/black"
+                                android:textColor="@color/color_red"
                                 android:textSize="@dimen/C15dp"></TextView>
                         </RelativeLayout>
 

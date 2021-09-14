@@ -438,33 +438,33 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                                 JSONObject jsonObject = new JSONObject(is.toString());
 
 
-//                                if (jsonObject.getBoolean("success")) {
-//
-//                                    Gson gson = new Gson();
-//                                    List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
-//
-//
-//                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
-//
-//                                    for (int i = 0; i < jsonArray.length(); i++) {
-//                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-//
-//
-//                                        product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Detail_Code"),
-//                                                "", "", jsonObject1.getInt("Qty"), ""));
-//
-//
-//                                    }
-//
-//                                    sharedCommonPref.save(Constants.PreOrderQtyList, gson.toJson(product_details_modalArrayList));
-//
-//                                    Log.v("PreOrderList: ", "" + product_details_modalArrayList.size());
-//
-//                                } else {
-//                                    sharedCommonPref.clear_pref(Constants.PreOrderQtyList);
-//                                    Log.v("PreOrderList: ", "" + "not success");
-//
-//                                }
+                                if (jsonObject.getBoolean("success")) {
+
+                                    Gson gson = new Gson();
+                                    List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
+
+
+                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+
+                                        product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
+                                                jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
+                                                jsonObject1.getString("Discount"), jsonObject1.getString("Discount_Type"),
+                                                jsonObject1.getString("Package")));
+
+
+                                    }
+
+                                    sharedCommonPref.save(Constants.FreeSchemeDiscList, gson.toJson(product_details_modalArrayList));
+
+
+                                } else {
+                                    sharedCommonPref.clear_pref(Constants.FreeSchemeDiscList);
+
+                                }
 
 
                             }

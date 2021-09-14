@@ -4,6 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Product_Details_Modal {
+    @SerializedName("Package")
+    @Expose
+    private String Package;
     @SerializedName("POP_UOM")
     @Expose
     private String UOM;
@@ -13,6 +16,7 @@ public class Product_Details_Modal {
     @SerializedName("name")
     @Expose
     private String name;
+
     private String sku;
     private int price;
     @SerializedName("Product_Cat_Code")
@@ -49,49 +53,33 @@ public class Product_Details_Modal {
 
     @SerializedName("free")
     @Expose
-    private Double free;
-
-    public Double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Double discount) {
-        this.discount = discount;
-    }
+    private String free;
 
     @SerializedName("discount")
     @Expose
-    private Double discount;
+    private String discount;
 
-
-    public Double getFree() {
-        return free;
+    public String getDiscount_type() {
+        return discount_type;
     }
 
-    public void setFree(Double free) {
-        this.free = free;
+    public void setDiscount_type(String discount_type) {
+        this.discount_type = discount_type;
     }
 
+    @SerializedName("discount_type")
+    @Expose
+    private String discount_type;
+
+
+    @SerializedName("Scheme")
+    @Expose
     private String scheme;
+
     @SerializedName("RegularQty")
     @Expose
     private Integer RegularQty;
 
-    public String getBookingDate() {
-        return bookingDate;
-    }
-
-    public void setBookingDate(String bookingDate) {
-        this.bookingDate = bookingDate;
-    }
-
-    public String getPopMaterial() {
-        return popMaterial;
-    }
-
-    public void setPopMaterial(String popMaterial) {
-        this.popMaterial = popMaterial;
-    }
 
     @SerializedName("bookingDate")
     @Expose
@@ -139,6 +127,50 @@ public class Product_Details_Modal {
         this.UOM = UOM;
 
     }
+
+    public Product_Details_Modal(String id, String scheme, String free, String discount, String discount_type, String Package) {
+        this.id = id;
+        this.scheme = scheme;
+        this.free = free;
+        this.discount = discount;
+        this.discount_type = discount_type;
+        this.Package = Package;
+    }
+
+    public String getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(String discount) {
+        this.discount = discount;
+    }
+
+
+    public String getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(String bookingDate) {
+        this.bookingDate = bookingDate;
+    }
+
+    public String getPopMaterial() {
+        return popMaterial;
+    }
+
+    public void setPopMaterial(String popMaterial) {
+        this.popMaterial = popMaterial;
+    }
+
+
+    public String getFree() {
+        return free;
+    }
+
+    public void setFree(String free) {
+        this.free = free;
+    }
+
 
     public Integer getRegularQty() {
         return RegularQty;
@@ -274,5 +306,13 @@ public class Product_Details_Modal {
 
     public void setUOM(String UOM) {
         this.UOM = UOM;
+    }
+
+    public String getPackage() {
+        return Package;
+    }
+
+    public void setPackage(String mPackage) {
+        Package = mPackage;
     }
 }
