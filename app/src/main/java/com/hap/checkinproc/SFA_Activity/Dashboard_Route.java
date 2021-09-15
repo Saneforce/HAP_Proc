@@ -313,14 +313,14 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                                             shared_common_pref.save(Constants.RetailorPreviousData, gson.toJson(previousRetailorData));*/
 
 
-                                        }
-                                    } else {
-                                        /*   shared_common_pref.save(Constants.RetailorPreviousData, "");*/
+                                       // }
+//                                    } else {
+//                                        /*   shared_common_pref.save(Constants.RetailorPreviousData, "");*/
+//
+//                                    }
 
-                                    }
 
-
-                                } else {
+                                /*} else {
                                     shared_common_pref.save(Constants.RetailorTodayData, "");
                                     shared_common_pref.save(Constants.RetailorPreviousData, "");
                                 }*/
