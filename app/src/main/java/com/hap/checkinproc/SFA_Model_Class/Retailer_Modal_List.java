@@ -125,6 +125,10 @@ public class Retailer_Modal_List {
     @Expose
     private String id;
 
+    @SerializedName("Type")
+    @Expose
+    private String Type;
+
     @SerializedName("ERP_Code")
     @Expose
     private String ERP_Code;
@@ -232,6 +236,13 @@ public class Retailer_Modal_List {
         this._long = _long;
     }
 
+    public String getType() {
+        return Type;
+    }
+
+    public void setType(String type) {
+        Type = type;
+    }
 
     public Retailer_Modal_List(String cust_Code, double others, double othersVal, double curd, double curdVal, double milk, double milkVal) {
         Cust_Code = cust_Code;
@@ -241,6 +252,7 @@ public class Retailer_Modal_List {
         CurdVal = curdVal;
         Milk = milk;
         MilkVal = milkVal;
+
     }
 
 

@@ -139,9 +139,9 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
     }
 
 
-    public Route_View_Adapter(List<Retailer_Modal_List> Retailer_Modal_Listitem, int rowLayout, Context context, AdapterOnClick mAdapterOnClick) {
+    public Route_View_Adapter(List<Retailer_Modal_List> retailer_Modal_Listitem, int rowLayout, Context context, AdapterOnClick mAdapterOnClick) {
         try {
-            this.Retailer_Modal_Listitem = Retailer_Modal_Listitem;
+            this.Retailer_Modal_Listitem = retailer_Modal_Listitem;
             this.rowLayout = rowLayout;
             this.context = context;
             this.mAdapterOnClick = mAdapterOnClick;
@@ -202,7 +202,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     JSONObject item=TodaySales.getJSONObject(i);
                     if (item.getString("Cust_Code").equals(Retailer_Modal_List.getId())) {
                         JSONArray BindArry=item.getJSONArray("Items");
-                        holder.lstTdyView.setAdapter(new CatewiseSalesaAdapter(BindArry,context));
+                        holder.lstTdyView.setAdapter(new CatewiseSalesaAdapter(BindArry,R.layout.categorywise_sales_adp,context));
                         DtaBnd=true;
 
                         int iQty=0;double iVal=0.0;
@@ -221,7 +221,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             }
             if(DtaBnd==false){
                 JSONArray BindArry=PreSales.getJSONArray("Group");
-                holder.lstTdyView.setAdapter(new CatewiseSalesaAdapter(BindArry,context));
+                holder.lstTdyView.setAdapter(new CatewiseSalesaAdapter(BindArry,R.layout.categorywise_sales_adp,context));
             }
 
             getMnthlyDta(holder,Retailer_Modal_List.getId(),holder.tvFirstMonth.getText().toString());
@@ -565,14 +565,14 @@ public void getMnthlyDta(Route_View_Adapter.MyViewHolder holder,String CusId,Str
                 if (item.getString("Cust_Code").equals(CusId) &&
                         Mnth.equals(str)) {
                     BindArry=item.getJSONArray("Items");
-                    holder.lstPreView.setAdapter(new CatewiseSalesaAdapter(BindArry,context));
+                    holder.lstPreView.setAdapter(new CatewiseSalesaAdapter(BindArry,R.layout.categorywise_sales_mnth_adp,context));
                     DtaBnd=true;
                 }
             }
         }
         if(DtaBnd==false){
             BindArry=PreSales.getJSONArray("Group");
-            holder.lstPreView.setAdapter(new CatewiseSalesaAdapter(BindArry,context));
+            holder.lstPreView.setAdapter(new CatewiseSalesaAdapter(BindArry,R.layout.categorywise_sales_mnth_adp,context));
         }
 
         sumOfTotal(BindArry,holder);

@@ -82,51 +82,45 @@ public class TabAdapter extends FragmentStatePagerAdapter {
 
         Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(Dashboard_Route.dashboard_route);
 
-        Retailer_Modal_List = new ArrayList<>();
-
-        Retailer_Modal_List.clear();
-        Retailer_Modal_List = Dashboard_Route.dashboard_route.Retailer_Modal_List;
-
         Retailer_Modal_ListFilter = new ArrayList<>();
 
         String Route_id = shared_common_pref.getvalue(Constants.Route_Id);
 
-
-        if (Retailer_Modal_List != null) {
-            for (int i = 0; i < Retailer_Modal_List.size(); i++) {
+        if (mRetailer_Modal_ListFilter != null) {
+            for (int i = 0; i < mRetailer_Modal_ListFilter.size(); i++) {
 
 
                 if (flag.equals("1")) {
 
                     if (!Route_id.equals("")) {
-                        if (Route_id.equals(Retailer_Modal_List.get(i).getTownCode())) {
-                            Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                        if (Route_id.equals(mRetailer_Modal_ListFilter.get(i).getTownCode())) {
+                            Retailer_Modal_ListFilter.add(mRetailer_Modal_ListFilter.get(i));
                         }
                     } else {
-                        Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                        Retailer_Modal_ListFilter.add(mRetailer_Modal_ListFilter.get(i));
 
                     }
                 } else if (flag.equals("2")) {
 
-                    if (Retailer_Modal_List.get(i).getStatusname().equals("PENDING")) {
+                    if (mRetailer_Modal_ListFilter.get(i).getStatusname().equals("PENDING")) {
                         if (!Route_id.equals("")) {
-                            if (Route_id.equals(Retailer_Modal_List.get(i).getTownCode())) {
-                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                            if (Route_id.equals(mRetailer_Modal_ListFilter.get(i).getTownCode())) {
+                                Retailer_Modal_ListFilter.add(mRetailer_Modal_ListFilter.get(i));
                             }
                         } else {
-                            Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                            Retailer_Modal_ListFilter.add(mRetailer_Modal_ListFilter.get(i));
 
                         }
                     }
 
                 } else if (flag.equals("3")) {
-                    if (Retailer_Modal_List.get(i).getStatusname().equals("COMPLETED")) {
+                    if (mRetailer_Modal_ListFilter.get(i).getStatusname().equals("COMPLETED")) {
                         if (!Route_id.equals("")) {
-                            if (Route_id.equals(Retailer_Modal_List.get(i).getTownCode())) {
-                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                            if (Route_id.equals(mRetailer_Modal_ListFilter.get(i).getTownCode())) {
+                                Retailer_Modal_ListFilter.add(mRetailer_Modal_ListFilter.get(i));
                             }
                         } else {
-                            Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+                            Retailer_Modal_ListFilter.add(mRetailer_Modal_ListFilter.get(i));
 
                         }
                     }

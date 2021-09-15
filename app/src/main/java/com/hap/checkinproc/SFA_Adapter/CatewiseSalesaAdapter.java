@@ -21,15 +21,17 @@ import java.text.DecimalFormat;
 public class CatewiseSalesaAdapter extends RecyclerView.Adapter<CatewiseSalesaAdapter.MyViewHolder> {
     JSONArray AryDta;
     private Context context;
-    public CatewiseSalesaAdapter(JSONArray jAryDta,Context mContext) {
+    int salRowDetailLayout;
+    public CatewiseSalesaAdapter(JSONArray jAryDta,int rowLayout,Context mContext) {
         AryDta=jAryDta;
         context=mContext;
+        salRowDetailLayout=rowLayout;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.categorywise_sales_adp, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(salRowDetailLayout, parent, false);
         return new MyViewHolder(view);
     }
 

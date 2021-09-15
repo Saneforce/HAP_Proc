@@ -2,15 +2,20 @@ package com.hap.checkinproc.SFA_Activity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -80,15 +85,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     List<OutletReport_View_Modal> Retailer_Order_List;
     Gson gson;
     Type userTypeRetailor, userTypeReport;
-    TextView headtext;
-    TextView textViewname;
-    TextView Alltextclick;
-    TextView Completeclick;
-    TextView Pendingclick;
-    TextView ReachedOutlet;
-    TextView route_text;
+    TextView headtext,textViewname,Alltextclick,Completeclick,Pendingclick,ReachedOutlet,route_text,
+    txSrvOtlt,txUniOtlt;
+    EditText txSearchRet;
     View Alltextview, completeview, pendingview;
-    LinearLayout btnCmbRoute;
+    LinearLayout btnCmbRoute,btSrvOtlt,btUniOtlt;
     Common_Model Model_Pojo;
     List<Common_Model> distributor_master = new ArrayList<>();
     List<Common_Model> Route_Masterlist = new ArrayList<>();
@@ -97,7 +98,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     String Route_id;
     String Distributor_Id;
     String DCRMode;
-    String sDeptType;
+    String sDeptType,RetType="1";
     SharedPreferences CheckInDetails;
     SharedPreferences UserDetails;
     DatabaseHandler db;
@@ -328,7 +329,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             btnCmbRoute = findViewById(R.id.btnCmbRoute);
             ivToolbarHome = findViewById(R.id.toolbar_home);
             llDistributor = findViewById(R.id.llDistributor);
-
+            txSearchRet=findViewById(R.id.txSearchRet);
+            txSrvOtlt=findViewById(R.id.txSrvOtlt);
+            txUniOtlt=findViewById(R.id.txUniOtlt);
+            btSrvOtlt=findViewById(R.id.btSrvOtlt);
+            btUniOtlt=findViewById(R.id.btUniOtlt);
             viewPager = findViewById(R.id.viewpager);
             viewPager.setOffscreenPageLimit(3);
             tabLayout = findViewById(R.id.tabs);
@@ -345,6 +350,45 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             ivToolbarHome.setOnClickListener(this);
             btnCmbRoute.setOnClickListener(this);
             llDistributor.setOnClickListener(this);
+            btSrvOtlt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RetType="1";
+                    txSrvOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    txSrvOtlt.setTypeface(null, Typeface.BOLD);
+                    txUniOtlt.setTypeface(null, Typeface.NORMAL);
+                    txUniOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    SearchRetailers();
+                }
+            });
+            btUniOtlt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    RetType="0";
+                    txUniOtlt.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    txUniOtlt.setTypeface(null, Typeface.BOLD);
+                    txSrvOtlt.setTypeface(null, Typeface.NORMAL);
+                    txSrvOtlt.setTextColor(getResources().getColor(R.color.grey_900));
+                    SearchRetailers();
+                }
+            });
+
+            txSearchRet.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    SearchRetailers();
+                }
+            });
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             gson = new Gson();
 
@@ -428,7 +472,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     if (shared_common_pref.getvalue(Constants.Route_Id).equals(""))
                         OutletFilter(Distributor_Id, "1", true);
                     else
-                        OutletFilter(Distributor_Id, "0", true);
+                        OutletFilter(Route_id, "0", true);
 
                     //}
                     sDeptType = UserDetails.getString("DeptType", "");
@@ -520,7 +564,43 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             e.printStackTrace();
         }
     }
+    private void SearchRetailers(){
+        String sSchText=txSearchRet.getText().toString();
+        Retailer_Modal_ListFilter.clear();
+        for (int i = 0; i < Retailer_Modal_List.size(); i++) {
+            if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase(RetType)
+                    && (sSchText.equalsIgnoreCase("") || Retailer_Modal_List.get(i).getName().toLowerCase().indexOf(sSchText.toLowerCase())>-1))
+                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
+        }
+        TabAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
 
+        adapter.notifyDataSetChanged();
+
+        recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
+            @Override
+            public void onIntentClick(int position) {
+                try {
+                    Shared_Common_Pref.Outler_AddFlag = "0";
+                    Shared_Common_Pref.OutletName = Retailer_Modal_ListFilter.get(position).getName().toUpperCase();
+                    Shared_Common_Pref.OutletCode = Retailer_Modal_ListFilter.get(position).getId();
+                    Shared_Common_Pref.DistributorCode = Distributor_Id;
+                    Shared_Common_Pref.DistributorName = distributor_text.getText().toString();
+                    Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
+                    //common_class.CommonIntentwithFinish(Route_Product_Info.class);
+                    shared_common_pref.save(Constants.Retailor_Address, Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
+                    shared_common_pref.save(Constants.Retailor_ERP_Code, Retailer_Modal_ListFilter.get(position).getERP_Code());
+                    shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_List.get(position).getName().toUpperCase() + "~" + Retailer_Modal_List.get(position).getERP_Code());
+                    common_class.CommonIntentwithoutFinish(Invoice_History.class);
+
+                } catch (Exception e) {
+                    Log.e("DR:RetailorClick: ", e.getMessage());
+                }
+            }
+        }));
+
+    }
 
     private void createTabFragment() {
 
@@ -637,12 +717,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             if (flag.equals("0")) {
 
                 Retailer_Modal_ListFilter = new ArrayList<>();
-
+                String sSchText=txSearchRet.getText().toString();
                 for (int i = 0; i < Retailer_Modal_List.size(); i++) {
                     if (id.equals(Retailer_Modal_List.get(i).getTownCode()))
                         Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
                 }
-
 
                 // shared_common_pref.save(Retailer_OutletList, gson.toJson(Retailer_Modal_ListFilter));
                 TabAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);

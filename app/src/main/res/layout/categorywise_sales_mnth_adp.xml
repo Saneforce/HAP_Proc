@@ -39,7 +39,7 @@
 
         <TextView
             android:id="@+id/tvTodayVal"
-            android:layout_width="70dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:textAlignment="textEnd"
