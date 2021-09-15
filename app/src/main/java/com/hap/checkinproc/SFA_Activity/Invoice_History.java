@@ -138,20 +138,20 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                     Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
                     Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
                     Shared_Common_Pref.Invoicetoorder = "1";
-                    if (FilterOrderList.get(position).getStatus().equals("ORDER")) {
-                        Intent intent = new Intent(getBaseContext(), Order_Category_Select.class);
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                        Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
-                        intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
-                        intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
-                        intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-                        intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
-                        intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
-                        intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
-                        startActivity(intent);
-                    }
+//                    if (FilterOrderList.get(position).getStatus().equals("ORDER")) {
+//                        Intent intent = new Intent(getBaseContext(), Order_Category_Select.class);
+//                        startActivity(intent);
+//                    } else {
+                    Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
+                    Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
+                    intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
+                    intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
+                    intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
+                    intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
+                    intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
+                    intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
+                    startActivity(intent);
+                    //}
 
                 }
             });
@@ -167,7 +167,6 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
             navigateOrderScreen();
 
 
-            getPreOrderQty();
         } catch (Exception e) {
 
         }
@@ -192,14 +191,15 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 
             case R.id.lin_order:
                 Shared_Common_Pref.Invoicetoorder = "0";
+                getPreOrderQty();
+
                 //Shared_Common_Pref.TransSlNo = "0";
-                common_class.CommonIntentwithFinish(Order_Category_Select.class);
                 break;
             case R.id.lin_repeat_order:
                 break;
             case R.id.lin_invoice:
                 Shared_Common_Pref.Invoicetoorder = "2";
-                common_class.CommonIntentwithFinish(Order_Category_Select.class);
+                getInvoiceOrderQty();
                 break;
             case R.id.lin_repeat_invoice:
                 break;
@@ -225,7 +225,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                 break;
 
             case R.id.tvOrder:
-                common_class.CommonIntentwithFinish(Order_Category_Select.class);
+                getPreOrderQty();
                 break;
         }
     }
@@ -381,20 +381,20 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                     Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
                     Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
                     Shared_Common_Pref.Invoicetoorder = "1";
-                    if (FilterOrderList.get(position).getStatus().equals("ORDER")) {
-                        Intent intent = new Intent(getBaseContext(), Order_Category_Select.class);
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                        Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
-                        intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
-                        intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
-                        intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-                        intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
-                        intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
-                        intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
-                        startActivity(intent);
-                    }
+//                    if (FilterOrderList.get(position).getStatus().equals("ORDER")) {
+//                        getPreOrderQty();
+//
+//                    } else {
+                    Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
+                    Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
+                    intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
+                    intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
+                    intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
+                    intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
+                    intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
+                    intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
+                    startActivity(intent);
+                    //  }
 
                 }
             });
@@ -449,11 +449,11 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                                     for (int i = 0; i < jsonArray.length(); i++) {
                                         JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
-
                                         product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
                                                 jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
                                                 jsonObject1.getString("Discount"), jsonObject1.getString("Discount_Type"),
-                                                jsonObject1.getString("Package")));
+                                                jsonObject1.getString("Package"), "0", jsonObject1.getString("Offer_Product"),
+                                                jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
 
 
                                     }
@@ -496,6 +496,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
     private void getPreOrderQty() {
         try {
             if (common_class.isNetworkAvailable(this)) {
+                common_class.ProgressdialogShow(1, "");
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
                 JSONObject HeadItem = new JSONObject();
@@ -531,23 +532,32 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 
                                     JSONArray jsonArray = jsonObject.getJSONArray("Data");
 
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                    if (jsonArray != null && jsonArray.length() > 0) {
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
 
-                                        product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Detail_Code"),
-                                                "", "", jsonObject1.getInt("Qty"), ""));
+                                            product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Detail_Code"),
+                                                    "", "", jsonObject1.getInt("Qty"), ""));
 
 
+                                        }
                                     }
 
                                     sharedCommonPref.save(Constants.PreOrderQtyList, gson.toJson(product_details_modalArrayList));
 
+
+                                    common_class.CommonIntentwithFinish(Order_Category_Select.class);
+
+
+                                    common_class.ProgressdialogShow(0, "");
                                     Log.v("PreOrderList: ", "" + product_details_modalArrayList.size());
 
                                 } else {
                                     sharedCommonPref.clear_pref(Constants.PreOrderQtyList);
                                     Log.v("PreOrderList: ", "" + "not success");
+                                    common_class.ProgressdialogShow(0, "");
+
 
                                 }
 
@@ -555,6 +565,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                             }
 
                         } catch (Exception e) {
+                            common_class.ProgressdialogShow(0, "");
 
 
                         }
@@ -563,6 +574,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.v("fail>>", t.toString());
+                        common_class.ProgressdialogShow(0, "");
 
 
                     }
@@ -578,6 +590,104 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
     }
 
 
+    private void getInvoiceOrderQty() {
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                common_class.ProgressdialogShow(1, "");
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                JSONObject HeadItem = new JSONObject();
+
+                HeadItem.put("OrderID", Shared_Common_Pref.OutletCode);
+
+
+                Call<ResponseBody> call = service.getInvoiceOrderQty(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+
+                                if (jsonObject.getBoolean("success")) {
+
+                                    Gson gson = new Gson();
+                                    List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
+
+
+                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                                    if (jsonArray != null && jsonArray.length() > 0) {
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+
+                                            product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Detail_Code"),
+                                                    "", "", jsonObject1.getInt("Qty"), ""));
+
+
+                                        }
+                                    }
+
+                                    sharedCommonPref.save(Constants.InvoiceQtyList, gson.toJson(product_details_modalArrayList));
+
+
+                                    common_class.CommonIntentwithFinish(Order_Category_Select.class);
+
+
+                                    common_class.ProgressdialogShow(0, "");
+                                    Log.v("PreOrderList: ", "" + product_details_modalArrayList.size());
+
+
+                                    common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+
+
+                                } else {
+                                    sharedCommonPref.clear_pref(Constants.InvoiceQtyList);
+                                    Log.v("PreOrderList: ", "" + "not success");
+                                    common_class.ProgressdialogShow(0, "");
+
+
+                                }
+
+
+                            }
+
+                        } catch (Exception e) {
+                            common_class.ProgressdialogShow(0, "");
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>", t.toString());
+                        common_class.ProgressdialogShow(0, "");
+
+
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
 
 
 

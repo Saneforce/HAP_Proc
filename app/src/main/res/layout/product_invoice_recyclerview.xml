@@ -55,6 +55,58 @@
                         android:textSize="@dimen/C13dp"
                         android:textStyle="bold" />
 
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tvRegularLabel"
+
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+
+                            android:hint=""
+                            android:inputType="number"
+                            android:text="Order Qty : "
+                            android:textColor="@color/grey_800"
+                            android:visibility="visible" />
+
+
+                        <TextView
+
+                            android:id="@+id/RegularQty"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_toRightOf="@+id/tvRegularLabel"
+                            android:gravity="center_vertical"
+
+                            android:hint=""
+                            android:inputType="number"
+                            android:text="0"
+                            android:textColor="@color/grey_800"
+                            android:visibility="visible" />
+
+
+                        <TextView
+                            android:id="@+id/RegularAmt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/C10dp"
+                            android:fontFamily="sans-serif"
+                            android:gravity="center_vertical"
+                            android:hint=""
+                            android:inputType="number"
+                            android:text="₹0"
+                            android:textColor="@color/txt_color_black"
+                            android:textStyle="bold"
+                            android:visibility="visible" />
+
+
+                    </RelativeLayout>
+
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -98,58 +150,6 @@
 
                     </RelativeLayout>
 
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="25dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/tvRegularLabel"
-
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-
-                            android:hint=""
-                            android:inputType="number"
-                            android:text="Regular  : "
-                            android:textColor="@color/grey_800"
-                            android:visibility="visible" />
-
-
-                        <TextView
-
-                            android:id="@+id/RegularQty"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_toRightOf="@+id/tvRegularLabel"
-                            android:gravity="center_vertical"
-
-                            android:hint=""
-                            android:inputType="number"
-                            android:text="0"
-                            android:textColor="@color/grey_800"
-                            android:visibility="visible" />
-
-
-                        <TextView
-                            android:id="@+id/RegularAmt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/C10dp"
-                            android:fontFamily="sans-serif"
-                            android:gravity="center_vertical"
-                            android:hint=""
-                            android:inputType="number"
-                            android:text="₹0"
-                            android:textColor="@color/txt_color_black"
-                            android:textStyle="bold"
-                            android:visibility="visible" />
-
-
-                    </RelativeLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -212,11 +212,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:layout_marginRight="@dimen/C10dp"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
+                        android:orientation="horizontal">
 
                         <TextView
-
                             android:id="@+id/tvFreeLabel"
 
                             android:layout_width="wrap_content"
@@ -224,7 +222,7 @@
                             android:gravity="center_vertical"
                             android:text="Free : "
                             android:textColor="@color/grey_800"
-                            android:visibility="invisible" />
+                            android:visibility="visible" />
 
 
                         <TextView
@@ -238,8 +236,8 @@
                             android:hint=""
                             android:inputType="number"
                             android:text="0"
-                            android:textStyle="bold"
                             android:textColor="@color/green"
+                            android:textStyle="bold"
                             android:visibility="visible" />
 
 
@@ -275,11 +273,9 @@
 
 
                     <RelativeLayout
-                        android:visibility="gone"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
-                        android:orientation="horizontal"
-                        android:visibility="gone">
+                        android:orientation="horizontal">
 
                         <TextView
                             android:id="@+id/tvTaxLabel"
@@ -352,7 +348,7 @@
                             android:layout_marginTop="@dimen/C3dp"
                             android:gravity="center_vertical"
                             android:inputType="number"
-                            android:text="Total Qty : 20"
+                            android:text="Total Qty : 0"
                             android:textColor="@color/txt_color_black"
                             android:visibility="visible" />
 

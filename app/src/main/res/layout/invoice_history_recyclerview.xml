@@ -88,7 +88,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginLeft="@dimen/sno1"
                         android:gravity="center"
-                        android:text="Invoice"
+                        android:text=""
                         android:textColor="@color/black"
                         android:textSize="@dimen/C14dp"></TextView>
                 </LinearLayout>

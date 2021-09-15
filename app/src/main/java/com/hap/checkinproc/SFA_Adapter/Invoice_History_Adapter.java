@@ -54,6 +54,7 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
         holder.txtOrderID.setText(mDate.get(position).getOrderNo());
         holder.txtValue.setText("" + mDate.get(position).getOrderValue());
         holder.Itemcountinvoice.setText("" + mDate.get(position).getNo_Of_items());
+        holder.txtType.setText("" + mDate.get(position).getStatus());
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,7 +69,7 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView Statusinvoice, txtOrderDate, txtOrderID, txtValue, Itemcountinvoice;
+        TextView Statusinvoice, txtOrderDate, txtOrderID, txtValue, Itemcountinvoice, txtType;
         LinearLayout linearLayout;
         RelativeLayout parent_layout;
         ImageView ivStatus;
@@ -83,6 +84,8 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
             parent_layout = itemView.findViewById(R.id.parent_layout);
             Itemcountinvoice = itemView.findViewById(R.id.Itemcountinvoice);
             ivStatus = itemView.findViewById(R.id.ivStatus);
+            txtType = itemView.findViewById(R.id.txt_type);
+
 
         }
     }

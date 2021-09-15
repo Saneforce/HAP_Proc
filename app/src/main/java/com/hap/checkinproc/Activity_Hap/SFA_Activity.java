@@ -70,18 +70,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     OutletDashboardInfoAdapter cumulativeInfoAdapter;
     private List<Cumulative_Order_Model> cumulative_order_modelList = new ArrayList<>();
     GridView recyclerView;
-
-
-//    RecyclerView recyclerView2;
-//
-//    CumulativeInfoAdapter cumulativeInfoAdapter2;
-//    private List<Cumulative_Order_Model> cumulative_order_modelList2 = new ArrayList<>();
-//
-
     TextView tvServiceOutlet, tvUniverseOutlet, tvNewSerOutlet, tvTotSerOutlet, tvExistSerOutlet, tvDate, tvTodayCalls, tvProCalls, tvCumTodayCalls, tvNewTodayCalls, tvCumProCalls, tvNewProCalls, tvAvgNewCalls, tvAvgTodayCalls, tvAvgCumCalls;
     private DatePickerDialog fromDatePickerDialog;
 
-    ProgressBar pbSFA;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,8 +91,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         linorders = findViewById(R.id.linorders);
         lin_Reports = findViewById(R.id.lin_Reports);
         Logout = findViewById(R.id.Logout);
-        pbSFA = findViewById(R.id.pbSFA);
-        //switchGraphMode = (Switch) findViewById(R.id.switchCumulativeMode);
 
         common_class = new Common_Class(this);
         SyncButon.setOnClickListener(this);
@@ -235,7 +224,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         try {
 
             if (common_class.isNetworkAvailable(this)) {
-                pbSFA.setVisibility(View.VISIBLE);
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
                 DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
@@ -620,7 +608,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        pbSFA.setVisibility(View.GONE);
+                        
                         InputStreamReader ip = null;
                         StringBuilder is = new StringBuilder();
                         String line = null;
@@ -674,7 +662,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                             }
 
                         } catch (Exception e) {
-                            pbSFA.setVisibility(View.GONE);
+                            
 
                             Log.v("fail>>1", e.getMessage());
 
@@ -683,7 +671,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        pbSFA.setVisibility(View.GONE);
+                        
                         Log.v("fail>>2", t.toString());
 
 

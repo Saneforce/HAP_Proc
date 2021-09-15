@@ -55,9 +55,28 @@ public class Product_Details_Modal {
     @Expose
     private String free;
 
+    public String getFree_val() {
+        return free_val;
+    }
+
+    public void setFree_val(String free_val) {
+        this.free_val = free_val;
+    }
+
+    @SerializedName("free_val")
+    @Expose
+    private String free_val;
+
+
     @SerializedName("discount")
     @Expose
     private String discount;
+
+
+    @SerializedName("discount_value")
+    @Expose
+    private String discount_value;
+
 
     public String getDiscount_type() {
         return discount_type;
@@ -88,6 +107,71 @@ public class Product_Details_Modal {
     @SerializedName("popMaterial")
     @Expose
     private String popMaterial;
+
+    @SerializedName("tax")
+    @Expose
+    private String tax;
+    @SerializedName("tax_value")
+    @Expose
+    private String tax_value;
+    @SerializedName("Off_Pro_code")
+    @Expose
+    private String Off_Pro_code;
+    @SerializedName("Off_Pro_name")
+    @Expose
+    private String Off_Pro_name;
+
+    public String getDiscount_value() {
+        return discount_value;
+    }
+
+    public void setDiscount_value(String discount_value) {
+        this.discount_value = discount_value;
+    }
+
+    public String getTax() {
+        return tax;
+    }
+
+    public void setTax(String tax) {
+        this.tax = tax;
+    }
+
+    public String getTax_value() {
+        return tax_value;
+    }
+
+    public void setTax_value(String tax_value) {
+        this.tax_value = tax_value;
+    }
+
+    public String getOff_Pro_code() {
+        return Off_Pro_code;
+    }
+
+    public void setOff_Pro_code(String off_Pro_code) {
+        Off_Pro_code = off_Pro_code;
+    }
+
+    public String getOff_Pro_name() {
+        return Off_Pro_name;
+    }
+
+    public void setOff_Pro_name(String off_Pro_name) {
+        Off_Pro_name = off_Pro_name;
+    }
+
+    public String getOff_Pro_Unit() {
+        return Off_Pro_Unit;
+    }
+
+    public void setOff_Pro_Unit(String off_Pro_Unit) {
+        Off_Pro_Unit = off_Pro_Unit;
+    }
+
+    @SerializedName("Off_Pro_Unit")
+    @Expose
+    private String Off_Pro_Unit;
 
 
     public Product_Details_Modal(String id, String name, Integer productCatCode, String rowNum, String productSaleUnit, String productUnit,
@@ -128,13 +212,19 @@ public class Product_Details_Modal {
 
     }
 
-    public Product_Details_Modal(String id, String scheme, String free, String discount, String discount_type, String Package) {
+    public Product_Details_Modal(String id, String scheme, String free, String discount, String discount_type, String Package
+            , String tax, String off_Pro_code, String off_Pro_name, String off_Pro_Unit) {
         this.id = id;
         this.scheme = scheme;
         this.free = free;
         this.discount = discount;
         this.discount_type = discount_type;
         this.Package = Package;
+        this.tax = tax;
+        this.Off_Pro_code = off_Pro_code;
+        this.Off_Pro_name = off_Pro_name;
+        this.Off_Pro_Unit = off_Pro_Unit;
+
     }
 
     public String getDiscount() {
