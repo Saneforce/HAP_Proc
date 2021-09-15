@@ -565,8 +565,10 @@ public void getMnthlyDta(Route_View_Adapter.MyViewHolder holder,String CusId,Str
                 if (item.getString("Cust_Code").equals(CusId) &&
                         Mnth.equals(str)) {
                     BindArry=item.getJSONArray("Items");
-                    holder.lstPreView.setAdapter(new CatewiseSalesaAdapter(BindArry,R.layout.categorywise_sales_mnth_adp,context));
-                    DtaBnd=true;
+                    if(BindArry.length()>0){
+                        holder.lstPreView.setAdapter(new CatewiseSalesaAdapter(BindArry,R.layout.categorywise_sales_mnth_adp,context));
+                        DtaBnd=true;
+                    }
                 }
             }
         }

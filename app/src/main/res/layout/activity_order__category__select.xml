@@ -94,7 +94,75 @@
             <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent">
+                    <LinearLayout
+                        android:id="@+id/lin_gridGrp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
+                        <GridView
+                            android:id="@+id/PGroup"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_margin="@dimen/C5dp"
+                            android:columnWidth="100dp"
+                            android:gravity="center"
+                            android:horizontalSpacing="1dp"
+                            android:numColumns="9"
+                            android:scrollbarAlwaysDrawHorizontalTrack="true"
+                            android:scrollbarAlwaysDrawVerticalTrack="true"
+                            android:scrollbars="horizontal"
+                            android:stretchMode="none"
+                            android:verticalSpacing="1dp">
+
+                        </GridView>
+
+
+                    </LinearLayout>
+            </FrameLayout>
+        </HorizontalScrollView>
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent">
+                    <LinearLayout
+                        android:id="@+id/lin_gridBrnd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <GridView
+                            android:id="@+id/PBrnd"
+                            android:layout_width="fill_parent"
+                            android:layout_height="fill_parent"
+                            android:layout_margin="@dimen/C5dp"
+                            android:columnWidth="100dp"
+                            android:gravity="center"
+                            android:horizontalSpacing="1dp"
+                            android:numColumns="9"
+                            android:scrollbarAlwaysDrawHorizontalTrack="true"
+                            android:scrollbarAlwaysDrawVerticalTrack="true"
+                            android:scrollbars="horizontal"
+                            android:stretchMode="none"
+                            android:verticalSpacing="1dp">
+
+                        </GridView>
+
+
+                    </LinearLayout>
+            </FrameLayout>
+        </HorizontalScrollView>
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none">
+            <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent">
                 <LinearLayout
                     android:id="@+id/lin_gridcategory"
                     android:layout_width="wrap_content"

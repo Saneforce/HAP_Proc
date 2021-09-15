@@ -31,6 +31,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
@@ -56,6 +57,7 @@ import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -124,6 +126,29 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
         common_class = new Common_Class(this);
         shared_common_pref = new Shared_Common_Pref(this);
+        CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+
+        ApiInterface ApiService = ApiClient.getClient().create(ApiInterface.class);
+        JSONObject jParam=new JSONObject();
+        try {
+            jParam.put("SF",UserDetails.getString("Sfcode",""));
+            jParam.put("div", UserDetails.getString("Divcode",""));
+            ApiService.getDataArrayList("get/prodgroup",jParam.toString()).enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    db.addMasterData("PGroup",response.body());
+                }
+
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
         common_class.getDataFromApi(Constants.Outlet_Total_Orders, this, false);
 
@@ -438,9 +463,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             });
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             gson = new Gson();
-
-            CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
-            UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
 
             userTypeRetailor = new TypeToken<ArrayList<Retailer_Modal_List>>() {

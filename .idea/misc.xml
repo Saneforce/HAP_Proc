@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/layout/activity_dashboard__route.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_dashboard__two.xml" value="0.1644021739130435" />
         <entry key="app/src/main/res/layout/activity_invoice__history.xml" value="0.23867753623188406" />
+        <entry key="app/src/main/res/layout/activity_order__category__select.xml" value="0.33" />
         <entry key="app/src/main/res/layout/activity_q_r_code_scanner.xml" value="0.24592391304347827" />
         <entry key="app/src/main/res/layout/activity_sfactivity.xml" value="0.1621376811594203" />
         <entry key="app/src/main/res/layout/activity_t_a_approval.xml" value="0.16802536231884058" />
@@ -15,6 +16,8 @@
         <entry key="app/src/main/res/layout/categorywise_sales_adp.xml" value="0.5508345978755691" />
         <entry key="app/src/main/res/layout/categorywise_sales_mnth_adp.xml" value="0.23505434782608695" />
         <entry key="app/src/main/res/layout/procuct_category_types.xml" value="0.23867753623188406" />
+        <entry key="app/src/main/res/layout/product_order_recyclerview.xml" value="0.13802083333333334" />
+        <entry key="app/src/main/res/layout/product_pay_recyclerview.xml" value="0.13802083333333334" />
         <entry key="app/src/main/res/layout/route_dashboard_recyclerview.xml" value="0.25" />
       </map>
     </option>

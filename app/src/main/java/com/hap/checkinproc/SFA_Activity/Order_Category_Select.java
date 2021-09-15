@@ -68,7 +68,7 @@ import retrofit2.Response;
 import static com.hap.checkinproc.SFA_Activity.Dashboard_Route.shared_common_pref;
 
 public class Order_Category_Select extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
-    GridView categorygrid;
+    GridView categorygrid,Grpgrid,Brndgrid;
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
     List<Product_Details_Modal> Order_Outlet_Filter;
@@ -119,6 +119,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(Order_Category_Select.this);
             common_class = new Common_Class(this);
+            Grpgrid = findViewById(R.id.PGroup);
+            Brndgrid = findViewById(R.id.PBrnd);
             categorygrid = findViewById(R.id.category);
             takeorder = findViewById(R.id.takeorder);
             orderbutton = findViewById(R.id.orderbutton);

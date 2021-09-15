@@ -212,7 +212,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:layout_marginRight="@dimen/C10dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/tvFreeLabel"
@@ -275,7 +276,8 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="gone">
 
                         <TextView
                             android:id="@+id/tvTaxLabel"
