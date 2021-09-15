@@ -533,7 +533,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     Calendar calobj = Calendar.getInstance();
                     String dateTime = df.format(calobj.getTime());
 
-                    String Cash_Discount = (cashdiscount.getText().toString().equals("") || cashdiscount.getText().toString() == null) ? "0" : cashdiscount.getText().toString();
+                    // String Cash_Discount = (cashdiscount.getText().toString().equals("") || cashdiscount.getText().toString() == null) ? "0" : cashdiscount.getText().toString();
                     try {
                         JSONObject HeadItem = new JSONObject();
                         HeadItem.put("SF", Shared_Common_Pref.Sf_Code);
@@ -552,7 +552,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         OutletItem.put("stockist_code", Shared_Common_Pref.DistributorCode);
                         OutletItem.put("stockist_name", Shared_Common_Pref.DistributorName);
                         OutletItem.put("orderValue", totalvalue.getText().toString());
-                        OutletItem.put("CashDiscount", Cash_Discount);
+                        OutletItem.put("CashDiscount", cashDiscount);
                         OutletItem.put("NetAmount", totalvalues);
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                         OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
@@ -579,7 +579,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                             ProdItem.put("Product_Total_Qty", Getorder_Array_List.get(z).getQty() +
                                     Getorder_Array_List.get(z).getRegularQty());
                             ProdItem.put("Product_Amount", Getorder_Array_List.get(z).getAmount());
-                            ProdItem.put("Rate", Getorder_Array_List.get(z).getRate());
+                            ProdItem.put("Rate", String.format("%.2f", Getorder_Array_List.get(z).getRate()));
                             Order_Details.put(ProdItem);
                         }
                         ActivityData.put("Order_Details", Order_Details);
@@ -730,9 +730,12 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
     public void updateToTALITEMUI() {
         TextView tvTotalItems = findViewById(R.id.tvTotalItems);
+        TextView tvTotLabel = findViewById(R.id.tvTotLabel);
+
         tvTotalAmount = findViewById(R.id.tvTotalAmount);
 
         TextView tvBillSubTotal = findViewById(R.id.subtotal);
+        TextView tvSaveAmt = findViewById(R.id.tvSaveAmt);
 
         tvBillTotItem = findViewById(R.id.totalitem);
         TextView tvBillTotQty = findViewById(R.id.tvtotalqty);
@@ -788,11 +791,23 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         tvTotalAmount.setText("₹ " + totalvalues);
         tvTotalItems.setText("Items : " + Getorder_Array_List.size());
 
+        if (Getorder_Array_List.size() == 1)
+            tvTotLabel.setText("Price (1 item)");
+        else
+            tvTotLabel.setText("Price (" + Getorder_Array_List.size() + " items)");
+
         tvBillSubTotal.setText("₹ " + totalvalues);
         tvBillTotItem.setText("" + Getorder_Array_List.size());
         tvBillTotQty.setText("" + totalQty);
         tvBillToPay.setText("₹ " + totalvalues);
         tvCashDiscount.setText("₹ " + cashDiscount);
+
+
+        if (cashDiscount > 0) {
+            tvSaveAmt.setVisibility(View.VISIBLE);
+            tvSaveAmt.setText("You will save ₹ " + cashDiscount + " on this order");
+        } else
+            tvSaveAmt.setVisibility(View.GONE);
 
 
     }
