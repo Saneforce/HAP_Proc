@@ -97,12 +97,20 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
 
 
                     if (!charSequence.toString().equals("")) {
-                        holder.Amount.setText("₹ " + Integer.parseInt(holder.Qty.getText().toString()) *
-                                Integer.parseInt(holder.etPrice.getText().toString()));
+
+                        int price = 0;
+
+
+                        if (!holder.etPrice.getText().toString().equals(""))
+                            price = Integer.parseInt(holder.etPrice.getText().toString());
+
+
+                        holder.Amount.setText("₹ " + (Integer.parseInt(holder.Qty.getText().toString()) *
+                                price));
 
 
                         Double amount = Double.valueOf(Integer.parseInt(holder.Qty.getText().toString()) *
-                                Integer.parseInt(holder.etPrice.getText().toString()));
+                                price);
 
                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setQty(Integer.valueOf(charSequence.toString()));
                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(amount);
@@ -154,10 +162,15 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
                 @Override
                 public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
                     if (!charSequence.toString().equals("")) {
-                        holder.Amount.setText("₹ " + Integer.parseInt(holder.Qty.getText().toString()) *
-                                Integer.parseInt(holder.etPrice.getText().toString()));
+                        int qty = 0;
 
-                        Double amount = Double.valueOf(Integer.parseInt(holder.Qty.getText().toString()) *
+                        if (!holder.Qty.getText().toString().equals(""))
+                            qty = Integer.parseInt(holder.Qty.getText().toString());
+
+
+                        holder.Amount.setText("₹ " + (qty * Integer.parseInt(holder.etPrice.getText().toString())));
+
+                        Double amount = Double.valueOf(qty *
                                 Integer.parseInt(holder.etPrice.getText().toString()));
                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setAmount(amount);
                         Product_Details_Modalitem.get(holder.getAdapterPosition()).setPrice(Integer.parseInt(charSequence.toString()));
@@ -254,7 +267,7 @@ public class OtherBrandAdapter extends RecyclerView.Adapter<OtherBrandAdapter.My
 
                         Product_Details_Modalitem.remove(pos);
 
-                        if(Product_Details_Modalitem.size()==0){
+                        if (Product_Details_Modalitem.size() == 0) {
                             Product_Details_Modalitem.add(new Product_Details_Modal("", "Select the Other Brand", "", 0, 0, 0, ""));
                         }
 

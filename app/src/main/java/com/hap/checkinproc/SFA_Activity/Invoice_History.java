@@ -164,6 +164,9 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
 
+            navigateOrderScreen();
+
+
             getPreOrderQty();
         } catch (Exception e) {
 
@@ -403,6 +406,90 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse) {
 
+    }
+
+    public void navigateOrderScreen() {
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                JSONObject HeadItem = new JSONObject();
+
+                HeadItem.put("sfCode", Shared_Common_Pref.DistributorCode);
+                HeadItem.put("divisionCode", Shared_Common_Pref.Div_Code);
+
+
+                Call<ResponseBody> call = service.getSecondaryscheme(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+
+                                if (jsonObject.getBoolean("success")) {
+
+                                    Gson gson = new Gson();
+                                    List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
+
+
+                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+
+                                        product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
+                                                jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
+                                                jsonObject1.getString("Discount"), jsonObject1.getString("Discount_Type"),
+                                                jsonObject1.getString("Package")));
+
+
+                                    }
+
+                                    sharedCommonPref.save(Constants.FreeSchemeDiscList, gson.toJson(product_details_modalArrayList));
+
+
+                                } else {
+                                    sharedCommonPref.clear_pref(Constants.FreeSchemeDiscList);
+
+                                }
+
+
+                            }
+
+                        } catch (Exception e) {
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>", t.toString());
+
+
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
     }
 
 

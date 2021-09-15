@@ -536,9 +536,12 @@ public interface ApiInterface {
     Call<ResponseBody> getServiceOutletsummary(@Field("data") String body);
 
     @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/outletsummary")
+    @POST("Db_v310.php?axn=get/channelwiseoutletsummary")
     Call<ResponseBody> getDashboardData(@Field("data") String body);
 
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/secondaryscheme")
+    Call<ResponseBody> getSecondaryscheme(@Field("data") String body);
 
 
     @FormUrlEncoded

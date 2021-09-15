@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
 
     <LinearLayout
@@ -27,32 +27,32 @@
 
 
             <TextView
+                style="@style/mediumTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Today"
-                style="@style/mediumTextStyle"
 
                 android:textStyle="bold"></TextView>
 
             <TextView
+                style="@style/mediumTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Cum"
-                style="@style/mediumTextStyle"
 
                 android:textStyle="bold"></TextView>
 
             <TextView
+                style="@style/mediumTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="Cum New"
-                style="@style/mediumTextStyle"
 
                 android:textStyle="bold"></TextView>
 
@@ -74,44 +74,41 @@
             android:padding="@dimen/C3dp">
 
             <TextView
-                android:layout_width="0dp"
+                style="@style/mediumTextStyle"
 
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Calls Made"
-                style="@style/mediumTextStyle"
                 android:textStyle="bold"></TextView>
 
 
             <TextView
-                style="@style/mediumTextStyle"
                 android:id="@+id/tvTodayCalls"
+                style="@style/mediumTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="0"
-               ></TextView>
+                android:text="0"></TextView>
 
             <TextView
                 android:id="@+id/tvCumTodayCalls"
+                style="@style/mediumTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="0"
-                style="@style/mediumTextStyle"
-                ></TextView>
+                android:text="0"></TextView>
 
             <TextView
                 android:id="@+id/tvNewTodayCalls"
+                style="@style/mediumTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="0"
-                style="@style/mediumTextStyle"
-                ></TextView>
+                android:text="0"></TextView>
 
 
         </LinearLayout>
@@ -123,43 +120,40 @@
             android:padding="@dimen/C3dp">
 
             <TextView
+                style="@style/mediumTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Eff calls"
-                style="@style/mediumTextStyle"
                 android:textStyle="bold"></TextView>
 
 
             <TextView
                 android:id="@+id/tvProCalls"
+                style="@style/mediumTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="0"
-                style="@style/mediumTextStyle"
-                ></TextView>
+                android:text="0"></TextView>
 
             <TextView
                 android:id="@+id/tvCumProCalls"
+                style="@style/mediumTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="0"
-                style="@style/mediumTextStyle"
-                ></TextView>
+                android:text="0"></TextView>
 
             <TextView
                 android:id="@+id/tvNewProCalls"
+                style="@style/mediumTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="0"
-                style="@style/mediumTextStyle"
-                ></TextView>
+                android:text="0"></TextView>
 
 
         </LinearLayout>
@@ -171,43 +165,40 @@
             android:padding="@dimen/C3dp">
 
             <TextView
+                style="@style/mediumTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Eff Calls%"
-                style="@style/mediumTextStyle"
                 android:textStyle="bold"></TextView>
 
 
             <TextView
                 android:id="@+id/tvAvgTodayCalls"
+                style="@style/mediumTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="0"
-                style="@style/mediumTextStyle"
-                ></TextView>
+                android:text="0"></TextView>
 
             <TextView
                 android:id="@+id/tvAvgCumCalls"
+                style="@style/mediumTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="0"
-                style="@style/mediumTextStyle"
-                ></TextView>
+                android:text="0"></TextView>
 
             <TextView
                 android:id="@+id/tvAvgNewCalls"
+                style="@style/mediumTextStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="0"
-                style="@style/mediumTextStyle"
-                ></TextView>
+                android:text="0"></TextView>
 
 
         </LinearLayout>
@@ -222,4 +213,13 @@
 
 
     </LinearLayout>
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/pbCumulative"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"></ProgressBar>
+
 </RelativeLayout>
