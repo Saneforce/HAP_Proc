@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,15 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Adapter.MyViewHolder> {
     Context context;
     List<Product_Details_Modal> mDate;
     AdapterOnClick mAdapterOnClick;
+
     public Print_Invoice_Adapter(Context context, List<Product_Details_Modal> mDate, AdapterOnClick mAdapterOnClick) {
         this.context = context;
         this.mDate = mDate;
@@ -38,8 +38,8 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
     @Override
     public void onBindViewHolder(Print_Invoice_Adapter.MyViewHolder holder, int position) {
         holder.productname.setText("" + mDate.get(position).getName());
-        holder.productqty.setText(""+mDate.get(position).getQty());
-        holder.productrate.setText("" + mDate.get(position).getRate());
+        holder.productqty.setText("" + mDate.get(position).getQty());
+        holder.productrate.setText("" + new DecimalFormat("##0.0").format(mDate.get(position).getRate()));
         holder.producttotal.setText("" + mDate.get(position).getAmount());
     }
 
@@ -50,6 +50,7 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView productname, productqty, productrate, producttotal;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             productname = itemView.findViewById(R.id.productname);
