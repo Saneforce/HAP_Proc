@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +63,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     private FileOutputStream writer;
     public static Print_Invoice_Activity mPrint_invoice_activity;
 
+    Button btnInvoice;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -93,20 +96,14 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             retailername = findViewById(R.id.retailername);
             retailerroute = findViewById(R.id.retailerroute);
             ok = findViewById(R.id.ok);
+            btnInvoice = findViewById(R.id.btnInvoice);
 
             retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             ivPrint = findViewById(R.id.ivPrint);
-            //command for testing purpose
-//            netamount.setText(getIntent().getStringExtra("NetAmount"));
-//            cashdiscount.setText(getIntent().getStringExtra("Discount_Amount"));
-//            subtotal.setText("" + String.valueOf(getIntent().getStringExtra("Order_Values")));
-//            totalitem.setText(getIntent().getStringExtra("No_Of_Items"));
-//            invoicedate.setText("Date : " + "\t\t" + getIntent().getStringExtra("Invoice_Date"));
-//            billnumber.setText("Bill no :" + "\t\t" + Shared_Common_Pref.TransSlNo);
-            //command for testing purpose
             back.setOnClickListener(this);
             ok.setOnClickListener(this);
             ivPrint.setOnClickListener(this);
+            btnInvoice.setOnClickListener(this);
 
 
             if (Shared_Common_Pref.Invoicetoorder != null) {
@@ -144,6 +141,9 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     DateFormat dfw = new SimpleDateFormat("dd/MM/yyyy");
                     Calendar calobjw = Calendar.getInstance();
                     invoicedate.setText("Date : " + dfw.format(calobjw.getTime()));
+
+
+                    sharedCommonPref.save(Constants.INVOICE_ORDERLIST, gson.toJson(Order_Outlet_Filter));
 
                     mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, new AdapterOnClick() {
                         @Override
@@ -183,6 +183,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 showPrinterList();
                 break;
 
+            case R.id.btnInvoice:
+                Shared_Common_Pref.Invoicetoorder = "2";
+                common_class.CommonIntentwithFinish(InvoiceOrderIdCategoryActivity.class);
+                break;
         }
     }
 
@@ -334,7 +338,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
         try {
 
 
-            int hgt = 500+(Order_Outlet_Filter.size()*40);
+            int hgt = 500 + (Order_Outlet_Filter.size() * 40);
 
             // create a new document
             PdfDocument document = new PdfDocument();
@@ -418,7 +422,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             // canvas.drawText(item + qty1 + rate1 + amt1, x, y, paint);
             canvas.drawText("Item", x, y, paint);
-            canvas.drawText("Qty", (widthSize / 2)+20, y, paint);
+            canvas.drawText("Qty", (widthSize / 2) + 20, y, paint);
             canvas.drawText("Rate", (widthSize / 2) + 70, y, paint);
             canvas.drawText("Total", (widthSize / 2) + 150, y, paint);
 
@@ -459,7 +463,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
 
                 canvas.drawText("" + Order_Outlet_Filter.get(i).getName(), x, y, paint);
-                canvas.drawText("" + Order_Outlet_Filter.get(i).getQty(), (widthSize / 2)+20, y, paint);
+                canvas.drawText("" + Order_Outlet_Filter.get(i).getQty(), (widthSize / 2) + 20, y, paint);
                 canvas.drawText("" + Order_Outlet_Filter.get(i).getRate(), (widthSize / 2) + 70, y, paint);
                 canvas.drawText("" + Order_Outlet_Filter.get(i).getAmount(), (widthSize / 2) + 150, y, paint);
 

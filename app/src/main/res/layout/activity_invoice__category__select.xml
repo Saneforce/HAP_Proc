@@ -474,13 +474,14 @@
 
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Gst Rate"
+                                android:text="TAX"
                                 android:textAlignment="textStart"
                                 android:textColor="@color/black"
                                 android:textSize="@dimen/C13dp"></TextView>
 
                             <TextView
-                                android:id="@+id/gstrate"
+                                android:fontFamily="sans-serif"
+                                android:id="@+id/taxRate"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:text="0.00"

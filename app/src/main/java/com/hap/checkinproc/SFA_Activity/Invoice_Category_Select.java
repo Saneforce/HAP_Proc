@@ -57,6 +57,8 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,6 +69,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class Invoice_Category_Select extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
+    NumberFormat formatter = new DecimalFormat("##.00");
     GridView categorygrid;
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
@@ -105,7 +108,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     ImageView ivClose;
     EditText etCategoryItemSearch;
     private TextView tvTotalAmount;
-    private int totalvalues, cashDiscount;
+    private double totalvalues, cashDiscount, taxAmount;
     private Integer totalQty;
     private TextView tvBillTotItem;
 
@@ -484,7 +487,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
 
             if (Product_Modal.get(pm).getRegularQty() != null) {
-                if (Product_Modal.get(pm).getQty() > 0 || Product_Modal.get(pm).getRegularQty() > 0) {
+                if (Product_Modal.get(pm).getQty() > 0) {
                     Getorder_Array_List.add(Product_Modal.get(pm));
 
                 }
@@ -755,7 +758,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 System.out.println("Product_getQty" + pm.getQty());
                 System.out.println("Product_getQty" + pm.getRegularQty());
                 if (pm.getRegularQty() != null) {
-                    if (pm.getQty() > 0 || pm.getRegularQty() > 0) {
+                    if (pm.getQty() > 0) {
                         Getorder_Array_List.add(pm);
                         // talqty += pm.getQty() + pm.getRegularQty();
                         talqty += pm.getQty() + pm.getRegularQty();
@@ -774,7 +777,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
             Pay_Adapter mProdct_Adapter = new Pay_Adapter(Getorder_Array_List, R.layout.invoice_pay_recyclerview, getApplicationContext(), -1);
             recyclerView.setAdapter(mProdct_Adapter);
-            new Prodct_Adapter(Getorder_Array_List, R.layout.invoice_pay_recyclerview, getApplicationContext(), 0).notifyDataSetChanged();
+            new Pay_Adapter(Getorder_Array_List, R.layout.invoice_pay_recyclerview, getApplicationContext(), 0).notifyDataSetChanged();
             recyclerView.setItemViewCacheSize(Product_Modal.size());
 
 
@@ -785,6 +788,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     public void updateToTALITEMUI() {
         TextView tvTotalItems = findViewById(R.id.tvTotalItems);
         TextView tvTotLabel = findViewById(R.id.tvTotLabel);
+
+        TextView tvTax = findViewById(R.id.taxRate);
 
         tvTotalAmount = findViewById(R.id.tvTotalAmount);
 
@@ -802,27 +807,41 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         totalvalues = 0;
         totalQty = 0;
         cashDiscount = 0;
+        taxAmount = 0;
 
         for (int pm = 0; pm < Product_Modal.size(); pm++) {
 
             if (Product_Modal.get(pm).getRegularQty() != null) {
                 if (Product_Modal.get(pm).getQty() > 0) {
 
-                    int discount = 0;
+                    double tax = 0;
+                    if (Common_Class.isNullOrEmpty(Product_Modal.get(pm).getTax()))
+                        tax = 0;
+                    else
+                        tax = Double.parseDouble(Product_Modal.get(pm).getTax());
+
+                    taxAmount += tax;
+
+
+
+                    double discount = 0;
                     if (Common_Class.isNullOrEmpty(Product_Modal.get(pm).getDiscount()))
                         discount = 0;
                     else
                         discount = Integer.parseInt(Product_Modal.get(pm).getDiscount());
 
 
+
                     cashDiscount += discount;
-                    totalvalues += ((Product_Modal.get(pm).getQty()
-                            * Product_Modal.get(pm).getRate()) - discount);
+                    totalvalues += (((Product_Modal.get(pm).getQty()
+                            * Product_Modal.get(pm).getRate()) - discount)+tax);
 
                     totalQty += Product_Modal.get(pm).getQty();
 
-                    Product_Modal.get(pm).setAmount((Product_Modal.get(pm).getQty()
-                            * Product_Modal.get(pm).getRate()) - discount);
+                    Product_Modal.get(pm).setAmount(((Product_Modal.get(pm).getQty()
+                            * Product_Modal.get(pm).getRate()) - discount)+tax);
+
+
 
                     Getorder_Array_List.add(Product_Modal.get(pm));
 
@@ -844,6 +863,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         tvBillTotQty.setText("" + totalQty);
         tvBillToPay.setText("₹ " + totalvalues);
         tvCashDiscount.setText("₹ " + cashDiscount);
+        tvTax.setText("₹ " + taxAmount);
 
 
         if (cashDiscount > 0) {
@@ -1035,7 +1055,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, lblAddQty, productQty, preOrderVal, regularAmt,
-                    QtyAmt, totalQty;
+                    QtyAmt, totalQty, tvTaxLabel;
 
             public LinearLayout lnRwEntry, lnlblRwEntry;
             EditText Qty;
@@ -1059,21 +1079,12 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 regularAmt = view.findViewById(R.id.RegularAmt);
                 QtyAmt = view.findViewById(R.id.qtyAmt);
                 totalQty = view.findViewById(R.id.totalqty);
-
-
-                assignValues();
+                tvTaxLabel = view.findViewById(R.id.tvTaxLabel);
 
 
             }
         }
 
-        private void assignValues() {
-            if (tvAmount.size() == 0) {
-                for (int i = 0; i < Product_Details_Modalitem.size(); i++) {
-                    tvAmount.add(String.valueOf(Product_Details_Modalitem.get(i).getQty()));
-                }
-            }
-        }
 
         public Prodct_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int Categorycolor) {
             this.Product_Details_Modalitem = Product_Details_Modalitem;
@@ -1146,6 +1157,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     holder.totalQty.setText("" + Product_Details_Modal.getQty());
 
                 }
+
+                if (Common_Class.isNullOrEmpty(Product_Details_Modal.getTax()))
+                    holder.tvTaxLabel.setText("TAX :₹0");
+                else
+                    holder.tvTaxLabel.setText("TAX :₹" + Product_Details_Modal.getTax());
+
+
                 holder.Qty.addTextChangedListener(new TextWatcher() {
                     @Override
                     public void onTextChanged(CharSequence charSequence, int start,
@@ -1159,7 +1177,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                 Product_Details_Modalitem.get(position).setQty(Integer.valueOf(charSequence.toString()));
                                 holder.Amount.setText("₹" + String.valueOf(Double.valueOf(charSequence.toString()) * Product_Details_Modalitem.get(position).getRate()));
                                 Product_Details_Modalitem.get(position).setAmount(Double.valueOf(charSequence.toString()) * Product_Details_Modalitem.get(position).getRate());
-                                tvAmount.set(position, holder.Qty.getText().toString());
 
 
                                 holder.QtyAmt.setText("₹" + (Float.parseFloat(charSequence.toString()) * Product_Details_Modalitem.get(position).getRate()));
@@ -1288,7 +1305,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                 Product_Details_Modalitem.get(position).setQty((Integer) 0);
                                 Product_Details_Modalitem.get(position).setAmount(Double.valueOf(0));
 
-                                tvAmount.set(position, "0");
 
                                 holder.QtyAmt.setText("₹0");
                                 holder.totalQty.setText("Total Qty : 0");
@@ -1300,6 +1316,45 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                                 holder.Free.setText("0");
                                 holder.Disc.setText("₹0");
+
+
+                            }
+
+
+                            String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
+
+                            if (!Common_Class.isNullOrEmpty(taxRes)) {
+                                JSONObject jsonObject = new JSONObject(taxRes.toString());
+
+
+                                JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                                double wholeTax = 0;
+
+                                for (int i = 0; i < jsonArray.length(); i++) {
+                                    JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+                                    if (jsonObject1.getString("Product_Detail_Code").equals(Product_Details_Modalitem.get(position).getId())) {
+
+                                        if (jsonObject1.getDouble("Tax_Val") > 0) {
+                                            double taxCal = Product_Details_Modalitem.get(position).getAmount() * ((jsonObject1.getDouble("Tax_Val") / 100));
+
+                                            wholeTax += taxCal;
+
+
+                                        }
+                                    }
+                                }
+
+
+                                Product_Details_Modalitem.get(position).setAmount(Double.valueOf(formatter.format(Product_Details_Modalitem.get(position).getAmount()
+                                        + wholeTax)));
+
+                                Product_Details_Modalitem.get(position).setTax(String.valueOf(formatter.format(wholeTax)));
+                                holder.Amount.setText("₹" + (Product_Details_Modalitem.get(position).getAmount()));
+
+
+                                holder.tvTaxLabel.setText("TAX :₹" + Product_Details_Modal.getTax());
 
 
                             }

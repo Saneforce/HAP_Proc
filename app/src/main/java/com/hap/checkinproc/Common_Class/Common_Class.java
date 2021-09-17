@@ -279,6 +279,12 @@ public class Common_Class {
                             " \\\"Valuesinv\\\" , \\\"InvoiceDate\\\", \\\"Category_Universe_Id\\\", \\\"Hatsun_AvailablityId\\\",   " +
                             "\\\"Doc_cat_code\\\",\\\"ContactPersion\\\",\\\"Doc_Special_Code\\\",\\\"Distributor_Code\\\"]\",\"where\":\"" +
                             "[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"stockist\"}";
+
+
+                    QueryString.put("Tcs", "");
+                    QueryString.put("Tds", "");
+                    QueryString.put("Outlet_Type", "Service Outlet");
+
                     break;
                 case (Constants.Distributor_List):
                     ProgressdialogShow(1, "Data Syncing");

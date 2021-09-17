@@ -47,4 +47,8 @@ public class Constants {
     public static final String RetailorTodayDataDynamic = "retailorTodayDataDynamic";
     public static final String FreeSchemeDiscList="freeSchemeDiscList";
     public static String InvoiceQtyList="InvoiceQtyList";
+
+    public static final String TAXList="taxList";
+
+    public static String INVOICE_ORDERLIST="invoiceOrderList";
 }

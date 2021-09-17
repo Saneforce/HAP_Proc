@@ -164,7 +164,8 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
 
-            navigateOrderScreen();
+            getSchemeList();
+            getTaxDetails();
 
 
         } catch (Exception e) {
@@ -199,7 +200,9 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.lin_invoice:
                 Shared_Common_Pref.Invoicetoorder = "2";
-                getInvoiceOrderQty();
+                //getInvoiceOrderQty();
+                common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+
                 break;
             case R.id.lin_repeat_invoice:
                 break;
@@ -408,7 +411,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 
     }
 
-    public void navigateOrderScreen() {
+    public void getSchemeList() {
         try {
             if (common_class.isNetworkAvailable(this)) {
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
@@ -446,16 +449,18 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 
                                     JSONArray jsonArray = jsonObject.getJSONArray("Data");
 
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                                    if (jsonArray != null && jsonArray.length() > 1) {
+                                        for (int i = 0; i < jsonArray.length(); i++) {
+                                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
-                                        product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
-                                                jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
-                                                jsonObject1.getString("Discount"), jsonObject1.getString("Discount_Type"),
-                                                jsonObject1.getString("Package"), "0", jsonObject1.getString("Offer_Product"),
-                                                jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
+                                            product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
+                                                    jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
+                                                    jsonObject1.getString("Discount"), jsonObject1.getString("Discount_Type"),
+                                                    jsonObject1.getString("Package"), "0", jsonObject1.getString("Offer_Product"),
+                                                    jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
 
 
+                                        }
                                     }
 
                                     sharedCommonPref.save(Constants.FreeSchemeDiscList, gson.toJson(product_details_modalArrayList));
@@ -463,6 +468,92 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 
                                 } else {
                                     sharedCommonPref.clear_pref(Constants.FreeSchemeDiscList);
+
+                                }
+
+
+                            }
+
+                        } catch (Exception e) {
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>", t.toString());
+
+
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+
+
+    public void getTaxDetails() {
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                JSONObject HeadItem = new JSONObject();
+
+                HeadItem.put("distributorid", Shared_Common_Pref.DistributorCode);
+                HeadItem.put("divisionCode", Shared_Common_Pref.Div_Code);
+
+
+                Call<ResponseBody> call = service.getTAXDetails(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+
+                                if (jsonObject.getBoolean("success")) {
+                                    sharedCommonPref.save(Constants.TAXList, is.toString());
+
+
+                                    Gson gson = new Gson();
+                                    List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
+
+
+                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+//                                    for (int i = 0; i < jsonArray.length(); i++) {
+//                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//
+//                                        product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
+//                                                jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
+//                                                jsonObject1.getString("Discount"), jsonObject1.getString("Discount_Type"),
+//                                                jsonObject1.getString("Package"), "0", jsonObject1.getString("Offer_Product"),
+//                                                jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
+//
+//
+//                                    }
+
+
+
+                                } else {
+                                    sharedCommonPref.clear_pref(Constants.TAXList);
 
                                 }
 
@@ -628,17 +719,17 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 
                                     JSONArray jsonArray = jsonObject.getJSONArray("Data");
 
-                                    if (jsonArray != null && jsonArray.length() > 0) {
-                                        for (int i = 0; i < jsonArray.length(); i++) {
-                                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-
-                                            product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Detail_Code"),
-                                                    "", "", jsonObject1.getInt("Qty"), ""));
-
-
-                                        }
-                                    }
+//                                    if (jsonArray != null && jsonArray.length() > 0) {
+//                                        for (int i = 0; i < jsonArray.length(); i++) {
+//                                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//
+//
+//                                            product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Detail_Code"),
+//                                                    "", "", jsonObject1.getInt("Qty"), ""));
+//
+//
+//                                        }
+//                                    }
 
                                     sharedCommonPref.save(Constants.InvoiceQtyList, gson.toJson(product_details_modalArrayList));
 
@@ -658,9 +749,13 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                                     Log.v("PreOrderList: ", "" + "not success");
                                     common_class.ProgressdialogShow(0, "");
 
+                                    common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+
 
                                 }
 
+
+                            } else {
 
                             }
 
@@ -690,50 +785,4 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
     }
 
 
-
-
- /*   public void ViewDateReport() {
-        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        Map<String, String> QueryString = new HashMap<>();
-        QueryString.put("axn", "table/list");
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code.replace(",", ""));
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("fromdate", Common_Class.GetDateOnly());
-        QueryString.put("todate", Common_Class.GetDateOnly());
-        QueryString.put("Outlet_Code", Shared_Common_Pref.OutletCode);
-        Log.e("Report_ValuesMap", QueryString.toString());
-        Call<Object> call = service.GetRouteObject(QueryString, "{\"tableName\":\"GetOutletViewReport\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}");
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                Log.e("MAster_Product_Details", response.body() + "");
-                System.out.println("GetOutletView" + new Gson().toJson(response.body()));
-                userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
-                }.getType();
-                OutletReport_View_Modal = gson.fromJson(new Gson().toJson(response.body()), userType);
-                if (OutletReport_View_Modal.size() == 0) {
-                    Toast.makeText(Invoice_History.this, "Order Not Available!", Toast.LENGTH_SHORT).show();
-                }
-
-                System.out.println("Product_Details_Size" + OutletReport_View_Modal.size());
-                mReportViewAdapter = new Outlet_Report_View_Adapter(Invoice_History.this, OutletReport_View_Modal, new ViewReport() {
-                    @Override
-                    public void reportCliick(String productId, String orderDate) {
-                        Intent intnet = new Intent(Invoice_History.this, Outet_Report_Details.class);
-                        intnet.putExtra("Order_ID", productId);
-                        intnet.putExtra("OrderDate", orderDate);
-                        startActivity(intnet);
-                    }
-                });
-
-                invoicerecyclerview.setAdapter(mReportViewAdapter);
-            }
-
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-
-            }
-        });
-
-    }*/
 }

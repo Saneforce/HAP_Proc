@@ -340,7 +340,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         sendImageToServer(Shared_Common_Pref.Sf_Code, filename, "outlet");
 //
 
-                        //addNewRetailers();
+                        addNewRetailers();
                         //Toast.makeText(AddNewRetailer.this, "New Retailer Added successfully", Toast.LENGTH_SHORT).show();
                     }
 

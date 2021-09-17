@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import static android.widget.Toast.LENGTH_LONG;
+
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -47,7 +49,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Common_Class.CameraPermission;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -69,8 +70,6 @@ import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.widget.Toast.LENGTH_LONG;
 
 public class Login extends AppCompatActivity {
     TextInputEditText name, password;
@@ -117,10 +116,10 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         db = new DatabaseHandler(this);
 
-        JSONArray pendingPhotos=db.getAllPendingPhotos();
-        if(pendingPhotos.length()>0){
+        JSONArray pendingPhotos = db.getAllPendingPhotos();
+        if (pendingPhotos.length() > 0) {
             try {
-                JSONObject itm=pendingPhotos.getJSONObject(0);
+                JSONObject itm = pendingPhotos.getJSONObject(0);
                 Intent mIntent = new Intent(Login.this, FileUploadService.class);
                 mIntent.putExtra("mFilePath", itm.getString("FileURI"));
                 mIntent.putExtra("SF", itm.getString("SFCode"));
@@ -339,8 +338,8 @@ public class Login extends AppCompatActivity {
                 Shared_Common_Pref.Div_Code = UserDetails.getString("Divcode", "");
                 Shared_Common_Pref.StateCode = UserDetails.getString("State_Code", "");
 
-                String ActStarted=shared_common_pref.getvalue("ActivityStart");
-                if(ActStarted.equalsIgnoreCase("true")){
+                String ActStarted = shared_common_pref.getvalue("ActivityStart");
+                if (ActStarted.equalsIgnoreCase("true")) {
                     Intent aIntent;
                     String sDeptType = UserDetails.getString("DeptType", "");
                     if (sDeptType.equalsIgnoreCase("1")) {
@@ -353,7 +352,7 @@ public class Login extends AppCompatActivity {
                             aIntent = new Intent(getApplicationContext(), Dashboard_Two.class);
                     }
                     startActivity(aIntent);
-                }else{
+                } else {
                     Intent Dashboard = new Intent(Login.this, Dashboard_Two.class);
                     Dashboard.putExtra("Mode", "CIN");
                     startActivity(Dashboard);
@@ -369,7 +368,7 @@ public class Login extends AppCompatActivity {
             JSONArray storeData = db.getMasterData(Constants.Distributor_List);
             if (storeData != null && storeData.length() > 0)
                 return true;
-        } catch (Exception  e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -541,7 +540,9 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        eMail = "ciadmin@hap.in";
+        //eMail = "ciadmin@hap.in";
+        eMail = "haptest3@hap.in";
+
 
         Call<Model> modelCall = apiInterface.login("get/GoogleLogin", eMail, deviceToken);
         modelCall.enqueue(new Callback<Model>() {
@@ -596,11 +597,13 @@ public class Login extends AppCompatActivity {
                         String sName = response.body().getData().get(0).getSfName();
                         String div = response.body().getData().get(0).getDivisionCode();
                         Integer type = response.body().getData().get(0).getCheckCount();
-                        String DesigNm =response.body().getData().get(0).getSfDesignationShortName();
-                        String SFRptCd=response.body().getData().get(0).getSfRptCode();;
-                        String SFRptNm=response.body().getData().get(0).getSfRptName();;
+                        String DesigNm = response.body().getData().get(0).getSfDesignationShortName();
+                        String SFRptCd = response.body().getData().get(0).getSfRptCode();
+                        ;
+                        String SFRptNm = response.body().getData().get(0).getSfRptName();
+                        ;
                         String DeptCd = response.body().getData().get(0).getSFDept();
-                        String DeptNm =response.body().getData().get(0).getDeptName();
+                        String DeptNm = response.body().getData().get(0).getDeptName();
                         String DeptType = response.body().getData().get(0).getDeptType();
                         String SFHQ = response.body().getData().get(0).getsFHQ();
                         String SFHQID = response.body().getData().get(0).getHQID();
