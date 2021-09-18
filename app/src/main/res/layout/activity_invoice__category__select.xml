@@ -579,54 +579,60 @@
                             android:textSize="@dimen/C13dp"
                             android:textStyle="bold"></TextView>
 
-
-                        <RelativeLayout
-                            android:id="@+id/rlPayTypeCredit"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                            <CheckBox
-                                android:id="@+id/cbCredit"
+                            <RelativeLayout
+                                android:id="@+id/rlPayTypeCredit"
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"></CheckBox>
+                                android:layout_height="wrap_content">
 
-                            <TextView
+                                <CheckBox
+                                    android:id="@+id/cbCredit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"></CheckBox>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toRightOf="@+id/cbCredit"
+
+                                    android:fontFamily="sans-serif"
+                                    android:text="Credit"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C13dp"></TextView>
+
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:id="@+id/rlPayTypeCash"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_toRightOf="@+id/cbCredit"
+                                android:layout_marginLeft="@dimen/C20dp">
 
-                                android:fontFamily="sans-serif"
-                                android:text="Credit"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C13dp"></TextView>
+                                <CheckBox
+                                    android:id="@+id/cbCash"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"></CheckBox>
 
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toRightOf="@+id/cbCash"
 
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:id="@+id/rlPayTypeCash"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <CheckBox
-                                android:id="@+id/cbCash"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"></CheckBox>
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_toRightOf="@+id/cbCash"
-
-                                android:fontFamily="sans-serif"
-                                android:text="Cash"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C13dp"></TextView>
+                                    android:fontFamily="sans-serif"
+                                    android:text="Cash"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C13dp"></TextView>
 
 
-                        </RelativeLayout>
+                            </RelativeLayout>
+                        </LinearLayout>
 
                         <LinearLayout
                             android:id="@+id/llPayMode"

@@ -143,6 +143,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 //                        startActivity(intent);
 //                    } else {
                     Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
+                    sharedCommonPref.save(Constants.FLAG,FilterOrderList.get(position).getStatus());
                     Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
                     intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
                     intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
@@ -389,6 +390,8 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 //
 //                    } else {
                     Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
+                    sharedCommonPref.save(Constants.FLAG,FilterOrderList.get(position).getStatus());
+
                     Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
                     intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
                     intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
@@ -443,6 +446,9 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 
                                 if (jsonObject.getBoolean("success")) {
 
+
+
+
                                     Gson gson = new Gson();
                                     List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
 
@@ -453,9 +459,12 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
+
+
+
                                             product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
                                                     jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
-                                                    jsonObject1.getString("Discount"), jsonObject1.getString("Discount_Type"),
+                                                    Double.valueOf(jsonObject1.getString("Discount")), jsonObject1.getString("Discount_Type"),
                                                     jsonObject1.getString("Package"), "0", jsonObject1.getString("Offer_Product"),
                                                     jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
 

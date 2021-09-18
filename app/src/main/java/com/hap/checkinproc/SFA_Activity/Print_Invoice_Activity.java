@@ -148,6 +148,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, new AdapterOnClick() {
                         @Override
                         public void onIntentClick(int position) {
+                          //  sharedCommonPref.save(Constants.ORDER_ID, Order_Outlet_Filter.get(position).getId());
                         }
                     });
                     printrecyclerview.setAdapter(mReportViewAdapter);
@@ -160,6 +161,12 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
+
+            if(sharedCommonPref.getvalue(Constants.FLAG).equals("ORDER"))
+                findViewById(R.id.llCreateInvoice).setVisibility(View.VISIBLE);
+            else
+                findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
+
 
         } catch (Exception e) {
 
@@ -622,6 +629,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, new AdapterOnClick() {
                         @Override
                         public void onIntentClick(int position) {
+
+                           // sharedCommonPref.save(Constants.ORDER_ID, Order_Outlet_Filter.get(position).getId());
                         }
                     });
                     printrecyclerview.setAdapter(mReportViewAdapter);
