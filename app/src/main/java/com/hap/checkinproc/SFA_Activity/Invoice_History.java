@@ -507,6 +507,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 
                 HeadItem.put("distributorid", Shared_Common_Pref.DistributorCode);
                 HeadItem.put("divisionCode", Shared_Common_Pref.Div_Code);
+                HeadItem.put("retailorId", Shared_Common_Pref.OutletCode);
 
 
                 Call<ResponseBody> call = service.getTAXDetails(HeadItem.toString());
@@ -530,27 +531,6 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 
                                 if (jsonObject.getBoolean("success")) {
                                     sharedCommonPref.save(Constants.TAXList, is.toString());
-
-
-                                    Gson gson = new Gson();
-                                    List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
-
-
-                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
-//                                    for (int i = 0; i < jsonArray.length(); i++) {
-//                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-//
-//                                        product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
-//                                                jsonObject1.getString("Scheme"), jsonObject1.getString("Free"),
-//                                                jsonObject1.getString("Discount"), jsonObject1.getString("Discount_Type"),
-//                                                jsonObject1.getString("Package"), "0", jsonObject1.getString("Offer_Product"),
-//                                                jsonObject1.getString("Offer_Product_Name"), jsonObject1.getString("offer_product_unit")));
-//
-//
-//                                    }
-
-
 
                                 } else {
                                     sharedCommonPref.clear_pref(Constants.TAXList);

@@ -3,14 +3,22 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/drawable/button_whitebg.xml" value="0.2890625" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/drawable/textbox_bg.xml" value="0.2890625" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_dashboard__route.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_invoice__category__select.xml" value="0.25271739130434784" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_invoice__history.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_invoice__orderid_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_map_direction.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_order__category__select.xml" value="0.25271739130434784" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_pop_layout.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_print__invoice_.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_route__product__info.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/activity_secondary_order.xml" value="0.12760416666666666" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/category_order_horizantal_universe_gridview.xml" value="0.27291666666666664" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/invoice_history_recyclerview.xml" value="0.25271739130434784" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/invoice_pay_recyclerview.xml" value="0.25271739130434784" />
+        <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/popup_add_recyclerview.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/print_invoice_recyclerview.xml" value="0.27291666666666664" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/procuct_category_types.xml" value="0.14447463768115942" />
         <entry key="..\:/AndroidCode/HAPCODE/HAP_Proc_15_9_2021/app/src/main/res/layout/product_invoice_recyclerview.xml" value="0.25271739130434784" />

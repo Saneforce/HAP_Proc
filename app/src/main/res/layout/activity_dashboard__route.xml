@@ -82,8 +82,8 @@
 
 
                         <ImageView
-                            android:layout_width="@dimen/C10dp"
-                            android:layout_height="@dimen/C10dp"
+                            android:layout_width="6dp"
+                            android:layout_height="5dp"
                             android:layout_gravity="center"
                             android:layout_marginRight="@dimen/C10dp"
                             android:src="@drawable/spin_down_arrow">

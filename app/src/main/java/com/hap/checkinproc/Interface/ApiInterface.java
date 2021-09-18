@@ -518,6 +518,11 @@ public interface ApiInterface {
     Call<ResponseBody> getTAXDetails(@Field("data") String body);
 
     @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/paymenttype")
+    Call<ResponseBody> getPayMode(@Field("data") String body);
+
+
+    @FormUrlEncoded
     @POST("Db_v310.php?axn=get/popmaster ")
     Call<ResponseBody> getPOPMaster(@Field("data") String body);
 

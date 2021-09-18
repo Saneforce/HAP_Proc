@@ -1,6 +1,18 @@
 package com.hap.checkinproc.Common_Class;
 
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+import static com.hap.checkinproc.Common_Class.Constants.Category_List;
+import static com.hap.checkinproc.Common_Class.Constants.Competitor_List;
+import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
+import static com.hap.checkinproc.Common_Class.Constants.Outlet_Total_Orders;
+import static com.hap.checkinproc.Common_Class.Constants.Product_List;
+import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
+import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
+import static com.hap.checkinproc.Common_Class.Constants.SFA_CUMULATIVE;
+import static com.hap.checkinproc.Common_Class.Constants.TodayOrderDetails_List;
+
 import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
@@ -58,18 +70,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.content.Context.INPUT_METHOD_SERVICE;
-import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
-import static com.hap.checkinproc.Common_Class.Constants.Category_List;
-import static com.hap.checkinproc.Common_Class.Constants.Competitor_List;
-import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
-import static com.hap.checkinproc.Common_Class.Constants.Outlet_Total_Orders;
-import static com.hap.checkinproc.Common_Class.Constants.Product_List;
-import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
-import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
-import static com.hap.checkinproc.Common_Class.Constants.SFA_CUMULATIVE;
-import static com.hap.checkinproc.Common_Class.Constants.TodayOrderDetails_List;
 
 
 public class Common_Class {
@@ -272,7 +272,7 @@ public class Common_Class {
 
                 case (Retailer_OutletList):
                     QuerySTring1 = "{\"tableName\":\"vwDoctor_Master_APP\",\"coloumns\":\"[\\\"doctor_code as id\\\", \\\"doctor_name as name\\\",\\\"Type\\\"," +
-                            "  \\\"reason_category\\\", \\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"ERP_Code\\\",\\\"town_name\\\"," +
+                            " \\\"reason_category\\\", \\\"StateCode\\\",\\\"Tcs\\\",\\\"Tds\\\",\\\"Outlet_Type\\\",\\\"town_code\\\", \\\"ListedDr_Email\\\",\\\"cityname\\\",\\\"Owner_Name\\\",\\\"ERP_Code\\\",\\\"town_name\\\"," +
                             "\\\"lat\\\",\\\"long\\\", \\\"pin_code\\\", \\\"gst\\\",   \\\"Hatsanavail_Switch\\\"  , \\\"HatsanCategory_Switch\\\"," +
                             "\\\"addrs\\\",\\\"ListedDr_Address1\\\",\\\"ListedDr_Sl_No\\\",   \\\"Compititor_Id\\\", \\\"Compititor_Name\\\", " +
                             " \\\"LastUpdt_Date\\\",    \\\"Mobile_Number\\\",\\\"Statusname\\\" ,\\\"Invoice_Flag\\\" , \\\"InvoiceValues\\\" ," +
@@ -281,14 +281,10 @@ public class Common_Class {
                             "[\\\"isnull(Doctor_Active_flag,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"stockist\"}";
 
 
-                    QueryString.put("Tcs", "");
-                    QueryString.put("Tds", "");
-                    QueryString.put("Outlet_Type", "Service Outlet");
-
                     break;
                 case (Constants.Distributor_List):
                     ProgressdialogShow(1, "Data Syncing");
-                    QuerySTring1 = "{\"tableName\":\"vwstockiest_Master_APP\",\"coloumns\":\"[\\\"distributor_code as id\\\", \\\"stockiest_name as name\\\",\\\"town_code\\\",\\\"town_name\\\",\\\"Addr1\\\",\\\"Addr2\\\",\\\"City\\\",\\\"Pincode\\\",\\\"GSTN\\\",\\\"lat\\\",\\\"long\\\",\\\"addrs\\\",\\\"Tcode\\\",\\\"Dis_Cat_Code\\\"]\",\"where\":\"[\\\"isnull(Stockist_Status,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
+                    QuerySTring1 = "{\"tableName\":\"vwstockiest_Master_APP\",\"coloumns\":\"[\\\"distributor_code as id\\\",\\\"StateCode \\\", \\\"stockiest_name as name\\\",\\\"town_code\\\",\\\"town_name\\\",\\\"Addr1\\\",\\\"Addr2\\\",\\\"City\\\",\\\"Pincode\\\",\\\"GSTN\\\",\\\"lat\\\",\\\"long\\\",\\\"addrs\\\",\\\"Tcode\\\",\\\"Dis_Cat_Code\\\"]\",\"where\":\"[\\\"isnull(Stockist_Status,0)=0\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     break;
                 case (Constants.Category_List):
                     QuerySTring1 = "{\"tableName\":\"category_universe\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
