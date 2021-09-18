@@ -30,6 +30,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -180,10 +182,11 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             }
 
             LinearLayout llGridParent = findViewById(R.id.lin_gridcategory);
+
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) llGridParent.getLayoutParams();
 // Changes the height and width to the specified *pixels*
             params.height = FrameLayout.LayoutParams.WRAP_CONTENT;
-            params.width = Category_Modal.size() * 210;
+            params.width = Category_Modal.size() * 270;
             llGridParent.setLayoutParams(params);
 
 
@@ -1170,6 +1173,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, lblAddQty, productQty, preOrderVal, regularAmt,
                     QtyAmt, totalQty;
+            ImageView ImgVwProd;
 
             public LinearLayout lnRwEntry, lnlblRwEntry;
             EditText Qty;
@@ -1178,6 +1182,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             public MyViewHolder(View view) {
                 super(view);
                 productname = view.findViewById(R.id.productname);
+                ImgVwProd=view.findViewById(R.id.ivAddShoppingCart);
                 Rate = view.findViewById(R.id.Rate);
                 Qty = view.findViewById(R.id.Qty);
                 lblRQty = view.findViewById(R.id.status);
@@ -1253,8 +1258,17 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 holder.Rate.setText("₹" + Product_Details_Modal.getRate());
                 holder.Amount.setText("₹" + Product_Details_Modal.getAmount());
                 holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(position).getRegularQty()) + (Product_Details_Modalitem.get(position).getQty())));
-
-
+                if(!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
+                    holder.ImgVwProd.clearColorFilter();
+                    Glide.with(this.context)
+                            .load(Product_Details_Modal.getPImage())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(holder.ImgVwProd);
+                }
+                else{
+                    holder.ImgVwProd.setImageDrawable(getResources().getDrawable(R.drawable.product_logo));
+                    holder.ImgVwProd.setColorFilter(getResources().getColor(R.color.grey_500));
+                }
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
                     holder.Free.setText("0");
                 else

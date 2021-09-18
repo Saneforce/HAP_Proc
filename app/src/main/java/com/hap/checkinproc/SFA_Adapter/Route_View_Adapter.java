@@ -164,21 +164,21 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
     @Override
     public void onBindViewHolder(Route_View_Adapter.MyViewHolder holder, int pos) {
         try {
-            Retailer_Modal_List Retailer_Modal_List = Retailer_Modal_Listitem.get(holder.getAdapterPosition());
-            holder.textviewname.setText(Retailer_Modal_List.getName().toUpperCase());
-            holder.tvRetailorCode.setText(Retailer_Modal_List.getERP_Code());
-//            if (Retailer_Modal_List.getStatusname() != null) {
-//                holder.status.setText("Status :" + "\t\t" + Retailer_Modal_List.getStatusname().toUpperCase());
+            Retailer_Modal_List mRetailer_Modal_List = Retailer_Modal_Listitem.get(holder.getAdapterPosition());
+            holder.textviewname.setText(mRetailer_Modal_List.getName().toUpperCase());
+            holder.tvRetailorCode.setText(mRetailer_Modal_List.getERP_Code());
+//            if (mRetailer_Modal_List.getStatusname() != null) {
+//                holder.status.setText("Status :" + "\t\t" + mRetailer_Modal_List.getStatusname().toUpperCase());
 //            } else {
 //                holder.status.setText("Status :" + "\t\t" + "");
 //            }
 
-//            holder.invoice.setText("Last inv value :" + "\t\t" + Retailer_Modal_List.getInvoiceValues());
-//            holder.values.setText("Value :" + "\t\t" + Retailer_Modal_List.getValuesinv());
-//            holder.invoicedate.setText("Last inv date :" + "\t\t" + Retailer_Modal_List.getInvoiceDate());
-            if (Retailer_Modal_List.getInvoice_Flag().equals("0")) {
+//            holder.invoice.setText("Last inv value :" + "\t\t" + mRetailer_Modal_List.getInvoiceValues());
+//            holder.values.setText("Value :" + "\t\t" + mRetailer_Modal_List.getValuesinv());
+//            holder.invoicedate.setText("Last inv date :" + "\t\t" + mRetailer_Modal_List.getInvoiceDate());
+            if (mRetailer_Modal_List.getInvoice_Flag().equals("0")) {
                 holder.parent_layout.setBackgroundResource(R.color.white);
-            } else if (Retailer_Modal_List.getInvoice_Flag().equals("1")) {
+            } else if (mRetailer_Modal_List.getInvoice_Flag().equals("1")) {
                 holder.parent_layout.setBackgroundResource(R.color.invoiceordercolor);
             } else {
                 holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
@@ -200,7 +200,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             if(TodaySales.length()>0){
                 for (int i = 0; i < TodaySales.length(); i++) {
                     JSONObject item=TodaySales.getJSONObject(i);
-                    if (item.getString("Cust_Code").equals(Retailer_Modal_List.getId())) {
+                    if (item.getString("Cust_Code").equals(mRetailer_Modal_List.getId())) {
                         JSONArray BindArry=item.getJSONArray("Items");
                         holder.lstTdyView.setAdapter(new CatewiseSalesaAdapter(BindArry,R.layout.categorywise_sales_adp,context));
                         DtaBnd=true;
@@ -210,8 +210,10 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                             JSONObject itm = BindArry.getJSONObject(il);
                             if (itm.has("Vals")) {
                                 JSONArray itmv = itm.getJSONArray("Vals");
+                                if(itmv.length()>0){
                                 iQty+=itmv.getJSONObject(0).getInt("Qty");
                                 iVal+=itmv.getJSONObject(0).getDouble("Val");
+                                }
                             }
                         }
                         holder.txTodayTotQty.setText(String.valueOf(iQty));
@@ -224,7 +226,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 holder.lstTdyView.setAdapter(new CatewiseSalesaAdapter(BindArry,R.layout.categorywise_sales_adp,context));
             }
 
-            getMnthlyDta(holder,Retailer_Modal_List.getId(),holder.tvFirstMonth.getText().toString());
+            getMnthlyDta(holder,mRetailer_Modal_List.getId(),holder.tvFirstMonth.getText().toString());
             holder.tvFirstMonth.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -237,7 +239,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     holder.tvThirdMnth.setTypeface(null, Typeface.NORMAL);
                     holder.tvThirdMnth.setTextColor(context.getResources().getColor(R.color.black_80));
 
-                    getMnthlyDta(holder,Retailer_Modal_List.getId(),holder.tvFirstMonth.getText().toString());
+                    getMnthlyDta(holder,mRetailer_Modal_List.getId(),holder.tvFirstMonth.getText().toString());
                 }
             });
             holder.tvSecondMnth.setOnClickListener(new View.OnClickListener() {
@@ -252,7 +254,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     holder.tvThirdMnth.setTypeface(null, Typeface.NORMAL);
                     holder.tvThirdMnth.setTextColor(context.getResources().getColor(R.color.black_80));
 
-                    getMnthlyDta(holder,Retailer_Modal_List.getId(),holder.tvSecondMnth.getText().toString());
+                    getMnthlyDta(holder,mRetailer_Modal_List.getId(),holder.tvSecondMnth.getText().toString());
                 }
             });
             holder.tvThirdMnth.setOnClickListener(new View.OnClickListener() {
@@ -267,7 +269,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     holder.tvThirdMnth.setTypeface(null, Typeface.BOLD);
                     holder.tvThirdMnth.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
 
-                    getMnthlyDta(holder,Retailer_Modal_List.getId(),holder.tvThirdMnth.getText().toString());
+                    getMnthlyDta(holder,mRetailer_Modal_List.getId(),holder.tvThirdMnth.getText().toString());
                 }
             });
 
@@ -277,7 +279,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 if (tdList != null && tdList.size() > 0) {
 
                     for (int i = 0; i < tdList.size(); i++) {
-                        if (tdList.get(i).getCust_Code().equals(Retailer_Modal_List.getId())) {
+                        if (tdList.get(i).getCust_Code().equals(mRetailer_Modal_List.getId())) {
                             isHaveToday = true;
 
                             holder.tvTdMilkVal.setText("" + tdList.get(i).getMilk() + "|₹" + tdList.get(i).getMilkVal());
@@ -309,10 +311,10 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             if (!shared_common_pref.getvalue(Constants.RetailorPreviousData).equals("") && holder.tvFirstMonth.getText().toString().equals("")) {
                 if (preList != null && preList.size() > 0) {
                     for (int i = 0; i < preList.size(); i++) {
-                        if (preList.get(i).getCust_Code().equals(Retailer_Modal_List.getId())) {
+                        if (preList.get(i).getCust_Code().equals(mRetailer_Modal_List.getId())) {
                             isHavePre = true;
 
-                            Log.v("PreList: ", Retailer_Modal_List.getName());
+                            Log.v("PreList: ", mRetailer_Modal_List.getName());
                             String str = preList.get(i).getMnth();
 
                             if (holder.tvFirstMonth.getText().toString().equals("")) {
@@ -380,12 +382,12 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     if (!shared_common_pref.getvalue(Constants.RetailorPreviousData).equals("")) {
                         if (preList != null && preList.size() > 0) {
                             for (int i = 0; i < preList.size(); i++) {
-                                if (preList.get(i).getCust_Code().equals(Retailer_Modal_List.getId())) {
+                                if (preList.get(i).getCust_Code().equals(mRetailer_Modal_List.getId())) {
                                     isHavePre = true;
 
                                     String str = preList.get(i).getMnth().substring(0, 3);
 
-                                    Log.v("PreList: ", Retailer_Modal_List.getName() + " mnth: " + str);
+                                    Log.v("PreList: ", mRetailer_Modal_List.getName() + " mnth: " + str);
 
 
                                     if (holder.tvFirstMonth.getText().toString().equals(str)) {
@@ -443,11 +445,11 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     if (!shared_common_pref.getvalue(Constants.RetailorPreviousData).equals("")) {
                         if (preList != null && preList.size() > 0) {
                             for (int i = 0; i < preList.size(); i++) {
-                                if (preList.get(i).getCust_Code().equals(Retailer_Modal_List.getId())) {
+                                if (preList.get(i).getCust_Code().equals(mRetailer_Modal_List.getId())) {
                                     isHavePre = true;
 
                                     String str = preList.get(i).getMnth().substring(0, 3);
-                                    Log.v("PreList: ", Retailer_Modal_List.getName() + " mnth: " + str);
+                                    Log.v("PreList: ", mRetailer_Modal_List.getName() + " mnth: " + str);
 
 
                                     if (holder.tvSecondMnth.getText().toString().equals(str)) {
@@ -501,11 +503,11 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                     if (!shared_common_pref.getvalue(Constants.RetailorPreviousData).equals("")) {
                         if (preList != null && preList.size() > 0) {
                             for (int i = 0; i < preList.size(); i++) {
-                                if (preList.get(i).getCust_Code().equals(Retailer_Modal_List.getId())) {
+                                if (preList.get(i).getCust_Code().equals(mRetailer_Modal_List.getId())) {
                                     isHavePre = true;
 
                                     String str = preList.get(i).getMnth().substring(0, 3);
-                                    Log.v("PreList: ", Retailer_Modal_List.getName() + " mnth: " + str);
+                                    Log.v("PreList: ", mRetailer_Modal_List.getName() + " mnth: " + str);
 
 
                                     if (holder.tvThirdMnth.getText().toString().equals(str)) {

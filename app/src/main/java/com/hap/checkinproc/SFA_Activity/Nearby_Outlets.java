@@ -37,6 +37,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
@@ -275,7 +276,8 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 Shared_Common_Pref.OutletAvail = "";
                 Shared_Common_Pref.OutletUniv = "";
                 Shared_Common_Pref.Outlet_Info_Flag = "0";
-                common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                common_class.CommonIntentwithFinish(AddNewRetailer.class);
+                //startActivity (Nearby_Outlets.this, AddNewRetailer.class);
                 break;
             case R.id.llNearMe:
                 llExplore.setBackgroundColor(Color.TRANSPARENT);

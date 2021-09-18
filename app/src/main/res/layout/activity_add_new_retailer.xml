@@ -110,7 +110,8 @@
                                     android:id="@+id/CurrentLocLin"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -597,11 +598,6 @@
                                     android:textColor="@android:color/black"
                                     android:textSize="13dp"></TextView>
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
-                                    android:src="@drawable/mandatory" />
 
                             </LinearLayout>
 

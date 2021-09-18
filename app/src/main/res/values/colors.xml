@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="colorAccent">#3949AB</color>
-    <color name="colorPrimary">#4E5FCA</color>
-    <color name="colorPrimaryDark">#3949AB</color>
-    <!--    <color name="colorAccent">#43A047</color>-->
-    <!--    <color name="colorPrimary">#7CB342</color>-->
-    <!--    <color name="colorPrimaryDark">#43A047</color>-->
+<!--    <color name="colorAccent">#3949AB</color>-->
+<!--    <color name="colorPrimary">#4E5FCA</color>-->
+<!--    <color name="colorPrimaryDark">#3949AB</color>-->
 
-    <!--    <color name="colorAccent">#4A87EE</color>-->
-    <!--    <color name="colorPrimary">#FFC107</color>-->
-    <!--    <color name="colorPrimaryDark">#ff9819</color>-->
 
-    <!--    <color name="colorAccent">#4A87EE</color>-->
-    <!--    <color name="colorPrimary">#5691F4</color>-->
-    <!--    <color name="colorPrimaryDark">#1068D6</color>-->
+    <color name="colorAccent">#43A047</color>
+    <color name="colorPrimary">#7CB342</color>
+    <color name="colorPrimaryDark">#056162</color>
+
+<!--        <color name="colorAccent">#4A87EE</color>-->
+<!--        <color name="colorPrimary">#FFC107</color>-->
+<!--        <color name="colorPrimaryDark">#ff9819</color>-->
+
+<!--        <color name="colorAccent">#4A87EE</color>-->
+<!--        <color name="colorPrimary">#5691F4</color>-->
+<!--        <color name="colorPrimaryDark">#1068D6</color>-->
 
     <!--    <color name="colorAccent">#009688</color>-->
     <!--    <color name="colorPrimary">#009688</color>-->

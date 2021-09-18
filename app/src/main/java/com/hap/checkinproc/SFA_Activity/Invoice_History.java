@@ -92,7 +92,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
             lin_noOrder = findViewById(R.id.lin_noOrder);
             tvOrder = (TextView) findViewById(R.id.tvOrder);
 
-
+            tvOrder.setVisibility(View.GONE);
             tvOtherBrand = (TextView) findViewById(R.id.tvOtherBrand);
             tvPOP = (TextView) findViewById(R.id.tvPOP);
             tvQPS = (TextView) findViewById(R.id.tvQPS);
@@ -601,7 +601,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                 HeadItem.put("OrderID", Shared_Common_Pref.OutletCode);
 
 
-                Call<ResponseBody> call = service.getInvoiceOrderQty(HeadItem.toString());
+                Call<ResponseBody> call = service.getPreOrderQty(HeadItem.toString());//service.getInvoiceOrderQty(HeadItem.toString());
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

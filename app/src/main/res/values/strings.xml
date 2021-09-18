@@ -7,7 +7,7 @@
     <string name="username" translatable="false">username</string>
     <string name="or" translatable="false">or</string>
     <!-- Strings used for fragments for navigation -->
-    <string name="map_key" translatable="false">AIzaSyB_qsP8AOP_P0MdlPz-48TDaJYjTP3vbjo</string>
+    <string name="map_key" translatable="false">AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU</string>
     <string name="txt_haplocations" translatable="false">Select the HAP locations <font fgcolor='#E53935'> *</font></string>
     <string name="txt_haplocationss" translatable="false">Select the HAP locations</string>
     <string name="txt_purpose" translatable="false">Enter the Purpose of visit<font fgcolor='#E53935'> *</font></string>

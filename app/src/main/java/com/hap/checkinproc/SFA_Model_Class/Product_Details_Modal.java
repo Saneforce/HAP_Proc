@@ -50,6 +50,9 @@ public class Product_Details_Modal {
     @Expose
     private Integer Qty;
 
+    @SerializedName("PImage")
+    @Expose
+    private String PImage;
 
     @SerializedName("free")
     @Expose
@@ -127,6 +130,14 @@ public class Product_Details_Modal {
 
     public void setDiscount_value(String discount_value) {
         this.discount_value = discount_value;
+    }
+
+    public String getPImage() {
+        return PImage;
+    }
+
+    public void setPImage(String PImage) {
+        this.PImage = PImage;
     }
 
     public String getTax() {

@@ -4,8 +4,12 @@
 
     <gradient
         android:angle="180"
-        android:endColor="@color/Reports"
-        android:startColor="#1974e6" />
+        android:endColor="#2a9945"
+        android:startColor="#2a9945" />
+<!--    <gradient-->
+<!--        android:angle="180"-->
+<!--        android:endColor="@color/Reports"-->
+<!--        android:startColor="#1974e6" />-->
 </shape>
 
 

@@ -190,166 +190,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                                 }
 
                                 shared_common_pref.save(Constants.RetailorTodayData, is.toString());
-                                //recyclerView.getAdapter().notifyDataSetChanged();
-                                /*JSONObject jsonObject = new JSONObject();
-
-                                ArrayList<Retailer_Modal_List> todayRetailorData = new ArrayList<>();
-                                ArrayList<Retailer_Modal_List> todayRetailorDataDynamic = new ArrayList<>();
-                                ArrayList<Retailer_Modal_List> tdRetailorDataDynamicVal = new ArrayList<>();
-
-                                ArrayList<Retailer_Modal_List> previousRetailorData = new ArrayList<>();
-
-                                ArrayList<Retailer_Modal_List> previousRetailorDataDynamic = new ArrayList<>();
-
-                                ArrayList<Retailer_Modal_List> retailor_valuesProduct = new ArrayList<>();
-
-                                if (jsonObject.getBoolean("success")) {
-
-                                    JSONArray previousdata = jsonObject.getJSONArray("data");
-
-                                    JSONArray todaydata = jsonObject.getJSONArray("todaydata");
-
-
-                                    if (todaydata != null && todaydata.length() > 0) {
-
-                                        for (int i = 0; i < todaydata.length(); i++) {
-                                            JSONObject tdObj = todaydata.getJSONObject(i);
-                                            double others = 0, othersVal = 0, curd = 0, curdVal = 0, milk = 0, milkVal = 0;
-
-                                            if (tdObj.has("Others"))
-                                                others = Double.parseDouble(df2.format(tdObj.getDouble("Others")));
-
-                                            if (tdObj.has("OthersVal"))
-                                                othersVal = Double.parseDouble(df2.format(tdObj.getDouble("OthersVal")));
-
-
-                                            if (tdObj.has("Milk"))
-                                                milk = Double.parseDouble(df2.format(tdObj.getDouble("Milk")));
-
-                                            if (tdObj.has("MilkVal"))
-                                                milkVal = Double.parseDouble(df2.format(tdObj.getDouble("MilkVal")));
-
-                                            if (tdObj.has("Curd"))
-                                                curd = Double.parseDouble(df2.format(tdObj.getDouble("Curd")));
-
-                                            if (tdObj.has("CurdVal"))
-                                                curdVal = Double.parseDouble(df2.format(tdObj.getDouble("CurdVal")));
-
-
-                                            todayRetailorData.add(new Retailer_Modal_List(tdObj.getString("Cust_Code"),
-                                                    others, othersVal, curd, curdVal,
-                                                    milk, milkVal));
-
-
-                                            shared_common_pref.save(Constants.RetailorTodayData, gson.toJson(todayRetailorData));
-
-
-//                                            tdRetailorDataDynamicVal.add(new Retailer_Modal_List("Milk", milk, milkVal));
-//                                            tdRetailorDataDynamicVal.add(new Retailer_Modal_List("Curd", curd, curdVal));
-//                                            tdRetailorDataDynamicVal.add(new Retailer_Modal_List("Others", others, othersVal));
-                                            //    todayRetailorDataDynamic.add(new Retailer_Modal_List(tdObj.getString("Cust_Code"), tdRetailorDataDynamicVal));
-
-//
-//                                            shared_common_pref.save(Constants.RetailorTodayDataDynamic, gson.toJson(todayRetailorDataDynamic));
-
-
-                                        }
-                                    } else {
-                                        shared_common_pref.save(Constants.RetailorTodayData, "");
-
-                                    }
-
-                                    if (previousdata != null && previousdata.length() > 0) {
-
-                                        for (int i = 0; i < previousdata.length(); i++) {
-                                            JSONObject preObj = previousdata.getJSONObject(i);
-                                            double others = 0, othersVal = 0, curd = 0, curdVal = 0, milk = 0, milkVal = 0;
-
-
-                                            String cus_code = preObj.getString("Cust_Code");
-                                            String Mnth = preObj.getString("Mnth");
-
-                                            JSONArray itemArray = preObj.getJSONArray("Items");
-
-                                            for (int item = 0; item < itemArray.length(); item++) {
-                                                JSONObject itemObj = itemArray.getJSONObject(item);
-
-                                                String productName = itemObj.getString("name");
-
-                                                JSONArray valArray = itemObj.getJSONArray("Vals");
-
-                                                ArrayList<Retailer_Modal_List> retailor_values = new ArrayList<>();
-
-                                                retailor_valuesProduct = new ArrayList<>();
-
-
-                                                if (valArray.length() > 0) {
-
-                                                    for (int val = 0; val < valArray.length(); val++) {
-
-                                                        JSONObject valObj = valArray.getJSONObject(val);
-                                                        double qty = valObj.getDouble("Qty");
-                                                        double value = valObj.getDouble("Val");
-
-
-                                                        retailor_values.add(new Retailer_Modal_List(qty, value));
-
-
-                                                    }
-
-                                                    retailor_valuesProduct.add(new Retailer_Modal_List(productName, retailor_values));
-                                                }
-
-
-                                            }
-
-
-                                            previousRetailorDataDynamic.add(new Retailer_Modal_List(cus_code, Mnth, retailor_valuesProduct));
-
-
-                                            shared_common_pref.save(Constants.RetailorPreviousDataDynamic, gson.toJson(previousRetailorDataDynamic));
-
-                                           /* if (preObj.has("Others"))
-                                                others = Double.parseDouble(df2.format(preObj.getDouble("Others")));
-
-                                            if (preObj.has("OthersVal"))
-                                                othersVal = Double.parseDouble(df2.format(preObj.getDouble("OthersVal")));
-
-
-                                            if (preObj.has("Milk"))
-                                                milk = Double.parseDouble(df2.format(preObj.getDouble("Milk")));
-
-                                            if (preObj.has("MilkVal"))
-                                                milkVal = Double.parseDouble(df2.format(preObj.getDouble("MilkVal")));
-
-                                            if (preObj.has("Curd"))
-                                                curd = Double.parseDouble(df2.format(preObj.getDouble("Curd")));
-
-                                            if (preObj.has("CurdVal"))
-                                                curdVal = Double.parseDouble(df2.format(preObj.getDouble("CurdVal")));
-
-
-                                            previousRetailorData.add(new Retailer_Modal_List(preObj.getString("Cust_Code"),
-                                                    preObj.getString("Mnth"),
-                                                    others, othersVal
-                                                    , curd, curdVal,
-                                                    milk, milkVal));
-
-                                            shared_common_pref.save(Constants.RetailorPreviousData, gson.toJson(previousRetailorData));*/
-
-
-                                       // }
-//                                    } else {
-//                                        /*   shared_common_pref.save(Constants.RetailorPreviousData, "");*/
-//
-//                                    }
-
-
-                                /*} else {
-                                    shared_common_pref.save(Constants.RetailorTodayData, "");
-                                    shared_common_pref.save(Constants.RetailorPreviousData, "");
-                                }*/
-
 
                             }
 
@@ -638,7 +478,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         Retailer_Modal_ListFilter.clear();
         for (int i = 0; i < Retailer_Modal_List.size(); i++) {
             if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase(RetType)
-                    && (sSchText.equalsIgnoreCase("") || Retailer_Modal_List.get(i).getName().toLowerCase().indexOf(sSchText.toLowerCase())>-1))
+                    && (sSchText.equalsIgnoreCase("") ||
+                    (";"+Retailer_Modal_List.get(i).getName().toLowerCase()).indexOf(";"+sSchText.toLowerCase())>-1))
                 Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
         }
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
@@ -996,6 +837,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 String ETabs = jsonObject1.optString("ETabs");
                 Model_Pojo = new Common_Model(id, name, flag);
                 if (listType.equals(Constants.Distributor_List)) {
+                    String Add2 = jsonObject1.optString("Addr2");
+                    Model_Pojo = new Common_Model( name,id, flag,Add2,"");
                     distributor_master.add(Model_Pojo);
                 } else if (listType.equals(Constants.Rout_List)) {
                     Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
