@@ -48,12 +48,11 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname,txTodayTotQty,txTodayTotVal, txPreTotQty, txPreTotVal,
-                textviewdate,
+                textviewdate,txAdd,txOwnerph,txDistName,txChannel,
                 status, invoice, values, invoicedate, tvRetailorCode, tvFirstMonth, tvSecondMnth, tvThirdMnth;
         LinearLayout parent_layout;
 
-        LinearLayout cdParent;
-
+        LinearLayout cdParent,linDistance;
 
         RecyclerView lstTdyView;
         RecyclerView lstPreView;
@@ -86,7 +85,18 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 lstTdyView.setLayoutManager(new LinearLayoutManager(context));
                 lstPreView.setLayoutManager(new LinearLayoutManager(context));
                 cdParent = view.findViewById(R.id.cdParent);
+                linDistance=view.findViewById(R.id.linDistance);
+                txAdd = view.findViewById(R.id.txAdd);
+                txOwnerph = view.findViewById(R.id.txOwnerPh);
+                txDistName = view.findViewById(R.id.txDistName);
+                txChannel = view.findViewById(R.id.txChannel);
+                txChannel = view.findViewById(R.id.txChannel);
 
+                linDistance.setVisibility(View.GONE);
+                txAdd.setVisibility(View.GONE);
+                txOwnerph.setVisibility(View.GONE);
+                txDistName.setVisibility(View.GONE);
+                txChannel.setVisibility(View.GONE);
 
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");

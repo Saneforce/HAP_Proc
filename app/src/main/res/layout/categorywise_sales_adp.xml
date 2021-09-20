@@ -27,7 +27,8 @@
             android:fontFamily="sans-serif"
             android:text="0"
             android:paddingLeft="@dimen/C5dp"
-            android:textSize="12sp"/>
+            android:textSize="12sp"
+            android:textStyle="bold"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,7 +46,8 @@
             android:textAlignment="textEnd"
             android:paddingLeft="@dimen/C5dp"
             android:text="₹0.00"
-            android:textSize="12sp">
+            android:textSize="12sp"
+            android:textStyle="bold">
 
 
         </TextView>

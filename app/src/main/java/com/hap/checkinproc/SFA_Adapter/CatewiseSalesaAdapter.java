@@ -40,7 +40,10 @@ public class CatewiseSalesaAdapter extends RecyclerView.Adapter<CatewiseSalesaAd
         try {
             JSONObject itm=AryDta.getJSONObject(position);
             holder.txCatname.setText(itm.getString("name"));
-            if(itm.has("Vals")){
+            if(itm.has("Qty")) {
+                holder.txQty.setText(itm.getString("Qty"));
+                holder.txVal.setText("₹" + new DecimalFormat("##0.00").format(itm.getDouble("Val")));
+            }else if(itm.has("Vals")){
                 JSONArray itmv=itm.getJSONArray("Vals");
                 if(itmv.length()>0) {
                     holder.txQty.setText(itmv.getJSONObject(0).getString("Qty"));

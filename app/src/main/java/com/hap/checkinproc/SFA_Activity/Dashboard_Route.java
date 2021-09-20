@@ -137,6 +137,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             ApiService.getDataArrayList("get/prodgroup",jParam.toString()).enqueue(new Callback<JsonArray>() {
                 @Override
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    db.deleteMasterData("PGroup");
                     db.addMasterData("PGroup",response.body());
                 }
 
@@ -323,12 +324,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
 
                 String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
-                //  String outletserializableob = null;
-//
-                //      outletserializableob = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
-//
-
-                Log.e("Retailor List: ", outletserializableob);
                 Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
 
 
@@ -390,7 +385,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 //                    if (sDeptType.equalsIgnoreCase("2")) {
 //                        btnCmbRoute.setVisibility(View.GONE);
 //                    }
-                    recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
+                    recyclerView.setAdapter(
+                            new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
                         @Override
                         public void onIntentClick(int position) {
                             Shared_Common_Pref.Outler_AddFlag = "0";
@@ -420,7 +416,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
 
                         }
-                    }));
+                    })
+                    );
 
 
                 }
@@ -474,6 +471,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         }
     }
     private void SearchRetailers(){
+        if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
+            String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
+            Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
+        }
         String sSchText=txSearchRet.getText().toString();
         Retailer_Modal_ListFilter.clear();
         for (int i = 0; i < Retailer_Modal_List.size(); i++) {
@@ -550,7 +551,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     shared_common_pref.save("RouteSelect", Route_id);
                     shared_common_pref.save("RouteName", route_text.getText().toString());
                     shared_common_pref.save("Distributor_ID", Distributor_Id);
-                    common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
+                    Shared_Common_Pref.Outler_AddFlag = "1";
+                    common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
+                    //common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
                 }
                 break;
             case R.id.distributor_text:
@@ -668,54 +671,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                         }
                     }
                 }));
-
             } else {
-
                 common_class.getDataFromApi(Retailer_OutletList, this, false);
-                //  getDataFromApi(Retailer_OutletList, this, false);
-//                Retailer_Modal_ListFilter.clear();
-//                Log.e("Retailer_Modal_ListSIZE", "" + Retailer_Modal_List.size());
-//
-//                common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
-//
-//
-//                String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
-//
-//                Log.e("Retailor List: ", outletserializableob);
-//
-//                Retailer_Modal_List.clear();
-//                Retailer_Modal_ListFilter.clear();
-//
-//                Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
-//
-//
-//                for (int i = 0; i < Retailer_Modal_List.size(); i++) {
-//
-//                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-////                        if (flag.equals("0")) {
-////                            if (Retailer_Modal_List.get(i).getTownCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-////                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-////                            }
-////                        }
-////                        if (flag.equals("1")) {
-////                            if (Retailer_Modal_List.get(i).getDistCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-////                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-////                            }
-////                        }
-////                        if (flag.equals("2")) {
-////                            if (Retailer_Modal_List.get(i).getInvoice_Flag().equals("2")) {
-////                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-////                            }
-////                        }
-////                        if (flag.equals("3")) {
-////                            if (!Retailer_Modal_List.get(i).getInvoice_Flag().equals("2")) {
-////                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-////                            }
-////                        }
-//
-//                }
-
-
             }
 
 
@@ -728,31 +685,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
     @Override
     public void setDataToRouteObject(Object noticeArrayList, int position) {
-//        Log.e("Calling Position", String.valueOf(position));
-//        Log.e("ROUTE_MASTER_Object", String.valueOf(noticeArrayList));
-//        if (position == 0) {
-//            Log.e("SharedprefrenceVALUES", new Gson().toJson(noticeArrayList));
-//            GetJsonData(new Gson().toJson(noticeArrayList), "0");
-//        }
-//        //move to DB
-//        //pos 1=distributor,pos 2=Route list
-//
-////        else if (position == 1) {
-////            GetJsonData(new Gson().toJson(noticeArrayList), "1");
-////        } else if (position == 2) {
-////            GetJsonData(new Gson().toJson(noticeArrayList), "2");
-////        }
-//
-//        else if (position == 3) {
-//            GetJsonData(new Gson().toJson(noticeArrayList), "3");
-//        } else if (position == 4) {
-//            GetJsonData(new Gson().toJson(noticeArrayList), "4");
-//        } else if (position == 5) {
-//            GetJsonData(new Gson().toJson(noticeArrayList), "5");
-//        } else {
-//
-//        }
-
     }
 
     @Override
@@ -779,53 +711,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             shared_common_pref.save(Constants.Route_name, FRoute_Master.get(0).getName());
             shared_common_pref.save(Constants.Route_Id, FRoute_Master.get(0).getId());
             Route_id = FRoute_Master.get(0).getId();
-
         } else {
             findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
-
         }
     }
-
-//    private void GetJsonData(String jsonResponse, String type) {
-//        try {
-//            JSONArray jsonArray = new JSONArray(jsonResponse);
-//            for (int i = 0; i < jsonArray.length(); i++) {
-//                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-//                String id = String.valueOf(jsonObject1.optInt("id"));
-//                String name = jsonObject1.optString("name");
-//                String flag = jsonObject1.optString("FWFlg");
-//                String ETabs = jsonObject1.optString("ETabs");
-//                Model_Pojo = new Common_Model(id, name, flag);
-//                // if (type.equals("1")) {
-//                // distributor_master.add(Model_Pojo);
-//                // } else if (type.equals("2")) {
-////                    Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
-////                    Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
-////                    FRoute_Master.add(Model_Pojo);
-////                    Route_Masterlist.add(Model_Pojo);
-//                //} else
-//                    if (type.equals("6")) {
-//
-//                    route_text.setText(jsonObject1.optString("ClstrName"));
-//                    Distributor_Id = jsonObject1.optString("stockist");
-//                    Route_id = jsonObject1.optString("cluster");
-//                    distributor_text.setText(jsonObject1.optString("StkName"));
-//                    loadroute(jsonObject1.optString("stockist"));
-//
-//
-//                }
-//
-//            }
-//
-//
-//            //spinner.setSelection(adapter.getPosition("select worktype"));
-//            //            parseJsonData_cluster(clustspin_list);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-
     void getDbstoreData(String listType) {
         try {
             JSONArray jsonArray = db.getMasterData(listType);

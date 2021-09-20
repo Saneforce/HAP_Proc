@@ -42,7 +42,7 @@
 
                     <TextView
                         android:id="@+id/retailername"
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/C10dp"
                         android:layout_weight="1"
@@ -54,6 +54,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:visibility="gone"
                         android:id="@+id/retailorCode"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -63,10 +64,65 @@
                         android:textAlignment="textEnd"
                         android:textColor="@android:color/darker_gray"
                         android:textSize="14dp"/>
-
+                    <LinearLayout
+                        android:id="@+id/linDistance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <ImageView
+                            android:layout_width="@dimen/C15dp"
+                            android:layout_height="@dimen/C15dp"
+                            android:src="@drawable/ic_wlk_distance"/>
+                        <TextView
+                            android:id="@+id/txDistance"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="@dimen/C2dp"
+                            android:paddingRight="@dimen/C10dp"
+                            android:paddingTop="2dp"
+                            android:gravity="center_vertical"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:text="10m"/>
+                    </LinearLayout>
+                    <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/round_status_blue">
+                            <TextView
+                                android:id="@+id/txChannel"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:paddingLeft="10dp"
+                                android:paddingTop="2dp"
+                                android:paddingRight="10dp"
+                                android:textColor="@color/white"
+                                android:textSize="10sp"
+                                android:textStyle="bold"
+                                android:text="DCO"/>
+                    </LinearLayout>
 
                 </LinearLayout>
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginLeft="@dimen/C10dp">
+                    <TextView
+                        android:id="@+id/txOwnerPh"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="9sp"/>
+                </LinearLayout>
+                <TextView
+                    android:id="@+id/txAdd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="9sp"
+                    android:layout_marginTop="-5dp"
+                    android:layout_marginLeft="@dimen/C10dp"/>
                 <LinearLayout
                     android:id="@+id/llDataParent"
                     android:layout_width="match_parent"
@@ -91,11 +147,12 @@
                             android:textSize="12sp"
                             android:gravity="center_vertical"
                             android:textStyle="bold"/>
-
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rvTodayData"
+                            android:clickable="true"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            >
                         </androidx.recyclerview.widget.RecyclerView>
 
                         <LinearLayout
@@ -124,7 +181,8 @@
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif"
                                 android:text="0"
-                                android:textSize="@dimen/C12dp"/>
+                                android:textSize="@dimen/C12dp"
+                                android:textStyle="bold"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -141,7 +199,8 @@
                                 android:fontFamily="sans-serif"
                                 android:textAlignment="textEnd"
                                 android:text="₹0.00"
-                                android:textSize="12sp">
+                                android:textSize="12sp"
+                                android:textStyle="bold">
 
 
                             </TextView>
@@ -252,7 +311,8 @@
                                     android:layout_height="wrap_content"
                                     android:fontFamily="sans-serif"
                                     android:text="0"
-                                    android:textSize="@dimen/C12dp"/>
+                                    android:textSize="@dimen/C12dp"
+                                    android:textStyle="bold"/>
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -269,7 +329,8 @@
                                     android:fontFamily="sans-serif"
                                     android:textAlignment="textEnd"
                                     android:text="₹0.00"
-                                    android:textSize="12sp">
+                                    android:textSize="12sp"
+                                    android:textStyle="bold">
 
 
                                 </TextView>
@@ -279,7 +340,20 @@
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="-5dp"
+    >
+    <TextView
+        android:id="@+id/txDistName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/C10dp"
+        android:textSize="10sp"
+        android:textColor="@color/colorPrimaryDark"
+        />
+</LinearLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="4dp"
