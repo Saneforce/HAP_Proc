@@ -39,8 +39,8 @@ public class Print_Invoice_Adapter extends RecyclerView.Adapter<Print_Invoice_Ad
     public void onBindViewHolder(Print_Invoice_Adapter.MyViewHolder holder, int position) {
         holder.productname.setText("" + mDate.get(position).getName());
         holder.productqty.setText("" + mDate.get(position).getQty());
-        holder.productrate.setText("" + new DecimalFormat("##0.0").format(mDate.get(position).getRate()));
-        holder.producttotal.setText("" + mDate.get(position).getAmount());
+        holder.productrate.setText("" + new DecimalFormat("##0.00").format(mDate.get(position).getRate()));
+        holder.producttotal.setText("" + new DecimalFormat("##0.00").format(mDate.get(position).getAmount()));
     }
 
     @Override

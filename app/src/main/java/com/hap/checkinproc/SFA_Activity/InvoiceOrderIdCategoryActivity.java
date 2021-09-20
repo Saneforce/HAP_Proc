@@ -493,10 +493,10 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
                                         Product_Modal.get(pmTax).setCGST(taxCal);
                                         break;
                                     case "SGST":
-                                        Product_Modal.get(pmTax).setCGST(taxCal);
+                                        Product_Modal.get(pmTax).setSGST(taxCal);
                                         break;
                                     case "IGST":
-                                        Product_Modal.get(pmTax).setCGST(taxCal);
+                                        Product_Modal.get(pmTax).setIGST(taxCal);
                                         break;
                                 }
 
@@ -868,6 +868,9 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
 
                                         startActivity(new Intent(getApplicationContext(), Invoice_History.class));
                                         finish();
+                                    }
+                                    else {
+
                                     }
 
                                 } catch (Exception e) {
@@ -1541,10 +1544,10 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
                                                     Product_Details_Modalitem.get(position).setCGST(taxCal);
                                                     break;
                                                 case "SGST":
-                                                    Product_Details_Modalitem.get(position).setCGST(taxCal);
+                                                    Product_Details_Modalitem.get(position).setSGST(taxCal);
                                                     break;
                                                 case "IGST":
-                                                    Product_Details_Modalitem.get(position).setCGST(taxCal);
+                                                    Product_Details_Modalitem.get(position).setIGST(taxCal);
                                                     break;
                                             }
 

@@ -516,7 +516,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/orderdetailsfrinv")
-    Call<ResponseBody> getInvoiceOrderQty(@Field("data") String body);
+    Call<ResponseBody> getInvoiceOrderDetails(@Field("data") String body);
 
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/producttaxdetails")

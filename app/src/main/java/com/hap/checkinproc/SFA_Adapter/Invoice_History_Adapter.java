@@ -16,6 +16,7 @@ import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_History_Adapter.MyViewHolder> {
@@ -54,7 +55,7 @@ public class Invoice_History_Adapter extends RecyclerView.Adapter<Invoice_Histor
         }
         holder.txtOrderDate.setText("" + mDate.get(position).getOrderDate());
         holder.txtOrderID.setText(mDate.get(position).getOrderNo());
-        holder.txtValue.setText("" + mDate.get(position).getOrderValue());
+        holder.txtValue.setText("" + new DecimalFormat("##0.00").format(mDate.get(position).getOrderValue()));
         holder.Itemcountinvoice.setText("" + mDate.get(position).getNo_Of_items());
         holder.txtType.setText("" + mDate.get(position).getStatus());
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {

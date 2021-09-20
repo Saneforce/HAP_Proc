@@ -42,6 +42,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,6 +66,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     public static Print_Invoice_Activity mPrint_invoice_activity;
 
     Button btnInvoice;
+    NumberFormat formatter = new DecimalFormat("##0.00");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,66 +110,16 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             btnInvoice.setOnClickListener(this);
 
 
-            if (Shared_Common_Pref.Invoicetoorder != null) {
-                if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
-                    // String orderlist = sharedCommonPref.getvalue(Shared_Common_Pref.TodayOrderDetails_List);
-                    String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
-                    userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
-                    }.getType();
-                    InvoiceorderDetails_List = gson.fromJson(orderlist, userType);
-                    Order_Outlet_Filter = new ArrayList<>();
-                    Order_Outlet_Filter.clear();
-                    int total_qtytext = 0, subTotalVal = 0;
-                    for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
-                        if (ivl.getTransSlNo().equals(Shared_Common_Pref.TransSlNo)) {
-                            Log.e("Product_Name", ivl.getProductName());
-                            Log.e("Product_getQty", String.valueOf(ivl.getQuantity()));
-                            // total_qtytext += ivl.getQty() + ivl.getQuantity();
-                            total_qtytext += ivl.getQuantity();
-                            subTotalVal += ivl.getValue();
-
-                            Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
-                                    "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(), ivl.getQty(), ivl.getValue()));
-                        }
-                    }
-
-
-                    retailerroute.setText(sharedCommonPref.getvalue(Constants.Route_name));
-                    retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
-
-                    totalqty.setText("" + String.valueOf(total_qtytext));
-                    totalitem.setText("" + Order_Outlet_Filter.size());
-                    subtotal.setText("" + subTotalVal);
-                    netamount.setText("₹ " + subTotalVal + ".00");
-
-                    DateFormat dfw = new SimpleDateFormat("dd/MM/yyyy");
-                    Calendar calobjw = Calendar.getInstance();
-                    invoicedate.setText("Date : " + dfw.format(calobjw.getTime()));
-
-
-                    sharedCommonPref.save(Constants.INVOICE_ORDERLIST, gson.toJson(Order_Outlet_Filter));
-
-                    mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, new AdapterOnClick() {
-                        @Override
-                        public void onIntentClick(int position) {
-                          //  sharedCommonPref.save(Constants.ORDER_ID, Order_Outlet_Filter.get(position).getId());
-                        }
-                    });
-                    printrecyclerview.setAdapter(mReportViewAdapter);
-
-                } else {
-
-                }
-            }
-
-
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
-            if(sharedCommonPref.getvalue(Constants.FLAG).equals("ORDER"))
+            if (sharedCommonPref.getvalue(Constants.FLAG).equals("ORDER"))
                 findViewById(R.id.llCreateInvoice).setVisibility(View.VISIBLE);
             else
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
+
+
+            // orderInvoiceDetailData();
 
 
         } catch (Exception e) {
@@ -594,24 +548,37 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     @Override
     public void onLoadDataUpdateUI(String apiDataResponse) {
         if (apiDataResponse != null && !apiDataResponse.equals("")) {
+            orderInvoiceDetailData();
+        }
 
+    }
+
+
+    void orderInvoiceDetailData() {
+        try {
             if (Shared_Common_Pref.Invoicetoorder != null) {
                 if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
                     // String orderlist = sharedCommonPref.getvalue(Shared_Common_Pref.TodayOrderDetails_List);
-                    //  String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
+                    billnumber.setText("Order No: " + Shared_Common_Pref.TransSlNo);
+                    String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
                     userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
                     }.getType();
-                    InvoiceorderDetails_List = gson.fromJson(apiDataResponse, userType);
+                    InvoiceorderDetails_List = gson.fromJson(orderlist, userType);
                     Order_Outlet_Filter = new ArrayList<>();
                     Order_Outlet_Filter.clear();
-                    int total_qtytext = 0, subTotalVal = 0;
+                    double total_qtytext = 0, subTotalVal = 0.00;
                     for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
                         if (ivl.getTransSlNo().equals(Shared_Common_Pref.TransSlNo)) {
                             Log.e("Product_Name", ivl.getProductName());
                             Log.e("Product_getQty", String.valueOf(ivl.getQuantity()));
+                            Log.e("Product_getVal", String.valueOf(ivl.getValue()));
                             // total_qtytext += ivl.getQty() + ivl.getQuantity();
                             total_qtytext += ivl.getQuantity();
                             subTotalVal += ivl.getValue();
+
+
+                            Log.e("Product_getSubTOTVal", "" + subTotalVal);
+
 
                             Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
                                     "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(), ivl.getQty(), ivl.getValue()));
@@ -624,13 +591,146 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                     totalqty.setText("" + String.valueOf(total_qtytext));
                     totalitem.setText("" + Order_Outlet_Filter.size());
-                    subtotal.setText("" + subTotalVal);
-                    netamount.setText("₹ " + subTotalVal + ".00");
+                    subtotal.setText("₹" + formatter.format(subTotalVal));
+                    netamount.setText("₹ " + formatter.format(subTotalVal));
+
+                    DateFormat dfw = new SimpleDateFormat("dd/MM/yyyy");
+                    Calendar calobjw = Calendar.getInstance();
+                    invoicedate.setText("Date : " + dfw.format(calobjw.getTime()));
+
+
+                    for (int pm = 0; pm < Order_Outlet_Filter.size(); pm++) {
+                        String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
+
+                        Type type1 = new TypeToken<ArrayList<Product_Details_Modal>>() {
+                        }.getType();
+                        List<Product_Details_Modal> product_details_modalArrayList = gson.fromJson(strSchemeList, type1);
+
+
+                        double highestScheme = 0;
+                        boolean haveVal = false;
+                        if (product_details_modalArrayList != null && product_details_modalArrayList.size() > 0) {
+
+                            for (int i = 0; i < product_details_modalArrayList.size(); i++) {
+
+                                if (Order_Outlet_Filter.get(pm).getId().equals(product_details_modalArrayList.get(i).getId())) {
+
+                                    haveVal = true;
+                                    double schemeVal = Double.parseDouble(product_details_modalArrayList.get(i).getScheme());
+                                    double enterQty = Order_Outlet_Filter.get(pm).getQty();
+
+                                    if (enterQty >= schemeVal) {
+
+                                        if (schemeVal > highestScheme) {
+                                            highestScheme = schemeVal;
+
+
+                                            if (!product_details_modalArrayList.get(i).getFree().equals("0")) {
+                                                if (product_details_modalArrayList.get(i).getPackage().equals("N")) {
+                                                    double freePer = (enterQty / highestScheme);
+
+                                                    double freeVal = freePer * Double.parseDouble(product_details_modalArrayList.
+                                                            get(i).getFree());
+
+                                                    Order_Outlet_Filter.get(pm).setFree(String.valueOf(Math.round(freeVal)));
+                                                } else {
+                                                    int val = (int) (enterQty / highestScheme);
+                                                    int freeVal = val * Integer.parseInt(product_details_modalArrayList.get(i).getFree());
+                                                    Order_Outlet_Filter.get(pm).setFree(String.valueOf(freeVal));
+                                                }
+                                            } else {
+
+                                                Order_Outlet_Filter.get(pm).setFree("0");
+
+                                            }
+
+
+                                            if (product_details_modalArrayList.get(i).getDiscount() != 0) {
+
+                                                if (product_details_modalArrayList.get(i).getDiscount_type().equals("%")) {
+                                                    double discountVal = enterQty * (((product_details_modalArrayList.get(i).getDiscount()
+                                                    )) / 100);
+
+
+                                                    Order_Outlet_Filter.get(pm).setDiscount((Math.round(discountVal)));
+
+                                                } else {
+                                                    //Rs
+                                                    if (product_details_modalArrayList.get(i).getPackage().equals("N")) {
+                                                        double freePer = (enterQty / highestScheme);
+
+                                                        double freeVal = freePer * (product_details_modalArrayList.
+                                                                get(i).getDiscount());
+
+                                                        Order_Outlet_Filter.get(pm).setDiscount((Math.round(freeVal)));
+                                                    } else {
+                                                        int val = (int) (enterQty / highestScheme);
+                                                        int freeVal = (int) (val * (product_details_modalArrayList.get(i).getDiscount()));
+                                                        Order_Outlet_Filter.get(pm).setDiscount((freeVal));
+                                                    }
+                                                }
+
+                                            } else {
+                                                Order_Outlet_Filter.get(pm).setDiscount(0.00);
+
+                                            }
+
+
+                                        }
+
+                                    } else {
+                                        Order_Outlet_Filter.get(pm).setFree("0");
+
+                                        Order_Outlet_Filter.get(pm).setDiscount(0.00);
+
+
+                                    }
+
+
+                                }
+
+                            }
+
+
+                        }
+
+                        if (!haveVal) {
+                            Order_Outlet_Filter.get(pm).setFree("0");
+
+                            Order_Outlet_Filter.get(pm).setDiscount(0.00);
+
+                        }
+
+
+                    }
+
+
+                    double disCountVal = 0.00;
+                    double taxVal = 0.00;
+
+                    for (int pm = 0; pm < Order_Outlet_Filter.size(); pm++) {
+
+                        if (Order_Outlet_Filter.get(pm).getQty() != null) {
+                            if (Order_Outlet_Filter.get(pm).getQty() > 0) {
+
+                                disCountVal += Order_Outlet_Filter.get(pm).getDiscount();
+
+                                taxVal += ((Order_Outlet_Filter.get(pm).getAmount() + Order_Outlet_Filter.get(pm).getDiscount()) - (Order_Outlet_Filter.get(pm).getQty() * Order_Outlet_Filter.get(pm).getRate()));
+                            }
+                        }
+                    }
+
+
+                    cashdiscount.setText("₹" + formatter.format(disCountVal));
+                    gstrate.setText("₹" + formatter.format(taxVal));
+
+
+                    sharedCommonPref.save(Constants.INVOICE_ORDERLIST, gson.toJson(Order_Outlet_Filter));
+
                     mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, new AdapterOnClick() {
                         @Override
                         public void onIntentClick(int position) {
-
-                           // sharedCommonPref.save(Constants.ORDER_ID, Order_Outlet_Filter.get(position).getId());
+                            //  sharedCommonPref.save(Constants.ORDER_ID, Order_Outlet_Filter.get(position).getId());
                         }
                     });
                     printrecyclerview.setAdapter(mReportViewAdapter);
@@ -639,7 +739,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
                 }
             }
-        }
+        } catch (Exception e) {
 
+        }
     }
 }

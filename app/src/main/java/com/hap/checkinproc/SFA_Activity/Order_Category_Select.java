@@ -477,10 +477,10 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                         Product_Modal.get(pmTax).setCGST(taxCal);
                                         break;
                                     case "SGST":
-                                        Product_Modal.get(pmTax).setCGST(taxCal);
+                                        Product_Modal.get(pmTax).setSGST(taxCal);
                                         break;
                                     case "IGST":
-                                        Product_Modal.get(pmTax).setCGST(taxCal);
+                                        Product_Modal.get(pmTax).setIGST(taxCal);
                                         break;
                                 }
 
@@ -1573,7 +1573,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                     if (jsonObject1.getString("Product_Detail_Code").equals(Product_Details_Modalitem.get(position).getId())) {
 
                                         if (jsonObject1.getDouble("Tax_Val") > 0) {
-                                            double taxCal = Product_Details_Modalitem.get(position).getAmount() * ((jsonObject1.getDouble("Tax_Val") / 100));
+                                            double taxCal = Product_Details_Modalitem.get(position).getAmount() *
+                                                    ((jsonObject1.getDouble("Tax_Val") / 100));
 
                                             wholeTax += taxCal;
 
@@ -1583,10 +1584,10 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                                     Product_Details_Modalitem.get(position).setCGST(taxCal);
                                                     break;
                                                 case "SGST":
-                                                    Product_Details_Modalitem.get(position).setCGST(taxCal);
+                                                    Product_Details_Modalitem.get(position).setSGST(taxCal);
                                                     break;
                                                 case "IGST":
-                                                    Product_Details_Modalitem.get(position).setCGST(taxCal);
+                                                    Product_Details_Modalitem.get(position).setIGST(taxCal);
                                                     break;
                                             }
 

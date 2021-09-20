@@ -681,7 +681,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                 HeadItem.put("OrderID", Shared_Common_Pref.OutletCode);
 
 
-                Call<ResponseBody> call = service.getInvoiceOrderQty(HeadItem.toString());
+                Call<ResponseBody> call = service.getInvoiceOrderDetails(HeadItem.toString());
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

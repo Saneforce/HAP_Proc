@@ -187,31 +187,33 @@
                                 android:outlineAmbientShadowColor="@color/statuscolor"></View>
 
 
-                            <RelativeLayout
-                                android:layout_width="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
                                 android:layout_marginTop="@dimen/C8dp"
                                 android:background="@color/background"
+                                android:orientation="horizontal"
                                 android:padding="@dimen/C8dp">
 
                                 <TextView
+
                                     android:id="@+id/billnumber"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Bill no : 674523"
-                                    android:textAlignment="textStart"
+                                    android:layout_weight="1"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C15dp"></TextView>
+                                    android:textSize="@dimen/C13dp"></TextView>
 
                                 <TextView
                                     android:id="@+id/invoicedate"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Date : 2021/08/07"
+                                    android:layout_weight="1"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C15dp"></TextView>
-                            </RelativeLayout>
+                                    android:textSize="@dimen/C13dp"></TextView>
+                            </LinearLayout>
 
                             <View
                                 android:layout_width="match_parent"
@@ -327,7 +329,8 @@
                                     android:id="@+id/subtotal"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="200.00"
+                                    android:fontFamily="sans-serif"
+                                    android:text="₹0.00"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C15dp"></TextView>
@@ -418,7 +421,8 @@
                                     android:id="@+id/gstrate"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="0.00"
+                                    android:fontFamily="sans-serif"
+                                    android:text="₹0.00"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C15dp"></TextView>
@@ -440,7 +444,8 @@
                                     android:id="@+id/cashdiscount"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="0.00"
+                                    android:fontFamily="sans-serif"
+                                    android:text="₹0.00"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C15dp"></TextView>
@@ -471,7 +476,7 @@
 
                                     android:layout_height="wrap_content"
                                     android:fontFamily="sans-serif"
-                                    android:text="1000.00"
+                                    android:text="₹ 0.00"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C15dp"

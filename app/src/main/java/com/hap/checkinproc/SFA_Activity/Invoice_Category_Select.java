@@ -1530,10 +1530,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                                     Product_Details_Modalitem.get(position).setCGST(taxCal);
                                                     break;
                                                 case "SGST":
-                                                    Product_Details_Modalitem.get(position).setCGST(taxCal);
+                                                    Product_Details_Modalitem.get(position).setSGST(taxCal);
                                                     break;
                                                 case "IGST":
-                                                    Product_Details_Modalitem.get(position).setCGST(taxCal);
+                                                    Product_Details_Modalitem.get(position).setIGST(taxCal);
                                                     break;
                                             }
 
