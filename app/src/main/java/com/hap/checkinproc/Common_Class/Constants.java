@@ -28,6 +28,7 @@ public class Constants {
     public static final String DEST_NAME = "destName";
     public static final String PLACE_ID_URL = "placeIdUrl";
     public static final String SHOP_PHOTO = "shopPhoto";
+    public static final String FLAG = "flag";
     public static String DirectionListPos = "directionListPos";
     public static final String Route_name = "routeName";
     public static final String Route_Id = "routeId";
@@ -47,4 +48,9 @@ public class Constants {
     public static final String RetailorTodayDataDynamic = "retailorTodayDataDynamic";
     public static final String FreeSchemeDiscList="freeSchemeDiscList";
     public static String InvoiceQtyList="InvoiceQtyList";
+
+    public static final String TAXList="taxList";
+
+    public static String INVOICE_ORDERLIST="invoiceOrderList";
+    public static final String ORDER_ID="orderId";
 }

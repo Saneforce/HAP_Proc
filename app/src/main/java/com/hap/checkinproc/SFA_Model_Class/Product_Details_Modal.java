@@ -54,6 +54,42 @@ public class Product_Details_Modal {
     @Expose
     private String PImage;
 
+    @SerializedName("CGST")
+    @Expose
+    private Double CGST;
+    @SerializedName("SGST")
+    @Expose
+    private Double SGST;
+
+    public Double getCGST() {
+        return CGST;
+    }
+
+    public void setCGST(Double CGST) {
+        this.CGST = CGST;
+    }
+
+    public Double getSGST() {
+        return SGST;
+    }
+
+    public void setSGST(Double SGST) {
+        this.SGST = SGST;
+    }
+
+    public Double getIGST() {
+        return IGST;
+    }
+
+    public void setIGST(Double IGST) {
+        this.IGST = IGST;
+    }
+
+    @SerializedName("IGST")
+    @Expose
+    private Double IGST;
+
+
     @SerializedName("free")
     @Expose
     private String free;
@@ -73,7 +109,7 @@ public class Product_Details_Modal {
 
     @SerializedName("discount")
     @Expose
-    private String discount;
+    private double discount;
 
 
     @SerializedName("discount_value")
@@ -223,7 +259,7 @@ public class Product_Details_Modal {
 
     }
 
-    public Product_Details_Modal(String id, String scheme, String free, String discount, String discount_type, String Package
+    public Product_Details_Modal(String id, String scheme, String free, double discount, String discount_type, String Package
             , String tax, String off_Pro_code, String off_Pro_name, String off_Pro_Unit) {
         this.id = id;
         this.scheme = scheme;
@@ -238,11 +274,11 @@ public class Product_Details_Modal {
 
     }
 
-    public String getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(String discount) {
+    public void setDiscount(double discount) {
         this.discount = discount;
     }
 

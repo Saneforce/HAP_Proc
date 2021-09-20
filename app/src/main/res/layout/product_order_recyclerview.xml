@@ -48,7 +48,7 @@
 
 
                     <TextView
-                        android:id="@+id/productname"
+                       android:id="@+id/productname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="thirumalai"
@@ -225,7 +225,7 @@
                             android:gravity="center_vertical"
                             android:text="Free : "
                             android:textColor="@color/grey_800"
-                            android:visibility="invisible" />
+                            android:visibility="visible" />
 
 
                         <TextView
@@ -239,8 +239,8 @@
                             android:hint=""
                             android:inputType="number"
                             android:text="0"
-                            android:textStyle="bold"
                             android:textColor="@color/green"
+                            android:textStyle="bold"
                             android:visibility="visible" />
 
 
@@ -276,7 +276,7 @@
 
 
                     <RelativeLayout
-                        android:visibility="gone"
+                        android:visibility="visible"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
                         android:orientation="horizontal">
@@ -291,12 +291,14 @@
                             android:hint=""
                             android:inputType="number"
                             android:text="TAX : "
+                            android:fontFamily="sans-serif"
                             android:textColor="@color/grey_800"
                             android:visibility="visible" />
 
 
                         <TextView
 
+                            android:fontFamily="sans-serif"
                             android:id="@+id/tax"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
@@ -305,7 +307,7 @@
 
                             android:hint=""
                             android:inputType="number"
-                            android:text="0"
+                            android:text=""
                             android:textColor="@color/grey_800"
                             android:visibility="visible" />
 

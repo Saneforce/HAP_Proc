@@ -433,6 +433,11 @@ public interface ApiInterface {
     Call<JsonObject> saveCalls(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
+    @POST("db_v310.php?axn=save/invoice")
+    Call<JsonObject> saveInvoice(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
+
+
+    @FormUrlEncoded
     @POST("db_v310.php?axn=save/otherbrandentry")
     Call<JsonObject> saveOtherBrand(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
@@ -490,10 +495,10 @@ public interface ApiInterface {
     @POST("db_new_activity.php?axn=upload/Taimg")
     Call<ResponseBody> uploadOutletImage(
             @Part MultipartBody.Part file);
+
     @FormUrlEncoded
     @POST("Db_v310.php?")
     Call<ResponseBody> sendUpldPhotoErrorMsg(@Query("axn") String axn, @Field("data") String body);
-
 
 
     @FormUrlEncoded
@@ -512,6 +517,19 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/prevorderqty")
     Call<ResponseBody> getPreOrderQty(@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/orderdetailsfrinv")
+    Call<ResponseBody> getInvoiceOrderDetails(@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/producttaxdetails")
+    Call<ResponseBody> getTAXDetails(@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/paymenttype")
+    Call<ResponseBody> getPayMode(@Field("data") String body);
+
 
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/popmaster ")

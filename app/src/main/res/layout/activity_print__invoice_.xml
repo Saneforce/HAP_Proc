@@ -89,403 +89,430 @@
             android:id="@+id/llParent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="0.8"
             android:background="@color/background"
             android:orientation="vertical"
             android:padding="@dimen/C8dp">
 
-            <androidx.cardview.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/C5dp"
-                app:cardCornerRadius="@dimen/C5dp">
+                android:layout_height="0dp"
+                android:layout_weight="0.9">
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/C10dp"
-                    android:orientation="vertical">
-
-                    <ImageView
-                        android:id="@+id/ivPreview"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/C90dp"
-                        android:visibility="gone"></ImageView>
-
+                    android:layout_margin="@dimen/C5dp"
+                    app:cardCornerRadius="@dimen/C5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="0.5"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/C10dp"
                         android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/retailername"
+                        <ImageView
+                            android:id="@+id/ivPreview"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:gravity="center"
-                            android:text="SALES INVOICE"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/C17dp"
-                            android:textStyle="bold">
+                            android:layout_height="@dimen/C90dp"
+                            android:visibility="gone"></ImageView>
 
-                        </TextView>
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/C5dp"
-                            android:background="@drawable/rect_dash_background"
-                            android:orientation="vertical"
-                            android:padding="@dimen/C10dp">
+                            android:layout_height="match_parent"
+                            android:layout_weight="0.5"
+                            android:orientation="vertical">
 
                             <TextView
+                                android:id="@+id/retailername"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="Address :"
+                                android:layout_gravity="center"
+                                android:gravity="center"
+                                android:text="SALES INVOICE"
                                 android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"
+                                android:textSize="@dimen/C17dp"
                                 android:textStyle="bold">
 
                             </TextView>
 
-
-                            <TextView
-                                android:visibility="gone"
-                                android:id="@+id/retailerroute"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Nandanam"
-
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp">
-
-                            </TextView>
-
-
-                            <TextView
-                                android:id="@+id/retaileAddress"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="No 4,Lotus colony,Nandhanam,chennai 600028"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp">
-
-                            </TextView>
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="5dp"
-                            android:background="@color/black"
-                            android:outlineAmbientShadowColor="@color/statuscolor"></View>
-
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/C10dp"
-                            android:background="@color/background"
-                            android:padding="@dimen/C8dp">
-
-                            <TextView
-                                android:id="@+id/billnumber"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Bill no : 674523"
-                                android:textAlignment="textStart"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"></TextView>
-
-                            <TextView
-                                android:id="@+id/invoicedate"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Date : 2021/08/07"
-                                android:textAlignment="viewEnd"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"></TextView>
-                        </RelativeLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="@dimen/C10dp"
-                            android:background="@color/black"
-                            android:outlineAmbientShadowColor="@color/statuscolor"></View>
-
-                        <LinearLayout
-                            android:id="@+id/row_report"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/C5dp"
-                            android:weightSum="4">
-
                             <LinearLayout
-                                android:layout_width="@dimen/header_width1"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1">
+                                android:layout_margin="@dimen/C5dp"
+                                android:background="@drawable/rect_dash_background"
+                                android:orientation="vertical"
+                                android:padding="@dimen/C10dp">
 
                                 <TextView
-                                    android:id="@+id/itemstextview"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_gravity="left"
-                                    android:gravity="left"
-                                    android:text="Item"
+                                    android:text="Address :"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C16dp"
-                                    android:textStyle="bold"></TextView>
+                                    android:textSize="@dimen/C15dp"
+                                    android:textStyle="bold">
+
+                                </TextView>
+
+
+                                <TextView
+                                    android:id="@+id/retailerroute"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Nandanam"
+                                    android:textColor="@color/black"
+
+                                    android:textSize="@dimen/C15dp"
+                                    android:visibility="gone">
+
+                                </TextView>
+
+
+                                <TextView
+                                    android:id="@+id/retaileAddress"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="No 4,Lotus colony,Nandhanam,chennai 600028"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp">
+
+                                </TextView>
+
                             </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="5dp"
+                                android:background="@color/black"
+                                android:outlineAmbientShadowColor="@color/statuscolor"></View>
 
 
                             <LinearLayout
-                                android:layout_width="@dimen/header_width2"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1">
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="@dimen/C8dp"
+                                android:background="@color/background"
+                                android:orientation="horizontal"
+                                android:padding="@dimen/C8dp">
 
                                 <TextView
-                                    android:id="@+id/orderqty"
+
+                                    android:id="@+id/billnumber"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_gravity="center"
-                                    android:gravity="end"
-                                    android:text="Qty"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C16dp"
-                                    android:textStyle="bold"></TextView>
+                                    android:textSize="@dimen/C13dp"></TextView>
+
+                                <TextView
+                                    android:id="@+id/invoicedate"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C13dp"></TextView>
                             </LinearLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="@dimen/C8dp"
+                                android:background="@color/black"></View>
 
                             <LinearLayout
-                                android:layout_width="@dimen/header_width2"
+                                android:id="@+id/row_report"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1">
+                                android:layout_gravity="center"
+                                android:padding="@dimen/C1dp">
 
-                                <TextView
-                                    android:id="@+id/Rate"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:text="Rate"
-                                    android:textAlignment="textEnd"
-                                    android:textColor="@color/black"
-                                    android:textSize="@dimen/C16dp"
-                                    android:textStyle="bold"></TextView>
+                                <LinearLayout
+                                    android:layout_width="@dimen/header_width1"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/itemstextview"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_gravity="left"
+                                        android:gravity="left"
+                                        android:text="Item"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C15dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+
+
+                                <LinearLayout
+                                    android:layout_width="@dimen/header_width2"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/orderqty"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_gravity="center"
+                                        android:gravity="end"
+                                        android:text="Qty"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C15dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="@dimen/header_width2"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/Rate"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="Rate"
+                                        android:textAlignment="textEnd"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C15dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="@dimen/header_width2"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="1">
+
+                                    <TextView
+                                        android:id="@+id/total"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:text="Total"
+                                        android:textAlignment="textEnd"
+                                        android:textColor="@color/black"
+                                        android:textSize="@dimen/C15dp"
+                                        android:textStyle="bold"></TextView>
+                                </LinearLayout>
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:layout_width="@dimen/header_width2"
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/black"></View>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/printrecyclerview"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="1">
+                                android:layout_weight="1" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/black"></View>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp">
 
                                 <TextView
-                                    android:id="@+id/total"
                                     android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:text="Total"
-                                    android:textAlignment="textEnd"
+                                    android:layout_height="wrap_content"
+                                    android:text="Subtotal"
+                                    android:textAlignment="textStart"
                                     android:textColor="@color/black"
-                                    android:textSize="@dimen/C16dp"
+                                    android:textSize="@dimen/C15dp"></TextView>
+
+                                <TextView
+                                    android:id="@+id/subtotal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif"
+                                    android:text="₹0.00"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"></TextView>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Total item"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"></TextView>
+
+                                <TextView
+                                    android:id="@+id/totalitem"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="5"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"></TextView>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Total Qty"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"></TextView>
+
+                                <TextView
+                                    android:id="@+id/totalqty"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="10"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"></TextView>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Total Free Qty"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"></TextView>
+
+                                <TextView
+                                    android:id="@+id/totalfreeqty"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="2"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"></TextView>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="TAX"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"></TextView>
+
+                                <TextView
+                                    android:id="@+id/gstrate"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif"
+                                    android:text="₹0.00"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"></TextView>
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Discount"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"></TextView>
+
+                                <TextView
+                                    android:id="@+id/cashdiscount"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif"
+                                    android:text="₹0.00"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"></TextView>
+                            </RelativeLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="3dp"
+                                android:background="@color/black"
+                                android:outlineAmbientShadowColor="@color/black"></View>
+
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Net Amount"
+                                    android:textAlignment="textStart"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"
                                     android:textStyle="bold"></TextView>
-                            </LinearLayout>
+
+                                <TextView
+                                    android:id="@+id/netamount"
+                                    android:layout_width="match_parent"
+
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="sans-serif"
+                                    android:text="₹ 0.00"
+                                    android:textAlignment="viewEnd"
+                                    android:textColor="@color/black"
+                                    android:textSize="@dimen/C15dp"
+                                    android:textStyle="bold"></TextView>
+                            </RelativeLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="3dp"
+                                android:background="@color/black"
+                                android:outlineAmbientShadowColor="@color/black"></View>
                         </LinearLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/black"></View>
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/printrecyclerview"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/black"
-                            ></View>
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Subtotal"
-                                android:textAlignment="textStart"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"></TextView>
-
-                            <TextView
-                                android:id="@+id/subtotal"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="200.00"
-                                android:textAlignment="viewEnd"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"></TextView>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Total item"
-                                android:textAlignment="textStart"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"></TextView>
-
-                            <TextView
-                                android:id="@+id/totalitem"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="5"
-                                android:textAlignment="viewEnd"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"></TextView>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <TextView
-
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Total Qty"
-                                android:textAlignment="textStart"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"></TextView>
-
-                            <TextView
-                                android:id="@+id/totalqty"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="10"
-                                android:textAlignment="viewEnd"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"></TextView>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Total Free Qty"
-                                android:textAlignment="textStart"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"></TextView>
-
-                            <TextView
-                                android:id="@+id/totalfreeqty"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="2"
-                                android:textAlignment="viewEnd"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"></TextView>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <TextView
-
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Gst Rate"
-                                android:textAlignment="textStart"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"></TextView>
-
-                            <TextView
-                                android:id="@+id/gstrate"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="0.00"
-                                android:textAlignment="viewEnd"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"></TextView>
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Cash Discount"
-                                android:textAlignment="textStart"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"></TextView>
-
-                            <TextView
-                                android:id="@+id/cashdiscount"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="0.00"
-                                android:textAlignment="viewEnd"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"></TextView>
-                        </RelativeLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="3dp"
-                            android:background="@color/black"
-                            android:outlineAmbientShadowColor="@color/black"></View>
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="Net Amount"
-                                android:textAlignment="textStart"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"
-                                android:textStyle="bold"></TextView>
-
-                            <TextView
-                                android:fontFamily="sans-serif"
-                                android:id="@+id/netamount"
-
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:text="1000.00"
-                                android:textAlignment="viewEnd"
-                                android:textColor="@color/black"
-                                android:textSize="@dimen/C15dp"
-                                android:textStyle="bold"></TextView>
-                        </RelativeLayout>
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="3dp"
-                            android:background="@color/black"
-                            android:outlineAmbientShadowColor="@color/black"></View>
                     </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/llCreateInvoice"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.1"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="visible">
+
+                <Button
+                    android:id="@+id/btnInvoice"
+                    style="@style/ButtonStyle"
+                    android:text="CREATE INVOICE"></Button>
+
+            </LinearLayout>
+
 
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"

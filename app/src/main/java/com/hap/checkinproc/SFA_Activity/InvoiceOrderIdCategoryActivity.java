@@ -77,7 +77,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Invoice_Category_Select extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
+public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
     NumberFormat formatter = new DecimalFormat("##0.00");
     GridView categorygrid;
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
@@ -108,7 +108,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     EditText cashdiscount;
     Prodct_Adapter mProdct_Adapter;
 
-    String TAG = "Invoice_Category_Select";
+    String TAG = "InvoiceOrderIdCategoryActivity";
     DatabaseHandler db;
     private int selectedPos = 0;
 
@@ -116,12 +116,12 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     ImageView ivClose;
     EditText etCategoryItemSearch;
     private TextView tvTotalAmount;
-    private double totalvalues;
+    private double totalvalues, totCGST, totSGST, totIGST;
     int cashDiscount;
 
     private Integer totalQty;
     private TextView tvBillTotItem, tvPayMode, tvDate, tvPayAmount;
-    private double taxVal, totCGST, totSGST, totIGST;
+    private double taxVal;
 
     RelativeLayout rlPayment, rlCredit, rlCash;
 
@@ -138,7 +138,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             setContentView(R.layout.activity_invoice__category__select);
             //  ((MyApplication) getApplication()).getNetComponent().inject(this);
             db = new DatabaseHandler(this);
-            sharedCommonPref = new Shared_Common_Pref(Invoice_Category_Select.this);
+            sharedCommonPref = new Shared_Common_Pref(InvoiceOrderIdCategoryActivity.this);
             common_class = new Common_Class(this);
             categorygrid = findViewById(R.id.category);
             takeorder = findViewById(R.id.takeorder);
@@ -217,7 +217,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             llGridParent.setLayoutParams(params);
 
 
-            Invoice_Category_Select.CategoryAdapter customAdapteravail = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(),
+            InvoiceOrderIdCategoryActivity.CategoryAdapter customAdapteravail = new InvoiceOrderIdCategoryActivity.CategoryAdapter(getApplicationContext(),
                     Category_Modal);
 
             categorygrid.setNumColumns(Category_Modal.size());
@@ -294,7 +294,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         if (Double.valueOf(s.toString()) > 0) {
                             Double totalamount = Double.valueOf(totalvalues);
                             if (Double.valueOf(s.toString()) > Double.valueOf(totalvalues)) {
-                                Toast.makeText(Invoice_Category_Select.this, "Discount Exceeded", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(InvoiceOrderIdCategoryActivity.this, "Discount Exceeded", Toast.LENGTH_SHORT).show();
                                 cashdiscount.setText("");
                                 netamount.setText("" + totalvalues);
                             } else {
@@ -336,7 +336,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             });
 
 
-          /*  String preOrderList = sharedCommonPref.getvalue(Constants.PreOrderQtyList);
+            String preOrderList = sharedCommonPref.getvalue(Constants.INVOICE_ORDERLIST);
 
             Type type = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
@@ -486,8 +486,19 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                             if (jsonObject1.getDouble("Tax_Val") > 0) {
                                 double taxCal = Product_Modal.get(pmTax).getAmount() * ((jsonObject1.getDouble("Tax_Val") / 100));
-
                                 wholeTax += taxCal;
+
+                                switch (jsonObject1.getString("Tax_Type")) {
+                                    case "CGST":
+                                        Product_Modal.get(pmTax).setCGST(taxCal);
+                                        break;
+                                    case "SGST":
+                                        Product_Modal.get(pmTax).setSGST(taxCal);
+                                        break;
+                                    case "IGST":
+                                        Product_Modal.get(pmTax).setIGST(taxCal);
+                                        break;
+                                }
 
 
                             }
@@ -502,7 +513,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
 
                 }
-            }*/
+            }
 
 
             tvDate.setText("" + Common_Class.GetDatewothouttime());
@@ -711,7 +722,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                                 if (payList.size() > 0) {
 
-                                    customDialog = new CustomListViewDialog(Invoice_Category_Select.this, payList, 1);
+                                    customDialog = new CustomListViewDialog(InvoiceOrderIdCategoryActivity.this, payList, 1);
                                     Window windoww = customDialog.getWindow();
                                     windoww.setGravity(Gravity.CENTER);
                                     windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -749,7 +760,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     private void SaveOrder() {
         if (common_class.isNetworkAvailable(this)) {
 
-            AlertDialogBox.showDialog(Invoice_Category_Select.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
+            AlertDialogBox.showDialog(InvoiceOrderIdCategoryActivity.this, "HAP SFA", "Are You Sure Want to Submit?", "OK", "Cancel", false, new AlertBox() {
                 @Override
                 public void PositiveMethod(DialogInterface dialog, int id) {
 
@@ -795,7 +806,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "invoice");
                         OutletItem.put("payType", tvPayMode.getText().toString());
-                        OutletItem.put("orderId", "");
+                        OutletItem.put("orderId", Shared_Common_Pref.TransSlNo);
 
 
                         if (strLoc.length > 0) {
@@ -848,9 +859,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                     Log.e("Success_Message", san);
                                     if (san.equals("true")) {
                                         if (Shared_Common_Pref.Invoicetoorder.equals("0")) {
-                                            Toast.makeText(Invoice_Category_Select.this, "Order Submitted Successfully", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(InvoiceOrderIdCategoryActivity.this, "Order Submitted Successfully", Toast.LENGTH_SHORT).show();
                                         } else {
-                                            Toast.makeText(Invoice_Category_Select.this, "Invoice Submitted Successfully", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(InvoiceOrderIdCategoryActivity.this, "Invoice Submitted Successfully", Toast.LENGTH_SHORT).show();
                                         }
                                         Shared_Common_Pref.Sync_Flag = "2";
 //                                    startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
@@ -858,10 +869,11 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                         startActivity(new Intent(getApplicationContext(), Invoice_History.class));
                                         finish();
                                     }
+                                    else {
 
-                                }
-                                catch (Exception e) {
-                                    Log.e(TAG,"invcatch: "+e.getMessage());
+                                    }
+
+                                } catch (Exception e) {
 
                                 }
                             }
@@ -913,7 +925,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
             //156
         } else {
-            Invoice_Category_Select.CategoryAdapter customAdapteravail = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+            InvoiceOrderIdCategoryActivity.CategoryAdapter customAdapteravail = new InvoiceOrderIdCategoryActivity.CategoryAdapter(getApplicationContext(), Category_Modal);
             categorygrid.setAdapter(customAdapteravail);
             linnercashdiscount.setVisibility(View.VISIBLE);
             orderbutton.setText("INVOICE");
@@ -1023,9 +1035,12 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         taxVal += Double.parseDouble(Product_Modal.get(pm).getTax());
 
 
-                    totCGST += Product_Modal.get(pm).getCGST();
-                    totSGST += Product_Modal.get(pm).getSGST();
-                    totIGST += Product_Modal.get(pm).getIGST();
+                    if (Product_Modal.get(pm).getCGST() != null)
+                        totCGST += Product_Modal.get(pm).getCGST();
+                    if (Product_Modal.get(pm).getSGST() != null)
+                        totSGST += Product_Modal.get(pm).getSGST();
+                    if (Product_Modal.get(pm).getIGST() != null)
+                        totIGST += Product_Modal.get(pm).getIGST();
 
                     Getorder_Array_List.add(Product_Modal.get(pm));
 
@@ -1080,7 +1095,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
 
-        Invoice_Category_Select.CategoryAdapter customAdapteravail = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+        InvoiceOrderIdCategoryActivity.CategoryAdapter customAdapteravail = new InvoiceOrderIdCategoryActivity.CategoryAdapter(getApplicationContext(), Category_Modal);
         categorygrid.setAdapter(customAdapteravail);
         // customAdapteravail.updateUi(categoryPos);
         //
@@ -1112,7 +1127,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
 
-        Invoice_Category_Select.CategoryAdapter customAdapteravail = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+        InvoiceOrderIdCategoryActivity.CategoryAdapter customAdapteravail = new InvoiceOrderIdCategoryActivity.CategoryAdapter(getApplicationContext(), Category_Modal);
         categorygrid.setAdapter(customAdapteravail);
         // customAdapteravail.updateUi(categoryPos);
         //
@@ -1231,7 +1246,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         }
     }
 
-    public class Prodct_Adapter extends RecyclerView.Adapter<Prodct_Adapter.MyViewHolder> {
+    public class Prodct_Adapter extends RecyclerView.Adapter<InvoiceOrderIdCategoryActivity.Prodct_Adapter.MyViewHolder> {
         private List<Product_Details_Modal> Product_Details_Modalitem;
         private int rowLayout;
         private int Categorycolor;
@@ -1282,9 +1297,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         }
 
         @Override
-        public Prodct_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public InvoiceOrderIdCategoryActivity.Prodct_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-            return new MyViewHolder(view);
+            return new InvoiceOrderIdCategoryActivity.Prodct_Adapter.MyViewHolder(view);
         }
 
         @Override
@@ -1298,7 +1313,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         }
 
         @Override
-        public void onBindViewHolder(Prodct_Adapter.MyViewHolder holder, int position) {
+        public void onBindViewHolder(InvoiceOrderIdCategoryActivity.Prodct_Adapter.MyViewHolder holder, int position) {
             try {
 
 
@@ -1326,7 +1341,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                     holder.Free.setText("" + Product_Details_Modal.getFree());
 
                 holder.Disc.setText("₹" + formatter.format(Product_Details_Modal.getDiscount()));
-
 
 
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getTax()))
@@ -1505,7 +1519,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                             String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
 
-                            if ( !Common_Class.isNullOrEmpty(taxRes)) {
+                            if (!Common_Class.isNullOrEmpty(taxRes)) {
                                 JSONObject jsonObject = new JSONObject(taxRes.toString());
 
 
@@ -1596,7 +1610,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     }
 
 
-    public class Pay_Adapter extends RecyclerView.Adapter<Pay_Adapter.MyViewHolder> {
+    public class Pay_Adapter extends RecyclerView.Adapter<InvoiceOrderIdCategoryActivity.Pay_Adapter.MyViewHolder> {
         private List<Product_Details_Modal> Product_Details_Modalitem;
         private int rowLayout;
 
@@ -1630,9 +1644,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         }
 
         @Override
-        public Pay_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public InvoiceOrderIdCategoryActivity.Pay_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-            return new MyViewHolder(view);
+            return new InvoiceOrderIdCategoryActivity.Pay_Adapter.MyViewHolder(view);
         }
 
         @Override
@@ -1646,7 +1660,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         }
 
         @Override
-        public void onBindViewHolder(Pay_Adapter.MyViewHolder holder, int position) {
+        public void onBindViewHolder(InvoiceOrderIdCategoryActivity.Pay_Adapter.MyViewHolder holder, int position) {
             try {
 
 
@@ -1703,7 +1717,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
 
                 takeorder.setText("PROCEED TO CART");
-                Invoice_Category_Select.CategoryAdapter customAdapteravaill = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+                InvoiceOrderIdCategoryActivity.CategoryAdapter customAdapteravaill = new InvoiceOrderIdCategoryActivity.CategoryAdapter(getApplicationContext(), Category_Modal);
                 categorygrid.setAdapter(customAdapteravaill);
 
 
