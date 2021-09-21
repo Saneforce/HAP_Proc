@@ -367,6 +367,8 @@
                         android:background="@color/white"
                         android:enabled="false"
                         android:clickable="false"
+                        android:textSize="13sp"
+                        android:gravity="top"
                         android:lines="3"/>
                 </LinearLayout>
                 <Button

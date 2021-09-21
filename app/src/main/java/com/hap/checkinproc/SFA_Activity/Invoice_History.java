@@ -177,9 +177,6 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
             }.getType();
             OutletReport_View_Modal = gson.fromJson(OrdersTable, userType);
-            System.out.println("Array_List_Size" + OrdersTable.toString());
-            System.out.println("Array_List_Sizee" + OutletReport_View_Modal.size());
-            System.out.println("Array_List_Outlet_Code" + Shared_Common_Pref.OutletCode);
             if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
                 for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
                     if (filterlist.getOutletCode().equals(Shared_Common_Pref.OutletCode)) {
@@ -406,8 +403,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                                     JSONObject jsonObjects = new JSONObject(response.body().toString());
                                     String san = jsonObjects.getString("success");
                                     Log.e("Success_Message", san);
+                                    linNoOrderRmks.setVisibility(View.GONE);
                                     if (san.equals("true")) {
-
                                         Toast.makeText(Invoice_History.this, "No Order Submitted Successfully", Toast.LENGTH_SHORT).show();
                                     }
 

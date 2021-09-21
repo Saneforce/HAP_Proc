@@ -33,6 +33,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -79,7 +81,7 @@ import retrofit2.Response;
 
 public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
     NumberFormat formatter = new DecimalFormat("##0.00");
-    GridView categorygrid;
+    //GridView categorygrid;
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
     List<Product_Details_Modal> Order_Outlet_Filter;
@@ -94,7 +96,7 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
             tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo;
     /* @Inject
      Retrofit retrofit;*/
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView,categorygrid;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, linnetamount, linnercashdiscount;
     public boolean gobackflag = false;
     Common_Class common_class;
@@ -160,6 +162,10 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
             rlCategoryItemSearch = findViewById(R.id.rlCategoryItemSearch);
             ivClose = findViewById(R.id.ivClose);
 
+            LinearLayoutManager layoutManager= new LinearLayoutManager(this);
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            categorygrid.setLayoutManager(layoutManager);
+
             tvOtherBrand = (TextView) findViewById(R.id.tvOtherBrand);
             tvPOP = (TextView) findViewById(R.id.tvPOP);
             tvQPS = (TextView) findViewById(R.id.tvQPS);
@@ -208,6 +214,7 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
             if (Shared_Common_Pref.Invoicetoorder == null || Shared_Common_Pref.Invoicetoorder.equals("0")) {
                 //  Get_regularqty();
             }
+/*
 
             LinearLayout llGridParent = findViewById(R.id.lin_gridcategory);
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) llGridParent.getLayoutParams();
@@ -215,12 +222,13 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
             params.height = FrameLayout.LayoutParams.WRAP_CONTENT;
             params.width = Category_Modal.size() * 210;
             llGridParent.setLayoutParams(params);
+*/
 
 
             InvoiceOrderIdCategoryActivity.CategoryAdapter customAdapteravail = new InvoiceOrderIdCategoryActivity.CategoryAdapter(getApplicationContext(),
                     Category_Modal);
 
-            categorygrid.setNumColumns(Category_Modal.size());
+            //categorygrid.setNumColumns(Category_Modal.size());
 
             categorygrid.setAdapter(customAdapteravail);
 
@@ -925,8 +933,8 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
 
             //156
         } else {
-            InvoiceOrderIdCategoryActivity.CategoryAdapter customAdapteravail = new InvoiceOrderIdCategoryActivity.CategoryAdapter(getApplicationContext(), Category_Modal);
-            categorygrid.setAdapter(customAdapteravail);
+//            InvoiceOrderIdCategoryActivity.CategoryAdapter customAdapteravail = new InvoiceOrderIdCategoryActivity.CategoryAdapter(getApplicationContext(), Category_Modal);
+//            categorygrid.setAdapter(customAdapteravail);
             linnercashdiscount.setVisibility(View.VISIBLE);
             orderbutton.setText("INVOICE");
         }
@@ -1095,8 +1103,8 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
 
-        InvoiceOrderIdCategoryActivity.CategoryAdapter customAdapteravail = new InvoiceOrderIdCategoryActivity.CategoryAdapter(getApplicationContext(), Category_Modal);
-        categorygrid.setAdapter(customAdapteravail);
+//        InvoiceOrderIdCategoryActivity.CategoryAdapter customAdapteravail = new InvoiceOrderIdCategoryActivity.CategoryAdapter(getApplicationContext(), Category_Modal);
+//        categorygrid.setAdapter(customAdapteravail);
         // customAdapteravail.updateUi(categoryPos);
         //
         mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_invoice_recyclerview, getApplicationContext(), categoryPos);
@@ -1127,8 +1135,8 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
 
-        InvoiceOrderIdCategoryActivity.CategoryAdapter customAdapteravail = new InvoiceOrderIdCategoryActivity.CategoryAdapter(getApplicationContext(), Category_Modal);
-        categorygrid.setAdapter(customAdapteravail);
+//        InvoiceOrderIdCategoryActivity.CategoryAdapter customAdapteravail = new InvoiceOrderIdCategoryActivity.CategoryAdapter(getApplicationContext(), Category_Modal);
+//        categorygrid.setAdapter(customAdapteravail);
         // customAdapteravail.updateUi(categoryPos);
         //
         mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_invoice_recyclerview, getApplicationContext(), categoryPos);
@@ -1163,7 +1171,7 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
         tvPayMode.setText("" + myDataset.get(position).getName());
     }
 
-    public class CategoryAdapter extends BaseAdapter {
+    /*public class CategoryAdapter extends BaseAdapter {
         Context context;
         LayoutInflater inflter;
         ImageView ivCategoryIcon;
@@ -1244,6 +1252,114 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
 
             return view;
         }
+    }*/
+    public class CategoryAdapter extends RecyclerView.Adapter<InvoiceOrderIdCategoryActivity.CategoryAdapter.MyViewHolder> {
+        private int rowLayout;
+
+        Context context;
+        LayoutInflater inflter;
+        InvoiceOrderIdCategoryActivity.CategoryAdapter.MyViewHolder pholder;
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+
+            public LinearLayout gridcolor;
+            TextView icon;
+            ImageView ivCategoryIcon;
+
+
+            public MyViewHolder(View view) {
+                super(view);
+
+                icon = view.findViewById(R.id.textView);
+                gridcolor = view.findViewById(R.id.gridcolor);
+                ivCategoryIcon = view.findViewById(R.id.ivCategoryIcon);
+
+
+            }
+        }
+
+
+        public CategoryAdapter(Context applicationContext, List<Category_Universe_Modal> list) {
+            this.context = applicationContext;
+            listt = list;
+        }
+
+        @Override
+        public InvoiceOrderIdCategoryActivity.CategoryAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            View view= layoutInflater.inflate(R.layout.category_order_horizantal_universe_gridview, parent, false);
+            return new InvoiceOrderIdCategoryActivity.CategoryAdapter.MyViewHolder(view);
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @SuppressLint("UseCompatLoadingForDrawables")
+        @Override
+        public void onBindViewHolder(InvoiceOrderIdCategoryActivity.CategoryAdapter.MyViewHolder holder, int position) {
+            try {
+
+
+                holder.icon.setText(listt.get(holder.getAdapterPosition()).getName());
+                if(!listt.get(position).getCatImage().equalsIgnoreCase("")) {
+                    holder.ivCategoryIcon.clearColorFilter();
+                    Glide.with(this.context)
+                            .load(listt.get(position).getCatImage())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(holder.ivCategoryIcon);
+                }
+                else{
+                    holder.ivCategoryIcon.setImageDrawable(getResources().getDrawable(R.drawable.product_logo));
+                    holder.ivCategoryIcon.setColorFilter(getResources().getColor(R.color.grey_500));
+                }
+
+                holder.gridcolor.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(pholder!=null) {
+                            pholder.icon.setTextColor(getResources().getColor(R.color.grey_500));
+                            pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                        }
+                        pholder=holder;
+                        selectedPos = holder.getAdapterPosition();
+                        showOrderItemList(holder.getAdapterPosition());
+
+                        holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                        holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
+                    }
+                });
+
+
+                if (position == selectedPos) {
+
+                    holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
+                } else {
+                    holder.icon.setTextColor(getResources().getColor(R.color.grey_500));
+                    holder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+
+                }
+
+
+            } catch (Exception e) {
+                Log.e(TAG, "adapterProduct: " + e.getMessage());
+            }
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return listt.size();
+        }
+
+
     }
 
     public class Prodct_Adapter extends RecyclerView.Adapter<InvoiceOrderIdCategoryActivity.Prodct_Adapter.MyViewHolder> {
@@ -1258,6 +1374,7 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, lblAddQty, productQty, preOrderVal, regularAmt,
                     QtyAmt, totalQty, tvTaxLabel;
 
+            ImageView ImgVwProd,QtyPls,QtyMns;
             public LinearLayout lnRwEntry, lnlblRwEntry;
             EditText Qty;
 
@@ -1267,6 +1384,9 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
                 productname = view.findViewById(R.id.productname);
                 Rate = view.findViewById(R.id.Rate);
                 Qty = view.findViewById(R.id.Qty);
+                ImgVwProd=view.findViewById(R.id.ivAddShoppingCart);
+                QtyPls=view.findViewById(R.id.ivQtyPls);
+                QtyMns=view.findViewById(R.id.ivQtyMns);
                 lblRQty = view.findViewById(R.id.status);
                 lblAddQty = view.findViewById(R.id.lblAddQty);
                 RegularQty = view.findViewById(R.id.RegularQty);
@@ -1324,6 +1444,37 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
                 holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate()));
                 holder.Amount.setText("₹" + formatter.format(Product_Details_Modal.getAmount()));
                 holder.totalQty.setText("Total Qty : " + (/*(Product_Details_Modalitem.get(position).getRegularQty()) +*/ (Product_Details_Modalitem.get(position).getQty())));
+
+                if(!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
+                    holder.ImgVwProd.clearColorFilter();
+                    Glide.with(this.context)
+                            .load(Product_Details_Modal.getPImage())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(holder.ImgVwProd);
+                }
+                else{
+                    holder.ImgVwProd.setImageDrawable(getResources().getDrawable(R.drawable.product_logo));
+                    holder.ImgVwProd.setColorFilter(getResources().getColor(R.color.grey_500));
+                }
+
+                holder.QtyPls.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String sVal=holder.Qty.getText().toString();
+                        if (sVal.equalsIgnoreCase("")) sVal="0";
+                        holder.Qty.setText(String.valueOf(Integer.parseInt(sVal)+1));
+                    }
+                });
+                holder.QtyMns.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String sVal=holder.Qty.getText().toString();
+                        if (sVal.equalsIgnoreCase("")) sVal="0";
+                        if(Integer.parseInt(sVal)>0){
+                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal)-1));
+                        }
+                    }
+                });
 
 
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
@@ -1717,8 +1868,8 @@ public class InvoiceOrderIdCategoryActivity extends AppCompatActivity implements
 
 
                 takeorder.setText("PROCEED TO CART");
-                InvoiceOrderIdCategoryActivity.CategoryAdapter customAdapteravaill = new InvoiceOrderIdCategoryActivity.CategoryAdapter(getApplicationContext(), Category_Modal);
-                categorygrid.setAdapter(customAdapteravaill);
+//                InvoiceOrderIdCategoryActivity.CategoryAdapter customAdapteravaill = new InvoiceOrderIdCategoryActivity.CategoryAdapter(getApplicationContext(), Category_Modal);
+//                categorygrid.setAdapter(customAdapteravaill);
 
 
                 showOrderItemList(selectedPos);

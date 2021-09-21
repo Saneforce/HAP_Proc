@@ -85,43 +85,55 @@
                 android:textSize="17dp"
                 android:textStyle="bold" />
         </LinearLayout>
-
-
-        <HorizontalScrollView
+    <LinearLayout
+        android:id="@+id/lin_gridcategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/category"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:scrollbars="none">
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
 
-            <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="match_parent">
+        </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
 
-                <LinearLayout
-                    android:id="@+id/lin_gridcategory"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
+<!--        <HorizontalScrollView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:scrollbars="none">-->
 
-                    <GridView
-                        android:id="@+id/category"
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_margin="@dimen/C5dp"
-                        android:columnWidth="100dp"
-                        android:gravity="center"
-                        android:horizontalSpacing="1dp"
-                        android:scrollbarAlwaysDrawHorizontalTrack="true"
-                        android:scrollbarAlwaysDrawVerticalTrack="true"
-                        android:scrollbars="horizontal"
-                        android:stretchMode="none"
-                        android:verticalSpacing="1dp">
+<!--            <FrameLayout-->
+<!--                android:layout_width="fill_parent"-->
+<!--                android:layout_height="match_parent">-->
 
-                    </GridView>
+<!--                <LinearLayout-->
+<!--                    android:id="@+id/lin_gridcategory"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:orientation="horizontal">-->
+
+<!--                    <GridView-->
+<!--                        android:id="@+id/category"-->
+<!--                        android:layout_width="fill_parent"-->
+<!--                        android:layout_height="fill_parent"-->
+<!--                        android:layout_margin="@dimen/C5dp"-->
+<!--                        android:columnWidth="100dp"-->
+<!--                        android:gravity="center"-->
+<!--                        android:horizontalSpacing="1dp"-->
+<!--                        android:scrollbarAlwaysDrawHorizontalTrack="true"-->
+<!--                        android:scrollbarAlwaysDrawVerticalTrack="true"-->
+<!--                        android:scrollbars="horizontal"-->
+<!--                        android:stretchMode="none"-->
+<!--                        android:verticalSpacing="1dp">-->
+
+<!--                    </GridView>-->
 
 
-                </LinearLayout>
-            </FrameLayout>
-        </HorizontalScrollView>
+<!--                </LinearLayout>-->
+<!--            </FrameLayout>-->
+<!--        </HorizontalScrollView>-->
 
 
         <androidx.cardview.widget.CardView
@@ -766,8 +778,11 @@
                     android:id="@+id/tvTotalItems"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
                     android:text="Items : 0"
-                    android:textColor="@color/white">
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+                    >
 
                 </TextView>
 
@@ -777,7 +792,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:text=" ₹ : 0"
-                    android:textColor="@color/white">
+                    android:textColor="@color/white"
+                    android:textSize="13sp">
 
                 </TextView>
 

@@ -33,6 +33,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
@@ -79,7 +81,7 @@ import retrofit2.Response;
 
 public class Invoice_Category_Select extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI, Master_Interface {
     NumberFormat formatter = new DecimalFormat("##0.00");
-    GridView categorygrid;
+    //GridView categorygrid;
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
     List<Product_Details_Modal> Order_Outlet_Filter;
@@ -94,7 +96,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo;
     /* @Inject
      Retrofit retrofit;*/
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerView,categorygrid;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, linnetamount, linnercashdiscount;
     public boolean gobackflag = false;
     Common_Class common_class;
@@ -144,6 +146,11 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             takeorder = findViewById(R.id.takeorder);
             orderbutton = findViewById(R.id.orderbutton);
             netamount = findViewById(R.id.netamount);
+
+            LinearLayoutManager layoutManager= new LinearLayoutManager(this);
+            layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            categorygrid.setLayoutManager(layoutManager);
+
             ok = findViewById(R.id.ok);
             back = findViewById(R.id.back);
             mDCRMode = sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
@@ -209,18 +216,18 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 //  Get_regularqty();
             }
 
-            LinearLayout llGridParent = findViewById(R.id.lin_gridcategory);
+           /* LinearLayout llGridParent = findViewById(R.id.lin_gridcategory);
             FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) llGridParent.getLayoutParams();
 // Changes the height and width to the specified *pixels*
             params.height = FrameLayout.LayoutParams.WRAP_CONTENT;
             params.width = Category_Modal.size() * 210;
-            llGridParent.setLayoutParams(params);
+            llGridParent.setLayoutParams(params);*/
 
 
             Invoice_Category_Select.CategoryAdapter customAdapteravail = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(),
                     Category_Modal);
 
-            categorygrid.setNumColumns(Category_Modal.size());
+            //categorygrid.setNumColumns(Category_Modal.size());
 
             categorygrid.setAdapter(customAdapteravail);
 
@@ -913,8 +920,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
             //156
         } else {
-            Invoice_Category_Select.CategoryAdapter customAdapteravail = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
-            categorygrid.setAdapter(customAdapteravail);
+//            Invoice_Category_Select.CategoryAdapter customAdapteravail = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+//            categorygrid.setAdapter(customAdapteravail);
             linnercashdiscount.setVisibility(View.VISIBLE);
             orderbutton.setText("INVOICE");
         }
@@ -1080,8 +1087,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
 
-        Invoice_Category_Select.CategoryAdapter customAdapteravail = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
-        categorygrid.setAdapter(customAdapteravail);
+//        Invoice_Category_Select.CategoryAdapter customAdapteravail = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+//        categorygrid.setAdapter(customAdapteravail);
         // customAdapteravail.updateUi(categoryPos);
         //
         mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_invoice_recyclerview, getApplicationContext(), categoryPos);
@@ -1112,8 +1119,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
 
-        Invoice_Category_Select.CategoryAdapter customAdapteravail = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
-        categorygrid.setAdapter(customAdapteravail);
+//        Invoice_Category_Select.CategoryAdapter customAdapteravail = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+//        categorygrid.setAdapter(customAdapteravail);
         // customAdapteravail.updateUi(categoryPos);
         //
         mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_invoice_recyclerview, getApplicationContext(), categoryPos);
@@ -1147,8 +1154,115 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         customDialog.dismiss();
         tvPayMode.setText("" + myDataset.get(position).getName());
     }
+    public class CategoryAdapter extends RecyclerView.Adapter<Invoice_Category_Select.CategoryAdapter.MyViewHolder> {
+        private int rowLayout;
 
-    public class CategoryAdapter extends BaseAdapter {
+        Context context;
+        LayoutInflater inflter;
+        Invoice_Category_Select.CategoryAdapter.MyViewHolder pholder;
+        public class MyViewHolder extends RecyclerView.ViewHolder {
+
+            public LinearLayout gridcolor;
+            TextView icon;
+            ImageView ivCategoryIcon;
+
+
+            public MyViewHolder(View view) {
+                super(view);
+
+                icon = view.findViewById(R.id.textView);
+                gridcolor = view.findViewById(R.id.gridcolor);
+                ivCategoryIcon = view.findViewById(R.id.ivCategoryIcon);
+
+
+            }
+        }
+
+
+        public CategoryAdapter(Context applicationContext, List<Category_Universe_Modal> list) {
+            this.context = applicationContext;
+            listt = list;
+        }
+
+        @Override
+        public Invoice_Category_Select.CategoryAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            View view= layoutInflater.inflate(R.layout.category_order_horizantal_universe_gridview, parent, false);
+            return new Invoice_Category_Select.CategoryAdapter.MyViewHolder(view);
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @SuppressLint("UseCompatLoadingForDrawables")
+        @Override
+        public void onBindViewHolder(Invoice_Category_Select.CategoryAdapter.MyViewHolder holder, int position) {
+            try {
+
+
+                holder.icon.setText(listt.get(holder.getAdapterPosition()).getName());
+                if(!listt.get(position).getCatImage().equalsIgnoreCase("")) {
+                    holder.ivCategoryIcon.clearColorFilter();
+                    Glide.with(this.context)
+                            .load(listt.get(position).getCatImage())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(holder.ivCategoryIcon);
+                }
+                else{
+                    holder.ivCategoryIcon.setImageDrawable(getResources().getDrawable(R.drawable.product_logo));
+                    holder.ivCategoryIcon.setColorFilter(getResources().getColor(R.color.grey_500));
+                }
+
+                holder.gridcolor.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(pholder!=null) {
+                            pholder.icon.setTextColor(getResources().getColor(R.color.grey_500));
+                            pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                        }
+                        pholder=holder;
+                        selectedPos = holder.getAdapterPosition();
+                        showOrderItemList(holder.getAdapterPosition());
+
+                        holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                        holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
+                    }
+                });
+
+
+                if (position == selectedPos) {
+
+                    holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
+                    holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
+                } else {
+                    holder.icon.setTextColor(getResources().getColor(R.color.grey_500));
+                    holder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+
+                }
+
+
+            } catch (Exception e) {
+                Log.e(TAG, "adapterProduct: " + e.getMessage());
+            }
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return listt.size();
+        }
+
+
+    }
+    /*public class CategoryAdapter extends BaseAdapter {
         Context context;
         LayoutInflater inflter;
         ImageView ivCategoryIcon;
@@ -1230,7 +1344,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             return view;
         }
     }
-
+*/
     public class Prodct_Adapter extends RecyclerView.Adapter<Prodct_Adapter.MyViewHolder> {
         private List<Product_Details_Modal> Product_Details_Modalitem;
         private int rowLayout;
@@ -1243,6 +1357,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, lblAddQty, productQty, preOrderVal, regularAmt,
                     QtyAmt, totalQty, tvTaxLabel;
 
+            ImageView ImgVwProd,QtyPls,QtyMns;
             public LinearLayout lnRwEntry, lnlblRwEntry;
             EditText Qty;
 
@@ -1252,6 +1367,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 productname = view.findViewById(R.id.productname);
                 Rate = view.findViewById(R.id.Rate);
                 Qty = view.findViewById(R.id.Qty);
+                ImgVwProd=view.findViewById(R.id.ivAddShoppingCart);
+                QtyPls=view.findViewById(R.id.ivQtyPls);
+                QtyMns=view.findViewById(R.id.ivQtyMns);
                 lblRQty = view.findViewById(R.id.status);
                 lblAddQty = view.findViewById(R.id.lblAddQty);
                 RegularQty = view.findViewById(R.id.RegularQty);
@@ -1310,7 +1428,17 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 holder.Amount.setText("₹" + formatter.format(Product_Details_Modal.getAmount()));
                 holder.totalQty.setText("Total Qty : " + (/*(Product_Details_Modalitem.get(position).getRegularQty()) +*/ (Product_Details_Modalitem.get(position).getQty())));
 
-
+                if(!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
+                    holder.ImgVwProd.clearColorFilter();
+                    Glide.with(this.context)
+                            .load(Product_Details_Modal.getPImage())
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(holder.ImgVwProd);
+                }
+                else{
+                    holder.ImgVwProd.setImageDrawable(getResources().getDrawable(R.drawable.product_logo));
+                    holder.ImgVwProd.setColorFilter(getResources().getColor(R.color.grey_500));
+                }
                 holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
                 holder.regularAmt.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getRegularQty() * Product_Details_Modalitem.get(position).getRate()));
 
@@ -1319,6 +1447,25 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                 holder.QtyAmt.setText("₹" + formatter.format(Product_Details_Modal.getRate() * Product_Details_Modal.getQty()));
 
+
+                holder.QtyPls.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String sVal=holder.Qty.getText().toString();
+                        if (sVal.equalsIgnoreCase("")) sVal="0";
+                        holder.Qty.setText(String.valueOf(Integer.parseInt(sVal)+1));
+                    }
+                });
+                holder.QtyMns.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String sVal=holder.Qty.getText().toString();
+                        if (sVal.equalsIgnoreCase("")) sVal="0";
+                        if(Integer.parseInt(sVal)>0){
+                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal)-1));
+                        }
+                    }
+                });
 
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
                     holder.Free.setText("0");
@@ -1703,8 +1850,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
 
                 takeorder.setText("PROCEED TO CART");
-                Invoice_Category_Select.CategoryAdapter customAdapteravaill = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
-                categorygrid.setAdapter(customAdapteravaill);
+//                Invoice_Category_Select.CategoryAdapter customAdapteravaill = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+//                categorygrid.setAdapter(customAdapteravaill);
 
 
                 showOrderItemList(selectedPos);

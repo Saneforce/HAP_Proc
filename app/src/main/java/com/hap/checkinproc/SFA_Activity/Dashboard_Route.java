@@ -545,18 +545,18 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 break;
             case R.id.ReachedOutlet:
                 //if (Distributor_Id == null || Distributor_Id.equals("")) {
-                if (distributor_text.getText().toString().equals("")) {
+                /*if (distributor_text.getText().toString().equals("")) {
                     Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
                 } else if (route_text.getText().toString().equals("")) {
                     Toast.makeText(this, "Select The Route", Toast.LENGTH_SHORT).show();
-                } else {
-                    shared_common_pref.save("RouteSelect", Route_id);
-                    shared_common_pref.save("RouteName", route_text.getText().toString());
-                    shared_common_pref.save("Distributor_ID", Distributor_Id);
-                    Shared_Common_Pref.Outler_AddFlag = "1";
+                } else {*/
+                   // shared_common_pref.save("RouteSelect", Route_id);
+                   // shared_common_pref.save("RouteName", route_text.getText().toString());
+                   // shared_common_pref.save("Distributor_ID", Distributor_Id);
+                   // Shared_Common_Pref.Outler_AddFlag = "1";
                     common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
                     //common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
-                }
+                //}
                 break;
             case R.id.distributor_text:
                 customDialog = new CustomListViewDialog(Dashboard_Route.this, distributor_master, 2);
