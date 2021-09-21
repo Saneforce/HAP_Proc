@@ -32,6 +32,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
@@ -57,6 +58,7 @@ import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -123,6 +125,30 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
         common_class = new Common_Class(this);
         shared_common_pref = new Shared_Common_Pref(this);
+        CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
+        UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
+
+        ApiInterface ApiService = ApiClient.getClient().create(ApiInterface.class);
+        JSONObject jParam=new JSONObject();
+        try {
+            jParam.put("SF",UserDetails.getString("Sfcode",""));
+            jParam.put("div", UserDetails.getString("Divcode",""));
+            ApiService.getDataArrayList("get/prodgroup",jParam.toString()).enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    db.deleteMasterData("PGroup");
+                    db.addMasterData("PGroup",response.body());
+                }
+
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
 
         common_class.getDataFromApi(Constants.Outlet_Total_Orders, this, false);
 
@@ -164,166 +190,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                                 }
 
                                 shared_common_pref.save(Constants.RetailorTodayData, is.toString());
-                                //recyclerView.getAdapter().notifyDataSetChanged();
-                                /*JSONObject jsonObject = new JSONObject();
-
-                                ArrayList<Retailer_Modal_List> todayRetailorData = new ArrayList<>();
-                                ArrayList<Retailer_Modal_List> todayRetailorDataDynamic = new ArrayList<>();
-                                ArrayList<Retailer_Modal_List> tdRetailorDataDynamicVal = new ArrayList<>();
-
-                                ArrayList<Retailer_Modal_List> previousRetailorData = new ArrayList<>();
-
-                                ArrayList<Retailer_Modal_List> previousRetailorDataDynamic = new ArrayList<>();
-
-                                ArrayList<Retailer_Modal_List> retailor_valuesProduct = new ArrayList<>();
-
-                                if (jsonObject.getBoolean("success")) {
-
-                                    JSONArray previousdata = jsonObject.getJSONArray("data");
-
-                                    JSONArray todaydata = jsonObject.getJSONArray("todaydata");
-
-
-                                    if (todaydata != null && todaydata.length() > 0) {
-
-                                        for (int i = 0; i < todaydata.length(); i++) {
-                                            JSONObject tdObj = todaydata.getJSONObject(i);
-                                            double others = 0, othersVal = 0, curd = 0, curdVal = 0, milk = 0, milkVal = 0;
-
-                                            if (tdObj.has("Others"))
-                                                others = Double.parseDouble(df2.format(tdObj.getDouble("Others")));
-
-                                            if (tdObj.has("OthersVal"))
-                                                othersVal = Double.parseDouble(df2.format(tdObj.getDouble("OthersVal")));
-
-
-                                            if (tdObj.has("Milk"))
-                                                milk = Double.parseDouble(df2.format(tdObj.getDouble("Milk")));
-
-                                            if (tdObj.has("MilkVal"))
-                                                milkVal = Double.parseDouble(df2.format(tdObj.getDouble("MilkVal")));
-
-                                            if (tdObj.has("Curd"))
-                                                curd = Double.parseDouble(df2.format(tdObj.getDouble("Curd")));
-
-                                            if (tdObj.has("CurdVal"))
-                                                curdVal = Double.parseDouble(df2.format(tdObj.getDouble("CurdVal")));
-
-
-                                            todayRetailorData.add(new Retailer_Modal_List(tdObj.getString("Cust_Code"),
-                                                    others, othersVal, curd, curdVal,
-                                                    milk, milkVal));
-
-
-                                            shared_common_pref.save(Constants.RetailorTodayData, gson.toJson(todayRetailorData));
-
-
-//                                            tdRetailorDataDynamicVal.add(new Retailer_Modal_List("Milk", milk, milkVal));
-//                                            tdRetailorDataDynamicVal.add(new Retailer_Modal_List("Curd", curd, curdVal));
-//                                            tdRetailorDataDynamicVal.add(new Retailer_Modal_List("Others", others, othersVal));
-                                            //    todayRetailorDataDynamic.add(new Retailer_Modal_List(tdObj.getString("Cust_Code"), tdRetailorDataDynamicVal));
-
-//
-//                                            shared_common_pref.save(Constants.RetailorTodayDataDynamic, gson.toJson(todayRetailorDataDynamic));
-
-
-                                        }
-                                    } else {
-                                        shared_common_pref.save(Constants.RetailorTodayData, "");
-
-                                    }
-
-                                    if (previousdata != null && previousdata.length() > 0) {
-
-                                        for (int i = 0; i < previousdata.length(); i++) {
-                                            JSONObject preObj = previousdata.getJSONObject(i);
-                                            double others = 0, othersVal = 0, curd = 0, curdVal = 0, milk = 0, milkVal = 0;
-
-
-                                            String cus_code = preObj.getString("Cust_Code");
-                                            String Mnth = preObj.getString("Mnth");
-
-                                            JSONArray itemArray = preObj.getJSONArray("Items");
-
-                                            for (int item = 0; item < itemArray.length(); item++) {
-                                                JSONObject itemObj = itemArray.getJSONObject(item);
-
-                                                String productName = itemObj.getString("name");
-
-                                                JSONArray valArray = itemObj.getJSONArray("Vals");
-
-                                                ArrayList<Retailer_Modal_List> retailor_values = new ArrayList<>();
-
-                                                retailor_valuesProduct = new ArrayList<>();
-
-
-                                                if (valArray.length() > 0) {
-
-                                                    for (int val = 0; val < valArray.length(); val++) {
-
-                                                        JSONObject valObj = valArray.getJSONObject(val);
-                                                        double qty = valObj.getDouble("Qty");
-                                                        double value = valObj.getDouble("Val");
-
-
-                                                        retailor_values.add(new Retailer_Modal_List(qty, value));
-
-
-                                                    }
-
-                                                    retailor_valuesProduct.add(new Retailer_Modal_List(productName, retailor_values));
-                                                }
-
-
-                                            }
-
-
-                                            previousRetailorDataDynamic.add(new Retailer_Modal_List(cus_code, Mnth, retailor_valuesProduct));
-
-
-                                            shared_common_pref.save(Constants.RetailorPreviousDataDynamic, gson.toJson(previousRetailorDataDynamic));
-
-                                           /* if (preObj.has("Others"))
-                                                others = Double.parseDouble(df2.format(preObj.getDouble("Others")));
-
-                                            if (preObj.has("OthersVal"))
-                                                othersVal = Double.parseDouble(df2.format(preObj.getDouble("OthersVal")));
-
-
-                                            if (preObj.has("Milk"))
-                                                milk = Double.parseDouble(df2.format(preObj.getDouble("Milk")));
-
-                                            if (preObj.has("MilkVal"))
-                                                milkVal = Double.parseDouble(df2.format(preObj.getDouble("MilkVal")));
-
-                                            if (preObj.has("Curd"))
-                                                curd = Double.parseDouble(df2.format(preObj.getDouble("Curd")));
-
-                                            if (preObj.has("CurdVal"))
-                                                curdVal = Double.parseDouble(df2.format(preObj.getDouble("CurdVal")));
-
-
-                                            previousRetailorData.add(new Retailer_Modal_List(preObj.getString("Cust_Code"),
-                                                    preObj.getString("Mnth"),
-                                                    others, othersVal
-                                                    , curd, curdVal,
-                                                    milk, milkVal));
-
-                                            shared_common_pref.save(Constants.RetailorPreviousData, gson.toJson(previousRetailorData));*/
-
-
-                                // }
-//                                    } else {
-//                                        /*   shared_common_pref.save(Constants.RetailorPreviousData, "");*/
-//
-//                                    }
-
-
-                                /*} else {
-                                    shared_common_pref.save(Constants.RetailorTodayData, "");
-                                    shared_common_pref.save(Constants.RetailorPreviousData, "");
-                                }*/
-
 
                             }
 
@@ -438,9 +304,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             gson = new Gson();
 
-            CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
-            UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
-
 
             userTypeRetailor = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
@@ -460,12 +323,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
 
                 String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
-                //  String outletserializableob = null;
-//
-                //      outletserializableob = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
-//
-
-                Log.e("Retailor List: ", outletserializableob);
                 Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
 
 
@@ -527,7 +384,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 //                    if (sDeptType.equalsIgnoreCase("2")) {
 //                        btnCmbRoute.setVisibility(View.GONE);
 //                    }
-                    recyclerView.setAdapter(new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
+                    recyclerView.setAdapter(
+                            new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
                         @Override
                         public void onIntentClick(int position) {
                             Shared_Common_Pref.Outler_AddFlag = "0";
@@ -559,7 +417,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
 
                         }
-                    }));
+                    })
+                    );
 
 
                 }
@@ -612,13 +471,17 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             e.printStackTrace();
         }
     }
-
-    private void SearchRetailers() {
-        String sSchText = txSearchRet.getText().toString();
+    private void SearchRetailers(){
+        if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
+            String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
+            Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
+        }
+        String sSchText=txSearchRet.getText().toString();
         Retailer_Modal_ListFilter.clear();
         for (int i = 0; i < Retailer_Modal_List.size(); i++) {
             if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase(RetType)
-                    && (sSchText.equalsIgnoreCase("") || Retailer_Modal_List.get(i).getName().toLowerCase().indexOf(sSchText.toLowerCase()) > -1))
+                    && (sSchText.equalsIgnoreCase("") ||
+                    (";"+Retailer_Modal_List.get(i).getName().toLowerCase()).indexOf(";"+sSchText.toLowerCase())>-1))
                 Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
         }
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
@@ -682,16 +545,18 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 break;
             case R.id.ReachedOutlet:
                 //if (Distributor_Id == null || Distributor_Id.equals("")) {
-                if (distributor_text.getText().toString().equals("")) {
+                /*if (distributor_text.getText().toString().equals("")) {
                     Toast.makeText(this, "Select The Distributor", Toast.LENGTH_SHORT).show();
                 } else if (route_text.getText().toString().equals("")) {
                     Toast.makeText(this, "Select The Route", Toast.LENGTH_SHORT).show();
-                } else {
-                    shared_common_pref.save("RouteSelect", Route_id);
-                    shared_common_pref.save("RouteName", route_text.getText().toString());
-                    shared_common_pref.save("Distributor_ID", Distributor_Id);
-                    common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
-                }
+                } else {*/
+                   // shared_common_pref.save("RouteSelect", Route_id);
+                   // shared_common_pref.save("RouteName", route_text.getText().toString());
+                   // shared_common_pref.save("Distributor_ID", Distributor_Id);
+                   // Shared_Common_Pref.Outler_AddFlag = "1";
+                    common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
+                    //common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
+                //}
                 break;
             case R.id.distributor_text:
                 customDialog = new CustomListViewDialog(Dashboard_Route.this, distributor_master, 2);
@@ -809,54 +674,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                         }
                     }
                 }));
-
             } else {
-
                 common_class.getDataFromApi(Retailer_OutletList, this, false);
-                //  getDataFromApi(Retailer_OutletList, this, false);
-//                Retailer_Modal_ListFilter.clear();
-//                Log.e("Retailer_Modal_ListSIZE", "" + Retailer_Modal_List.size());
-//
-//                common_class.getDataFromApi(Constants.Retailer_OutletList, this, false);
-//
-//
-//                String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
-//
-//                Log.e("Retailor List: ", outletserializableob);
-//
-//                Retailer_Modal_List.clear();
-//                Retailer_Modal_ListFilter.clear();
-//
-//                Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
-//
-//
-//                for (int i = 0; i < Retailer_Modal_List.size(); i++) {
-//
-//                    Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-////                        if (flag.equals("0")) {
-////                            if (Retailer_Modal_List.get(i).getTownCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-////                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-////                            }
-////                        }
-////                        if (flag.equals("1")) {
-////                            if (Retailer_Modal_List.get(i).getDistCode().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
-////                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-////                            }
-////                        }
-////                        if (flag.equals("2")) {
-////                            if (Retailer_Modal_List.get(i).getInvoice_Flag().equals("2")) {
-////                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-////                            }
-////                        }
-////                        if (flag.equals("3")) {
-////                            if (!Retailer_Modal_List.get(i).getInvoice_Flag().equals("2")) {
-////                                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
-////                            }
-////                        }
-//
-//                }
-
-
             }
 
 
@@ -869,31 +688,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
     @Override
     public void setDataToRouteObject(Object noticeArrayList, int position) {
-//        Log.e("Calling Position", String.valueOf(position));
-//        Log.e("ROUTE_MASTER_Object", String.valueOf(noticeArrayList));
-//        if (position == 0) {
-//            Log.e("SharedprefrenceVALUES", new Gson().toJson(noticeArrayList));
-//            GetJsonData(new Gson().toJson(noticeArrayList), "0");
-//        }
-//        //move to DB
-//        //pos 1=distributor,pos 2=Route list
-//
-////        else if (position == 1) {
-////            GetJsonData(new Gson().toJson(noticeArrayList), "1");
-////        } else if (position == 2) {
-////            GetJsonData(new Gson().toJson(noticeArrayList), "2");
-////        }
-//
-//        else if (position == 3) {
-//            GetJsonData(new Gson().toJson(noticeArrayList), "3");
-//        } else if (position == 4) {
-//            GetJsonData(new Gson().toJson(noticeArrayList), "4");
-//        } else if (position == 5) {
-//            GetJsonData(new Gson().toJson(noticeArrayList), "5");
-//        } else {
-//
-//        }
-
     }
 
     @Override
@@ -920,53 +714,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             shared_common_pref.save(Constants.Route_name, FRoute_Master.get(0).getName());
             shared_common_pref.save(Constants.Route_Id, FRoute_Master.get(0).getId());
             Route_id = FRoute_Master.get(0).getId();
-
         } else {
             findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
-
         }
     }
-
-//    private void GetJsonData(String jsonResponse, String type) {
-//        try {
-//            JSONArray jsonArray = new JSONArray(jsonResponse);
-//            for (int i = 0; i < jsonArray.length(); i++) {
-//                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-//                String id = String.valueOf(jsonObject1.optInt("id"));
-//                String name = jsonObject1.optString("name");
-//                String flag = jsonObject1.optString("FWFlg");
-//                String ETabs = jsonObject1.optString("ETabs");
-//                Model_Pojo = new Common_Model(id, name, flag);
-//                // if (type.equals("1")) {
-//                // distributor_master.add(Model_Pojo);
-//                // } else if (type.equals("2")) {
-////                    Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
-////                    Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
-////                    FRoute_Master.add(Model_Pojo);
-////                    Route_Masterlist.add(Model_Pojo);
-//                //} else
-//                    if (type.equals("6")) {
-//
-//                    route_text.setText(jsonObject1.optString("ClstrName"));
-//                    Distributor_Id = jsonObject1.optString("stockist");
-//                    Route_id = jsonObject1.optString("cluster");
-//                    distributor_text.setText(jsonObject1.optString("StkName"));
-//                    loadroute(jsonObject1.optString("stockist"));
-//
-//
-//                }
-//
-//            }
-//
-//
-//            //spinner.setSelection(adapter.getPosition("select worktype"));
-//            //            parseJsonData_cluster(clustspin_list);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
-//    }
-
-
     void getDbstoreData(String listType) {
         try {
             JSONArray jsonArray = db.getMasterData(listType);
@@ -978,6 +729,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 String ETabs = jsonObject1.optString("ETabs");
                 Model_Pojo = new Common_Model(id, name, flag);
                 if (listType.equals(Constants.Distributor_List)) {
+                    String Add2 = jsonObject1.optString("Addr2");
+                    Model_Pojo = new Common_Model( name,id, flag,Add2,"");
                     distributor_master.add(Model_Pojo);
                 } else if (listType.equals(Constants.Rout_List)) {
                     Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));

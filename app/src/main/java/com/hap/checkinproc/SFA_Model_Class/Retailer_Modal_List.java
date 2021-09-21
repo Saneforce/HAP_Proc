@@ -164,7 +164,6 @@ public class Retailer_Modal_List {
         this.Cust_Code = cust_Code;
         this.Mnth = mnth;
         this.retailer_modal_list = (Retailer_Modal_List) retailer_modal_lists;
-
     }
 
 

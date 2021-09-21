@@ -1,12 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/grid_view_items"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:padding="@dimen/C10dp">
 
     <LinearLayout
         android:id="@+id/gridcolor"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
@@ -15,8 +15,8 @@
 
         <ImageView
             android:id="@+id/ivCategoryIcon"
-            android:layout_width="@dimen/C15dp"
-            android:layout_height="@dimen/C15dp"
+            android:layout_width="@dimen/C30dp"
+            android:layout_height="@dimen/C30dp"
             android:gravity="center"
             android:scaleType="centerInside"
             android:src="@drawable/ic_baseline_shopping_cart_grey24"
@@ -25,7 +25,7 @@
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="Demo"

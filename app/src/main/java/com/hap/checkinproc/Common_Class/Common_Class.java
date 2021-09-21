@@ -465,6 +465,7 @@ public class Common_Class {
 
                 @Override
                 public void onFailure(Call<Object> call, Throwable t) {
+                    Log.e("api response ex:", t.getMessage());
                 }
             });
         } catch (Exception e) {

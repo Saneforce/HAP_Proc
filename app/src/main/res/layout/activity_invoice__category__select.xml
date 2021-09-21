@@ -86,6 +86,20 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/lin_gridcategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/category"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
+<!--
 
         <HorizontalScrollView
             android:layout_width="match_parent"
@@ -123,6 +137,7 @@
             </FrameLayout>
         </HorizontalScrollView>
 
+-->
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -933,8 +948,10 @@
                     android:id="@+id/tvTotalItems"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
                     android:text="Items : 0"
-                    android:textColor="@color/white">
+                    android:textColor="@color/white"
+                    android:textSize="11sp">
 
                 </TextView>
 
@@ -944,7 +961,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
                     android:text=" ₹ : 0"
-                    android:textColor="@color/white">
+                    android:textColor="@color/white"
+                    android:textSize="13sp">
 
                 </TextView>
 

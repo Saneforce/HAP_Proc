@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -36,17 +37,24 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity_Hap.AddNewRetailer;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
+import com.hap.checkinproc.SFA_Adapter.RetailerNearByADP;
 import com.hap.checkinproc.SFA_Model_Class.Dashboard_View_Model;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.adapters.ExploreMapAdapter;
@@ -70,6 +78,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class Nearby_Outlets extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, OnMapReadyCallback, Master_Interface {
     List<Dashboard_View_Model> approvalList;
     Gson gson;
@@ -80,6 +92,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> ShowRetailer_Modal_List;
     public static Shared_Common_Pref shared_common_pref;
+    SharedPreferences UserDetails, CheckInDetails;
     MapView mapView;
     GoogleMap map;
     Boolean rev = false;
@@ -94,7 +107,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     private int _xDelta;
     private int _yDelta, ht;
 
-    String TAG = "Nearby_Outlets";
+    String TAG = "Nearby_Outlets",CheckInfo = "CheckInDetail", UserInfo = "MyPrefs";
 
     ImageView ivFilterKeysMenu, ivNearMe, ivExplore;
     CustomListViewDialog customDialog;
@@ -126,12 +139,14 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             nearby_outlets = this;
             shared_common_pref = new Shared_Common_Pref(this);
 
+            CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+            UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+
             init();
             setClickListener();
 
 
             mapView.onCreate(savedInstanceState);
-
             mapView.getMapAsync(this);
             vwRetails.setOnTouchListener(this);
             RelativeLayout.LayoutParams rel_btn = new RelativeLayout.LayoutParams(
@@ -140,9 +155,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             vwRetails.setLayoutParams(rel_btn);
             Log.d("Height:", String.valueOf(vwRetails.getHeight()));
 
-
-            latitude.setText("Lat : " + Shared_Common_Pref.Outletlat);
-            longitude.setText("Lng : " + Shared_Common_Pref.Outletlong);
             common_class = new Common_Class(this);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 
@@ -153,32 +165,81 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             }.getType();
             String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
             //  String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
-            Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
-            System.out.println("DISTANCE_CHECKING_Lat" + "---" + Shared_Common_Pref.Outletlat + "----->");
-            System.out.println("DISTANCE_CHECKING_Long" + "---" + Shared_Common_Pref.Outletlong + "----->");
-            ShowRetailer_Modal_List = new ArrayList<>();
-            ShowRetailer_Modal_List.clear();
-            for (Retailer_Modal_List rml : Retailer_Modal_List) {
-                if (rml.getLat() != null && rml.getLat() != "") {
-                    System.out.println("DISTANCE_CHECKING" + "---" + rml.getId() + "----->" + String.valueOf(Common_Class.Check_Distance(Common_Class.ParseDouble(rml.getLat()), Common_Class.ParseDouble(rml.getLong()), Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong)));
-                    if (Common_Class.Check_Distance(Common_Class.ParseDouble(rml.getLat()), Common_Class.ParseDouble(rml.getLong()), Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong) < 0.5) {
-                        ShowRetailer_Modal_List.add(rml);
+            latitude.setText("Locating Please Wait...");
+            new LocationFinder(getApplication(), new LocationEvents() {
+                @Override
+                public void OnLocationRecived(Location location) {;
+                    if(location==null){
+                        availableoutlets.setText("Location Not Detacted.");
+                        Toast.makeText(Nearby_Outlets.this,"Location Not Detacted. Please Try Again.",Toast.LENGTH_LONG).show();
+                        return;
                     }
+
+                    Shared_Common_Pref.Outletlat=location.getLatitude();
+                    Shared_Common_Pref.Outletlong=location.getLongitude();
+                    latitude.setText("Lat : " + location.getLatitude());
+                    longitude.setText("Lng : " + location.getLongitude());
+                    JSONObject jsonObject=new JSONObject();
+                    try {
+                        jsonObject.put("SF",UserDetails.getString("Sfcode",""));
+                        jsonObject.put("Div",UserDetails.getString("Divcode",""));
+                        jsonObject.put("Lat",location.getLatitude());
+                        jsonObject.put("Lng",location.getLongitude());
+                        ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                        service.getDataArrayList("get/fencedOutlet",jsonObject.toString()).enqueue(new Callback<JsonArray>() {
+                            @Override
+                            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                                JsonArray jOutlets=response.body();
+                                availableoutlets.setText("Available Outlets :" + "\t" + jOutlets.size());
+                                recyclerView.setAdapter(new RetailerNearByADP(jOutlets, R.layout.route_dashboard_recyclerview,
+                                         getApplicationContext(), new AdapterOnClick() {
+                                    @Override
+                                    public void onIntentClick(int position) {
+                                     JsonObject jItm=jOutlets.get(position).getAsJsonObject();
+
+                                        Shared_Common_Pref.Outler_AddFlag = "0";
+                                        Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
+                                        Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
+                                        Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
+                                        Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
+                                        Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
+                                        //common_class.CommonIntentwithFinish(Route_Product_Info.class);
+                                        shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
+                                        shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
+                                        shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
+                                        common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                                    }
+                                }));
+                            }
+
+                            @Override
+                            public void onFailure(Call<JsonArray> call, Throwable t) {
+                                Log.d("Fence",t.getMessage());
+                            }
+                        });
+
+
+
+
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    map.getUiSettings().setMyLocationButtonEnabled(false);
+                    if (ActivityCompat.checkSelfPermission(Nearby_Outlets.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(Nearby_Outlets.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        Log.d("LocationError", "Need Location Permission");
+                        return;
+                    }
+                    laty = location.getLatitude();
+                    lngy = location.getLongitude();
+                    map.setMyLocationEnabled(true);
+                    map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(laty, lngy)));
+                    map.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(laty, lngy), 15));
+                    getExploreDr(true);
                 }
-            }
-            availableoutlets.setText("Available Outlets :" + "\t" + ShowRetailer_Modal_List.size());
-            if (ShowRetailer_Modal_List != null && ShowRetailer_Modal_List.size() > 0) {
-                recyclerView.setAdapter(new Outlet_Info_Adapter(ShowRetailer_Modal_List, R.layout.outlet_info_recyclerview, getApplicationContext(), new AdapterOnClick() {
-                    @Override
-                    public void onIntentClick(int position) {
-                        Shared_Common_Pref.Outler_AddFlag = "0";
-                        Shared_Common_Pref.OutletName = ShowRetailer_Modal_List.get(position).getName().toUpperCase();
-                        Shared_Common_Pref.OutletCode = ShowRetailer_Modal_List.get(position).getId();
-                        common_class.CommonIntentwithFinish(Route_Product_Info.class);
-                        common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-                    }
-                }));
-            }
+            });
+
             Createoutlet.setOnClickListener(this);
             ImageView backView = findViewById(R.id.imag_back);
 
@@ -275,7 +336,8 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 Shared_Common_Pref.OutletAvail = "";
                 Shared_Common_Pref.OutletUniv = "";
                 Shared_Common_Pref.Outlet_Info_Flag = "0";
-                common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                common_class.CommonIntentwithFinish(AddNewRetailer.class);
+                //startActivity (Nearby_Outlets.this, AddNewRetailer.class);
                 break;
             case R.id.llNearMe:
                 llExplore.setBackgroundColor(Color.TRANSPARENT);
@@ -748,13 +810,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     public void onResume() {
         mapView.onResume();
         super.onResume();
-
-        new LocationFinder(getApplication(), new LocationEvents() {
-            @Override
-            public void OnLocationRecived(Location location) {
-                // clocation=location;
-            }
-        });
 
     }
 

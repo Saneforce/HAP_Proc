@@ -18,6 +18,7 @@ import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
@@ -124,7 +125,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         init();
         setOnClickListener();
-
+        getNoOrderRemarks();
 
 //        addBottomDots(0);
 //
@@ -508,6 +509,34 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private void getNoOrderRemarks(){
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("Div", Shared_Common_Pref.Div_Code);
+                service.getDataArrayList("get/noordrmks",HeadItem.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        db.deleteMasterData("HAPNoOrdRmks");
+                        db.addMasterData("HAPNoOrdRmks", response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+
+            } else {
+                common_class.showMsg(this, "Please check your internet connection");
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
 
     private void getOutletSummary() {
         try {

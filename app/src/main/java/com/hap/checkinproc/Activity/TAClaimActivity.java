@@ -1432,7 +1432,7 @@ Log.d("DACliam","Error : "+t.getMessage());
     ldg_coutDt.setText("");
     TotalDays.setVisibility(View.GONE);
 
-    edt_ldg_bill.setText("");
+   // edt_ldg_bill.setText("");
 
     SumOFJointLodging();
     SumOFLodging(0);

@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,6 +34,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -40,11 +42,13 @@ import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Model_Class.ReatilRouteModel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
+import com.hap.checkinproc.common.FileUploadService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -88,15 +92,15 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
     JSONObject docMasterObject;
-    String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue;
+    String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue,imageConvert = "", imageServer = "";
     Integer routeId1, classId, channelID;
     String routeId, Compititor_Id, Compititor_Name, CatUniverSelectId, AvailUniverSelectId, reason_category_remarks = "", HatsunAvailswitch = "", categoryuniverseswitch = "";
     Shared_Common_Pref shared_common_pref;
-    SharedPreferences CheckInDetails;
+    SharedPreferences UserDetails, CheckInDetails;
     Common_Class common_class;
     List<Retailer_Modal_List> Retailer_Modal_List;
     ImageView copypaste;
-    String TAG = "AddNewRetailer: ";
+    String TAG = "AddNewRetailer: ",UserInfo = "MyPrefs";
     DatabaseHandler db;
 
     ImageView ivPhotoShop;
@@ -129,6 +133,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_add_new_retailer);
+
+            CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
+            UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
+
             db = new DatabaseHandler(this);
             linReatilerRoute = findViewById(R.id.linear_Retailer);
             txtRetailerRoute = findViewById(R.id.retailer_type);
@@ -166,9 +174,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
             if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
                 mSubmit.setVisibility(View.VISIBLE);
-                CurrentLocLin.setVisibility(View.VISIBLE);
+                CurrentLocLin.setVisibility(View.GONE);
                 retailercodevisible.setVisibility(View.GONE);
-                CurrentLocationsAddress.setVisibility(View.VISIBLE);
+                CurrentLocationsAddress.setVisibility(View.GONE);
                 routeId = shared_common_pref.getvalue("RouteSelect");
                 txtRetailerRoute.setText(shared_common_pref.getvalue("RouteName"));
                 CurrentLocationsAddress.setText("" + Shared_Common_Pref.OutletAddress);
@@ -218,7 +226,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             imgHome.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    SharedPreferences CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
                     Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
                     if (CheckIn == true) {
 //                        Intent Dashboard = new Intent(getApplicationContext(), Dashboard_Two.class);
@@ -332,12 +339,12 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //                        Intent mIntent = new Intent(AddNewRetailer.this, FileUploadService.class);
 //                        mIntent.putExtra("mFilePath", String.valueOf(file));
 //                        mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
-                        String filename = filePath.substring(filePath.lastIndexOf("/") + 1);
+                        //String filename = filePath.substring(filePath.lastIndexOf("/") + 1);
 //                        mIntent.putExtra("FileName", filename);
 //                        mIntent.putExtra("Mode", "outlet");
 //                        FileUploadService.enqueueWork(AddNewRetailer.this, mIntent);
 
-                        sendImageToServer(Shared_Common_Pref.Sf_Code, filename, "outlet");
+                      //  sendImageToServer(Shared_Common_Pref.Sf_Code, filename, "outlet");
 //
 
                         addNewRetailers();
@@ -756,6 +763,14 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     public void addNewRetailers() {
         try {
+            if (!imageServer.equalsIgnoreCase("")) {
+                Intent mIntent = new Intent(AddNewRetailer.this, FileUploadService.class);
+                mIntent.putExtra("mFilePath", imageConvert);
+                mIntent.putExtra("SF", UserDetails.getString("Sfcode", ""));
+                mIntent.putExtra("FileName", imageServer);
+                mIntent.putExtra("Mode", "Outlet");
+                FileUploadService.enqueueWork(this, mIntent);
+            }
             DateFormat dfw = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
             Calendar calobjw = Calendar.getInstance();
             KeyDate = shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code);
@@ -931,16 +946,17 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 break;
 
             case R.id.ivShopPhoto:
-//                Intent takePhoto = new Intent(this, ImageCapture.class);
-//                takePhoto.putExtra("RetailorCapture", "NewRetailor");
-//                startActivity(takePhoto);
-
-                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                outputFileUri = FileProvider.getUriForFile(AddNewRetailer.this, getApplicationContext().getPackageName() + ".provider", new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "outlet" + "_" + System.currentTimeMillis() + ".jpeg"));
-                Log.v("FILE_PATH", String.valueOf(outputFileUri));
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                startActivityForResult(intent, 1000);
+                AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
+                    @Override
+                    public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
+                        imageServer = FileName;
+                        imageConvert=fullPath;
+                        ivPhotoShop.setImageBitmap(image);
+                    }
+                });
+                Intent intent = new Intent(AddNewRetailer.this, AllowancCapture.class);
+                intent.putExtra("allowance", "One");
+                startActivity(intent);
                 break;
         }
     }

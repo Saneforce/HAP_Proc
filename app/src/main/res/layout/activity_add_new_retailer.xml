@@ -110,7 +110,8 @@
                                     android:id="@+id/CurrentLocLin"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:orientation="horizontal">
+                                    android:orientation="horizontal"
+                                    android:visibility="gone">
 
                                     <TextView
                                         android:layout_width="wrap_content"
@@ -597,11 +598,6 @@
                                     android:textColor="@android:color/black"
                                     android:textSize="13dp"></TextView>
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
-                                    android:src="@drawable/mandatory" />
 
                             </LinearLayout>
 
@@ -622,50 +618,54 @@
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            >
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="gone">
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/retailer_class"
+            android:textColor="@android:color/black"
+            android:textSize="13dp"></TextView>
 
 
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/mandatory" />
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginBottom="10dp"
-                                    android:text="@string/retailer_class"
-                                    android:textColor="@android:color/black"
-                                    android:textSize="13dp"></TextView>
+    </LinearLayout>
+    <LinearLayout
 
+        android:id="@+id/linear_retailer_class"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/text_bg_grey"
+        android:orientation="vertical"
+        android:padding="5dp">
 
-                                <ImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="12dp"
-                                    android:src="@drawable/mandatory" />
-
-                            </LinearLayout>
-
-
-                            <LinearLayout
-
-                                android:id="@+id/linear_retailer_class"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@drawable/text_bg_grey"
-                                android:orientation="vertical"
-                                android:padding="5dp">
-
-                                <TextView
-                                    android:id="@+id/txt_retailer_class"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="@string/retailer_class"
-                                    android:padding="5dp"
-                                    android:textSize="13dp" />
-                            </LinearLayout>
+        <TextView
+            android:id="@+id/txt_retailer_class"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/retailer_class"
+            android:padding="5dp"
+            android:textSize="13dp" />
+    </LinearLayout>
+</LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="wrap_content"
@@ -679,7 +679,7 @@
                                     android:layout_marginBottom="10dp"
                                     android:text="@string/retailer_channel"
                                     android:textColor="@android:color/black"
-                                    android:textSize="13dp"></TextView>
+                                    android:textSize="13dp" />
 
 
                                 <ImageView
