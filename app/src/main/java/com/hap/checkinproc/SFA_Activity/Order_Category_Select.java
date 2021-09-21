@@ -326,6 +326,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             Type type = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
             List<Product_Details_Modal> productList = gson.fromJson(preOrderList, type);
+            String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
 
 
             for (int pm = 0; pm < Product_Modal.size(); pm++) {
@@ -448,10 +449,11 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         }
                     }
                 }
+
+
             }
 
 
-            String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
 
 
             for (int pmTax = 0; pmTax < Product_Modal.size(); pmTax++) {
@@ -966,11 +968,11 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         taxVal += Double.parseDouble(Product_Modal.get(pm).getTax());
 
 
-                    if (Product_Modal.get(pm).getCGST()!=null)
+                    if (Product_Modal.get(pm).getCGST() != null)
                         totCGST += Product_Modal.get(pm).getCGST();
-                    if (Product_Modal.get(pm).getSGST() !=null)
+                    if (Product_Modal.get(pm).getSGST() != null)
                         totSGST += Product_Modal.get(pm).getSGST();
-                    if (Product_Modal.get(pm).getIGST() !=null)
+                    if (Product_Modal.get(pm).getIGST() != null)
                         totIGST += Product_Modal.get(pm).getIGST();
 
 

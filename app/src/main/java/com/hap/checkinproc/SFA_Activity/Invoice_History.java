@@ -110,19 +110,12 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
             invoicerecyclerview = (RecyclerView) findViewById(R.id.invoicerecyclerview);
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             invoicerecyclerview.setLayoutManager(layoutManager);
-            String DCRMode = sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
-//            lin_invoice.setVisibility(View.VISIBLE);
-//            if (!DCRMode.equalsIgnoreCase("")) {
-//                lin_invoice.setVisibility(View.GONE);
-//            }
-            // String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.GetTodayOrder_List);
+
             String OrdersTable = String.valueOf(db.getMasterData(Constants.GetTodayOrder_List));
             userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
             }.getType();
             OutletReport_View_Modal = gson.fromJson(OrdersTable, userType);
-            System.out.println("Array_List_Size" + OrdersTable.toString());
-            System.out.println("Array_List_Sizee" + OutletReport_View_Modal.size());
-            System.out.println("Array_List_Outlet_Code" + Shared_Common_Pref.OutletCode);
+
             if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
                 for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
                     if (filterlist.getOutletCode().equals(Shared_Common_Pref.OutletCode)) {
@@ -143,7 +136,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 //                        startActivity(intent);
 //                    } else {
                     Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                    sharedCommonPref.save(Constants.FLAG,FilterOrderList.get(position).getStatus());
+                    sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
                     Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
                     intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
                     intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
@@ -170,6 +163,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 
 
         } catch (Exception e) {
+            Log.v("Invoice History: ","onCreate: "+e.getMessage());
 
         }
 
@@ -390,7 +384,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 //
 //                    } else {
                     Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                    sharedCommonPref.save(Constants.FLAG,FilterOrderList.get(position).getStatus());
+                    sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
 
                     Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
                     intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
@@ -447,8 +441,6 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                                 if (jsonObject.getBoolean("success")) {
 
 
-
-
                                     Gson gson = new Gson();
                                     List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
 
@@ -458,8 +450,6 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                                     if (jsonArray != null && jsonArray.length() > 1) {
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-
 
 
                                             product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
@@ -576,7 +566,6 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
     private void getPreOrderQty() {
         try {
             if (common_class.isNetworkAvailable(this)) {
-                common_class.ProgressdialogShow(1, "");
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
                 JSONObject HeadItem = new JSONObject();
@@ -630,13 +619,11 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                                     common_class.CommonIntentwithFinish(Order_Category_Select.class);
 
 
-                                    common_class.ProgressdialogShow(0, "");
                                     Log.v("PreOrderList: ", "" + product_details_modalArrayList.size());
 
                                 } else {
                                     sharedCommonPref.clear_pref(Constants.PreOrderQtyList);
                                     Log.v("PreOrderList: ", "" + "not success");
-                                    common_class.ProgressdialogShow(0, "");
 
 
                                 }
@@ -645,7 +632,6 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                             }
 
                         } catch (Exception e) {
-                            common_class.ProgressdialogShow(0, "");
 
 
                         }
@@ -654,7 +640,6 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                         Log.v("fail>>", t.toString());
-                        common_class.ProgressdialogShow(0, "");
 
 
                     }
@@ -670,7 +655,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
     }
 
 
-    private void getInvoiceOrderQty() {
+   /* private void getInvoiceOrderQty() {
         try {
             if (common_class.isNetworkAvailable(this)) {
                 common_class.ProgressdialogShow(1, "");
@@ -771,7 +756,7 @@ public class Invoice_History extends AppCompatActivity implements View.OnClickLi
 
 
         }
-    }
+    }*/
 
 
 }

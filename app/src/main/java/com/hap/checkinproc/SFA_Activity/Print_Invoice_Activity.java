@@ -118,10 +118,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             else
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
 
-
-            // orderInvoiceDetailData();
-
-
         } catch (Exception e) {
 
         }
@@ -568,6 +564,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     Order_Outlet_Filter.clear();
                     double total_qtytext = 0, subTotalVal = 0.00;
                     for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
+                        Log.e("TRANS_SLNO", ivl.getTransSlNo()+" : number:"+Shared_Common_Pref.TransSlNo);
+
                         if (ivl.getTransSlNo().equals(Shared_Common_Pref.TransSlNo)) {
                             Log.e("Product_Name", ivl.getProductName());
                             Log.e("Product_getQty", String.valueOf(ivl.getQuantity()));
@@ -598,133 +596,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     Calendar calobjw = Calendar.getInstance();
                     invoicedate.setText("Date : " + dfw.format(calobjw.getTime()));
 
-
-                    for (int pm = 0; pm < Order_Outlet_Filter.size(); pm++) {
-                        String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
-
-                        Type type1 = new TypeToken<ArrayList<Product_Details_Modal>>() {
-                        }.getType();
-                        List<Product_Details_Modal> product_details_modalArrayList = gson.fromJson(strSchemeList, type1);
-
-
-                        double highestScheme = 0;
-                        boolean haveVal = false;
-                        if (product_details_modalArrayList != null && product_details_modalArrayList.size() > 0) {
-
-                            for (int i = 0; i < product_details_modalArrayList.size(); i++) {
-
-                                if (Order_Outlet_Filter.get(pm).getId().equals(product_details_modalArrayList.get(i).getId())) {
-
-                                    haveVal = true;
-                                    double schemeVal = Double.parseDouble(product_details_modalArrayList.get(i).getScheme());
-                                    double enterQty = Order_Outlet_Filter.get(pm).getQty();
-
-                                    if (enterQty >= schemeVal) {
-
-                                        if (schemeVal > highestScheme) {
-                                            highestScheme = schemeVal;
-
-
-                                            if (!product_details_modalArrayList.get(i).getFree().equals("0")) {
-                                                if (product_details_modalArrayList.get(i).getPackage().equals("N")) {
-                                                    double freePer = (enterQty / highestScheme);
-
-                                                    double freeVal = freePer * Double.parseDouble(product_details_modalArrayList.
-                                                            get(i).getFree());
-
-                                                    Order_Outlet_Filter.get(pm).setFree(String.valueOf(Math.round(freeVal)));
-                                                } else {
-                                                    int val = (int) (enterQty / highestScheme);
-                                                    int freeVal = val * Integer.parseInt(product_details_modalArrayList.get(i).getFree());
-                                                    Order_Outlet_Filter.get(pm).setFree(String.valueOf(freeVal));
-                                                }
-                                            } else {
-
-                                                Order_Outlet_Filter.get(pm).setFree("0");
-
-                                            }
-
-
-                                            if (product_details_modalArrayList.get(i).getDiscount() != 0) {
-
-                                                if (product_details_modalArrayList.get(i).getDiscount_type().equals("%")) {
-                                                    double discountVal = enterQty * (((product_details_modalArrayList.get(i).getDiscount()
-                                                    )) / 100);
-
-
-                                                    Order_Outlet_Filter.get(pm).setDiscount((Math.round(discountVal)));
-
-                                                } else {
-                                                    //Rs
-                                                    if (product_details_modalArrayList.get(i).getPackage().equals("N")) {
-                                                        double freePer = (enterQty / highestScheme);
-
-                                                        double freeVal = freePer * (product_details_modalArrayList.
-                                                                get(i).getDiscount());
-
-                                                        Order_Outlet_Filter.get(pm).setDiscount((Math.round(freeVal)));
-                                                    } else {
-                                                        int val = (int) (enterQty / highestScheme);
-                                                        int freeVal = (int) (val * (product_details_modalArrayList.get(i).getDiscount()));
-                                                        Order_Outlet_Filter.get(pm).setDiscount((freeVal));
-                                                    }
-                                                }
-
-                                            } else {
-                                                Order_Outlet_Filter.get(pm).setDiscount(0.00);
-
-                                            }
-
-
-                                        }
-
-                                    } else {
-                                        Order_Outlet_Filter.get(pm).setFree("0");
-
-                                        Order_Outlet_Filter.get(pm).setDiscount(0.00);
-
-
-                                    }
-
-
-                                }
-
-                            }
-
-
-                        }
-
-                        if (!haveVal) {
-                            Order_Outlet_Filter.get(pm).setFree("0");
-
-                            Order_Outlet_Filter.get(pm).setDiscount(0.00);
-
-                        }
-
-
-                    }
-
-
-                    double disCountVal = 0.00;
-                    double taxVal = 0.00;
-
-                    for (int pm = 0; pm < Order_Outlet_Filter.size(); pm++) {
-
-                        if (Order_Outlet_Filter.get(pm).getQty() != null) {
-                            if (Order_Outlet_Filter.get(pm).getQty() > 0) {
-
-                                disCountVal += Order_Outlet_Filter.get(pm).getDiscount();
-
-                                taxVal += ((Order_Outlet_Filter.get(pm).getAmount() + Order_Outlet_Filter.get(pm).getDiscount()) - (Order_Outlet_Filter.get(pm).getQty() * Order_Outlet_Filter.get(pm).getRate()));
-                            }
-                        }
-                    }
-
-
-                    cashdiscount.setText("₹" + formatter.format(disCountVal));
-                    gstrate.setText("₹" + formatter.format(taxVal));
-
-
                     sharedCommonPref.save(Constants.INVOICE_ORDERLIST, gson.toJson(Order_Outlet_Filter));
 
                     mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, new AdapterOnClick() {
@@ -734,6 +605,10 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                         }
                     });
                     printrecyclerview.setAdapter(mReportViewAdapter);
+
+                    cashdiscount.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("Discount_Amount"))));
+                    gstrate.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("NetAmount"))));
+
 
                 } else {
 
