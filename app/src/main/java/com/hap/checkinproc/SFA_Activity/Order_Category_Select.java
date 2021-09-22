@@ -1,6 +1,5 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,10 +13,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -84,7 +80,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo;
     /* @Inject
      Retrofit retrofit;*/
-    private RecyclerView recyclerView,categorygrid,Grpgrid,Brndgrid;
+    private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, totalorderbottom, linnetamount, linnercashdiscount;
     public boolean gobackflag = false;
     Common_Class common_class;
@@ -173,7 +169,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             recyclerView = findViewById(R.id.orderrecyclerview);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            LinearLayoutManager layoutManager= new LinearLayoutManager(this);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
 
@@ -189,14 +185,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             if (Shared_Common_Pref.Invoicetoorder == null || Shared_Common_Pref.Invoicetoorder.equals("0")) {
                 //  Get_regularqty();
             }
-
-           // LinearLayout llGridParent = findViewById(R.id.lin_gridcategory);
-
-           /* FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) llGridParent.getLayoutParams();
-// Changes the height and width to the specified *pixels*
-            params.height = FrameLayout.LayoutParams.WRAP_CONTENT;
-            params.width = Category_Modal.size() * 270;
-            llGridParent.setLayoutParams(params);*/
 
 
             Order_Category_Select.CategoryAdapter customAdapteravail = new Order_Category_Select.CategoryAdapter(getApplicationContext(),
@@ -457,7 +445,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
             }
-
 
 
             Log.v(TAG, " order oncreate:j ");
@@ -1031,8 +1018,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
 
-       // Order_Category_Select.CategoryAdapter customAdapteravail = new Order_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
-       // categorygrid.setAdapter(customAdapteravail);
+        // Order_Category_Select.CategoryAdapter customAdapteravail = new Order_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+        // categorygrid.setAdapter(customAdapteravail);
         // customAdapteravail.updateUi(categoryPos);
         //
         mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_order_recyclerview, getApplicationContext(), categoryPos);
@@ -1064,8 +1051,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
 
-       // Order_Category_Select.CategoryAdapter customAdapteravail = new Order_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
-       // categorygrid.setAdapter(customAdapteravail);
+        // Order_Category_Select.CategoryAdapter customAdapteravail = new Order_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+        // categorygrid.setAdapter(customAdapteravail);
 
         mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_order_recyclerview, getApplicationContext(), categoryPos);
 
@@ -1092,99 +1079,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
     }
 
-   /* public class CategoryAdapter extends BaseAdapter {
-        Context context;
-        LayoutInflater inflter;
-        ImageView ivCategoryIcon;
-        TextView icon;
-
-        public CategoryAdapter(Context applicationContext, List<Category_Universe_Modal> list) {
-            this.context = applicationContext;
-            listt = list;
-            inflter = (LayoutInflater.from(applicationContext));
-        }
-
-        @Override
-        public int getCount() {
-            return listt.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-
-        @SuppressLint("ResourceAsColor")
-        public void updateUi(int pos) {
-            for (int i = 0; i < listt.size(); i++) {
-
-                if (i == pos) {
-
-                    ivCategoryIcon.setImageResource(R.drawable.ic_baseline_shopping_cart_24);
-                    icon.setTextColor(R.color.colorPrimaryDark);
-                    icon.setTypeface(Typeface.DEFAULT_BOLD);
-                } else {
-                    ivCategoryIcon.setImageResource(R.drawable.ic_baseline_shopping_cart_grey24);
-                    icon.setTextColor(R.color.grey_500);
-                    icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-
-                }
-            }
-
-            notifyDataSetChanged();
-
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            view = inflter.inflate(R.layout.category_order_horizantal_universe_gridview, null); // inflate the layout
-            icon = view.findViewById(R.id.textView);
-            LinearLayout gridcolor = view.findViewById(R.id.gridcolor);
-            ivCategoryIcon = view.findViewById(R.id.ivCategoryIcon);
-            icon.setText(listt.get(i).getName());
-
-
-//            LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) gridcolor.getLayoutParams();
-//// Changes the height and width to the specified *pixels*
-//            params.height = FrameLayout.LayoutParams.WRAP_CONTENT;
-//            params.width = 120;
-//            gridcolor.setLayoutParams(params);
-
-
-            gridcolor.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    selectedPos = i;
-                    showOrderItemList(i);
-
-
-                }
-            });
-
-
-            if (i == selectedPos) {
-
-                ivCategoryIcon.setImageResource(R.drawable.ic_baseline_shopping_cart_24);
-                icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-                icon.setTypeface(Typeface.DEFAULT_BOLD);
-            } else {
-                ivCategoryIcon.setImageResource(R.drawable.ic_baseline_shopping_cart_grey24);
-                icon.setTextColor(getResources().getColor(R.color.grey_500));
-                icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-
-            }
-
-            return view;
-        }
-    }*/
-
 
     public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.MyViewHolder> {
         private int rowLayout;
@@ -1192,6 +1086,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         Context context;
         LayoutInflater inflter;
         CategoryAdapter.MyViewHolder pholder;
+
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
             public LinearLayout gridcolor;
@@ -1219,7 +1114,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         @Override
         public CategoryAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-            View view= layoutInflater.inflate(R.layout.category_order_horizantal_universe_gridview, parent, false);
+            View view = layoutInflater.inflate(R.layout.category_order_horizantal_universe_gridview, parent, false);
             return new MyViewHolder(view);
         }
 
@@ -1239,14 +1134,13 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
                 holder.icon.setText(listt.get(holder.getAdapterPosition()).getName());
-                if(!listt.get(position).getCatImage().equalsIgnoreCase("")) {
+                if (!listt.get(position).getCatImage().equalsIgnoreCase("")) {
                     holder.ivCategoryIcon.clearColorFilter();
                     Glide.with(this.context)
                             .load(listt.get(position).getCatImage())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(holder.ivCategoryIcon);
-                }
-                else{
+                } else {
                     holder.ivCategoryIcon.setImageDrawable(getResources().getDrawable(R.drawable.product_logo));
                     holder.ivCategoryIcon.setColorFilter(getResources().getColor(R.color.grey_500));
                 }
@@ -1254,11 +1148,11 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 holder.gridcolor.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(pholder!=null) {
+                        if (pholder != null) {
                             pholder.icon.setTextColor(getResources().getColor(R.color.grey_500));
                             pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
                         }
-                        pholder=holder;
+                        pholder = holder;
                         selectedPos = holder.getAdapterPosition();
                         showOrderItemList(holder.getAdapterPosition());
 
@@ -1298,7 +1192,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     public class Prodct_Adapter extends RecyclerView.Adapter<Prodct_Adapter.MyViewHolder> {
         private List<Product_Details_Modal> Product_Details_Modalitem;
         private int rowLayout;
-        private int Categorycolor;
 
         Context context;
 
@@ -1306,7 +1199,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         public class MyViewHolder extends RecyclerView.ViewHolder {
             public TextView productname, Rate, Amount, Disc, Free, RegularQty, lblRQty, lblAddQty, productQty, preOrderVal, regularAmt,
                     QtyAmt, totalQty, tvTaxLabel;
-            ImageView ImgVwProd,QtyPls,QtyMns;
+            ImageView ImgVwProd, QtyPls, QtyMns;
             public LinearLayout lnRwEntry, lnlblRwEntry;
             EditText Qty;
 
@@ -1314,9 +1207,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             public MyViewHolder(View view) {
                 super(view);
                 productname = view.findViewById(R.id.productname);
-                ImgVwProd=view.findViewById(R.id.ivAddShoppingCart);
-                QtyPls=view.findViewById(R.id.ivQtyPls);
-                QtyMns=view.findViewById(R.id.ivQtyMns);
+                ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
+                QtyPls = view.findViewById(R.id.ivQtyPls);
+                QtyMns = view.findViewById(R.id.ivQtyMns);
                 Rate = view.findViewById(R.id.Rate);
                 Qty = view.findViewById(R.id.Qty);
                 lblRQty = view.findViewById(R.id.status);
@@ -1344,7 +1237,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             this.Product_Details_Modalitem = Product_Details_Modalitem;
             this.rowLayout = rowLayout;
             this.context = context;
-            this.Categorycolor = Categorycolor;
 
         }
 
@@ -1376,14 +1268,13 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate()));
                 holder.Amount.setText("₹" + new DecimalFormat("##0.00").format(Product_Details_Modal.getAmount()));
                 holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
-                if(!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
+                if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                     holder.ImgVwProd.clearColorFilter();
                     Glide.with(this.context)
                             .load(Product_Details_Modal.getPImage())
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(holder.ImgVwProd);
-                }
-                else{
+                } else {
                     holder.ImgVwProd.setImageDrawable(getResources().getDrawable(R.drawable.product_logo));
                     holder.ImgVwProd.setColorFilter(getResources().getColor(R.color.grey_500));
                 }
@@ -1415,18 +1306,18 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 holder.QtyPls.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String sVal=holder.Qty.getText().toString();
-                        if (sVal.equalsIgnoreCase("")) sVal="0";
-                        holder.Qty.setText(String.valueOf(Integer.parseInt(sVal)+1));
+                        String sVal = holder.Qty.getText().toString();
+                        if (sVal.equalsIgnoreCase("")) sVal = "0";
+                        holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) + 1));
                     }
                 });
                 holder.QtyMns.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String sVal=holder.Qty.getText().toString();
-                        if (sVal.equalsIgnoreCase("")) sVal="0";
-                        if(Integer.parseInt(sVal)>0){
-                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal)-1));
+                        String sVal = holder.Qty.getText().toString();
+                        if (sVal.equalsIgnoreCase("")) sVal = "0";
+                        if (Integer.parseInt(sVal) > 0) {
+                            holder.Qty.setText(String.valueOf(Integer.parseInt(sVal) - 1));
                         }
                     }
                 });
@@ -1700,7 +1591,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView productname, Rate, Amount, Disc, Free, RegularQty, productQty, totalQty, tvTaxLabel;
+            public TextView productname, Rate, Amount, tvDisc, Free, RegularQty, productQty, totalQty, tvTax;
 
 
             public MyViewHolder(View view) {
@@ -1711,6 +1602,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 Amount = view.findViewById(R.id.Amount);
                 Free = view.findViewById(R.id.Free);
                 productQty = view.findViewById(R.id.productqty);
+                tvTax = view.findViewById(R.id.productTax);
+                tvDisc = view.findViewById(R.id.productDiscount);
 
 
             }
@@ -1757,6 +1650,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                 holder.productQty.setText("" + Product_Details_Modal.getQty());
 
+                holder.tvDisc.setText("₹" + formatter.format(Product_Details_Modal.getDiscount()));
+                holder.tvTax.setText("₹" + Product_Details_Modal.getTax());
+
 
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
                     holder.Free.setText("0");
@@ -1801,8 +1697,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
                 takeorder.setText("PROCEED TO CART");
-               // Order_Category_Select.CategoryAdapter customAdapteravaill = new Order_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
-               // categorygrid.setAdapter(customAdapteravaill);
+                // Order_Category_Select.CategoryAdapter customAdapteravaill = new Order_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
+                // categorygrid.setAdapter(customAdapteravaill);
 
 
                 showOrderItemList(selectedPos);

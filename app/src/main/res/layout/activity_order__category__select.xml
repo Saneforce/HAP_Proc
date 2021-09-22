@@ -85,55 +85,57 @@
                 android:textSize="17dp"
                 android:textStyle="bold" />
         </LinearLayout>
-    <LinearLayout
-        android:id="@+id/lin_gridcategory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/category"
+
+        <LinearLayout
+            android:id="@+id/lin_gridcategory"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        </androidx.recyclerview.widget.RecyclerView>
-    </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/category"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-<!--        <HorizontalScrollView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:scrollbars="none">-->
+            </androidx.recyclerview.widget.RecyclerView>
+        </LinearLayout>
 
-<!--            <FrameLayout-->
-<!--                android:layout_width="fill_parent"-->
-<!--                android:layout_height="match_parent">-->
+        <!--        <HorizontalScrollView-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:scrollbars="none">-->
 
-<!--                <LinearLayout-->
-<!--                    android:id="@+id/lin_gridcategory"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:orientation="horizontal">-->
+        <!--            <FrameLayout-->
+        <!--                android:layout_width="fill_parent"-->
+        <!--                android:layout_height="match_parent">-->
 
-<!--                    <GridView-->
-<!--                        android:id="@+id/category"-->
-<!--                        android:layout_width="fill_parent"-->
-<!--                        android:layout_height="fill_parent"-->
-<!--                        android:layout_margin="@dimen/C5dp"-->
-<!--                        android:columnWidth="100dp"-->
-<!--                        android:gravity="center"-->
-<!--                        android:horizontalSpacing="1dp"-->
-<!--                        android:scrollbarAlwaysDrawHorizontalTrack="true"-->
-<!--                        android:scrollbarAlwaysDrawVerticalTrack="true"-->
-<!--                        android:scrollbars="horizontal"-->
-<!--                        android:stretchMode="none"-->
-<!--                        android:verticalSpacing="1dp">-->
+        <!--                <LinearLayout-->
+        <!--                    android:id="@+id/lin_gridcategory"-->
+        <!--                    android:layout_width="wrap_content"-->
+        <!--                    android:layout_height="match_parent"-->
+        <!--                    android:orientation="horizontal">-->
 
-<!--                    </GridView>-->
+        <!--                    <GridView-->
+        <!--                        android:id="@+id/category"-->
+        <!--                        android:layout_width="fill_parent"-->
+        <!--                        android:layout_height="fill_parent"-->
+        <!--                        android:layout_margin="@dimen/C5dp"-->
+        <!--                        android:columnWidth="100dp"-->
+        <!--                        android:gravity="center"-->
+        <!--                        android:horizontalSpacing="1dp"-->
+        <!--                        android:scrollbarAlwaysDrawHorizontalTrack="true"-->
+        <!--                        android:scrollbarAlwaysDrawVerticalTrack="true"-->
+        <!--                        android:scrollbars="horizontal"-->
+        <!--                        android:stretchMode="none"-->
+        <!--                        android:verticalSpacing="1dp">-->
+
+        <!--                    </GridView>-->
 
 
-<!--                </LinearLayout>-->
-<!--            </FrameLayout>-->
-<!--        </HorizontalScrollView>-->
+        <!--                </LinearLayout>-->
+        <!--            </FrameLayout>-->
+        <!--        </HorizontalScrollView>-->
 
 
         <androidx.cardview.widget.CardView
@@ -225,9 +227,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
 
-                        android:layout_marginLeft="@dimen/C10dp"
+                        android:layout_marginLeft="@dimen/C5dp"
                         android:layout_marginTop="@dimen/C10dp"
-                        android:layout_marginRight="@dimen/C10dp"
+                        android:layout_marginRight="@dimen/C5dp"
                         android:background="@color/black"
                         android:outlineAmbientShadowColor="@color/statuscolor"></View>
 
@@ -237,14 +239,13 @@
                         android:layout_width="match_parent"
 
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/C10dp"
-                        android:layout_marginRight="@dimen/C10dp"
-                        android:padding="@dimen/C5dp">
+                       android:padding="@dimen/C5dp">
 
                         <LinearLayout
                             android:layout_width="@dimen/header_width1"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1">
+                            android:layout_weight="1"
+                            android:visibility="gone">
 
                             <TextView
                                 android:id="@+id/itemstextview"
@@ -259,16 +260,15 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="@dimen/header_width2"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1">
 
                             <TextView
+                                android:layout_marginRight="@dimen/C3dp"
                                 android:id="@+id/FreeQty"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_gravity="end"
-                                android:layout_marginRight="@dimen/C5dp"
                                 android:gravity="end"
                                 android:text="Free"
                                 android:textColor="@color/black"
@@ -278,7 +278,7 @@
 
 
                         <LinearLayout
-                            android:layout_width="@dimen/header_width2"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1">
 
@@ -296,7 +296,7 @@
 
 
                         <LinearLayout
-                            android:layout_width="@dimen/header_width2"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1">
 
@@ -313,7 +313,37 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="@dimen/header_width2"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="TAX"
+                                android:textAlignment="textEnd"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C12dp"
+                                android:textStyle="bold"></TextView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:text="Discount"
+                                android:textAlignment="textEnd"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C12dp"
+                                android:textStyle="bold"></TextView>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1">
 
@@ -329,7 +359,7 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="@dimen/header_width2"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1">
 
@@ -349,8 +379,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
 
-                        android:layout_marginLeft="@dimen/C10dp"
-                        android:layout_marginRight="@dimen/C10dp"
+                        android:layout_marginLeft="@dimen/C5dp"
+                        android:layout_marginRight="@dimen/C5dp"
                         android:background="@color/black"></View>
 
                 </LinearLayout>
@@ -580,10 +610,6 @@
                             android:textStyle="bold"></TextView>
 
 
-
-
-
-
                     </LinearLayout>
                 </LinearLayout>
 
@@ -781,8 +807,7 @@
                     android:fontFamily="sans-serif"
                     android:text="Items : 0"
                     android:textColor="@color/white"
-                    android:textSize="11sp"
-                    >
+                    android:textSize="11sp">
 
                 </TextView>
 

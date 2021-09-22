@@ -4,14 +4,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
-import android.text.InputFilter;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,13 +23,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
-import com.hap.checkinproc.Common_Class.CtrlsListModel;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.AlertBox;
@@ -55,7 +52,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,9 +62,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Invoice_History extends AppCompatActivity implements Master_Interface,View.OnClickListener, UpdateResponseUI {
-    TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder,txRmkTmplSpinn,txRmksNoOrd;
-    LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder,linNoOrderRmks;
+public class Invoice_History extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
+    TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn, txRmksNoOrd;
+    LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks;
     Common_Class common_class;
     List<OutletReport_View_Modal> OutletReport_View_Modal;
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
@@ -99,7 +95,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             new LocationFinder(getApplication(), new LocationEvents() {
                 @Override
                 public void OnLocationRecived(Location location) {
-                    mlocation=location;
+                    mlocation = location;
                 }
             });
             common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
@@ -157,10 +153,11 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             btnSbmtNOrd.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(txRmksNoOrd.getText().toString().equalsIgnoreCase("")){
-                        Toast.makeText(Invoice_History.this,"Select the Reason",Toast.LENGTH_LONG).show();
+                    if (txRmksNoOrd.getText().toString().equalsIgnoreCase("")) {
+                        Toast.makeText(Invoice_History.this, "Select the Reason", Toast.LENGTH_LONG).show();
                         return;
                     }
+                    linNoOrderRmks.setVisibility(View.GONE);
                     SaveOrder();
                 }
             });
@@ -197,7 +194,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 //                        startActivity(intent);
 //                    } else {
                     Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                    sharedCommonPref.save(Constants.FLAG,FilterOrderList.get(position).getStatus());
+                    sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
                     Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
                     intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
                     intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
@@ -228,6 +225,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         }
 
     }
+
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         customDialog.dismiss();
@@ -236,6 +234,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         }
 
     }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -274,7 +273,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                 break;
             case R.id.lin_noOrder:
-                if (mlocation==null) {
+                if (mlocation == null) {
                     new LocationFinder(getApplication(), new LocationEvents() {
                         @Override
                         public void OnLocationRecived(Location location) {
@@ -295,14 +294,15 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 break;
         }
     }
+
     public void loadNoOrdRemarks() {
         db = new DatabaseHandler(this);
         try {
-            JSONArray HAPRmks=db.getMasterData("HAPNoOrdRmks");
-            if(HAPRmks!=null){
-                for(int li=0;li<HAPRmks.length();li++){
-                    JSONObject jItem=HAPRmks.getJSONObject(li);
-                    Common_Model item=new Common_Model(jItem.getString("id"),jItem.getString("name"),jItem);
+            JSONArray HAPRmks = db.getMasterData("HAPNoOrdRmks");
+            if (HAPRmks != null) {
+                for (int li = 0; li < HAPRmks.length(); li++) {
+                    JSONObject jItem = HAPRmks.getJSONObject(li);
+                    Common_Model item = new Common_Model(jItem.getString("id"), jItem.getString("name"), jItem);
                     ldgRemarks.add(item);
                 }
             }
@@ -311,6 +311,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         }
 
     }
+
     private void GetJsonData(String jsonResponse, String type) {
 
         //type =1 product category data values
@@ -467,7 +468,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 //
 //                    } else {
                     Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-                    sharedCommonPref.save(Constants.FLAG,FilterOrderList.get(position).getStatus());
+                    sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
 
                     Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
                     intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
@@ -524,8 +525,6 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                                 if (jsonObject.getBoolean("success")) {
 
 
-
-
                                     Gson gson = new Gson();
                                     List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
 
@@ -535,8 +534,6 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                                     if (jsonArray != null && jsonArray.length() > 1) {
                                         for (int i = 0; i < jsonArray.length(); i++) {
                                             JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-
 
 
                                             product_details_modalArrayList.add(new Product_Details_Modal(jsonObject1.getString("Product_Code"),
@@ -649,6 +646,16 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+            common_class.CommonIntentwithFinish(Dashboard_Route.class);
+
+            return true;
+        }
+        return false;
+    }
 
     private void getPreOrderQty() {
         try {
@@ -755,7 +762,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
                 JSONObject HeadItem = new JSONObject();
 
-                HeadItem.put("OrderID", Shared_Common_Pref.OutletCode);
+                HeadItem.put("OrderID", Shared_Common_Pref.TransSlNo);
 
 
                 Call<ResponseBody> call = service.getInvoiceOrderDetails(HeadItem.toString());

@@ -29,6 +29,8 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Print_Invoice_Adapter;
@@ -38,8 +40,13 @@ import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
 import com.hap.checkinproc.common.DatabaseHandler;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -48,6 +55,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Print_Invoice_Activity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
     Print_Invoice_Adapter mReportViewAdapter;
@@ -141,8 +153,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                 break;
 
             case R.id.btnInvoice:
-                Shared_Common_Pref.Invoicetoorder = "2";
-                common_class.CommonIntentwithFinish(InvoiceOrderIdCategoryActivity.class);
+                Shared_Common_Pref.Invoicetoorder = "4";
+                getInvoiceOrderDetails();
                 break;
         }
     }
@@ -549,6 +561,86 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
 
     }
 
+    private void getInvoiceOrderDetails() {
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                common_class.ProgressdialogShow(1, "");
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                JSONObject HeadItem = new JSONObject();
+
+                HeadItem.put("OrderID", Shared_Common_Pref.TransSlNo);
+
+
+                Call<ResponseBody> call = service.getInvoiceOrderDetails(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+
+                                if (jsonObject.getBoolean("success")) {
+
+
+                                    sharedCommonPref.save(Constants.InvoiceQtyList, is.toString());
+
+
+
+                                    common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+
+
+                                } else {
+                                    sharedCommonPref.clear_pref(Constants.InvoiceQtyList);
+                                    Log.v("PreOrderList: ", "" + "not success");
+
+                                    common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+
+
+                                }
+
+
+                            } else {
+
+                            }
+
+                        } catch (Exception e) {
+                            common_class.ProgressdialogShow(0, "");
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>", t.toString());
+                        common_class.ProgressdialogShow(0, "");
+
+
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+
+
 
     void orderInvoiceDetailData() {
         try {
@@ -564,7 +656,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                     Order_Outlet_Filter.clear();
                     double total_qtytext = 0, subTotalVal = 0.00;
                     for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
-                        Log.e("TRANS_SLNO", ivl.getTransSlNo()+" : number:"+Shared_Common_Pref.TransSlNo);
+                        Log.e("TRANS_SLNO", ivl.getTransSlNo() + " : number:" + Shared_Common_Pref.TransSlNo);
 
                         if (ivl.getTransSlNo().equals(Shared_Common_Pref.TransSlNo)) {
                             Log.e("Product_Name", ivl.getProductName());

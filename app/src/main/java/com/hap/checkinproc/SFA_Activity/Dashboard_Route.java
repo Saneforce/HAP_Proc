@@ -11,6 +11,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -129,15 +130,15 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
 
         ApiInterface ApiService = ApiClient.getClient().create(ApiInterface.class);
-        JSONObject jParam=new JSONObject();
+        JSONObject jParam = new JSONObject();
         try {
-            jParam.put("SF",UserDetails.getString("Sfcode",""));
-            jParam.put("div", UserDetails.getString("Divcode",""));
-            ApiService.getDataArrayList("get/prodgroup",jParam.toString()).enqueue(new Callback<JsonArray>() {
+            jParam.put("SF", UserDetails.getString("Sfcode", ""));
+            jParam.put("div", UserDetails.getString("Divcode", ""));
+            ApiService.getDataArrayList("get/prodgroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
                 @Override
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                     db.deleteMasterData("PGroup");
-                    db.addMasterData("PGroup",response.body());
+                    db.addMasterData("PGroup", response.body());
                 }
 
                 @Override
@@ -157,6 +158,18 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             getLastInvoiceData();
 
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+
+            common_class.CommonIntentwithFinish(SFA_Activity.class);
+
+            return true;
+        }
+        return false;
     }
 
     private void getLastInvoiceData() {
@@ -386,38 +399,38 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 //                    }
                     recyclerView.setAdapter(
                             new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
-                        @Override
-                        public void onIntentClick(int position) {
-                            Shared_Common_Pref.Outler_AddFlag = "0";
-                            Log.e("Route_Outlet_Info", Retailer_Modal_List.get(position).getId());
-                            Shared_Common_Pref.OutletName = Retailer_Modal_List.get(position).getName().toUpperCase();
-                            Shared_Common_Pref.OutletCode = Retailer_Modal_List.get(position).getId();
-                            Shared_Common_Pref.OutletAvail = Retailer_Modal_List.get(position).getHatsun_AvailablityId();
-                            Shared_Common_Pref.OutletUniv = Retailer_Modal_List.get(position).getCategory_Universe_Id();
-                            shared_common_pref.save("CurrLoc", "");
-
-
-                            new LocationFinder(getApplication(), new LocationEvents() {
                                 @Override
-                                public void OnLocationRecived(Location location) {
-                                    shared_common_pref.save("CurrLoc", location.getLatitude() + ":" + location.getLongitude());
+                                public void onIntentClick(int position) {
+                                    Shared_Common_Pref.Outler_AddFlag = "0";
+                                    Log.e("Route_Outlet_Info", Retailer_Modal_List.get(position).getId());
+                                    Shared_Common_Pref.OutletName = Retailer_Modal_List.get(position).getName().toUpperCase();
+                                    Shared_Common_Pref.OutletCode = Retailer_Modal_List.get(position).getId();
+                                    Shared_Common_Pref.OutletAvail = Retailer_Modal_List.get(position).getHatsun_AvailablityId();
+                                    Shared_Common_Pref.OutletUniv = Retailer_Modal_List.get(position).getCategory_Universe_Id();
+                                    shared_common_pref.save("CurrLoc", "");
+
+
+                                    new LocationFinder(getApplication(), new LocationEvents() {
+                                        @Override
+                                        public void OnLocationRecived(Location location) {
+                                            shared_common_pref.save("CurrLoc", location.getLatitude() + ":" + location.getLongitude());
+                                        }
+                                    });
+
+                                    shared_common_pref.save(Constants.Retailor_Address, Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
+                                    shared_common_pref.save(Constants.Retailor_ERP_Code, Retailer_Modal_ListFilter.get(position).getERP_Code());
+                                    shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_List.get(position).getName().toUpperCase()/* + "~" + Retailer_Modal_List.get(position).getERP_Code()*/);
+
+                                    if (!DCRMode.equalsIgnoreCase("")) {
+                                        common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                                    } else {
+                                        //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
+                                        common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                                    }
+
+
                                 }
-                            });
-
-                            shared_common_pref.save(Constants.Retailor_Address, Retailer_Modal_ListFilter.get(position).getListedDrAddress1());
-                            shared_common_pref.save(Constants.Retailor_ERP_Code, Retailer_Modal_ListFilter.get(position).getERP_Code());
-                            shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_List.get(position).getName().toUpperCase()/* + "~" + Retailer_Modal_List.get(position).getERP_Code()*/);
-
-                            if (!DCRMode.equalsIgnoreCase("")) {
-                                common_class.CommonIntentwithoutFinish(Invoice_History.class);
-                            } else {
-                                //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
-                                common_class.CommonIntentwithoutFinish(Invoice_History.class);
-                            }
-
-
-                        }
-                    })
+                            })
                     );
 
 
@@ -471,17 +484,18 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             e.printStackTrace();
         }
     }
-    private void SearchRetailers(){
+
+    private void SearchRetailers() {
         if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
             String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
             Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
         }
-        String sSchText=txSearchRet.getText().toString();
+        String sSchText = txSearchRet.getText().toString();
         Retailer_Modal_ListFilter.clear();
         for (int i = 0; i < Retailer_Modal_List.size(); i++) {
             if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase(RetType)
                     && (sSchText.equalsIgnoreCase("") ||
-                    (";"+Retailer_Modal_List.get(i).getName().toLowerCase()).indexOf(";"+sSchText.toLowerCase())>-1))
+                    (";" + Retailer_Modal_List.get(i).getName().toLowerCase()).indexOf(";" + sSchText.toLowerCase()) > -1))
                 Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
         }
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
@@ -550,12 +564,12 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 } else if (route_text.getText().toString().equals("")) {
                     Toast.makeText(this, "Select The Route", Toast.LENGTH_SHORT).show();
                 } else {*/
-                   // shared_common_pref.save("RouteSelect", Route_id);
-                   // shared_common_pref.save("RouteName", route_text.getText().toString());
-                   // shared_common_pref.save("Distributor_ID", Distributor_Id);
-                   // Shared_Common_Pref.Outler_AddFlag = "1";
-                    common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
-                    //common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
+                // shared_common_pref.save("RouteSelect", Route_id);
+                // shared_common_pref.save("RouteName", route_text.getText().toString());
+                // shared_common_pref.save("Distributor_ID", Distributor_Id);
+                // Shared_Common_Pref.Outler_AddFlag = "1";
+                common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
+                //common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
                 //}
                 break;
             case R.id.distributor_text:
@@ -718,6 +732,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
         }
     }
+
     void getDbstoreData(String listType) {
         try {
             JSONArray jsonArray = db.getMasterData(listType);
@@ -730,7 +745,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 Model_Pojo = new Common_Model(id, name, flag);
                 if (listType.equals(Constants.Distributor_List)) {
                     String Add2 = jsonObject1.optString("Addr2");
-                    Model_Pojo = new Common_Model( name,id, flag,Add2,"");
+                    Model_Pojo = new Common_Model(name, id, flag, Add2, "");
                     distributor_master.add(Model_Pojo);
                 } else if (listType.equals(Constants.Rout_List)) {
                     Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
