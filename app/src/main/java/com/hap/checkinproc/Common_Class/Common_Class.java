@@ -312,6 +312,7 @@ public class Common_Class {
                     QuerySTring1 = "{\"tableName\":\"GettotalOrderDetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
+                    QueryString.put("orderID",Shared_Common_Pref.TransSlNo);
                     break;
 
                 case Constants.Competitor_List:

@@ -352,7 +352,7 @@
                                     android:id="@+id/totalitem"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="5"
+                                    android:text="0"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C15dp"></TextView>
@@ -375,7 +375,7 @@
                                     android:id="@+id/totalqty"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="10"
+                                    android:text="0"
                                     android:textAlignment="viewEnd"
                                     android:textColor="@color/black"
                                     android:textSize="@dimen/C15dp"></TextView>

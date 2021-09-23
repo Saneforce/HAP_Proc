@@ -1299,9 +1299,9 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
                 if (Common_Class.isNullOrEmpty(Product_Details_Modal.getTax()))
-                    holder.tvTaxLabel.setText("TAX :₹0.00");
+                    holder.tvTaxLabel.setText("₹0.00");
                 else
-                    holder.tvTaxLabel.setText("TAX :₹" + Product_Details_Modal.getTax());
+                    holder.tvTaxLabel.setText("₹" + Product_Details_Modal.getTax());
 
                 holder.QtyPls.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1539,7 +1539,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                 holder.Amount.setText("₹" + formatter.format(Product_Details_Modalitem.get(holder.getAdapterPosition()).getAmount()));
 
 
-                                holder.tvTaxLabel.setText("TAX :₹" + Product_Details_Modal.getTax());
+                                holder.tvTaxLabel.setText("₹" + Product_Details_Modal.getTax());
 
 
                             }

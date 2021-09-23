@@ -264,7 +264,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
     public void showBrandDialog(int position) {
 
         selectedPos = position;
-        customDialog = new CustomListViewDialog(this, otherBrandList, 1);
+        customDialog = new CustomListViewDialog(this, otherBrandList, 501);
         Window windoww = customDialog.getWindow();
         windoww.setGravity(Gravity.CENTER);
         windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
@@ -274,11 +274,16 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
+        try {
+
         if (selectedPos >= 0) {
             customDialog.dismiss();
             Getorder_Array_List.set(selectedPos, new Product_Details_Modal(myDataset.get(position).getId(), myDataset.get(position).getName(), "", 0, 0, 0, ""));
             otherBrandAdapter.notifyData(Getorder_Array_List);
 
+        }}
+        catch (Exception e){
+            Log.v("OtherBrandDialog: ",e.getMessage());
         }
     }
 

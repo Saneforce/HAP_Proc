@@ -40,7 +40,6 @@ import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.SFA_Model_Class.Trans_Order_Details_Offline;
 import com.hap.checkinproc.common.DatabaseHandler;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -597,7 +596,6 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
                                     sharedCommonPref.save(Constants.InvoiceQtyList, is.toString());
 
 
-
                                     common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
 
 
@@ -641,72 +639,57 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     }
 
 
-
     void orderInvoiceDetailData() {
         try {
-            if (Shared_Common_Pref.Invoicetoorder != null) {
-                if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
-                    // String orderlist = sharedCommonPref.getvalue(Shared_Common_Pref.TodayOrderDetails_List);
-                    billnumber.setText("Order No: " + Shared_Common_Pref.TransSlNo);
-                    String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
-                    userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
-                    }.getType();
-                    InvoiceorderDetails_List = gson.fromJson(orderlist, userType);
-                    Order_Outlet_Filter = new ArrayList<>();
-                    Order_Outlet_Filter.clear();
-                    double total_qtytext = 0, subTotalVal = 0.00;
-                    for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
-                        Log.e("TRANS_SLNO", ivl.getTransSlNo() + " : number:" + Shared_Common_Pref.TransSlNo);
 
-                        if (ivl.getTransSlNo().equals(Shared_Common_Pref.TransSlNo)) {
-                            Log.e("Product_Name", ivl.getProductName());
-                            Log.e("Product_getQty", String.valueOf(ivl.getQuantity()));
-                            Log.e("Product_getVal", String.valueOf(ivl.getValue()));
-                            // total_qtytext += ivl.getQty() + ivl.getQuantity();
-                            total_qtytext += ivl.getQuantity();
-                            subTotalVal += ivl.getValue();
+            billnumber.setText("Order No: " + Shared_Common_Pref.TransSlNo);
+            String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
+            userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
+            }.getType();
+            InvoiceorderDetails_List = gson.fromJson(orderlist, userType);
+            Order_Outlet_Filter = new ArrayList<>();
+            Order_Outlet_Filter.clear();
+            double total_qtytext = 0, subTotalVal = 0.00;
+            for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
+
+                total_qtytext += ivl.getQuantity();
+                subTotalVal += ivl.getValue();
 
 
-                            Log.e("Product_getSubTOTVal", "" + subTotalVal);
+                Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
+                        "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(), ivl.getQty(), ivl.getValue()));
 
-
-                            Order_Outlet_Filter.add(new Product_Details_Modal(ivl.getProductCode(), ivl.getProductName(), 1, "1",
-                                    "1", "5", "i", 7.99, 1.8, ivl.getRate(), ivl.getQuantity(), ivl.getQty(), ivl.getValue()));
-                        }
-                    }
-
-
-                    retailerroute.setText(sharedCommonPref.getvalue(Constants.Route_name));
-                    retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
-
-                    totalqty.setText("" + String.valueOf(total_qtytext));
-                    totalitem.setText("" + Order_Outlet_Filter.size());
-                    subtotal.setText("₹" + formatter.format(subTotalVal));
-                    netamount.setText("₹ " + formatter.format(subTotalVal));
-
-                    DateFormat dfw = new SimpleDateFormat("dd/MM/yyyy");
-                    Calendar calobjw = Calendar.getInstance();
-                    invoicedate.setText("Date : " + dfw.format(calobjw.getTime()));
-
-                    sharedCommonPref.save(Constants.INVOICE_ORDERLIST, gson.toJson(Order_Outlet_Filter));
-
-                    mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, new AdapterOnClick() {
-                        @Override
-                        public void onIntentClick(int position) {
-                            //  sharedCommonPref.save(Constants.ORDER_ID, Order_Outlet_Filter.get(position).getId());
-                        }
-                    });
-                    printrecyclerview.setAdapter(mReportViewAdapter);
-
-                    cashdiscount.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("Discount_Amount"))));
-                    gstrate.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("NetAmount"))));
-
-
-                } else {
-
-                }
             }
+
+
+            retailerroute.setText(sharedCommonPref.getvalue(Constants.Route_name));
+            retaileAddress.setText(sharedCommonPref.getvalue(Constants.Retailor_Address));
+
+            totalqty.setText("" + String.valueOf(total_qtytext));
+            totalitem.setText("" + Order_Outlet_Filter.size());
+            subtotal.setText("₹" + formatter.format(subTotalVal));
+            netamount.setText("₹ " + formatter.format(subTotalVal));
+
+            DateFormat dfw = new SimpleDateFormat("dd/MM/yyyy");
+            Calendar calobjw = Calendar.getInstance();
+            invoicedate.setText("Date : " + dfw.format(calobjw.getTime()));
+
+            sharedCommonPref.save(Constants.INVOICE_ORDERLIST, gson.toJson(Order_Outlet_Filter));
+
+            mReportViewAdapter = new Print_Invoice_Adapter(Print_Invoice_Activity.this, Order_Outlet_Filter, new AdapterOnClick() {
+                @Override
+                public void onIntentClick(int position) {
+                    //  sharedCommonPref.save(Constants.ORDER_ID, Order_Outlet_Filter.get(position).getId());
+                }
+            });
+            printrecyclerview.setAdapter(mReportViewAdapter);
+
+            cashdiscount.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("Discount_Amount"))));
+            gstrate.setText("₹" + formatter.format(Double.parseDouble(getIntent().getStringExtra("NetAmount"))));
+
+
         } catch (Exception e) {
+            Log.e("PRINT:getData ", e.getMessage());
 
         }
     }
