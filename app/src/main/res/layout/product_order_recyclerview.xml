@@ -34,8 +34,7 @@
                     android:layout_centerVertical="true"
                     android:layout_weight="3"
                     android:scaleType="centerInside"
-                    android:src="@drawable/product_logo"
-                    >
+                    android:src="@drawable/product_logo">
 
                 </ImageView>
 
@@ -48,7 +47,7 @@
 
 
                     <TextView
-                       android:id="@+id/productname"
+                        android:id="@+id/productname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="thirumalai"
@@ -165,44 +164,49 @@
                             android:layout_toLeftOf="@+id/Qty"
                             android:gravity="center_vertical"
                             android:text="New Qty : "
-                            android:textColor="@color/grey_800"/>
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical"
-    android:background="@drawable/order_qty_backround">
-    <ImageView
-    android:id="@+id/ivQtyPls"
-    android:layout_width="25dp"
-    android:layout_height="25dp"
-    android:padding="6dp"
-    app:tint="@color/green"
-    android:src="@drawable/plus"/>
-    <EditText
-        android:id="@+id/Qty"
-        android:layout_width="40dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:gravity="center_vertical"
-        android:background="@color/white"
-        android:hint="0"
-        android:text=""
-        android:inputType="number"
-        android:maxLength="4"
-        android:paddingLeft="@dimen/C5dp"
-        android:paddingRight="@dimen/C5dp"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="@dimen/C13dp"
-        tools:ignore="RtlCompat"/>
-    <ImageView
-        android:id="@+id/ivQtyMns"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:padding="6dp"
-        app:tint="@color/color_red"
-        android:src="@drawable/disable_minus"/>
-</LinearLayout>
+                            android:textColor="@color/grey_800" />
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:background="@drawable/order_qty_backround">
+
+                            <ImageView
+                                android:id="@+id/ivQtyPls"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:padding="6dp"
+                                android:src="@drawable/plus"
+                                app:tint="@color/green" />
+
+                            <EditText
+
+                                android:id="@+id/Qty"
+                                android:layout_width="40dp"
+                                android:layout_height="match_parent"
+                                android:layout_alignParentRight="true"
+                                android:background="@color/white"
+                                android:gravity="center_vertical"
+                                android:hint="0"
+                                android:inputType="number"
+                                android:maxLength="4"
+                                android:paddingLeft="@dimen/C5dp"
+                                android:paddingRight="@dimen/C5dp"
+                                android:text=""
+                                android:textAlignment="center"
+                                android:textColor="@color/black"
+                                android:textSize="@dimen/C13dp"
+                                tools:ignore="RtlCompat" />
+
+                            <ImageView
+                                android:id="@+id/ivQtyMns"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:padding="6dp"
+                                android:src="@drawable/disable_minus"
+                                app:tint="@color/color_red" />
+                        </LinearLayout>
 
 
                         <RelativeLayout
@@ -297,10 +301,10 @@
 
 
                     <RelativeLayout
-                        android:visibility="visible"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="visible">
 
                         <TextView
 
@@ -318,11 +322,11 @@
 
                         <TextView
 
-                            android:fontFamily="sans-serif"
                             android:id="@+id/tax"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/tvTaxLabel"
+                            android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
 
                             android:hint=""

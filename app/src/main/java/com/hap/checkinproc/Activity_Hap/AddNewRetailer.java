@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Activity_Hap;
 
+import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
+
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -11,8 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -28,13 +28,11 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
-import com.hap.checkinproc.Activity.AllowanceActivity;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
@@ -70,8 +68,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import static com.hap.checkinproc.Activity_Hap.Leave_Request.CheckInfo;
-
 public class AddNewRetailer extends AppCompatActivity implements Master_Interface, View.OnClickListener {
     TextView toolHeader;
     CustomListViewDialog customDialog;
@@ -92,7 +88,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
     JSONObject docMasterObject;
-    String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue,imageConvert = "", imageServer = "";
+    String keyEk = "N", KeyDate, KeyHyp = "-", keyCodeValue, imageConvert = "", imageServer = "";
     Integer routeId1, classId, channelID;
     String routeId, Compititor_Id, Compititor_Name, CatUniverSelectId, AvailUniverSelectId, reason_category_remarks = "", HatsunAvailswitch = "", categoryuniverseswitch = "";
     Shared_Common_Pref shared_common_pref;
@@ -100,7 +96,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     Common_Class common_class;
     List<Retailer_Modal_List> Retailer_Modal_List;
     ImageView copypaste;
-    String TAG = "AddNewRetailer: ",UserInfo = "MyPrefs";
+    String TAG = "AddNewRetailer: ", UserInfo = "MyPrefs";
     DatabaseHandler db;
 
     ImageView ivPhotoShop;
@@ -177,7 +173,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 CurrentLocLin.setVisibility(View.GONE);
                 retailercodevisible.setVisibility(View.GONE);
                 CurrentLocationsAddress.setVisibility(View.GONE);
-                routeId = shared_common_pref.getvalue("RouteSelect");
+             //   routeId = shared_common_pref.getvalue("RouteSelect");
+                routeId = shared_common_pref.getvalue(Constants.Route_Id);
+
                 txtRetailerRoute.setText(shared_common_pref.getvalue("RouteName"));
                 CurrentLocationsAddress.setText("" + Shared_Common_Pref.OutletAddress);
                 headtext.setText("Create Outlet");
@@ -329,9 +327,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         Toast.makeText(getApplicationContext(), "Enter City", Toast.LENGTH_SHORT).show();
                     } else if (addRetailerPhone.getText().toString().matches("")) {
                         Toast.makeText(getApplicationContext(), "Enter Phone", Toast.LENGTH_SHORT).show();
-                    } else if (txtRetailerClass.getText().toString().matches("")) {
-                        Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
-                    } else if (finalPath.isEmpty()) {
+                    }
+//                    else if (txtRetailerClass.getText().toString().matches("")) {
+//                        Toast.makeText(getApplicationContext(), "Select the Outlet Type", Toast.LENGTH_SHORT).show();
+//                    }
+                    else if (imageConvert.equals("")) {
                         Toast.makeText(getApplicationContext(), "Please take picture", Toast.LENGTH_SHORT).show();
 
                     } else {
@@ -344,7 +344,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //                        mIntent.putExtra("Mode", "outlet");
 //                        FileUploadService.enqueueWork(AddNewRetailer.this, mIntent);
 
-                      //  sendImageToServer(Shared_Common_Pref.Sf_Code, filename, "outlet");
+                        //  sendImageToServer(Shared_Common_Pref.Sf_Code, filename, "outlet");
 //
 
                         addNewRetailers();
@@ -950,7 +950,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     @Override
                     public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
                         imageServer = FileName;
-                        imageConvert=fullPath;
+                        imageConvert = fullPath;
                         ivPhotoShop.setImageBitmap(image);
                     }
                 });
