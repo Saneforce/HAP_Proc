@@ -438,11 +438,11 @@ public interface ApiInterface {
 
 
     @FormUrlEncoded
-    @POST("db_v310.php?axn=save/otherbrandentry")
+    @POST("Db_v310.php?axn=save/otherbrandentry")
     Call<JsonObject> saveOtherBrand(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
-    @POST("db_v310.php?axn=save/popentry")
+    @POST("Db_v310.php?axn=save/popentry")
     Call<JsonObject> savePOP(@Query("divisionCode") String div_code, @Query("Sf_code") String sf_code, @Field("data") String toString);
 
     @FormUrlEncoded
@@ -532,7 +532,7 @@ public interface ApiInterface {
 
 
     @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/popmaster ")
+    @POST("Db_v310.php?axn=get/popmaster")
     Call<ResponseBody> getPOPMaster(@Field("data") String body);
 
 

@@ -77,20 +77,17 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
-    TextView takeorder, ok, back, Out_Let_Name, Category_Nametext, netamount,
+    TextView takeorder,  Out_Let_Name, Category_Nametext,
             tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo;
 
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
     LinearLayout lin_orderrecyclerview, lin_gridcategory, rlAddProduct;
-    public boolean gobackflag = false;
     Common_Class common_class;
     String Ukey;
     String[] strLoc;
-    String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "", mDCRMode;
+    String Worktype_code = "", Route_Code = "", Dirtributor_Cod = "", Distributor_Name = "";
     Shared_Common_Pref sharedCommonPref;
     Prodct_Adapter mProdct_Adapter;
-    Pay_Adapter mPay_Adapter;
-
 
     String TAG = "Order_Category_Select";
     DatabaseHandler db;
@@ -121,10 +118,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
             Brndgrid = findViewById(R.id.PBrnd);*/
             categorygrid = findViewById(R.id.category);
             takeorder = findViewById(R.id.takeorder);
-            netamount = findViewById(R.id.netamount);
-            ok = findViewById(R.id.ok);
-            back = findViewById(R.id.back);
-            mDCRMode = sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
             common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6");
@@ -173,8 +166,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
             if (Shared_Common_Pref.Invoicetoorder != null) {
                 if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
-                    ok.setText("Edit");
-                    // String orderlist = sharedCommonPref.getvalue(Shared_Common_Pref.TodayOrderDetails_List);
+
                     String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
                     userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
                     }.getType();
@@ -205,10 +197,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     for (Category_Universe_Modal CM : Category_Modal) {
                         for (Product_Details_Modal PM : Product_Modal) {
                             if (PM.getQty() > 0 || PM.getRegularQty() > 0) {
-                          /*  Log.e("GETQTY", String.valueOf(PM.getQty()));
-                            Log.e("GETREgular", String.valueOf(PM.getRegularQty()));
-                            Log.e("Category_Universe_Modal", CM.getId());
-                            Log.e("Product_Details_Modal", String.valueOf(PM.getProductCatCode()));*/
+
                                 if (CM.getId().equals(String.valueOf(PM.getProductCatCode())) && (PM.getQty() > 0 || PM.getRegularQty() > 0)) {
                                     Category_Modal.get(jki).setColorFlag("1");
                                     Log.e("Category_Modal_CAT", Category_Modal.get(jki).getColorFlag());
@@ -219,13 +208,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                     }
                     FilterProduct("invoice", true);
-                } else {
-                    ok.setText("Ok");
                 }
-            } else {
-                ok.setText("OK");
             }
-
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
@@ -397,6 +381,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
             Log.v(TAG, " order oncreate:j ");
 
+            if(!Common_Class.isNullOrEmpty(preOrderList)){
             for (int pmTax = 0; pmTax < Product_Modal.size(); pmTax++) {
                 double wholeTax = 0;
                 if (!Common_Class.isNullOrEmpty(taxRes)) {
@@ -436,7 +421,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
                 }
-            }
+            }}
 
             Log.v(TAG, " order oncreate:k ");
         } catch (Exception e) {
@@ -870,19 +855,12 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     Product_ModalSetAdapter.add(personNpi);
             }
         }
-        // lin_gridcategory.setVisibility(View.GONE);
         lin_orderrecyclerview.setVisibility(View.VISIBLE);
-        ok.setVisibility(View.VISIBLE);
-        gobackflag = true;
-        // takeorder.setVisibility(View.GONE);
         Category_Nametext.setVisibility(View.VISIBLE);
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
 
-        // Order_Category_Select.CategoryAdapter customAdapteravail = new Order_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
-        // categorygrid.setAdapter(customAdapteravail);
-        // customAdapteravail.updateUi(categoryPos);
-        //
+
         mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_order_recyclerview, getApplicationContext(), categoryPos);
 
         recyclerView.setAdapter(mProdct_Adapter);
@@ -906,9 +884,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         Category_Nametext.setVisibility(View.VISIBLE);
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
-
-        // Order_Category_Select.CategoryAdapter customAdapteravail = new Order_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
-        // categorygrid.setAdapter(customAdapteravail);
 
         mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_order_recyclerview, getApplicationContext(), categoryPos);
 

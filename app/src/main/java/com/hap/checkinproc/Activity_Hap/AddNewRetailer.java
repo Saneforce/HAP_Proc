@@ -165,7 +165,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
             String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
-            //String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
 
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
             if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
@@ -173,7 +172,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 CurrentLocLin.setVisibility(View.GONE);
                 retailercodevisible.setVisibility(View.GONE);
                 CurrentLocationsAddress.setVisibility(View.GONE);
-             //   routeId = shared_common_pref.getvalue("RouteSelect");
+                //   routeId = shared_common_pref.getvalue("RouteSelect");
                 routeId = shared_common_pref.getvalue(Constants.Route_Id);
 
                 txtRetailerRoute.setText(shared_common_pref.getvalue("RouteName"));
@@ -275,7 +274,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
                     if (Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email() != null)
                         addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
-                    owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
+                    if (Retailer_Modal_List.get(getOutletPosition()).getOwner_Name() != null)
+                        owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
                     edt_pin_codeedit.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getPin_code()));
                     edt_gst.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getGst()));
                     // txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
@@ -300,7 +300,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     addRetailerCity.setText("" + Retailer_Modal_List.get(getOutletPosition()).getCityname());
                 if (Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email() != null)
                     addRetailerEmail.setText("" + Retailer_Modal_List.get(getOutletPosition()).getListedDr_Email());
-                owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
+                if (Retailer_Modal_List.get(getOutletPosition()).getOwner_Name() != null)
+                    owner_name.setText("" + Retailer_Modal_List.get(getOutletPosition()).getOwner_Name());
                 edt_pin_codeedit.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPin_code());
                 edt_gst.setText("" + Retailer_Modal_List.get(getOutletPosition()).getGst());
                 //  txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());

@@ -188,7 +188,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
 
 
                             JSONArray Order_Details = new JSONArray();
-                            for (int z = 0; z < Getorder_Array_List.size(); z++) {
+                            for (int z = 0; z < submitBrandList.size(); z++) {
                                 JSONObject ProdItem = new JSONObject();
                                 ProdItem.put("id", submitBrandList.get(z).getId());
                                 ProdItem.put("BrandNm", submitBrandList.get(z).getName());

@@ -82,19 +82,16 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     List<Category_Universe_Modal> Category_Modal = new ArrayList<>();
     List<Product_Details_Modal> Product_Modal;
     List<Product_Details_Modal> Order_Outlet_Filter;
-    List<com.hap.checkinproc.SFA_Model_Class.RegularQty_Modal> RegularQty_Modal;
     List<Product_Details_Modal> Product_ModalSetAdapter;
     List<Product_Details_Modal> Getorder_Array_List;
     List<Trans_Order_Details_Offline> InvoiceorderDetails_List;
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
-    TextView takeorder, ok, back, Out_Let_Name, Category_Nametext, orderbutton, netamount;
-    /* @Inject
-     Retrofit retrofit;*/
+    TextView takeorder, ok, back, Out_Let_Name, Category_Nametext;
+
     private RecyclerView recyclerView, categorygrid, freeRecyclerview;
-    LinearLayout lin_orderrecyclerview, lin_gridcategory, linnetamount, linnercashdiscount;
-    public boolean gobackflag = false;
+    LinearLayout lin_gridcategory;
     Common_Class common_class;
     CustomListViewDialog customDialog;
 
@@ -137,14 +134,11 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         try {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_invoice__category__select_edit);
-            //  ((MyApplication) getApplication()).getNetComponent().inject(this);
             db = new DatabaseHandler(this);
             sharedCommonPref = new Shared_Common_Pref(Invoice_Category_Select.this);
             common_class = new Common_Class(this);
             categorygrid = findViewById(R.id.category);
             takeorder = findViewById(R.id.takeorder);
-            orderbutton = findViewById(R.id.orderbutton);
-            netamount = findViewById(R.id.netamount);
 
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -153,13 +147,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             ok = findViewById(R.id.ok);
             back = findViewById(R.id.back);
             mDCRMode = sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
-            //   GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "6");
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
             common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
             GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "6");
-            lin_orderrecyclerview = findViewById(R.id.lin_orderrecyclerview);
             cashdiscount = findViewById(R.id.cashdiscount);
-            linnercashdiscount = findViewById(R.id.linnercashdiscount);
             lin_gridcategory = findViewById(R.id.lin_gridcategory);
             Out_Let_Name = findViewById(R.id.outlet_name);
             Category_Nametext = findViewById(R.id.Category_Nametext);
@@ -186,13 +177,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             ok.setOnClickListener(this);
             takeorder.setOnClickListener(this);
             back.setOnClickListener(this);
-            orderbutton.setOnClickListener(this);
             rlCategoryItemSearch.setOnClickListener(this);
             ivClose.setOnClickListener(this);
             rlPayment.setOnClickListener(this);
             rlCash.setOnClickListener(this);
             rlCredit.setOnClickListener(this);
             rlAddProduct.setOnClickListener(this);
+            Category_Nametext.setOnClickListener(this);
 
 
             Ukey = Common_Class.GetEkey();
@@ -202,17 +193,12 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
-            //  GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Category_List), "1");
             GetJsonData(String.valueOf(db.getMasterData(Constants.Category_List)), "1");
-            // String OrdersTable = sharedCommonPref.getvalue(Shared_Common_Pref.Product_List);
+
             String OrdersTable = String.valueOf(db.getMasterData(Constants.Product_List));
             userType = new TypeToken<ArrayList<Product_Details_Modal>>() {
             }.getType();
             Product_Modal = gson.fromJson(OrdersTable, userType);
-            //156
-            if (Shared_Common_Pref.Invoicetoorder == null || Shared_Common_Pref.Invoicetoorder.equals("0")) {
-                //  Get_regularqty();
-            }
 
 
             Invoice_Category_Select.CategoryAdapter customAdapteravail = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(),
@@ -221,10 +207,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             categorygrid.setAdapter(customAdapteravail);
 
 
-            if (Shared_Common_Pref.Invoicetoorder != null) {
-                if (Shared_Common_Pref.Invoicetoorder.equals("1")) {
-                    ok.setText("Edit");
-                    // String orderlist = sharedCommonPref.getvalue(Shared_Common_Pref.TodayOrderDetails_List);
+
+                if (Shared_Common_Pref.Invoicetoorder != null&&Shared_Common_Pref.Invoicetoorder.equals("1")) {
+
                     String orderlist = String.valueOf(db.getMasterData(Constants.TodayOrderDetails_List));
                     userType = new TypeToken<ArrayList<Trans_Order_Details_Offline>>() {
                     }.getType();
@@ -266,50 +251,14 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                     }
                     FilterProduct("invoice", true);
-                } else {
-                    ok.setText("Ok");
                 }
-            } else {
-                ok.setText("OK");
-            }
-
-            cashdiscount.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void afterTextChanged(Editable s) {
-                    // TODO Auto-generated method stub
-                }
-
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    // TODO Auto-generated method stub
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (!s.toString().equals("")) {
-                        if (Double.valueOf(s.toString()) > 0) {
-                            Double totalamount = Double.valueOf(totalvalues);
-                            if (Double.valueOf(s.toString()) > Double.valueOf(totalvalues)) {
-                                Toast.makeText(Invoice_Category_Select.this, "Discount Exceeded", Toast.LENGTH_SHORT).show();
-                                cashdiscount.setText("");
-                                netamount.setText("" + totalvalues);
-                            } else {
-                                Double discountvalues = totalamount - Double.valueOf(s.toString());
-                                netamount.setText("" + discountvalues);
-                            }
-                        }
-                    } else {
-                        netamount.setText("" + totalvalues);
-                    }
-                }
-            });
 
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
 
-            showOrderItemList(0);
+            showOrderItemList(0, "");
 
 
             etCategoryItemSearch.addTextChangedListener(new TextWatcher() {
@@ -321,7 +270,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-                    showOrderFilterItem(selectedPos, s.toString());
+                    showOrderItemList(selectedPos, s.toString());
 
                 }
 
@@ -362,135 +311,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             if (Shared_Common_Pref.Invoicetoorder.equals("4")) {
                 orderId = Shared_Common_Pref.TransSlNo;
                 Shared_Common_Pref.Invoicetoorder = "2";
-                /*String preOrderList = sharedCommonPref.getvalue(Constants.INVOICE_ORDERLIST);
 
-                Type type = new TypeToken<ArrayList<Product_Details_Modal>>() {
-                }.getType();
-                List<Product_Details_Modal> productList = gson.fromJson(preOrderList, type);
-
-
-                for (int pm = 0; pm < Product_Modal.size(); pm++) {
-
-                    if (productList != null && productList.size() > 0) {
-
-                        for (int k = 0; k < productList.size(); k++) {
-
-                            if (Product_Modal.get(pm).getId().equals(productList.get(k).getId())) {
-
-                                Product_Modal.get(pm).setRegularQty(productList.get(k).getQty());
-                                Product_Modal.get(pm).setQty(productList.get(k).getQty());
-
-                                Product_Modal.get(pm).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pm).getRegularQty() * Product_Modal.get(pm).getRate())));
-
-
-                                double enterQty = Product_Modal.get(pm).getRegularQty();
-                                String strSchemeList = sharedCommonPref.getvalue(Constants.FreeSchemeDiscList);
-
-                                Type type1 = new TypeToken<ArrayList<Product_Details_Modal>>() {
-                                }.getType();
-                                List<Product_Details_Modal> product_details_modalArrayList = gson.fromJson(strSchemeList, type1);
-
-                                double highestScheme = 0;
-                                boolean haveVal = false;
-                                if (product_details_modalArrayList != null && product_details_modalArrayList.size() > 0) {
-
-                                    for (int i = 0; i < product_details_modalArrayList.size(); i++) {
-
-                                        if (Product_Modal.get(pm).getId().equals(product_details_modalArrayList.get(i).getId())) {
-
-                                            haveVal = true;
-                                            double schemeVal = Double.parseDouble(product_details_modalArrayList.get(i).getScheme());
-
-                                            if (enterQty >= schemeVal) {
-
-                                                if (schemeVal > highestScheme) {
-                                                    highestScheme = schemeVal;
-
-
-                                                    if (!product_details_modalArrayList.get(i).getFree().equals("0")) {
-                                                        if (product_details_modalArrayList.get(i).getPackage().equals("N")) {
-                                                            double freePer = (enterQty / highestScheme);
-
-                                                            double freeVal = freePer * Double.parseDouble(product_details_modalArrayList.
-                                                                    get(i).getFree());
-
-                                                            Product_Modal.get(pm).setFree(String.valueOf(Math.round(freeVal)));
-                                                        } else {
-                                                            int val = (int) (enterQty / highestScheme);
-                                                            int freeVal = val * Integer.parseInt(product_details_modalArrayList.get(i).getFree());
-                                                            Product_Modal.get(pm).setFree(String.valueOf(freeVal));
-                                                        }
-                                                    } else {
-
-                                                        Product_Modal.get(pm).setFree("0");
-
-                                                    }
-
-
-                                                    if (product_details_modalArrayList.get(i).getDiscount() != 0) {
-
-                                                        if (product_details_modalArrayList.get(i).getDiscount_type().equals("%")) {
-                                                            double discountVal = enterQty * (((product_details_modalArrayList.get(i).getDiscount()
-                                                            )) / 100);
-
-
-                                                            Product_Modal.get(pm).setDiscount((Math.round(discountVal)));
-
-                                                        } else {
-                                                            //Rs
-                                                            if (product_details_modalArrayList.get(i).getPackage().equals("N")) {
-                                                                double freePer = (enterQty / highestScheme);
-
-                                                                double freeVal = freePer * (product_details_modalArrayList.
-                                                                        get(i).getDiscount());
-
-                                                                Product_Modal.get(pm).setDiscount((Math.round(freeVal)));
-                                                            } else {
-                                                                int val = (int) (enterQty / highestScheme);
-                                                                int freeVal = (int) (val * (product_details_modalArrayList.get(i).getDiscount()));
-                                                                Product_Modal.get(pm).setDiscount((freeVal));
-                                                            }
-                                                        }
-
-                                                    } else {
-                                                        Product_Modal.get(pm).setDiscount(0.00);
-
-                                                    }
-
-
-                                                }
-
-                                            } else {
-                                                Product_Modal.get(pm).setFree("0");
-
-                                                Product_Modal.get(pm).setDiscount(0.00);
-
-
-                                            }
-
-
-                                        }
-
-                                    }
-
-
-                                }
-
-                                if (!haveVal) {
-                                    Product_Modal.get(pm).setFree("0");
-
-                                    Product_Modal.get(pm).setDiscount(0.00);
-
-                                } else {
-                                    Product_Modal.get(pm).setAmount((Product_Modal.get(pm).getAmount()) -
-                                            Double.valueOf(Product_Modal.get(pm).getDiscount()));
-                                }
-
-
-                            }
-                        }
-                    }
-                }*/
 
                 String preOrderList = sharedCommonPref.getvalue(Constants.InvoiceQtyList);
                 JSONObject invoiceObj = new JSONObject(preOrderList);
@@ -524,6 +345,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 }
 
 
+                if(!Common_Class.isNullOrEmpty(preOrderList)){
                 String taxRes = sharedCommonPref.getvalue(Constants.TAXList);
 
 
@@ -570,7 +392,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
 
                     }
-                }
+                }}
 
             }
 
@@ -932,20 +754,14 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     private void FilterProduct(String StringFlag, boolean flag) {
 
-        orderbutton.setText("SUBMIT");
 
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.rlSearchParent).setVisibility(View.GONE);
         findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.VISIBLE);
         lin_gridcategory.setVisibility(View.GONE);
-        lin_orderrecyclerview.setVisibility(View.VISIBLE);
         takeorder.setText("SUBMIT");
 
-      /*  Pay_Adapter mProdct_Adapter = new Pay_Adapter(Getorder_Array_List, R.layout.invoice_pay_recyclerview, getApplicationContext(), -1);
-        recyclerView.setAdapter(mProdct_Adapter);
-        new Pay_Adapter(Getorder_Array_List, R.layout.invoice_pay_recyclerview, getApplicationContext(), 0).notifyDataSetChanged();
-        recyclerView.setItemViewCacheSize(Product_Modal.size());*/
         mProdct_Adapter = new Prodct_Adapter(Getorder_Array_List, R.layout.invoice_pay_recyclerview_edit, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
         new Prodct_Adapter(Getorder_Array_List, R.layout.invoice_pay_recyclerview_edit, getApplicationContext(), -1).notifyDataSetChanged();
@@ -981,7 +797,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         }
 
     }
-
 
     public void updateToTALITEMUI() {
         TextView tvTotalItems = findViewById(R.id.tvTotalItems);
@@ -1068,70 +883,28 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     }
 
+    public void showOrderItemList(int categoryPos, String filterString) {
 
-    public void showOrderFilterItem(int categoryPos, String filterString) {
-        categoryPos = selectedPos;
         Product_ModalSetAdapter.clear();
         for (Product_Details_Modal personNpi : Product_Modal) {
             if (personNpi.getProductCatCode().toString().equals(listt.get(categoryPos).getId())) {
-                if (personNpi.getName().toLowerCase().contains(filterString.toLowerCase()))
+                if (Common_Class.isNullOrEmpty(filterString))
                     Product_ModalSetAdapter.add(personNpi);
+                else {
+                    if (personNpi.getName().toLowerCase().contains(filterString.toLowerCase()))
+                        Product_ModalSetAdapter.add(personNpi);
+
+                }
             }
         }
-        // lin_gridcategory.setVisibility(View.GONE);
-        lin_orderrecyclerview.setVisibility(View.VISIBLE);
-        orderbutton.setVisibility(View.GONE);
-        ok.setVisibility(View.VISIBLE);
-        gobackflag = true;
-        // takeorder.setVisibility(View.GONE);
-        Category_Nametext.setVisibility(View.VISIBLE);
+
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
-
-//        Invoice_Category_Select.CategoryAdapter customAdapteravail = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
-//        categorygrid.setAdapter(customAdapteravail);
-        // customAdapteravail.updateUi(categoryPos);
-        //
         mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_invoice_recyclerview, getApplicationContext(), categoryPos);
 
         recyclerView.setAdapter(mProdct_Adapter);
         new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_invoice_recyclerview, getApplicationContext(), categoryPos).notifyDataSetChanged();
         recyclerView.setItemViewCacheSize(Product_ModalSetAdapter.size());
-
-
-        Category_Nametext.setOnClickListener(this);
-    }
-
-    public void showOrderItemList(int categoryPos) {
-
-        Product_ModalSetAdapter.clear();
-        for (Product_Details_Modal personNpi : Product_Modal) {
-            if (personNpi.getProductCatCode().toString().equals(listt.get(categoryPos).getId())) {
-                Product_ModalSetAdapter.add(personNpi);
-            }
-        }
-        // lin_gridcategory.setVisibility(View.GONE);
-        lin_orderrecyclerview.setVisibility(View.VISIBLE);
-        orderbutton.setVisibility(View.GONE);
-        ok.setVisibility(View.VISIBLE);
-        gobackflag = true;
-        // takeorder.setVisibility(View.GONE);
-        Category_Nametext.setVisibility(View.VISIBLE);
-        Category_Nametext.setText(listt.get(categoryPos).getName());
-
-
-//        Invoice_Category_Select.CategoryAdapter customAdapteravail = new Invoice_Category_Select.CategoryAdapter(getApplicationContext(), Category_Modal);
-//        categorygrid.setAdapter(customAdapteravail);
-        // customAdapteravail.updateUi(categoryPos);
-        //
-        mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_invoice_recyclerview, getApplicationContext(), categoryPos);
-
-        recyclerView.setAdapter(mProdct_Adapter);
-        new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_invoice_recyclerview, getApplicationContext(), categoryPos).notifyDataSetChanged();
-        recyclerView.setItemViewCacheSize(Product_ModalSetAdapter.size());
-
-
-        Category_Nametext.setOnClickListener(this);
 
     }
 
@@ -1229,7 +1002,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         }
                         pholder = holder;
                         selectedPos = holder.getAdapterPosition();
-                        showOrderItemList(holder.getAdapterPosition());
+                        showOrderItemList(holder.getAdapterPosition(), "");
 
                         holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                         holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
@@ -1263,89 +1036,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     }
 
-    /*public class CategoryAdapter extends BaseAdapter {
-        Context context;
-        LayoutInflater inflter;
-        ImageView ivCategoryIcon;
-        TextView icon;
-
-        public CategoryAdapter(Context applicationContext, List<Category_Universe_Modal> list) {
-            this.context = applicationContext;
-            listt = list;
-            inflter = (LayoutInflater.from(applicationContext));
-        }
-
-        @Override
-        public int getCount() {
-            return listt.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-
-        @SuppressLint("ResourceAsColor")
-        public void updateUi(int pos) {
-            for (int i = 0; i < listt.size(); i++) {
-
-                if (i == pos) {
-
-                    ivCategoryIcon.setImageResource(R.drawable.ic_baseline_shopping_cart_24);
-                    icon.setTextColor(R.color.colorPrimaryDark);
-                    icon.setTypeface(Typeface.DEFAULT_BOLD);
-                } else {
-                    ivCategoryIcon.setImageResource(R.drawable.ic_baseline_shopping_cart_grey24);
-                    icon.setTextColor(R.color.grey_500);
-                    icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-
-                }
-            }
-
-            notifyDataSetChanged();
-
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            view = inflter.inflate(R.layout.category_order_horizantal_universe_gridview, null); // inflate the layout
-            icon = view.findViewById(R.id.textView);
-            LinearLayout gridcolor = view.findViewById(R.id.gridcolor);
-            ivCategoryIcon = view.findViewById(R.id.ivCategoryIcon);
-            icon.setText(listt.get(i).getName());
-            gridcolor.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    selectedPos = i;
-                    showOrderItemList(i);
-
-                }
-            });
-
-
-            if (i == selectedPos) {
-
-                ivCategoryIcon.setImageResource(R.drawable.ic_baseline_shopping_cart_24);
-                icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-                icon.setTypeface(Typeface.DEFAULT_BOLD);
-            } else {
-                ivCategoryIcon.setImageResource(R.drawable.ic_baseline_shopping_cart_grey24);
-                icon.setTextColor(getResources().getColor(R.color.grey_500));
-                icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
-
-            }
-
-            return view;
-        }
-    }
-*/
     public class Prodct_Adapter extends RecyclerView.Adapter<Prodct_Adapter.MyViewHolder> {
         private List<Product_Details_Modal> Product_Details_Modalitem;
         private int rowLayout;
@@ -1830,99 +1520,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     }
 
-    public class Pay_Adapter extends RecyclerView.Adapter<Pay_Adapter.MyViewHolder> {
-        private List<Product_Details_Modal> Product_Details_Modalitem;
-        private int rowLayout;
-
-        Context context;
-
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView productname, Rate, Amount, Free, RegularQty, productQty, totalQty, tvDisc, tvTax;
-
-
-            public MyViewHolder(View view) {
-                super(view);
-                productname = view.findViewById(R.id.productname);
-                Rate = view.findViewById(R.id.Rate);
-                RegularQty = view.findViewById(R.id.RegularQty);
-                Amount = view.findViewById(R.id.Amount);
-                Free = view.findViewById(R.id.Free);
-                productQty = view.findViewById(R.id.productqty);
-                tvTax = view.findViewById(R.id.productTax);
-                tvDisc = view.findViewById(R.id.productDiscount);
-
-
-            }
-        }
-
-
-        public Pay_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int Categorycolor) {
-            this.Product_Details_Modalitem = Product_Details_Modalitem;
-            this.rowLayout = rowLayout;
-            this.context = context;
-
-
-        }
-
-        @Override
-        public Pay_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-            return new MyViewHolder(view);
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public void onBindViewHolder(Pay_Adapter.MyViewHolder holder, int position) {
-            try {
-
-
-                Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
-
-
-                holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-                holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate()));
-                holder.Amount.setText("₹" + formatter.format(Product_Details_Modal.getAmount()));
-
-                holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
-
-                holder.productQty.setText("" + Product_Details_Modal.getQty());
-
-
-                if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
-                    holder.Free.setText("0");
-                else
-                    holder.Free.setText("" + Product_Details_Modal.getFree());
-
-                holder.tvDisc.setText("₹" + formatter.format(Product_Details_Modal.getDiscount()));
-                holder.tvTax.setText("₹" + Product_Details_Modal.getTax());
-
-                updateToTALITEMUI();
-            } catch (Exception e) {
-                Log.e(TAG, "adapterProduct: " + e.getMessage());
-            }
-
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return Product_Details_Modalitem.size();
-        }
-
-
-    }
-
-
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -1939,22 +1536,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     void moveProductScreen() {
         lin_gridcategory.setVisibility(View.VISIBLE);
-
         findViewById(R.id.rlSearchParent).setVisibility(View.VISIBLE);
-
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
-
-
         findViewById(R.id.llBillHeader).setVisibility(View.GONE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
-
-
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
-
-
         takeorder.setText("PROCEED TO CART");
-
-        showOrderItemList(selectedPos);
+        showOrderItemList(selectedPos, "");
 
 
     }

@@ -10,7 +10,6 @@ import static com.hap.checkinproc.Common_Class.Constants.Outlet_Total_Orders;
 import static com.hap.checkinproc.Common_Class.Constants.Product_List;
 import static com.hap.checkinproc.Common_Class.Constants.Retailer_OutletList;
 import static com.hap.checkinproc.Common_Class.Constants.Rout_List;
-import static com.hap.checkinproc.Common_Class.Constants.SFA_CUMULATIVE;
 import static com.hap.checkinproc.Common_Class.Constants.TodayOrderDetails_List;
 
 import android.Manifest;
@@ -312,7 +311,7 @@ public class Common_Class {
                     QuerySTring1 = "{\"tableName\":\"GettotalOrderDetails\",\"coloumns\":\"[\\\"Category_Code as id\\\", \\\"Category_Name as name\\\"]\",\"sfCode\":0,\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
                     QueryString.put("fromdate", Common_Class.GetDatewothouttime());
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
-                    QueryString.put("orderID",Shared_Common_Pref.TransSlNo);
+                    QueryString.put("orderID", Shared_Common_Pref.TransSlNo);
                     break;
 
                 case Constants.Competitor_List:
@@ -475,7 +474,7 @@ public class Common_Class {
     }
 
 
-    public void getDashboarddata(String key, Activity activity) {
+    public void getDashboarddata(String key, Activity activity, String data) {
         try {
             if (isNetworkAvailable(activity)) {
                 Map<String, String> QueryString = new HashMap<>();
@@ -484,8 +483,8 @@ public class Common_Class {
                 switch (key) {
 
 
-                    case SFA_CUMULATIVE:
-                        axnname = "get/cumulativevalues";
+                    case Constants.POP_SAVE:
+                        axnname = "get/popmaster";
                         break;
 
                     default:
@@ -498,13 +497,7 @@ public class Common_Class {
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
 
-                JSONObject HeadItem = new JSONObject();
-                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
-                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
-                HeadItem.put("dt", GetDatewothouttime());
-
-
-                Call<ResponseBody> call = service.GetRouteObject310(QueryString, HeadItem.toString());
+                Call<ResponseBody> call = service.GetRouteObject310(QueryString, data);
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -528,17 +521,7 @@ public class Common_Class {
 
                                 if (jsonObject.getBoolean("success")) {
 
-                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
-                                    int todayCall = 0, cumTodayCall = 0, newTodayCall = 0, proCall = 0, cumProCall = 0, newProCall = 0;
-
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-
-                                    }
-
-
+                                    showMsg(activity, jsonObject.getString("Msg"));
                                 }
 
 
