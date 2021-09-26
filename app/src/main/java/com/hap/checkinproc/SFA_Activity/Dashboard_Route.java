@@ -88,7 +88,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     Gson gson;
     Type userTypeRetailor, userTypeReport;
     TextView headtext, textViewname, Alltextclick, Completeclick, Pendingclick, ReachedOutlet, route_text,
-            txSrvOtlt, txUniOtlt;
+            txSrvOtlt, txUniOtlt, tvHistory;
     EditText txSearchRet;
     View Alltextview, completeview, pendingview;
     LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt;
@@ -260,6 +260,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             btSrvOtlt = findViewById(R.id.btSrvOtlt);
             btUniOtlt = findViewById(R.id.btUniOtlt);
             viewPager = findViewById(R.id.viewpager);
+            tvHistory = findViewById(R.id.tvHistory);
             viewPager.setOffscreenPageLimit(3);
             tabLayout = findViewById(R.id.tabs);
 
@@ -275,6 +276,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             ivToolbarHome.setOnClickListener(this);
             btnCmbRoute.setOnClickListener(this);
             llDistributor.setOnClickListener(this);
+            tvHistory.setOnClickListener(this);
             btSrvOtlt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -539,6 +541,9 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tvHistory:
+                common_class.CommonIntentwithoutFinish(HistoryInfoActivity.class);
+                break;
             case R.id.Alltextclick:
                 // OutletFilter("t", "1");
                 Alltextview.setVisibility(View.VISIBLE);
@@ -860,19 +865,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
 
             return inflater.inflate(R.layout.fragment_tab_outlet, container, false);
-        }
-
-        @Override
-        public void setUserVisibleHint(boolean isVisibleToUser) {
-            super.setUserVisibleHint(isVisibleToUser);
-            if (isVisibleToUser) {
-                // Refresh your fragment here
-                //   getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-
-                // updateData();
-
-
-            }
         }
 
 

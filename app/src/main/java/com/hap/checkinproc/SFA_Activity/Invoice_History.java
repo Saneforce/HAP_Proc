@@ -268,7 +268,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             case R.id.lin_repeat_invoice:
                 break;
             case R.id.lastinvoice:
-                common_class.CommonIntentwithoutFinish(MoreInfoActivity.class);
+                common_class.CommonIntentwithoutFinish(HistoryInfoActivity.class);
                 // common_class.CommonIntentwithoutFinish(More_Info_Activity.class);
 
                 break;

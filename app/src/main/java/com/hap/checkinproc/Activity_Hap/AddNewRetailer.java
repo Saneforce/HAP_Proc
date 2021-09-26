@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -75,8 +76,9 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     EditText toolSearch, retailercode;
     Button mSubmit;
     ApiInterface service;
-    LinearLayout linReatilerRoute, linReatilerClass, linReatilerChannel, CurrentLocLin, retailercodevisible;
-    TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext;
+    RelativeLayout linReatilerRoute, rlDistributor;
+    LinearLayout linReatilerClass, linReatilerChannel, CurrentLocLin, retailercodevisible;
+    TextView txtRetailerRoute, txtRetailerClass, txtRetailerChannel, CurrentLocationsAddress, headtext, distributor_text;
     Type userType;
     List<Common_Model> modelRetailClass = new ArrayList<>();
     List<Common_Model> modelRetailChannel = new ArrayList<>();
@@ -107,6 +109,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     private Uri outputFileUri;
     private String finalPath = "";
     private String place_id = "";
+    Common_Model Model_Pojo;
+    List<Common_Model> FRoute_Master = new ArrayList<>();
+    List<Common_Model> Route_Masterlist = new ArrayList<>();
+    List<Common_Model> distributor_master = new ArrayList<>();
 
 
 //    @Override
@@ -134,8 +140,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
 
             db = new DatabaseHandler(this);
-            linReatilerRoute = findViewById(R.id.linear_Retailer);
+            linReatilerRoute = findViewById(R.id.rl_route);
+            rlDistributor = findViewById(R.id.rl_Distributor);
             txtRetailerRoute = findViewById(R.id.retailer_type);
+            distributor_text = findViewById(R.id.distributor_text);
             retailercode = findViewById(R.id.retailercode);
             common_class = new Common_Class(this);
             CurrentLocLin = findViewById(R.id.CurrentLocLin);
@@ -152,6 +160,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             addRetailerEmail = findViewById(R.id.edt_new_email);
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
             ivPhotoShop = findViewById(R.id.ivShopPhoto);
+            mSubmit = findViewById(R.id.submit_button);
+
 
             copypaste.setOnClickListener(this);
             ivPhotoShop.setOnClickListener(this);
@@ -160,7 +170,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             gson = new Gson();
             shared_common_pref = new Shared_Common_Pref(this);
             service = ApiClient.getClient().create(ApiInterface.class);
-            mSubmit = findViewById(R.id.submit_button);
             gson = new Gson();
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
@@ -240,7 +249,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 //                    mOnBackPressedDispatcher.onBackPressed();
 //                }
 //            });
-            OnclickRoute();
+            // OnclickRoute();
             onClickRetailerClass();
             onClickRetailerChannel();
 
@@ -279,12 +288,19 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                     edt_pin_codeedit.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getPin_code()));
                     edt_gst.setText("" + (Retailer_Modal_List.get(getOutletPosition()).getGst()));
                     // txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
-                    Compititor_Id = i.getExtras().getString("Compititor_Id");
-                    Compititor_Name = i.getExtras().getString("Compititor_Name");
-                    CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
-                    AvailUniverSelectId = i.getExtras().getString("AvailUniverSelectId");
-                    reason_category_remarks = i.getExtras().getString("reason_category");
+
+                    if (i.getExtras().getString("Compititor_Id") != null)
+                        Compititor_Id = i.getExtras().getString("Compititor_Id");
+                    if (i.getExtras().getString("Compititor_Name") != null)
+                        Compititor_Name = i.getExtras().getString("Compititor_Name");
+                    if (i.getExtras().getString("CatUniverSelectId") != null)
+                        CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
+                    if (i.getExtras().getString("AvailUniverSelectId") != null)
+                        AvailUniverSelectId = i.getExtras().getString("AvailUniverSelectId");
+                    if (i.getExtras().getString("reason_category") != null)
+                        reason_category_remarks = i.getExtras().getString("reason_category");
                 }
+
             }
 
 
@@ -305,13 +321,22 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                 edt_pin_codeedit.setText("" + Retailer_Modal_List.get(getOutletPosition()).getPin_code());
                 edt_gst.setText("" + Retailer_Modal_List.get(getOutletPosition()).getGst());
                 //  txtRetailerClass.setText("" + Retailer_Modal_List.get(getOutletPosition()).getClass());
-                Compititor_Id = i.getExtras().getString("Compititor_Id");
-                Compititor_Name = i.getExtras().getString("Compititor_Name");
-                CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
-                AvailUniverSelectId = i.getExtras().getString("AvailUniverSelectId");
-                reason_category_remarks = i.getExtras().getString("reason_category");
-                HatsunAvailswitch = i.getExtras().getString("HatsunAvailswitch");
-                categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
+                if (i != null && i.getExtras() != null) {
+                    if (i.getExtras().getString("Compititor_Id") != null)
+                        Compititor_Id = i.getExtras().getString("Compititor_Id");
+                    if (i.getExtras().getString("Compititor_Name") != null)
+                        Compititor_Name = i.getExtras().getString("Compititor_Name");
+                    if (i.getExtras().getString("CatUniverSelectId") != null)
+                        CatUniverSelectId = i.getExtras().getString("CatUniverSelectId");
+                    if (i.getExtras().getString("AvailUniverSelectId") != null)
+                        AvailUniverSelectId = i.getExtras().getString("AvailUniverSelectId");
+                    if (i.getExtras().getString("reason_category") != null)
+                        reason_category_remarks = i.getExtras().getString("reason_category");
+                    if (i.getExtras().getString("HatsunAvailswitch") != null)
+                        HatsunAvailswitch = i.getExtras().getString("HatsunAvailswitch");
+                    if (i.getExtras().getString("categoryuniverseswitch") != null)
+                        categoryuniverseswitch = i.getExtras().getString("categoryuniverseswitch");
+                }
             }
             mSubmit.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -408,8 +433,49 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             }
 
             shared_common_pref.save(Constants.Retailor_FilePath, "");
+
+            distributor_text.setText(shared_common_pref.getvalue(Constants.Distributor_name));
+
+            if (Shared_Common_Pref.Outler_AddFlag.equals("1")) {
+                linReatilerRoute.setOnClickListener(this);
+                rlDistributor.setOnClickListener(this);
+                loadroute(shared_common_pref.getvalue(Constants.Distributor_Id));
+                getDbstoreData(Constants.Distributor_List);
+                getDbstoreData(Constants.Rout_List);
+
+            }
+
+
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
+
+        }
+
+
+    }
+
+    void getDbstoreData(String listType) {
+        try {
+            JSONArray jsonArray = db.getMasterData(listType);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                String id = String.valueOf(jsonObject1.optInt("id"));
+                String name = jsonObject1.optString("name");
+                String flag = jsonObject1.optString("FWFlg");
+                String ETabs = jsonObject1.optString("ETabs");
+                Model_Pojo = new Common_Model(id, name, flag);
+                if (listType.equals(Constants.Distributor_List)) {
+                    distributor_master.add(Model_Pojo);
+                } else if (listType.equals(Constants.Rout_List)) {
+                    Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
+                    Model_Pojo = new Common_Model(id, name, jsonObject1.optString("stockist_code"));
+                    FRoute_Master.add(Model_Pojo);
+                    Route_Masterlist.add(Model_Pojo);
+                }
+
+            }
+
+        } catch (Exception e) {
 
         }
 
@@ -453,21 +519,24 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         });
     }
 
+
+
+
     /*Route Click*/
-    public void OnclickRoute() {
-
-        linReatilerRoute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                customDialog = new CustomListViewDialog(AddNewRetailer.this, modelRetailDetails, 8);
-                Window window = customDialog.getWindow();
-                window.setGravity(Gravity.CENTER);
-                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
-            }
-        });
-    }
+//    public void OnclickRoute() {
+//
+//        linReatilerRoute.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                customDialog = new CustomListViewDialog(AddNewRetailer.this, modelRetailDetails, 8);
+//                Window window = customDialog.getWindow();
+//                window.setGravity(Gravity.CENTER);
+//                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//                customDialog.show();
+//            }
+//        });
+//    }
 
 
     /*Route Class*/
@@ -885,14 +954,29 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     @Override
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
-        customDialog.dismiss();
-        if (type == 8) {
+
+      /*  if (type == 8) {
             txtRetailerRoute.setText(myDataset.get(position).getName());
             routeId = myDataset.get(position).getId();
             routeId = String.valueOf(routeId.subSequence(1, routeId.length() - 1));
             routeId1 = Integer.valueOf(routeId);
             Log.e("ASDFGHJ", "" + routeId);
+        }*/
+        customDialog.dismiss();
+        if (type == 2) {
+            txtRetailerRoute.setText("");
+            distributor_text.setText(myDataset.get(position).getName());
+            findViewById(R.id.rl_route).setVisibility(View.VISIBLE);
+            loadroute(myDataset.get(position).getId());
+
+
+        } else if (type == 3) {
+            routeId = myDataset.get(position).getId();
+            txtRetailerRoute.setText(myDataset.get(position).getName());
+
+
         } else if (type == 9) {
+
             txtRetailerClass.setText(myDataset.get(position).getName());
             classId = Integer.valueOf(myDataset.get(position).getId());
         } else if (type == 10) {
@@ -900,6 +984,30 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             channelID = Integer.valueOf(myDataset.get(position).getId());
         }
     }
+
+    public void loadroute(String id) {
+        if (common_class.isNullOrEmpty(String.valueOf(id))) {
+            Toast.makeText(this, "Select the Distributor", Toast.LENGTH_SHORT).show();
+        }
+        FRoute_Master.clear();
+        for (int i = 0; i < Route_Masterlist.size(); i++) {
+            if (Route_Masterlist.get(i).getFlag().toLowerCase().trim().replaceAll("\\s", "").contains(id.toLowerCase().trim().replaceAll("\\s", ""))) {
+                Log.e("Route_Masterlist", String.valueOf(id) + "STOCKIST" + Route_Masterlist.get(i).getFlag());
+                FRoute_Master.add(new Common_Model(Route_Masterlist.get(i).getId(), Route_Masterlist.get(i).getName(), Route_Masterlist.get(i).getFlag()));
+            }
+        }
+
+        if (FRoute_Master.size() == 1) {
+            txtRetailerRoute.setText(FRoute_Master.get(0).getName());
+            findViewById(R.id.ivRouteSpinner).setVisibility(View.INVISIBLE);
+
+
+        } else {
+            findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
+
+        }
+    }
+
 
 //    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
 //            new OnBackPressedDispatcher(new Runnable() {
@@ -942,6 +1050,24 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+
+
+            case R.id.rl_route:
+                if (FRoute_Master != null && FRoute_Master.size() > 1) {
+                    customDialog = new CustomListViewDialog(AddNewRetailer.this, FRoute_Master, 3);
+                    Window windowww = customDialog.getWindow();
+                    windowww.setGravity(Gravity.CENTER);
+                    windowww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                    customDialog.show();
+                }
+                break;
+            case R.id.rl_Distributor:
+                customDialog = new CustomListViewDialog(AddNewRetailer.this, distributor_master, 2);
+                Window windoww = customDialog.getWindow();
+                windoww.setGravity(Gravity.CENTER);
+                windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
+                break;
             case R.id.copypaste:
                 addRetailerAddress.setText(CurrentLocationsAddress.getText().toString());
                 break;

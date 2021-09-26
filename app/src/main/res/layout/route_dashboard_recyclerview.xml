@@ -20,21 +20,34 @@
             android:orientation="horizontal"
             android:padding="@dimen/C3dp">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView
+
+                    android:id="@+id/ivEdit"
+                    android:layout_width="@dimen/C30dp"
+                    android:layout_height="@dimen/C30dp"
+                    android:padding="@dimen/C5dp"
+                    android:src="@drawable/edit"
+                    android:visibility="visible" />
+
                 <ImageView
                     android:layout_width="@dimen/C20dp"
                     android:layout_height="@dimen/C20dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_baseline_shopping_cart_24"/>
-            </LinearLayout>
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_baseline_shopping_cart_24" />
+            </RelativeLayout>
 
 
             <LinearLayout
+                android:layout_marginLeft="@dimen/C5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -44,7 +57,6 @@
                         android:id="@+id/retailername"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/C10dp"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:maxLines="1"
@@ -54,7 +66,6 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:visibility="gone"
                         android:id="@+id/retailorCode"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -63,74 +74,82 @@
                         android:text="167892"
                         android:textAlignment="textEnd"
                         android:textColor="@android:color/darker_gray"
-                        android:textSize="14dp"/>
+                        android:textSize="14dp"
+                        android:visibility="gone" />
+
                     <LinearLayout
                         android:id="@+id/linDistance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
                         <ImageView
                             android:layout_width="@dimen/C15dp"
                             android:layout_height="@dimen/C15dp"
-                            android:src="@drawable/ic_wlk_distance"/>
+                            android:src="@drawable/ic_wlk_distance" />
+
                         <TextView
                             android:id="@+id/txDistance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingLeft="@dimen/C2dp"
-                            android:paddingRight="@dimen/C10dp"
-                            android:paddingTop="2dp"
                             android:gravity="center_vertical"
+                            android:paddingLeft="@dimen/C2dp"
+                            android:paddingTop="2dp"
+                            android:paddingRight="@dimen/C10dp"
+                            android:text="10m"
                             android:textSize="10sp"
-                            android:textStyle="bold"
-                            android:text="10m"/>
+                            android:textStyle="bold" />
                     </LinearLayout>
+
                     <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/round_status_blue">
+
+                        <TextView
+                            android:id="@+id/txChannel"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:background="@drawable/round_status_blue">
-                            <TextView
-                                android:id="@+id/txChannel"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:paddingLeft="10dp"
-                                android:paddingTop="2dp"
-                                android:paddingRight="10dp"
-                                android:textColor="@color/white"
-                                android:textSize="10sp"
-                                android:textStyle="bold"
-                                android:text="DCO"/>
+                            android:paddingLeft="10dp"
+                            android:paddingTop="2dp"
+                            android:paddingRight="10dp"
+                            android:text="DCO"
+                            android:textColor="@color/white"
+                            android:textSize="10sp"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-5dp"
-                    android:layout_marginLeft="@dimen/C10dp">
+                    android:layout_marginTop="-5dp">
+
                     <TextView
                         android:id="@+id/txOwnerPh"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text=""
-                        android:textSize="9sp"/>
+                        android:textSize="9sp" />
                 </LinearLayout>
+
                 <TextView
                     android:id="@+id/txAdd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text=""
-                    android:textSize="9sp"
                     android:layout_marginTop="-5dp"
-                    android:layout_marginLeft="@dimen/C10dp"/>
+                    android:text=""
+                    android:textSize="9sp" />
+
                 <LinearLayout
                     android:id="@+id/llDataParent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/C10dp"
                     android:layout_marginRight="@dimen/C10dp"
                     android:layout_marginBottom="@dimen/C10dp"
                     android:orientation="horizontal">
+
                     <LinearLayout
                         android:id="@+id/llTdDataParent"
                         android:layout_width="match_parent"
@@ -138,28 +157,29 @@
                         android:layout_weight="1"
                         android:orientation="vertical"
                         android:visibility="visible">
+
                         <TextView
                             android:id="@+id/tvDate"
                             android:layout_width="match_parent"
                             android:layout_height="25dp"
                             android:fontFamily="sans-serif"
+                            android:gravity="center_vertical"
                             android:text="09-06-2021"
                             android:textSize="12sp"
-                            android:gravity="center_vertical"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold" />
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rvTodayData"
-                            android:clickable="true"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            >
-                        </androidx.recyclerview.widget.RecyclerView>
+                            android:clickable="true"></androidx.recyclerview.widget.RecyclerView>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
                             android:layout_marginRight="@dimen/C5dp"
-                            android:background="@color/grey_500"/>
+                            android:background="@color/grey_500" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -174,7 +194,8 @@
                                 android:fontFamily="sans-serif"
                                 android:text="Total"
                                 android:textSize="@dimen/C12dp"
-                                android:textStyle="bold"/>
+                                android:textStyle="bold" />
+
                             <TextView
                                 android:id="@+id/tvTodayTotQty"
                                 android:layout_width="wrap_content"
@@ -182,23 +203,24 @@
                                 android:fontFamily="sans-serif"
                                 android:text="0"
                                 android:textSize="@dimen/C12dp"
-                                android:textStyle="bold"/>
+                                android:textStyle="bold" />
+
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif"
-                                android:text="|"
                                 android:layout_marginLeft="@dimen/C2dp"
                                 android:layout_marginRight="@dimen/C2dp"
-                                android:textSize="12sp"/>
+                                android:fontFamily="sans-serif"
+                                android:text="|"
+                                android:textSize="12sp" />
 
                             <TextView
                                 android:id="@+id/tvTodayTotVal"
                                 android:layout_width="70dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif"
-                                android:textAlignment="textEnd"
                                 android:text="₹0.00"
+                                android:textAlignment="textEnd"
                                 android:textSize="12sp"
                                 android:textStyle="bold">
 
@@ -209,24 +231,27 @@
                         </LinearLayout>
 
                     </LinearLayout>
+
                     <LinearLayout
-    android:layout_width="2dp"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/C5dp">
-    <LinearLayout
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/grey_500"
-        android:padding="@dimen/C5dp"
-        android:layout_marginTop="@dimen/C30dp"
-        android:layout_marginBottom="@dimen/C30dp"
-        />
-</LinearLayout>
+                        android:layout_width="2dp"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/C5dp">
+
+                        <LinearLayout
+                            android:layout_width="1dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/C30dp"
+                            android:layout_marginBottom="@dimen/C30dp"
+                            android:background="@color/grey_500"
+                            android:padding="@dimen/C5dp" />
+                    </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:orientation="vertical">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="25dp"
@@ -236,16 +261,18 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="25dp"
                                 android:ellipsize="end"
-                                android:maxLines="1"
                                 android:gravity="center_vertical"
+                                android:maxLines="1"
                                 android:text=""
                                 android:textSize="12sp"
-                                android:textStyle="bold"/>
+                                android:textStyle="bold" />
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
+
                                 <TextView
                                     android:id="@+id/tvLMFirst"
                                     android:layout_width="match_parent"
@@ -255,7 +282,8 @@
                                     android:textAlignment="center"
                                     android:textColor="@color/colorPrimaryDark"
                                     android:textSize="12sp"
-                                    android:textStyle="bold"/>
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/tvLMSecond"
                                     android:layout_width="match_parent"
@@ -265,7 +293,8 @@
                                     android:textAlignment="center"
                                     android:textColor="@color/black_80"
                                     android:textSize="12sp"
-                                    android:textStyle="normal"/>
+                                    android:textStyle="normal" />
+
                                 <TextView
                                     android:id="@+id/tvLMThree"
                                     android:layout_width="match_parent"
@@ -275,21 +304,25 @@
                                     android:textAlignment="center"
                                     android:textColor="@color/black_80"
                                     android:textSize="12sp"
-                                    android:textStyle="normal"/>
+                                    android:textStyle="normal" />
                             </LinearLayout>
                         </LinearLayout>
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rvPreMnData"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content" />
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
-                                android:background="@color/grey_500"/>
+                                android:background="@color/grey_500" />
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -304,7 +337,8 @@
                                     android:fontFamily="sans-serif"
                                     android:text="Total"
                                     android:textSize="@dimen/C12dp"
-                                    android:textStyle="bold"/>
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:id="@+id/tvPreTotQty"
                                     android:layout_width="wrap_content"
@@ -312,23 +346,24 @@
                                     android:fontFamily="sans-serif"
                                     android:text="0"
                                     android:textSize="@dimen/C12dp"
-                                    android:textStyle="bold"/>
+                                    android:textStyle="bold" />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:fontFamily="sans-serif"
-                                    android:text="|"
                                     android:layout_marginLeft="@dimen/C2dp"
                                     android:layout_marginRight="@dimen/C2dp"
-                                    android:textSize="12sp"/>
+                                    android:fontFamily="sans-serif"
+                                    android:text="|"
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:id="@+id/tvPreTotVal"
                                     android:layout_width="80dp"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="sans-serif"
-                                    android:textAlignment="textEnd"
                                     android:text="₹0.00"
+                                    android:textAlignment="textEnd"
                                     android:textSize="12sp"
                                     android:textStyle="bold">
 
@@ -340,20 +375,21 @@
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="-5dp"
-    >
-    <TextView
-        android:id="@+id/txDistName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/C10dp"
-        android:textSize="10sp"
-        android:textColor="@color/colorPrimaryDark"
-        />
-</LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-5dp">
+
+                    <TextView
+                        android:id="@+id/txDistName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/C10dp"
+                        android:textColor="@color/colorPrimaryDark"
+                        android:textSize="10sp" />
+                </LinearLayout>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="4dp"
@@ -365,20 +401,21 @@
 
             </LinearLayout>
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone">
+
             <TextView
                 android:id="@+id/status"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
+
             <TextView
                 android:id="@+id/invoice"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -199,10 +200,12 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
                 tvFirstMonth, tvSecondMnth, tvThirdMnth;
         LinearLayout parent_layout;
         RecyclerView lstTdyView,lstPreView;
+        ImageView ivEdit;
 
         public MyViewHolder(View view) {
             super(view);
             try {
+                ivEdit=view.findViewById(R.id.ivEdit);
                 parent_layout = view.findViewById(R.id.parent_layout);
 
                 txRetailName = view.findViewById(R.id.retailername);
@@ -227,6 +230,8 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
 
                 lstTdyView.setLayoutManager(new LinearLayoutManager(context));
                 lstPreView.setLayoutManager(new LinearLayoutManager(context));
+
+                ivEdit.setVisibility(View.GONE);
 
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");

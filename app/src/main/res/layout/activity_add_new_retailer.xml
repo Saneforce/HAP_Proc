@@ -154,6 +154,55 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="10dp"
                                     android:layout_marginBottom="10dp"
+                                    android:text="Distributor"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13dp"></TextView>
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="12dp"
+                                    android:src="@drawable/mandatory" />
+
+                            </LinearLayout>
+
+
+                            <RelativeLayout
+                                android:id="@+id/rl_Distributor"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/text_bg_grey"
+                                android:orientation="vertical"
+                                android:padding="5dp">
+
+                                <TextView
+                                    android:id="@+id/distributor_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="Distributor"
+                                    android:padding="5dp"
+                                    android:textSize="13dp" />
+
+                                <ImageView
+                                    android:layout_width="@dimen/C10dp"
+                                    android:layout_height="@dimen/C10dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginRight="@dimen/C10dp"
+                                    android:src="@drawable/spin_down_arrow"></ImageView>
+                            </RelativeLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginBottom="10dp"
                                     android:text="@string/route"
                                     android:textColor="@android:color/black"
                                     android:textSize="13dp"></TextView>
@@ -167,8 +216,8 @@
                             </LinearLayout>
 
 
-                            <LinearLayout
-                                android:id="@+id/linear_Retailer"
+                            <RelativeLayout
+                                android:id="@+id/rl_route"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/text_bg_grey"
@@ -182,7 +231,17 @@
                                     android:hint="@string/route"
                                     android:padding="5dp"
                                     android:textSize="13dp" />
-                            </LinearLayout>
+
+                                <ImageView
+                                    android:id="@+id/ivRouteSpinner"
+                                    android:layout_width="@dimen/C10dp"
+                                    android:layout_height="@dimen/C10dp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginRight="@dimen/C10dp"
+                                    android:src="@drawable/spin_down_arrow"></ImageView>
+
+                            </RelativeLayout>
 
                         </LinearLayout>
 

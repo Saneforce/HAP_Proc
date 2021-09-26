@@ -26,7 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/basic"
-                android:text="More Info"
+                android:text="History Info"
                 android:textAlignment="center"
                 android:textAllCaps="true"
                 android:textColor="#FFF"
@@ -37,124 +37,63 @@
         </LinearLayout>
 
 
-        <TextView
-            android:id="@+id/tvOutletName"
+        <LinearLayout
+            android:id="@+id/db1_root"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/C10dp"
-            android:gravity="center"
-            android:text="SALES INVOICE"
-            android:textColor="@color/black"
-            android:textSize="@dimen/C17dp"
-            android:textStyle="bold">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        </TextView>
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-
-            >
 
             <TextView
-                android:id="@+id/tvStatus"
-                android:layout_width="wrap_content"
+                android:id="@+id/retailername"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/C10dp"
+                android:text="7 Hills milk Centre"
+                android:textColor="@color/black"
+                android:textSize="@dimen/C17dp"
+                android:textStyle="bold">
+
+            </TextView>
+
+
+            <LinearLayout
+                android:layout_marginLeft="@dimen/C10dp"
                 android:layout_marginRight="@dimen/C10dp"
-                android:gravity="start"
-                android:text="Status : InActive"
-                android:textColor="@color/txt_color_black"
-                android:textSize="@dimen/C14dp" />
-
-        </RelativeLayout>
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/C10dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Total Sales"
-                android:textColor="@color/black"
-                android:textSize="14dp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Total Invoice"
-                android:textColor="@color/black"
-                android:textSize="14dp"
-                android:textStyle="bold" />
+                <TextView
+                    android:drawableTint="@color/colorPrimaryDark"
+                    android:id="@+id/tvStartDate"
+                    style="@style/TextStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/textbox_bg"
+                    android:drawableRight="@drawable/ic_baseline_calendar_today_24"
+                    android:elevation="5dp"
+                    android:hint="Select  Start Date"
+                    android:padding="@dimen/C8dp" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="Total Qty"
-                android:textColor="@color/black"
-                android:textSize="14dp"
-                android:textStyle="bold" />
+
+                <TextView
+                    android:drawableTint="@color/colorPrimaryDark"
+                    android:id="@+id/tvEndDate"
+                    style="@style/TextStyle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/textbox_bg"
+                    android:drawableRight="@drawable/ic_baseline_calendar_today_24"
+                    android:elevation="5dp"
+                    android:hint="Select  End Date"
+                    android:padding="@dimen/C8dp" />
+
+            </LinearLayout>
+
+
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="190"
-                android:textColor="@color/black"
-                android:textSize="14dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="170"
-                android:textColor="@color/black"
-                android:textSize="14dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="2070"
-                android:textColor="@color/black"
-                android:textSize="14dp" />
-        </LinearLayout>
-
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:layout_margin="@dimen/C10dp"
-            android:gravity="left"
-            android:text="Category wise sale"
-            android:textColor="@color/txt_color_black"
-            android:textSize="18dp" />
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -229,9 +168,10 @@
 
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/leaverecyclerview"
+                    android:id="@+id/rvHistory"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/C10dp"></androidx.recyclerview.widget.RecyclerView>
 
             </LinearLayout>
 
