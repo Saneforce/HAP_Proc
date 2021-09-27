@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -53,12 +54,17 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
             String OutletId=jItem.get("Code").getAsString();
             holder.txRetailName.setText(jItem.get("Name").getAsString().toUpperCase());
             holder.txRetailCode.setText(OutletId);
-            holder.txOwnerph.setText(jItem.get("Owner_Name").getAsString().toUpperCase()+" - "+jItem.get("Mobile").getAsString().toUpperCase());
+            holder.txOwnerNm.setText(jItem.get("Owner_Name").getAsString().toUpperCase());
+            holder.txMobile.setText(jItem.get("Mobile").getAsString().toUpperCase());
             holder.txAdd.setText(jItem.get("Add1").getAsString().toUpperCase());
             holder.txDistName.setText(jItem.get("Distributor").getAsString());
             holder.txChannel.setText(jItem.get("Channel").getAsString());
             holder.txDistance.setText(jItem.get("Distance").getAsString());
             String InvFlag=jItem.get("InvFlag").getAsString();
+            holder.icMob.setVisibility(View.VISIBLE);
+            if(jItem.get("Mobile").getAsString().equalsIgnoreCase("")){
+                holder.icMob.setVisibility(View.GONE);
+            }
             if (InvFlag.equalsIgnoreCase("0")) {
                 holder.parent_layout.setBackgroundResource(R.color.white);
             } else if (InvFlag.equalsIgnoreCase("1")) {
@@ -195,10 +201,11 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView txRetailName,txRetailCode,txAdd,txOwnerph,txDistName,txChannel,txDistance,txTdyDt,txTodayTotQty,txTodayTotVal, txPreTotQty, txPreTotVal,
+        TextView txRetailName,txRetailCode,txAdd,txOwnerNm,txMobile,txDistName,txChannel,txDistance,txTdyDt,txTodayTotQty,txTodayTotVal, txPreTotQty, txPreTotVal,
                 tvFirstMonth, tvSecondMnth, tvThirdMnth;
         LinearLayout parent_layout;
         RecyclerView lstTdyView,lstPreView;
+        ImageView icMob;
 
         public MyViewHolder(View view) {
             super(view);
@@ -208,7 +215,9 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
                 txRetailName = view.findViewById(R.id.retailername);
                 txRetailCode = view.findViewById(R.id.retailorCode);
                 txAdd = view.findViewById(R.id.txAdd);
-                txOwnerph = view.findViewById(R.id.txOwnerPh);
+                txOwnerNm = view.findViewById(R.id.txOwnerNm);
+                txMobile = view.findViewById(R.id.txMobile);
+                icMob = view.findViewById(R.id.icMob);
                 txDistName = view.findViewById(R.id.txDistName);
                 txChannel = view.findViewById(R.id.txChannel);
                 txDistance = view.findViewById(R.id.txDistance);

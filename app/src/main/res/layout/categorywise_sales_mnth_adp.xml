@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:id="@+id/parent_layout">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/C3dp"
         android:orientation="horizontal">
@@ -18,15 +18,15 @@
             android:ellipsize="end"
             android:fontFamily="sans-serif"
             android:text="Milk"
+            android:visibility="gone"
             android:textSize="12sp"
             android:textColor="@color/grey_700"/>
         <TextView
             android:id="@+id/tvTodayQty"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:text="0"
-            android:paddingLeft="@dimen/C5dp"
             android:textSize="12sp"
             android:textStyle="bold"/>
         <TextView
@@ -36,7 +36,7 @@
             android:text="|"
             android:layout_marginLeft="@dimen/C2dp"
             android:layout_marginRight="@dimen/C2dp"
-            android:textSize="12sp"/>
+            android:textSize="11sp"/>
 
         <TextView
             android:id="@+id/tvTodayVal"
@@ -46,7 +46,7 @@
             android:textAlignment="textEnd"
             android:paddingLeft="@dimen/C5dp"
             android:text="₹0.00"
-            android:textSize="12sp"
+            android:textSize="11sp"
             android:textStyle="bold">
 
 

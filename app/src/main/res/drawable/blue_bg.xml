@@ -3,9 +3,9 @@
     android:shape="rectangle">
 
     <gradient
-        android:angle="180"
-        android:endColor="#2a9945"
-        android:startColor="#2a9945" />
+        android:angle="90"
+        android:endColor="#06AF75"
+        android:startColor="#04B074" />
 <!--    <gradient-->
 <!--        android:angle="180"-->
 <!--        android:endColor="@color/Reports"-->

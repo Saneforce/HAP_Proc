@@ -172,12 +172,12 @@
     android:layout_gravity="center_vertical"
     android:background="@drawable/order_qty_backround">
     <ImageView
-    android:id="@+id/ivQtyPls"
-    android:layout_width="25dp"
-    android:layout_height="25dp"
-    android:padding="6dp"
-    app:tint="@color/green"
-    android:src="@drawable/plus"/>
+        android:id="@+id/ivQtyMns"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:padding="6dp"
+        app:tint="@color/color_red"
+        android:src="@drawable/disable_minus"/>
     <EditText
         android:id="@+id/Qty"
         android:layout_width="40dp"
@@ -196,12 +196,12 @@
         android:textSize="@dimen/C13dp"
         tools:ignore="RtlCompat"/>
     <ImageView
-        android:id="@+id/ivQtyMns"
+        android:id="@+id/ivQtyPls"
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:padding="6dp"
-        app:tint="@color/color_red"
-        android:src="@drawable/disable_minus"/>
+        app:tint="@color/green"
+        android:src="@drawable/plus"/>
 </LinearLayout>
 
 

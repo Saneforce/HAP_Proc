@@ -5,7 +5,6 @@
     android:background="@color/colorPrimaryDark"
     android:orientation="horizontal"
     android:paddingBottom="5dp">
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,12 +30,10 @@
             android:textColor="@color/white"
             android:textSize="8sp" />
     </LinearLayout>
-
     <Space
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1" />
-
     <TextView
         android:id="@+id/toolbar_ert"
         android:layout_width="wrap_content"
@@ -48,7 +45,6 @@
         android:text="ERT"
         android:textColor="@color/white"
         android:textSize="13sp" />
-
     <TextView
         android:id="@+id/toolbar_play_slip"
         android:layout_width="wrap_content"
@@ -60,7 +56,6 @@
         android:text="Payslip"
         android:textColor="@color/white"
         android:textSize="13sp" />
-
     <TextView
         android:id="@+id/toolbar_help"
         android:layout_width="wrap_content"
@@ -72,7 +67,6 @@
         android:text="Help"
         android:textColor="@color/white"
         android:textSize="13sp" />
-
     <ImageView
         android:id="@+id/toolbar_home"
         android:layout_width="@dimen/C30dp"

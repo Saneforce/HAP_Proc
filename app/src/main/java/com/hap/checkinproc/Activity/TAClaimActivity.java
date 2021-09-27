@@ -4145,8 +4145,6 @@ Log.d("DACliam","Error : "+t.getMessage());
             ldgEliAmt = Double.valueOf(myldgEliAmt);
             txtMyEligi.setText("₹" + new DecimalFormat("##0.00").format(ldgEliAmt));
 
-            Log.e("TXT_MY_ELIGIBLE", txtMyEligi.getText().toString().substring(3, 7));
-
             //mChckCont.setChecked(false);
             mChckLate.setChecked(false);
             mChckEarly.setChecked(false);

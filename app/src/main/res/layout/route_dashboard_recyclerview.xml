@@ -18,19 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/C3dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
-                <ImageView
-                    android:layout_width="@dimen/C20dp"
-                    android:layout_height="@dimen/C20dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_baseline_shopping_cart_24"/>
-            </LinearLayout>
-
-
+            android:padding="@dimen/C5dp">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -39,12 +27,35 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
-
+                    <ImageView
+                        android:layout_width="@dimen/C20dp"
+                        android:layout_height="@dimen/C20dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_baseline_shopping_cart_24"
+                        android:visibility="gone"/>
+                    <LinearLayout
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:orientation="horizontal"
+                        android:gravity="center_horizontal"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/bugetoutletno">
+                        <TextView
+                            android:id="@+id/txRetNo"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="999"
+                            android:paddingTop="@dimen/C4dp"
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textStyle="bold"
+                            android:textSize="12sp"/>
+                    </LinearLayout>
                     <TextView
                         android:id="@+id/retailername"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/C10dp"
+                        android:layout_marginLeft="5dp"
                         android:layout_weight="1"
                         android:ellipsize="end"
                         android:maxLines="1"
@@ -104,16 +115,37 @@
 
                 </LinearLayout>
                 <LinearLayout
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="-5dp"
                     android:layout_marginLeft="@dimen/C10dp">
                     <TextView
-                        android:id="@+id/txOwnerPh"
-                        android:layout_width="match_parent"
+                        android:id="@+id/txOwnerNm"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
                         android:textSize="9sp"/>
+                    <LinearLayout
+                        android:id="@+id/btnCallMob"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">                    <ImageView
+                        android:id="@+id/icMob"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="@dimen/C20dp"
+                        android:src="@drawable/call_icon"
+                        app:tint="@color/colorPrimaryDark"
+                        />
+                    <TextView
+                        android:id="@+id/txMobile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textSize="9sp"/>
+                    </LinearLayout>
+
                 </LinearLayout>
                 <TextView
                     android:id="@+id/txAdd"
@@ -121,14 +153,11 @@
                     android:layout_height="wrap_content"
                     android:text=""
                     android:textSize="9sp"
-                    android:layout_marginTop="-5dp"
-                    android:layout_marginLeft="@dimen/C10dp"/>
+                    android:layout_marginTop="0dp"/>
                 <LinearLayout
                     android:id="@+id/llDataParent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/C10dp"
-                    android:layout_marginRight="@dimen/C10dp"
                     android:layout_marginBottom="@dimen/C10dp"
                     android:orientation="horizontal">
                     <LinearLayout
@@ -147,6 +176,80 @@
                             android:textSize="12sp"
                             android:gravity="center_vertical"
                             android:textStyle="bold"/>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="visible">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="0.5"
+                                android:ellipsize="end"
+                                android:fontFamily="sans-serif"
+                                android:text=""
+                                android:textSize="@dimen/C12dp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="25dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="Ord"
+                                android:textSize="10sp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="|"
+                                android:layout_marginLeft="@dimen/C2dp"
+                                android:layout_marginRight="@dimen/C2dp"
+                                android:textSize="12sp"/>
+                            <TextView
+                            android:layout_width="25dp"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif"
+                            android:text="N.Q"
+                            android:textSize="10sp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="|"
+                                android:layout_marginLeft="@dimen/C2dp"
+                                android:layout_marginRight="@dimen/C2dp"
+                                android:textSize="12sp"/>
+
+                            <TextView
+                                android:layout_width="25dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:textAlignment="textEnd"
+                                android:text="Inv"
+                                android:textSize="10sp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="|"
+                                android:layout_marginLeft="@dimen/C2dp"
+                                android:layout_marginRight="@dimen/C2dp"
+                                android:textSize="12sp"/>
+
+                            <TextView
+                                android:layout_width="50dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:textAlignment="textEnd"
+                                android:text="Inv.Val"
+                                android:textSize="10sp">
+
+
+                            </TextView>
+
+
+                        </LinearLayout>
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rvTodayData"
                             android:clickable="true"
@@ -173,15 +276,50 @@
                                 android:ellipsize="end"
                                 android:fontFamily="sans-serif"
                                 android:text="Total"
-                                android:textSize="@dimen/C12dp"
+                                android:textSize="12sp"
                                 android:textStyle="bold"/>
                             <TextView
-                                android:id="@+id/tvTodayTotQty"
-                                android:layout_width="wrap_content"
+                                android:id="@+id/tvTodayTotOQty"
+                                android:layout_width="25dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif"
                                 android:text="0"
-                                android:textSize="@dimen/C12dp"
+                                android:paddingLeft="@dimen/C5dp"
+                                android:textSize="11sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="|"
+                                android:layout_marginLeft="@dimen/C2dp"
+                                android:layout_marginRight="@dimen/C2dp"
+                                android:textSize="12sp"/>
+                            <TextView
+                                android:id="@+id/tvTodayTotNOQty"
+                                android:layout_width="25dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="0"
+                                android:paddingLeft="@dimen/C5dp"
+                                android:textSize="11sp"
+                                android:textStyle="bold"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="|"
+                                android:layout_marginLeft="@dimen/C2dp"
+                                android:layout_marginRight="@dimen/C2dp"
+                                android:textSize="12sp"/>
+                            <TextView
+                                android:id="@+id/tvTodayTotQty"
+                                android:layout_width="25dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="0"
+                                android:paddingLeft="@dimen/C5dp"
+                                android:textSize="11sp"
                                 android:textStyle="bold"/>
                             <TextView
                                 android:layout_width="wrap_content"
@@ -194,12 +332,12 @@
 
                             <TextView
                                 android:id="@+id/tvTodayTotVal"
-                                android:layout_width="70dp"
+                                android:layout_width="50dp"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="sans-serif"
                                 android:textAlignment="textEnd"
                                 android:text="₹0.00"
-                                android:textSize="12sp"
+                                android:textSize="11sp"
                                 android:textStyle="bold">
 
 
@@ -223,12 +361,11 @@
         />
 </LinearLayout>
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:orientation="vertical">
                         <LinearLayout
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="25dp"
                             android:orientation="horizontal">
 
@@ -242,7 +379,7 @@
                                 android:textSize="12sp"
                                 android:textStyle="bold"/>
                             <LinearLayout
-                                android:layout_width="match_parent"
+                                android:layout_width="130dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal">
@@ -278,8 +415,42 @@
                                     android:textStyle="normal"/>
                             </LinearLayout>
                         </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:visibility="visible">
+                            <TextView
+                                android:layout_width="40dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="Inv"
+                                android:textSize="10sp"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:text="|"
+                                android:layout_marginLeft="@dimen/C2dp"
+                                android:layout_marginRight="@dimen/C2dp"
+                                android:textSize="12sp"/>
+
+                            <TextView
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif"
+                                android:textAlignment="textEnd"
+                                android:text="Inv.Val"
+                                android:textSize="10sp">
+
+
+                            </TextView>
+
+
+                        </LinearLayout>
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rvPreMnData"
+                            android:clickable="false"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
                         <LinearLayout
@@ -304,14 +475,15 @@
                                     android:fontFamily="sans-serif"
                                     android:text="Total"
                                     android:textSize="@dimen/C12dp"
-                                    android:textStyle="bold"/>
+                                    android:textStyle="bold"
+                                    android:visibility="gone"/>
                                 <TextView
                                     android:id="@+id/tvPreTotQty"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="@dimen/C40dp"
                                     android:layout_height="wrap_content"
                                     android:fontFamily="sans-serif"
                                     android:text="0"
-                                    android:textSize="@dimen/C12dp"
+                                    android:textSize="11sp"
                                     android:textStyle="bold"/>
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -329,7 +501,7 @@
                                     android:fontFamily="sans-serif"
                                     android:textAlignment="textEnd"
                                     android:text="₹0.00"
-                                    android:textSize="12sp"
+                                    android:textSize="11sp"
                                     android:textStyle="bold">
 
 

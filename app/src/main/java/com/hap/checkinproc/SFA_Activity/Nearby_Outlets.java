@@ -207,7 +207,10 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                                         shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
                                         shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
                                         shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
-                                        common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                                        if (jItm.get("Mobile").getAsString().equalsIgnoreCase("") || jItm.get("Owner_Name").getAsString().equalsIgnoreCase(""))
+                                            common_class.CommonIntentwithoutFinish(AddNewRetailer.class);
+                                        else
+                                            common_class.CommonIntentwithoutFinish(Invoice_History.class);
                                     }
                                 }));
                             }

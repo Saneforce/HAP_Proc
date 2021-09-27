@@ -1,27 +1,39 @@
 package com.hap.checkinproc.SFA_Adapter;
 
+
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Activity_Hap.Dashboard_Two;
+import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.HAPApp;
 import com.hap.checkinproc.SFA_Activity.TabAdapter;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
@@ -48,14 +60,11 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         public TextView textviewname,txTodayTotQty,txTodayTotVal, txPreTotQty, txPreTotVal,
-                textviewdate,txAdd,txOwnerph,txDistName,txChannel,
+                textviewdate,txAdd,txOwnerNm,txMobile,txDistName,txChannel,txRetNo,
                 status, invoice, values, invoicedate, tvRetailorCode, tvFirstMonth, tvSecondMnth, tvThirdMnth;
-        LinearLayout parent_layout;
-
-        LinearLayout cdParent,linDistance;
-
-        RecyclerView lstTdyView;
-        RecyclerView lstPreView;
+        LinearLayout parent_layout,cdParent,linDistance,btnCallMob;
+        ImageView icMob;
+        RecyclerView lstTdyView,lstPreView;
 
 
         public MyViewHolder(View view) {
@@ -68,6 +77,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
 
                 invoicedate = view.findViewById(R.id.invoicedate);
                 tvRetailorCode = view.findViewById(R.id.retailorCode);
+                txRetNo = view.findViewById(R.id.txRetNo);
 
                 tvFirstMonth = view.findViewById(R.id.tvLMFirst);
                 tvSecondMnth = view.findViewById(R.id.tvLMSecond);
@@ -86,15 +96,17 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 lstPreView.setLayoutManager(new LinearLayoutManager(context));
                 cdParent = view.findViewById(R.id.cdParent);
                 linDistance=view.findViewById(R.id.linDistance);
+                btnCallMob=view.findViewById(R.id.btnCallMob);
                 txAdd = view.findViewById(R.id.txAdd);
-                txOwnerph = view.findViewById(R.id.txOwnerPh);
+                txOwnerNm = view.findViewById(R.id.txOwnerNm);
+                txMobile = view.findViewById(R.id.txMobile);
+                icMob = view.findViewById(R.id.icMob);
+
                 txDistName = view.findViewById(R.id.txDistName);
                 txChannel = view.findViewById(R.id.txChannel);
                 txChannel = view.findViewById(R.id.txChannel);
 
                 linDistance.setVisibility(View.GONE);
-                txAdd.setVisibility(View.GONE);
-                txOwnerph.setVisibility(View.GONE);
                 txDistName.setVisibility(View.GONE);
                 txChannel.setVisibility(View.GONE);
 
@@ -177,6 +189,14 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             Retailer_Modal_List mRetailer_Modal_List = Retailer_Modal_Listitem.get(holder.getAdapterPosition());
             holder.textviewname.setText(mRetailer_Modal_List.getName().toUpperCase());
             holder.tvRetailorCode.setText(mRetailer_Modal_List.getERP_Code());
+            holder.txOwnerNm.setText(mRetailer_Modal_List.getContactPersion());
+            holder.txMobile.setText(mRetailer_Modal_List.getMobileNumber());
+            holder.txAdd.setText(mRetailer_Modal_List.getListedDrAddress1());
+            holder.txRetNo.setText(String.valueOf(pos+1));
+            holder.icMob.setVisibility(View.VISIBLE);
+            if(mRetailer_Modal_List.getMobileNumber().equalsIgnoreCase("")){
+                holder.icMob.setVisibility(View.GONE);
+            }
 //            if (mRetailer_Modal_List.getStatusname() != null) {
 //                holder.status.setText("Status :" + "\t\t" + mRetailer_Modal_List.getStatusname().toUpperCase());
 //            } else {
@@ -193,6 +213,22 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             } else {
                 holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
             }
+            holder.btnCallMob.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialogBox.showDialog(context, "HAP Check-In", "Do you want to Call this Outlet?", "Yes", "No", false, new AlertBox() {
+                        @Override
+                        public void PositiveMethod(DialogInterface dialog, int id) {
+                            mAdapterOnClick.CallMobile(holder.txMobile.getText().toString().replaceAll(",", ""));
+                        }
+
+                        @Override
+                        public void NegativeMethod(DialogInterface dialog, int id) {
+
+                        }
+                    });
+                }
+            });
             holder.parent_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
