@@ -311,16 +311,6 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
                     FRoute_Master.add(Model_Pojo);
                     Route_Masterlist.add(Model_Pojo);
                 }
-//                else if (type.equals("6")) {
-//
-//                    route_text.setText(jsonObject1.optString("ClstrName"));
-//                    Distributor_Id = jsonObject1.optString("stockist");
-//                    Route_id = jsonObject1.optString("cluster");
-//                    distributor_text.setText(jsonObject1.optString("StkName"));
-//                    loadroute(jsonObject1.optString("stockist"));
-//
-//
-//                }
 
             }
 

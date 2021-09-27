@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -11,59 +10,28 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/llHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/blue_bg"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
 
             <TextView
                 android:id="@+id/txt"
                 style="@style/TextStyle"
+                android:layout_width="match_parent"
                 android:layout_gravity="center"
                 android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:paddingLeft="@dimen/C10dp"
-                android:text="Select Item"
+                android:text="Add Key"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/ivAddKey"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.1"
-                android:padding="@dimen/C8dp"
-                android:src="@drawable/plus"
-                android:text="Select Item"
-                android:textColor="@color/colorPrimaryDark"
-                android:visibility="gone"
-                app:tint="@color/white" />
-
-
         </LinearLayout>
 
 
         <EditText
-
-            android:id="@+id/searchView"
-            android:layout_width="match_parent"
-            android:layout_height="35dp"
-            android:layout_below="@+id/llHeader"
-            android:layout_margin="@dimen/C5dp"
-            android:background="@drawable/search_backround"
-            android:drawableLeft="@drawable/ic_search_icon"
-            android:paddingLeft="5dp"
-            android:singleLine="true"
-            android:textAlignment="textStart"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="15sp"
-            android:textStyle="normal"
-            android:visibility="visible"
-            tools:ignore="RtlCompat" />
-
-        <EditText
-            android:id="@+id/et_addMapKey"
+            android:id="@+id/et_addItem"
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_below="@+id/llHeader"
@@ -77,20 +45,8 @@
             android:textColor="@color/colorPrimaryDark"
             android:textSize="15sp"
             android:textStyle="normal"
-            android:visibility="gone"
+            android:visibility="visible"
             tools:ignore="RtlCompat" />
-
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/travel_allowance"
-            android:layout_gravity="center"
-            android:layout_margin="@dimen/C5dp"
-            android:fadeScrollbars="false"
-            android:scrollbarSize="5dip"
-            android:scrollbarThumbVertical="@color/colorAccent"
-            android:scrollbars="vertical" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -107,11 +63,11 @@
                 android:padding="@dimen/C8dp"
                 android:text="Save"
                 android:textColor="@color/color_white"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
 
             <Button
-                android:id="@+id/no"
+                android:id="@+id/btn_cancel"
                 android:layout_width="@dimen/C100dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

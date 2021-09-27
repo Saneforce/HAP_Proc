@@ -52,7 +52,7 @@ public class Trans_Order_Details_Offline {
     private Double clStock;
     @SerializedName("PromoVal")
     @Expose
-    private Double promoVal;
+    private String promoVal;
     @SerializedName("Div_ID")
     @Expose
     private Double divID;
@@ -76,7 +76,7 @@ public class Trans_Order_Details_Offline {
     private String offProUnit;
     @SerializedName("umo_unit")
     @Expose
-    private Double umoUnit;
+    private String umoUnit;
     @SerializedName("qty")
     @Expose
     private Integer qty;
@@ -212,13 +212,6 @@ public class Trans_Order_Details_Offline {
         this.clStock = clStock;
     }
 
-    public Double getPromoVal() {
-        return promoVal;
-    }
-
-    public void setPromoVal(Double promoVal) {
-        this.promoVal = promoVal;
-    }
 
     public Double getDivID() {
         return divID;
@@ -276,13 +269,6 @@ public class Trans_Order_Details_Offline {
         this.offProUnit = offProUnit;
     }
 
-    public Double getUmoUnit() {
-        return umoUnit;
-    }
-
-    public void setUmoUnit(Double umoUnit) {
-        this.umoUnit = umoUnit;
-    }
 
     public Integer getQty() {
         return qty;

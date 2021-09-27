@@ -34,8 +34,7 @@
                     android:layout_centerVertical="true"
                     android:layout_weight="3"
                     android:scaleType="centerInside"
-                    android:src="@drawable/product_logo"
-                    >
+                    android:src="@drawable/product_logo">
 
                 </ImageView>
 
@@ -48,7 +47,7 @@
 
 
                     <TextView
-                       android:id="@+id/productname"
+                        android:id="@+id/productname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="thirumalai"
@@ -63,7 +62,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
@@ -73,12 +71,15 @@
                             android:visibility="visible" />
 
 
+
                         <TextView
                             android:id="@+id/Rate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="@dimen/C10dp"
+                            android:drawablePadding="@dimen/C3dp"
+                            android:drawableRight="@drawable/edit_small"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
                             android:text="₹0"
@@ -87,14 +88,6 @@
                             android:textStyle="bold" />
 
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/C10dp"
-                            android:gravity="center_vertical"
-                            android:textColor="@color/txt_color_black"
-                            android:visibility="gone" />
 
 
                     </RelativeLayout>
@@ -235,7 +228,7 @@
                         android:layout_height="25dp"
                         android:layout_marginRight="@dimen/C10dp"
                         android:orientation="horizontal"
-                        android:visibility="gone">
+                        android:visibility="visible">
 
                         <TextView
 
@@ -274,7 +267,7 @@
                             android:gravity="center_vertical"
                             android:text="Discount : "
                             android:textColor="@color/grey_800"
-                            android:visibility="visible" />
+                            android:visibility="gone" />
 
 
                         <TextView
@@ -290,40 +283,37 @@
                             android:text="₹0"
                             android:textColor="@color/color_red"
                             android:textStyle="bold"
-                            android:visibility="visible" />
+                            android:visibility="gone" />
 
 
                     </RelativeLayout>
 
 
                     <RelativeLayout
-                        android:visibility="visible"
                         android:layout_width="match_parent"
                         android:layout_height="25dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="visible">
 
                         <TextView
-                            android:id="@+id/tvTaxLabel"
-
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
-
                             android:hint=""
                             android:inputType="number"
-                            android:text="TAX : "
-                            android:fontFamily="sans-serif"
+                            android:text="TAX  "
                             android:textColor="@color/grey_800"
                             android:visibility="visible" />
 
 
                         <TextView
 
-                            android:fontFamily="sans-serif"
                             android:id="@+id/tax"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_toRightOf="@+id/tvTaxLabel"
+                            android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
 
                             android:hint=""
@@ -334,7 +324,7 @@
 
 
                         <TextView
-                            android:id="@+id/taxAmt"
+                            android:id="@+id/tvTaxLabel"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:layout_alignParentRight="true"

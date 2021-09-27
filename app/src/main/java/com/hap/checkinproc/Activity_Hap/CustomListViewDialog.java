@@ -1,12 +1,14 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -22,6 +24,7 @@ import com.google.gson.Gson;
 import com.hap.checkinproc.Activity.Util.UpdateUi;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
+import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Nearby_Outlets;
 import com.hap.checkinproc.adapters.DataAdapter;
@@ -51,14 +54,14 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
     ImageView mIvAddMapKey;
     EditText etAddKey;
     TextView tvtitle;
+    Master_Interface updateUi;
+
 
     public CustomListViewDialog(Activity a, List<Common_Model> wk, int type) {
         super(a);
         this.activity = a;
         this.type = type;
-        //this.adapter = adapter;
         this.mDataset = wk;
-
         this.da = new DataAdapter(mDataset, activity, type);
         setupLayout();
     }
@@ -90,6 +93,11 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
             searchView.setVisibility(View.GONE);
         }
 
+        if (type == 501) {
+            mIvAddMapKey.setVisibility(View.VISIBLE);
+            updateUi = ((Master_Interface) activity);
+        }
+
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.setAdapter(da);
 
@@ -112,28 +120,81 @@ public class CustomListViewDialog extends Dialog implements View.OnClickListener
         mIvAddMapKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etAddKey.setVisibility(View.VISIBLE);
-                mBtnSave.setVisibility(View.VISIBLE);
+                if (type == 501) {
+                    showDialog();
+                } else {
+                    etAddKey.setVisibility(View.VISIBLE);
+                    mBtnSave.setVisibility(View.VISIBLE);
+                }
             }
         });
 
         mBtnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (etAddKey.getText().toString().isEmpty()) {
-                    Toast.makeText(getContext(), "Empty key is not allowed", Toast.LENGTH_SHORT).show();
-                } else {
-                    mDataset.add(new Common_Model(etAddKey.getText().toString()));
-                    etAddKey.setText("");
-                    Gson gson = new Gson();
-                    Nearby_Outlets.shared_common_pref.save(Constants.MAP_KEYLIST, gson.toJson(mDataset));
-                    da.notifyDataSetChanged();
+                try {
+                    if (etAddKey.getText().toString().isEmpty()) {
+                        Toast.makeText(getContext(), "Empty key is not allowed", Toast.LENGTH_SHORT).show();
+                    } else {
+                        mDataset.add(new Common_Model(etAddKey.getText().toString()));
+                        etAddKey.setText("");
+                        Gson gson = new Gson();
+//                        if (type == 501) {
+//                            da.notifyDataSetChanged();
+//                            updateUi.OnclickMasterType(mDataset, mDataset.size() - 1, type);
+//                        } else {
+                        Nearby_Outlets.shared_common_pref.save(Constants.MAP_KEYLIST, gson.toJson(mDataset));
+                        da.notifyDataSetChanged();
+                        // }
 
+                    }
+
+                } catch (Exception e) {
+                    Log.v("CustomDialog: ", e.getMessage());
                 }
             }
         });
 
 
+    }
+
+    private void showDialog() {
+        LayoutInflater inflater = LayoutInflater.from(activity);
+
+        final View view = inflater.inflate(R.layout.edittext_dialog, null);
+        AlertDialog alertDialog = new AlertDialog.Builder(activity).create();
+        alertDialog.setCancelable(false);
+
+        final EditText etComments = (EditText) view.findViewById(R.id.et_addItem);
+        Button btnSave = (Button) view.findViewById(R.id.btn_save);
+        Button btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (etComments.getText().toString().isEmpty()) {
+                    Toast.makeText(getContext(), "Empty key is not allowed", Toast.LENGTH_SHORT).show();
+                } else {
+                    alertDialog.dismiss();
+                    mDataset.add(new Common_Model(etComments.getText().toString()));
+                    etComments.setText("");
+                    da.notifyDataSetChanged();
+                    updateUi.OnclickMasterType(mDataset, mDataset.size() - 1, type);
+
+                }
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+
+
+        alertDialog.setView(view);
+        alertDialog.show();
     }
 
 

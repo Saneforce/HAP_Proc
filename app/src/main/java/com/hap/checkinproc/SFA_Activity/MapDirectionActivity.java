@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static com.hap.checkinproc.SFA_Activity.Nearby_Outlets.shared_common_pref;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -56,8 +58,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import static com.hap.checkinproc.SFA_Activity.Nearby_Outlets.shared_common_pref;
-
 public class MapDirectionActivity extends FragmentActivity implements OnMapReadyCallback, View.OnClickListener {
     private static final int REQUEST_CODE = 101;
     static String googlePlacesData;
@@ -106,12 +106,10 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
                 downloadTask.execute(getIntent().getStringExtra(Constants.MAP_ROUTE));
 
 
-
             }
         });
 
     }
-
 
 
     private void fetchLocation() {
@@ -463,6 +461,7 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
             // getDrDetail(googlePlacesData);
 
             Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
+            Shared_Common_Pref.Outler_AddFlag = "1";
             intent.putExtra(Constants.PLACE_ID, googlePlacesData);
             startActivity(intent);
 

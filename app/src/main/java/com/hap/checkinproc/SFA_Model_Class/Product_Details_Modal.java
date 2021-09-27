@@ -7,6 +7,9 @@ public class Product_Details_Modal {
     @SerializedName("Package")
     @Expose
     private String Package;
+    @SerializedName("MRP")
+    @Expose
+    private String MRP;
     @SerializedName("POP_UOM")
     @Expose
     private String UOM;
@@ -60,6 +63,16 @@ public class Product_Details_Modal {
     @SerializedName("SGST")
     @Expose
     private Double SGST;
+
+
+    public String getMRP() {
+        return MRP;
+    }
+
+    public void setMRP(String MRP) {
+        this.MRP = MRP;
+    }
+
 
     public Double getCGST() {
         return CGST;

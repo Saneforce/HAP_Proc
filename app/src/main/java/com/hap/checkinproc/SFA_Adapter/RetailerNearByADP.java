@@ -206,10 +206,12 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
         LinearLayout parent_layout;
         RecyclerView lstTdyView,lstPreView;
         ImageView icMob;
+        ImageView ivEdit;
 
         public MyViewHolder(View view) {
             super(view);
             try {
+                ivEdit=view.findViewById(R.id.ivEdit);
                 parent_layout = view.findViewById(R.id.parent_layout);
 
                 txRetailName = view.findViewById(R.id.retailername);
@@ -236,6 +238,8 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
 
                 lstTdyView.setLayoutManager(new LinearLayoutManager(context));
                 lstPreView.setLayoutManager(new LinearLayoutManager(context));
+
+                ivEdit.setVisibility(View.GONE);
 
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");
