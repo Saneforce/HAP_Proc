@@ -65,11 +65,7 @@ public class OrderInfoFragment extends Fragment {
         }
 
 
-        historyInfoAdapter = new HistoryInfoAdapter(getActivity(), FilterOrderList, new AdapterOnClick() {
-            @Override
-            public void onIntentClick(int position) {
-            }
-        });
+        historyInfoAdapter = new HistoryInfoAdapter(getActivity(), FilterOrderList,R.layout.history_info_adapter_layout);
 
         recyclerView.setAdapter(historyInfoAdapter);
 

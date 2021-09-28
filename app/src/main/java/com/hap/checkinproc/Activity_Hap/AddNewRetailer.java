@@ -439,9 +439,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             if (Shared_Common_Pref.Outler_AddFlag.equals("1")) {
                 linReatilerRoute.setOnClickListener(this);
                 rlDistributor.setOnClickListener(this);
-                loadroute(shared_common_pref.getvalue(Constants.Distributor_Id));
                 getDbstoreData(Constants.Distributor_List);
                 getDbstoreData(Constants.Rout_List);
+
+                loadroute(shared_common_pref.getvalue(Constants.Distributor_Id));
 
             }
 

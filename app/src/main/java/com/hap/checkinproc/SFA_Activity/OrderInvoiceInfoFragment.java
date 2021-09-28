@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Constants;
-import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.HistoryInfoAdapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
@@ -49,6 +48,8 @@ public class OrderInvoiceInfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.history_more_info_layout, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
 
+        view.findViewById(R.id.llOrderInvHeader).setVisibility(View.VISIBLE);
+
         DatabaseHandler db = new DatabaseHandler(getActivity());
         String OrdersTable = String.valueOf(db.getMasterData(Constants.GetTodayOrder_List));
         Type userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
@@ -66,11 +67,8 @@ public class OrderInvoiceInfoFragment extends Fragment {
         }
 
 
-        historyInfoAdapter = new HistoryInfoAdapter(getActivity(), FilterOrderList, new AdapterOnClick() {
-            @Override
-            public void onIntentClick(int position) {
-            }
-        });
+
+        historyInfoAdapter = new HistoryInfoAdapter(getActivity(), FilterOrderList, R.layout.history_orderinvoice_adapter_layout);
 
         recyclerView.setAdapter(historyInfoAdapter);
 

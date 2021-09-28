@@ -2,13 +2,12 @@ package com.hap.checkinproc.SFA_Activity;
 
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -20,10 +19,8 @@ import com.google.android.material.tabs.TabLayout;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Adapter.Invoice_History_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
@@ -31,7 +28,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 
 public class HistoryInfoActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
@@ -49,10 +48,9 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
 
     String response = "";
 
-    String TAG="HistoryInfoActivity";
+    String TAG = "HistoryInfoActivity";
     List<OutletReport_View_Modal> OutletReport_View_Modal;
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
-
 
 
     @Override
@@ -111,15 +109,28 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
     }
 
 
-    public static boolean checkDates(String stDate, String endDate) {
+    public boolean checkDates(String stDate, String endDate) {
         boolean b = false;
+
+
         try {
-            if (dfDate.parse(stDate).before(dfDate.parse(endDate))) {
-                b = true;//If start date is before end date
-            } else if (dfDate.parse(stDate).equals(dfDate.parse(endDate))) {
-                b = true;//If two dates are equal
+
+            Date date1 = dfDate.parse(stDate);
+            Date date2 = dfDate.parse(endDate);
+            long diff = date2.getTime() - date1.getTime();
+            System.out.println("Days: " + TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS));
+            if (TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) <= 90) {
+                if (dfDate.parse(stDate).before(dfDate.parse(endDate))) {
+                    b = true;//If start date is before end date
+                } else if (dfDate.parse(stDate).equals(dfDate.parse(endDate))) {
+                    b = true;//If two dates are equal
+                } else {
+                    b = false; //If start date is after the end date
+                }
+
             } else {
-                b = false; //If start date is after the end date
+                Toast.makeText(HistoryInfoActivity.this, "You can see only minimum 3 Months records", Toast.LENGTH_SHORT).show();
+                return false;
             }
         } catch (ParseException e) {
             // TODO Auto-generated catch block
@@ -152,32 +163,6 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
             }
 
 
-//            mReportViewAdapter = new Invoice_History_Adapter(Invoice_History.this, FilterOrderList, new AdapterOnClick() {
-//                @Override
-//                public void onIntentClick(int position) {
-//                    Log.e("TRANS_SLNO", FilterOrderList.get(position).getTransSlNo());
-//                    Shared_Common_Pref.TransSlNo = FilterOrderList.get(position).getTransSlNo();
-//                    Shared_Common_Pref.Invoicetoorder = "1";
-////                    if (FilterOrderList.get(position).getStatus().equals("ORDER")) {
-////                        getPreOrderQty();
-////
-////                    } else {
-//                    Intent intent = new Intent(getBaseContext(), Print_Invoice_Activity.class);
-//                    sharedCommonPref.save(Constants.FLAG, FilterOrderList.get(position).getStatus());
-//
-//                    Log.e("Sub_Total", String.valueOf(FilterOrderList.get(position).getOrderValue() + ""));
-//                    intent.putExtra("Order_Values", FilterOrderList.get(position).getOrderValue() + "");
-//                    intent.putExtra("Invoice_Values", FilterOrderList.get(position).getInvoicevalues());
-//                    intent.putExtra("No_Of_Items", FilterOrderList.get(position).getNo_Of_items());
-//                    intent.putExtra("Invoice_Date", FilterOrderList.get(position).getOrderDate());
-//                    intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
-//                    intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
-//                    startActivity(intent);
-//                    //  }
-//
-//                }
-//            });
-//            invoicerecyclerview.setAdapter(mReportViewAdapter);
         }
 
     }

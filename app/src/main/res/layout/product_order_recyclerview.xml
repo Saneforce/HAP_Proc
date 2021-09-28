@@ -62,7 +62,6 @@
                         android:orientation="horizontal">
 
                         <TextView
-
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
@@ -72,12 +71,15 @@
                             android:visibility="visible" />
 
 
+
                         <TextView
                             android:id="@+id/Rate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
                             android:layout_marginRight="@dimen/C10dp"
+                            android:drawablePadding="@dimen/C3dp"
+                            android:drawableRight="@drawable/edit_small"
                             android:fontFamily="sans-serif"
                             android:gravity="center_vertical"
                             android:text="₹0"
@@ -86,14 +88,6 @@
                             android:textStyle="bold" />
 
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="@dimen/C10dp"
-                            android:gravity="center_vertical"
-                            android:textColor="@color/txt_color_black"
-                            android:visibility="gone" />
 
 
                     </RelativeLayout>

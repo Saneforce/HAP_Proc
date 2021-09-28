@@ -1,5 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -77,7 +79,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
-    TextView takeorder,  Out_Let_Name, Category_Nametext,
+    TextView takeorder, Out_Let_Name, Category_Nametext,
             tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo;
 
     private RecyclerView recyclerView, categorygrid, Grpgrid, Brndgrid, freeRecyclerview;
@@ -381,47 +383,48 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
             Log.v(TAG, " order oncreate:j ");
 
-            if(!Common_Class.isNullOrEmpty(preOrderList)){
-            for (int pmTax = 0; pmTax < Product_Modal.size(); pmTax++) {
-                double wholeTax = 0;
-                if (!Common_Class.isNullOrEmpty(taxRes)) {
-                    JSONObject jsonObject = new JSONObject(taxRes.toString());
-                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+            if (!Common_Class.isNullOrEmpty(preOrderList)) {
+                for (int pmTax = 0; pmTax < Product_Modal.size(); pmTax++) {
+                    double wholeTax = 0;
+                    if (!Common_Class.isNullOrEmpty(taxRes)) {
+                        JSONObject jsonObject = new JSONObject(taxRes.toString());
+                        JSONArray jsonArray = jsonObject.getJSONArray("Data");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
-                        if (jsonObject1.getString("Product_Detail_Code").equals(Product_Modal.get(pmTax).getId())) {
+                            if (jsonObject1.getString("Product_Detail_Code").equals(Product_Modal.get(pmTax).getId())) {
 
-                            if (jsonObject1.getDouble("Tax_Val") > 0) {
-                                double taxCal = Product_Modal.get(pmTax).getAmount() * ((jsonObject1.getDouble("Tax_Val") / 100));
-                                wholeTax += taxCal;
+                                if (jsonObject1.getDouble("Tax_Val") > 0) {
+                                    double taxCal = Product_Modal.get(pmTax).getAmount() * ((jsonObject1.getDouble("Tax_Val") / 100));
+                                    wholeTax += taxCal;
 
-                                switch (jsonObject1.getString("Tax_Type")) {
-                                    case "CGST":
-                                        Product_Modal.get(pmTax).setCGST(taxCal);
-                                        break;
-                                    case "SGST":
-                                        Product_Modal.get(pmTax).setSGST(taxCal);
-                                        break;
-                                    case "IGST":
-                                        Product_Modal.get(pmTax).setIGST(taxCal);
-                                        break;
+                                    switch (jsonObject1.getString("Tax_Type")) {
+                                        case "CGST":
+                                            Product_Modal.get(pmTax).setCGST(taxCal);
+                                            break;
+                                        case "SGST":
+                                            Product_Modal.get(pmTax).setSGST(taxCal);
+                                            break;
+                                        case "IGST":
+                                            Product_Modal.get(pmTax).setIGST(taxCal);
+                                            break;
+                                    }
+
+
                                 }
-
-
                             }
                         }
+
+
+                        Product_Modal.get(pmTax).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pmTax).getAmount()
+                                + wholeTax)));
+
+                        Product_Modal.get(pmTax).setTax(String.valueOf(formatter.format(wholeTax)));
+
+
                     }
-
-
-                    Product_Modal.get(pmTax).setAmount(Double.valueOf(formatter.format(Product_Modal.get(pmTax).getAmount()
-                            + wholeTax)));
-
-                    Product_Modal.get(pmTax).setTax(String.valueOf(formatter.format(wholeTax)));
-
-
                 }
-            }}
+            }
 
             Log.v(TAG, " order oncreate:k ");
         } catch (Exception e) {
@@ -860,7 +863,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         Category_Nametext.setText(listt.get(categoryPos).getName());
 
 
-
         mProdct_Adapter = new Prodct_Adapter(Product_ModalSetAdapter, R.layout.product_order_recyclerview, getApplicationContext(), categoryPos);
 
         recyclerView.setAdapter(mProdct_Adapter);
@@ -1102,7 +1104,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
                 if (CategoryType >= 0) {
-                    holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) + (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
+                    holder.totalQty.setText("Total Qty : " + ((Product_Details_Modalitem.get(holder.getAdapterPosition()).getRegularQty()) +
+                            (Product_Details_Modalitem.get(holder.getAdapterPosition()).getQty())));
 
                     if (!Product_Details_Modal.getPImage().equalsIgnoreCase("")) {
                         holder.ImgVwProd.clearColorFilter();
@@ -1178,7 +1181,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
-                                holder.totalQty.setText("Total Qty : " + totQty);
+                                holder.totalQty.setText("Total Qty : " + (int) totQty);
                             }
 
 
@@ -1415,6 +1418,14 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     }
                 });
 
+
+                holder.Rate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showDialog(Product_Details_Modal);
+                    }
+                });
+
                 updateToTALITEMUI();
             } catch (Exception e) {
                 Log.e(TAG, "adapterProduct: " + e.getMessage());
@@ -1426,6 +1437,53 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         @Override
         public int getItemCount() {
             return Product_Details_Modalitem.size();
+        }
+
+        private void showDialog(Product_Details_Modal product_details_modal) {
+            try {
+
+
+                LayoutInflater inflater = LayoutInflater.from(Order_Category_Select.this);
+
+                final View view = inflater.inflate(R.layout.edittext_price_dialog, null);
+                AlertDialog alertDialog = new AlertDialog.Builder(Order_Category_Select.this).create();
+                alertDialog.setCancelable(false);
+
+                final EditText etComments = (EditText) view.findViewById(R.id.et_addItem);
+                Button btnSave = (Button) view.findViewById(R.id.btn_save);
+                Button btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+
+                btnSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
+                            common_class.showMsg(Order_Category_Select.this, "Empty value is not allowed");
+                        } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getMRP())) {
+                            common_class.showMsg(Order_Category_Select.this, "Enter Rate is greater than MRP");
+
+                        } else {
+                            alertDialog.dismiss();
+                            product_details_modal.setRate(Double.valueOf(etComments.getText().toString()));
+                            etComments.setText("");
+                            notifyDataSetChanged();
+
+                        }
+                    }
+                });
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+
+                alertDialog.setView(view);
+                alertDialog.show();
+            } catch (Exception e) {
+                Log.e("OrderAdapter:dialog ", e.getMessage());
+            }
         }
 
 

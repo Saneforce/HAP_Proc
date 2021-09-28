@@ -381,6 +381,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                         OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
                         OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "no order");
+                        OutletItem.put("reason", txRmksNoOrd.getText().toString());
                         if (strLoc.length > 0) {
                             OutletItem.put("Lat", strLoc[0]);
                             OutletItem.put("Long", strLoc[1]);

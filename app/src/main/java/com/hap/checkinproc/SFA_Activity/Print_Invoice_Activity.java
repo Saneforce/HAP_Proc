@@ -649,7 +649,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             InvoiceorderDetails_List = gson.fromJson(orderlist, userType);
             Order_Outlet_Filter = new ArrayList<>();
             Order_Outlet_Filter.clear();
-            double total_qtytext = 0, subTotalVal = 0.00;
+            int total_qtytext = 0;
+            double subTotalVal = 0.00;
             for (Trans_Order_Details_Offline ivl : InvoiceorderDetails_List) {
 
                 total_qtytext += ivl.getQuantity();

@@ -1,6 +1,7 @@
 package com.hap.checkinproc.SFA_Activity;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -325,8 +327,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                 JSONObject jsonObject1 = jsonArray.getJSONObject(i);
 
                                 if (Product_Modal.get(pm).getId().equals(jsonObject1.getString("Product_Code"))) {
-                                    Product_Modal.get(pm).setRegularQty(jsonObject1.getInt("Regular_Qty"));
-                                    Product_Modal.get(pm).setQty(jsonObject1.getInt("Regular_Qty"));
+                                    Product_Modal.get(pm).setRegularQty(jsonObject1.getInt("Total_Qty"));
+                                    Product_Modal.get(pm).setQty(jsonObject1.getInt("Total_Qty"));
                                     Product_Modal.get(pm).setAmount(jsonObject1.getDouble("Total_Amount"));
                                     Product_Modal.get(pm).setDiscount(jsonObject1.getInt("Discount"));
                                     Product_Modal.get(pm).setFree(String.valueOf(jsonObject1.getInt("free")));
@@ -1193,7 +1195,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                     Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate())));
                             if (CategoryType >= 0) {
                                 holder.QtyAmt.setText("₹" + formatter.format(enterQty * Product_Details_Modalitem.get(holder.getAdapterPosition()).getRate()));
-                                holder.totalQty.setText("Total Qty : " + totQty);
+                                holder.totalQty.setText("Total Qty : " + (int) totQty);
                             }
 
 
@@ -1428,6 +1430,12 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                     }
                 });
+                holder.Rate.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        showDialog(Product_Details_Modal);
+                    }
+                });
 
                 updateToTALITEMUI();
             } catch (Exception e) {
@@ -1435,6 +1443,55 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             }
 
 
+        }
+
+        private void showDialog(Product_Details_Modal product_details_modal) {
+            try {
+
+
+                LayoutInflater inflater = LayoutInflater.from(Invoice_Category_Select.this);
+
+                final View view = inflater.inflate(R.layout.edittext_price_dialog, null);
+                AlertDialog alertDialog = new AlertDialog.Builder(Invoice_Category_Select.this).create();
+                alertDialog.setCancelable(false);
+
+                final EditText etComments = (EditText) view.findViewById(R.id.et_addItem);
+                Button btnSave = (Button) view.findViewById(R.id.btn_save);
+                Button btnCancel = (Button) view.findViewById(R.id.btn_cancel);
+
+                btnSave.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
+                            common_class.showMsg(Invoice_Category_Select.this, "Empty value is not allowed");
+                        } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getMRP())) {
+                            common_class.showMsg(Invoice_Category_Select.this, "Enter Rate is greater than MRP");
+
+                        } else {
+                            alertDialog.dismiss();
+                            product_details_modal.setRate(Double.valueOf(etComments.getText().toString()));
+                            etComments.setText("");
+                            notifyDataSetChanged();
+
+                        }
+
+                    }
+                });
+
+                btnCancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        alertDialog.dismiss();
+                    }
+                });
+
+
+                alertDialog.setView(view);
+                alertDialog.show();
+            } catch (Exception e) {
+                Log.e("OrderAdapter:dialog ", e.getMessage());
+            }
         }
 
         @Override
