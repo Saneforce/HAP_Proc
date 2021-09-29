@@ -202,7 +202,7 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView txRetailName,txRetailCode,txAdd,txOwnerNm,txMobile,txDistName,txChannel,txDistance,txTdyDt,txTodayTotQty,txTodayTotVal, txPreTotQty, txPreTotVal,
-                tvFirstMonth, tvSecondMnth, tvThirdMnth;
+                tvFirstMonth, tvSecondMnth, tvThirdMnth,txRetNo;
         LinearLayout parent_layout;
         RecyclerView lstTdyView,lstPreView;
         ImageView icMob;
@@ -211,11 +211,11 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
         public MyViewHolder(View view) {
             super(view);
             try {
-                ivEdit=view.findViewById(R.id.ivEdit);
                 parent_layout = view.findViewById(R.id.parent_layout);
 
                 txRetailName = view.findViewById(R.id.retailername);
                 txRetailCode = view.findViewById(R.id.retailorCode);
+                txRetNo = view.findViewById(R.id.txRetNo);
                 txAdd = view.findViewById(R.id.txAdd);
                 txOwnerNm = view.findViewById(R.id.txOwnerNm);
                 txMobile = view.findViewById(R.id.txMobile);
@@ -240,7 +240,7 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
                 lstPreView.setLayoutManager(new LinearLayoutManager(context));
 
                 ivEdit.setVisibility(View.GONE);
-
+                txRetNo.setVisibility(View.GONE);
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");
                 String plantime = dpln.format(c.getTime());

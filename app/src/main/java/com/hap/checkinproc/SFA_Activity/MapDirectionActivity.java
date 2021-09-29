@@ -297,9 +297,9 @@ public class MapDirectionActivity extends FragmentActivity implements OnMapReady
             case R.id.tvStartDirection:
 
                 if (ReachedOutlet.getText().toString().contains("START")) {
-
-                    shared_common_pref.save(Constants.DEST_NAME, getIntent().getStringExtra(Constants.DEST_NAME));
-
+                    try {
+                        shared_common_pref.save(Constants.DEST_NAME, getIntent().getStringExtra(Constants.DEST_NAME));
+                    }catch (Exception e){}
                     Uri gmmIntentUri = Uri.parse("google.navigation:q=" + getIntent().getStringExtra(Constants.DEST_LAT) + "," + getIntent().getStringExtra(Constants.DEST_LNG) + "&mode=l");
                     Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                     mapIntent.setPackage("com.google.android.apps.maps");

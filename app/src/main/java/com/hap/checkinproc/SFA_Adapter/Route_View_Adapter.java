@@ -34,6 +34,7 @@ import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.HAPApp;
+import com.hap.checkinproc.SFA_Activity.MapDirectionActivity;
 import com.hap.checkinproc.SFA_Activity.TabAdapter;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
@@ -62,7 +63,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
         public TextView textviewname,txTodayTotQty,txTodayTotVal, txPreTotQty, txPreTotVal,
                 textviewdate,txAdd,txOwnerNm,txMobile,txDistName,txChannel,txRetNo,
                 status, invoice, values, invoicedate, tvRetailorCode, tvFirstMonth, tvSecondMnth, tvThirdMnth;
-        LinearLayout parent_layout,cdParent,linDistance,btnCallMob;
+        LinearLayout parent_layout,cdParent,linDistance,btnCallMob,linDirection;
         ImageView icMob;
         RecyclerView lstTdyView,lstPreView;
 
@@ -96,6 +97,7 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
                 lstPreView.setLayoutManager(new LinearLayoutManager(context));
                 cdParent = view.findViewById(R.id.cdParent);
                 linDistance=view.findViewById(R.id.linDistance);
+                linDirection=view.findViewById(R.id.linDirection);
                 btnCallMob=view.findViewById(R.id.btnCallMob);
                 txAdd = view.findViewById(R.id.txAdd);
                 txOwnerNm = view.findViewById(R.id.txOwnerNm);
@@ -104,11 +106,10 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
 
                 txDistName = view.findViewById(R.id.txDistName);
                 txChannel = view.findViewById(R.id.txChannel);
-                txChannel = view.findViewById(R.id.txChannel);
 
                 linDistance.setVisibility(View.GONE);
                 txDistName.setVisibility(View.GONE);
-                txChannel.setVisibility(View.GONE);
+                //txChannel.setVisibility(View.GONE);
 
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");
@@ -189,14 +190,16 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
             Retailer_Modal_List mRetailer_Modal_List = Retailer_Modal_Listitem.get(holder.getAdapterPosition());
             holder.textviewname.setText(mRetailer_Modal_List.getName().toUpperCase());
             holder.tvRetailorCode.setText(mRetailer_Modal_List.getERP_Code());
-            holder.txOwnerNm.setText(mRetailer_Modal_List.getContactPersion());
+            holder.txOwnerNm.setText(mRetailer_Modal_List.getOwner_Name());
             holder.txMobile.setText(mRetailer_Modal_List.getMobileNumber());
             holder.txAdd.setText(mRetailer_Modal_List.getListedDrAddress1());
-            holder.txRetNo.setText(String.valueOf(pos+1));
+            holder.txRetNo.setText(mRetailer_Modal_List.getListedDrSlNo().toString());
+            holder.txChannel.setText(mRetailer_Modal_List.getSpeciality());
             holder.icMob.setVisibility(View.VISIBLE);
             if(mRetailer_Modal_List.getMobileNumber().equalsIgnoreCase("")){
                 holder.icMob.setVisibility(View.GONE);
             }
+
 //            if (mRetailer_Modal_List.getStatusname() != null) {
 //                holder.status.setText("Status :" + "\t\t" + mRetailer_Modal_List.getStatusname().toUpperCase());
 //            } else {
@@ -207,11 +210,11 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
 //            holder.values.setText("Value :" + "\t\t" + mRetailer_Modal_List.getValuesinv());
 //            holder.invoicedate.setText("Last inv date :" + "\t\t" + mRetailer_Modal_List.getInvoiceDate());
             if (mRetailer_Modal_List.getInvoice_Flag().equals("0")) {
-                holder.parent_layout.setBackgroundResource(R.color.white);
+                holder.cdParent.setBackgroundResource(R.color.white);
             } else if (mRetailer_Modal_List.getInvoice_Flag().equals("1")) {
-                holder.parent_layout.setBackgroundResource(R.color.invoiceordercolor);
+                holder.cdParent.setBackgroundResource(R.color.invoiceordercolor);
             } else {
-                holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
+                holder.cdParent.setBackgroundResource(R.color.greeninvoicecolor);
             }
             holder.btnCallMob.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -227,6 +230,13 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
 
                         }
                     });
+                }
+            });
+            holder.linDirection.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String sOutletName=mRetailer_Modal_List.getName();
+                    drawRoute(sOutletName,mRetailer_Modal_List.getLat() ,mRetailer_Modal_List.getLong());
                 }
             });
             holder.parent_layout.setOnClickListener(new View.OnClickListener() {
@@ -598,6 +608,37 @@ public class Route_View_Adapter extends RecyclerView.Adapter<Route_View_Adapter.
         } catch (Exception e) {
             Log.v("RouteAdapter: ", e.getMessage());
         }
+    }
+
+    private void drawRoute(String OutletName,String sLat,String sLng) {
+        // Getting URL to the Google Directions API
+
+        String mDestination = sLat + "," + sLng;
+        String url = getDirectionsUrl(mDestination);
+
+        Intent intent = new Intent(context.getApplicationContext(), MapDirectionActivity.class);
+        intent.putExtra(Constants.MAP_ROUTE, url);
+        intent.putExtra(Constants.DEST_LAT, sLat);
+        intent.putExtra(Constants.DEST_LNG, sLng);
+        intent.putExtra(Constants.DEST_NAME, OutletName);
+        context.startActivity(intent);
+
+    }
+
+    private String getDirectionsUrl(String dest) {
+        // Origin of route
+        String str_origin = "origin=" + Shared_Common_Pref.Outletlat + "," + Shared_Common_Pref.Outletlong;
+        // Destination of route
+        String str_dest = "destination=" + dest;
+        // Key
+        String key = "key=" + context.getString(R.string.map_api_key);
+        // Building the parameters to the web service
+        String parameters = str_origin + "&" + str_dest + "&" + key;
+        // Output format
+        String output = "json";
+        // Building the url to the web service
+        String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
+        return url;
     }
 public void getMnthlyDta(Route_View_Adapter.MyViewHolder holder,String CusId,String Mnth){
 

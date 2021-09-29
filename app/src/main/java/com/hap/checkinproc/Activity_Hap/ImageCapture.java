@@ -982,7 +982,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                             editor.putString("Logintime", "");
                             editor.putBoolean("CheckIn", false);
                             editor.apply();
-
+                            mShared_common_pref.clear_pref(Shared_Common_Pref.DAMode);
                             JsonObject itm = response.body().getAsJsonObject();
                             String mMessage = "Your Check-Out Submitted Successfully<br><br>Check in Time  : " + CheckInDetails.getString("FTime", "") + "<br>" +
                                     "Check Out Time : " + CTime;

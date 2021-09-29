@@ -64,7 +64,6 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
         setupViewPager(viewPager);
         tabLayout.setupWithViewPager(viewPager);
         common_class.gotoHomeScreen(this, ivToolbarHome);
-
         common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
         common_class.getDataFromApi(Constants.Outlet_Total_AlldaysOrders, this, false);
 

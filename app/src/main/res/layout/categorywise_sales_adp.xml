@@ -18,7 +18,7 @@
             android:ellipsize="end"
             android:fontFamily="sans-serif"
             android:text="Milk"
-            android:textSize="12sp"
+            android:textSize="11sp"
             android:textColor="@color/grey_700"/>
         <TextView
             android:id="@+id/tvTodayOQty"
@@ -26,7 +26,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:text="0"
-            android:paddingLeft="@dimen/C5dp"
             android:textSize="11sp"
             android:textStyle="bold"/>
         <TextView
@@ -43,7 +42,6 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:text="0"
-        android:paddingLeft="@dimen/C5dp"
         android:textSize="11sp"
         android:textStyle="bold"/>
         <TextView
@@ -60,7 +58,6 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:text="0"
-            android:paddingLeft="@dimen/C5dp"
             android:textSize="11sp"
             android:textStyle="bold"/>
         <TextView
@@ -74,7 +71,7 @@
 
         <TextView
             android:id="@+id/tvTodayVal"
-            android:layout_width="50dp"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:textAlignment="textEnd"

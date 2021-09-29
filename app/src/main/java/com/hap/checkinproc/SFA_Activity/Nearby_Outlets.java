@@ -860,28 +860,18 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     }
 
     private String getDirectionsUrl(String dest) {
-
         // Origin of route
         String str_origin = "origin=" + Shared_Common_Pref.Outletlat + "," + Shared_Common_Pref.Outletlong;
-
-
         // Destination of route
         String str_dest = "destination=" + dest;
-
         // Key
         String key = "key=" + getString(R.string.map_api_key);
-
         // Building the parameters to the web service
         String parameters = str_origin + "&" + str_dest + "&" + key;
-
         // Output format
         String output = "json";
-
         // Building the url to the web service
-//        String url = "https://maps.googleapis.com/maps/api/directions/"+output+"?"+parameters;
-        // https://maps.googleapis.com/maps/api/directions/json?origin=13.06035965534021,80.26152804493904&destination=13.058304658284644,80.26527408510447&key=AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU
         String url = "https://maps.googleapis.com/maps/api/directions/json?" + parameters;
-
         return url;
     }
 

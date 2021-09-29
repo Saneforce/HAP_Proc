@@ -116,7 +116,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     SharedPreferences UserDetails;
     DatabaseHandler db;
 
-    ImageView ivToolbarHome;
+    ImageView ivToolbarHome,ivBtnRpt;
     LinearLayout llDistributor;
     TabAdapter adapter;
     private RecyclerView recyclerView;
@@ -196,6 +196,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             txUniOtlt = findViewById(R.id.txUniOtlt);
             btSrvOtlt = findViewById(R.id.btSrvOtlt);
             btUniOtlt = findViewById(R.id.btUniOtlt);
+            ivBtnRpt = findViewById(R.id.ivBtnRpt);
 
             smryOrd = findViewById(R.id.smryOrd);
             smryNOrd = findViewById(R.id.smryNOrd);
@@ -221,7 +222,12 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             ivToolbarHome.setOnClickListener(this);
             btnCmbRoute.setOnClickListener(this);
             llDistributor.setOnClickListener(this);
-
+            ivBtnRpt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    common_class.CommonIntentwithoutFinish(HistoryInfoActivity.class);
+                }
+            });
             btSrvOtlt.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -365,11 +371,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                                     shared_common_pref.save(Constants.Retailor_ERP_Code, Retailer_Modal_ListFilter.get(position).getERP_Code());
                                     shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_ListFilter.get(position).getName().toUpperCase()/* + "~" + Retailer_Modal_List.get(position).getERP_Code()*/);
 
-                                    if (Retailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("") || Retailer_Modal_ListFilter.get(position).getContactPersion().equalsIgnoreCase("")) {
+                                    if (Retailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("") || Retailer_Modal_ListFilter.get(position).getOwner_Name().equalsIgnoreCase("")) {
 
                                         Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
-                                        Shared_Common_Pref.Outlet_Info_Flag = "1";
-                                        Shared_Common_Pref.Editoutletflag = "0";
+                                        Shared_Common_Pref.Outlet_Info_Flag = "0";
+                                        Shared_Common_Pref.Editoutletflag = "1";
                                         Shared_Common_Pref.Outler_AddFlag = "0";
                                         Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getId());
                                         intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_ListFilter.get(position).getId()));
@@ -612,11 +618,11 @@ public void getSalesCounts()
                             /*+ "~" + Retailer_Modal_List.get(position).getERP_Code()*/);
 
                     if (Retailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("")
-                            || Retailer_Modal_ListFilter.get(position).getContactPersion().equalsIgnoreCase("")) {
+                            || Retailer_Modal_ListFilter.get(position).getOwner_Name().equalsIgnoreCase("")) {
 
                         Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
-                        Shared_Common_Pref.Outlet_Info_Flag = "1";
-                        Shared_Common_Pref.Editoutletflag = "0";
+                        Shared_Common_Pref.Outlet_Info_Flag = "0";
+                        Shared_Common_Pref.Editoutletflag = "1";
                         Shared_Common_Pref.Outler_AddFlag = "0";
                         Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getId());
                         intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_ListFilter.get(position).getId()));
@@ -810,11 +816,11 @@ public void getSalesCounts()
                                 shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_ListFilter.get(position).getName().toUpperCase()
                                         /* + "~" + Retailer_Modal_List.get(position).getERP_Code()*/);
                                 if (Retailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("")
-                                        || Retailer_Modal_ListFilter.get(position).getContactPersion().equalsIgnoreCase("")) {
+                                        || Retailer_Modal_ListFilter.get(position).getOwner_Name().equalsIgnoreCase("")) {
 
                                     Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
-                                    Shared_Common_Pref.Outlet_Info_Flag = "1";
-                                    Shared_Common_Pref.Editoutletflag = "0";
+                                    Shared_Common_Pref.Outlet_Info_Flag = "0";
+                                    Shared_Common_Pref.Editoutletflag = "1";
                                     Shared_Common_Pref.Outler_AddFlag = "0";
                                     Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getId());
                                     intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_ListFilter.get(position).getId()));
@@ -985,11 +991,11 @@ public void getSalesCounts()
                         shared_common_pref.save(Constants.Retailor_Name_ERP_Code, Retailer_Modal_List.get(position).getName().toUpperCase()/* + "~" + Retailer_Modal_List.get(position).getERP_Code()*/);
                         //common_class.CommonIntentwithFinish(Route_Product_Info.class);
                         if (Retailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("")
-                                || Retailer_Modal_ListFilter.get(position).getContactPersion().equalsIgnoreCase("")) {
+                                || Retailer_Modal_ListFilter.get(position).getOwner_Name().equalsIgnoreCase("")) {
 
                             Intent intent = new Intent(getApplicationContext(), AddNewRetailer.class);
-                            Shared_Common_Pref.Outlet_Info_Flag = "1";
-                            Shared_Common_Pref.Editoutletflag = "0";
+                            Shared_Common_Pref.Outlet_Info_Flag = "0";
+                            Shared_Common_Pref.Editoutletflag = "1";
                             Shared_Common_Pref.Outler_AddFlag = "0";
                             Shared_Common_Pref.OutletCode = String.valueOf(Retailer_Modal_ListFilter.get(position).getId());
                             intent.putExtra("OutletCode", String.valueOf(Retailer_Modal_ListFilter.get(position).getId()));
@@ -1096,11 +1102,11 @@ public void getSalesCounts()
                             shared_common_pref.save(Constants.Retailor_Name_ERP_Code, mRetailer_Modal_ListFilter.get(position).getName().toUpperCase() /*+ "~"
                                     + mRetailer_Modal_ListFilter.get(position).getERP_Code()*/);
                             if (mRetailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("")
-                                    || mRetailer_Modal_ListFilter.get(position).getContactPersion().equalsIgnoreCase("")) {
+                                    || mRetailer_Modal_ListFilter.get(position).getOwner_Name().equalsIgnoreCase("")) {
 
                                 Intent intent = new Intent(context, AddNewRetailer.class);
-                                Shared_Common_Pref.Outlet_Info_Flag = "1";
-                                Shared_Common_Pref.Editoutletflag = "0";
+                                Shared_Common_Pref.Outlet_Info_Flag = "0";
+                                Shared_Common_Pref.Editoutletflag = "1";
                                 Shared_Common_Pref.Outler_AddFlag = "0";
                                 Shared_Common_Pref.OutletCode = String.valueOf(mRetailer_Modal_ListFilter.get(position).getId());
                                 intent.putExtra("OutletCode", String.valueOf(mRetailer_Modal_ListFilter.get(position).getId()));
@@ -1199,11 +1205,11 @@ public void getSalesCounts()
                         shared_common_pref.save(Constants.Retailor_Name_ERP_Code, mRetailer_Modal_ListFilter.get(position).getName().toUpperCase()/* + "~" +
                                 mRetailer_Modal_ListFilter.get(position).getERP_Code()*/);
                         if (mRetailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("")
-                                || mRetailer_Modal_ListFilter.get(position).getContactPersion().equalsIgnoreCase("")) {
+                                || mRetailer_Modal_ListFilter.get(position).getOwner_Name().equalsIgnoreCase("")) {
 
                             Intent intent = new Intent(context, AddNewRetailer.class);
-                            Shared_Common_Pref.Outlet_Info_Flag = "1";
-                            Shared_Common_Pref.Editoutletflag = "0";
+                            Shared_Common_Pref.Outlet_Info_Flag = "0";
+                            Shared_Common_Pref.Editoutletflag = "1";
                             Shared_Common_Pref.Outler_AddFlag = "0";
                             Shared_Common_Pref.OutletCode = String.valueOf(mRetailer_Modal_ListFilter.get(position).getId());
                             intent.putExtra("OutletCode", String.valueOf(mRetailer_Modal_ListFilter.get(position).getId()));
@@ -1280,11 +1286,11 @@ public void getSalesCounts()
                         shared_common_pref.save(Constants.Retailor_Name_ERP_Code,
                                 mRetailer_Modal_ListFilter.get(position).getName().toUpperCase() /*+ "~"+ mRetailer_Modal_ListFilter.get(position).getERP_Code()*/);
                         if (mRetailer_Modal_ListFilter.get(position).getMobileNumber().equalsIgnoreCase("")
-                                || mRetailer_Modal_ListFilter.get(position).getContactPersion().equalsIgnoreCase("")) {
+                                || mRetailer_Modal_ListFilter.get(position).getOwner_Name().equalsIgnoreCase("")) {
 
                             Intent intent = new Intent(context, AddNewRetailer.class);
-                            Shared_Common_Pref.Outlet_Info_Flag = "1";
-                            Shared_Common_Pref.Editoutletflag = "0";
+                            Shared_Common_Pref.Outlet_Info_Flag = "0";
+                            Shared_Common_Pref.Editoutletflag = "1";
                             Shared_Common_Pref.Outler_AddFlag = "0";
                             Shared_Common_Pref.OutletCode = String.valueOf(mRetailer_Modal_ListFilter.get(position).getId());
                             intent.putExtra("OutletCode", String.valueOf(mRetailer_Modal_ListFilter.get(position).getId()));

@@ -296,6 +296,7 @@
             android:text="0000"
             android:visibility="invisible"/>
         <ImageView
+            android:id="@+id/ivBtnRpt"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="@dimen/C5dp"
@@ -543,8 +544,6 @@
             android:layout_height="match_parent"
             android:layout_weight="0.8"
             android:orientation="vertical">
-
-
             <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -560,21 +559,20 @@
                     <com.google.android.material.tabs.TabLayout
                         android:id="@+id/tabs"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
+                        android:layout_height="35dp"
                         android:background="@drawable/blue_bg"
                         app:tabGravity="fill"
                         app:tabIndicatorColor="@android:color/white"
                         app:tabIndicatorHeight="2dp" />
 
                 </RelativeLayout>
-
-                <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/viewpager"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white" />
-
             </com.google.android.material.appbar.AppBarLayout>
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
