@@ -3,6 +3,7 @@ package com.hap.checkinproc.SFA_Activity;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -19,11 +20,17 @@ import com.google.android.material.tabs.TabLayout;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,6 +38,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class HistoryInfoActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
@@ -51,7 +63,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
     String TAG = "HistoryInfoActivity";
     List<OutletReport_View_Modal> OutletReport_View_Modal;
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
-
+    private UpdateResponseUI updateUi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,14 +71,20 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_history_info);
         init();
 
-        shared_common_pref = new Shared_Common_Pref(this);
-        tvOutletName.setText(shared_common_pref.getvalue(Constants.Retailor_Name_ERP_Code));
-        setupViewPager(viewPager);
-        tabLayout.setupWithViewPager(viewPager);
-        common_class.gotoHomeScreen(this, ivToolbarHome);
 
-        common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
-        common_class.getDataFromApi(Constants.Outlet_Total_AlldaysOrders, this, false);
+        shared_common_pref = new Shared_Common_Pref(this);
+        tvOutletName.setText(shared_common_pref.getvalue(Constants.Distributor_name));
+
+//        common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
+//        common_class.getDataFromApi(Constants.Outlet_Total_AlldaysOrders, this, false);
+
+
+        tvStartDate.setText(Common_Class.GetDatewothouttime());
+        tvEndDate.setText(Common_Class.GetDatewothouttime());
+      //  getTaxDetails();
+        getHistoryData();
+
+        common_class.gotoHomeScreen(this, ivToolbarHome);
 
 
     }
@@ -104,6 +122,139 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
             case R.id.tvEndDate:
                 selectDate(2);
                 break;
+
+        }
+    }
+
+    public void getTaxDetails() {
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                JSONObject HeadItem = new JSONObject();
+
+                HeadItem.put("distributorid", Shared_Common_Pref.DistributorCode);
+                HeadItem.put("divisionCode", Shared_Common_Pref.Div_Code);
+                HeadItem.put("retailorId", Shared_Common_Pref.OutletCode);
+
+
+                Call<ResponseBody> call = service.getTAXDetails(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+
+                                if (jsonObject.getBoolean("success")) {
+                                    shared_common_pref.save(Constants.TAXList, is.toString());
+
+                                } else {
+                                    shared_common_pref.clear_pref(Constants.TAXList);
+
+                                }
+
+
+                            }
+
+                        } catch (Exception e) {
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>", t.toString());
+
+
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+
+    public void getHistoryData() {
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                JSONObject HeadItem = new JSONObject();
+
+                HeadItem.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
+                HeadItem.put("fdt", tvStartDate.getText().toString());
+                HeadItem.put("tdt", tvEndDate.getText().toString());
+
+
+                Call<ResponseBody> call = service.getHistoryInfo(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+
+                                if (jsonObject.getBoolean("success")) {
+                                    shared_common_pref.save(Constants.HistoryData, is.toString());
+
+                                } else {
+                                    shared_common_pref.clear_pref(Constants.HistoryData);
+
+                                }
+
+
+                                tabLayout.setupWithViewPager(viewPager);
+                                setupViewPager(viewPager);
+
+                            }
+
+                        } catch (Exception e) {
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>", t.toString());
+
+
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
 
         }
     }
@@ -214,15 +365,17 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
                 date = ("" + year + "-" + month + "-" + dayOfMonth);
                 if (val == 1) {
                     if (checkDates(date, tvEndDate.getText().toString()) ||
-                            tvEndDate.getText().toString().equals(""))
+                            tvEndDate.getText().toString().equals("")) {
                         tvStartDate.setText(date);
-                    else
+                        getHistoryData();
+                    } else
                         common_class.showMsg(HistoryInfoActivity.this, "Please select valid date");
                 } else {
                     if (checkDates(tvStartDate.getText().toString(), date) ||
-                            tvStartDate.getText().toString().equals(""))
+                            tvStartDate.getText().toString().equals("")) {
                         tvEndDate.setText(date);
-                    else
+                        getHistoryData();
+                    } else
                         common_class.showMsg(HistoryInfoActivity.this, "Please select valid date");
 
                 }

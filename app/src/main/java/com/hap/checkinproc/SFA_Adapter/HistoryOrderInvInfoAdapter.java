@@ -5,75 +5,53 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Common_Class.Common_Class;
-import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
-import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
-import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 
-public class HistoryInfoAdapter extends RecyclerView.Adapter<HistoryInfoAdapter.MyViewHolder> {
+public class HistoryOrderInvInfoAdapter extends RecyclerView.Adapter<HistoryOrderInvInfoAdapter.MyViewHolder> {
     Context context;
     List<OutletReport_View_Modal> mDate;
-    AdapterOnClick mAdapterOnClick;
     private View listItem;
     int rowlayout;
     NumberFormat formatter = new DecimalFormat("##0.00");
 
     int tab;
 
-    Common_Class common_class;
-    Shared_Common_Pref shared_common_pref;
-
-    public HistoryInfoAdapter(Context context, List<OutletReport_View_Modal> mDate, int rowlayout, int tab, AdapterOnClick mAdapterOnClick) {
+    public HistoryOrderInvInfoAdapter(Context context, List<OutletReport_View_Modal> mDate, int rowlayout, int tab) {
         this.context = context;
         this.mDate = mDate;
         this.rowlayout = rowlayout;
         this.tab = tab;
-        this.mAdapterOnClick = mAdapterOnClick;
-        common_class = new Common_Class(context);
-        shared_common_pref = new Shared_Common_Pref(context);
-
 
     }
 
-
     @NonNull
     @Override
-    public HistoryInfoAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HistoryOrderInvInfoAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
 //        if (viewType == 3)
 //            listItem = layoutInflater.inflate(R.layout.history_orderinvoice_adapter_layout, null, false);
 //        else
         listItem = layoutInflater.inflate(rowlayout, null, false);
-        return new HistoryInfoAdapter.MyViewHolder(listItem);
+        return new HistoryOrderInvInfoAdapter.MyViewHolder(listItem);
     }
 
     @Override
-    public long getItemId(int position) {
-        return position;
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return position;
-    }
-
-
-    @Override
-    public void onBindViewHolder(HistoryInfoAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(HistoryOrderInvInfoAdapter.MyViewHolder holder, int position) {
         try {
+            // holder.tvName.setText("" + mDate.get(position).getNo_Of_items() + " items");
             holder.tvId.setText("" + mDate.get(position).getOrderNo());
             holder.tvDate.setText("" + mDate.get(position).getOrderDate());
             holder.tvOutletName.setText("" + mDate.get(position).getOutletCode());
@@ -89,41 +67,33 @@ public class HistoryInfoAdapter extends RecyclerView.Adapter<HistoryInfoAdapter.
             }
             holder.tvAmount.setText("₹ " + formatter.format(mDate.get(position).getOrderValue()));
 
-            StringBuilder value = new StringBuilder();
-            //  holder.tvName.setText("" + mDate.get(position).getNo_Of_items());
-            if (mDate.get(position).getProduct_details_modal() != null && mDate.get(position).getProduct_details_modal().size() > 0) {
-                for (int i = 0; i < mDate.get(position).getProduct_details_modal().size(); i++) {
-                    Product_Details_Modal pm = mDate.get(position).getProduct_details_modal().get(i);
-                    if((i+1)==mDate.get(position).getProduct_details_modal().size())
-                        value.append(pm.getName() + " x " + pm.getQty() );
-                    else
-                    value.append(pm.getName() + " x " + pm.getQty() + ", ");
-
-                }
-
-                holder.tvName.setText("" + value);
-            } else
-                holder.tvName.setText("");
+            holder.tvName.setText("" + mDate.get(position).getNo_Of_items());
 
 
-//            holder.btnReOrder.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Gson gson = new Gson();
-//
-//                    shared_common_pref.save(Constants.PreOrderQtyList, gson.toJson(mDate.get(position).getProduct_details_modal()));
-//
-//
-//                    if (tab == 1)
-//                        context.startActivity(new Intent(context, Order_Category_Select.class));
-//                    else
-//                        context.startActivity(new Intent(context, Invoice_Category_Select.class));
-//
-//                }
-//            });
+            holder.tvInvDate.setText("" + mDate.get(position).getInvoiceDate());
+            holder.tvInvStatus.setText("" + mDate.get(position).getInvoiceStatus());
+            holder.tvInvId.setText("" + mDate.get(position).getInvoiceID());
+
+            if (!Common_Class.isNullOrEmpty(mDate.get(position).getInvoiceAmount()))
+                holder.tvInvAmt.setText("₹ " + mDate.get(position).getInvoiceAmount());
+            holder.tvInvProducts.setText("" + mDate.get(position).getInvoiceItems());
+
+            if (mDate.get(position).getInvoiceStatus().equals("Completed")) {
+
+                holder.ivInvStatus.setImageResource(R.drawable.ic_round_done_outline_24);
+
+                holder.rlInvDateParent.setVisibility(View.VISIBLE);
+            } else {
+
+                holder.tvInvStatus.setText("Pending");
+                holder.rlInvDateParent.setVisibility(View.GONE);
+
+                holder.ivInvStatus.setImageResource(R.drawable.ic_round_pending_24);
+            }
+
 
         } catch (Exception e) {
-            Log.e("History_Adapter:", e.getMessage());
+            Log.e("OrderInvAdapter: ", e.getMessage());
         }
     }
 
@@ -135,8 +105,8 @@ public class HistoryInfoAdapter extends RecyclerView.Adapter<HistoryInfoAdapter.
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView tvName, tvId, tvDate, tvStatus, tvAmount, tvAddress, tvOutletName, tvInvDate, tvInvStatus, tvInvId, tvInvAmt, tvInvProducts;
-        ImageView ivStatus;
-        Button btnReOrder;
+        ImageView ivStatus, ivInvStatus;
+        RelativeLayout rlInvDateParent;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -148,7 +118,16 @@ public class HistoryInfoAdapter extends RecyclerView.Adapter<HistoryInfoAdapter.
             tvAddress = itemView.findViewById(R.id.tvAddress);
             ivStatus = itemView.findViewById(R.id.ivStatus);
             tvDate = itemView.findViewById(R.id.tvDate);
-            btnReOrder = itemView.findViewById(R.id.btnReOrder);
+
+
+            tvInvDate = itemView.findViewById(R.id.tvDateInv);
+            tvInvStatus = itemView.findViewById(R.id.tvStatusInv);
+            tvInvId = itemView.findViewById(R.id.tvInvoiceId);
+            tvInvAmt = itemView.findViewById(R.id.tvAmountInv);
+            tvInvProducts = itemView.findViewById(R.id.tvProductNameInv);
+            ivInvStatus = itemView.findViewById(R.id.ivStatusInv);
+
+            rlInvDateParent = itemView.findViewById(R.id.rlInvDateParent);
 
 
         }

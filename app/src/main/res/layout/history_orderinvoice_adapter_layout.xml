@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -19,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="7 Hills milk Centre"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="@dimen/C15dp"
             android:textStyle="bold" />
@@ -37,55 +36,60 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvDate"
+                    android:id="@+id/tvOrderId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="25/9/2021"
+                    android:text=""
                     android:textColor="@color/grey_600"
                     android:textSize="@dimen/C13dp" />
 
 
                 <RelativeLayout
-
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content">
 
+                    <ImageView
+                        android:id="@+id/ivDate"
+                        android:layout_width="@dimen/C10dp"
+                        android:layout_height="@dimen/C10dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_baseline_date_range_24"></ImageView>
 
                     <TextView
-
-                        android:id="@+id/tvStatus"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tvDate"
+                        android:layout_width="@dimen/header_width1"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/C5dp"
-                        android:layout_marginTop="@dimen/C3dp"
-                        android:layout_toRightOf="@+id/ivStatus"
-                        android:gravity="start"
-                        android:text="Delivered"
-
+                        android:layout_marginLeft="@dimen/C3dp"
+                        android:layout_toRightOf="@+id/ivDate"
+                        android:text=""
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp">
+                        android:textSize="@dimen/C13dp"></TextView>
+
+                </RelativeLayout>
 
 
-                    </TextView>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <ImageView
                         android:id="@+id/ivStatus"
-                        android:layout_width="@dimen/C15dp"
-                        android:layout_height="@dimen/C15dp"
+                        android:layout_width="@dimen/C10dp"
+                        android:layout_height="@dimen/C10dp"
                         android:layout_centerVertical="true"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_round_done_outline_24"
-                        app:tint="@color/greenColor"></ImageView>
-                </RelativeLayout>
+                        android:src="@drawable/ic_round_done_outline_24"></ImageView>
 
-                <TextView
-                    android:id="@+id/tvOrderId"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="HAPH5291-61"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/C13dp" />
+                    <TextView
+                        android:id="@+id/tvStatus"
+                        android:layout_width="@dimen/header_width1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/C3dp"
+                        android:layout_toRightOf="@+id/ivStatus"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/C13dp"></TextView>
+
+                </RelativeLayout>
 
 
                 <TextView
@@ -94,14 +98,15 @@
                     android:layout_height="wrap_content"
                     android:text="Chennai"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/C13dp" />
+                    android:textSize="@dimen/C13dp"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/tvAmount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
-                    android:text="₹ 100"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="@dimen/C13dp" />
 
@@ -112,7 +117,8 @@
                     android:layout_marginTop="@dimen/C10dp"
                     android:layout_marginBottom="@dimen/C10dp"
                     android:layout_weight="1"
-                    android:background="@drawable/line_dash_background">
+                    android:background="@drawable/line_dash_background"
+                    android:visibility="gone">
 
                 </RelativeLayout>
 
@@ -123,7 +129,8 @@
                     android:layout_height="wrap_content"
                     android:text="Arokya can Sm x 4, Hatsun Butter x 1, Aavin milk 500ml x 30"
                     android:textColor="@color/grey_600"
-                    android:textSize="@dimen/C13dp" />
+                    android:textSize="@dimen/C13dp"
+                    android:visibility="gone" />
 
 
             </LinearLayout>
@@ -146,71 +153,69 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvDateInv"
+                    android:id="@+id/tvInvoiceId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="25/9/2021"
+                    android:text=""
                     android:textColor="@color/grey_600"
                     android:textSize="@dimen/C13dp" />
 
 
                 <RelativeLayout
-
+                    android:id="@+id/rlInvDateParent"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content">
 
+                    <ImageView
+                        android:id="@+id/ivDateInv"
+                        android:layout_width="@dimen/C10dp"
+                        android:layout_height="@dimen/C10dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/ic_baseline_date_range_24"></ImageView>
 
                     <TextView
-
-                        android:id="@+id/tvStatusInv"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/tvDateInv"
+                        android:layout_width="@dimen/header_width1"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/C5dp"
-                        android:layout_marginTop="@dimen/C3dp"
-                        android:layout_toRightOf="@+id/ivStatusInv"
-                        android:gravity="start"
-                        android:text="Completed"
-
+                        android:layout_marginLeft="@dimen/C3dp"
+                        android:layout_toRightOf="@+id/ivDateInv"
+                        android:text=""
                         android:textColor="@color/black"
-                        android:textSize="@dimen/C13dp">
+                        android:textSize="@dimen/C13dp"></TextView>
+
+                </RelativeLayout>
 
 
-                    </TextView>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <ImageView
                         android:id="@+id/ivStatusInv"
-                        android:layout_width="@dimen/C15dp"
-                        android:layout_height="@dimen/C15dp"
+                        android:layout_width="@dimen/C10dp"
+                        android:layout_height="@dimen/C10dp"
                         android:layout_centerVertical="true"
-                        android:scaleType="centerInside"
-                        android:src="@drawable/ic_round_done_outline_24"
-                        app:tint="@color/greenColor"></ImageView>
+                        android:src="@drawable/ic_round_done_outline_24"></ImageView>
+
+                    <TextView
+                        android:id="@+id/tvStatusInv"
+                        android:layout_width="@dimen/header_width1"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/C3dp"
+                        android:layout_toRightOf="@+id/ivStatusInv"
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/C13dp"></TextView>
+
                 </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/tvOrderIdInv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="HAPH5291-61"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/C13dp" />
-
-
-                <TextView
-                    android:id="@+id/tvAddressInv"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Chennai"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/C13dp" />
 
                 <TextView
                     android:id="@+id/tvAmountInv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
-                    android:text="₹ 100.00"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="@dimen/C13dp" />
 
@@ -221,7 +226,8 @@
                     android:layout_marginTop="@dimen/C10dp"
                     android:layout_marginBottom="@dimen/C10dp"
                     android:layout_weight="1"
-                    android:background="@drawable/line_dash_background">
+                    android:background="@drawable/line_dash_background"
+                    android:visibility="gone">
 
                 </RelativeLayout>
 
@@ -232,7 +238,8 @@
                     android:layout_height="wrap_content"
                     android:text="Arokya can Sm x 4, Hatsun Butter x 1, Aavin milk 500ml x 30, Hatsun cow milk 500ml x 6"
                     android:textColor="@color/grey_600"
-                    android:textSize="@dimen/C13dp" />
+                    android:textSize="@dimen/C13dp"
+                    android:visibility="gone" />
 
 
             </LinearLayout>

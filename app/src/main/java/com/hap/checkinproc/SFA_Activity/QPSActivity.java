@@ -119,7 +119,8 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
                 findViewById(R.id.llQPSStatus).setVisibility(View.GONE);
                 findViewById(R.id.llQPSRequestStatus).setVisibility(View.VISIBLE);
 
-                btnSubmit.setText("Completed");
+               // btnSubmit.setText("Completed");
+                btnSubmit.setVisibility(View.GONE);
 
             }
         });

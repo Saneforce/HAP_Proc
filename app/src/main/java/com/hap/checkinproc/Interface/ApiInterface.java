@@ -56,7 +56,7 @@ public interface ApiInterface {
 
     @FormUrlEncoded
     @POST("Db_v310.php?")
-    Call<JsonArray> getDataArrayList(@Query("axn") String axn,@Field("data") String data);
+    Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Field("data") String data);
 
     @GET("Db_v300.php?")
     Call<JsonArray> getDataArrayList(@Query("axn") String axn, @Query("divisionCode") String divisionCode, @Query("Sf_code") String Sf_code, @Query("dte") String date);
@@ -564,6 +564,10 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/secondaryscheme")
     Call<ResponseBody> getSecondaryscheme(@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/orderandinvoice")
+    Call<ResponseBody> getHistoryInfo(@Field("data") String body);
 
 
     @FormUrlEncoded
