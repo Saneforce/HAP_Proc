@@ -116,7 +116,8 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                 findViewById(R.id.llPOPStatus).setVisibility(View.GONE);
                 findViewById(R.id.llPOPRequestStatus).setVisibility(View.VISIBLE);
                 tvAdd.setVisibility(View.GONE);
-                btnSubmit.setText("Completed");
+               // btnSubmit.setText("Completed");
+                btnSubmit.setVisibility(View.GONE);
 
             }
         });

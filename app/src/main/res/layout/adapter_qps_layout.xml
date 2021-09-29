@@ -150,7 +150,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:padding="@dimen/C5dp"
-                    android:src="@drawable/ic_round_photo_camera_24" />
+                    android:src="@drawable/ic_round_photo_camera_24"
+                    app:tint="@color/colorPrimaryDark" />
 
                 <ImageView
                     android:id="@+id/ivQPSPreviewImg"
@@ -162,6 +163,19 @@
                     app:tint="@color/colorPrimaryDark" />
 
             </LinearLayout>
+
+            <Button
+                android:id="@+id/btnComplete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/C10dp"
+                android:background="@drawable/blue_bg"
+                android:elevation="@dimen/C5dp"
+                android:padding="10dp"
+                android:text="Completed"
+                android:textColor="@color/white"
+               />
 
         </LinearLayout>
 

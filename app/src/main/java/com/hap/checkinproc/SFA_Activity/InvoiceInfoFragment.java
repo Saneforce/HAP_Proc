@@ -8,17 +8,18 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
+import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.HistoryInfoAdapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
-import com.hap.checkinproc.common.DatabaseHandler;
 
-import java.lang.reflect.Type;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +27,11 @@ public class InvoiceInfoFragment extends Fragment {
     String mTabName = "";
     RecyclerView recyclerView;
 
-    HistoryInfoAdapter historyInfoAdapter;
-    private List<Product_Details_Modal> mProductList = new ArrayList<>();
-    List<OutletReport_View_Modal> OutletReport_View_Modal;
+    Shared_Common_Pref shared_common_pref;
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
 
+    HistoryInfoAdapter historyInfoAdapter;
+    Common_Class common_class;
 
     public InvoiceInfoFragment(String TabName) {
         // Required empty public constructor
@@ -48,26 +49,73 @@ public class InvoiceInfoFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.history_more_info_layout, container, false);
         recyclerView = view.findViewById(R.id.recyclerView);
-        DatabaseHandler db = new DatabaseHandler(getActivity());
-        String OrdersTable = String.valueOf(db.getMasterData(Constants.GetTodayOrder_List));
-        Type userType = new TypeToken<ArrayList<OutletReport_View_Modal>>() {
-        }.getType();
+        shared_common_pref = new Shared_Common_Pref(getActivity());
 
-        Gson gson = new Gson();
-        OutletReport_View_Modal = gson.fromJson(OrdersTable, userType);
-        FilterOrderList.clear();
-        if (OutletReport_View_Modal != null && OutletReport_View_Modal.size() > 0) {
-            for (OutletReport_View_Modal filterlist : OutletReport_View_Modal) {
-                if (filterlist.getStatus().equals("INVOICE")) {
-                    FilterOrderList.add(filterlist);
-                }
-            }
-        }
-
-        historyInfoAdapter = new HistoryInfoAdapter(getActivity(), FilterOrderList,R.layout.history_info_adapter_layout);
-        recyclerView.setAdapter(historyInfoAdapter);
+        common_class = new Common_Class(getActivity());
+        setAdapter();
 
         return view;
     }
+
+    void setAdapter() {
+        try {
+            FilterOrderList.clear();
+            String strHistory = shared_common_pref.getvalue(Constants.HistoryData);
+
+
+            JSONObject invoiceObj = new JSONObject(strHistory);
+
+
+            //  if (invoiceObj.getBoolean("success")) {
+            JSONArray jsonArray = invoiceObj.getJSONArray("Invoice");
+
+            if (jsonArray != null && jsonArray.length() > 0) {
+                for (int pm = 0; pm < jsonArray.length(); pm++) {
+                    JSONObject jsonObject1 = jsonArray.getJSONObject(pm);
+
+
+                    List<Product_Details_Modal> product_details_modalArrayList = new ArrayList<>();
+
+
+                    if (!jsonObject1.getString("Status").equals("No Order")) {
+                        JSONArray detailsArray = jsonObject1.getJSONArray("Details");
+
+
+                        for (int da = 0; da < detailsArray.length(); da++) {
+
+                            JSONObject daObj = detailsArray.getJSONObject(da);
+
+
+                            product_details_modalArrayList.add(new Product_Details_Modal(daObj.getString("Product_Code"),
+                                    daObj.getString("Product_Name"), "", Integer.parseInt(daObj.getString("Quantity")), ""));
+
+                        }
+                    }
+                    FilterOrderList.add(new OutletReport_View_Modal("", jsonObject1.getString("InvoiceID"), "",
+                            jsonObject1.getString("ListedDr_Name"),
+                            jsonObject1.getString("Date"), (jsonObject1.getDouble("Order_Value")),
+                            jsonObject1.getString("Status"), product_details_modalArrayList));
+
+
+                }
+
+
+            }
+
+
+            historyInfoAdapter = new HistoryInfoAdapter(getActivity(), FilterOrderList, R.layout.history_info_adapter_layout, 2, new AdapterOnClick() {
+                @Override
+                public void onIntentClick(int pos) {
+
+
+                }
+            });
+
+            recyclerView.setAdapter(historyInfoAdapter);
+        } catch (Exception e) {
+
+        }
+    }
+
 
 }

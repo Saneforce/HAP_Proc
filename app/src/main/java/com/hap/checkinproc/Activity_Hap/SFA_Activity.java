@@ -105,94 +105,18 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         linorders.setOnClickListener(this);
         Logout.setOnClickListener(this);
         ivLogout.setOnClickListener(this);
-        //presenter = new MasterSync_Implementations(this, new Offline_SyncView());
         gson = new Gson();
-        // presenter.requestDataFromServer();
 
-/*
-        ImageView backView = findViewById(R.id.imag_back);
-        backView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mOnBackPressedDispatcher.onBackPressed();
-            }
-        });*/
 
         ivLogout.setImageResource(R.drawable.ic_baseline_logout_24);
-//        if (sharedCommonPref.getvalue(Constants.HAVE_VALUE, "").equals(""))
-//            common_class.getDataFromApi(Constants.GetTodayOrder_List, this, false);
 
 
         init();
         setOnClickListener();
         getNoOrderRemarks();
-
-//        addBottomDots(0);
-//
-//
-//        ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                addBottomDots(position);
-//
-//            }
-//
-//            @Override
-//            public void onPageScrolled(int arg0, float arg1, int arg2) {
-//
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int arg0) {
-//
-//            }
-//        };
-//
-//        switchGraphMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if (isChecked) {
-//
-//                    setupViewPager(viewPager, true);
-//                } else {
-//
-//                    setupViewPager(viewPager, false);
-//                }
-//            }
-//        });
-//
-//        setupViewPager(viewPager, false);
-//        viewPager.addOnPageChangeListener(viewPagerPageChangeListener);
-//
-//
-//        tabLayout.setupWithViewPager(viewPager);
-
-
-        recyclerView = findViewById(R.id.gvOutlet);
+      recyclerView = findViewById(R.id.gvOutlet);
 
         llGridParent = findViewById(R.id.lin_gridOutlet);
-
-
-//        recyclerView2 = findViewById(R.id.recyclerView2);
-//
-//        cumulative_order_modelList2.clear();
-//
-//
-//        cumulative_order_modelList2.add(new Cumulative_Order_Model("DSO", 20, 10, 30, 40, 20, 20));
-//
-//        cumulative_order_modelList2.add(new Cumulative_Order_Model("DCO", 30, 50, 70, 50, 100, 120));
-//
-//        cumulative_order_modelList2.add(new Cumulative_Order_Model("Veg Shop", 50, 60, 100, 90, 170, 150));
-//        cumulative_order_modelList2.add(new Cumulative_Order_Model("Modern Trade", 50, 60, 100, 90, 100, 67));
-//
-//
-//        cumulativeInfoAdapter2 = new CumulativeInfoAdapter(this, cumulative_order_modelList2, new AdapterOnClick() {
-//            @Override
-//            public void onIntentClick(int position) {
-//            }
-//        });
-//        recyclerView2.setAdapter(cumulativeInfoAdapter2);
 
 
         getCumulativeDataFromAPI();
@@ -203,18 +127,9 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         getDashboarddata();
 
 
-        //    common_class.getDashboarddata(Constants.SFA_CUMULATIVE, this);
-
     }
 
 
-    void loadingUI(int visibility) {
-        this.runOnUiThread(new Runnable() {
-            public void run() {
-                // Do stuff
-            }
-        });
-    }
 
     private void setOnClickListener() {
         ivCalendar.setOnClickListener(this);
@@ -964,48 +879,5 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         Log.v("CHECKING", "CHECKING");
     }
 
-
-//    class ViewPagerAdapter extends FragmentStatePagerAdapter {
-//        private final List<Fragment> mFragmentList = new ArrayList<>();
-//        private final List<String> mFragmentTitleList = new ArrayList<>();
-//
-//        public ViewPagerAdapter(FragmentManager manager) {
-//            super(manager);
-//        }
-//
-//        @Override
-//        public Fragment getItem(int position) {
-//            return mFragmentList.get(position);
-//        }
-//
-//        @Override
-//        public int getCount() {
-//            return mFragmentList.size();
-//        }
-//
-//        public void addFragment(Fragment fragment, String title) {
-//            mFragmentList.add(fragment);
-//            mFragmentTitleList.add(title);
-//            notifyDataSetChanged();
-//        }
-//
-//        @Override
-//        public int getItemPosition(Object object) {
-//            return PagerAdapter.POSITION_NONE;
-//        }
-//
-//
-//        public void resetFragment() {
-//            mFragmentList.clear();
-//            mFragmentTitleList.clear();
-//
-//        }
-//
-//
-//        @Override
-//        public CharSequence getPageTitle(int position) {
-//            return mFragmentTitleList.get(position);
-//        }
-//    }
 
 }
