@@ -69,37 +69,19 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
     private CustomListViewDialog customDialog;
 
     EditText etNewOrder, etOtherBrand;
+    TextView tvRetailorName;
+    ImageView ivToolbarHome;
 
     private List<Common_Model> qpsComboList = new ArrayList<>();
     private String QPS_Code = "";
+    Shared_Common_Pref shared_common_pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qps);
-        btnSubmit = findViewById(R.id.btnSubmit);
-        tvViewStatus = findViewById(R.id.tvQPSViewStatus);
-        tvOrder = (TextView) findViewById(R.id.tvOrder);
-        tvPOP = (TextView) findViewById(R.id.tvPOP);
-        tvOtherBrand = (TextView) findViewById(R.id.tvOtherBrand);
-        tvCoolerInfo = (TextView) findViewById(R.id.tvCoolerInfo);
-        rvQps = (RecyclerView) findViewById(R.id.rvQps);
-        etBookingDate = (TextView) findViewById(R.id.etQPSBookingDate);
-        tvHapBrand = (TextView) findViewById(R.id.tvQPSHapBrand);
-        ivEye = (ImageView) findViewById(R.id.ivQPSComboData);
 
-        tvPeriod = (TextView) findViewById(R.id.tvQPSPeriodDays);
-        tvGift = (TextView) findViewById(R.id.tvQPSGift);
-        tvTarget = (TextView) findViewById(R.id.tvQpsAcheive);
-        tvAvailble = (TextView) findViewById(R.id.tvQpsCurrentAcheive);
-        etNewOrder = (EditText) findViewById(R.id.etNewOrder);
-        etOtherBrand = (EditText) findViewById(R.id.etQPSotherBrand);
-
-
-        common_class = new Common_Class(this);
-
-        TextView tvRetailorName = findViewById(R.id.Category_Nametext);
-        Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(this);
+        init();
 
         tvRetailorName.setText(shared_common_pref.getvalue(Constants.Retailor_Name_ERP_Code));
 
@@ -110,50 +92,14 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
         tvCoolerInfo.setOnClickListener(this);
         ivEye.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
-
-
-        tvViewStatus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tvViewStatus.setVisibility(View.GONE);
-                findViewById(R.id.llQPSStatus).setVisibility(View.GONE);
-                findViewById(R.id.llQPSRequestStatus).setVisibility(View.VISIBLE);
-
-               // btnSubmit.setText("Completed");
-                btnSubmit.setVisibility(View.GONE);
-
-            }
-        });
+        tvViewStatus.setOnClickListener(this);
+        etBookingDate.setOnClickListener(this);
 
 
         findViewById(R.id.tvQPS).setVisibility(View.GONE);
-        qpsModals.add(new QPS_Modal("233", "236763", "Cooker", "30.8.2021", "-1 day", "10.9.2021"));
-        qpsModals.add(new QPS_Modal("234", "236745", "Mobile", "25.8.2021", "-5 days", "10.9.2021"));
 
-        qpsModals.add(new QPS_Modal("235", "236789", "Bag", "28.8.2021", "-3 days", "10.9.2021"));
-        qpsAdapter = new QPSAdapter(this, qpsModals);
-        rvQps.setAdapter(qpsAdapter);
 
-        ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
         common_class.gotoHomeScreen(this, ivToolbarHome);
-
-
-        etBookingDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar newCalendar = Calendar.getInstance();
-                fromDatePickerDialog = new DatePickerDialog(QPSActivity.this, new DatePickerDialog.OnDateSetListener() {
-
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        int month = monthOfYear + 1;
-
-                        etBookingDate.setText("" + year + "-" + month + "-" + dayOfMonth);
-                    }
-                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
-                fromDatePickerDialog.show();
-            }
-        });
-
 
         etNewOrder.addTextChangedListener(new TextWatcher() {
             @Override
@@ -424,10 +370,103 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
+
+    private void getQPSStatus() {
+        try {
+            ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+            JSONObject HeadItem = new JSONObject();
+            HeadItem.put("retailerCode", Shared_Common_Pref.OutletCode);
+
+            Call<ResponseBody> call = service.getQPSStatus(HeadItem.toString());
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    InputStreamReader ip = null;
+                    StringBuilder is = new StringBuilder();
+                    String line = null;
+                    try {
+                        if (response.isSuccessful()) {
+                            ip = new InputStreamReader(response.body().byteStream());
+                            BufferedReader bf = new BufferedReader(ip);
+                            while ((line = bf.readLine()) != null) {
+                                is.append(line);
+                                Log.v("Res>>", is.toString());
+                            }
+
+
+                            JSONObject jsonObject = new JSONObject(is.toString());
+
+                            qpsModals.clear();
+
+                            if (jsonObject.getBoolean("success")) {
+
+                                JSONArray jsonArray = jsonObject.getJSONArray("Data");
+                                for (int i = 0; i < jsonArray.length(); i++) {
+
+                                    JSONObject arrObj = jsonArray.getJSONObject(i);
+
+                                    qpsModals.add(new QPS_Modal(arrObj.getString("SlNO"), arrObj.getString("Trans_sl_No"),
+                                            arrObj.getString("QPS_Name"), arrObj.getString("Booking_Date"), arrObj.getString("Duration"),
+                                            arrObj.getString("Received_Date"), arrObj.getString("Status")));
+                                }
+
+                            } else {
+                                qpsModals.clear();
+                            }
+
+                            qpsAdapter = new QPSAdapter(QPSActivity.this, qpsModals);
+                            rvQps.setAdapter(qpsAdapter);
+
+                        }
+
+                    } catch (Exception e) {
+
+                        Log.v("fail>>1", e.getMessage());
+
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                    Log.v("fail>>2", t.toString());
+
+
+                }
+            });
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+
+
     @Override
     public void onClick(View v) {
         Common_Class common_class = new Common_Class(this);
         switch (v.getId()) {
+            case R.id.etQPSBookingDate:
+                Calendar newCalendar = Calendar.getInstance();
+                fromDatePickerDialog = new DatePickerDialog(QPSActivity.this, new DatePickerDialog.OnDateSetListener() {
+
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        int month = monthOfYear + 1;
+
+                        etBookingDate.setText("" + year + "-" + month + "-" + dayOfMonth);
+                    }
+                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+                fromDatePickerDialog.show();
+                break;
+            case R.id.tvQPSViewStatus:
+                tvViewStatus.setVisibility(View.GONE);
+                findViewById(R.id.llQPSStatus).setVisibility(View.GONE);
+                findViewById(R.id.llQPSRequestStatus).setVisibility(View.VISIBLE);
+
+                // btnSubmit.setText("Completed");
+                btnSubmit.setVisibility(View.GONE);
+                getQPSStatus();
+                break;
             case R.id.tvOrder:
                 common_class.CommonIntentwithFinish(Order_Category_Select.class);
                 break;
@@ -523,6 +562,34 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
         tvTarget.setText("" + myDataset.get(position).getTotal_Ltrs());
 
         QPS_Code = myDataset.get(position).getQPS_Code();
+
+
+    }
+
+
+    void init() {
+        common_class = new Common_Class(this);
+        shared_common_pref = new Shared_Common_Pref(this);
+
+        btnSubmit = findViewById(R.id.btnSubmit);
+        tvViewStatus = findViewById(R.id.tvQPSViewStatus);
+        tvOrder = (TextView) findViewById(R.id.tvOrder);
+        tvPOP = (TextView) findViewById(R.id.tvPOP);
+        tvOtherBrand = (TextView) findViewById(R.id.tvOtherBrand);
+        tvCoolerInfo = (TextView) findViewById(R.id.tvCoolerInfo);
+        rvQps = (RecyclerView) findViewById(R.id.rvQps);
+        etBookingDate = (TextView) findViewById(R.id.etQPSBookingDate);
+        tvHapBrand = (TextView) findViewById(R.id.tvQPSHapBrand);
+        ivEye = (ImageView) findViewById(R.id.ivQPSComboData);
+
+        tvPeriod = (TextView) findViewById(R.id.tvQPSPeriodDays);
+        tvGift = (TextView) findViewById(R.id.tvQPSGift);
+        tvTarget = (TextView) findViewById(R.id.tvQpsAcheive);
+        tvAvailble = (TextView) findViewById(R.id.tvQpsCurrentAcheive);
+        etNewOrder = (EditText) findViewById(R.id.etNewOrder);
+        etOtherBrand = (EditText) findViewById(R.id.etQPSotherBrand);
+        ivToolbarHome = findViewById(R.id.toolbar_home);
+        tvRetailorName = findViewById(R.id.Category_Nametext);
 
 
     }

@@ -4,6 +4,8 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,6 +41,21 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
         holder.bookingDate.setText("" + mData.get(position).getBookingDate());
         holder.duration.setText("" + mData.get(position).getDuration());
         holder.receivedDate.setText("" + mData.get(position).getReceivedDate());
+        holder.status.setText("" + mData.get(position).getStatus());
+
+        if (mData.get(position).getStatus().equalsIgnoreCase("COMPLETED"))
+            holder.btnComplete.setVisibility(View.GONE);
+        else
+            holder.btnComplete.setVisibility(View.VISIBLE);
+
+
+        holder.ivCaptureImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
 
     }
 
@@ -48,7 +65,9 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView sNo, requestNo, gift, bookingDate, duration, receivedDate;
+        TextView sNo, requestNo, gift, bookingDate, duration, receivedDate, status;
+        Button btnComplete;
+        ImageView ivCaptureImg, ivAttachImg;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,6 +77,10 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
             bookingDate = itemView.findViewById(R.id.tvQPSBookDate);
             duration = itemView.findViewById(R.id.tvQPSDuration);
             receivedDate = itemView.findViewById(R.id.tvQPSReceivedDate);
+            status = itemView.findViewById(R.id.tvStatus);
+            btnComplete = itemView.findViewById(R.id.btnComplete);
+            ivCaptureImg=itemView.findViewById(R.id.ivQPSCaptureImg);
+            ivAttachImg=itemView.findViewById(R.id.ivQPSPreviewImg);
 
         }
     }

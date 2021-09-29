@@ -4,13 +4,14 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class QPS_Modal {
-    public QPS_Modal(String sNo, String requestNo, String gift, String bookingDate, String duration, String receivedDate) {
+    public QPS_Modal(String sNo, String requestNo, String gift, String bookingDate, String duration, String receivedDate,String Status) {
         this.sNo = sNo;
         this.requestNo = requestNo;
         this.gift = gift;
         this.bookingDate = bookingDate;
         this.duration = duration;
         this.receivedDate = receivedDate;
+        this.Status=Status;
     }
 
     @SerializedName("id")
@@ -29,6 +30,11 @@ public class QPS_Modal {
     @SerializedName("duration")
     @Expose
     private String duration;
+
+    @SerializedName("Status")
+    @Expose
+    private String Status;
+
 
     public String getsNo() {
         return sNo;
@@ -83,4 +89,11 @@ public class QPS_Modal {
     private String receivedDate;
 
 
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
+    }
 }

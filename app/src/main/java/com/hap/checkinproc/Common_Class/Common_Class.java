@@ -328,7 +328,6 @@ public class Common_Class {
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
 
 
-
                     break;
             }
 
@@ -477,16 +476,18 @@ public class Common_Class {
     }
 
 
-    public void getDashboarddata(String key, Activity activity, String data) {
+    public void getDb_310Data(String key, Activity activity) {
         try {
             if (isNetworkAvailable(activity)) {
                 Map<String, String> QueryString = new HashMap<>();
                 String axnname = "";
+                JSONObject data = new JSONObject();
+
 
                 switch (key) {
 
 
-                    case Constants.POP_SAVE:
+                    case Constants.QPS_STATUS:
                         axnname = "get/popmaster";
                         break;
 
@@ -500,7 +501,7 @@ public class Common_Class {
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
 
-                Call<ResponseBody> call = service.GetRouteObject310(QueryString, data);
+                Call<ResponseBody> call = service.GetRouteObject310(QueryString, data.toString());
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

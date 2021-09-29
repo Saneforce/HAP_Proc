@@ -98,6 +98,16 @@ public class HistoryOrderInvInfoAdapter extends RecyclerView.Adapter<HistoryOrde
     }
 
     @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
     public int getItemCount() {
         return mDate.size();
     }

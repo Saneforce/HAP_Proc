@@ -506,6 +506,10 @@ public interface ApiInterface {
     Call<ResponseBody> getQPSData(@Field("data") String body);
 
     @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/qpsentrystatus")
+    Call<ResponseBody> getQPSStatus(@Field("data") String body);
+
+    @FormUrlEncoded
     @POST("Db_v310.php?axn=get/qpshaplitres")
     Call<ResponseBody> getHapBrand(@Field("data") String body);
 
