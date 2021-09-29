@@ -540,7 +540,7 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        //eMail = "ciadmin@hap.in";
+        //eMail = "purushotham.b@hap.in";
         eMail = "haptest3@hap.in";
 
 

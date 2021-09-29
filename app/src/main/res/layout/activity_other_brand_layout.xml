@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <include layout="@layout/custom_toolbar_help"></include>
+    <include layout="@layout/sfatoolbar"></include>
 
     <include layout="@layout/procuct_category_types"></include>
 

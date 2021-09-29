@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_marginLeft="@dimen/C3dp"
-            android:text="HAP Check-In"
+            android:text="HATSUN DAILY"
             android:textColor="@color/white"
             android:textSize="11sp" />
 
@@ -44,6 +44,7 @@
         android:gravity="center_horizontal|center_vertical"
         android:text="ERT"
         android:textColor="@color/white"
+        android:visibility="gone"
         android:textSize="13sp" />
     <TextView
         android:id="@+id/toolbar_play_slip"
@@ -55,7 +56,8 @@
         android:gravity="center_horizontal|center_vertical"
         android:text="Payslip"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        android:visibility="gone" />
     <TextView
         android:id="@+id/toolbar_help"
         android:layout_width="wrap_content"
@@ -66,7 +68,8 @@
         android:gravity="center_horizontal|center_vertical"
         android:text="Help"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        android:visibility="gone" />
     <ImageView
         android:id="@+id/toolbar_home"
         android:layout_width="@dimen/C30dp"

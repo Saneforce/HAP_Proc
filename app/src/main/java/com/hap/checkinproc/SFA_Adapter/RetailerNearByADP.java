@@ -54,12 +54,17 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
             String OutletId=jItem.get("Code").getAsString();
             holder.txRetailName.setText(jItem.get("Name").getAsString().toUpperCase());
             holder.txRetailCode.setText(OutletId);
-            holder.txOwnerph.setText(jItem.get("Owner_Name").getAsString().toUpperCase()+" - "+jItem.get("Mobile").getAsString().toUpperCase());
+            holder.txOwnerNm.setText(jItem.get("Owner_Name").getAsString().toUpperCase());
+            holder.txMobile.setText(jItem.get("Mobile").getAsString().toUpperCase());
             holder.txAdd.setText(jItem.get("Add1").getAsString().toUpperCase());
             holder.txDistName.setText(jItem.get("Distributor").getAsString());
             holder.txChannel.setText(jItem.get("Channel").getAsString());
             holder.txDistance.setText(jItem.get("Distance").getAsString());
             String InvFlag=jItem.get("InvFlag").getAsString();
+            holder.icMob.setVisibility(View.VISIBLE);
+            if(jItem.get("Mobile").getAsString().equalsIgnoreCase("")){
+                holder.icMob.setVisibility(View.GONE);
+            }
             if (InvFlag.equalsIgnoreCase("0")) {
                 holder.parent_layout.setBackgroundResource(R.color.white);
             } else if (InvFlag.equalsIgnoreCase("1")) {
@@ -196,22 +201,25 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView txRetailName,txRetailCode,txAdd,txOwnerph,txDistName,txChannel,txDistance,txTdyDt,txTodayTotQty,txTodayTotVal, txPreTotQty, txPreTotVal,
-                tvFirstMonth, tvSecondMnth, tvThirdMnth;
+        TextView txRetailName,txRetailCode,txAdd,txOwnerNm,txMobile,txDistName,txChannel,txDistance,txTdyDt,txTodayTotQty,txTodayTotVal, txPreTotQty, txPreTotVal,
+                tvFirstMonth, tvSecondMnth, tvThirdMnth,txRetNo;
         LinearLayout parent_layout;
         RecyclerView lstTdyView,lstPreView;
+        ImageView icMob;
         ImageView ivEdit;
 
         public MyViewHolder(View view) {
             super(view);
             try {
-                ivEdit=view.findViewById(R.id.ivEdit);
                 parent_layout = view.findViewById(R.id.parent_layout);
 
                 txRetailName = view.findViewById(R.id.retailername);
                 txRetailCode = view.findViewById(R.id.retailorCode);
+                txRetNo = view.findViewById(R.id.txRetNo);
                 txAdd = view.findViewById(R.id.txAdd);
-                txOwnerph = view.findViewById(R.id.txOwnerPh);
+                txOwnerNm = view.findViewById(R.id.txOwnerNm);
+                txMobile = view.findViewById(R.id.txMobile);
+                icMob = view.findViewById(R.id.icMob);
                 txDistName = view.findViewById(R.id.txDistName);
                 txChannel = view.findViewById(R.id.txChannel);
                 txDistance = view.findViewById(R.id.txDistance);
@@ -232,7 +240,7 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
                 lstPreView.setLayoutManager(new LinearLayoutManager(context));
 
                 ivEdit.setVisibility(View.GONE);
-
+                txRetNo.setVisibility(View.GONE);
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");
                 String plantime = dpln.format(c.getTime());

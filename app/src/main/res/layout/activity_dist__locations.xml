@@ -11,7 +11,7 @@
         android:orientation="vertical"
         tools:ignore="MissingConstraints">
 
-        <include layout="@layout/custom_toolbar_help"></include>
+        <include layout="@layout/sfatoolbar"></include>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

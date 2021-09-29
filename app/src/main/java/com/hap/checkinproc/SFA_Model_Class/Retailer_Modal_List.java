@@ -1,5 +1,7 @@
 package com.hap.checkinproc.SFA_Model_Class;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -420,7 +422,15 @@ public class Retailer_Modal_List {
     @SerializedName("place_id")
     @Expose
     private String place_id = "ChIJ6fBt_tVnUjoRVxxz1mgBipI";
-
+    @SerializedName("Category")
+    @Expose
+    private String Category;
+    @SerializedName("Speciality")
+    @Expose
+    private String Speciality;
+    @SerializedName("Class")
+    @Expose
+    private String 	Class;
 
     public Retailer_Modal_List(String id, String name, String owner_Name, String statusname, String valuesinv, String invoiceValues, String invoiceDate, String townCode, String townName, String lat, String _long, String addrs, String listedDrAddress1, Object listedDrSlNo, String mobileNumber, Integer docCatCode, String contactPersion, Integer docSpecialCode, String invoice_Flag, String hatsun_AvailablityId, String listedDr_Email, String cityname, String compititor_Name, String compititor_Id, String lastUpdt_Date, String hatsanavail_Switch, String hatsanCategory_Switch, String pin_code, String gst, String reason_category, String category_Universe_Id) {
         this.id = id;
@@ -756,5 +766,27 @@ public class Retailer_Modal_List {
         this.ERP_Code = ERP_Code;
     }
 
+    public String getCategory() {
+        return Category;
+    }
 
+    public void setCategory(String category) {
+        Category = category;
+    }
+
+    public String getSpeciality() {
+        return Speciality;
+    }
+
+    public void setSpeciality(String speciality) {
+        Speciality = speciality;
+    }
+
+    public String getOutletClass() {
+        return Class;
+    }
+
+    public void setOutletClass(String aClass) {
+        Class = aClass;
+    }
 }

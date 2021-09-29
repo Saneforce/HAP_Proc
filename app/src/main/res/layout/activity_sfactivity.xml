@@ -4,9 +4,51 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:padding="@dimen/C5dp"
+        android:gravity="center_vertical"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <include layout="@layout/custom_toolbar_help"></include>
+            <TextView
+                android:id="@+id/AppTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="HATSUN DAILY"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="12sp" />
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/AppTitle"
+                android:text="@string/tool_app_ver"
+                android:textColor="@color/white"
+                android:textSize="8sp" />
+        </LinearLayout>
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:id="@+id/toolbar_home"
+            android:layout_width="@dimen/C30dp"
+            android:layout_height="@dimen/C30dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:gravity="center_horizontal|center_vertical"
+            android:padding="5dp"
+            android:src="@drawable/ic_baseline_logout_24" />
+    </LinearLayout>
+    
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
