@@ -28,7 +28,7 @@
                     android:id="@+id/AppTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="HAP Check-In"
+                    android:text="HATSUN DAILY"
                     android:textColor="@color/white"
                     android:textStyle="bold"
                     android:textSize="12sp" />
