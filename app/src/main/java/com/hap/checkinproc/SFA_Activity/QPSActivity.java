@@ -373,67 +373,81 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
 
     private void getQPSStatus() {
         try {
-            ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
-            JSONObject HeadItem = new JSONObject();
-            HeadItem.put("retailerCode", Shared_Common_Pref.OutletCode);
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("retailerCode", Shared_Common_Pref.OutletCode);
 
-            Call<ResponseBody> call = service.getQPSStatus(HeadItem.toString());
-            call.enqueue(new Callback<ResponseBody>() {
-                @Override
-                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    InputStreamReader ip = null;
-                    StringBuilder is = new StringBuilder();
-                    String line = null;
-                    try {
-                        if (response.isSuccessful()) {
-                            ip = new InputStreamReader(response.body().byteStream());
-                            BufferedReader bf = new BufferedReader(ip);
-                            while ((line = bf.readLine()) != null) {
-                                is.append(line);
-                                Log.v("Res>>", is.toString());
-                            }
-
-
-                            JSONObject jsonObject = new JSONObject(is.toString());
-
-                            qpsModals.clear();
-
-                            if (jsonObject.getBoolean("success")) {
-
-                                JSONArray jsonArray = jsonObject.getJSONArray("Data");
-                                for (int i = 0; i < jsonArray.length(); i++) {
-
-                                    JSONObject arrObj = jsonArray.getJSONObject(i);
-
-                                    qpsModals.add(new QPS_Modal(arrObj.getString("SlNO"), arrObj.getString("Trans_sl_No"),
-                                            arrObj.getString("QPS_Name"), arrObj.getString("Booking_Date"), arrObj.getString("Duration"),
-                                            arrObj.getString("Received_Date"), arrObj.getString("Status")));
+                Call<ResponseBody> call = service.getQPSStatus(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
                                 }
 
-                            } else {
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
                                 qpsModals.clear();
+
+                                if (jsonObject.getBoolean("success")) {
+
+                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                                        JSONObject arrObj = jsonArray.getJSONObject(i);
+
+                                        qpsModals.add(new QPS_Modal(arrObj.getString("SlNO"), arrObj.getString("Trans_sl_No"),
+                                                arrObj.getString("QPS_Name"), arrObj.getString("Booking_Date"), arrObj.getString("Duration"),
+                                                arrObj.getString("Received_Date"), arrObj.getString("Status")));
+                                    }
+
+                                    tvViewStatus.setVisibility(View.GONE);
+                                    findViewById(R.id.llQPSStatus).setVisibility(View.GONE);
+                                    findViewById(R.id.llQPSRequestStatus).setVisibility(View.VISIBLE);
+
+                                    // btnSubmit.setText("Completed");
+                                    btnSubmit.setVisibility(View.GONE);
+
+                                    qpsAdapter = new QPSAdapter(QPSActivity.this, qpsModals);
+                                    rvQps.setAdapter(qpsAdapter);
+
+
+                                } else {
+
+                                    qpsModals.clear();
+                                    common_class.showMsg(QPSActivity.this, jsonObject.getString("Msg"));
+                                }
+
+
                             }
 
-                            qpsAdapter = new QPSAdapter(QPSActivity.this, qpsModals);
-                            rvQps.setAdapter(qpsAdapter);
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
 
                         }
+                    }
 
-                    } catch (Exception e) {
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
 
-                        Log.v("fail>>1", e.getMessage());
 
                     }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.v("fail>>2", t.toString());
-
-
-                }
-            });
+                });
+            } else
+                common_class.showMsg(this, "Please check your internet connection");
         } catch (Exception e) {
             Log.v("fail>>", e.getMessage());
 
@@ -459,12 +473,7 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
                 fromDatePickerDialog.show();
                 break;
             case R.id.tvQPSViewStatus:
-                tvViewStatus.setVisibility(View.GONE);
-                findViewById(R.id.llQPSStatus).setVisibility(View.GONE);
-                findViewById(R.id.llQPSRequestStatus).setVisibility(View.VISIBLE);
 
-                // btnSubmit.setText("Completed");
-                btnSubmit.setVisibility(View.GONE);
                 getQPSStatus();
                 break;
             case R.id.tvOrder:

@@ -362,19 +362,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                     } else {
 
-//                        Intent mIntent = new Intent(AddNewRetailer.this, FileUploadService.class);
-//                        mIntent.putExtra("mFilePath", String.valueOf(file));
-//                        mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
-                        //String filename = filePath.substring(filePath.lastIndexOf("/") + 1);
-//                        mIntent.putExtra("FileName", filename);
-//                        mIntent.putExtra("Mode", "outlet");
-//                        FileUploadService.enqueueWork(AddNewRetailer.this, mIntent);
-
-                        //  sendImageToServer(Shared_Common_Pref.Sf_Code, filename, "outlet");
-//
-
                         addNewRetailers();
-                        //Toast.makeText(AddNewRetailer.this, "New Retailer Added successfully", Toast.LENGTH_SHORT).show();
                     }
 
                 }

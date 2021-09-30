@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,17 +17,22 @@ import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
-import com.hap.checkinproc.Interface.OnImagePickListener;
 import com.hap.checkinproc.Interface.OnAttachmentDelete;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -37,12 +43,12 @@ public class AttachementActivity extends AppCompatActivity {
     private GridLayout parentLinearLayout;
     FrameLayout frameLayout;
     ImageView deleteImage;
-    Integer position,ImgCount=0;
+    Integer position, ImgCount = 0;
     RelativeLayout allRelative;
     Shared_Common_Pref shared_common_pref;
-    String ImageUKey = "", ImageUrl = "", DateTime = "",sMode="";
+    String ImageUKey = "", ImageUrl = "", DateTime = "", sMode = "";
 
-
+    List<QPS_Modal> qpsModalList = new ArrayList<>();
     static OnAttachmentDelete deleteListener;
 
     @SuppressLint("ResourceType")
@@ -64,12 +70,89 @@ public class AttachementActivity extends AppCompatActivity {
                 String.valueOf(getIntent().getSerializableExtra("headTravel")),
                 String.valueOf(getIntent().getSerializableExtra("mode")),
                 String.valueOf(getIntent().getSerializableExtra("date")));
-        sMode=String.valueOf(getIntent().getSerializableExtra("mode"));
+
+        sMode = String.valueOf(getIntent().getSerializableExtra("mode"));
         parentLinearLayout = (GridLayout) findViewById(R.id.parent_linear_layout);
 
         parentLinearLayout.setColumnCount(3);
         parentLinearLayout.setRowCount(4);
         ImageUKey = String.valueOf(getIntent().getSerializableExtra("Delete"));
+
+
+        if (getIntent().getStringExtra("keyList") != null && !getIntent().getStringExtra("keyList").equals("")) {
+            showLocalImgList();
+        }
+
+
+    }
+
+    private void showLocalImgList() {
+        try {
+            Gson gson = new Gson();
+            String strQPS = getIntent().getStringExtra("keyList");
+            Type userType = new TypeToken<ArrayList<QPS_Modal>>() {
+            }.getType();
+            qpsModalList = gson.fromJson(strQPS, userType);
+
+            List<QPS_Modal> filterList = new ArrayList<>();
+            filterList.clear();
+
+            for (int i = 0; i < qpsModalList.size(); i++) {
+                if (qpsModalList.get(i).getFileKey().contains((getIntent().getStringExtra("pos")))) {
+                    filterList.add(qpsModalList.get(i));
+                }
+            }
+
+
+            ImgCount = filterList.size();
+            for (int m = 0; m < filterList.size(); m++) {
+
+                LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+                final View rowView = inflater.inflate(R.layout.activity_layout_img_preview, null);
+                parentLinearLayout.addView(rowView, parentLinearLayout.getChildCount());
+
+                View childView = parentLinearLayout.getChildAt(m);
+                ImageView taAttach = (ImageView) (childView.findViewById(R.id.img_preview));
+
+                File f = new File(filterList.get(m).getFilePath());
+                Uri contentUri = Uri.fromFile(f);
+
+                Picasso.with(AttachementActivity.this)
+                        .load(contentUri)
+                        .into(taAttach);
+
+                position = parentLinearLayout.indexOfChild(rowView);
+                View cv = parentLinearLayout.getChildAt(position);
+                ImageView taAttachs = (ImageView) (cv.findViewById(R.id.img_preview));
+                deleteImage = (ImageView) cv.findViewById(R.id.img_delete);
+                if (ImageUKey.equals("1")) {
+                    deleteImage.setVisibility(View.GONE);
+                } else {
+                    deleteImage.setVisibility(View.VISIBLE);
+                }
+
+
+                deleteImage.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //  deleteImage(jsonObject.get("Img_U_key").getAsString(), jsonObject.get("lat").getAsString(), jsonObject.get("Insert_Date_Time").getAsString(), (View) v.getParent());
+
+                    }
+                });
+                taAttachs.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+//                        Intent intent = new Intent(getApplicationContext(), ProductImageView.class);
+//                        intent.putExtra("ImageUrl", jsonObject.get("Imageurl").getAsString());
+//                        startActivity(intent);
+                    }
+                });
+            }
+        } catch (Exception e) {
+            Log.e("AttachQPS: ", e.getMessage());
+        }
 
 
     }
@@ -85,7 +168,7 @@ public class AttachementActivity extends AppCompatActivity {
 
                 JsonArray jsonArray = response.body();
                 Log.e("JSON_ARRAY", jsonArray.toString());
-                ImgCount=jsonArray.size();
+                ImgCount = jsonArray.size();
                 for (int m = 0; m < jsonArray.size(); m++) {
                     JsonObject jsonObject = (JsonObject) jsonArray.get(m);
 
@@ -142,7 +225,8 @@ public class AttachementActivity extends AppCompatActivity {
     public static void setOnAttachmentDeleteListener(OnAttachmentDelete mOnAttachmentDelete) {
         deleteListener = mOnAttachmentDelete;
     }
-    public void deleteImage(String ImageUKey, String ImageUrl, String DateTime,View view) {
+
+    public void deleteImage(String ImageUKey, String ImageUrl, String DateTime, View view) {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         Call<JsonObject> mCall = apiInterface.dltePrvws(ImageUrl, ImageUKey, DateTime, shared_common_pref.getvalue(Shared_Common_Pref.Sf_Code));
@@ -155,7 +239,7 @@ public class AttachementActivity extends AppCompatActivity {
                 //parentLinearLayout.removeViewAt(Position);
                 parentLinearLayout.removeView(view);
                 ImgCount--;
-                deleteListener.OnImageDelete(sMode,ImgCount);
+                deleteListener.OnImageDelete(sMode, ImgCount);
 //                if (jsonObject.get("success").getAsString().equals("true")) {
 //                    finish();
 //                }
