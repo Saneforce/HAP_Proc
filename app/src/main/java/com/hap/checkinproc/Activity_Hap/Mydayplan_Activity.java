@@ -182,8 +182,8 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         distributor_text = findViewById(R.id.distributor_text);
         text_tour_plancount = findViewById(R.id.text_tour_plancount);
         text_tour_plancount.setText("0");
-        presenter = new MasterSync_Implementations(this, new Master_Sync_View());
-        presenter.requestDataFromServer();
+//        presenter = new MasterSync_Implementations(this, new Master_Sync_View());
+//        presenter.requestDataFromServer();
         jointwork_layout = findViewById(R.id.jointwork_layout);
         jointwork_recycler = findViewById(R.id.jointwork_recycler);
         jointwork_recycler.setLayoutManager(new LinearLayoutManager(this));

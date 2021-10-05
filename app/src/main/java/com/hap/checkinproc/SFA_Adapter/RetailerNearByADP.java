@@ -57,7 +57,7 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
             holder.txOwnerNm.setText(jItem.get("Owner_Name").getAsString().toUpperCase());
             holder.txMobile.setText(jItem.get("Mobile").getAsString().toUpperCase());
             holder.txAdd.setText(jItem.get("Add1").getAsString().toUpperCase());
-            holder.txDistName.setText(jItem.get("Distributor").getAsString());
+            holder.txDistName.setText(jItem.get("Distributor").getAsString()+" - "+jItem.get("DistCode").getAsString());
             holder.txChannel.setText(jItem.get("Channel").getAsString());
             holder.txDistance.setText(jItem.get("Distance").getAsString());
             String InvFlag=jItem.get("InvFlag").getAsString();

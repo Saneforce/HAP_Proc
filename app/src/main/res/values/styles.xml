@@ -12,6 +12,10 @@
         <item name="android:buttonStyle">@style/RobotoButtonStyle</item>
     </style>
 
+    <style name="BluePrimaryButton" parent="Theme.AppCompat.Light">
+        <item name="android:colorBackground">@android:color/black</item>
+    </style>
+
     <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
         <item name="android:fontFamily">@font/poppins_regular</item>
         <item name="android:textSize">12sp</item>

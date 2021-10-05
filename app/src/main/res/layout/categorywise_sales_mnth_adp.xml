@@ -7,7 +7,6 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/C3dp"
         android:orientation="horizontal">
 
         <TextView
@@ -15,11 +14,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:paddingLeft="2dp"
             android:ellipsize="end"
             android:fontFamily="sans-serif"
             android:text="Milk"
             android:visibility="gone"
-            android:textSize="12sp"
+            android:textSize="11sp"
             android:textColor="@color/grey_700"/>
         <TextView
             android:id="@+id/tvTodayQty"
@@ -27,16 +27,11 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:text="0"
-            android:textSize="12sp"
-            android:textStyle="bold"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="|"
-            android:layout_marginLeft="@dimen/C2dp"
-            android:layout_marginRight="@dimen/C2dp"
-            android:textSize="11sp"/>
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:paddingLeft="3dp"
+            android:background="@drawable/item_border"/>
+
 
         <TextView
             android:id="@+id/tvTodayVal"
@@ -44,14 +39,11 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif"
             android:textAlignment="textEnd"
-            android:paddingLeft="@dimen/C5dp"
+            android:paddingRight="@dimen/C2dp"
             android:text="₹0.00"
             android:textSize="11sp"
-            android:textStyle="bold">
-
-
-        </TextView>
-
+            android:textStyle="bold"
+            android:background="@drawable/item_border"/>
 
     </LinearLayout>
 </LinearLayout>

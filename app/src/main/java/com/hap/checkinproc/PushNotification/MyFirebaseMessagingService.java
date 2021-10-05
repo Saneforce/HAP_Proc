@@ -12,6 +12,10 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.hap.checkinproc.Activity_Hap.Login;
+import com.hap.checkinproc.Interface.OnLiveUpdateListener;
+import com.hap.checkinproc.Interface.onListItemClick;
+import com.hap.checkinproc.SFA_Activity.Dashboard_Route;
+import com.hap.checkinproc.SFA_Activity.HAPApp;
 
 import org.json.JSONObject;
 
@@ -23,6 +27,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private NotificationUtils notificationUtils;
 
+    static OnLiveUpdateListener liveUpdateListener;
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.e(TAG, "From: " + remoteMessage.getFrom());
@@ -55,14 +60,21 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
             // app is in foreground, broadcast the push message
 
-            Log.e("PUSH_NOtificaiton", message);
-            Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-            pushNotification.putExtra("message", message);
-            LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-
-            // play notification sound
+            if(message.equalsIgnoreCase("reloadSale")){
+                Log.d("ActiveActivity",HAPApp.activeActivity.getClass().toString());
+                if(HAPApp.activeActivity.getClass().toString().equalsIgnoreCase("Dashboard_Route")){
+                    Log.d("ActiveActivity","Dashboard_Route");
+                    liveUpdateListener.onUpdate(message);
+                }
+            }else {
+                Log.e("PUSH_NOtificaiton", message);
+                Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+                pushNotification.putExtra("message", message);
+                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+                // play notification sound
        /*     NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
             notificationUtils.playNotificationSound();*/
+            }
         } else {
             // If the app is in background, firebase itself handles the notification
         }
@@ -87,29 +99,37 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Log.e(TAG, "imageUrl: " + imageUrl);
             Log.e(TAG, "timestamp: " + timestamp);*/
 
+            if(message.equalsIgnoreCase("reloadSale")) {
 
-            if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
-                // app is in foreground, broadcast the push message
-                Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
-                pushNotification.putExtra("message", message);
-                LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
-                showNotificationMessage(getApplicationContext(), title, message, "timestamp", pushNotification);
-
-                // play notification sound
+                if (!NotificationUtils.isAppIsInBackground(getApplicationContext())) {
+                    Log.d("ActiveActivity", HAPApp.activeActivity.getClass().toString());
+                    if (HAPApp.activeActivity.getClass().getSimpleName().equalsIgnoreCase("Dashboard_Route")) {
+                        Log.d("ActiveActivity", "Dashboard_Route");
+                        Log.d("ActiveActivity","Dashboard_Route");
+                        liveUpdateListener.onUpdate(message);
+                    } else {
+                        // app is in foreground, broadcast the push message
+                        Intent pushNotification = new Intent(Config.PUSH_NOTIFICATION);
+                        pushNotification.putExtra("message", message);
+                        LocalBroadcastManager.getInstance(this).sendBroadcast(pushNotification);
+                        showNotificationMessage(getApplicationContext(), title, message, "timestamp", pushNotification);
+                    }
+                    // play notification sound
                /* NotificationUtils notificationUtils = new NotificationUtils(getApplicationContext());
                 notificationUtils.playNotificationSound();*/
-            } else {
-                // app is in background, show the notification in notification tray
-                Intent resultIntent = new Intent(getApplicationContext(), Login.class);
-                resultIntent.putExtra("message", message);
-                showNotificationMessage(getApplicationContext(), title, message, "timestamp", resultIntent);
-                // check for image attachment
+                } else {
+                    // app is in background, show the notification in notification tray
+                    Intent resultIntent = new Intent(getApplicationContext(), Login.class);
+                    resultIntent.putExtra("message", message);
+                    showNotificationMessage(getApplicationContext(), title, message, "timestamp", resultIntent);
+                    // check for image attachment
                /* if (TextUtils.isEmpty(imageUrl)) {
 
                 } else {
                     // image is present, show notification with image
                     showNotificationMessageWithBigImage(getApplicationContext(), title, message, timestamp, resultIntent, imageUrl);
                 }*/
+                }
             }
         } catch (Exception e) {
             Log.e(TAG, "Exception: " + e.getMessage());
@@ -120,13 +140,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
      * Showing notification with text only
      */
     private void showNotificationMessage(Context context, String title, String message, String timeStamp, Intent intent) {
-
-
         notificationUtils = new NotificationUtils(context);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
-
     }
 
     /**
@@ -136,5 +152,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         notificationUtils = new NotificationUtils(context);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl);
+    }
+
+    public static void setOnLiveUpdateListener(OnLiveUpdateListener mliveUpdateListener){
+        liveUpdateListener=mliveUpdateListener;
     }
 }

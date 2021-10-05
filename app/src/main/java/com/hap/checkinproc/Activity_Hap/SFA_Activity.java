@@ -60,7 +60,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     Gson gson;
     Type userType;
     Common_Class common_class;
-    private Main_Model.presenter presenter;
     Shared_Common_Pref sharedCommonPref;
     DatabaseHandler db;
 

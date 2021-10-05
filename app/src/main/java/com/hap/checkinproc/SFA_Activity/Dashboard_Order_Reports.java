@@ -74,8 +74,10 @@ public class Dashboard_Order_Reports extends AppCompatActivity implements Main_M
             common_class.getDataFromApi(Constants.Outlet_Total_AlldaysOrders, this, false);
             recyclerView = findViewById(R.id.leaverecyclerview);
             sharedCommonPref = new Shared_Common_Pref(Dashboard_Order_Reports.this);
-            presenter = new MasterSync_Implementations(this, new Master_Sync_View());
-            presenter.requestDataFromServer();
+
+//            presenter = new MasterSync_Implementations(this, new Master_Sync_View());
+//            presenter.requestDataFromServer();
+
             shared_common_pref = new Shared_Common_Pref(this);
             headtext = findViewById(R.id.headtext);
             route_text = findViewById(R.id.route_text);

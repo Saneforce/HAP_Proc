@@ -558,10 +558,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
                         Log.e("RETAILER_CLASS_NAME", retailerClass);
                         if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
-                            if (id.equals(String.valueOf(Retailer_Modal_List.get(getOutletPosition()).getDocCatCode()))) {
+                            /*if (id.equals(String.valueOf(Retailer_Modal_List.get(getOutletPosition()).getDocCatCode()))) {
                                 txtRetailerClass.setText(className.replace('"', ' '));
                                 classId = Integer.valueOf(String.valueOf(jsonObject.get("id")));
-                            }
+                            }*/
                         }
                         mCommon_model_spinner = new Common_Model(id, retailerClass, "flag");
                         Log.e("LeaveType_Request", retailerClass);

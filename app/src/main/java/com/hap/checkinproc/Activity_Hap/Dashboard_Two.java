@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -58,6 +59,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Dashboard_Two extends AppCompatActivity implements View.OnClickListener/*, Main_Model.MasterSyncView*/ {
     private static String Tag = "HAP_Check-In";
@@ -605,32 +609,86 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                             if (WKItems.size() > 0) {
                                 if (itm.get("WKFlg").getAsInt() == 1) {
                                     Log.d("WEEKOFF", String.valueOf(itm.get("WKFlg").getAsInt()));
-                                    AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
-                                            .setTitle("HAP Check-In")
-                                            .setMessage(Html.fromHtml(mMessage))
-                                            .setCancelable(false)
-                                            .setPositiveButton("Weekoff", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
-                                                    JsonObject mItem = WKItems.get(0).getAsJsonObject();
-                                                    Intent iWeekOff = new Intent(Dashboard_Two.this, Weekly_Off.class);
-                                                    iWeekOff.putExtra("EDt", mItem.get("EDt").getAsString());
-                                                    Dashboard_Two.this.startActivity(iWeekOff);
-                                                    ((AppCompatActivity) Dashboard_Two.this).finish();
-                                                }
-                                            }).setNegativeButton("Others", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialogInterface, int i) {
 
-                                                    JsonObject mItem = WKItems.get(0).getAsJsonObject();
-                                                    Intent iLeave = new Intent(Dashboard_Two.this, Leave_Request.class);
-                                                    iLeave.putExtra("EDt", mItem.get("EDt").getAsString());
-                                                    Dashboard_Two.this.startActivity(iLeave);
+                                    LayoutInflater inflater = LayoutInflater.from(Dashboard_Two.this);
 
-                                                    ((AppCompatActivity) Dashboard_Two.this).finish();
-                                                }
-                                            })
-                                            .show();
+                                    final View view = inflater.inflate(R.layout.dashboard_deviation_dialog, null);
+                                    android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(Dashboard_Two.this).create();
+                                    alertDialog.setTitle("HAP Check-In");
+                                    alertDialog.setMessage(Html.fromHtml(mMessage));
+                                    alertDialog.setCancelable(false);
+
+                                    TextView btnOthers = (TextView) view.findViewById(R.id.tvOthers);
+                                    TextView btnWeekOFF = (TextView) view.findViewById(R.id.tvWeekOff);
+                                    TextView btnDeviation = (TextView) view.findViewById(R.id.tvDeviation);
+
+                                    btnOthers.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            alertDialog.dismiss();
+                                            JsonObject mItem = WKItems.get(0).getAsJsonObject();
+                                            Intent iLeave = new Intent(Dashboard_Two.this, Leave_Request.class);
+                                            iLeave.putExtra("EDt", mItem.get("EDt").getAsString());
+                                            Dashboard_Two.this.startActivity(iLeave);
+
+                                            ((AppCompatActivity) Dashboard_Two.this).finish();
+                                        }
+                                    });
+
+                                    btnWeekOFF.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            alertDialog.dismiss();
+                                            JsonObject mItem = WKItems.get(0).getAsJsonObject();
+                                            Intent iWeekOff = new Intent(Dashboard_Two.this, Weekly_Off.class);
+                                            iWeekOff.putExtra("EDt", mItem.get("EDt").getAsString());
+                                            Dashboard_Two.this.startActivity(iWeekOff);
+                                            ((AppCompatActivity) Dashboard_Two.this).finish();
+                                        }
+                                    });
+
+                                    btnDeviation.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            alertDialog.dismiss();
+                                            JsonObject mItem = WKItems.get(0).getAsJsonObject();
+                                            Intent iLeave = new Intent(Dashboard_Two.this, DeviationEntry.class);
+                                            iLeave.putExtra("EDt", mItem.get("EDt").getAsString());
+                                            Dashboard_Two.this.startActivity(iLeave);
+
+                                            ((AppCompatActivity) Dashboard_Two.this).finish();
+                                        }
+                                    });
+
+                                    alertDialog.setView(view);
+                                    alertDialog.show();
+
+                               /* AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
+                                        .setTitle("HAP Check-In")
+                                        .setMessage(Html.fromHtml(mMessage))
+                                        .setCancelable(false)
+                                        .setPositiveButton("Weekofffff", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+                                                JsonObject mItem = WKItems.get(0).getAsJsonObject();
+                                                Intent iWeekOff = new Intent(Dashboard_Two.this, Weekly_Off.class);
+                                                iWeekOff.putExtra("EDt", mItem.get("EDt").getAsString());
+                                                Dashboard_Two.this.startActivity(iWeekOff);
+                                                ((AppCompatActivity) Dashboard_Two.this).finish();
+                                            }
+                                        }).setNegativeButton("Others", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialogInterface, int i) {
+
+                                                JsonObject mItem = WKItems.get(0).getAsJsonObject();
+                                                Intent iLeave = new Intent(Dashboard_Two.this, Leave_Request.class);
+                                                iLeave.putExtra("EDt", mItem.get("EDt").getAsString());
+                                                Dashboard_Two.this.startActivity(iLeave);
+
+                                                ((AppCompatActivity) Dashboard_Two.this).finish();
+                                            }
+                                        })
+                                        .show();*/
                                 } else {
                                     AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
                                             .setTitle("HAP Check-In")
@@ -669,6 +727,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         } catch (Exception e) {
         }
     }
+
     @Override
     public void onClick(View v) {
         Intent intent = null;
@@ -711,14 +770,46 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                     startActivity(aIntent);
 
                                 } else {
-                                    Shared_Common_Pref.Sync_Flag = "0";
+                                    JSONObject jParam=new JSONObject();
+                                    try {
+                                        jParam.put("SF", UserDetails.getString("Sfcode", ""));
+                                        jParam.put("div", UserDetails.getString("Divcode", ""));
+                                    }
+                                    catch (JSONException ex){
+
+                                    }
+                                    ApiClient.getClient().create(ApiInterface.class)
+                                    .getDataArrayList("get/distributor",jParam.toString())
+                                    .enqueue(new Callback<JsonArray>()
+                                    {
+                                        @Override
+                                        public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                                            try {
+                                               // new Shared_Common_Pref(Dashboard_Two.this)
+                                               //         .save(Distributor_List, response.body().toString());
+                                                db.deleteMasterData(Distributor_List);
+                                                db.addMasterData(Distributor_List,response.body().toString());
+                                            }
+                                            catch (Exception e) {
+
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<JsonArray> call, Throwable t) {
+                                            Log.d(Tag, String.valueOf(t));
+                                        }
+                                    });
+                                    startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
+                                    /*Shared_Common_Pref.Sync_Flag = "0";
                                     com.hap.checkinproc.Common_Class.Common_Class common_class = new com.hap.checkinproc.Common_Class.Common_Class(Dashboard_Two.this);
 
 //                                    if (common_class.checkValueStore(Dashboard_Two.this, Retailer_OutletList)) {
 //                                        startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
 //                                    } else {
                                     common_class.getDataFromApi(Distributor_List, Dashboard_Two.this, false);
-                                    // }
+                                    // }*/
 
 
                                 }

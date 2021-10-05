@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
+    android:orientation="vertical"
     tools:context=".Activity.AllowanceActivityTwo">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
+        android:orientation="vertical"
+        android:layout_marginBottom="@dimen/C5dp"
+        android:layout_weight="1">
         <include layout="@layout/custom_toolbar_help"></include>
         <LinearLayout
             android:id="@+id/vwlblHead"
@@ -410,19 +412,32 @@
 
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/submit_allowance"
-                    style="@style/ButtonStyle"
-                    android:layout_weight="1"
-                    android:layout_marginTop="@dimen/C20dp"
-                    android:background="@drawable/button_blueg"
-                    android:text="@string/txt_submit" />
+
 
             </LinearLayout>
         </ScrollView>
-
     </LinearLayout>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        >
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:id="@+id/submit_allowance"
+            style="@style/ButtonStyle"
+            android:layout_marginTop="@dimen/C20dp"
+            android:background="@drawable/button_blueg"
+            android:text="@string/txt_submit"
+            android:textColor="@android:color/white"
+            android:theme="@style/BluePrimaryButton"
+            app:finalCornerAngle="50dp"
+            app:initialCornerAngle="0dp"
+            app:spinning_bar_color="#FFFFFFFF"
+            app:spinning_bar_padding="5dp"
+            app:spinning_bar_width="5dp" />
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -433,4 +448,4 @@
         <include layout="@layout/back_arrow"></include>
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

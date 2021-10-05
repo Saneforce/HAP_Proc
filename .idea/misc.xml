@@ -65,12 +65,17 @@
         <entry key="app/src/main/res/drawable/round_rect_green.xml" value="0.22395833333333334" />
         <entry key="app/src/main/res/drawable/round_rect_yellow.xml" value="0.22395833333333334" />
         <entry key="app/src/main/res/drawable/round_status_blue.xml" value="0.22395833333333334" />
+        <entry key="app/src/main/res/drawable/shape_user.xml" value="0.21197916666666666" />
+        <entry key="app/src/main/res/drawable/sign_bg.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/layout/activity_add_new_retailer.xml" value="0.16666666666666666" />
+        <entry key="app/src/main/res/layout/activity_allowance.xml" value="0.11956521739130435" />
+        <entry key="app/src/main/res/layout/activity_allowance_two.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_cooler_info_layout.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_dashboard.xml" value="0.1716485507246377" />
         <entry key="app/src/main/res/layout/activity_dashboard__order__reports.xml" value="0.18432971014492755" />
-        <entry key="app/src/main/res/layout/activity_dashboard__route.xml" value="0.1297278190173206" />
+        <entry key="app/src/main/res/layout/activity_dashboard__route.xml" value="0.3673012318029115" />
         <entry key="app/src/main/res/layout/activity_dashboard__two.xml" value="0.1644021739130435" />
+        <entry key="app/src/main/res/layout/activity_deviation_entry.xml" value="0.19479166666666667" />
         <entry key="app/src/main/res/layout/activity_dist__locations.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_history_info.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_invoice__category__select.xml" value="0.2078125" />
@@ -88,6 +93,7 @@
         <entry key="app/src/main/res/layout/activity_qps.xml" value="0.18432971014492755" />
         <entry key="app/src/main/res/layout/activity_route__product__info.xml" value="0.16666666666666666" />
         <entry key="app/src/main/res/layout/activity_s_f_a__dashboard.xml" value="0.18432971014492755" />
+        <entry key="app/src/main/res/layout/activity_sales_calls.xml" value="0.19583333333333333" />
         <entry key="app/src/main/res/layout/activity_secondary_order.xml" value="0.2078125" />
         <entry key="app/src/main/res/layout/activity_sfactivity.xml" value="0.1621376811594203" />
         <entry key="app/src/main/res/layout/activity_t_a_approval.xml" value="0.16802536231884058" />

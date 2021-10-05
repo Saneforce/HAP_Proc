@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:padding="10dp"
             android:layout_marginLeft="@dimen/C3dp"
-            android:text="HATSUN DAILY"
+            android:text="HAP DAILY"
             android:textColor="@color/white"
             android:textSize="11sp" />
 

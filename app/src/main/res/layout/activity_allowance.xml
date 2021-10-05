@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,18 +7,15 @@
     android:focusableInTouchMode="true"
     android:orientation="vertical"
     tools:context=".Activity.AllowanceActivity">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="@dimen/C50dp"
+        android:layout_marginBottom="@dimen/C5dp"
         android:focusableInTouchMode="true"
+        android:layout_weight="1"
         android:orientation="vertical"
-        tools:context=".Activity.AllowanceActivity"
-        tools:ignore="MissingConstraints">
-
+        tools:context=".Activity.AllowanceActivity">
         <include layout="@layout/custom_toolbar_help"></include>
-
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -362,12 +359,7 @@
 
                         </androidx.cardview.widget.CardView>
 
-                        <Button
-                            android:id="@+id/btn_submit"
-                            style="@style/ButtonStyle"
-                            android:layout_weight="1"
-                            android:background="@drawable/button_blueg"
-                            android:text="Submit" />
+
 
                     </LinearLayout>
                 </LinearLayout>
@@ -375,13 +367,14 @@
             </LinearLayout>
 
         </ScrollView>
-
     </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        >
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
@@ -389,9 +382,21 @@
             android:layout_margin="@dimen/C5dp"
             android:paddingLeft="@dimen/C8dp"
             android:paddingRight="@dimen/C8dp"
-            android:src="@drawable/back_arrow"></ImageView>
-
+            android:src="@drawable/back_arrow"
+            android:visibility="gone"></ImageView>
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:id="@+id/btn_submit"
+            style="@style/ButtonStyle"
+            android:background="@drawable/button_blueg"
+            android:text="Submit"
+            android:textColor="@android:color/white"
+            android:theme="@style/BluePrimaryButton"
+            app:finalCornerAngle="50dp"
+            app:initialCornerAngle="0dp"
+            app:spinning_bar_color="#FFFFFFFF"
+            app:spinning_bar_padding="5dp"
+            app:spinning_bar_width="5dp" />
 <!--        <include layout="@layout/back_arrow"></include>-->
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

@@ -14,7 +14,7 @@
 
         <include
             android:id="@+id/tool_header"
-            layout="@layout/custom_toolbar_help"></include>
+            layout="@layout/sfatoolbar"></include>
 
 
         <LinearLayout
@@ -241,8 +241,31 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.8"
-                    android:padding="@dimen/C8dp">
-
+                    android:padding="@dimen/C8dp"
+                    android:orientation="vertical">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/C2dp"
+                        android:layout_marginLeft="@dimen/C5dp"
+                        android:layout_marginRight="@dimen/C5dp"
+                        android:layout_marginBottom="@dimen/C5dp"
+                        android:background="@drawable/hash_border">
+                        <ImageView
+                            android:layout_width="@dimen/C20dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="@dimen/C3dp"
+                            android:src="@drawable/ic_search_icon"/>
+                        <EditText
+                            android:id="@+id/txSearchRet"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:padding="@dimen/C5dp"
+                            android:textSize="12sp"
+                            android:hint="Search"
+                            />
+                    </LinearLayout>
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
