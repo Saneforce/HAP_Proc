@@ -14,6 +14,7 @@ import static com.hap.checkinproc.Common_Class.Constants.TodayOrderDetails_List;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -30,6 +31,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -95,7 +98,9 @@ public class Common_Class {
 
     List<OutletReport_View_Modal> outletReport_view_modalList = new ArrayList<>();
     private Type userTypeGetTodayOrder;
+    private DatePickerDialog fromDatePickerDialog;
 
+    String pickDate = "";
 
     public void CommonIntentwithFinish(Class classname) {
         intent = new Intent(activity, classname);
@@ -561,6 +566,26 @@ public class Common_Class {
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
+
+
+    public String datePicker(Activity activity, TextView view) {
+        Calendar newCalendar = Calendar.getInstance();
+        fromDatePickerDialog = new DatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                int month = monthOfYear + 1;
+
+                pickDate = ("" + dayOfMonth + "/" + month + "/" + year);
+
+
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        fromDatePickerDialog.show();
+
+        return pickDate;
+    }
+
+
 //    public boolean checkValueStore(Activity activity, String key) {
 //        DatabaseHandler db = new DatabaseHandler(activity);
 //

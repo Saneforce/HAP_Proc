@@ -49,7 +49,7 @@
                 android:layout_gravity="center"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:text="7 Hills milk Centre"
+                android:text=""
                 android:textColor="@color/black"
                 android:textSize="@dimen/C16dp"
                 android:textStyle="bold">
@@ -61,16 +61,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <TextView
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:layout_toLeftOf="@+id/tvPayOutStandAmt"
+                    android:fontFamily="sans-serif"
+                    android:gravity="end"
+                    android:text="Outstanding :"></TextView>
 
                 <TextView
-
-                    android:id="@+id/tvLabel"
+                    android:id="@+id/tvPayOutStandAmt"
                     style="@style/TextStyle"
                     android:layout_width="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:fontFamily="sans-serif"
-                    android:paddingTop="@dimen/C10dp"
-                    android:text="Remaining outstanding : ₹500.00" />
+                    android:text="₹500.00"
+                    android:textColor="@color/color_red"
+                    android:textStyle="bold" />
 
             </RelativeLayout>
 
@@ -90,7 +97,9 @@
                     android:layout_height="@dimen/C30dp"
                     android:orientation="horizontal">
 
-                    <CheckBox style="@style/TextStyle" />
+                    <CheckBox
+                        android:id="@+id/cbPayCash"
+                        style="@style/TextStyle" />
 
                     <TextView
                         style="@style/TextStyle"
@@ -102,7 +111,9 @@
                     android:layout_height="@dimen/C30dp"
                     android:orientation="horizontal">
 
-                    <CheckBox style="@style/TextStyle" />
+                    <CheckBox
+                        android:id="@+id/cbPayUPI"
+                        style="@style/TextStyle" />
 
                     <TextView
                         style="@style/TextStyle"
@@ -114,7 +125,9 @@
                     android:layout_height="@dimen/C30dp"
                     android:orientation="horizontal">
 
-                    <CheckBox style="@style/TextStyle" />
+                    <CheckBox
+                        android:id="@+id/cbPayOnlineTrans"
+                        style="@style/TextStyle" />
 
                     <TextView
                         style="@style/TextStyle"
@@ -136,6 +149,7 @@
                     android:text="Ref No" />
 
                 <EditText
+                    android:id="@+id/etPayRefNo"
                     style="@style/TextStyle"
                     android:layout_width="match_parent"
                     android:background="@drawable/textbox_bg"
@@ -156,7 +170,8 @@
                     android:paddingTop="@dimen/C10dp"
                     android:text="Date of payment" />
 
-                <EditText
+                <TextView
+                    android:id="@+id/etPayDate"
                     style="@style/TextStyle"
                     android:layout_width="match_parent"
                     android:background="@drawable/textbox_bg"
@@ -178,10 +193,34 @@
                     android:text="Amount Received" />
 
                 <EditText
+                    android:id="@+id/etPayRecAmt"
                     style="@style/TextStyle"
                     android:layout_width="match_parent"
                     android:background="@drawable/textbox_bg"
                     android:elevation="5dp"
+                    android:inputType="number"
+                    android:padding="@dimen/C8dp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:paddingTop="@dimen/C10dp"
+                    android:text="Remaining Outstanding" />
+
+                <TextView
+                    android:id="@+id/tvPayRemainAmt"
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/textbox_bg"
+                    android:elevation="5dp"
+                    android:inputType="number"
                     android:padding="@dimen/C8dp" />
 
 
@@ -189,5 +228,20 @@
 
 
         </LinearLayout>
+
+
     </ScrollView>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/C10dp">
+
+        <Button
+            android:id="@+id/btnPaySubmit"
+            style="@style/ButtonStyle"
+            android:layout_alignParentBottom="true"
+            android:text="@string/txt_submit"></Button>
+    </RelativeLayout>
 </LinearLayout>

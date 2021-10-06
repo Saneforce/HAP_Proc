@@ -199,6 +199,7 @@
                                     android:visibility="gone">
 
                                     <ImageView
+                                        app:tint="@color/colorPrimaryDark"
                                         style="@style/TextStyle"
                                         android:src="@drawable/ic_round_photo_camera_24" />
 
@@ -243,6 +244,7 @@
                                     android:visibility="gone">
 
                                     <ImageView
+                                        app:tint="@color/colorPrimaryDark"
 
                                         style="@style/TextStyle"
                                         android:src="@drawable/ic_round_photo_camera_24" />
