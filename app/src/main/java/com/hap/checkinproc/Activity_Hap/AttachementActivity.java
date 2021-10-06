@@ -21,6 +21,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
@@ -50,6 +51,7 @@ public class AttachementActivity extends AppCompatActivity {
 
     List<QPS_Modal> qpsModalList = new ArrayList<>();
     static OnAttachmentDelete deleteListener;
+    private Gson gson;
 
     @SuppressLint("ResourceType")
     @Override
@@ -79,7 +81,7 @@ public class AttachementActivity extends AppCompatActivity {
         ImageUKey = String.valueOf(getIntent().getSerializableExtra("Delete"));
 
 
-        if (getIntent().getStringExtra("keyList") != null && !getIntent().getStringExtra("keyList").equals("")) {
+        if (getIntent().getStringExtra("qps_localData") != null && !getIntent().getStringExtra("qps_localData").equals("")) {
             showLocalImgList();
         }
 
@@ -88,8 +90,9 @@ public class AttachementActivity extends AppCompatActivity {
 
     private void showLocalImgList() {
         try {
-            Gson gson = new Gson();
-            String strQPS = getIntent().getStringExtra("keyList");
+            gson = new Gson();
+            String strQPS = shared_common_pref.getvalue(Constants.QPS_LOCALPICLIST);
+
             Type userType = new TypeToken<ArrayList<QPS_Modal>>() {
             }.getType();
             qpsModalList = gson.fromJson(strQPS, userType);
@@ -98,7 +101,7 @@ public class AttachementActivity extends AppCompatActivity {
             filterList.clear();
 
             for (int i = 0; i < qpsModalList.size(); i++) {
-                if (qpsModalList.get(i).getFileKey().contains((getIntent().getStringExtra("pos")))) {
+                if (qpsModalList.get(i).getFileKey().contains((getIntent().getStringExtra("qps_localData")))) {
                     filterList.add(qpsModalList.get(i));
                 }
             }
@@ -115,8 +118,8 @@ public class AttachementActivity extends AppCompatActivity {
                 View childView = parentLinearLayout.getChildAt(m);
                 ImageView taAttach = (ImageView) (childView.findViewById(R.id.img_preview));
 
-                File f = new File(filterList.get(m).getFilePath());
-                Uri contentUri = Uri.fromFile(f);
+                File file = new File(filterList.get(m).getFilePath());
+                Uri contentUri = Uri.fromFile(file);
 
                 Picasso.with(AttachementActivity.this)
                         .load(contentUri)
@@ -136,7 +139,7 @@ public class AttachementActivity extends AppCompatActivity {
                 deleteImage.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        //  deleteImage(jsonObject.get("Img_U_key").getAsString(), jsonObject.get("lat").getAsString(), jsonObject.get("Insert_Date_Time").getAsString(), (View) v.getParent());
+                        deleteImage(file, (View) v.getParent());
 
                     }
                 });
@@ -249,6 +252,23 @@ public class AttachementActivity extends AppCompatActivity {
             public void onFailure(Call<JsonObject> call, Throwable t) {
             }
         });
+
+    }
+
+
+    public void deleteImage(File file, View view) {
+
+        for (int i = 0; i < qpsModalList.size(); i++) {
+            if (qpsModalList.get(i).getFilePath().equals(file.getAbsolutePath())) {
+                qpsModalList.remove(i);
+                shared_common_pref.save(Constants.QPS_LOCALPICLIST, gson.toJson(qpsModalList));
+            }
+        }
+
+        parentLinearLayout.removeView(view);
+        ImgCount--;
+        if (file.exists())
+            file.delete();
 
     }
 

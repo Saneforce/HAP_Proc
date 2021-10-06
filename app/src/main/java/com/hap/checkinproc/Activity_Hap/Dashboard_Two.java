@@ -1,6 +1,8 @@
 
 package com.hap.checkinproc.Activity_Hap;
 
+import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
+
 import android.animation.ArgbEvaluator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
@@ -14,6 +16,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,10 +32,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.firebase.crashlytics.internal.model.CrashlyticsReport;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.hap.checkinproc.Activity.AllowanceActivityTwo;
 import com.hap.checkinproc.Activity.ProcurementDashboardActivity;
 import com.hap.checkinproc.Activity.TAClaimActivity;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
@@ -56,8 +57,6 @@ import java.util.Date;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
 
 public class Dashboard_Two extends AppCompatActivity implements View.OnClickListener/*, Main_Model.MasterSyncView*/ {
     private static String Tag = "HAP_Check-In";
@@ -242,10 +241,10 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             btnGateIn = findViewById(R.id.btn_gate_in);
             btnGateOut = findViewById(R.id.btn_gate_out);
 
-        mRecyclerView = findViewById(R.id.gate_recycle);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(layoutManager);
-        //mRecyclerView.stopScroll();
+            mRecyclerView = findViewById(R.id.gate_recycle);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            mRecyclerView.setLayoutManager(layoutManager);
+            //mRecyclerView.stopScroll();
 
             if (UserDetails.getInt("CheckCount", 0) <= 0) {
                 btnApprovals.setVisibility(View.GONE);
@@ -335,12 +334,14 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
         }
     }
+
     private void hideShimmer() {
         if (LoadingCnt >= 2) {
             mShimmerViewContainer.stopShimmerAnimation();
             mShimmerViewContainer.setVisibility(View.GONE);
         }
     }
+
     private void getNotify() {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<JsonArray> rptCall = apiInterface.getDataArrayList("get/notify",
@@ -380,6 +381,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             }
         });
     }
+
     private void getMnthReports(int m) {
         if (cModMnth == m) return;
         String[] mns = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -440,10 +442,13 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
-                Log.d(Tag, String.valueOf(t));LoadingCnt++;hideShimmer();
+                Log.d(Tag, String.valueOf(t));
+                LoadingCnt++;
+                hideShimmer();
             }
         });
     }
+
     private void getDyReports() {
         // appendDS = appendDS + "&divisionCode=" + userData.divisionCode + "&sfCode=" + sSF + "&rSF=" + userData.sfCode + "&State_Code=" + userData.State_Code;
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
@@ -534,7 +539,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             @Override
             public void onFailure(Call<JsonArray> call, Throwable t) {
                 Log.d(Tag, String.valueOf(t));
-                LoadingCnt++;hideShimmer();
+                LoadingCnt++;
+                hideShimmer();
             }
         });
         ImageView backView = findViewById(R.id.imag_back);
@@ -545,10 +551,12 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             }
         });
     }
+
     @Override
     public void onBackPressed() {
         Toast.makeText(Dashboard_Two.this, "There is no back action", Toast.LENGTH_LONG).show();
     }
+
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
             new OnBackPressedDispatcher(new Runnable() {
                 @Override
@@ -560,6 +568,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                     }
                 }
             });
+
     private void GetMissedPunch() {
         // appendDS = appendDS + "&divisionCode=" + userData.divisionCode + "&sfCode=" + sSF + "&rSF=" + userData.sfCode + "&State_Code=" + userData.State_Code;
         try {
@@ -605,11 +614,65 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                             if (WKItems.size() > 0) {
                                 if (itm.get("WKFlg").getAsInt() == 1) {
                                     Log.d("WEEKOFF", String.valueOf(itm.get("WKFlg").getAsInt()));
-                                    AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
+
+                                    LayoutInflater inflater = LayoutInflater.from(Dashboard_Two.this);
+
+                                    final View view = inflater.inflate(R.layout.dashboard_deviation_dialog, null);
+                                    android.app.AlertDialog alertDialog = new android.app.AlertDialog.Builder(Dashboard_Two.this).create();
+                                    alertDialog.setTitle("HAP Check-In");
+                                    alertDialog.setMessage(Html.fromHtml(mMessage));
+                                    alertDialog.setCancelable(false);
+
+                                    TextView btnOthers = (TextView) view.findViewById(R.id.tvOthers);
+                                    TextView btnWeekOFF = (TextView) view.findViewById(R.id.tvWeekOff);
+                                    TextView btnDeviation = (TextView) view.findViewById(R.id.tvDeviation);
+
+                                    btnOthers.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            alertDialog.dismiss();
+                                            JsonObject mItem = WKItems.get(0).getAsJsonObject();
+                                            Intent iLeave = new Intent(Dashboard_Two.this, Leave_Request.class);
+                                            iLeave.putExtra("EDt", mItem.get("EDt").getAsString());
+                                            Dashboard_Two.this.startActivity(iLeave);
+
+                                            ((AppCompatActivity) Dashboard_Two.this).finish();
+                                        }
+                                    });
+
+                                    btnWeekOFF.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            alertDialog.dismiss();
+                                            JsonObject mItem = WKItems.get(0).getAsJsonObject();
+                                            Intent iWeekOff = new Intent(Dashboard_Two.this, Weekly_Off.class);
+                                            iWeekOff.putExtra("EDt", mItem.get("EDt").getAsString());
+                                            Dashboard_Two.this.startActivity(iWeekOff);
+                                            ((AppCompatActivity) Dashboard_Two.this).finish();
+                                        }
+                                    });
+
+                                    btnDeviation.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            alertDialog.dismiss();
+                                            JsonObject mItem = WKItems.get(0).getAsJsonObject();
+                                            Intent iLeave = new Intent(Dashboard_Two.this, DeviationEntry.class);
+                                            iLeave.putExtra("EDt", mItem.get("EDt").getAsString());
+                                            Dashboard_Two.this.startActivity(iLeave);
+
+                                            ((AppCompatActivity) Dashboard_Two.this).finish();
+                                        }
+                                    });
+
+                                    alertDialog.setView(view);
+                                    alertDialog.show();
+
+                                   /* AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
                                             .setTitle("HAP Check-In")
                                             .setMessage(Html.fromHtml(mMessage))
                                             .setCancelable(false)
-                                            .setPositiveButton("Weekoff", new DialogInterface.OnClickListener() {
+                                            .setPositiveButton("Weekofffff", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialogInterface, int i) {
                                                     JsonObject mItem = WKItems.get(0).getAsJsonObject();
@@ -630,7 +693,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                                     ((AppCompatActivity) Dashboard_Two.this).finish();
                                                 }
                                             })
-                                            .show();
+                                            .show();*/
                                 } else {
                                     AlertDialog alertDialog = new AlertDialog.Builder(Dashboard_Two.this)
                                             .setTitle("HAP Check-In")
@@ -669,6 +732,7 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
         } catch (Exception e) {
         }
     }
+
     @Override
     public void onClick(View v) {
         Intent intent = null;
@@ -829,12 +893,14 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
             startActivity(intent);
         }
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         GetMissedPunch();
         Log.v("LOG_IN_LOCATION", "ONRESTART");
     }
+
     public void gatevalue(String Date) {
         Log.v("plantimeplantime", Date);
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);

@@ -75,11 +75,13 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
     private List<Common_Model> qpsComboList = new ArrayList<>();
     private String QPS_Code = "";
     Shared_Common_Pref shared_common_pref;
+    public static QPSActivity qpsActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qps);
+        qpsActivity = this;
 
         init();
 
@@ -224,8 +226,14 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (tvViewStatus.getVisibility() == View.VISIBLE)
 
-            common_class.CommonIntentwithFinish(Invoice_History.class);
+                common_class.CommonIntentwithFinish(Invoice_History.class);
+            else {
+                common_class.CommonIntentwithFinish(QPSActivity.class);
+                shared_common_pref.clear_pref(Constants.QPS_LOCALPICLIST);
+            }
+
 
             return true;
         }
@@ -371,7 +379,7 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
     }
 
 
-    private void getQPSStatus() {
+    public void getQPSStatus() {
         try {
             if (common_class.isNetworkAvailable(this)) {
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
@@ -407,9 +415,21 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
 
                                         JSONObject arrObj = jsonArray.getJSONObject(i);
 
-                                        qpsModals.add(new QPS_Modal(arrObj.getString("SlNO"), arrObj.getString("Trans_sl_No"),
-                                                arrObj.getString("QPS_Name"), arrObj.getString("Booking_Date"), arrObj.getString("Duration"),
-                                                arrObj.getString("Received_Date"), arrObj.getString("Status")));
+
+                                        JSONArray fileArray = arrObj.getJSONArray("Images");
+
+                                        List<String> fileList = new ArrayList<>();
+
+                                        if (fileArray != null && fileArray.length() > 0) {
+                                            for (int fa = 0; fa < fileArray.length(); fa++) {
+                                                if (!Common_Class.isNullOrEmpty(String.valueOf(fileArray.get(fa))))
+                                                    fileList.add(String.valueOf(fileArray.get(fa)));
+                                            }
+
+                                            qpsModals.add(new QPS_Modal(arrObj.getString("SlNO"), arrObj.getString("Trans_sl_No"),
+                                                    arrObj.getString("QPS_Name"), arrObj.getString("Booking_Date"), arrObj.getString("Duration"),
+                                                    arrObj.getString("Received_Date"), arrObj.getString("Status"), fileList));
+                                        }
                                     }
 
                                     tvViewStatus.setVisibility(View.GONE);
@@ -419,15 +439,16 @@ public class QPSActivity extends AppCompatActivity implements View.OnClickListen
                                     // btnSubmit.setText("Completed");
                                     btnSubmit.setVisibility(View.GONE);
 
-                                    qpsAdapter = new QPSAdapter(QPSActivity.this, qpsModals);
-                                    rvQps.setAdapter(qpsAdapter);
-
 
                                 } else {
 
                                     qpsModals.clear();
                                     common_class.showMsg(QPSActivity.this, jsonObject.getString("Msg"));
                                 }
+
+
+                                qpsAdapter = new QPSAdapter(QPSActivity.this, qpsModals);
+                                rvQps.setAdapter(qpsAdapter);
 
 
                             }

@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.net.Uri;
@@ -17,6 +16,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,11 +61,9 @@ import com.hap.checkinproc.MVP.MasterSync_Implementations;
 import com.hap.checkinproc.MVP.Master_Sync_View;
 import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Adapter.RetailerNearByADP;
 import com.hap.checkinproc.SFA_Adapter.Route_View_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
-import com.hap.checkinproc.common.CountingRequestBody;
 import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.LocationFinder;
 
@@ -99,10 +97,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     Gson gson;
     Type userTypeRetailor, userTypeReport;
     TextView headtext, textViewname, Alltextclick, Completeclick, Pendingclick, ReachedOutlet, route_text,
-            txSrvOtlt, txUniOtlt,txSrvOtltCnt,txUniOtltCnt,smryOrd,smryNOrd,smryNOOrd,smryInv,smryInvVal;
+            txSrvOtlt, txUniOtlt, txSrvOtltCnt, txUniOtltCnt, smryOrd, smryNOrd, smryNOOrd, smryInv, smryInvVal;
     EditText txSearchRet;
     View Alltextview, completeview, pendingview;
-    LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt,undrUni,undrServ;
+    LinearLayout btnCmbRoute, btSrvOtlt, btUniOtlt, undrUni, undrServ;
     Common_Model Model_Pojo;
     List<Common_Model> distributor_master = new ArrayList<>();
     List<Common_Model> Route_Masterlist = new ArrayList<>();
@@ -116,7 +114,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     SharedPreferences UserDetails;
     DatabaseHandler db;
 
-    ImageView ivToolbarHome,ivBtnRpt;
+    ImageView ivToolbarHome, ivBtnRpt;
     LinearLayout llDistributor;
     TabAdapter adapter;
     private RecyclerView recyclerView;
@@ -125,9 +123,10 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     private ViewPager viewPager;
     private static DecimalFormat df2 = new DecimalFormat("#.##");
     private static final int REQUEST_PERMISSIONS_REQUEST_CODE = 1001;
-    int CountUR=0,CountSR=0;
+    int CountUR = 0, CountSR = 0;
     Boolean StopedUpdate;
     ApiInterface apiInterface;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,7 +135,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         apiInterface = ApiClient.getClient().create(ApiInterface.class);
 
         dashboard_route = this;
-        StopedUpdate=false;
+        StopedUpdate = false;
 
         db = new DatabaseHandler(this);
         getDbstoreData(Constants.Distributor_List);
@@ -147,15 +146,15 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         CheckInDetails = getSharedPreferences(CheckInDetail, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
         getSalesCounts();
-        JSONObject jParam=new JSONObject();
+        JSONObject jParam = new JSONObject();
         try {
-            jParam.put("SF",UserDetails.getString("Sfcode",""));
-            jParam.put("div", UserDetails.getString("Divcode",""));
-            apiInterface.getDataArrayList("get/prodgroup",jParam.toString()).enqueue(new Callback<JsonArray>() {
+            jParam.put("SF", UserDetails.getString("Sfcode", ""));
+            jParam.put("div", UserDetails.getString("Divcode", ""));
+            apiInterface.getDataArrayList("get/prodgroup", jParam.toString()).enqueue(new Callback<JsonArray>() {
                 @Override
                 public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                     db.deleteMasterData("PGroup");
-                    db.addMasterData("PGroup",response.body());
+                    db.addMasterData("PGroup", response.body());
                 }
 
                 @Override
@@ -168,9 +167,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
         }
 
 
-
         common_class.getDataFromApi(Constants.Outlet_Total_Orders, this, false);
-        try{
+        try {
             recyclerView = findViewById(R.id.leaverecyclerview);
             presenter = new MasterSync_Implementations(this, new Master_Sync_View());
             presenter.requestDataFromServer();
@@ -291,8 +289,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             Retailer_Modal_List = new ArrayList<>();
 
 
-
-
             if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
 
                 String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
@@ -347,8 +343,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                     sDeptType = "1";
                     btnCmbRoute.setVisibility(View.VISIBLE);
                     recyclerView.setAdapter(
-                            new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() 
-                            {
+                            new Route_View_Adapter(Retailer_Modal_ListFilter, R.layout.route_dashboard_recyclerview, getApplicationContext(), new AdapterOnClick() {
                                 @Override
                                 public void onIntentClick(int position) {
                                     Shared_Common_Pref.Outler_AddFlag = "0";
@@ -393,11 +388,11 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
                                 @Override
                                 public void CallMobile(String MobileNo) {
-                                    Log.d("Event","CAll Mobile");
+                                    Log.d("Event", "CAll Mobile");
                                     int readReq = ContextCompat.checkSelfPermission(Dashboard_Route.this, CALL_PHONE);
                                     if (readReq != PackageManager.PERMISSION_GRANTED) {
                                         ActivityCompat.requestPermissions(Dashboard_Route.this, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-                                    } else{
+                                    } else {
                                         Intent callIntent = new Intent(Intent.ACTION_CALL);
                                         callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
                                         startActivity(callIntent);
@@ -416,41 +411,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
             createTabFragment();
 
-            viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                    Log.e("viewPager:", "onPageScrolled:" + position);
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    scrollPosition = position;
-                    Log.e("viewPager:", "onPageSelected:" + position);
-
-                    // OutletFilter("t", String.valueOf(position + 1), false);
-
-
-        //                    adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
-        //                    viewPager.setAdapter(adapter);
-        //                    tabLayout.setupWithViewPager(viewPager);
-
-
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                    if (state == ViewPager.SCROLL_STATE_IDLE) {
-                        // OutletFilter("t", String.valueOf(scrollPosition));
-                        //adapter.notifyDataSetChanged();
-
-
-                        // Toast.makeText(getApplicationContext(), "" + scrollPosition, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
         } catch (Exception e) {
             Log.e("Retailor List:ex ", e.getMessage());
 
@@ -461,7 +421,8 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
             getLastInvoiceData();
         getSalesCounts();
     }
-    public void updateSales(){
+
+    public void updateSales() {
         new android.os.Handler(Looper.getMainLooper()).postDelayed(
                 new Runnable() {
                     public void run() {
@@ -470,48 +431,49 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
                 },
                 60000);
     }
-public void getSalesCounts()
-{
-    JSONObject jParam=new JSONObject();
-    try {
-        jParam.put("SF",UserDetails.getString("Sfcode",""));
-        jParam.put("div", UserDetails.getString("Divcode",""));
-        apiInterface.getDataArrayList("get/salessumry",jParam.toString()).enqueue(new Callback<JsonArray>() {
-            @Override
-            public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                JsonArray jRes=response.body();
-                if(jRes.size()>0){
-                    JsonObject jItm=jRes.get(0).getAsJsonObject();
-                   double invVal=  jItm.get("InvVal").getAsDouble();
-                    smryOrd.setText(jItm.get("Orders").getAsString());
-                    smryNOrd.setText(jItm.get("NOrders").getAsString());
-                    smryNOOrd.setText(jItm.get("NoOrder").getAsString());
-                    smryInv.setText(jItm.get("InvCnt").getAsString());
-                    smryInvVal.setText("₹" + new DecimalFormat("##0.00").format(invVal));
-                }else{
 
-                    smryOrd.setText("0");
-                    smryNOrd.setText("0");
-                    smryNOOrd.setText("0");
-                    smryInv.setText("0");
-                    smryInvVal.setText("₹0.00");
+    public void getSalesCounts() {
+        JSONObject jParam = new JSONObject();
+        try {
+            jParam.put("SF", UserDetails.getString("Sfcode", ""));
+            jParam.put("div", UserDetails.getString("Divcode", ""));
+            apiInterface.getDataArrayList("get/salessumry", jParam.toString()).enqueue(new Callback<JsonArray>() {
+                @Override
+                public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                    JsonArray jRes = response.body();
+                    if (jRes.size() > 0) {
+                        JsonObject jItm = jRes.get(0).getAsJsonObject();
+                        double invVal = jItm.get("InvVal").getAsDouble();
+                        smryOrd.setText(jItm.get("Orders").getAsString());
+                        smryNOrd.setText(jItm.get("NOrders").getAsString());
+                        smryNOOrd.setText(jItm.get("NoOrder").getAsString());
+                        smryInv.setText(jItm.get("InvCnt").getAsString());
+                        smryInvVal.setText("₹" + new DecimalFormat("##0.00").format(invVal));
+                    } else {
+
+                        smryOrd.setText("0");
+                        smryNOrd.setText("0");
+                        smryNOOrd.setText("0");
+                        smryInv.setText("0");
+                        smryInvVal.setText("₹0.00");
+                    }
+                    if (StopedUpdate == false) updateSales();
                 }
-                if(StopedUpdate==false) updateSales();
-            }
 
-            @Override
-            public void onFailure(Call<JsonArray> call, Throwable t) {
-                if(StopedUpdate==false) updateSales();
-            }
-        });
-    } catch (JSONException e) {
-        e.printStackTrace();
+                @Override
+                public void onFailure(Call<JsonArray> call, Throwable t) {
+                    if (StopedUpdate == false) updateSales();
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
-}
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        StopedUpdate=true;
+        StopedUpdate = true;
     }
 
     @Override
@@ -524,6 +486,7 @@ public void getSalesCounts()
                 }
         }
     }
+
     private void getLastInvoiceData() {
         try {
 
@@ -582,17 +545,17 @@ public void getSalesCounts()
         }
     }
 
-    private void SearchRetailers(){
+    private void SearchRetailers() {
         if (!shared_common_pref.getvalue(Constants.Distributor_Id).equals("")) {
             String outletserializableob = shared_common_pref.getvalue(Constants.Retailer_OutletList);
             Retailer_Modal_List = gson.fromJson(outletserializableob, userTypeRetailor);
         }
-        String sSchText=txSearchRet.getText().toString();
+        String sSchText = txSearchRet.getText().toString();
         Retailer_Modal_ListFilter.clear();
         for (int i = 0; i < Retailer_Modal_List.size(); i++) {
             if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase(RetType)
                     && (sSchText.equalsIgnoreCase("") ||
-                    (";"+Retailer_Modal_List.get(i).getName().toLowerCase()).indexOf(";"+sSchText.toLowerCase())>-1))
+                    (";" + Retailer_Modal_List.get(i).getName().toLowerCase()).indexOf(";" + sSchText.toLowerCase()) > -1))
                 Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
         }
         TabAdapter adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
@@ -644,11 +607,11 @@ public void getSalesCounts()
 
             @Override
             public void CallMobile(String MobileNo) {
-                Log.d("Event","CAll Mobile");
+                Log.d("Event", "CAll Mobile");
                 int readReq = ContextCompat.checkSelfPermission(Dashboard_Route.this, CALL_PHONE);
                 if (readReq != PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(Dashboard_Route.this, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-                } else{
+                } else {
                     Intent callIntent = new Intent(Intent.ACTION_CALL);
                     callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
                     startActivity(callIntent);
@@ -692,12 +655,12 @@ public void getSalesCounts()
                 } else if (route_text.getText().toString().equals("")) {
                     Toast.makeText(this, "Select The Route", Toast.LENGTH_SHORT).show();
                 } else {*/
-                   // shared_common_pref.save("RouteSelect", Route_id);
-                   // shared_common_pref.save("RouteName", route_text.getText().toString());
-                   // shared_common_pref.save("Distributor_ID", Distributor_Id);
-                   // Shared_Common_Pref.Outler_AddFlag = "1";
-                    common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
-                    //common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
+                // shared_common_pref.save("RouteSelect", Route_id);
+                // shared_common_pref.save("RouteName", route_text.getText().toString());
+                // shared_common_pref.save("Distributor_ID", Distributor_Id);
+                // Shared_Common_Pref.Outler_AddFlag = "1";
+                common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
+                //common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
                 //}
                 break;
             case R.id.distributor_text:
@@ -769,8 +732,8 @@ public void getSalesCounts()
 
     public void OutletFilter(String id, String flag, Boolean pagerUpdate) {
         try {
-            CountUR=0;
-            CountSR=0;
+            CountUR = 0;
+            CountSR = 0;
 
 
             if (flag.equals("0")) {
@@ -778,8 +741,8 @@ public void getSalesCounts()
                 Retailer_Modal_ListFilter = new ArrayList<>();
                 String sSchText = txSearchRet.getText().toString();
                 for (int i = 0; i < Retailer_Modal_List.size(); i++) {
-                    if(!Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) CountUR++;
-                    if(Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) CountSR++;
+                    if (!Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) CountUR++;
+                    if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) CountSR++;
 
                     if (id.equals(Retailer_Modal_List.get(i).getTownCode()))
                         Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(i));
@@ -842,11 +805,11 @@ public void getSalesCounts()
 
                     @Override
                     public void CallMobile(String MobileNo) {
-                        Log.d("Event","CAll Mobile");
+                        Log.d("Event", "CAll Mobile");
                         int readReq = ContextCompat.checkSelfPermission(Dashboard_Route.this, CALL_PHONE);
                         if (readReq != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions(Dashboard_Route.this, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-                        } else{
+                        } else {
                             Intent callIntent = new Intent(Intent.ACTION_CALL);
                             callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
                             startActivity(callIntent);
@@ -898,6 +861,7 @@ public void getSalesCounts()
             findViewById(R.id.ivRouteSpinner).setVisibility(View.VISIBLE);
         }
     }
+
     void getDbstoreData(String listType) {
         try {
             JSONArray jsonArray = db.getMasterData(listType);
@@ -910,7 +874,7 @@ public void getSalesCounts()
                 Model_Pojo = new Common_Model(id, name, flag);
                 if (listType.equals(Constants.Distributor_List)) {
                     String Add2 = jsonObject1.optString("Addr2");
-                    Model_Pojo = new Common_Model( name,id, flag,Add2,"");
+                    Model_Pojo = new Common_Model(name, id, flag, Add2, "");
                     distributor_master.add(Model_Pojo);
                 } else if (listType.equals(Constants.Rout_List)) {
                     Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
@@ -954,8 +918,8 @@ public void getSalesCounts()
 
             Retailer_Modal_List = retailer_modal_list;
             for (int i = 0; i < Retailer_Modal_List.size(); i++) {
-                if(!Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) CountUR++;
-                if(Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) CountSR++;
+                if (!Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) CountUR++;
+                if (Retailer_Modal_List.get(i).getType().equalsIgnoreCase("1")) CountSR++;
             }
 
             txUniOtltCnt.setText(String.valueOf(CountUR));
@@ -1011,13 +975,14 @@ public void getSalesCounts()
                         }
                     }
                 }
+
                 @Override
                 public void CallMobile(String MobileNo) {
-                    Log.d("Event","CAll Mobile");
+                    Log.d("Event", "CAll Mobile");
                     int readReq = ContextCompat.checkSelfPermission(Dashboard_Route.this, CALL_PHONE);
                     if (readReq != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(Dashboard_Route.this, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-                    } else{
+                    } else {
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
                         callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
                         startActivity(callIntent);
@@ -1127,13 +1092,14 @@ public void getSalesCounts()
 
                     }
                 }
+
                 @Override
                 public void CallMobile(String MobileNo) {
-                    Log.d("Event","CAll Mobile");
+                    Log.d("Event", "CAll Mobile");
                     int readReq = ContextCompat.checkSelfPermission(context, CALL_PHONE);
                     if (readReq != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-                    } else{
+                    } else {
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
                         callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
                         startActivity(callIntent);
@@ -1225,13 +1191,14 @@ public void getSalesCounts()
                         }
                     }
                 }
+
                 @Override
                 public void CallMobile(String MobileNo) {
-                    Log.d("Event","CAll Mobile");
+                    Log.d("Event", "CAll Mobile");
                     int readReq = ContextCompat.checkSelfPermission(context, CALL_PHONE);
                     if (readReq != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-                    } else{
+                    } else {
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
                         callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
                         startActivity(callIntent);
@@ -1306,13 +1273,14 @@ public void getSalesCounts()
                         }
                     }
                 }
+
                 @Override
                 public void CallMobile(String MobileNo) {
-                    Log.d("Event","CAll Mobile");
+                    Log.d("Event", "CAll Mobile");
                     int readReq = ContextCompat.checkSelfPermission(context, CALL_PHONE);
                     if (readReq != PackageManager.PERMISSION_GRANTED) {
                         ActivityCompat.requestPermissions(HAPApp.activeActivity, new String[]{CALL_PHONE}, REQUEST_PERMISSIONS_REQUEST_CODE);
-                    } else{
+                    } else {
                         Intent callIntent = new Intent(Intent.ACTION_CALL);
                         callIntent.setData(Uri.parse("tel:" + MobileNo));//change the number
                         startActivity(callIntent);
@@ -1323,5 +1291,17 @@ public void getSalesCounts()
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+
+
+            common_class.CommonIntentwithFinish(SFA_Activity.class);
+
+
+            return true;
+        }
+        return false;
+    }
 }
 

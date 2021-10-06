@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+
+
+    <include layout="@layout/sfatoolbar"></include>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/blue_bg"
+        android:orientation="vertical"
+        android:padding="@dimen/C8dp">
+
+        <TextView
+            android:id="@+id/headtext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/basic"
+            android:text="Payment"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="#FFF"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/C10dp"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/retailername"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="7 Hills milk Centre"
+                android:textColor="@color/black"
+                android:textSize="@dimen/C16dp"
+                android:textStyle="bold">
+
+            </TextView>
+
+            <RelativeLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+
+                <TextView
+
+                    android:id="@+id/tvLabel"
+                    style="@style/TextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:fontFamily="sans-serif"
+                    android:paddingTop="@dimen/C10dp"
+                    android:text="Remaining outstanding : ₹500.00" />
+
+            </RelativeLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:paddingTop="@dimen/C10dp"
+                    android:text="Payment Mode" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/C30dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox style="@style/TextStyle" />
+
+                    <TextView
+                        style="@style/TextStyle"
+                        android:text="Cash" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/C30dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox style="@style/TextStyle" />
+
+                    <TextView
+                        style="@style/TextStyle"
+                        android:text="UPI" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/C30dp"
+                    android:orientation="horizontal">
+
+                    <CheckBox style="@style/TextStyle" />
+
+                    <TextView
+                        style="@style/TextStyle"
+                        android:text="Online Transfer" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:paddingTop="@dimen/C10dp"
+                    android:text="Ref No" />
+
+                <EditText
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/textbox_bg"
+                    android:elevation="5dp"
+                    android:hint="Enter Ref No here"
+                    android:padding="@dimen/C8dp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:paddingTop="@dimen/C10dp"
+                    android:text="Date of payment" />
+
+                <EditText
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/textbox_bg"
+                    android:elevation="5dp"
+                    android:hint="Enter Date here"
+                    android:padding="@dimen/C8dp" />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/TextStyle"
+                    android:paddingTop="@dimen/C10dp"
+                    android:text="Amount Received" />
+
+                <EditText
+                    style="@style/TextStyle"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/textbox_bg"
+                    android:elevation="5dp"
+                    android:padding="@dimen/C8dp" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

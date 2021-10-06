@@ -126,10 +126,10 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         findViewById(R.id.tvPOP).setVisibility(View.GONE);
 
 
-        qpsModals.add(new QPS_Modal("233", "236763", "Cooker", "30.8.2021", "-1 day", "10.9.2021", "PENDING"));
-        qpsModals.add(new QPS_Modal("234", "236745", "Mobile", "25.8.2021", "-5 days", "10.9.2021", "COMPLETED"));
+        qpsModals.add(new QPS_Modal("233", "236763", "Cooker", "30.8.2021", "-1 day", "10.9.2021", "PENDING", null));
+        qpsModals.add(new QPS_Modal("234", "236745", "Mobile", "25.8.2021", "-5 days", "10.9.2021", "Approved", null));
 
-        qpsModals.add(new QPS_Modal("235", "236789", "Bag", "28.8.2021", "-3 days", "10.9.2021", "PENDING"));
+        qpsModals.add(new QPS_Modal("235", "236789", "Bag", "28.8.2021", "-3 days", "10.9.2021", "PENDING", null));
         qpsAdapter = new QPSAdapter(this, qpsModals);
         rvQps.setAdapter(qpsAdapter);
 

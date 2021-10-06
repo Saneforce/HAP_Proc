@@ -41,9 +41,7 @@ public class HistoryOrderInvInfoAdapter extends RecyclerView.Adapter<HistoryOrde
     @Override
     public HistoryOrderInvInfoAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-//        if (viewType == 3)
-//            listItem = layoutInflater.inflate(R.layout.history_orderinvoice_adapter_layout, null, false);
-//        else
+
         listItem = layoutInflater.inflate(rowlayout, null, false);
         return new HistoryOrderInvInfoAdapter.MyViewHolder(listItem);
     }
@@ -51,7 +49,6 @@ public class HistoryOrderInvInfoAdapter extends RecyclerView.Adapter<HistoryOrde
     @Override
     public void onBindViewHolder(HistoryOrderInvInfoAdapter.MyViewHolder holder, int position) {
         try {
-            // holder.tvName.setText("" + mDate.get(position).getNo_Of_items() + " items");
             holder.tvId.setText("" + mDate.get(position).getOrderNo());
             holder.tvDate.setText("" + mDate.get(position).getOrderDate());
             holder.tvOutletName.setText("" + mDate.get(position).getOutletCode());
@@ -75,7 +72,7 @@ public class HistoryOrderInvInfoAdapter extends RecyclerView.Adapter<HistoryOrde
             holder.tvInvId.setText("" + mDate.get(position).getInvoiceID());
 
             if (!Common_Class.isNullOrEmpty(mDate.get(position).getInvoiceAmount()))
-                holder.tvInvAmt.setText("₹ " + mDate.get(position).getInvoiceAmount());
+                holder.tvInvAmt.setText("₹ " + formatter.format(Double.parseDouble(mDate.get(position).getInvoiceAmount())));
             holder.tvInvProducts.setText("" + mDate.get(position).getInvoiceItems());
 
             if (mDate.get(position).getInvoiceStatus().equals("Completed")) {

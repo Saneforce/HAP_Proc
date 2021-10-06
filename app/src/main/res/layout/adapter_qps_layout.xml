@@ -7,7 +7,10 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/C10dp"
+        android:layout_marginStart="@dimen/C10dp"
+        android:layout_marginTop="@dimen/C10dp"
+        android:layout_marginEnd="@dimen/C10dp"
+        android:layout_marginBottom="@dimen/C10dp"
         app:cardCornerRadius="@dimen/C5dp">
 
         <LinearLayout
@@ -155,21 +158,38 @@
             </LinearLayout>
 
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:paddingBottom="2dp">
 
+
                 <TextView
+
+                    android:id="@+id/tvPhotoLabel"
                     style="@style/DashboardTextStyle"
-                    android:layout_weight="1"
                     android:text="Photo" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvFiles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/C5dp"
+                    android:visibility="visible"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager">
+
+                </androidx.recyclerview.widget.RecyclerView>
+
 
                 <ImageView
                     android:id="@+id/ivQPSCaptureImg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_toLeftOf="@id/ivQPSPreviewImg"
                     android:padding="@dimen/C5dp"
                     android:src="@drawable/ic_round_photo_camera_24"
                     app:tint="@color/colorPrimaryDark" />
@@ -178,12 +198,44 @@
                     android:id="@+id/ivQPSPreviewImg"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_gravity="center_vertical"
                     android:padding="@dimen/C5dp"
                     android:src="@drawable/image_preview_24"
                     app:tint="@color/colorPrimaryDark" />
 
-            </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/ivFileCount"
+                        android:layout_width="@dimen/C20dp"
+                        android:layout_height="@dimen/C20dp"
+                        android:background="@drawable/circle_bg"
+                        android:gravity="center"
+                        android:paddingTop="@dimen/C3dp"
+                        android:text="5"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/C8dp"
+                        android:textStyle="bold|italic"
+                        app:tint="@color/colorPrimaryDark" />
+                </RelativeLayout>
+
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/circle_bg"
+                    android:padding="6dp"
+                    android:text="3"
+                    android:textColor="@android:color/white"
+                    android:visibility="gone" />
+
+            </RelativeLayout>
 
             <Button
                 android:id="@+id/btnComplete"

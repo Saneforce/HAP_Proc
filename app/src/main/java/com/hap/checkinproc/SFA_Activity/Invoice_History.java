@@ -64,7 +64,7 @@ import retrofit2.Response;
 
 public class Invoice_History extends AppCompatActivity implements Master_Interface, View.OnClickListener, UpdateResponseUI {
     TextView outlet_name, lastinvoice, tvOtherBrand, tvQPS, tvPOP, tvCoolerInfo, tvOrder, txRmkTmplSpinn, txRmksNoOrd;
-    LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks;
+    LinearLayout lin_order, lin_repeat_order, lin_invoice, lin_repeat_invoice, lin_noOrder, linNoOrderRmks, linPayment;
     Common_Class common_class;
     List<OutletReport_View_Modal> OutletReport_View_Modal;
     List<OutletReport_View_Modal> FilterOrderList = new ArrayList<>();
@@ -81,7 +81,8 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     List<Common_Model> ldgRemarks = new ArrayList<>();
     Button btnSbmtNOrd;
     ImageView btnRmkClose;
-//Updateed
+
+    //Updateed
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -120,6 +121,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             txRmkTmplSpinn = (TextView) findViewById(R.id.txRmkTmplSpinn);
             txRmksNoOrd = (TextView) findViewById(R.id.txRmksNoOrd);
             btnRmkClose = (ImageView) findViewById(R.id.btnRmkClose);
+            linPayment = (LinearLayout) findViewById(R.id.lin_payment);
 
 
             lin_noOrder.setOnClickListener(this);
@@ -130,6 +132,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
             tvPOP.setOnClickListener(this);
             tvOrder.setOnClickListener(this);
             tvCoolerInfo.setOnClickListener(this);
+            linPayment.setOnClickListener(this);
 
 
             loadNoOrdRemarks();
@@ -238,6 +241,9 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.lin_payment:
+                common_class.CommonIntentwithoutFinish(PaymentActivity.class);
+                break;
             case R.id.tvOtherBrand:
                 common_class.CommonIntentwithFinish(OtherBrandActivity.class);
                 break;

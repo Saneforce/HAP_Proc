@@ -106,6 +106,14 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
         chooseDate = (EditText) findViewById(R.id.choose_date);
         remarks = findViewById(R.id.remarks);
         DeviationSubmit = findViewById(R.id.deviation_submit);
+
+        Bundle params = getIntent().getExtras();
+        if (params != null) {
+            String[] stDt = params.getString("EDt").split("/");
+            chooseDate.setText(stDt[2] + "-" + stDt[1] + "-" + stDt[0]);
+            chooseDate.setEnabled(false);
+        }
+
         chooseDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

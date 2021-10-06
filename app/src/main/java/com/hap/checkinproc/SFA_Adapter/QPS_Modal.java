@@ -3,8 +3,11 @@ package com.hap.checkinproc.SFA_Adapter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class QPS_Modal {
-    public QPS_Modal(String sNo, String requestNo, String gift, String bookingDate, String duration, String receivedDate, String Status) {
+    public QPS_Modal(String sNo, String requestNo, String gift, String bookingDate, String duration, String receivedDate, String Status,
+                     List<String> fileUrls) {
         this.sNo = sNo;
         this.requestNo = requestNo;
         this.gift = gift;
@@ -12,11 +15,15 @@ public class QPS_Modal {
         this.duration = duration;
         this.receivedDate = receivedDate;
         this.Status = Status;
+        this.fileUrls = fileUrls;
     }
 
     @SerializedName("id")
     @Expose
     private String sNo;
+
+    private List<String> fileUrls;
+
 
     @SerializedName("requestNo")
     @Expose
@@ -130,5 +137,13 @@ public class QPS_Modal {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public List<String> getFileUrls() {
+        return fileUrls;
+    }
+
+    public void setFileUrls(List<String> fileUrls) {
+        this.fileUrls = fileUrls;
     }
 }

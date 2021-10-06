@@ -11,16 +11,15 @@ import android.widget.DatePicker;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.activity.OnBackPressedDispatcher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
@@ -33,6 +32,7 @@ import com.hap.checkinproc.SFA_Activity.Dist_Locations;
 import com.hap.checkinproc.SFA_Activity.Lead_Activity;
 import com.hap.checkinproc.SFA_Activity.Offline_Sync_Activity;
 import com.hap.checkinproc.SFA_Activity.Outlet_Info_Activity;
+import com.hap.checkinproc.SFA_Activity.PrimaryOrderActivity;
 import com.hap.checkinproc.SFA_Activity.Reports_Outler_Name;
 import com.hap.checkinproc.SFA_Activity.SFA_Dashboard;
 import com.hap.checkinproc.SFA_Adapter.OutletDashboardInfoAdapter;
@@ -56,7 +56,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SFA_Activity extends AppCompatActivity implements View.OnClickListener /*,Main_Model.MasterSyncView*/ {
-    LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders;
+    LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders, linPrimary;
     Gson gson;
     Type userType;
     Common_Class common_class;
@@ -92,6 +92,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         linorders = findViewById(R.id.linorders);
         lin_Reports = findViewById(R.id.lin_Reports);
         Logout = findViewById(R.id.Logout);
+        linPrimary = findViewById(R.id.Lin_primary);
 
         common_class = new Common_Class(this);
         SyncButon.setOnClickListener(this);
@@ -105,6 +106,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         linorders.setOnClickListener(this);
         Logout.setOnClickListener(this);
         ivLogout.setOnClickListener(this);
+        linPrimary.setOnClickListener(this);
         gson = new Gson();
 
 
@@ -114,21 +116,14 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         init();
         setOnClickListener();
         getNoOrderRemarks();
-      recyclerView = findViewById(R.id.gvOutlet);
+        recyclerView = findViewById(R.id.gvOutlet);
 
         llGridParent = findViewById(R.id.lin_gridOutlet);
 
 
-        getCumulativeDataFromAPI();
-
-        getServiceOutletSummary();
-        getOutletSummary();
-
-        getDashboarddata();
-
+        showDashboardData();
 
     }
-
 
 
     private void setOnClickListener() {
@@ -172,9 +167,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
 
                                 JSONObject jsonObject = new JSONObject(is.toString());
-
-
-                                //   {"success":true,"Data":[{"CTC":31,"CPC":28,"TC":0,"PC":0,"NTC":0,"NPC":0}]}
 
                                 if (jsonObject.getBoolean("success")) {
 
@@ -241,95 +233,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private void getDashboardDataFromAPI() {
-        try {
-            if (common_class.isNetworkAvailable(this)) {
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-
-                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                Calendar calobj = Calendar.getInstance();
-                String dateTime = df.format(calobj.getTime());
-
-
-                JSONObject HeadItem = new JSONObject();
-                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
-                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
-                HeadItem.put("dt", dateTime);
-
-
-                Call<ResponseBody> call = service.getDashboardValues(HeadItem.toString());
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        InputStreamReader ip = null;
-                        StringBuilder is = new StringBuilder();
-                        String line = null;
-                        try {
-                            if (response.isSuccessful()) {
-                                ip = new InputStreamReader(response.body().byteStream());
-                                BufferedReader bf = new BufferedReader(ip);
-                                while ((line = bf.readLine()) != null) {
-                                    is.append(line);
-                                    Log.v("Res>>", is.toString());
-                                }
-
-
-                                JSONObject jsonObject = new JSONObject(is.toString());
-
-
-                                //   {"success":true,"Data":[{"CTC":31,"CPC":28,"TC":0,"PC":0,"NTC":0,"NPC":0}]}
-
-                                if (jsonObject.getBoolean("success")) {
-
-                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
-
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-
-
-                                    }
-
-
-                                }
-
-
-//                            popMaterialList.clear();
-//
-//                            for (int i = 0; i < jsonArray.length(); i++) {
-//                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-//
-//                                popMaterialList.add(new Common_Model(jsonObject1.getString("POP_Code"), jsonObject1.getString("POP_Name"),
-//                                        jsonObject1.getString("POP_UOM")));
-//                            }
-
-
-                            }
-
-                        } catch (Exception e) {
-
-                            Log.v("fail>>1", e.getMessage());
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.v("fail>>2", t.toString());
-
-
-                    }
-                });
-            } else {
-                common_class.showMsg(this, "Please check your internet connection");
-            }
-        } catch (Exception e) {
-            Log.v("fail>>", e.getMessage());
-
-
-        }
-    }
-
     private void getServiceOutletSummary() {
         try {
             if (common_class.isNetworkAvailable(this)) {
@@ -388,16 +291,6 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                                 }
 
 
-//                            popMaterialList.clear();
-//
-//                            for (int i = 0; i < jsonArray.length(); i++) {
-//                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-//
-//                                popMaterialList.add(new Common_Model(jsonObject1.getString("POP_Code"), jsonObject1.getString("POP_Name"),
-//                                        jsonObject1.getString("POP_UOM")));
-//                            }
-
-
                             }
 
                         } catch (Exception e) {
@@ -424,13 +317,13 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private void getNoOrderRemarks(){
+    private void getNoOrderRemarks() {
         try {
             if (common_class.isNetworkAvailable(this)) {
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
                 JSONObject HeadItem = new JSONObject();
                 HeadItem.put("Div", Shared_Common_Pref.Div_Code);
-                service.getDataArrayList("get/noordrmks",HeadItem.toString()).enqueue(new Callback<JsonArray>() {
+                service.getDataArrayList("get/noordrmks", HeadItem.toString()).enqueue(new Callback<JsonArray>() {
                     @Override
                     public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
                         db.deleteMasterData("HAPNoOrdRmks");
@@ -552,7 +445,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        
+
                         InputStreamReader ip = null;
                         StringBuilder is = new StringBuilder();
                         String line = null;
@@ -606,7 +499,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                             }
 
                         } catch (Exception e) {
-                            
+
 
                             Log.v("fail>>1", e.getMessage());
 
@@ -615,7 +508,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        
+
                         Log.v("fail>>2", t.toString());
 
 
@@ -722,6 +615,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.Lin_primary:
+                common_class.CommonIntentwithNEwTask(PrimaryOrderActivity.class);
+
+                break;
             case R.id.ivSFACalendar:
 
                 Calendar newCalendar = Calendar.getInstance();
@@ -731,13 +628,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                         int month = monthOfYear + 1;
                         tvDate.setText("" + year + "-" + month + "-" + dayOfMonth);
 
-                        getCumulativeDataFromAPI();
-
-                        getServiceOutletSummary();
-                        getOutletSummary();
-
-                        getDashboarddata();
-
+                        showDashboardData();
 
                     }
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
@@ -753,10 +644,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                 Intent intent = new Intent(SFA_Activity.this, Dashboard_Route.class);
                 startActivity(intent);
                 break;
-            case R.id.Lin_Route:
-                sharedCommonPref.save(sharedCommonPref.DCRMode, "");
-                common_class.CommonIntentwithNEwTask(Dashboard_Route.class);
-                break;
+
             case R.id.Lin_Outlet:
                 common_class.CommonIntentwithNEwTask(Outlet_Info_Activity.class);
                 break;
@@ -766,10 +654,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
             case R.id.lin_Reports:
                 common_class.CommonIntentwithNEwTask(Reports_Outler_Name.class);
                 break;
-            case R.id.SyncButon:
-                Shared_Common_Pref.Sync_Flag = "10";
-                common_class.CommonIntentwithNEwTask(Offline_Sync_Activity.class);
-                break;
+
             case R.id.linorders:
                 common_class.CommonIntentwithNEwTask(Dashboard_Order_Reports.class);
                 break;
@@ -793,85 +678,19 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
                 break;
+
+
+            case R.id.Lin_Route:
+                sharedCommonPref.save(sharedCommonPref.DCRMode, "");
+                common_class.CommonIntentwithNEwTask(Dashboard_Route.class);
+                break;
+
+            case R.id.SyncButon:
+                Shared_Common_Pref.Sync_Flag = "10";
+                common_class.CommonIntentwithNEwTask(Offline_Sync_Activity.class);
+                break;
         }
     }
-
-
-
-   /* @Override
-    public void showProgress() {
-    }
-
-    @Override
-    public void hideProgress() {
-    }
-
-    @Override
-    public void setDataToRoute(ArrayList<Route_Master> noticeArrayList) {
-
-    }
-
-    @Override
-    public void setDataToRouteObject(Object responsebody, int position) {
-        Log.e("Calling Position", String.valueOf(position));
-        // Toast.makeText(this, "Position" + position, Toast.LENGTH_SHORT).show();
-        Log.e("ResponseFromServer", String.valueOf(responsebody));
-        String serializedData = gson.toJson(responsebody);
-        switch (position) {
-            case (0):
-                //Outlet_List
-                System.out.println("GetTodayOrder_All" + serializedData);
-                sharedCommonPref.save(Shared_Common_Pref.Outlet_List, serializedData);
-                break;
-            case (1):
-                //Distributor_List
-                //  System.out.println("Distributor_List" + serializedData);
-                //  sharedCommonPref.save(Shared_Common_Pref.Distributor_List, serializedData);
-                break;
-            case (2):
-                //Category_List
-                System.out.println("Category_List" + serializedData);
-                sharedCommonPref.save(Shared_Common_Pref.Category_List, serializedData);
-                break;
-            case (3):
-                //Product_List
-                System.out.println("Product_List" + serializedData);
-                sharedCommonPref.save(Shared_Common_Pref.Product_List, serializedData);
-                break;
-            case (4):
-                //GetTodayOrder_List
-                System.out.println("GetTodayOrder_List" + serializedData);
-                sharedCommonPref.save(Shared_Common_Pref.GetTodayOrder_List, serializedData);
-                break;
-            default:
-                System.out.println("Compititor_List" + serializedData);
-                sharedCommonPref.save(Shared_Common_Pref.Compititor_List, serializedData);
-        }
-    }
-
-    @Override
-    public void onResponseFailure(Throwable throwable) {
-
-    }*/
-
-/*
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            common_class.CommonIntentwithFinish(Dashboard.class);
-            return true;
-        }
-        return false;
-    }
-*/
-
-    private final OnBackPressedDispatcher mOnBackPressedDispatcher =
-            new OnBackPressedDispatcher(new Runnable() {
-                @Override
-                public void run() {
-                    finish();
-                }
-            });
 
 
     @Override
@@ -880,4 +699,105 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    void showDashboardData() {
+        getCumulativeDataFromAPI();
+
+       // common_class.getDb_310Data(Constants.CUMULATIVEDATA, this);
+
+        getServiceOutletSummary();
+        getOutletSummary();
+
+        getDashboarddata();
+
+    }
+
 }
+
+  /*  private void getDashboardDataFromAPI() {
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+
+                DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+                Calendar calobj = Calendar.getInstance();
+                String dateTime = df.format(calobj.getTime());
+
+
+                JSONObject HeadItem = new JSONObject();
+                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
+                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
+                HeadItem.put("dt", dateTime);
+
+
+                Call<ResponseBody> call = service.getDashboardValues(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+
+                                //   {"success":true,"Data":[{"CTC":31,"CPC":28,"TC":0,"PC":0,"NTC":0,"NPC":0}]}
+
+                                if (jsonObject.getBoolean("success")) {
+
+                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
+
+                                    for (int i = 0; i < jsonArray.length(); i++) {
+                                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+
+
+                                    }
+
+
+                                }
+
+
+//                            popMaterialList.clear();
+//
+//                            for (int i = 0; i < jsonArray.length(); i++) {
+//                                JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//
+//                                popMaterialList.add(new Common_Model(jsonObject1.getString("POP_Code"), jsonObject1.getString("POP_Name"),
+//                                        jsonObject1.getString("POP_UOM")));
+//                            }
+
+
+                            }
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>1", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>2", t.toString());
+
+
+                    }
+                });
+            } else {
+                common_class.showMsg(this, "Please check your internet connection");
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }*/

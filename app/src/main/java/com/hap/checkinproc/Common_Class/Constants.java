@@ -1,5 +1,7 @@
 package com.hap.checkinproc.Common_Class;
 
+import android.app.Activity;
+
 public class Constants {
     public static final String MAP_KEYLIST = "mapKeyList";
     public static final String MAP_KEY = "mapKey";
@@ -42,14 +44,16 @@ public class Constants {
 
 
     public static final String RetailorTodayDataDynamic = "retailorTodayDataDynamic";
-    public static final String FreeSchemeDiscList="freeSchemeDiscList";
-    public static final String InvoiceQtyList="InvoiceQtyList";
+    public static final String FreeSchemeDiscList = "freeSchemeDiscList";
+    public static final String InvoiceQtyList = "InvoiceQtyList";
 
-    public static final String TAXList="taxList";
+    public static final String TAXList = "taxList";
 
-    public static final String INVOICE_ORDERLIST="invoiceOrderList";
-    public static final String ORDER_ID="orderId";
-    public static final String POP_SAVE="popSave";
-    public static final String HistoryData="historyData";
-    public static final String QPS_STATUS="qpsStatus";
+    public static final String INVOICE_ORDERLIST = "invoiceOrderList";
+    public static final String ORDER_ID = "orderId";
+    public static final String POP_SAVE = "popSave";
+    public static final String HistoryData = "historyData";
+    public static final String QPS_STATUS = "qpsStatus";
+    public static final String QPS_LOCALPICLIST = "qpsLocalPicList";
+    public static final String CUMULATIVEDATA = "cumulativeData";
 }

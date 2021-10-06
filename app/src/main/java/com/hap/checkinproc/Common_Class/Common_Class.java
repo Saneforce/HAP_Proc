@@ -45,6 +45,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.HistoryInfoActivity;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -486,6 +487,14 @@ public class Common_Class {
 
                 switch (key) {
 
+                    case Constants.HistoryData:
+                        axnname = "get/orderandinvoice";
+                        data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("fdt", HistoryInfoActivity.stDate);
+                        data.put("tdt", HistoryInfoActivity.endDate);
+
+
+                        break;
 
                     case Constants.QPS_STATUS:
                         axnname = "get/popmaster";
@@ -518,17 +527,9 @@ public class Common_Class {
                                 }
 
 
-                                JSONObject jsonObject = new JSONObject(is.toString());
-
-
-                                //   {"success":true,"Data":[{"CTC":31,"CPC":28,"TC":0,"PC":0,"NTC":0,"NPC":0}]}
-
-                                if (jsonObject.getBoolean("success")) {
-
-                                    showMsg(activity, jsonObject.getString("Msg"));
-                                }
-
-
+                                shared_common_pref.save(key, is.toString());
+                                updateUi = ((UpdateResponseUI) activity);
+                                updateUi.onLoadDataUpdateUI(is.toString());
                             }
 
                         } catch (Exception e) {
