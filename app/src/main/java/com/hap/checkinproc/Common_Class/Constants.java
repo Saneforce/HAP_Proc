@@ -56,4 +56,6 @@ public class Constants {
     public static final String QPS_STATUS = "qpsStatus";
     public static final String QPS_LOCALPICLIST = "qpsLocalPicList";
     public static final String CUMULATIVEDATA = "cumulativeData";
+    public static final String OUTSTANDING="outstanding";
+    public static final String PAYMODES="payModes";
 }

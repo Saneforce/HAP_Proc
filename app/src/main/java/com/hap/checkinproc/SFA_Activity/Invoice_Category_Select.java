@@ -716,11 +716,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                     String san = jsonObjects.getString("success");
                                     Log.e("Success_Message", san);
                                     if (san.equals("true")) {
-                                        if (Shared_Common_Pref.Invoicetoorder.equals("0")) {
-                                            Toast.makeText(Invoice_Category_Select.this, "Order Submitted Successfully", Toast.LENGTH_SHORT).show();
-                                        } else {
+
                                             Toast.makeText(Invoice_Category_Select.this, "Invoice Submitted Successfully", Toast.LENGTH_SHORT).show();
-                                        }
+
                                         Shared_Common_Pref.Sync_Flag = "2";
 //                                    startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
 
@@ -920,7 +918,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse) {
+    public void onLoadDataUpdateUI(String apiDataResponse,String key) {
 
     }
 

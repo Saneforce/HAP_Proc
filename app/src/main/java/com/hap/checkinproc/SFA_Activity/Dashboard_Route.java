@@ -999,7 +999,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse) {
+    public void onLoadDataUpdateUI(String apiDataResponse,String key) {
 
     }
 

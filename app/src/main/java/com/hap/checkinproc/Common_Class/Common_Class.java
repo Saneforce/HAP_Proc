@@ -409,7 +409,7 @@ public class Common_Class {
 
                             updateUi = ((UpdateResponseUI) activity);
 
-                            updateUi.onLoadDataUpdateUI(gson.toJson(response.body()));
+                            updateUi.onLoadDataUpdateUI(gson.toJson(response.body()),key);
                         }
 
 
@@ -500,9 +500,18 @@ public class Common_Class {
 
 
                         break;
+                    case Constants.PAYMODES:
+                        axnname="get/paymenttype";
+                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        break;
 
                     case Constants.QPS_STATUS:
                         axnname = "get/popmaster";
+                        break;
+
+                    case Constants.OUTSTANDING:
+                        axnname = "get/customeroutstanding";
+                        data.put("retailerCode", shared_common_pref.getvalue(Constants.Retailor_ERP_Code));
                         break;
 
                     default:
@@ -534,7 +543,7 @@ public class Common_Class {
 
                                 shared_common_pref.save(key, is.toString());
                                 updateUi = ((UpdateResponseUI) activity);
-                                updateUi.onLoadDataUpdateUI(is.toString());
+                                updateUi.onLoadDataUpdateUI(is.toString(),key);
                             }
 
                         } catch (Exception e) {

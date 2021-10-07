@@ -156,15 +156,27 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivMnthSelecter:
-                displayMonthYearPickerDialogFragment(
-                        false,
-                        false
-                );
+//                displayMonthYearPickerDialogFragment(
+//                        false,
+//                        false
+//                );
+                btnToday.setTypeface(null, Typeface.NORMAL);
+                btnToday.setTextColor(getResources().getColor(R.color.a50white));
 
+                btnYesterday.setTypeface(null, Typeface.NORMAL);
+                btnYesterday.setTextColor(getResources().getColor(R.color.a50white));
+                btnCurrentMnth.setTypeface(null, Typeface.BOLD);
+                btnCurrentMnth.setTextColor(getResources().getColor(R.color.white));
+
+                findViewById(R.id.llCustomDate).setVisibility(View.VISIBLE);
+                tvStartDate.setText(stDate);
+                tvEndDate.setText(endDate);
+                btnSelectDate.setText(stDate + " TO " + endDate);
                 break;
 
             case R.id.tvSales:
                 llHistoryParent.setVisibility(View.GONE);
+                findViewById(R.id.llCustomDate).setVisibility(View.GONE);
                 findViewById(R.id.llSalesParent).setVisibility(View.VISIBLE);
                 tvSales.setVisibility(View.GONE);
                 stDate = Common_Class.GetDatewothouttime();
@@ -174,11 +186,15 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
             case R.id.tvStartDate:
                 selectDate(1);
 
+
                 break;
             case R.id.tvEndDate:
                 selectDate(2);
+
                 break;
             case R.id.btnToday:
+                findViewById(R.id.llCustomDate).setVisibility(View.GONE);
+
                 btnToday.setTypeface(null, Typeface.BOLD);
                 btnToday.setTextColor(getResources().getColor(R.color.white));
 
@@ -194,14 +210,14 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
                 break;
             case R.id.btnYesterday:
 
+                findViewById(R.id.llCustomDate).setVisibility(View.GONE);
+
                 btnToday.setTypeface(null, Typeface.NORMAL);
                 btnToday.setTextColor(getResources().getColor(R.color.a50white));
-
                 btnYesterday.setTypeface(null, Typeface.BOLD);
                 btnYesterday.setTextColor(getResources().getColor(R.color.white));
                 btnCurrentMnth.setTypeface(null, Typeface.NORMAL);
                 btnCurrentMnth.setTextColor(getResources().getColor(R.color.a50white));
-
 
                 stDate = getYesterdayDateString();
                 endDate = getYesterdayDateString();
@@ -216,14 +232,18 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
                 btnYesterday.setTextColor(getResources().getColor(R.color.a50white));
                 btnCurrentMnth.setTypeface(null, Typeface.BOLD);
                 btnCurrentMnth.setTextColor(getResources().getColor(R.color.white));
+                findViewById(R.id.llCustomDate).setVisibility(View.VISIBLE);
 
-                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.DAY_OF_MONTH, 1);
-                stDate = dateFormat.format(cal.getTime());
-                endDate = Common_Class.GetDatewothouttime();
-                common_class.getDb_310Data(Constants.HistoryData, this);
-                btnSelectDate.setText("Current Month");
+                tvStartDate.setText(stDate);
+                tvEndDate.setText(endDate);
+
+//                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//                Calendar cal = Calendar.getInstance();
+//                cal.set(Calendar.DAY_OF_MONTH, 1);
+//                stDate = dateFormat.format(cal.getTime());
+//                endDate = Common_Class.GetDatewothouttime();
+//                common_class.getDb_310Data(Constants.HistoryData, this);
+                // btnSelectDate.setText("Current Month");
 
                 break;
 
@@ -351,7 +371,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse) {
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         try {
 
 
@@ -493,7 +513,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
                             tvEndDate.getText().toString().equals("")) {
                         tvStartDate.setText(date);
                         stDate = tvStartDate.getText().toString();
-
+                        btnSelectDate.setText(stDate + " TO " + endDate);
                         common_class.getDb_310Data(Constants.HistoryData, HistoryInfoActivity.this);
                     } else
                         common_class.showMsg(HistoryInfoActivity.this, "Please select valid date");
@@ -502,7 +522,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
                             tvStartDate.getText().toString().equals("")) {
                         tvEndDate.setText(date);
                         endDate = tvEndDate.getText().toString();
-
+                        btnSelectDate.setText(stDate + " TO " + endDate);
                         common_class.getDb_310Data(Constants.HistoryData, HistoryInfoActivity.this);
 
                     } else
@@ -526,6 +546,7 @@ public class HistoryInfoActivity extends AppCompatActivity implements View.OnCli
                 finish();
             } else {
                 llHistoryParent.setVisibility(View.VISIBLE);
+                findViewById(R.id.llCustomDate).setVisibility(View.VISIBLE);
                 findViewById(R.id.llSalesParent).setVisibility(View.GONE);
                 tvSales.setVisibility(View.VISIBLE);
 

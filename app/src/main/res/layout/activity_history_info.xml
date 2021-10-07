@@ -35,11 +35,11 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_marginRight="@dimen/C10dp"
                 android:id="@+id/tvSales"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_marginRight="@dimen/C10dp"
                 android:fontFamily="@font/basic"
                 android:text="Sales"
                 android:textAlignment="center"
@@ -68,47 +68,47 @@
         </TextView>
 
         <LinearLayout
+            android:id="@+id/llCustomDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/C10dp"
+            android:layout_marginRight="@dimen/C10dp"
+            android:orientation="horizontal"
+            android:visibility="visible">
+
+            <TextView
+                android:id="@+id/tvStartDate"
+                style="@style/TextStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/textbox_bg"
+                android:drawableRight="@drawable/ic_baseline_date_range_24"
+                android:drawableTint="@color/colorPrimaryDark"
+                android:elevation="5dp"
+                android:hint="Select  Start Date"
+                android:padding="@dimen/C8dp" />
+
+
+            <TextView
+                android:id="@+id/tvEndDate"
+                style="@style/TextStyle"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:background="@drawable/textbox_bg"
+                android:drawableRight="@drawable/ic_baseline_date_range_24"
+                android:drawableTint="@color/colorPrimaryDark"
+                android:elevation="5dp"
+                android:hint="Select  End Date"
+                android:padding="@dimen/C8dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/llHistoryParent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:visibility="visible">
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/C10dp"
-                android:layout_marginRight="@dimen/C10dp"
-                android:orientation="horizontal"
-                android:visibility="visible">
-
-                <TextView
-                    android:id="@+id/tvStartDate"
-                    style="@style/TextStyle"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/textbox_bg"
-                    android:drawableRight="@drawable/ic_baseline_date_range_24"
-                    android:drawableTint="@color/colorPrimaryDark"
-                    android:elevation="5dp"
-                    android:hint="Select  Start Date"
-                    android:padding="@dimen/C8dp" />
-
-
-                <TextView
-                    android:id="@+id/tvEndDate"
-                    style="@style/TextStyle"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/textbox_bg"
-                    android:drawableRight="@drawable/ic_baseline_date_range_24"
-                    android:drawableTint="@color/colorPrimaryDark"
-                    android:elevation="5dp"
-                    android:hint="Select  End Date"
-                    android:padding="@dimen/C8dp" />
-
-            </LinearLayout>
 
 
             <LinearLayout
@@ -212,14 +212,14 @@
                 android:layout_weight="1"
                 android:background="@color/colorPrimaryDark"
                 android:padding="@dimen/C8dp"
-                android:text="Current Month"
+                android:text="Custom Date"
                 android:textAlignment="center"
                 android:textColor="@color/white"></Button>
 
             <ImageView
                 android:id="@+id/ivMnthSelecter"
                 android:layout_width="@dimen/C30dp"
-                android:layout_height="@dimen/C30dp"
+                android:layout_height="match_parent"
                 android:layout_marginRight="@dimen/C10dp"
                 android:padding="@dimen/C5dp"
                 android:src="@drawable/ic_baseline_date_range_24"

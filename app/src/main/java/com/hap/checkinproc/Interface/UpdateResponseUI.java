@@ -11,6 +11,6 @@ public interface UpdateResponseUI {
 
     void onLoadTodayOrderList(java.util.List<OutletReport_View_Modal> outletReportViewModals);
 
-    void onLoadDataUpdateUI(String apiDataResponse);
+    void onLoadDataUpdateUI(String apiDataResponse, String key);
 
 }

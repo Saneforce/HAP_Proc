@@ -400,9 +400,7 @@
         <activity
             android:name=".SFA_Activity.Invoice_Category_Select"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".SFA_Activity.InvoiceOrderIdCategoryActivity"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".SFA_Activity.CoolerInfoActivity"
             android:screenOrientation="portrait" />

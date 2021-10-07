@@ -495,7 +495,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse) {
+    public void onLoadDataUpdateUI(String apiDataResponse,String key) {
 
     }
 

@@ -298,7 +298,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse) {
+    public void onLoadDataUpdateUI(String apiDataResponse,String key) {
 
         if (apiDataResponse != null && !apiDataResponse.equals("")) {
             DatabaseHandler db = new DatabaseHandler(OtherBrandActivity.otherBrandActivity);
