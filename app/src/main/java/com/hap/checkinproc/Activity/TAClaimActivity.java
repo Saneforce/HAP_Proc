@@ -3634,7 +3634,7 @@ Log.d("DACliam","Error : "+t.getMessage());
     public void selectMultiImage(Integer attachName) {
         dialog.dismiss();
         Intent intent = new Intent();
-        intent.setType("image/*");
+        intent.setType("*/*");
         intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), attachName + 1);

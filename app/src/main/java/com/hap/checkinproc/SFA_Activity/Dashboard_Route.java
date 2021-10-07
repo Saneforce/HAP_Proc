@@ -706,6 +706,8 @@ public void getSalesCounts()
                    // shared_common_pref.save("Distributor_ID", Distributor_Id);
                    // Shared_Common_Pref.Outler_AddFlag = "1";
                     common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
+
+                    overridePendingTransition(R.anim.in,R.anim.out);
                     //common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
                 //}
                 break;
