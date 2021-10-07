@@ -636,6 +636,52 @@
 
                         </LinearLayout>
 
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:orientation="vertical">
+
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="10dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:text="Second Phone No"
+                                    android:textColor="@android:color/black"
+                                    android:textSize="13dp"></TextView>
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="12dp"
+                                    android:src="@drawable/mandatory"
+                                    android:visibility="gone" />
+
+                            </LinearLayout>
+
+
+                            <EditText
+                                android:id="@+id/edt_new_phone2"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/text_bg_grey"
+                                android:gravity="start"
+                                android:hint="Enter the Second Phone No"
+                                android:inputType="phone"
+                                android:padding="10dp"
+                                android:textSize="13dp" />
+
+                        </LinearLayout>
+
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

@@ -348,7 +348,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse) {
+    public void onLoadDataUpdateUI(String apiDataResponse,String key) {
 
     }
 

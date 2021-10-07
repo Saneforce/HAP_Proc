@@ -61,6 +61,10 @@
                 android:padding="@dimen/C8dp"
                 android:text="DEVIATION"
                 android:textColor="@color/black" />
+
         </LinearLayout>
+
+
     </LinearLayout>
+
 </RelativeLayout>

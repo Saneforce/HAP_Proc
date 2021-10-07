@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+
+
+    <include layout="@layout/sfatoolbar"></include>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/blue_bg"
+        android:orientation="vertical"
+        android:padding="@dimen/C8dp">
+
+        <TextView
+            android:id="@+id/headtext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/basic"
+            android:text="Payment"
+            android:textAlignment="center"
+            android:textAllCaps="true"
+            android:textColor="#FFF"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/C10dp"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/retailername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/C16dp"
+            android:textStyle="bold">
+
+        </TextView>
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tvPayDate"
+                style="@style/TextStyle"
+                android:layout_width="wrap_content"
+                android:layout_toRightOf="@id/tvOutstandLabel"
+                android:fontFamily="sans-serif"
+                android:gravity="end"
+                android:text="06/10/2021"
+                android:textColor="@color/grey_600"
+                android:textSize="@dimen/C14dp"
+                android:textStyle="bold"
+                android:visibility="gone"></TextView>
+
+
+            <TextView
+                android:id="@+id/tvOutstandLabel"
+                style="@style/TextStyle"
+                android:layout_width="match_parent"
+                android:fontFamily="sans-serif"
+                android:gravity="end"
+                android:text="Outstanding as on 06/10/2021"
+                android:textSize="@dimen/C14dp"
+                android:textStyle="bold"></TextView>
+
+            <TextView
+
+                android:id="@+id/tvPayOutStandAmt"
+                style="@style/TextStyle"
+                android:layout_below="@+id/tvOutstandLabel"
+                android:layout_alignParentEnd="true"
+                android:fontFamily="sans-serif"
+                android:text="₹500.00"
+                android:textColor="@color/color_red"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+
+            android:layout_height="0dp"
+            android:layout_weight="0.9"
+            android:orientation="vertical">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:paddingTop="@dimen/C10dp"
+                            android:text="Payment Mode" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/C30dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <CheckBox
+                                android:id="@+id/cbPayCash"
+                                style="@style/TextStyle" />
+
+                            <TextView
+                                style="@style/TextStyle"
+                                android:text="Cash" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/C30dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <CheckBox
+                                android:id="@+id/cbPayUPI"
+                                style="@style/TextStyle" />
+
+                            <TextView
+                                style="@style/TextStyle"
+                                android:text="UPI" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/C30dp"
+                            android:orientation="horizontal"
+                            android:visibility="gone">
+
+                            <CheckBox
+                                android:id="@+id/cbPayOnlineTrans"
+                                style="@style/TextStyle" />
+
+                            <TextView
+                                style="@style/TextStyle"
+                                android:text="Online Transfer" />
+                        </LinearLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvPayMode"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"></androidx.recyclerview.widget.RecyclerView>
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:paddingTop="@dimen/C10dp"
+                            android:text="Ref No" />
+
+                        <EditText
+                            android:id="@+id/etPayRefNo"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:background="@drawable/textbox_bg"
+                            android:elevation="5dp"
+                            android:hint="Enter Ref No here"
+                            android:padding="@dimen/C8dp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:paddingTop="@dimen/C10dp"
+                            android:text="Date of payment" />
+
+                        <TextView
+                            android:id="@+id/etPayDate"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:background="@drawable/textbox_bg"
+                            android:elevation="5dp"
+                            android:hint="Enter Date here"
+                            android:padding="@dimen/C8dp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:paddingTop="@dimen/C10dp"
+                            android:text="Amount Received" />
+
+                        <EditText
+                            android:id="@+id/etPayRecAmt"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:background="@drawable/textbox_bg"
+                            android:elevation="5dp"
+                            android:inputType="number"
+                            android:padding="@dimen/C8dp" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/TextStyle"
+                            android:paddingTop="@dimen/C10dp"
+                            android:text="Remaining Outstanding" />
+
+                        <TextView
+                            android:id="@+id/tvPayRemainAmt"
+                            style="@style/TextStyle"
+                            android:layout_width="match_parent"
+                            android:background="@drawable/textbox_bg"
+                            android:elevation="5dp"
+                            android:fontFamily="sans-serif"
+                            android:inputType="number"
+                            android:padding="@dimen/C8dp" />
+
+
+                    </LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+
+        </LinearLayout>
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.1">
+
+            <Button
+                android:id="@+id/btnPaySubmit"
+                style="@style/ButtonStyle"
+                android:layout_alignParentBottom="true"
+
+                android:text="Submit"></Button>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

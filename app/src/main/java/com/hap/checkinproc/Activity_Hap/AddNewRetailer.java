@@ -86,7 +86,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     Common_Model mCommon_model_spinner;
     List<ReatilRouteModel> mRetailerDetailsModels;
     Gson gson;
-    EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail, edt_pin_codeedit, edt_gst;
+    EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail, edt_pin_codeedit, edt_gst, etPhoneNo2;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
     JSONObject docMasterObject;
@@ -161,6 +161,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             edt_pin_codeedit = findViewById(R.id.edt_pin_code);
             ivPhotoShop = findViewById(R.id.ivShopPhoto);
             mSubmit = findViewById(R.id.submit_button);
+            etPhoneNo2 = findViewById(R.id.edt_new_phone2);
 
 
             copypaste.setOnClickListener(this);
@@ -362,19 +363,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                     } else {
 
-//                        Intent mIntent = new Intent(AddNewRetailer.this, FileUploadService.class);
-//                        mIntent.putExtra("mFilePath", String.valueOf(file));
-//                        mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
-                        //String filename = filePath.substring(filePath.lastIndexOf("/") + 1);
-//                        mIntent.putExtra("FileName", filename);
-//                        mIntent.putExtra("Mode", "outlet");
-//                        FileUploadService.enqueueWork(AddNewRetailer.this, mIntent);
-
-                        //  sendImageToServer(Shared_Common_Pref.Sf_Code, filename, "outlet");
-//
-
                         addNewRetailers();
-                        //Toast.makeText(AddNewRetailer.this, "New Retailer Added successfully", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -858,6 +847,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_doctor_gst", "'" + edt_gst.getText().toString() + "'");
             reportObject.put("unlisted_doctor_address", "'" + addRetailerAddress.getText().toString().replace("\n", "") + "'");
             reportObject.put("unlisted_doctor_phone", "'" + addRetailerPhone.getText().toString() + "'");
+            reportObject.put("unlisted_doctor_secondphone", "'" + etPhoneNo2.getText().toString());
             reportObject.put("unlisted_doctor_cityname", "'" + addRetailerCity.getText().toString() + "'");
             reportObject.put("unlisted_doctor_landmark", "''");
             reportObject.put("unlisted_doctor_mobiledate", common_class.addquote(Common_Class.GetDatewothouttime()));

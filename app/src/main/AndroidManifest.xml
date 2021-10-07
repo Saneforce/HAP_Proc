@@ -5,7 +5,6 @@
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
-
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -42,12 +41,18 @@
         tools:replace="android:allowBackup"
         tools:targetApi="n">
         <activity
+            android:name=".SFA_Activity.PaymentActivity"
+            android:exported="true" />
+        <activity
+            android:name=".Activity_Hap.GLoginActivity"
+            android:exported="true"></activity>
+        <activity
             android:name=".SFA_Activity.HistoryInfoActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SFA_Activity.MapDirectionActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".Activity_Hap.TACumulativeApproval"></activity>
+        <activity android:name=".Activity_Hap.TACumulativeApproval" />
         <activity android:name=".Activity.FuleEntryActivity" />
         <activity android:name=".Activity_Hap.DaExceptionStatus" />
         <activity android:name=".Activity_Hap.DaExceptionReject" />
@@ -87,9 +92,10 @@
         <activity android:name=".SFA_Activity.Reports_Outler_Name" />
         <activity
             android:name=".SFA_Activity.Order_Category_Select"
-
-
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SFA_Activity.PrimaryOrderActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".SFA_Activity.Invoice_History"
             android:screenOrientation="portrait" />
@@ -129,8 +135,6 @@
         <activity
             android:name=".SFA_Activity.Print_Invoice_Activity"
             android:screenOrientation="portrait">
-
-
             <intent-filter>
                 <action android:name="android.intent.action.PICK" />
 
@@ -144,7 +148,7 @@
         <activity android:name=".SFA_Activity.Lead_Activity" />
         <activity
             android:name=".Activity_Hap.SFA_Activity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Activity_Hap.AttachementActivity"
             android:screenOrientation="portrait"
@@ -390,15 +394,9 @@
         <activity
             android:name=".Activity.ProcurementDashboardActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".SFA_Activity.OrderCategoriesTypesActivity"></activity>
-
+        <activity android:name=".SFA_Activity.OrderCategoriesTypesActivity" />
         <activity
             android:name=".SFA_Activity.Invoice_Category_Select"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".SFA_Activity.InvoiceOrderIdCategoryActivity"
             android:screenOrientation="portrait" />
 
         <activity
@@ -410,11 +408,9 @@
         <activity
             android:name=".SFA_Activity.QPSActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".SFA_Activity.OtherBrandActivity"
             android:screenOrientation="portrait" />
-
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -462,7 +458,6 @@
             android:name=".common.AlmReceiver"
             android:enabled="true" />
         <receiver android:name=".SFA_Activity.GeofenceBroadcastReceiver" />
-
 
         <provider
             android:name="androidx.core.content.FileProvider"

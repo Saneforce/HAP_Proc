@@ -128,7 +128,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
-                        android:textSize="9sp"/>
+                        android:textSize="12sp"/>
                     <LinearLayout
                         android:id="@+id/btnCallMob"
                         android:layout_width="wrap_content"
@@ -145,7 +145,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text=""
-                        android:textSize="9sp"/>
+                        android:textSize="12sp"/>
                     </LinearLayout>
 
                 </LinearLayout>

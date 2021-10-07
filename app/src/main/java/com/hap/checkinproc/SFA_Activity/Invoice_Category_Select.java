@@ -62,8 +62,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -73,7 +71,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -112,13 +109,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     RelativeLayout rlCategoryItemSearch;
     ImageView ivClose;
-    EditText etCategoryItemSearch;
+    EditText etCategoryItemSearch, tvPayAmount;
     private TextView tvTotalAmount;
     private double totalvalues;
     int cashDiscount;
 
     private Integer totalQty;
-    private TextView tvBillTotItem, tvPayMode, tvDate, tvPayAmount;
+    private TextView tvBillTotItem, tvPayMode, tvDate, tvOutStanding, tvTotOutstanding;
     private double taxVal, totCGST, totSGST, totIGST;
 
     RelativeLayout rlPayment, rlCredit, rlCash;
@@ -130,6 +127,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     String orderId = "";
     private LinearLayout rlAddProduct;
+    private int outstandAmt;
+    private double payAmt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +170,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             cbCredit = findViewById(R.id.cbCredit);
             llPayMode = findViewById(R.id.llPayMode);
             rlAddProduct = findViewById(R.id.rlAddProduct);
-
+            tvOutStanding = findViewById(R.id.tvOutstanding);
+            tvTotOutstanding = findViewById(R.id.tvTotOutstanding);
 
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             Product_ModalSetAdapter = new ArrayList<>();
@@ -309,6 +309,35 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             });
 
 
+            tvPayAmount.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    try {
+                        payAmt = 0;
+
+                        if (!Common_Class.isNullOrEmpty(s.toString())) {
+                            payAmt = Double.parseDouble(s.toString());
+                        }
+
+                        tvTotOutstanding.setText("₹ " + formatter.format(outstandAmt + (totalvalues - payAmt)));
+
+                    } catch (Exception e) {
+
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+
+
             if (Shared_Common_Pref.Invoicetoorder.equals("4")) {
                 orderId = Shared_Common_Pref.TransSlNo;
                 Shared_Common_Pref.Invoicetoorder = "2";
@@ -398,6 +427,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             }
 
 
+            common_class.getDb_310Data(Constants.OUTSTANDING, this);
+
         } catch (Exception e) {
 
             Log.e(TAG, " invoice oncreate: " + e.getMessage());
@@ -473,7 +504,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 break;
 
             case R.id.rlPayMode:
-                callPayModeAPI();
+
+                common_class.getDb_310Data(Constants.PAYMODES, this);
                 break;
 
             case R.id.Category_Nametext:
@@ -532,86 +564,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         }
     }
 
-    private void callPayModeAPI() {
-
-        try {
-            if (common_class.isNetworkAvailable(this)) {
-                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-
-                JSONObject HeadItem = new JSONObject();
-
-                HeadItem.put("divisionCode", Shared_Common_Pref.Div_Code);
-
-
-                Call<ResponseBody> call = service.getPayMode(HeadItem.toString());
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        InputStreamReader ip = null;
-                        StringBuilder is = new StringBuilder();
-                        String line = null;
-                        try {
-                            payList.clear();
-                            if (response.isSuccessful()) {
-                                ip = new InputStreamReader(response.body().byteStream());
-                                BufferedReader bf = new BufferedReader(ip);
-                                while ((line = bf.readLine()) != null) {
-                                    is.append(line);
-                                    Log.v("Res>>", is.toString());
-                                }
-
-                                JSONObject jsonObject = new JSONObject(is.toString());
-
-
-                                if (jsonObject.getBoolean("success")) {
-
-                                    JSONArray jsonArray = jsonObject.getJSONArray("Data");
-                                    for (int i = 0; i < jsonArray.length(); i++) {
-                                        JSONObject dataObj = jsonArray.getJSONObject(i);
-                                        payList.add(new Common_Model(dataObj.getString("Name"), dataObj.getString("Code")));
-                                    }
-
-                                } else {
-
-                                }
-
-                                if (payList.size() > 0) {
-
-                                    customDialog = new CustomListViewDialog(Invoice_Category_Select.this, payList, 1);
-                                    Window windoww = customDialog.getWindow();
-                                    windoww.setGravity(Gravity.CENTER);
-                                    windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                                    customDialog.show();
-                                }
-
-
-                            }
-
-                        } catch (Exception e) {
-
-
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.v("fail>>", t.toString());
-
-
-                    }
-                });
-            } else {
-                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            Log.v("fail>>", e.getMessage());
-
-
-        }
-
-
-    }
-
     private void SaveOrder() {
         if (common_class.isNetworkAvailable(this)) {
 
@@ -652,7 +604,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
 
                         OutletItem.put("NetAmount", totalvalues);
-                        OutletItem.put("PAYAmount", totalvalues);
 
                         OutletItem.put("No_Of_items", tvBillTotItem.getText().toString());
                         OutletItem.put("Invoice_Flag", Shared_Common_Pref.Invoicetoorder);
@@ -660,6 +611,10 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         OutletItem.put("doctor_code", Shared_Common_Pref.OutletCode);
                         OutletItem.put("doctor_name", Shared_Common_Pref.OutletName);
                         OutletItem.put("ordertype", "invoice");
+                        // OutletItem.put("outstandAmt", outstandAmt);
+
+                        OutletItem.put("PAYAmount", tvPayAmount.getText().toString());
+
                         if (cbCredit.isChecked())
                             OutletItem.put("payType", "Credit");
                         else
@@ -716,11 +671,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                                     String san = jsonObjects.getString("success");
                                     Log.e("Success_Message", san);
                                     if (san.equals("true")) {
-                                        if (Shared_Common_Pref.Invoicetoorder.equals("0")) {
-                                            Toast.makeText(Invoice_Category_Select.this, "Order Submitted Successfully", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(Invoice_Category_Select.this, "Invoice Submitted Successfully", Toast.LENGTH_SHORT).show();
-                                        }
+
+                                        Toast.makeText(Invoice_Category_Select.this, "Invoice Submitted Successfully", Toast.LENGTH_SHORT).show();
+
                                         Shared_Common_Pref.Sync_Flag = "2";
 //                                    startActivity(new Intent(getApplicationContext(), Offline_Sync_Activity.class));
 
@@ -872,7 +825,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         tvBillToPay.setText("₹ " + formatter.format(totalvalues));
         tvCashDiscount.setText("₹ " + formatter.format(cashDiscount));
         tvTax.setText("₹ " + formatter.format(taxVal));
-        tvPayAmount.setText("₹ " + formatter.format(totalvalues));
+        //  tvPayAmount.setText("" + (int) totalvalues);
+
+        tvTotOutstanding.setText("₹ " + formatter.format(outstandAmt + (totalvalues - payAmt)));
 
 
         if (cashDiscount > 0) {
@@ -920,7 +875,62 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse) {
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+        try {
+            JSONObject jsonObject = new JSONObject(apiDataResponse);
+
+
+            switch (key) {
+                case Constants.OUTSTANDING:
+
+
+                    if (jsonObject.getBoolean("success")) {
+
+                        JSONArray jsonArray = jsonObject.getJSONArray("Data");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+
+                            outstandAmt = jsonArray.getJSONObject(i).getInt("Outstanding");
+                            tvOutStanding.setText("₹ " + formatter.format(jsonArray.getJSONObject(i).getInt("Outstanding")));
+                        }
+
+                    } else {
+
+                        outstandAmt = 0;
+                        tvOutStanding.setText("₹ " + 0.00);
+                    }
+
+                    tvTotOutstanding.setText("₹ " + tvOutStanding.getText().toString());
+                    break;
+                case Constants.PAYMODES:
+
+                    payList.clear();
+
+                    if (jsonObject.getBoolean("success")) {
+
+                        JSONArray jsonArray = jsonObject.getJSONArray("Data");
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject dataObj = jsonArray.getJSONObject(i);
+                            payList.add(new Common_Model(dataObj.getString("Name"), dataObj.getString("Code")));
+                        }
+
+                    } else {
+                        common_class.showMsg(this, "No Records Found");
+                    }
+                    if (payList.size() > 0) {
+
+                        customDialog = new CustomListViewDialog(Invoice_Category_Select.this, payList, 1);
+                        Window windoww = customDialog.getWindow();
+                        windoww.setGravity(Gravity.CENTER);
+                        windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                        customDialog.show();
+                    }
+
+                    break;
+
+            }
+        } catch (Exception e) {
+
+        }
 
     }
 
@@ -1404,7 +1414,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
 
                             if (CategoryType == -1) {
-                                if (holder.Amount.getText().toString().equals("₹0.00")) {
+                                String amt = holder.Amount.getText().toString();
+                                if (amt.equals("₹0.00")) {
                                     Product_Details_Modalitem.remove(position);
                                     notifyDataSetChanged();
                                 }

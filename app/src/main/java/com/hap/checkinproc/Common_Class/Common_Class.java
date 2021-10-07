@@ -14,6 +14,7 @@ import static com.hap.checkinproc.Common_Class.Constants.TodayOrderDetails_List;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -30,6 +31,8 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.DatePicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
@@ -45,6 +48,7 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.HistoryInfoActivity;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -94,7 +98,9 @@ public class Common_Class {
 
     List<OutletReport_View_Modal> outletReport_view_modalList = new ArrayList<>();
     private Type userTypeGetTodayOrder;
+    private DatePickerDialog fromDatePickerDialog;
 
+    String pickDate = "";
 
     public void CommonIntentwithFinish(Class classname) {
         intent = new Intent(activity, classname);
@@ -328,7 +334,6 @@ public class Common_Class {
                     QueryString.put("todate", Common_Class.GetDatewothouttime());
 
 
-
                     break;
             }
 
@@ -404,7 +409,7 @@ public class Common_Class {
 
                             updateUi = ((UpdateResponseUI) activity);
 
-                            updateUi.onLoadDataUpdateUI(gson.toJson(response.body()));
+                            updateUi.onLoadDataUpdateUI(gson.toJson(response.body()),key);
                         }
 
 
@@ -477,17 +482,36 @@ public class Common_Class {
     }
 
 
-    public void getDashboarddata(String key, Activity activity, String data) {
+    public void getDb_310Data(String key, Activity activity) {
         try {
             if (isNetworkAvailable(activity)) {
                 Map<String, String> QueryString = new HashMap<>();
                 String axnname = "";
+                JSONObject data = new JSONObject();
+
 
                 switch (key) {
 
+                    case Constants.HistoryData:
+                        axnname = "get/orderandinvoice";
+                        data.put("distributorid", shared_common_pref.getvalue(Constants.Distributor_Id));
+                        data.put("fdt", HistoryInfoActivity.stDate);
+                        data.put("tdt", HistoryInfoActivity.endDate);
 
-                    case Constants.POP_SAVE:
+
+                        break;
+                    case Constants.PAYMODES:
+                        axnname="get/paymenttype";
+                        data.put("divisionCode", Shared_Common_Pref.Div_Code);
+                        break;
+
+                    case Constants.QPS_STATUS:
                         axnname = "get/popmaster";
+                        break;
+
+                    case Constants.OUTSTANDING:
+                        axnname = "get/customeroutstanding";
+                        data.put("retailerCode", shared_common_pref.getvalue(Constants.Retailor_ERP_Code));
                         break;
 
                     default:
@@ -500,7 +524,7 @@ public class Common_Class {
                 ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
 
 
-                Call<ResponseBody> call = service.GetRouteObject310(QueryString, data);
+                Call<ResponseBody> call = service.GetRouteObject310(QueryString, data.toString());
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -517,17 +541,9 @@ public class Common_Class {
                                 }
 
 
-                                JSONObject jsonObject = new JSONObject(is.toString());
-
-
-                                //   {"success":true,"Data":[{"CTC":31,"CPC":28,"TC":0,"PC":0,"NTC":0,"NPC":0}]}
-
-                                if (jsonObject.getBoolean("success")) {
-
-                                    showMsg(activity, jsonObject.getString("Msg"));
-                                }
-
-
+                                shared_common_pref.save(key, is.toString());
+                                updateUi = ((UpdateResponseUI) activity);
+                                updateUi.onLoadDataUpdateUI(is.toString(),key);
                             }
 
                         } catch (Exception e) {
@@ -559,6 +575,26 @@ public class Common_Class {
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
     }
+
+
+    public String datePicker(Activity activity, TextView view) {
+        Calendar newCalendar = Calendar.getInstance();
+        fromDatePickerDialog = new DatePickerDialog(activity, new DatePickerDialog.OnDateSetListener() {
+
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                int month = monthOfYear + 1;
+
+                pickDate = ("" + dayOfMonth + "/" + month + "/" + year);
+
+
+            }
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+        fromDatePickerDialog.show();
+
+        return pickDate;
+    }
+
+
 //    public boolean checkValueStore(Activity activity, String key) {
 //        DatabaseHandler db = new DatabaseHandler(activity);
 //

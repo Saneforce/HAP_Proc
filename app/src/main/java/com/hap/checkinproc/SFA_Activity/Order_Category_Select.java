@@ -720,11 +720,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         }
 
 
-//        mPay_Adapter = new Pay_Adapter(Getorder_Array_List, R.layout.product_pay_recyclerview_edit, getApplicationContext(), -1);
-//        recyclerView.setAdapter(mPay_Adapter);
-//        new Pay_Adapter(Getorder_Array_List, R.layout.product_pay_recyclerview_edit, getApplicationContext(), 0).notifyDataSetChanged();
-//        recyclerView.setItemViewCacheSize(Product_Modal.size());
-
 
         mProdct_Adapter = new Prodct_Adapter(Getorder_Array_List, R.layout.product_pay_recyclerview_edit, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
@@ -908,7 +903,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse) {
+    public void onLoadDataUpdateUI(String apiDataResponse,String key) {
 
     }
 
@@ -1490,104 +1485,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     }
 
 
-    public class Pay_Adapter extends RecyclerView.Adapter<Pay_Adapter.MyViewHolder> {
-        private List<Product_Details_Modal> Product_Details_Modalitem;
-        private int rowLayout;
-
-        Context context;
-        ImageView ImgVwProd, QtyPls, QtyMns;
-
-
-        public class MyViewHolder extends RecyclerView.ViewHolder {
-            public TextView productname, Rate, Amount, tvDisc, Free, RegularQty, productQty, totalQty, tvTax;
-            EditText Qty;
-
-            public MyViewHolder(View view) {
-                super(view);
-                productname = view.findViewById(R.id.productname);
-                Qty = view.findViewById(R.id.Qty);
-                Rate = view.findViewById(R.id.Rate);
-                RegularQty = view.findViewById(R.id.RegularQty);
-                Amount = view.findViewById(R.id.Amount);
-                Free = view.findViewById(R.id.Free);
-                //   productQty = view.findViewById(R.id.productqty);
-
-                ImgVwProd = view.findViewById(R.id.ivAddShoppingCart);
-                QtyPls = view.findViewById(R.id.ivQtyPls);
-                QtyMns = view.findViewById(R.id.ivQtyMns);
-                tvTax = view.findViewById(R.id.productTax);
-                tvDisc = view.findViewById(R.id.productDiscount);
-
-
-            }
-        }
-
-
-        public Pay_Adapter(List<Product_Details_Modal> Product_Details_Modalitem, int rowLayout, Context context, int Categorycolor) {
-            this.Product_Details_Modalitem = Product_Details_Modalitem;
-            this.rowLayout = rowLayout;
-            this.context = context;
-
-
-        }
-
-        @Override
-        public Pay_Adapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(rowLayout, parent, false);
-            return new MyViewHolder(view);
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public void onBindViewHolder(Pay_Adapter.MyViewHolder holder, int position) {
-            try {
-
-
-                Product_Details_Modal Product_Details_Modal = Product_Details_Modalitem.get(position);
-
-
-                holder.productname.setText("" + Product_Details_Modal.getName().toUpperCase());
-                holder.Rate.setText("₹" + formatter.format(Product_Details_Modal.getRate()));
-                holder.Amount.setText("₹" + formatter.format(Product_Details_Modal.getAmount()));
-
-                holder.RegularQty.setText("" + Product_Details_Modal.getRegularQty());
-
-                holder.productQty.setText("" + Product_Details_Modal.getQty());
-
-                holder.tvDisc.setText("₹" + formatter.format(Product_Details_Modal.getDiscount()));
-                holder.tvTax.setText("₹" + Product_Details_Modal.getTax());
-
-
-                if (Common_Class.isNullOrEmpty(Product_Details_Modal.getFree()))
-                    holder.Free.setText("0");
-                else
-                    holder.Free.setText("" + Product_Details_Modal.getFree());
-
-
-                updateToTALITEMUI();
-            } catch (Exception e) {
-                Log.e(TAG, "adapterProduct: " + e.getMessage());
-            }
-
-
-        }
-
-        @Override
-        public int getItemCount() {
-            return Product_Details_Modalitem.size();
-        }
-
-
-    }
 
     public class Free_Adapter extends RecyclerView.Adapter<Free_Adapter.MyViewHolder> {
         private List<Product_Details_Modal> Product_Details_Modalitem;

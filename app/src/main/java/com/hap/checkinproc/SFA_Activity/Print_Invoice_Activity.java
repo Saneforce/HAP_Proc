@@ -553,7 +553,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse) {
+    public void onLoadDataUpdateUI(String apiDataResponse,String key) {
         if (apiDataResponse != null && !apiDataResponse.equals("")) {
             orderInvoiceDetailData();
         }

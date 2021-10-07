@@ -3,19 +3,27 @@ package com.hap.checkinproc.SFA_Adapter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class QPS_Modal {
-    public QPS_Modal(String sNo, String requestNo, String gift, String bookingDate, String duration, String receivedDate) {
+    public QPS_Modal(String sNo, String requestNo, String gift, String bookingDate, String duration, String receivedDate, String Status,
+                     List<String> fileUrls) {
         this.sNo = sNo;
         this.requestNo = requestNo;
         this.gift = gift;
         this.bookingDate = bookingDate;
         this.duration = duration;
         this.receivedDate = receivedDate;
+        this.Status = Status;
+        this.fileUrls = fileUrls;
     }
 
     @SerializedName("id")
     @Expose
     private String sNo;
+
+    private List<String> fileUrls;
+
 
     @SerializedName("requestNo")
     @Expose
@@ -29,6 +37,22 @@ public class QPS_Modal {
     @SerializedName("duration")
     @Expose
     private String duration;
+
+    @SerializedName("Status")
+    @Expose
+    private String Status;
+
+
+    public QPS_Modal(String filePath, String fileName, String fileKey) {
+        this.filePath = filePath;
+        this.fileName = fileName;
+        this.fileKey = fileKey;
+    }
+
+    private String filePath;
+    private String fileName;
+    private String fileKey;
+
 
     public String getsNo() {
         return sNo;
@@ -83,4 +107,43 @@ public class QPS_Modal {
     private String receivedDate;
 
 
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
+    }
+
+    public String getFileKey() {
+        return fileKey;
+    }
+
+    public void setFileKey(String fileKey) {
+        this.fileKey = fileKey;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public List<String> getFileUrls() {
+        return fileUrls;
+    }
+
+    public void setFileUrls(List<String> fileUrls) {
+        this.fileUrls = fileUrls;
+    }
 }

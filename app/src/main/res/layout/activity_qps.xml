@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/C15dp"
+            android:layout_marginRight="@dimen/C10dp"
             android:gravity="center_vertical"
             android:text="View Status"
             android:textColor="@color/black"
@@ -48,7 +48,7 @@
         android:id="@+id/Category_Nametext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/C15dp"
+        android:layout_marginLeft="@dimen/C10dp"
         android:layout_marginTop="@dimen/C10dp"
         android:ellipsize="end"
         android:text="AM SNACKS BAR"
@@ -79,14 +79,14 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/C15dp"
+                        android:layout_margin="@dimen/C10dp"
                         app:cardCornerRadius="@dimen/C10dp">
 
                         <LinearLayout
                             android:id="@+id/llQPSStatus"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/C15dp"
+                            android:layout_margin="@dimen/C10dp"
                             android:orientation="vertical"
                             android:visibility="visible">
 

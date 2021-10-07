@@ -506,6 +506,10 @@ public interface ApiInterface {
     Call<ResponseBody> getQPSData(@Field("data") String body);
 
     @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/qpsentrystatus")
+    Call<ResponseBody> getQPSStatus(@Field("data") String body);
+
+    @FormUrlEncoded
     @POST("Db_v310.php?axn=get/qpshaplitres")
     Call<ResponseBody> getHapBrand(@Field("data") String body);
 
@@ -513,6 +517,9 @@ public interface ApiInterface {
     @POST("Db_v310.php?axn=save/qpsentry")
     Call<ResponseBody> submitQPSData(@Field("data") String body);
 
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/savepaymententry")
+    Call<ResponseBody> submitPayData(@Field("data") String body);
 
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/prevorderqty")
@@ -525,10 +532,6 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/producttaxdetails")
     Call<ResponseBody> getTAXDetails(@Field("data") String body);
-
-    @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/paymenttype")
-    Call<ResponseBody> getPayMode(@Field("data") String body);
 
 
     @FormUrlEncoded
@@ -566,14 +569,13 @@ public interface ApiInterface {
     Call<ResponseBody> getSecondaryscheme(@Field("data") String body);
 
     @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/orderandinvoice")
-    Call<ResponseBody> getHistoryInfo(@Field("data") String body);
-
-
-    @FormUrlEncoded
     @POST("Db_v310.php?")
     Call<ResponseBody> GetRouteObject310(@QueryMap Map<String, String> params,
                                          @Field("data") String data);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=approve/qpsentry")
+    Call<JsonObject> approveQPSEntry(@Field("data") String toString);
 
 
 }
