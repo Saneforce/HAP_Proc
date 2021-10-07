@@ -71,7 +71,7 @@
         <item name="android:layout_height">@dimen/C45dp</item>
         <item name="android:layout_margin">@dimen/C5dp</item>
         <item name="android:padding">@dimen/C1dp</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/button_blueg</item>

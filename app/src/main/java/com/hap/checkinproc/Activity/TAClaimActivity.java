@@ -12,11 +12,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.Html;
@@ -114,6 +116,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import id.zelory.compressor.Compressor;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -193,7 +196,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     float tJointAmt = 0;
 
     boolean changeStay=false;
-    Button btn_sub, buttonSave,btnDAChange;
+    Button  btnDAChange;
+    CircularProgressButton btn_sub, buttonSave;
     int countLoding = 0;
 
     //ArrayList<CtrlsListModel> uLCItems,uOEItems;
@@ -243,6 +247,8 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
     LinearLayout LinearCheckInDate;
     Location clocation=null;
     com.hap.checkinproc.Activity_Hap.Common_Class DT = new com.hap.checkinproc.Activity_Hap.Common_Class();
+
+    final Handler handler = new Handler();
 
     private ShimmerFrameLayout mShimmerViewContainer;
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -577,8 +583,10 @@ public class TAClaimActivity extends AppCompatActivity implements Master_Interfa
                         return;
                     }
                     if(sDALocId.equalsIgnoreCase("-1")){
-                        Toast.makeText(TAClaimActivity.this,"Enter the Other Location",Toast.LENGTH_LONG).show();
-                        return;
+                        if(txDAOthName.getText().toString().equalsIgnoreCase("")){
+                            Toast.makeText(TAClaimActivity.this,"Enter the Other Location",Toast.LENGTH_LONG).show();
+                            return;
+                        }
                     }
                     data.put("SF",UserDetails.getString("Sfcode",""));
                     data.put("ExpDt",DateTime);
@@ -1248,33 +1256,54 @@ Log.d("DACliam","Error : "+t.getMessage());
         btn_sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                if (txt_date.getText().toString().matches("")) {
-                    Toast.makeText(TAClaimActivity.this, "Please choose Date", Toast.LENGTH_SHORT).show();
-                    return;
-                } else {
-                    /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    String currentDateandTime = sdf.format(new Date());
-                    if(DateTime.equalsIgnoreCase(currentDateandTime)){
-                        Toast.makeText(TAClaimActivity.this, "Can't Send Approval on Same day", Toast.LENGTH_SHORT).show();
-                        return;
-                        //btn_sub.setVisibility(View.GONE);
-                    }*/
-                    if(!validate()){
-                        return;
-                    }
-                    if(clocation!=null){
-                        submitData("SubmitForApp");
-                    }else{
-                        new LocationFinder(getApplication(), new LocationEvents() {
-                            @Override
-                            public void OnLocationRecived(Location location) {
-                                clocation=location;
-                                submitData("SubmitForApp");
+                btn_sub.startAnimation();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (txt_date.getText().toString().matches("")) {
+                            Toast.makeText(TAClaimActivity.this, "Please choose Date", Toast.LENGTH_SHORT).show();
+                            ResetSubmitBtn(0,btn_sub);
+                            return;
+                        } else {
+                            /*SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                            String currentDateandTime = sdf.format(new Date());
+                            if(DateTime.equalsIgnoreCase(currentDateandTime)){
+                                Toast.makeText(TAClaimActivity.this, "Can't Send Approval on Same day", Toast.LENGTH_SHORT).show();
+                                return;
+                                //btn_sub.setVisibility(View.GONE);
+                            }*/
+                            if(!validate()){
+                                ResetSubmitBtn(0,btn_sub);
+                                return;
                             }
-                        });
+
+                            AlertDialogBox.showDialog(TAClaimActivity.this, "HAP Check-In", String.valueOf(Html.fromHtml("Do You submit your claim to Approval.")), "Yes", "No", false, new AlertBox() {
+                                @Override
+                                public void PositiveMethod(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                    if(clocation!=null){
+                                        submitData("SubmitForApp",btn_sub);
+                                    }else{
+                                        new LocationFinder(getApplication(), new LocationEvents() {
+                                            @Override
+                                            public void OnLocationRecived(Location location) {
+                                                clocation=location;
+                                                submitData("SubmitForApp",btn_sub);
+                                            }
+                                        });
+                                    }
+                                }
+
+                                @Override
+                                public void NegativeMethod(DialogInterface dialog, int id) {
+                                    ResetSubmitBtn(0,btn_sub);
+                                    dialog.dismiss();
+                                }
+                            });
+                        }
+
                     }
-                }
+                },100);
             }
         });
         card_date.setOnClickListener(new View.OnClickListener() {
@@ -1287,7 +1316,6 @@ Log.d("DACliam","Error : "+t.getMessage());
                 customDialog.show();
             }
         });
-
         mapZoomIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1306,21 +1334,40 @@ Log.d("DACliam","Error : "+t.getMessage());
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!validate()){
-                    return;
-                }
-                if(clocation!=null){
-                    submitData("Save");
-                }else{
-                new LocationFinder(getApplication(), new LocationEvents() {
+                buttonSave.startAnimation();
+                handler.postDelayed(new Runnable() {
                     @Override
-                    public void OnLocationRecived(Location location) {
-                        clocation=location;
-                        submitData("Save");
-                    }
-                });
-                }
+                    public void run() {
+                        if(!validate()){
+                            ResetSubmitBtn(0,buttonSave);
+                            return;
+                        }
+                        AlertDialogBox.showDialog(TAClaimActivity.this, "HAP Check-In", String.valueOf(Html.fromHtml("Do You Save your claim as Draft.")), "Yes", "No", false, new AlertBox() {
+                            @Override
+                            public void PositiveMethod(DialogInterface dialog, int id) {
+                                dialog.dismiss();
+                                if(clocation!=null){
+                                    submitData("Save",buttonSave);
+                                }else{
+                                    new LocationFinder(getApplication(), new LocationEvents() {
+                                        @Override
+                                        public void OnLocationRecived(Location location) {
+                                            clocation=location;
+                                            submitData("Save",buttonSave);
+                                        }
+                                    });
+                                }
 
+                            }
+
+                            @Override
+                            public void NegativeMethod(DialogInterface dialog, int id) {
+                                ResetSubmitBtn(0,buttonSave);
+                                dialog.dismiss();
+                            }
+                        });
+                    }
+                },100);
             }
         });
 
@@ -1505,6 +1552,7 @@ Log.d("DACliam","Error : "+t.getMessage());
 
                 if (str.equalsIgnoreCase("Lod_Check_In")) {
                     ldg_cin.setText(hour + ":" + min);
+                    if(ldg_cout.getText().toString().equalsIgnoreCase("")) ldg_cout.setText(hour + ":" + min);
                 } else if (str.equalsIgnoreCase("Lod_Check_Out")) {
                     ldg_cout.setText(hour + ":" + min);
                 } else if (str.equalsIgnoreCase("Ear_Check_In")) {
@@ -1538,9 +1586,13 @@ Log.d("DACliam","Error : "+t.getMessage());
                 @Override
                 public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                     ldg_coutDt.setText(year+"-"+((monthOfYear<9)?"0":"")+(monthOfYear+1)+"-"+((dayOfMonth<10)?"0":"")+dayOfMonth);//(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                    COutDate=year+"-"+((monthOfYear<9)?"0":"")+(monthOfYear+1)+"-"+((dayOfMonth<10)?"0":"")+dayOfMonth;
                     nofNght=DT.Daybetween( DateTime+" 00:00:00",year+"-"+((monthOfYear<9)?"0":"")+(monthOfYear+1)+"-"+((dayOfMonth<10)?"0":"")+dayOfMonth+" 00:00:00");
                     //if(nofNght==0) nofNght=1;
                     NoofNight.setText(" - "+ String.valueOf(nofNght)+" Nights - ");
+                    linContinueStay.setVisibility(View.VISIBLE);
+                    if(DT.Daybetween(DateTime+" 00:00:00",ldg_coutDt.getText().toString()+ " 00:00:00")<=1)
+                        linContinueStay.setVisibility(View.GONE);
                     getStayAllow();
                 }
         }, yr, mnth, day);
@@ -2008,6 +2060,8 @@ Log.d("DACliam","Error : "+t.getMessage());
             txEligDt.setText(sadt[2]+"/"+sadt[1]+"/"+sadt[0]);
             TextCheckInDate.setText(ChoosedDate);
             ldg_coutDt.setText(ChoosedDate);
+            CInDate=ChoosedDate;
+            COutDate=ChoosedDate;
 
             JSONObject jj = new JSONObject();
             try {
@@ -2740,8 +2794,11 @@ Log.d("DACliam","Error : "+t.getMessage());
                         lodgContvw.setVisibility(View.GONE);
                     }
                     SumOFLodging(0);
+                    linContinueStay.setVisibility(View.VISIBLE);
+                    if(DT.Daybetween(COutDate + " 00:00:00",DateTime+" 00:00:00")<=1)
+                        linContinueStay.setVisibility(View.GONE);
 
-/*
+                    /*
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                     String currentDateandTime = sdf.format(new Date());
                     if(finalChoosedDate.equalsIgnoreCase(currentDateandTime)){
@@ -3623,6 +3680,7 @@ Log.d("DACliam","Error : "+t.getMessage());
     public boolean validate() {
         String sMsg="";
         if(lodgContvw.getVisibility()==View.VISIBLE){ /// && mChckCont.isChecked()==false
+
             if(txt_ldg_type.getText().toString().equalsIgnoreCase("")){
                 sMsg="Select the Lodging Type";
             }
@@ -3640,6 +3698,9 @@ Log.d("DACliam","Error : "+t.getMessage());
             else if(ldg_cout.getText().toString().equalsIgnoreCase("") && !txt_ldg_type.getText().toString().equalsIgnoreCase("Stay At Relative's House")) {
                 sMsg="Select the Check-Out Time";
             }
+            else if(nofNght>0 && DT.getDate(ldg_coutDt.getText() + "00:00:00").getTime()<=DT.getDate(DateTime+" 00:00:00").getTime()){
+                sMsg="Lodging Can't Applicable for the  "+DateTime;
+            }
             else if(!mChckCont.isChecked() && !txt_ldg_type.getText().toString().equalsIgnoreCase("Stay At Relative's House")){
                 String lBillAmt=edt_ldg_bill.getText().toString();
                 if(lBillAmt.equalsIgnoreCase("") || lBillAmt.equalsIgnoreCase("0")){
@@ -3656,7 +3717,8 @@ Log.d("DACliam","Error : "+t.getMessage());
         }
         return true;
     }
-    public void submitData(String responseVal) {
+    public void submitData(String responseVal,CircularProgressButton btnAnim) {
+
         if (edtEarBill.getText().toString().equalsIgnoreCase("")) edtEarBill.setText("0");
         if (edtLateBill.getText().toString().equalsIgnoreCase("")) edtLateBill.setText("0");
         if (earCheckIn.getText().toString().equalsIgnoreCase("00:00:00")) earCheckIn.setText("");
@@ -3796,27 +3858,31 @@ Log.d("DACliam","Error : "+t.getMessage());
                 CtrlsListModel UTAItem=uTAItems.get(editModeId);
                 if(editMode.equalsIgnoreCase("")){
                     Toast.makeText(TAClaimActivity.this,"Select the Travel Mode",Toast.LENGTH_LONG).show();
+                    ResetSubmitBtn(0,btnAnim);
                     return;
                 }
                 if(enterFrom.getText().toString().equalsIgnoreCase("")){
                     Toast.makeText(TAClaimActivity.this,"Enter the From",Toast.LENGTH_LONG).show();
+                    ResetSubmitBtn(0,btnAnim);
                     enterFrom.requestFocus();
                     return;
                 }
                 if(enterTo.getText().toString().equalsIgnoreCase("")){
                     Toast.makeText(TAClaimActivity.this,"Enter the To",Toast.LENGTH_LONG).show();
+                    ResetSubmitBtn(0,btnAnim);
                     enterTo.requestFocus();
                     return;
                 }
                 if(enterFare.getText().toString().equalsIgnoreCase("")){
                     Toast.makeText(TAClaimActivity.this,"Enter the "+editMode+" Amount",Toast.LENGTH_LONG).show();
+                    ResetSubmitBtn(0,btnAnim);
                     enterFare.requestFocus();
                     return;
                 }
                 if(UTAItem!=null) {
                     if (UTAItem.getAttachNeed().equalsIgnoreCase("1") && tvTxtUKeys.getText().toString().equalsIgnoreCase("")) {
                         Toast.makeText(TAClaimActivity.this, "Please attach supporting files for " + editMode, Toast.LENGTH_LONG).show();
-                        return;
+                        ResetSubmitBtn(0,btnAnim);return;
                     }
                 }
                 jsonTrLoc.put("mode", editText.getText().toString());
@@ -3859,7 +3925,7 @@ Log.d("DACliam","Error : "+t.getMessage());
 
                 if(editMode.equalsIgnoreCase("")){
                     Toast.makeText(TAClaimActivity.this,"Select the Convenyance",Toast.LENGTH_LONG).show();
-                    return;
+                    ResetSubmitBtn(0,btnAnim);return;
                 }
                 CtrlsListModel ULCItem=uLCItems.get(editModeId);
                 JSONArray lcModeRef = new JSONArray();
@@ -3878,7 +3944,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                         EditText txlcDet=lstCtrl.get(da).getTxtValue();
                         if(txlcDet.getText().toString().equalsIgnoreCase("")){
                             Toast.makeText(TAClaimActivity.this,"Enter the "+lblDetCap,Toast.LENGTH_LONG).show();
-                            txlcDet.requestFocus();
+                            ResetSubmitBtn(0,btnAnim);txlcDet.requestFocus();
                             return;
                         }
                         JSONObject AditionallLocalConvenyance = new JSONObject();
@@ -3889,11 +3955,11 @@ Log.d("DACliam","Error : "+t.getMessage());
 
                     if(editLaFare.getText().toString().equalsIgnoreCase("")){
                         Toast.makeText(TAClaimActivity.this,"Enter the "+editMode+" Amount",Toast.LENGTH_LONG).show();
-                        editLaFare.requestFocus();
+                        ResetSubmitBtn(0,btnAnim);editLaFare.requestFocus();
                         return;
                     }
                     if(ULCItem.getAttachNeed().equalsIgnoreCase("1") && lcTxtUKeys.getText().toString().equalsIgnoreCase("")){
-                        Toast.makeText(TAClaimActivity.this,"Please attach supporting files for "+editMode,Toast.LENGTH_LONG).show();
+                        ResetSubmitBtn(0,btnAnim);Toast.makeText(TAClaimActivity.this,"Please attach supporting files for "+editMode,Toast.LENGTH_LONG).show();
                         return;
                     }
                 }
@@ -3918,7 +3984,7 @@ Log.d("DACliam","Error : "+t.getMessage());
 
                 if(editMode.equalsIgnoreCase("")){
                     Toast.makeText(TAClaimActivity.this,"Select the Other Expense",Toast.LENGTH_LONG).show();
-                    return;
+                    ResetSubmitBtn(0,btnAnim);return;
                 }
                 CtrlsListModel UOEItem=uOEItems.get(editModeId);
                 JSONArray lcModeRef1 = new JSONArray();
@@ -3937,7 +4003,7 @@ Log.d("DACliam","Error : "+t.getMessage());
                         if(txoeDet.getText().toString().equalsIgnoreCase("")){
                             Toast.makeText(TAClaimActivity.this,"Enter the "+lblDetCap,Toast.LENGTH_LONG).show();
                             txoeDet.requestFocus();
-                            return;
+                            ResetSubmitBtn(0,btnAnim);return;
                         }
                         JSONObject AditionallLocalConvenyance = new JSONObject();
                         AditionallLocalConvenyance.put("KEY", lblDetCap);
@@ -3948,11 +4014,11 @@ Log.d("DACliam","Error : "+t.getMessage());
                     if(edtOE.getText().toString().equalsIgnoreCase("")){
                         Toast.makeText(TAClaimActivity.this,"Enter the "+editMode+" Amount",Toast.LENGTH_LONG).show();
                         edtOE.requestFocus();
-                        return;
+                        ResetSubmitBtn(0,btnAnim);return;
                     }
                     if(UOEItem.getAttachNeed().equalsIgnoreCase("1") && oeTxtUKey.getText().toString().equalsIgnoreCase("")){
                         Toast.makeText(TAClaimActivity.this,"Please attach supporting files for "+editMode,Toast.LENGTH_LONG).show();
-                        return;
+                        ResetSubmitBtn(0,btnAnim);return;
                     }
                 }
 
@@ -3993,15 +4059,17 @@ Log.d("DACliam","Error : "+t.getMessage());
                 } else {
                     Toast.makeText(TAClaimActivity.this, "Submitted Successfully ", Toast.LENGTH_SHORT).show();
                 }
+                ResetSubmitBtn(1,btnAnim);
             }
 
             @Override
             public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                ResetSubmitBtn(2,btnAnim);
             }
         });
 
         } catch (Exception e) {
+            ResetSubmitBtn(0,btnAnim);
             AlertDialogBox.showDialog(TAClaimActivity.this, "HAP Check-In", String.valueOf(Html.fromHtml("Can't submit your claim. <br> "+e.getMessage())), "OK", "", false, new AlertBox() {
                 @Override
                 public void PositiveMethod(DialogInterface dialog, int id) {
@@ -4013,9 +4081,26 @@ Log.d("DACliam","Error : "+t.getMessage());
 
                 }
             });
-            Log.e("TOTAL_JSON_OUT", e.toString()
-            );
+            Log.e("TOTAL_JSON_OUT", e.toString());
         }
+    }
+    public void ResetSubmitBtn(int resetMode,CircularProgressButton btnAnim){
+        long dely=10;
+        if(resetMode!=0) dely=1000;
+        if (resetMode==1){
+            btnAnim.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
+        }else {
+            btnAnim.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
+        }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                btnAnim.stopAnimation();
+                btnAnim.revertAnimation();
+                btnAnim.setBackground(getDrawable(R.drawable.button_blueg));
+            }
+        },dely);
+
     }
     public void getMulipart(String count, String path, String x, String imageKEY, String mode, String from, String to) {
         Log.v("PATH_IMAGE", path);
@@ -4184,12 +4269,14 @@ Log.d("DACliam","Error : "+t.getMessage());
                 lbl_ldg_eligi.setText("₹" + new DecimalFormat("##0.00").format(ldgEliAmt));
                 img_lodg_prvw.setVisibility(View.VISIBLE);
             }
-            ldg_cout.setText("");
+            //ldg_cout.setText("");
             //ldg_coutDt.setText("");
-            if (ldg_cin.getText().toString().equals("") || ldg_cout.getText().toString().equals("")) {
+            if (ldg_cin.getText().toString().equals("") || ldg_coutDt.getText().toString().equals("")) {
                 TotalDays.setVisibility(View.GONE);
             } else {
                 TotalDays.setVisibility(View.VISIBLE);
+                if(DT.Daybetween(DateTime+" 00:00:00",COutDate + " 00:00:00")<=1)
+                    linContinueStay.setVisibility(View.GONE);
             }
             edt_ldg_bill.setText("");
 

@@ -428,7 +428,6 @@
             android:id="@+id/submit_allowance"
             style="@style/ButtonStyle"
             android:layout_marginTop="@dimen/C20dp"
-            android:background="@drawable/button_blueg"
             android:text="@string/txt_submit"
             android:textColor="@android:color/white"
             android:theme="@style/BluePrimaryButton"

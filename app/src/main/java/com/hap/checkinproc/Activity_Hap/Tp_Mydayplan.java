@@ -58,6 +58,7 @@ import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.Model_Class.Tp_Dynamic_Modal;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.Joint_Work_Adapter;
+import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
@@ -133,6 +134,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
     DynamicViewAdapter dynamicadapter;
     Button tpapprovebutton, tp_rejectsave, tpreject;
 
+    DatabaseHandler db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,7 +184,7 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
 
 //        presenter = new MasterSync_Implementations(this, new Master_Sync_View());
 //        presenter.requestDataFromServer();
-
+        loadWorkTypes();
         jointwork_layout = findViewById(R.id.jointwork_layout);
         jointwork_recycler = findViewById(R.id.jointwork_recycler);
         jointwork_recycler.setLayoutManager(new LinearLayoutManager(this));
@@ -688,7 +690,27 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
             e.printStackTrace();
         }
     }
-
+    public void loadWorkTypes() {
+        db = new DatabaseHandler(this);
+        try {
+            JSONArray HAPLoca=db.getMasterData("HAPWorkTypes");
+            if(HAPLoca!=null){
+                for(int li=0;li<HAPLoca.length();li++){
+                    JSONObject jItem=HAPLoca.getJSONObject(li);
+                    String id = String.valueOf(jItem.optInt("id"));
+                    String name = jItem.optString("name");
+                    String flag = jItem.optString("FWFlg");
+                    String ETabs = jItem.optString("ETabs");
+                    String PlInv = jItem.optString("Place_Involved");
+                    boolean tExpNeed=(PlInv.equalsIgnoreCase("Y")?true:false);
+                    Common_Model item = new Common_Model(id, name, flag, ETabs,tExpNeed);
+                    worktypelist.add(item);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     private void Get_MydayPlan(String tourDate) {
         String Sf_Code = "";
         if (Shared_Common_Pref.Tp_Approvalflag.equals("0")) {
@@ -972,7 +994,6 @@ public class Tp_Mydayplan extends AppCompatActivity implements Main_Model.Master
                 userType = new TypeToken<ArrayList<ModeOfTravel>>() {
                 }.getType();
                 modelOfTravel = gson.fromJson(new Gson().toJson(response.body()), userType);
-                Log.e("RESPONSE_VALUE ", modelOfTravel.toString());
                 for (int i = 0; i < modelOfTravel.size(); i++) {
                     String id = String.valueOf(modelOfTravel.get(i).getStEndNeed());
                     String name = modelOfTravel.get(i).getName();

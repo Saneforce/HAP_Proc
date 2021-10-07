@@ -59,6 +59,7 @@ import com.hap.checkinproc.Model_Class.Route_Master;
 import com.hap.checkinproc.Model_Class.Tp_Dynamic_Modal;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.adapters.Joint_Work_Adapter;
+import com.hap.checkinproc.common.DatabaseHandler;
 import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
@@ -144,6 +145,7 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
     boolean ExpNeed = false;
     Shared_Common_Pref sharedCommonPref;
 
+    DatabaseHandler db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -184,6 +186,9 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         text_tour_plancount.setText("0");
 //        presenter = new MasterSync_Implementations(this, new Master_Sync_View());
 //        presenter.requestDataFromServer();
+
+        loadWorkTypes();
+        Get_MydayPlan(com.hap.checkinproc.Common_Class.Common_Class.GetDateOnly());
         jointwork_layout = findViewById(R.id.jointwork_layout);
         jointwork_recycler = findViewById(R.id.jointwork_recycler);
         jointwork_recycler.setLayoutManager(new LinearLayoutManager(this));
@@ -546,6 +551,27 @@ public class Mydayplan_Activity extends AppCompatActivity implements Main_Model.
         }
     }
 
+    public void loadWorkTypes() {
+        db = new DatabaseHandler(this);
+        try {
+            JSONArray HAPLoca=db.getMasterData("HAPWorkTypes");
+            if(HAPLoca!=null){
+                for(int li=0;li<HAPLoca.length();li++){
+                    JSONObject jItem=HAPLoca.getJSONObject(li);
+                    String id = String.valueOf(jItem.optInt("id"));
+                    String name = jItem.optString("name");
+                    String flag = jItem.optString("FWFlg");
+                    String ETabs = jItem.optString("ETabs");
+                    String PlInv = jItem.optString("Place_Involved");
+                    boolean tExpNeed=(PlInv.equalsIgnoreCase("Y")?true:false);
+                    Common_Model item = new Common_Model(id, name, flag, ETabs,tExpNeed);
+                    worktypelist.add(item);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     public void OrderType() {
         travelTypeList = new ArrayList<>();
         travelTypeList.add("HQ");
