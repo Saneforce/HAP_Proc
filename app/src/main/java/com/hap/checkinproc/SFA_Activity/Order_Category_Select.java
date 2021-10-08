@@ -720,11 +720,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         }
 
 
-//        mPay_Adapter = new Pay_Adapter(Getorder_Array_List, R.layout.product_pay_recyclerview_edit, getApplicationContext(), -1);
-//        recyclerView.setAdapter(mPay_Adapter);
-//        new Pay_Adapter(Getorder_Array_List, R.layout.product_pay_recyclerview_edit, getApplicationContext(), 0).notifyDataSetChanged();
-//        recyclerView.setItemViewCacheSize(Product_Modal.size());
-
 
         mProdct_Adapter = new Prodct_Adapter(Getorder_Array_List, R.layout.product_pay_recyclerview_edit, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);

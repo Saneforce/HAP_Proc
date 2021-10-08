@@ -1,5 +1,6 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,15 +24,14 @@ import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
-import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Adapter.POPStatusAdapter;
 import com.hap.checkinproc.SFA_Adapter.PopAddAdapter;
-import com.hap.checkinproc.SFA_Adapter.QPSAdapter;
 import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
 
@@ -55,11 +56,11 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
 
     TextView tvViewStatus;
     Button btnSubmit;
-    TextView tvOrder, tvOtherBrand, tvQPS, tvCoolerInfo;
+    TextView tvOrder, tvOtherBrand, tvQPS, tvCoolerInfo, tvBookingDate;
 
     RecyclerView rvQps;
 
-    QPSAdapter qpsAdapter;
+    POPStatusAdapter popStatusAdapter;
     ArrayList<QPS_Modal> qpsModals = new ArrayList<>();
     Common_Class common_class;
 
@@ -67,7 +68,8 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
 
     PopAddAdapter popAddAdapter;
 
-    TextView tvAdd;
+    ImageView ivAdd;
+    private DatePickerDialog fromDatePickerDialog;
 
     List<Product_Details_Modal> popAddList = new ArrayList<>();
     private ArrayList<Common_Model> popMaterialList = new ArrayList<>();
@@ -93,29 +95,29 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         tvCoolerInfo = (TextView) findViewById(R.id.tvCoolerInfo);
         rvQps = (RecyclerView) findViewById(R.id.rvPOP);
         rvPopAdd = (RecyclerView) findViewById(R.id.rvPOPAdd);
-        tvAdd = (TextView) findViewById(R.id.tvAddPOP);
+        ivAdd = (ImageView) findViewById(R.id.ivAddPOP);
+        tvBookingDate = (TextView) findViewById(R.id.tvBookingDate);
 
         TextView tvRetailorName = findViewById(R.id.Category_Nametext);
-        TextView tvRetailorCode = findViewById(R.id.retailorCode);
-        Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(this);
 
         tvRetailorName.setText(Shared_Common_Pref.OutletName);
-        tvRetailorCode.setText(shared_common_pref.getvalue(Constants.Retailor_ERP_Code));
 
 
         tvOrder.setOnClickListener(this);
         tvOtherBrand.setOnClickListener(this);
         tvQPS.setOnClickListener(this);
         tvCoolerInfo.setOnClickListener(this);
-        tvAdd.setOnClickListener(this);
+        ivAdd.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
+        tvBookingDate.setOnClickListener(this);
         tvViewStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 tvViewStatus.setVisibility(View.GONE);
+                findViewById(R.id.rlBookingDate).setVisibility(View.GONE);
                 findViewById(R.id.llPOPStatus).setVisibility(View.GONE);
                 findViewById(R.id.llPOPRequestStatus).setVisibility(View.VISIBLE);
-                tvAdd.setVisibility(View.GONE);
+                ivAdd.setVisibility(View.GONE);
                 // btnSubmit.setText("Completed");
                 btnSubmit.setVisibility(View.GONE);
 
@@ -130,8 +132,8 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         qpsModals.add(new QPS_Modal("234", "236745", "Mobile", "25.8.2021", "-5 days", "10.9.2021", "Approved", null));
 
         qpsModals.add(new QPS_Modal("235", "236789", "Bag", "28.8.2021", "-3 days", "10.9.2021", "PENDING", null));
-        qpsAdapter = new QPSAdapter(this, qpsModals);
-        rvQps.setAdapter(qpsAdapter);
+        popStatusAdapter = new POPStatusAdapter(this, qpsModals);
+        rvQps.setAdapter(popStatusAdapter);
 
 
         popAddList.add(new Product_Details_Modal("", "", "", 0, ""));
@@ -223,7 +225,17 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
-            common_class.CommonIntentwithFinish(Invoice_History.class);
+            if (tvViewStatus.getVisibility() == View.VISIBLE) {
+                common_class.CommonIntentwithFinish(Invoice_History.class);
+            } else {
+                tvViewStatus.setVisibility(View.VISIBLE);
+                findViewById(R.id.rlBookingDate).setVisibility(View.VISIBLE);
+                findViewById(R.id.llPOPStatus).setVisibility(View.VISIBLE);
+                findViewById(R.id.llPOPRequestStatus).setVisibility(View.GONE);
+                ivAdd.setVisibility(View.VISIBLE);
+                // btnSubmit.setText("Completed");
+                btnSubmit.setVisibility(View.VISIBLE);
+            }
 
             return true;
         }
@@ -232,8 +244,20 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        Common_Class common_class = new Common_Class(this);
         switch (v.getId()) {
+            case R.id.tvBookingDate:
+                Calendar newCalendar = Calendar.getInstance();
+                fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                        int mnth = monthOfYear + 1;
+
+                        tvBookingDate.setText("" + year + "-" + mnth + "-" + dayOfMonth);
+
+                    }
+                }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+                fromDatePickerDialog.show();
+                break;
             case R.id.tvOrder:
                 common_class.CommonIntentwithFinish(Order_Category_Select.class);
                 break;
@@ -246,13 +270,16 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
             case R.id.tvCoolerInfo:
                 common_class.CommonIntentwithFinish(CoolerInfoActivity.class);
                 break;
-            case R.id.tvAddPOP:
+            case R.id.ivAddPOP:
                 popAddList.add(new Product_Details_Modal("", "", "", 0, ""));
                 popAddAdapter.notifyData(popAddList);
 
                 break;
             case R.id.btnSubmit:
-                SaveOrder();
+                if (tvBookingDate.getText().toString().equals(""))
+                    common_class.showMsg(this, "Enter Booking Date");
+                else
+                    SaveOrder();
                 break;
         }
     }
@@ -295,6 +322,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                             HeadItem.put("CustName", Shared_Common_Pref.OutletName);
                             HeadItem.put("StkCode", Shared_Common_Pref.DistributorCode);
                             HeadItem.put("Datetime", dateTime);
+                            HeadItem.put("date", tvBookingDate.getText().toString());
                             ActivityData.put("Json_Head", HeadItem);
 
 
@@ -303,7 +331,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                                 JSONObject ProdItem = new JSONObject();
                                 ProdItem.put("id", submitPOPList.get(z).getId());
                                 ProdItem.put("material", submitPOPList.get(z).getName());
-                                ProdItem.put("date", submitPOPList.get(z).getBookingDate());
+                                // ProdItem.put("date", submitPOPList.get(z).getBookingDate());
                                 ProdItem.put("Qty", submitPOPList.get(z).getQty());
                                 ProdItem.put("uom", submitPOPList.get(z).getUOM());
 

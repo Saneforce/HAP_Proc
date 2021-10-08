@@ -63,12 +63,14 @@
                 android:id="@+id/tvPayDate"
                 style="@style/TextStyle"
                 android:layout_width="wrap_content"
+                android:layout_toRightOf="@id/tvOutstandLabel"
                 android:fontFamily="sans-serif"
                 android:gravity="end"
                 android:text="06/10/2021"
                 android:textColor="@color/grey_600"
                 android:textSize="@dimen/C14dp"
-                android:textStyle="bold"></TextView>
+                android:textStyle="bold"
+                android:visibility="gone"></TextView>
 
 
             <TextView
@@ -77,7 +79,7 @@
                 android:layout_width="match_parent"
                 android:fontFamily="sans-serif"
                 android:gravity="end"
-                android:text="Outstanding"
+                android:text="Outstanding as on 06/10/2021"
                 android:textSize="@dimen/C14dp"
                 android:textStyle="bold"></TextView>
 
@@ -121,10 +123,10 @@
                             android:text="Payment Mode" />
 
                         <LinearLayout
-                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/C30dp"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <CheckBox
                                 android:id="@+id/cbPayCash"
@@ -136,10 +138,10 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/C30dp"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <CheckBox
                                 android:id="@+id/cbPayUPI"
@@ -151,10 +153,10 @@
                         </LinearLayout>
 
                         <LinearLayout
-                            android:visibility="gone"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/C30dp"
-                            android:orientation="horizontal">
+                            android:orientation="horizontal"
+                            android:visibility="gone">
 
                             <CheckBox
                                 android:id="@+id/cbPayOnlineTrans"

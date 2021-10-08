@@ -55,7 +55,7 @@ public class QPSFilesAdapter extends RecyclerView.Adapter<QPSFilesAdapter.MyView
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, ProductImageView.class);
-                    intent.putExtra("ImageUrl", itm);
+                    intent.putExtra("ImageUrl", AryDta.get(position));
                     context.startActivity(intent);
                 }
             });
@@ -64,6 +64,16 @@ public class QPSFilesAdapter extends RecyclerView.Adapter<QPSFilesAdapter.MyView
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override

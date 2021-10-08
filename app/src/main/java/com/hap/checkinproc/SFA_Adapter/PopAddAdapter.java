@@ -110,50 +110,6 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
             });
 
 
-//            holder.sku.setText("" + Product_Details_Modal.getSku());
-//            holder.Qty.setText("" + Product_Details_Modal.getQty());
-
-
-//            holder.Qty.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void onTextChanged(CharSequence charSequence, int start,
-//                                          int before, int count) {
-//
-//
-//                    if (!charSequence.toString().equals("")) {
-//                        holder.Amount.setText("₹ " + Integer.parseInt(holder.Qty.getText().toString()) *
-//                                Integer.parseInt(holder.etPrice.getText().toString()));
-//
-//
-//                        Double amount = Double.valueOf(Integer.parseInt(holder.Qty.getText().toString()) *
-//                                Integer.parseInt(holder.etPrice.getText().toString()));
-//
-//                        Product_Details_Modalitem.get(position).setQty(Integer.valueOf(charSequence.toString()));
-//                        Product_Details_Modalitem.get(position).setAmount(amount);
-//
-//                    } else {
-//                        holder.Amount.setText("₹ 0");
-//                        Product_Details_Modalitem.get(position).setQty(0);
-//                        Product_Details_Modalitem.get(position).setAmount(0.0);
-//
-//                    }
-//
-//
-//                }
-//
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start,
-//                                              int count, int after) {
-//
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//
-//                }
-//            });
-//
-//
             holder.etPopMaterial.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -168,81 +124,6 @@ public class PopAddAdapter extends RecyclerView.Adapter<PopAddAdapter.MyViewHold
                     }
                 }
             });
-//
-//            holder.etPrice.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-//                    if (!charSequence.toString().equals("")) {
-//                        holder.Amount.setText("₹ " + Integer.parseInt(holder.Qty.getText().toString()) *
-//                                Integer.parseInt(holder.etPrice.getText().toString()));
-//
-//                        Double amount = Double.valueOf(Integer.parseInt(holder.Qty.getText().toString()) *
-//                                Integer.parseInt(holder.etPrice.getText().toString()));
-//                        Product_Details_Modalitem.get(position).setAmount(amount);
-//                        Product_Details_Modalitem.get(position).setPrice(Integer.parseInt(charSequence.toString()));
-//
-//                    } else {
-//                        holder.Amount.setText("₹ 0");
-//                        holder.etPrice.setHint("0");
-//                        Product_Details_Modalitem.get(position).setPrice(0);
-//                        Product_Details_Modalitem.get(position).setAmount(0.0);
-//
-//                    }
-//
-//
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//
-//                }
-//            });
-//
-//            holder.Free.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-//
-//                    Product_Details_Modalitem.get(position).setScheme((charSequence.toString()));
-//
-//
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//
-//                }
-//            });
-//
-//            holder.sku.addTextChangedListener(new TextWatcher() {
-//                @Override
-//                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//                }
-//
-//                @Override
-//                public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-//
-//                    Product_Details_Modalitem.get(position).setSku((charSequence.toString()));
-//
-//
-//                }
-//
-//                @Override
-//                public void afterTextChanged(Editable s) {
-//
-//                }
-//            });
-//
 
             holder.etBookingDate.setOnClickListener(new View.OnClickListener() {
                 @Override

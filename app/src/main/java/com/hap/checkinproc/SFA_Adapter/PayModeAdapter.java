@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.SFA_Activity.PaymentActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,8 +63,10 @@ public class PayModeAdapter extends RecyclerView.Adapter<PayModeAdapter.MyViewHo
                         payList.get(clickedPos).setSelected(cb.isSelected());
 
 
+                        PaymentActivity.paymentActivity.payModeLabel = payList.get(position).getName();
                     } else {
                         lastChecked = null;
+                        PaymentActivity.paymentActivity.payModeLabel = "";
 
                     }
 

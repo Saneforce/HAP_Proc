@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/C15dp"
+            android:layout_marginRight="@dimen/C10dp"
             android:gravity="center_vertical"
             android:text="View Status"
             android:textColor="@color/black"
@@ -59,35 +59,50 @@
             android:visibility="visible" />
 
 
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rlBookingDate"
+        android:layout_marginRight="@dimen/C10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/C10dp"
+        android:orientation="vertical">
+
         <TextView
-            android:drawableTint="#2a9945"
-            android:id="@+id/tvAddPOP"
+            style="@style/TextStyle"
+            android:drawableRight="@drawable/mandatory"
+            android:drawablePadding="@dimen/C3dp"
+            android:paddingTop="@dimen/C10dp"
+            android:text="Booking Date" />
+
+        <TextView
+            android:id="@+id/tvBookingDate"
+            style="@style/TextStyle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/C10dp"
-            android:drawableRight="@drawable/ic_round_add_circle_24"
-            android:drawablePadding="@dimen/C5dp"
-            android:gravity="center_vertical"
-            android:text="Add Brand"
-            android:textSize="14dp"
-            android:textStyle="bold" />
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/textbox_bg"
+            android:drawableRight="@drawable/ic_baseline_date_range_24"
+            android:drawableTint="@color/colorPrimaryDark"
+            android:hint="Enter date here"
+            android:padding="@dimen/C8dp"
+            />
 
 
     </RelativeLayout>
 
-    <TextView
-
-        android:id="@+id/retailorCode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/C10dp"
-        android:text="AM SNACKS BAR"
-        android:textColor="@android:color/darker_gray"
-        android:textSize="14dp"
-        android:textStyle="bold"
-        android:visibility="gone" />
+    <ImageView
+        android:id="@+id/ivAddPOP"
+        android:layout_width="@dimen/C30dp"
+        android:layout_height="@dimen/C30dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_gravity="end"
+        android:layout_marginRight="@dimen/C10dp"
+        android:gravity="center_vertical"
+        android:padding="@dimen/C5dp"
+        android:src="@drawable/ic_round_add_circle_24"
+        app:tint="@color/colorPrimaryDark" />
 
 
     <LinearLayout
@@ -112,14 +127,13 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/C15dp"
+                        android:layout_margin="@dimen/C10dp"
                         app:cardCornerRadius="@dimen/C10dp">
 
                         <LinearLayout
                             android:id="@+id/llPOPStatus"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/C5dp"
                             android:orientation="vertical"
                             android:visibility="visible">
 
@@ -144,10 +158,10 @@
                             android:visibility="gone">
 
                             <TextView
-                                android:backgroundTint="#2a9945"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/button_yellow"
+                                android:backgroundTint="#2a9945"
                                 android:gravity="center"
                                 android:padding="@dimen/C10dp"
                                 android:text="POP Request Status"

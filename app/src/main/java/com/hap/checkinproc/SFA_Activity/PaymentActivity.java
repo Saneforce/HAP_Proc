@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +19,8 @@ import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.PayModeAdapter;
@@ -27,11 +30,18 @@ import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PaymentActivity extends AppCompatActivity implements View.OnClickListener, UpdateResponseUI {
 
@@ -48,11 +58,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
     NumberFormat formatter = new DecimalFormat("##0.00");
 
     Double outstandAmt;
+    public String payModeLabel = "";
+    public static PaymentActivity paymentActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+        paymentActivity = this;
         common_class = new Common_Class(this);
         shared_common_pref = new Shared_Common_Pref(this);
 
@@ -74,13 +87,14 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         tvRemainAmt.setText("₹" + outstandAmt);
                     } else {
                         double remainAmt = outstandAmt;
-                        double val;
-                        if (remainAmt < Integer.parseInt(s.toString())) {
-                            val = 0;
-                        } else
-                            val = Double.parseDouble(formatter.format(outstandAmt - Double.parseDouble(s.toString())));
 
-                        tvRemainAmt.setText("₹" + val);
+                        if (remainAmt < Integer.parseInt(s.toString())) {
+                            tvRemainAmt.setText("₹" + 0.00);
+                        } else {
+                            tvRemainAmt.setText("₹" + formatter.format(outstandAmt - Double.parseDouble(s.toString())));
+                        }
+
+
                     }
                 } catch (Exception e) {
                     Log.e("paymentAct:etAmtRec ", e.getMessage());
@@ -115,6 +129,77 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
 
     }
 
+    private void submitPayData() {
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                JSONObject HeadItem = new JSONObject();
+
+                HeadItem.put("retailorCode", Shared_Common_Pref.OutletCode);
+                HeadItem.put("sfCode", Shared_Common_Pref.Sf_Code);
+                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
+                HeadItem.put("distributorCode", Shared_Common_Pref.DistributorCode);
+
+                HeadItem.put("outstandingAmt", outstandAmt);
+                HeadItem.put("payMode", payModeLabel);
+
+                HeadItem.put("RefNo", etRefNo.getText().toString());
+                HeadItem.put("dateOfPay", etDate.getText().toString());
+                HeadItem.put("amtReceived", etAmtRec.getText().toString());
+                HeadItem.put("remainOutstand", tvRemainAmt.getText().toString());
+                HeadItem.put("outstandDate", Common_Class.GetDatewothouttime());
+
+
+                Call<ResponseBody> call = service.submitPayData(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+                                if (jsonObject.getBoolean("success")) {
+                                    common_class.showMsg(PaymentActivity.this, jsonObject.getString("Msg"));
+                                    finish();
+                                }
+
+                            }
+
+                        } catch (Exception e) {
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>", t.toString());
+
+
+                    }
+                });
+            } else {
+                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -127,8 +212,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                 } else if (etAmtRec.getText().toString().equals("")) {
                     common_class.showMsg(this, "Please enter the Amount Received");
                 } else {
-                    common_class.showMsg(this, "Submitted Successfully");
-                    finish();
+                    submitPayData();
+
                 }
 
                 break;
@@ -177,7 +262,8 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                         JSONArray jsonArray = jsonObject.getJSONArray("Data");
                         for (int i = 0; i < jsonArray.length(); i++) {
                             outstandAmt = Double.valueOf(formatter.format(jsonArray.getJSONObject(i).getDouble("Outstanding")));
-                            tvOutStandAmt.setText("₹" + outstandAmt);
+                            tvOutStandAmt.setText("₹" + formatter.format(jsonArray.getJSONObject(i).getDouble("Outstanding")));
+
                         }
 
                     } else {

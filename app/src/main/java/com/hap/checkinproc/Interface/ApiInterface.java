@@ -517,6 +517,9 @@ public interface ApiInterface {
     @POST("Db_v310.php?axn=save/qpsentry")
     Call<ResponseBody> submitQPSData(@Field("data") String body);
 
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/savepaymententry")
+    Call<ResponseBody> submitPayData(@Field("data") String body);
 
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/prevorderqty")
@@ -529,10 +532,6 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("Db_v310.php?axn=get/producttaxdetails")
     Call<ResponseBody> getTAXDetails(@Field("data") String body);
-
-    @FormUrlEncoded
-    @POST("Db_v310.php?axn=get/paymenttype")
-    Call<ResponseBody> getPayMode(@Field("data") String body);
 
 
     @FormUrlEncoded
