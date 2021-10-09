@@ -61,13 +61,15 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
             holder.txChannel.setText(jItem.get("Channel").getAsString());
             holder.txDistance.setText(jItem.get("Distance").getAsString());
             String InvFlag=jItem.get("InvFlag").getAsString();
+            holder.txRetNo.setText(String.valueOf(position+1));
             holder.icMob.setVisibility(View.VISIBLE);
             if(jItem.get("Mobile").getAsString().equalsIgnoreCase("")){
                 holder.icMob.setVisibility(View.GONE);
             }
             if (InvFlag.equalsIgnoreCase("0")) {
                 holder.parent_layout.setBackgroundResource(R.color.white);
-            } else if (InvFlag.equalsIgnoreCase("1")) {
+            }
+            else if (InvFlag.equalsIgnoreCase("1")) {
                 holder.parent_layout.setBackgroundResource(R.color.invoiceordercolor);
             } else {
                 holder.parent_layout.setBackgroundResource(R.color.greeninvoicecolor);
@@ -75,7 +77,9 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
             holder.parent_layout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mAdapterOnClick.onIntentClick(holder.getAdapterPosition());
+                    int posi=holder.getAdapterPosition();
+                    mAdapterOnClick.onIntentClick(jLists.get(posi).getAsJsonObject(),posi);
+                    mAdapterOnClick.onIntentClick(posi);
                 }
             });
 
@@ -240,7 +244,7 @@ public class RetailerNearByADP  extends RecyclerView.Adapter<RetailerNearByADP.M
                 lstPreView.setLayoutManager(new LinearLayoutManager(context));
 
                 ivEdit.setVisibility(View.GONE);
-                txRetNo.setVisibility(View.GONE);
+                //txRetNo.setVisibility(View.GONE);
                 Calendar c = Calendar.getInstance();
                 SimpleDateFormat dpln = new SimpleDateFormat("yyyy-MM-dd");
                 String plantime = dpln.format(c.getTime());

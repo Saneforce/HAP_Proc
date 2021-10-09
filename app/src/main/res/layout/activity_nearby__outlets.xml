@@ -206,42 +206,59 @@
 
 
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/latitude"
+                        android:id="@+id/cAddress"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="10dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
                         android:layout_weight="1"
                         android:gravity="start"
                         android:text="Latitude:"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="@color/black"
                         android:textSize="12dp" />
+                    <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp">
 
-                    <TextView
-                        android:id="@+id/longitude"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="10dp"
-                        android:layout_weight="1"
-                        android:gravity="start"
-                        android:text="Longitude:"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textColor="@color/black"
-                        android:textSize="12dp" />
+                                    <TextView
+                                        android:id="@+id/latitude"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:gravity="start"
+                                        android:text="Latitude:"
+                                        android:textAppearance="?android:attr/textAppearanceLarge"
+                                        android:textColor="@color/black"
+                                        android:textSize="12dp" />
+
+                                    <TextView
+                                        android:id="@+id/longitude"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_weight="1"
+                                        android:gravity="start"
+                                        android:text="Longitude:"
+                                        android:textAppearance="?android:attr/textAppearanceLarge"
+                                        android:textColor="@color/black"
+                                        android:textSize="12dp" />
+                                </LinearLayout>
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.8"
-                    android:padding="@dimen/C8dp"
                     android:orientation="vertical">
                     <LinearLayout
                         android:layout_width="match_parent"

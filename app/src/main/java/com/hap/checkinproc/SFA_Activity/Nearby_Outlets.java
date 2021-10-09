@@ -1,20 +1,28 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static android.Manifest.permission.CALL_PHONE;
+
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -55,6 +63,7 @@ import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
 import com.hap.checkinproc.SFA_Adapter.RetailerNearByADP;
+import com.hap.checkinproc.SFA_Adapter.Route_View_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.Dashboard_View_Model;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.adapters.ExploreMapAdapter;
@@ -76,6 +85,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import retrofit2.Call;
@@ -88,7 +98,8 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     private RecyclerView recyclerView, rclRetail;
     Type userType;
     Common_Class common_class;
-    TextView Createoutlet, latitude, longitude, availableoutlets, btnNearme, btnExplore;
+    TextView Createoutlet, latitude, longitude, availableoutlets, btnNearme, btnExplore,cAddress;
+    EditText txSearchRet;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> ShowRetailer_Modal_List;
     public static Shared_Common_Pref shared_common_pref;
@@ -129,7 +140,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     private String dest_name;
     private JSONArray oldData;
     private Marker marker;
-
+    JsonArray jOutlets;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -163,6 +174,22 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             gson = new Gson();
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
+            txSearchRet.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    SearchRetailers();
+                }
+            });
             String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
             //  String OrdersTable = String.valueOf(db.getMasterData(Constants.Retailer_OutletList));
             latitude.setText("Locating Please Wait...");
@@ -179,6 +206,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                     Shared_Common_Pref.Outletlong=location.getLongitude();
                     latitude.setText("Lat : " + location.getLatitude());
                     longitude.setText("Lng : " + location.getLongitude());
+                    getCompleteAddressString(location.getLatitude(),location.getLongitude());
                     JSONObject jsonObject=new JSONObject();
                     try {
                         jsonObject.put("SF",UserDetails.getString("Sfcode",""));
@@ -189,7 +217,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                         service.getDataArrayList("get/fencedOutlet",jsonObject.toString()).enqueue(new Callback<JsonArray>() {
                             @Override
                             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                                JsonArray jOutlets=response.body();
+                                jOutlets=response.body();
                                 availableoutlets.setText("Available Outlets :" + "\t" + jOutlets.size());
                                 recyclerView.setAdapter(new RetailerNearByADP(jOutlets, R.layout.route_dashboard_recyclerview,
                                          getApplicationContext(), new AdapterOnClick() {
@@ -263,8 +291,6 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
-
-
                     if (!recyclerView.canScrollVertically(1)) {
                         if (common_class.isNetworkAvailable(Nearby_Outlets.this)) {
                             common_class.ProgressdialogShow(1, "");
@@ -286,6 +312,40 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    private void SearchRetailers(){
+        JsonArray srhOutlets=new JsonArray();
+        for (int sr=0;sr<jOutlets.size();sr++){
+            JsonObject jItm=jOutlets.get(sr).getAsJsonObject();
+            String itmname=jItm.get("Name").getAsString().toUpperCase();
+            String sSchText=txSearchRet.getText().toString().toUpperCase();
+            if((";"+itmname).indexOf(";"+sSchText)>-1){
+                srhOutlets.add(jItm);
+            }
+        }
+        availableoutlets.setText("Available Outlets :" + "\t" + srhOutlets.size());
+        recyclerView.setAdapter(new RetailerNearByADP(srhOutlets, R.layout.route_dashboard_recyclerview,
+                getApplicationContext(), new AdapterOnClick() {
+            @Override
+            public void onIntentClick(JsonObject item,int position) {
+                JsonObject jItm=item;
+
+                Shared_Common_Pref.Outler_AddFlag = "0";
+                Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
+                Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
+                Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
+                Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
+                Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
+                //common_class.CommonIntentwithFinish(Route_Product_Info.class);
+                shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
+                shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
+                shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
+//                                        if (jItm.get("Mobile").getAsString().equalsIgnoreCase("") || jItm.get("Owner_Name").getAsString().equalsIgnoreCase(""))
+//                                            common_class.CommonIntentwithoutFinish(AddNewRetailer.class);
+//                                        else
+                common_class.CommonIntentwithoutFinish(Invoice_History.class);
+            }
+        }));
+    }
 
     private void setClickListener() {
         ivFilterKeysMenu.setOnClickListener(this);
@@ -305,6 +365,8 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         availableoutlets = findViewById(R.id.availableoutlets);
         latitude = findViewById(R.id.latitude);
         longitude = findViewById(R.id.longitude);
+        cAddress = findViewById(R.id.cAddress);
+        txSearchRet = findViewById(R.id.txSearchRet);
 
         vwRetails = findViewById(R.id.vwRetails);
         tabExplore = findViewById(R.id.tabExplore);
@@ -410,6 +472,29 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder();
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                cAddress.setText(strReturnedAddress.toString());
+                strAdd = strReturnedAddress.toString();
+                //Log.w("My Current loction address", strReturnedAddress.toString());
+            } else {
+                // Log.w("My Current loction address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //  Log.w("My Current loction address", "Canont get Address!");
+        }
+        return strAdd;
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         try {

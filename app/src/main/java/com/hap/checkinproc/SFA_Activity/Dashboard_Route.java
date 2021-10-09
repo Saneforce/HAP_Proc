@@ -393,6 +393,7 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 //                                    } else {
                                         //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                                         common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                                    overridePendingTransition(R.anim.in,R.anim.out);
                                     //}
                                 }
 
@@ -644,6 +645,7 @@ public void getSalesCounts()
 //                    } else {
                         //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                         common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                        overridePendingTransition(R.anim.in,R.anim.out);
                     //}
 
                 } catch (Exception e) {
@@ -842,6 +844,7 @@ public void getSalesCounts()
 //                                } else {
                                     //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                                     common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                                overridePendingTransition(R.anim.in,R.anim.out);
 //                                }
                             }
                         } catch (Exception e) {
@@ -1052,6 +1055,7 @@ public void getSalesCounts()
 //                        } else {
                             //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                             common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                        overridePendingTransition(R.anim.in,R.anim.out);
                         //}
                     }
                 }
@@ -1078,7 +1082,7 @@ public void getSalesCounts()
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse) {
+    public void onLoadDataUpdateUI(String apiDataResponse,String key) {
 
     }
 
@@ -1164,6 +1168,7 @@ public void getSalesCounts()
 //                            } else {
                                 //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                                 common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                            getActivity().overridePendingTransition(R.anim.in,R.anim.out);
                             //}
 
                         }
@@ -1189,7 +1194,6 @@ public void getSalesCounts()
 //            notifyAll();
 
         }
-
         @Override
         public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
@@ -1266,6 +1270,7 @@ public void getSalesCounts()
 //                        } else {
                             //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                             common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                        getActivity().overridePendingTransition(R.anim.in,R.anim.out);
                         //}
                     }
                 }
@@ -1347,6 +1352,7 @@ public void getSalesCounts()
 //                        } else {
                             //common_class.CommonIntentwithoutFinish(Route_Product_Info.class);
                             common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                        getActivity().overridePendingTransition(R.anim.in,R.anim.out);
                         //}
                     }
                 }
