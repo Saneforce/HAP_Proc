@@ -577,5 +577,8 @@ public interface ApiInterface {
     @POST("Db_v310.php?axn=approve/qpsentry")
     Call<JsonObject> approveQPSEntry(@Field("data") String toString);
 
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=save/popapprove")
+    Call<JsonObject> approvePOPEntry(@Field("data") String toString);
 
 }

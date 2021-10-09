@@ -263,17 +263,21 @@
                 </LinearLayout>
 
             </com.facebook.shimmer.ShimmerFrameLayout>
+
             <ScrollView
                 android:id="@+id/scrlMain"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="0dp"
                 android:layout_marginBottom="@dimen/C100dp"
-                android:visibility="visible"
-                >
+                android:visibility="visible">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/header_date_width"
@@ -299,24 +303,28 @@
                             android:src="@drawable/zoom_in" />
 
                     </RelativeLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/C10dp"
                         android:layout_marginRight="@dimen/C5dp"
                         android:orientation="vertical">
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/C5dp"
                             android:layout_marginTop="@dimen/C5dp"
                             android:orientation="horizontal">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:orientation="horizontal"
                                 android:padding="@dimen/C2dp">
+
                                 <TextView
                                     android:id="@+id/txt_Name"
                                     android:layout_width="wrap_content"
@@ -328,6 +336,7 @@
                                     android:textSize="@dimen/C15dp"
                                     android:textStyle="bold"
                                     tools:ignore="RtlCompat" />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -337,6 +346,7 @@
                                     android:textAllCaps="false"
                                     android:textColor="@android:color/black"
                                     android:textSize="14sp" />
+
                                 <TextView
                                     android:id="@+id/txt_emp_id"
                                     android:layout_width="match_parent"
@@ -346,6 +356,7 @@
                                     android:text=""
                                     android:textSize="12sp" />
                             </LinearLayout>
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -374,6 +385,7 @@
 
 
                             </LinearLayout>
+
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -390,11 +402,13 @@
                                 </ImageView>
                             </LinearLayout>
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/C5dp"
                             android:orientation="horizontal">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -424,6 +438,7 @@
                                     tools:ignore="RtlCompat" />
 
                             </LinearLayout>
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -452,6 +467,7 @@
 
 
                             </LinearLayout>
+
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
@@ -470,6 +486,7 @@
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -594,6 +611,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/C8dp"
                             app:cardCornerRadius="@dimen/C5dp">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -617,6 +635,7 @@
                                         android:textSize="14sp"
                                         android:textStyle="bold" />
                                 </LinearLayout>
+
                                 <LinearLayout
                                     android:id="@+id/lin_da_type"
                                     android:layout_width="match_parent"
@@ -677,19 +696,21 @@
 
                                             </LinearLayout>
                                         </RelativeLayout>
+
                                         <LinearLayout
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_marginLeft="@dimen/C5dp"
                                             android:layout_marginTop="-7dp">
+
                                             <TextView
                                                 android:id="@+id/txtAllwType"
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
                                                 android:text=""
-                                                android:textSize="11sp"
-                                                />
+                                                android:textSize="11sp" />
                                         </LinearLayout>
+
                                         <LinearLayout
                                             android:id="@+id/vwBoarding"
                                             android:layout_width="match_parent"
@@ -727,6 +748,7 @@
                                                     android:textStyle="bold" />
                                             </LinearLayout>
                                         </LinearLayout>
+
                                         <LinearLayout
                                             android:id="@+id/vwDrvBoarding"
                                             android:layout_width="match_parent"
@@ -765,6 +787,7 @@
                                                     android:textStyle="bold" />
                                             </LinearLayout>
                                         </LinearLayout>
+
                                         <LinearLayout
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
@@ -774,10 +797,12 @@
                                             android:paddingBottom="@dimen/C5dp"
                                             android:visibility="gone"
                                             android:weightSum="2">
+
                                             <LinearLayout
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
                                                 android:orientation="horizontal">
+
                                                 <TextView
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="wrap_content"
@@ -787,6 +812,7 @@
                                                     android:textColor="@android:color/black"
                                                     android:textSize="11sp"
                                                     android:textStyle="bold"></TextView>
+
                                                 <Switch
                                                     android:id="@+id/sw_ldgNeed"
                                                     android:layout_width="wrap_content"
@@ -822,11 +848,13 @@
 
                                     </LinearLayout>
                                 </LinearLayout>
+
                                 <View
                                     android:layout_width="match_parent"
                                     android:layout_height="1dp"
                                     android:layout_margin="@dimen/C10dp"
                                     android:background="@color/grey_300"></View>
+
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
@@ -834,6 +862,7 @@
                                     android:layout_marginRight="@dimen/C10dp"
                                     android:layout_marginBottom="@dimen/C5dp"
                                     android:orientation="horizontal">
+
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
@@ -842,6 +871,7 @@
                                         android:textColor="@color/black"
                                         android:textSize="@dimen/C15dp"
                                         android:textStyle="bold"></TextView>
+
                                     <TextView
                                         android:id="@+id/txt_totDA"
                                         android:layout_width="wrap_content"
@@ -897,8 +927,8 @@
                                     <androidx.core.widget.NestedScrollView
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:overScrollMode="never"
-                                        android:focusableInTouchMode="false">
+                                        android:focusableInTouchMode="false"
+                                        android:overScrollMode="never">
 
                                         <androidx.recyclerview.widget.RecyclerView
                                             android:id="@+id/recycler_fuel"
@@ -1369,6 +1399,7 @@
                                         </LinearLayout>
                                     </LinearLayout>
                                 </LinearLayout>
+
                                 <LinearLayout
                                     android:id="@+id/lin_travel_dynamic_place"
                                     android:layout_width="match_parent"
@@ -1501,6 +1532,7 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="@dimen/C8dp"
                             app:cardCornerRadius="@dimen/C5dp">
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -1511,13 +1543,14 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:background="@drawable/button_yellow"
-                                    android:visibility="visible"
-                                    android:padding="@dimen/C8dp">
+                                    android:padding="@dimen/C8dp"
+                                    android:visibility="visible">
 
                                     <LinearLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:orientation="horizontal">
+
                                         <TextView
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
@@ -1530,6 +1563,7 @@
                                             android:textStyle="bold">
 
                                         </TextView>
+
                                         <TextView
                                             android:id="@+id/ldg_Add"
                                             android:layout_width="wrap_content"
@@ -1546,15 +1580,17 @@
                                     android:id="@+id/lodgContvw"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:orientation="vertical"
                                     android:layout_marginTop="@dimen/C10dp"
+                                    android:orientation="vertical"
                                     android:visibility="gone">
+
                                     <TextView
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
                                         android:layout_marginLeft="@dimen/C10dp"
                                         android:text="Type"
                                         android:textSize="10sp" />
+
                                     <LinearLayout
                                         android:id="@+id/ldg_typ_spiner"
                                         android:layout_width="match_parent"
@@ -1590,14 +1626,15 @@
                                         android:layout_height="match_parent"
                                         android:orientation="vertical"
                                         android:visibility="gone">
+
                                         <LinearLayout
                                             android:id="@+id/prm_linear_orders"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:layout_weight="1"
                                             android:orientation="vertical"
-                                            android:visibility="gone">
-                                        </LinearLayout>
+                                            android:visibility="gone"></LinearLayout>
+
                                         <LinearLayout
                                             android:id="@+id/ldg_stayloc"
                                             android:layout_width="match_parent"
@@ -1639,6 +1676,7 @@
                                                     android:src="@drawable/spin_down_arrow" />
 
                                             </LinearLayout>
+
                                             <EditText
                                                 android:id="@+id/edt_stay_loc"
                                                 android:layout_width="match_parent"
@@ -1649,9 +1687,9 @@
                                                 android:paddingTop="5dp"
                                                 android:textColorHint="#C0C0C0"
                                                 android:textSize="14sp"
-                                                android:visibility="gone"
-                                                />
+                                                android:visibility="gone" />
                                         </LinearLayout>
+
                                         <LinearLayout
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content">
@@ -1662,97 +1700,106 @@
                                             android:id="@+id/ldg_stayDt"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:orientation="vertical"
-                                            android:background="@color/awhite"
                                             android:layout_marginLeft="@dimen/C5dp"
-                                            android:layout_marginRight="@dimen/C5dp">
+                                            android:layout_marginRight="@dimen/C5dp"
+                                            android:background="@color/awhite"
+                                            android:orientation="vertical">
+
                                             <LinearLayout
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
                                                 android:layout_margin="@dimen/C5dp"
                                                 android:orientation="horizontal">
+
                                                 <LinearLayout
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
                                                     android:layout_weight="1"
                                                     android:orientation="vertical">
+
                                                     <TextView
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:text="Hotel Check IN"
                                                         android:textSize="10sp" />
+
                                                     <LinearLayout
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:orientation="horizontal">
+
                                                         <TextView
+                                                            android:id="@+id/txt_hotel_date"
                                                             android:layout_width="wrap_content"
                                                             android:layout_height="wrap_content"
-                                                            android:textColor="@android:color/black"
-                                                            android:id="@+id/txt_hotel_date"
                                                             android:text="10 Aug 2021"
+                                                            android:textColor="@android:color/black"
                                                             android:textSize="15sp"
-                                                            android:textStyle="bold"
-                                                            />
+                                                            android:textStyle="bold" />
+
                                                         <EditText
                                                             android:id="@+id/from_picker"
                                                             android:layout_width="match_parent"
                                                             android:layout_height="wrap_content"
                                                             android:layout_marginLeft="@dimen/C5dp"
-                                                            android:background="@drawable/item_border"
                                                             android:layout_weight="1"
+                                                            android:background="@drawable/item_border"
                                                             android:focusable="false"
-                                                            android:text="00:00"
                                                             android:hint="Time"
                                                             android:inputType="date"
+                                                            android:text="00:00"
                                                             android:textSize="12sp" />
                                                     </LinearLayout>
                                                 </LinearLayout>
+
                                                 <LinearLayout
                                                     android:layout_width="wrap_content"
                                                     android:layout_height="match_parent"
-                                                    android:orientation="vertical"
-                                                    >
+                                                    android:orientation="vertical">
+
                                                     <LinearLayout
                                                         android:layout_width="@dimen/C90dp"
                                                         android:layout_height="match_parent"
-                                                        android:layout_marginTop="@dimen/C10dp"
-                                                        android:orientation="vertical"
-                                                        android:gravity="center"
                                                         android:layout_gravity="center"
-                                                        >
+                                                        android:layout_marginTop="@dimen/C10dp"
+                                                        android:gravity="center"
+                                                        android:orientation="vertical">
+
                                                         <TextView
                                                             android:id="@+id/NoofNight"
                                                             android:layout_width="@dimen/C70dp"
                                                             android:layout_height="wrap_content"
-                                                            android:text="- 1 Nights -"
-                                                            android:textSize="10sp"
+                                                            android:layout_gravity="center"
                                                             android:gravity="center"
-                                                            android:layout_gravity="center" />
+                                                            android:text="- 1 Nights -"
+                                                            android:textSize="10sp" />
 
                                                     </LinearLayout>
                                                 </LinearLayout>
+
                                                 <LinearLayout
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
                                                     android:layout_weight="1"
                                                     android:orientation="vertical">
+
                                                     <LinearLayout
                                                         android:id="@+id/lin_chck_out"
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
-                                                        android:orientation="vertical"
-                                                        >
+                                                        android:orientation="vertical">
+
                                                         <TextView
                                                             android:layout_width="match_parent"
                                                             android:layout_height="wrap_content"
                                                             android:text="Hotel Check Out"
                                                             android:textSize="10sp" />
+
                                                         <LinearLayout
                                                             android:layout_width="match_parent"
                                                             android:layout_height="match_parent"
-                                                            android:orientation="horizontal"
-                                                            >
+                                                            android:orientation="horizontal">
+
                                                             <TextView
                                                                 android:id="@+id/toDt_picker"
                                                                 android:layout_width="wrap_content"
@@ -1762,18 +1809,19 @@
                                                                 android:inputType="date"
                                                                 android:text="10 Aug 2021"
                                                                 android:textSize="15sp"
-                                                                android:textStyle="bold"/>
+                                                                android:textStyle="bold" />
+
                                                             <EditText
                                                                 android:id="@+id/to_picker"
                                                                 android:layout_width="match_parent"
                                                                 android:layout_height="wrap_content"
                                                                 android:layout_marginLeft="@dimen/C5dp"
+                                                                android:layout_weight="1"
                                                                 android:background="@drawable/item_border"
                                                                 android:focusable="false"
-                                                                android:layout_weight="1"
-                                                                android:text="00:00"
                                                                 android:hint="Time"
                                                                 android:inputType="date"
+                                                                android:text="00:00"
                                                                 android:textSize="12sp" />
                                                         </LinearLayout>
                                                     </LinearLayout>
@@ -1786,6 +1834,7 @@
                                                 android:orientation="horizontal">
 
                                             </LinearLayout>
+
                                             <LinearLayout
                                                 android:id="@+id/total_days"
                                                 android:layout_width="match_parent"
@@ -1800,7 +1849,8 @@
                                                     android:text="No of Stays : "
                                                     android:textColor="#000"
                                                     android:textSize="8sp"
-                                                    android:visibility="gone"/>
+                                                    android:visibility="gone" />
+
                                                 <TextView
                                                     android:id="@+id/txt_stay_total"
                                                     android:layout_width="wrap_content"
@@ -1809,9 +1859,10 @@
                                                     android:textAllCaps="true"
                                                     android:textColor="#000"
                                                     android:textSize="8sp"
-                                                    android:visibility="gone"/>
+                                                    android:visibility="gone" />
                                             </LinearLayout>
                                         </LinearLayout>
+
                                         <LinearLayout
                                             android:id="@+id/lodgJoin"
                                             android:layout_width="match_parent"
@@ -1838,7 +1889,7 @@
                                                     android:textAllCaps="true"
                                                     android:textColor="@color/colorPrimary"
                                                     android:textSize="12sp"
-                                                    android:textStyle="bold"/>
+                                                    android:textStyle="bold" />
 
                                                 <TextView
                                                     android:id="@+id/txt_joint_add"
@@ -1847,7 +1898,7 @@
                                                     android:text="+ Add"
                                                     android:textAllCaps="true"
                                                     android:textColor="@color/colorPrimary"
-                                                    android:textSize="12sp"/>
+                                                    android:textSize="12sp" />
 
                                             </LinearLayout>
 
@@ -1860,7 +1911,7 @@
                                                 android:layout_marginBottom="@dimen/C5dp"
                                                 android:orientation="vertical"
                                                 android:visibility="gone"
-                                                tools:ignore="MissingPrefix"/>
+                                                tools:ignore="MissingPrefix" />
                                         </LinearLayout>
 
                                         <LinearLayout
@@ -1876,12 +1927,14 @@
                                                 android:layout_margin="@dimen/C5dp"
                                                 android:orientation="vertical"
                                                 android:visibility="gone">
+
                                                 <CheckBox
                                                     android:id="@+id/chk_cnt_sty"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
                                                     android:layout_margin="@dimen/C2dp"
-                                                    android:text="Continue Stay"/>
+                                                    android:text="Continue Stay" />
+
                                                 <CheckBox
                                                     android:id="@+id/chk_early"
                                                     android:layout_width="match_parent"
@@ -1889,6 +1942,7 @@
                                                     android:layout_margin="@dimen/C2dp"
                                                     android:text="Early Check-in"
                                                     android:visibility="gone" />
+
                                                 <LinearLayout
                                                     android:id="@+id/lin_early"
                                                     android:layout_width="match_parent"
@@ -2016,6 +2070,7 @@
                                                         </LinearLayout>
                                                     </LinearLayout>
                                                 </LinearLayout>
+
                                                 <CheckBox
                                                     android:id="@+id/chk_late"
                                                     android:layout_width="match_parent"
@@ -2023,6 +2078,7 @@
                                                     android:layout_margin="@dimen/C2dp"
                                                     android:text="Late Check-Out"
                                                     android:visibility="gone" />
+
                                                 <LinearLayout
                                                     android:id="@+id/lin_late"
                                                     android:layout_width="match_parent"
@@ -2149,6 +2205,7 @@
 
                                                 </LinearLayout>
                                             </LinearLayout>
+
                                             <LinearLayout
                                                 android:id="@+id/ldgEAra"
                                                 android:layout_width="match_parent"
@@ -2179,6 +2236,7 @@
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:layout_weight="1"
+                                                        android:gravity="end"
                                                         android:paddingLeft="@dimen/C8dp"
                                                         android:paddingTop="@dimen/C1dp"
                                                         android:paddingRight="@dimen/C8dp"
@@ -2187,8 +2245,7 @@
                                                         android:textAlignment="textEnd"
                                                         android:textAllCaps="false"
                                                         android:textSize="12sp"
-                                                        android:textStyle="bold"
-                                                        android:gravity="end" />
+                                                        android:textStyle="bold" />
 
                                                 </LinearLayout>
 
@@ -2215,6 +2272,7 @@
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:layout_weight="1"
+                                                        android:gravity="end"
                                                         android:paddingLeft="@dimen/C8dp"
                                                         android:paddingTop="@dimen/C1dp"
                                                         android:paddingRight="@dimen/C8dp"
@@ -2223,8 +2281,7 @@
                                                         android:textAlignment="textEnd"
                                                         android:textAllCaps="false"
                                                         android:textSize="12sp"
-                                                        android:textStyle="bold"
-                                                        android:gravity="end" />
+                                                        android:textStyle="bold" />
 
                                                 </LinearLayout>
 
@@ -2252,6 +2309,7 @@
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:layout_weight="1"
+                                                        android:gravity="end"
                                                         android:paddingLeft="@dimen/C8dp"
                                                         android:paddingTop="@dimen/C1dp"
                                                         android:paddingRight="@dimen/C8dp"
@@ -2260,8 +2318,7 @@
                                                         android:textAlignment="textEnd"
                                                         android:textAllCaps="false"
                                                         android:textSize="12sp"
-                                                        android:textStyle="bold"
-                                                        android:gravity="end" />
+                                                        android:textStyle="bold" />
 
                                                 </LinearLayout>
                                             </LinearLayout>
@@ -2269,69 +2326,73 @@
                                             <LinearLayout
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginTop="@dimen/C5dp"
                                                 android:layout_marginLeft="@dimen/C3dp"
+                                                android:layout_marginTop="@dimen/C5dp"
                                                 android:layout_marginRight="@dimen/C3dp"
                                                 android:orientation="vertical">
+
                                                 <TextView
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
+                                                    android:layout_marginLeft="@dimen/C5dp"
+                                                    android:text="Stay Allowance Details"
                                                     android:textSize="11sp"
-                                                    android:textStyle="bold"
-                                                    android:layout_marginLeft="@dimen/C5dp"
-                                                    android:text="Stay Allowance Details" />
-
-                                            <LinearLayout
-                                                android:id="@+id/linear_con"
-                                                android:layout_width="match_parent"
-                                                android:layout_height="wrap_content"
-                                                android:orientation="vertical"
-                                                android:visibility="visible">
+                                                    android:textStyle="bold" />
 
                                                 <LinearLayout
-                                                    android:id="@+id/data"
+                                                    android:id="@+id/linear_con"
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
-                                                    android:orientation="horizontal">
+                                                    android:orientation="vertical"
+                                                    android:visibility="visible">
 
                                                     <LinearLayout
-                                                        android:id="@+id/lin_con_sty"
-                                                        android:layout_width="wrap_content"
+                                                        android:id="@+id/data"
+                                                        android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
-                                                        android:layout_weight="1"
-                                                        android:orientation="vertical"
-                                                        android:padding="5dp" />
-                                                    <LinearLayout
-                                                        android:id="@+id/lin_con_sty_amt"
-                                                        android:layout_width="wrap_content"
-                                                        android:layout_height="wrap_content"
-                                                        android:orientation="vertical"
-                                                        android:padding="5dp" />
+                                                        android:orientation="horizontal">
+
+                                                        <LinearLayout
+                                                            android:id="@+id/lin_con_sty"
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:layout_weight="1"
+                                                            android:orientation="vertical"
+                                                            android:padding="5dp" />
+
+                                                        <LinearLayout
+                                                            android:id="@+id/lin_con_sty_amt"
+                                                            android:layout_width="wrap_content"
+                                                            android:layout_height="wrap_content"
+                                                            android:orientation="vertical"
+                                                            android:padding="5dp" />
+                                                    </LinearLayout>
                                                 </LinearLayout>
-                                            </LinearLayout>
+
                                                 <LinearLayout
                                                     android:layout_width="match_parent"
                                                     android:layout_height="wrap_content"
                                                     android:layout_marginLeft="@dimen/C5dp"
                                                     android:orientation="horizontal">
+
                                                     <TextView
                                                         android:id="@+id/txEligDt"
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
                                                         android:layout_weight="1"
-                                                        android:textSize="12sp"
-                                                        />
+                                                        android:textSize="12sp" />
+
                                                     <TextView
                                                         android:id="@+id/txldgTdyAmt"
                                                         android:layout_width="match_parent"
                                                         android:layout_height="wrap_content"
+                                                        android:layout_marginRight="@dimen/C5dp"
                                                         android:layout_weight="1"
                                                         android:textAlignment="textEnd"
-                                                        android:textSize="12sp"
-                                                        android:layout_marginRight="@dimen/C5dp"
-                                                        />
+                                                        android:textSize="12sp" />
                                                 </LinearLayout>
                                             </LinearLayout>
+
                                             <LinearLayout
                                                 android:id="@+id/vwldgBillAmt"
                                                 android:layout_width="match_parent"
@@ -2396,13 +2457,13 @@
                                                                 android:id="@+id/lblHdBill"
                                                                 android:layout_width="match_parent"
                                                                 android:layout_height="wrap_content"
+                                                                android:gravity="start"
                                                                 android:paddingLeft="@dimen/C5dp"
                                                                 android:text="Bill Amount"
                                                                 android:textAlignment="textStart"
                                                                 android:textAllCaps="true"
                                                                 android:textColor="#000"
-                                                                android:textSize="10sp"
-                                                                android:gravity="start" />
+                                                                android:textSize="10sp" />
 
 
                                                             <EditText
@@ -2493,9 +2554,9 @@
                                             <LinearLayout
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginBottom="@dimen/C5dp"
                                                 android:layout_marginLeft="@dimen/C10dp"
                                                 android:layout_marginRight="@dimen/C10dp"
+                                                android:layout_marginBottom="@dimen/C5dp"
                                                 android:orientation="horizontal">
 
                                                 <TextView

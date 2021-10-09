@@ -225,7 +225,7 @@ public class PaymentActivity extends AppCompatActivity implements View.OnClickLi
                     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                         int month = monthOfYear + 1;
 
-                        etDate.setText("" + dayOfMonth + "/" + month + "/" + year);
+                        etDate.setText("" + year + "/" + month + "/" + dayOfMonth);
                     }
                 }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
                 fromDatePickerDialog.show();

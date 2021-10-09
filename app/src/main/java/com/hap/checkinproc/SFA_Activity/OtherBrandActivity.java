@@ -88,11 +88,8 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
         tvSubmit = (TextView) findViewById(R.id.btnSubmit);
 
         TextView tvRetailorName = findViewById(R.id.Category_Nametext);
-        TextView tvRetailorCode = findViewById(R.id.retailorCode);
-        Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(this);
 
         tvRetailorName.setText(Shared_Common_Pref.OutletName);
-        tvRetailorCode.setText(shared_common_pref.getvalue(Constants.Retailor_ERP_Code));
 
 
         tvOrder.setOnClickListener(this);
@@ -276,14 +273,14 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
     public void OnclickMasterType(List<Common_Model> myDataset, int position, int type) {
         try {
 
-        if (selectedPos >= 0) {
-            customDialog.dismiss();
-            Getorder_Array_List.set(selectedPos, new Product_Details_Modal(myDataset.get(position).getId(), myDataset.get(position).getName(), "", 0, 0, 0, ""));
-            otherBrandAdapter.notifyData(Getorder_Array_List);
+            if (selectedPos >= 0) {
+                customDialog.dismiss();
+                Getorder_Array_List.set(selectedPos, new Product_Details_Modal(myDataset.get(position).getId(), myDataset.get(position).getName(), "", 0, 0, 0, ""));
+                otherBrandAdapter.notifyData(Getorder_Array_List);
 
-        }}
-        catch (Exception e){
-            Log.v("OtherBrandDialog: ",e.getMessage());
+            }
+        } catch (Exception e) {
+            Log.v("OtherBrandDialog: ", e.getMessage());
         }
     }
 
@@ -298,7 +295,7 @@ public class OtherBrandActivity extends AppCompatActivity implements View.OnClic
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse,String key) {
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
 
         if (apiDataResponse != null && !apiDataResponse.equals("")) {
             DatabaseHandler db = new DatabaseHandler(OtherBrandActivity.otherBrandActivity);

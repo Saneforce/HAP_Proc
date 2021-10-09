@@ -409,7 +409,7 @@ public class Common_Class {
 
                             updateUi = ((UpdateResponseUI) activity);
 
-                            updateUi.onLoadDataUpdateUI(gson.toJson(response.body()),key);
+                            updateUi.onLoadDataUpdateUI(gson.toJson(response.body()), key);
                         }
 
 
@@ -498,10 +498,9 @@ public class Common_Class {
                         data.put("fdt", HistoryInfoActivity.stDate);
                         data.put("tdt", HistoryInfoActivity.endDate);
 
-
                         break;
                     case Constants.PAYMODES:
-                        axnname="get/paymenttype";
+                        axnname = "get/paymenttype";
                         data.put("divisionCode", Shared_Common_Pref.Div_Code);
                         break;
 
@@ -511,9 +510,13 @@ public class Common_Class {
 
                     case Constants.OUTSTANDING:
                         axnname = "get/customeroutstanding";
-                        data.put("retailerCode", shared_common_pref.getvalue(Constants.Retailor_ERP_Code));
+                        data.put("retailerCode", Shared_Common_Pref.OutletCode);
                         break;
 
+                    case Constants.POP_ENTRY_STATUS:
+                        axnname = "get/popentrystatus";
+                        data.put("retailerCode", Shared_Common_Pref.OutletCode);
+                        break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + key);
                 }
@@ -543,7 +546,7 @@ public class Common_Class {
 
                                 shared_common_pref.save(key, is.toString());
                                 updateUi = ((UpdateResponseUI) activity);
-                                updateUi.onLoadDataUpdateUI(is.toString(),key);
+                                updateUi.onLoadDataUpdateUI(is.toString(), key);
                             }
 
                         } catch (Exception e) {

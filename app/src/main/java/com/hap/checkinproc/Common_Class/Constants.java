@@ -58,4 +58,6 @@ public class Constants {
     public static final String CUMULATIVEDATA = "cumulativeData";
     public static final String OUTSTANDING="outstanding";
     public static final String PAYMODES="payModes";
+    public static final String POP_ENTRY_STATUS ="popEntryStatus" ;
+    public static final String POP_LOCALPICLIST ="popLocPicList" ;
 }

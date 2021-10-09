@@ -12,22 +12,33 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.hap.checkinproc.Activity_Hap.ProductImageView;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class QPSFilesAdapter extends RecyclerView.Adapter<QPSFilesAdapter.MyViewHolder> {
+public class POPFilesAdapter extends RecyclerView.Adapter<POPFilesAdapter.MyViewHolder> {
     List<String> AryDta = new ArrayList<>();
     private Context context;
     int salRowDetailLayout;
     String itm = "";
+    String data = "";
 
-    public QPSFilesAdapter(List<String> jAryDta, int rowLayout, Context mContext) {
-        AryDta = jAryDta;
+    public POPFilesAdapter(String jAryDta, int rowLayout, Context mContext) {
+        data = jAryDta;
         context = mContext;
         salRowDetailLayout = rowLayout;
+
+        AryDta.clear();
+
+        String[] res = data.split("[,]", 0);
+        for (String myStr : res) {
+            if (!Common_Class.isNullOrEmpty(myStr))
+                AryDta.add(myStr);
+        }
+
     }
 
     @NonNull
@@ -40,6 +51,7 @@ public class QPSFilesAdapter extends RecyclerView.Adapter<QPSFilesAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         try {
+
 
 
             if (AryDta != null && AryDta.size() > 0) {
