@@ -24,16 +24,20 @@ import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
+import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.Master_Interface;
+import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.POPStatusAdapter;
 import com.hap.checkinproc.SFA_Adapter.PopAddAdapter;
 import com.hap.checkinproc.SFA_Adapter.QPS_Modal;
+import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Product_Details_Modal;
+import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,7 +56,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class POPActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface {
+public class POPActivity extends AppCompatActivity implements View.OnClickListener, Master_Interface, UpdateResponseUI {
 
     TextView tvViewStatus;
     Button btnSubmit;
@@ -61,7 +65,6 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
     RecyclerView rvQps;
 
     POPStatusAdapter popStatusAdapter;
-    ArrayList<QPS_Modal> qpsModals = new ArrayList<>();
     Common_Class common_class;
 
     RecyclerView rvPopAdd;
@@ -77,6 +80,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
 
     public static POPActivity popActivity;
     private int selectedPos;
+    Shared_Common_Pref shared_common_pref;
 
 
     @Override
@@ -84,6 +88,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pop_layout);
         common_class = new Common_Class(this);
+        shared_common_pref=new Shared_Common_Pref(this);
         popActivity = this;
 
         btnSubmit = findViewById(R.id.btnSubmit);
@@ -110,30 +115,9 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         ivAdd.setOnClickListener(this);
         btnSubmit.setOnClickListener(this);
         tvBookingDate.setOnClickListener(this);
-        tvViewStatus.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tvViewStatus.setVisibility(View.GONE);
-                findViewById(R.id.rlBookingDate).setVisibility(View.GONE);
-                findViewById(R.id.llPOPStatus).setVisibility(View.GONE);
-                findViewById(R.id.llPOPRequestStatus).setVisibility(View.VISIBLE);
-                ivAdd.setVisibility(View.GONE);
-                // btnSubmit.setText("Completed");
-                btnSubmit.setVisibility(View.GONE);
-
-            }
-        });
-
+        tvViewStatus.setOnClickListener(this);
 
         findViewById(R.id.tvPOP).setVisibility(View.GONE);
-
-
-        qpsModals.add(new QPS_Modal("233", "236763", "Cooker", "30.8.2021", "-1 day", "10.9.2021", "PENDING", null));
-        qpsModals.add(new QPS_Modal("234", "236745", "Mobile", "25.8.2021", "-5 days", "10.9.2021", "Approved", null));
-
-        qpsModals.add(new QPS_Modal("235", "236789", "Bag", "28.8.2021", "-3 days", "10.9.2021", "PENDING", null));
-        popStatusAdapter = new POPStatusAdapter(this, qpsModals);
-        rvQps.setAdapter(popStatusAdapter);
 
 
         popAddList.add(new Product_Details_Modal("", "", "", 0, ""));
@@ -226,6 +210,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
             if (tvViewStatus.getVisibility() == View.VISIBLE) {
+                shared_common_pref.clear_pref(Constants.QPS_LOCALPICLIST);
                 common_class.CommonIntentwithFinish(Invoice_History.class);
             } else {
                 tvViewStatus.setVisibility(View.VISIBLE);
@@ -234,7 +219,8 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                 findViewById(R.id.llPOPRequestStatus).setVisibility(View.GONE);
                 ivAdd.setVisibility(View.VISIBLE);
                 // btnSubmit.setText("Completed");
-                btnSubmit.setVisibility(View.VISIBLE);
+               // btnSubmit.setVisibility(View.VISIBLE);
+                findViewById(R.id.rlPOPSubmit).setVisibility(View.VISIBLE);
             }
 
             return true;
@@ -245,6 +231,20 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.tvPOPViewStatus:
+                tvViewStatus.setVisibility(View.GONE);
+                findViewById(R.id.rlBookingDate).setVisibility(View.GONE);
+                findViewById(R.id.llPOPStatus).setVisibility(View.GONE);
+                findViewById(R.id.llPOPRequestStatus).setVisibility(View.VISIBLE);
+                ivAdd.setVisibility(View.GONE);
+                // btnSubmit.setText("Completed");
+               // btnSubmit.setVisibility(View.GONE);
+                findViewById(R.id.rlPOPSubmit).setVisibility(View.GONE);
+
+                common_class.getDb_310Data(Constants.POP_ENTRY_STATUS, this);
+
+
+                break;
             case R.id.tvBookingDate:
                 Calendar newCalendar = Calendar.getInstance();
                 fromDatePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -292,7 +292,7 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         submitPOPList.clear();
 
         for (int i = 0; i < popAddList.size(); i++) {
-            if (!popAddList.get(i).getName().equals("") && !popAddList.get(i).getBookingDate().equals("") && popAddList.get(i).getQty() > 0 &&
+            if (!popAddList.get(i).getName().equals("") /*&& !popAddList.get(i).getBookingDate().equals("")*/ && popAddList.get(i).getQty() > 0 &&
                     !popAddList.get(i).getUOM().equals("")) {
                 submitPOPList.add(popAddList.get(i));
 
@@ -404,5 +404,32 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
         windoww.setGravity(Gravity.CENTER);
         windoww.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
         customDialog.show();
+    }
+
+    @Override
+    public void onLoadFilterData(List<Retailer_Modal_List> retailer_modal_list) {
+
+    }
+
+    @Override
+    public void onLoadTodayOrderList(List<OutletReport_View_Modal> outletReportViewModals) {
+
+    }
+
+    @Override
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
+
+        try {
+
+            JSONObject jsonObject = new JSONObject(apiDataResponse);
+
+            if (jsonObject.getBoolean("success")) {
+                popStatusAdapter = new POPStatusAdapter(this, jsonObject.getJSONArray("Data"));
+                rvQps.setAdapter(popStatusAdapter);
+            }
+        } catch (Exception e) {
+
+        }
+
     }
 }

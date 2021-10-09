@@ -5,32 +5,32 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.R;
 
-import java.util.ArrayList;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.util.List;
 
 public class POPStatusAdapter extends RecyclerView.Adapter<POPStatusAdapter.MyViewHolder> {
     Context context;
-    List<QPS_Modal> mData;
 
     Shared_Common_Pref shared_common_pref;
 
 
-    POPMaterialAdapter qpsFilesAdapter;
+    POPMaterialAdapter popMaterialAdapter;
 
-    public POPStatusAdapter(Context context, List<QPS_Modal> mData) {
+    JSONArray jsonArray;
+
+    public POPStatusAdapter(Context context, JSONArray jsonArray) {
         this.context = context;
-        this.mData = mData;
+        this.jsonArray = jsonArray;
         shared_common_pref = new Shared_Common_Pref(context);
 
     }
@@ -46,13 +46,18 @@ public class POPStatusAdapter extends RecyclerView.Adapter<POPStatusAdapter.MyVi
     @Override
     public void onBindViewHolder(POPStatusAdapter.MyViewHolder holder, int position) {
         try {
-            holder.sNo.setText("" + mData.get(position).getsNo());
-            holder.requestNo.setText("" + mData.get(position).getRequestNo());
-            holder.bookingDate.setText("" + mData.get(position).getBookingDate());
+            JSONObject itm=jsonArray.getJSONObject(position);
 
-            qpsFilesAdapter = new POPMaterialAdapter(context, mData);
+            holder.sNo.setText("" + itm.getString("SlNo"));
+            holder.requestNo.setText("" + itm.getString("Requset_No"));
+            holder.bookingDate.setText("" + itm.getString("Booking_Date"));
 
-            holder.rvFile.setAdapter(qpsFilesAdapter);
+
+
+
+            popMaterialAdapter = new POPMaterialAdapter(context,itm.getJSONArray("Details"));
+
+            holder.rvMaterials.setAdapter(popMaterialAdapter);
 
 
         } catch (Exception e) {
@@ -64,20 +69,28 @@ public class POPStatusAdapter extends RecyclerView.Adapter<POPStatusAdapter.MyVi
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return jsonArray.length();
+    }
+    @Override
+    public int getItemViewType(int position) {
+        return position;
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView sNo, requestNo,  bookingDate;
-        RecyclerView rvFile;
+        TextView sNo, requestNo, bookingDate;
+        RecyclerView rvMaterials;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             sNo = itemView.findViewById(R.id.tvQpsSno);
             requestNo = itemView.findViewById(R.id.tvQPSReqNo);
-            bookingDate=itemView.findViewById(R.id.tvBookingDate);
-            rvFile = itemView.findViewById(R.id.rvMaterials);
+            bookingDate = itemView.findViewById(R.id.tvBookingDate);
+            rvMaterials = itemView.findViewById(R.id.rvMaterials);
 
         }
     }

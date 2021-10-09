@@ -904,10 +904,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("DrKeyId", "'" + keyCodeValue + "'");
 
             //for marked option in explore screen
-//            reportObject.put("place_id", place_id);
+            reportObject.put("place_id", place_id);
 //
 //            String imgName = filePath.substring(filePath.indexOf("/"));
-//            reportObject.put("img_name", imgName);
+            reportObject.put("img_name", imageServer);
 
             //
 

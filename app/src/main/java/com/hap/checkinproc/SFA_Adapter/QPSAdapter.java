@@ -52,6 +52,7 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
     List<QPS_Modal> qpsModalList = new ArrayList<>();
 
     QPSFilesAdapter qpsFilesAdapter;
+    private String key = "";
 
     public QPSAdapter(Context context, List<QPS_Modal> mData) {
         this.context = context;
@@ -101,13 +102,13 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
                 @Override
                 public void onClick(View v) {
                     getCurrentList();
-                    if (isCheckExceed(mData.get(position).getsNo() + "key")) {
+                    if (isCheckExceed(mData.get(position).getsNo() + "~key")) {
                         AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
                             @Override
                             public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
 
 
-                                qpsModalList.add(new QPS_Modal(fullPath, FileName, (mData.get(position).getsNo() + "key" + System.currentTimeMillis())));
+                                qpsModalList.add(new QPS_Modal(fullPath, FileName, (mData.get(position).getsNo() + "~key" + System.currentTimeMillis())));
 
                                 shared_common_pref.save(Constants.QPS_LOCALPICLIST, gson.toJson(qpsModalList));
                             }
@@ -137,78 +138,20 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
 
 
                     Intent stat = new Intent(context, AttachementActivity.class);
-                    stat.putExtra("qps_localData", mData.get(position).getsNo() + "key");
+                    stat.putExtra("qps_localData", mData.get(position).getsNo() + "~key");
                     context.startActivity(stat);
                 }
             });
-
-//working
-       /* holder.ivCaptureImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AllowancCapture.setOnImagePickListener(new OnImagePickListener() {
-                    @Override
-                    public void OnImageURIPick(Bitmap image, String FileName, String fullPath) {
-                        imageServer = FileName;
-                        imageConvert = fullPath;
-                        long nano_startTime = System.nanoTime();
-                        String ImageUKey = "EK" + Shared_Common_Pref.Sf_Code + nano_startTime;
-
-
-                        String sMode = "TL;" + Common_Class.GetDatewothouttime() + ";" + "EK" + Shared_Common_Pref.Sf_Code + "-" + mData.get(position).getsNo() + ";"
-                                + "Bus" + ";" + ImageUKey;
-
-                        if (!Common_Class.isNullOrEmpty(imageServer)) {
-
-                            Intent mIntent = new Intent(context, FileUploadService.class);
-                            mIntent.putExtra("mFilePath", fullPath);
-                            mIntent.putExtra("SF", Shared_Common_Pref.Sf_Code);
-                            mIntent.putExtra("FileName", FileName);
-                            mIntent.putExtra("Mode", "ExpClaim;" + sMode);
-                            FileUploadService.enqueueWork(context, mIntent);
-                        }
-                    }
-                });
-                Intent intent = new Intent(context, AllowancCapture.class);
-                intent.putExtra("allowance", "TAClaim");
-                context.startActivity(intent);
-
-
-            }
-        });
-
-        holder.ivAttachImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                key = "EK" + Shared_Common_Pref.Sf_Code + "-" + mData.get(position).getsNo();
-                AttachementActivity.setOnAttachmentDeleteListener(new OnAttachmentDelete() {
-                    @Override
-                    public void OnImageDelete(String Mode, int ImgCount) {
-                        if (ImgCount < 1) {
-                            key = "";
-                        }
-                    }
-                });
-                Intent stat = new Intent(context, AttachementActivity.class);
-                stat.putExtra("position", "EK" + Shared_Common_Pref.Sf_Code + "-" + mData.get(position).getsNo());
-                stat.putExtra("headTravel", "TL");
-                stat.putExtra("mode", "Bus");
-                stat.putExtra("date", Common_Class.GetDatewothouttime());
-                context.startActivity(stat);
-            }
-        });*/
-
             //working
             holder.btnComplete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
+                    key = mData.get(position).getsNo() + "~key";
                     SaveOrder(holder.requestNo.getText().toString());
 
                     for (int i = 0; i < qpsModalList.size(); i++) {
-                        if (qpsModalList.get(i).getFileKey().contains(mData.get(position).getsNo() + "key")) {
+                        if (qpsModalList.get(i).getFileKey().contains(key)) {
 
                             Intent mIntent = new Intent(context, FileUploadService.class);
                             mIntent.putExtra("mFilePath", qpsModalList.get(i).getFilePath());
@@ -246,16 +189,15 @@ public class QPSAdapter extends RecyclerView.Adapter<QPSAdapter.MyViewHolder> {
 
             HeadItem.put("date", Common_Class.GetDatewothouttime());
 
-
             ActivityData.put("QPS_Header", HeadItem);
             JSONArray Order_Details = new JSONArray();
             for (int z = 0; z < qpsModalList.size(); z++) {
-                JSONObject ProdItem = new JSONObject();
-                ProdItem.put("qps_filename", qpsModalList.get(z).getFileName());
-                ProdItem.put("qps_reqNo", reqNo);
-
-
-                Order_Details.put(ProdItem);
+                if (qpsModalList.get(z).getFileKey().contains(key)) {
+                    JSONObject ProdItem = new JSONObject();
+                    ProdItem.put("qps_filename", qpsModalList.get(z).getFileName());
+                    ProdItem.put("qps_reqNo", reqNo);
+                    Order_Details.put(ProdItem);
+                }
             }
             ActivityData.put("file_Details", Order_Details);
             data.put(ActivityData);
