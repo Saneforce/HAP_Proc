@@ -121,6 +121,7 @@
                 app:tint="@color/colorPrimaryDark" />
 
             <Button
+                android:layout_marginTop="@dimen/C5dp"
                 android:id="@+id/btnComplete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -47,14 +47,40 @@
             </LinearLayout>
 
             <Button
-                android:id="@+id/btnAddtoList"
                 android:layout_width="@dimen/C80dp"
                 android:layout_height="45dp"
                 android:layout_gravity="center"
                 android:background="@drawable/button_blueg"
                 android:padding="@dimen/C10dp"
                 android:text="Direction"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/btnAddtoList"
+                    android:layout_width="@dimen/C50dp"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/C5dp"
+                    android:src="@drawable/ic_round_assistant_direction_24"
+                    android:text="Direction"
+                    android:visibility="visible" />
+
+                <ImageView
+                    android:id="@+id/ivMarked"
+                    android:layout_width="@dimen/C50dp"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/C5dp"
+                    android:src="@drawable/ic_round_bookmark_add_24"
+                    android:text="Direction"
+                    android:visibility="visible" />
+            </LinearLayout>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
