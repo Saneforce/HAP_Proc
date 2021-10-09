@@ -7,11 +7,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextUtils;
@@ -69,6 +71,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import id.zelory.compressor.Compressor;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -81,7 +84,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
     TextView TextModeTravel, TextStartedKm, TextMaxKm, TextToPlace, TextCloseDate,TextDtTrv;
     ImageView StartedKmImage, EndedKmImage;
-    Button submitAllowance;
+    CircularProgressButton submitAllowance;
     EditText EndedEditText, PersonalKmEdit, ReasonMode;
     Integer stKM = 0, endKm = 0, personalKM = 0, StratKm = 0, maxKM = 0, TotalKm = 0, totalPM = 0,StartedKM=0;
     SharedPreferences CheckInDetails, sharedpreferences, UserDetails;
@@ -96,6 +99,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
     Common_Class common_class;
     List<Common_Model> modelRetailDetails = new ArrayList<>();
     Location mlocation;
+    final Handler handler = new Handler();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -258,13 +262,20 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
         submitAllowance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (EndedEditText.getText().toString().matches("")) {
-                    Toast.makeText(AllowanceActivityTwo.this, "Choose End Km", Toast.LENGTH_SHORT).show();
-                    return;
-                } else if (imageConvert.matches("")) { //if (EndedImage.matches("") && ((ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) )
-                    Toast.makeText(AllowanceActivityTwo.this, "Choose End photo", Toast.LENGTH_SHORT).show();
-                    return;
-                } else {
+                submitAllowance.startAnimation();
+                common_class.ProgressdialogShow(1,"Validating Please wait...");
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (EndedEditText.getText().toString().matches("")) {
+                            Toast.makeText(AllowanceActivityTwo.this, "Choose End Km", Toast.LENGTH_SHORT).show();
+                            ResetSubmitBtn(0);return;
+                        }
+                        else if (imageConvert.matches("")) { //if (EndedImage.matches("") && ((ClosingDate.equals("") || ClosingDate.equalsIgnoreCase("null"))) )
+                            Toast.makeText(AllowanceActivityTwo.this, "Choose End photo", Toast.LENGTH_SHORT).show();
+                            ResetSubmitBtn(0);return;
+                        }
+                        else {
 
                     try {
                         stKM = Integer.valueOf(TextStartedKm.getText().toString());
@@ -275,7 +286,6 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                     if (stKM < endKm) {
                         endKm = Integer.parseInt(EndedEditText.getText().toString());
                         if (StartedKM < endKm) {
-
                             if(TextModeTravel.getText().toString().equalsIgnoreCase("Two Wheeler")){
                                 EndedEditText.setFilters(new InputFilter[]{new Common_Class.InputFilterMinMax(0,StartedKM+maxKM)});
                             }else if(TextModeTravel.getText().toString().equalsIgnoreCase("Four Wheeler")){
@@ -284,7 +294,7 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                         }
                         if((StartedKM+maxKM)<endKm){
                             Toast.makeText(AllowanceActivityTwo.this, "KM Limit is Exceeded", Toast.LENGTH_SHORT).show();
-                            return;
+                            ResetSubmitBtn(0);return;
                         }
                         if(mlocation!=null){
                             common_class.ProgressdialogShow(1, "Submitting Please wait...");
@@ -311,11 +321,13 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                             });
                         }
                     } else {
+                        ResetSubmitBtn(0);
                         Toast.makeText(AllowanceActivityTwo.this, "Should be greater then Started Km", Toast.LENGTH_SHORT).show();
 
                     }
                 }
-
+                    }
+                },100);
             }
         });
 
@@ -384,16 +396,13 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         if (response.isSuccessful()) {
-                            common_class.ProgressdialogShow(0, "");
-                            Log.v("print_upload_file_true", "ggg" + response);
                             JSONObject jb = null;
                             String jsonData = null;
                             jsonData = response.body().string();
-                            Log.v("response_data", jsonData);
                             JSONObject js = new JSONObject(jsonData);
                             if (js.getString("success").equalsIgnoreCase("true")) {
                                 Toast.makeText(AllowanceActivityTwo.this, " Submitted successfully ", Toast.LENGTH_SHORT).show();
-
+                                ResetSubmitBtn(1);
                                 SharedPreferences.Editor editor = sharedpreferences.edit();
                                 editor.remove(Name);
                                 editor.remove(MOT);
@@ -417,14 +426,16 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
                                 }
 
 
-                            } else
+                            } else {
+                                ResetSubmitBtn(2);
                                 Toast.makeText(AllowanceActivityTwo.this, "Cannot submitted the data. Try again", Toast.LENGTH_SHORT).show();
+                            }
                         }else{
-                            common_class.ProgressdialogShow(0, "");
+                            ResetSubmitBtn(2);
                             Toast.makeText(AllowanceActivityTwo.this, "Cannot submitted the data. Try again", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
-                        common_class.ProgressdialogShow(0, "");
+                        ResetSubmitBtn(2);
                         Toast.makeText(AllowanceActivityTwo.this, "Cannot submitted the data. Try again", Toast.LENGTH_SHORT).show();
 
                     }
@@ -432,19 +443,35 @@ public class AllowanceActivityTwo extends AppCompatActivity implements Master_In
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    common_class.ProgressdialogShow(0, "");
+                    ResetSubmitBtn(2);
                     Toast.makeText(AllowanceActivityTwo.this, "Cannot submitted the data. Try again", Toast.LENGTH_SHORT).show();
-
-
                 }
             });
         } catch (Exception e) {
-            common_class.ProgressdialogShow(0, "");
+            ResetSubmitBtn(0);
             Toast.makeText(AllowanceActivityTwo.this, e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
         }
     }
 
 
+    public void ResetSubmitBtn(int resetMode){
+        common_class.ProgressdialogShow(0, "");
+        long dely=100;
+        //if(resetMode!=0) dely=1000;
+        if (resetMode==1){
+            submitAllowance.doneLoadingAnimation(getResources().getColor(R.color.green), BitmapFactory.decodeResource(getResources(), R.drawable.done));
+        }else {
+            submitAllowance.doneLoadingAnimation(getResources().getColor(R.color.color_red), BitmapFactory.decodeResource(getResources(), R.drawable.ic_wrong));
+        }
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                submitAllowance.stopAnimation();
+                submitAllowance.revertAnimation();
+            }
+        },dely);
+
+    }
     public void BusToValue() {
 
         JSONObject jj = new JSONObject();

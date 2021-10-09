@@ -1,30 +1,45 @@
 package com.hap.checkinproc.SFA_Activity;
 
+import static android.Manifest.permission.CALL_PHONE;
+
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.CustomListViewDialog;
 import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.AdapterOnClick;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Adapter.Lead_Adapter;
+import com.hap.checkinproc.SFA_Adapter.RetailerNearByADP;
+import com.hap.checkinproc.SFA_Adapter.Route_View_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.OutletReport_View_Modal;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.common.DatabaseHandler;
@@ -50,6 +65,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
     Shared_Common_Pref sharedCommonPref;
     Common_Model Model_Pojo;
     String Route_id;
+    EditText txSearchRet;
     List<Common_Model> FRoute_Master = new ArrayList<>();
     List<Common_Model> Route_Masterlist = new ArrayList<>();
     List<Common_Model> distributor_master = new ArrayList<>();
@@ -76,6 +92,7 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             TotalOutlets = findViewById(R.id.TotalOutlets);
             distributor_text = findViewById(R.id.distributor_text);
 
+            txSearchRet = findViewById(R.id.txSearchRet);
 
             route_text.setOnClickListener(this);
             reachedoutlets.setOnClickListener(this);
@@ -104,14 +121,8 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
             if (Retailer_Modal_List != null) {
                 Retailer_Modal_ListFilter = gson.fromJson(OrdersTable, userType);
-
-                //GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Todaydayplanresult), "2");
-                // GetJsonData(sharedCommonPref.getvalue(Shared_Common_Pref.Rout_List), "1");
-                //  GetJsonData(String.valueOf(db.getMasterData(Constants.Rout_List)), "1");
                 GetJsonData(String.valueOf(db.getMasterData(Constants.Todaydayplanresult)), "2");
-
-
-                TotalOutlets.setText("Total Outlets:" + "\t" + Retailer_Modal_List.size());
+                TotalOutlets.setText(String.valueOf(Retailer_Modal_List.size()));
                 int todaycount = 0;
                 for (Retailer_Modal_List lm : Retailer_Modal_List) {
                     if (lm.getLastUpdt_Date() != null && lm.getLastUpdt_Date().equals(Common_Class.GetDatewothouttime())) {
@@ -122,9 +133,10 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             }
             if (Retailer_Modal_ListFilter != null && Retailer_Modal_ListFilter.size() > 0) {
                 recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
-                new Lead_Adapter(Retailer_Modal_List, R.layout.lead_recyclerview, getApplicationContext()).notifyDataSetChanged();
+
                 // recyclerView.setItemViewCacheSize(Retailer_Modal_List.size());
             }
+
 
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
@@ -144,10 +156,43 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
 
             }
 
+            txSearchRet.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    SearchRetailers();
+                }
+            });
 
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
         }
+    }
+
+    private void SearchRetailers(){
+        Retailer_Modal_ListFilter.clear();
+        userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
+        }.getType();
+        String OrdersTable = sharedCommonPref.getvalue(Constants.Retailer_OutletList);
+        Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
+        for (int sr=0;sr<Retailer_Modal_List.size();sr++){
+            String itmname=Retailer_Modal_List.get(sr).getName().toUpperCase();
+            String sSchText=txSearchRet.getText().toString().toUpperCase();
+            if((";"+itmname).indexOf(";"+sSchText)>-1){
+                Retailer_Modal_ListFilter.add(Retailer_Modal_List.get(sr));
+            }
+        }
+        TotalOutlets.setText(String.valueOf(Retailer_Modal_List.size()));
+        recyclerView.setAdapter(new Lead_Adapter(Retailer_Modal_ListFilter, R.layout.lead_recyclerview, getApplicationContext()));
     }
 
     @Override
@@ -211,7 +256,9 @@ public class Lead_Activity extends AppCompatActivity implements View.OnClickList
             case R.id.reachedoutlets:
                 sharedCommonPref.save("RouteSelect", Route_id);
                 sharedCommonPref.save("RouteName", route_text.getText().toString());
-                common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
+                //common_class.CommonIntentwithoutFinish(New_Outlet_Map_creations.class);
+                common_class.CommonIntentwithoutFinish(Nearby_Outlets.class);
+                overridePendingTransition(R.anim.in,R.anim.out);
                 break;
             case R.id.route_text:
                 if (FRoute_Master != null && FRoute_Master.size() > 1) {

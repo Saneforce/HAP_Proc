@@ -663,13 +663,13 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                 mProgress.setTitle(titleId);
                 mProgress.setMessage("Preparing Please Wait...");
                 mProgress.show();
-                if (mlocation != null) {
+                /*if (mlocation != null) {
                     mProgress.setMessage("Submiting Please Wait...");
                     vwPreview.setVisibility(View.GONE);
                     // imgPreview.setImageURI(Uri.fromFile(file));
                     button.setVisibility(View.GONE);
                     saveCheckIn();
-                } else {
+                } else {*/
                     new LocationFinder(getApplication(), new LocationEvents() {
                         @Override
                         public void OnLocationRecived(Location location) {
@@ -681,7 +681,7 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                             saveCheckIn();
                         }
                     });
-                }
+                //}
             }
         } catch (Exception e) {
             Log.e(TAG, e.getMessage());
@@ -697,7 +697,6 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                 public void OnLocationRecived(Location location) {
                     try {
                         mlocation = location;
-
 //                        ImageCapture.vwPreview.setVisibility(View.GONE);
 //                        // imgPreview.setImageURI(Uri.fromFile(file));
 //                        button.setVisibility(View.GONE);
@@ -983,6 +982,11 @@ public class ImageCapture extends AppCompatActivity implements CameraActivity.Ca
                             editor.putBoolean("CheckIn", false);
                             editor.apply();
                             mShared_common_pref.clear_pref(Shared_Common_Pref.DAMode);
+
+                            Intent playIntent = new Intent(ImageCapture.this, SANGPSTracker.class);
+                            stopService(playIntent);
+                            finishAffinity();
+
                             JsonObject itm = response.body().getAsJsonObject();
                             String mMessage = "Your Check-Out Submitted Successfully<br><br>Check in Time  : " + CheckInDetails.getString("FTime", "") + "<br>" +
                                     "Check Out Time : " + CTime;

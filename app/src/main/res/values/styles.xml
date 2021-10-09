@@ -5,11 +5,18 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+<!--        <item name="android:windowAnimationStyle">@style/CustomActivityAnimation</item>-->
+
+
     </style>
 
     <style name="AppTheme" parent="AppBaseTheme">
         <item name="android:textViewStyle">@style/RobotoTextViewStyle</item>
         <item name="android:buttonStyle">@style/RobotoButtonStyle</item>
+    </style>
+
+    <style name="BluePrimaryButton" parent="Theme.AppCompat.Light">
+        <item name="android:colorBackground">@android:color/black</item>
     </style>
 
     <style name="RobotoTextViewStyle" parent="android:Widget.TextView">
@@ -67,7 +74,7 @@
         <item name="android:layout_height">@dimen/C45dp</item>
         <item name="android:layout_margin">@dimen/C5dp</item>
         <item name="android:padding">@dimen/C1dp</item>
-        <item name="android:textSize">15sp</item>
+        <item name="android:textSize">13sp</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/button_blueg</item>
@@ -154,4 +161,10 @@
         <item name="android:scrollbarSize">2dp</item>
     </style>
 
+    <style name="CustomActivityAnimation" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_in_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_out_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_in_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_out_right</item>
+    </style>
 </resources>

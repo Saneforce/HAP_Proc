@@ -1453,7 +1453,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                     public void onClick(View v) {
                         if (Common_Class.isNullOrEmpty(etComments.getText().toString())) {
                             common_class.showMsg(Order_Category_Select.this, "Empty value is not allowed");
-                        } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getMRP())) {
+                        } else if (Double.valueOf(etComments.getText().toString()) > Double.valueOf(product_details_modal.getRate())) {
                             common_class.showMsg(Order_Category_Select.this, "Enter Rate is greater than MRP");
 
                         } else {

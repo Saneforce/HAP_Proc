@@ -2992,32 +2992,44 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"></Space>
 
-                <Button
+                <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                     android:id="@+id/save_button"
                     android:layout_width="100dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/C40dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="@dimen/C10dp"
                     android:background="@drawable/button_blueg"
                     android:padding="10dp"
                     android:text="Save"
+                    android:textColor="@android:color/white"
+                    android:theme="@style/BluePrimaryButton"
+                    app:finalCornerAngle="50dp"
+                    app:initialCornerAngle="10dp"
+                    app:spinning_bar_color="#FFFFFFFF"
+                    app:spinning_bar_padding="5dp"
+                    app:spinning_bar_width="5dp"
                     android:textAlignment="center"
-                    android:textColor="#FFFFFF"
                     android:textStyle="bold"
                     android:visibility="gone"
                     tools:ignore="RtlCompat" />
 
-                <Button
+                <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                     android:id="@+id/btn_sub"
                     android:layout_width="200dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/C40dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginRight="@dimen/C10dp"
                     android:background="@drawable/button_blueg"
                     android:padding="10dp"
                     android:text="Submit for Approval"
+                    android:textColor="@android:color/white"
+                    android:theme="@style/BluePrimaryButton"
+                    app:finalCornerAngle="50dp"
+                    app:initialCornerAngle="10dp"
+                    app:spinning_bar_color="#FFFFFFFF"
+                    app:spinning_bar_padding="5dp"
+                    app:spinning_bar_width="5dp"
                     android:textAlignment="center"
-                    android:textColor="#FFFFFF"
                     android:textStyle="bold"
                     android:visibility="gone"
                     tools:ignore="RtlCompat" />

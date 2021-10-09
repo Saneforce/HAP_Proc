@@ -264,7 +264,7 @@ public class Login extends AppCompatActivity {
                     mLUService.requestLocationUpdates();
                 }
                 Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(googleApiClient);
-                startActivityForResult(signInIntent, RC_SIGN_IN);
+                Login.this.startActivityForResult(signInIntent, RC_SIGN_IN);
 
             }
         });
@@ -349,7 +349,10 @@ public class Login extends AppCompatActivity {
                         if (checkValueStore())
                             aIntent = new Intent(getApplicationContext(), SFA_Activity.class);
                         else
+                        {
                             aIntent = new Intent(getApplicationContext(), Dashboard_Two.class);
+                            aIntent.putExtra("Mode", "CIN");
+                        }
                     }
                     startActivity(aIntent);
                 } else {
@@ -540,8 +543,8 @@ public class Login extends AppCompatActivity {
             return;
         }
 
-        //eMail = "purushotham.b@hap.in";
-        eMail = "haptest3@hap.in";
+        //eMail = "srinivasan.vh@hap.in";
+        //eMail = "haptest3@hap.in";
 //        eMail = "senthil.s@hap.in";
 //        eMail = "ssiva2519@gmail.com";
        // eMail="sebastin.j@hap.in";
@@ -558,8 +561,6 @@ public class Login extends AppCompatActivity {
                         JsonArray CinData = response.body().getCInData();
                         if (CinData.size() > 0) {
                             JsonObject CinObj = CinData.get(0).getAsJsonObject();
-                            Log.d("CinData", String.valueOf(CinObj));
-
                             SharedPreferences.Editor editor = CheckInDetails.edit();
                             editor.putString("Shift_Selected_Id", CinObj.get("Sft_ID").getAsString());
                             editor.putString("Shift_Name", CinObj.get("Sft_Name").getAsString());
@@ -602,9 +603,7 @@ public class Login extends AppCompatActivity {
                         Integer type = response.body().getData().get(0).getCheckCount();
                         String DesigNm = response.body().getData().get(0).getSfDesignationShortName();
                         String SFRptCd = response.body().getData().get(0).getSfRptCode();
-                        ;
                         String SFRptNm = response.body().getData().get(0).getSfRptName();
-                        ;
                         String DeptCd = response.body().getData().get(0).getSFDept();
                         String DeptNm = response.body().getData().get(0).getDeptName();
                         String DeptType = response.body().getData().get(0).getDeptType();

@@ -206,6 +206,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                     intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
                     intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
                     startActivity(intent);
+                    overridePendingTransition(R.anim.in,R.anim.out);
                     //}
 
                 }
@@ -243,18 +244,23 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         switch (v.getId()) {
             case R.id.lin_payment:
                 common_class.CommonIntentwithoutFinish(PaymentActivity.class);
+                overridePendingTransition(R.anim.in,R.anim.out);
                 break;
             case R.id.tvOtherBrand:
                 common_class.CommonIntentwithFinish(OtherBrandActivity.class);
+                overridePendingTransition(R.anim.in,R.anim.out);
                 break;
             case R.id.tvQPS:
                 common_class.CommonIntentwithFinish(QPSActivity.class);
+                overridePendingTransition(R.anim.in,R.anim.out);
                 break;
             case R.id.tvPOP:
                 common_class.CommonIntentwithFinish(POPActivity.class);
+                overridePendingTransition(R.anim.in,R.anim.out);
                 break;
             case R.id.tvCoolerInfo:
                 common_class.CommonIntentwithFinish(CoolerInfoActivity.class);
+                overridePendingTransition(R.anim.in,R.anim.out);
                 break;
 
             case R.id.lin_order:
@@ -269,12 +275,14 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                 Shared_Common_Pref.Invoicetoorder = "2";
                 //getInvoiceOrderQty();
                 common_class.CommonIntentwithFinish(Invoice_Category_Select.class);
+                overridePendingTransition(R.anim.in,R.anim.out);
 
                 break;
             case R.id.lin_repeat_invoice:
                 break;
             case R.id.lastinvoice:
                 common_class.CommonIntentwithoutFinish(HistoryInfoActivity.class);
+                overridePendingTransition(R.anim.in,R.anim.out);
                 // common_class.CommonIntentwithoutFinish(More_Info_Activity.class);
 
                 break;
@@ -485,6 +493,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
                     intent.putExtra("NetAmount", FilterOrderList.get(position).getNetAmount());
                     intent.putExtra("Discount_Amount", FilterOrderList.get(position).getDiscount_Amount());
                     startActivity(intent);
+                    overridePendingTransition(R.anim.in,R.anim.out);
                     //  }
 
                 }
@@ -498,7 +507,6 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
     public void onLoadDataUpdateUI(String apiDataResponse,String key) {
 
     }
-
     public void getSchemeList() {
         try {
             if (common_class.isNetworkAvailable(this)) {
@@ -658,6 +666,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
         if (keyCode == KeyEvent.KEYCODE_BACK) {
 
             common_class.CommonIntentwithFinish(Dashboard_Route.class);
+            overridePendingTransition(R.anim.in,R.anim.out);
 
             return true;
         }
@@ -719,6 +728,7 @@ public class Invoice_History extends AppCompatActivity implements Master_Interfa
 
 
                                     common_class.CommonIntentwithFinish(Order_Category_Select.class);
+                                    overridePendingTransition(R.anim.in,R.anim.out);
 
 
                                     common_class.ProgressdialogShow(0, "");

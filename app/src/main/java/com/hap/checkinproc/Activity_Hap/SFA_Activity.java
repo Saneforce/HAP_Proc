@@ -1,8 +1,10 @@
 package com.hap.checkinproc.Activity_Hap;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -39,6 +41,7 @@ import com.hap.checkinproc.SFA_Adapter.OutletDashboardInfoAdapter;
 import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -59,9 +62,10 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     LinearLayout Lin_Route, Lin_DCR, Lin_Lead, Lin_Dashboard, Lin_Outlet, DistLocation, Logout, lin_Reports, SyncButon, linorders, linPrimary;
     Gson gson;
     Type userType;
+    public static final String UserDetail = "MyPrefs";
     Common_Class common_class;
-    private Main_Model.presenter presenter;
     Shared_Common_Pref sharedCommonPref;
+    SharedPreferences UserDetails;
     DatabaseHandler db;
 
     ImageView ivLogout, ivCalendar;
@@ -81,6 +85,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_sfactivity);
         db = new DatabaseHandler(this);
         sharedCommonPref = new Shared_Common_Pref(SFA_Activity.this);
+        UserDetails = getSharedPreferences(UserDetail, Context.MODE_PRIVATE);
         ivLogout = findViewById(R.id.toolbar_home);
         Lin_Route = findViewById(R.id.Lin_Route);
         SyncButon = findViewById(R.id.SyncButon);
@@ -115,7 +120,7 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
 
         init();
         setOnClickListener();
-        getNoOrderRemarks();
+        getNoOrderRemarks();getProductDetails();
         recyclerView = findViewById(R.id.gvOutlet);
 
         llGridParent = findViewById(R.id.lin_gridOutlet);
@@ -126,6 +131,44 @@ public class SFA_Activity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+
+    public void getProductDetails(){
+        if (common_class.isNetworkAvailable(this)) {
+            JSONObject jParam=new JSONObject();
+            try {
+                jParam.put("SF",UserDetails.getString("Sfcode",""));
+                jParam.put("div", UserDetails.getString("Divcode",""));
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+                service.getDataArrayList("get/prodCate",jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        db.deleteMasterData(Constants.Category_List);
+                        db.addMasterData(Constants.Category_List,response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+                service.getDataArrayList("get/prodDets",jParam.toString()).enqueue(new Callback<JsonArray>() {
+                    @Override
+                    public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
+                        db.deleteMasterData(Constants.Product_List);
+                        db.addMasterData(Constants.Product_List,response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<JsonArray> call, Throwable t) {
+
+                    }
+                });
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
     private void setOnClickListener() {
         ivCalendar.setOnClickListener(this);
     }

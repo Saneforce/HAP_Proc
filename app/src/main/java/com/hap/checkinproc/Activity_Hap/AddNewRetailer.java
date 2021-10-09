@@ -11,6 +11,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -60,6 +62,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import okhttp3.MultipartBody;
@@ -114,8 +117,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     List<Common_Model> Route_Masterlist = new ArrayList<>();
     List<Common_Model> distributor_master = new ArrayList<>();
 
-
-//    @Override
+    //    @Override
 //    protected void onRestart() {
 //        super.onRestart();
 //
@@ -175,7 +177,6 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             userType = new TypeToken<ArrayList<Retailer_Modal_List>>() {
             }.getType();
             String OrdersTable = shared_common_pref.getvalue(Constants.Retailer_OutletList);
-
             Retailer_Modal_List = gson.fromJson(OrdersTable, userType);
             if (Shared_Common_Pref.Outler_AddFlag != null && Shared_Common_Pref.Outler_AddFlag.equals("1")) {
                 mSubmit.setVisibility(View.VISIBLE);
@@ -187,6 +188,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                 txtRetailerRoute.setText(shared_common_pref.getvalue("RouteName"));
                 CurrentLocationsAddress.setText("" + Shared_Common_Pref.OutletAddress);
+                getCompleteAddressString(Shared_Common_Pref.Outletlat,Shared_Common_Pref.Outletlong);
                 headtext.setText("Create Outlet");
             } else {
                 retailercodevisible.setVisibility(View.VISIBLE);
@@ -444,6 +446,31 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
     }
 
+    private String getCompleteAddressString(double LATITUDE, double LONGITUDE) {
+        String strAdd = "";
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            List<Address> addresses = geocoder.getFromLocation(LATITUDE, LONGITUDE, 1);
+            if (addresses != null) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder strReturnedAddress = new StringBuilder();
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    strReturnedAddress.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                addRetailerAddress.setText(strReturnedAddress.toString());
+                addRetailerCity.setText(returnedAddress.getLocality());
+                edt_pin_codeedit.setText(returnedAddress.getPostalCode());
+                strAdd = strReturnedAddress.toString();
+                //Log.w("My Current loction address", strReturnedAddress.toString());
+            } else {
+                // Log.w("My Current loction address", "No Address returned!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            //  Log.w("My Current loction address", "Canont get Address!");
+        }
+        return strAdd;
+    }
     void getDbstoreData(String listType) {
         try {
             JSONArray jsonArray = db.getMasterData(listType);
@@ -547,10 +574,10 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
                         String retailerClass = String.valueOf(className.subSequence(1, className.length() - 1));
                         Log.e("RETAILER_CLASS_NAME", retailerClass);
                         if (Shared_Common_Pref.Editoutletflag != null && Shared_Common_Pref.Editoutletflag.equals("1") || (Shared_Common_Pref.Outlet_Info_Flag != null && Shared_Common_Pref.Outlet_Info_Flag.equals("1"))) {
-                            if (id.equals(String.valueOf(Retailer_Modal_List.get(getOutletPosition()).getDocCatCode()))) {
+                            /*if (id.equals(String.valueOf(Retailer_Modal_List.get(getOutletPosition()).getDocCatCode()))) {
                                 txtRetailerClass.setText(className.replace('"', ' '));
                                 classId = Integer.valueOf(String.valueOf(jsonObject.get("id")));
-                            }
+                            }*/
                         }
                         mCommon_model_spinner = new Common_Model(id, retailerClass, "flag");
                         Log.e("LeaveType_Request", retailerClass);

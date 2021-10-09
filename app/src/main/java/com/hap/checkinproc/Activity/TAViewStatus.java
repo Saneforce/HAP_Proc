@@ -2171,7 +2171,7 @@ public String ddmmyy(String srcdt){
             JSONObject jj = new JSONObject();
             jj.put("Ta_Date", date);
             jj.put("div", div);
-            jj.put("sf", SF_code);
+            jj.put("sf", sfCode);
             jj.put("rSF", SF_code);
             jj.put("State_Code", State_Code);
             Log.v("json_obj_ta", jj.toString());
@@ -2300,21 +2300,18 @@ public String ddmmyy(String srcdt){
         JSONObject taReq = new JSONObject();
 
         try {
-
+            taReq.put("rSF", SF_code);
             taReq.put("sfCode", sfCode);
             taReq.put("Flag", flag);
             taReq.put("Sl_No", SlStart);
             taReq.put("AAmount", GrandTotalAMT);
             taReq.put("Reason", appCompatEditText.getText());
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
-        Log.v("TA_REQ", taReq.toString());
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> mCall = apiInterface.taApprove(taReq.toString());
+            Log.v("TA_REQ", taReq.toString());
+            ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+            Call<JsonObject> mCall = apiInterface.taApprove(taReq.toString());
 
-        mCall.enqueue(new Callback<JsonObject>() {
+            mCall.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 // locationList=response.body();
@@ -2341,5 +2338,8 @@ public String ddmmyy(String srcdt){
 
             }
         });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

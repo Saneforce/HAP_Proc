@@ -23,7 +23,7 @@
                 android:id="@+id/AppTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="HATSUN DAILY"
+                android:text="HAP DAILY"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:textStyle="bold" />

@@ -357,14 +357,12 @@
             android:theme="@style/AppTheme.Dialog" />
         <activity
             android:name=".Activity_Hap.Check_in"
-            android:noHistory="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity_Hap.Dashboard"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity_Hap.Login"
-            android:exported="true"
             android:screenOrientation="portrait" />
         <activity
             android:name=".Activity_Hap.ProductImageView"

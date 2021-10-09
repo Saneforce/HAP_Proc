@@ -15,6 +15,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -37,15 +38,18 @@ import androidx.core.app.ActivityCompat;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.BuildConfig;
 import com.hap.checkinproc.Common_Class.AlertDialogBox;
 import com.hap.checkinproc.Common_Class.Common_Model;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
 import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
+import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
 import com.hap.checkinproc.Model_Class.DeviationEntryModel;
 import com.hap.checkinproc.R;
+import com.hap.checkinproc.common.LocationFinder;
 import com.hap.checkinproc.common.TimerService;
 
 import org.json.JSONArray;
@@ -66,17 +70,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class DeviationEntry extends AppCompatActivity implements View.OnClickListener, Master_Interface, LocationListener {
+public class DeviationEntry extends AppCompatActivity implements Master_Interface {
 
     TextView DeviationTypeEntry;
     EditText chooseDate, remarks;
-    SharedPreferences CheckInDetails;
-    SharedPreferences UserDetails;
+    SharedPreferences CheckInDetails,UserDetails;
     public static final String CheckInfo = "CheckInDetail";
     public static final String UserInfo = "MyPrefs";
     DatePickerDialog picker1;
-    String minDate, minYear, minMonth, minDay, dateInput;
-    String Currentlocation = "";
+    String  minDate, minYear, minMonth, minDay, dateInput,sAppVer,myVersion,deivationID="",
+            sSf_Code,sSf_Name,sDiv_Code,sStateCode,Currentlocation = "";
+    int sdkVersion;
     Button DeviationSubmit;
 
     /*Deviation Entry*/
@@ -86,10 +90,7 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
     Common_Model Model_Pojo;
     List<Common_Model> modelleaveType = new ArrayList<>();
     CustomListViewDialog customDialog;
-    LocationManager locationManager;
-    Shared_Common_Pref mShared_common_pref;
-    Location location;
-    String deivationID = "";
+    Location mLocation;
     LinearLayout LinearDevaitaionType;
 
     @Override
@@ -98,22 +99,27 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_deviation_entry);
         getToolbar();
         gson = new Gson();
-        locationManager = (LocationManager) getSystemService(Service.LOCATION_SERVICE);
         CheckInDetails = getSharedPreferences(CheckInfo, Context.MODE_PRIVATE);
         UserDetails = getSharedPreferences(UserInfo, Context.MODE_PRIVATE);
-        mShared_common_pref = new Shared_Common_Pref(this);
         DeviationTypeEntry = findViewById(R.id.deviation_type);
         chooseDate = (EditText) findViewById(R.id.choose_date);
         remarks = findViewById(R.id.remarks);
         DeviationSubmit = findViewById(R.id.deviation_submit);
 
-        Bundle params = getIntent().getExtras();
-        if (params != null) {
-            String[] stDt = params.getString("EDt").split("/");
-            chooseDate.setText(stDt[2] + "-" + stDt[1] + "-" + stDt[0]);
-            chooseDate.setEnabled(false);
-        }
+        sSf_Code = UserDetails.getString("Sfcode", "");
+        sSf_Name = UserDetails.getString("SfName", "");
+        sDiv_Code = UserDetails.getString("Divcode", "");
+        sStateCode = UserDetails.getString("State_Code", "");
+        sAppVer= BuildConfig.VERSION_NAME;
+        myVersion = Build.VERSION.RELEASE;
+        sdkVersion = android.os.Build.VERSION.SDK_INT;
 
+        new LocationFinder(DeviationEntry.this, new LocationEvents() {
+            @Override
+            public void OnLocationRecived(Location location) {
+                mLocation=location;
+            }
+        });
         chooseDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -124,14 +130,13 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
                 // date picker dialog.
 
                 picker1 = new DatePickerDialog(DeviationEntry.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                chooseDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
-                                dateInput = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
-
-                            }
-                        }, year, month, day);
+                    new DatePickerDialog.OnDateSetListener() {
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            chooseDate.setText(year + "-" + (monthOfYear + 1) + "-" + dayOfMonth);
+                            dateInput = year + "-" + (monthOfYear + 1) + "-" + dayOfMonth;
+                        }
+                    }, year, month, day);
                 Calendar calendarmin = Calendar.getInstance();
                 calendarmin.set(Integer.parseInt(minYear), Integer.parseInt(minMonth) - 1, Integer.parseInt(minDay));
                 picker1.getDatePicker().setMaxDate(cldr.getTimeInMillis());
@@ -140,54 +145,30 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
 
         });
 
-        DeviationTypeEntry.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                modelleaveType.clear();
-                getDevetionType();
-            }
-        });
+        modelleaveType.clear();
+        getDevetionType();
+//        DeviationTypeEntry.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                customDialog = new CustomListViewDialog(DeviationEntry.this, modelleaveType, 8);
+//                Window window = customDialog.getWindow();
+//                window.setGravity(Gravity.CENTER);
+//                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+//                customDialog.show();
+//            }
+//        });
 
         LinearDevaitaionType = findViewById(R.id.lin_deviation_entry);
         LinearDevaitaionType.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                modelleaveType.clear();
-                getDevetionType();
+                customDialog = new CustomListViewDialog(DeviationEntry.this, modelleaveType, 8);
+                Window window = customDialog.getWindow();
+                window.setGravity(Gravity.CENTER);
+                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
+                customDialog.show();
             }
         });
-
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
-            return;
-        }
-        try {
-            LocationManager enabledManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-            if (enabledManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                location = enabledManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                if (location == null) {
-                    Toast.makeText(this, "Please enable GPS", Toast.LENGTH_SHORT).show();
-                } else {
-                    locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-                    locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, (LocationListener) this);
-                    location = new Location(String.valueOf(locationManager));
-                    onLocationChanged(location);
-                }
-            }
-
-
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        }
-
 
         ImageView backView = findViewById(R.id.imag_back);
         backView.setOnClickListener(new View.OnClickListener() {
@@ -197,15 +178,34 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
             }
         });
 
-
         DeviationSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                deviationEntrySubmit();
+                if(mLocation!=null){
+                    Currentlocation = mLocation.getLatitude() + "," + mLocation.getLongitude();
+                    deviationEntrySubmit();
+                }
+                else {
+                    new LocationFinder(DeviationEntry.this, new LocationEvents() {
+                        @Override
+                        public void OnLocationRecived(Location location) {
+                            mLocation = location;
+                            Currentlocation = mLocation.getLatitude() + "," + mLocation.getLongitude();
+                            deviationEntrySubmit();
+                        }
+                    });
+                }
             }
         });
-    }
 
+        Bundle params = getIntent().getExtras();
+        if (params != null) {
+            String[] stDt = params.getString("EDt").split("/");
+            chooseDate.setText(stDt[2] + "-" + stDt[1] + "-" + stDt[0]);
+            dateInput = stDt[2] + "-" + stDt[1] + "-" + stDt[0];
+            chooseDate.setEnabled(false);
+        }
+    }
 
     public void getToolbar() {
         MaxMinDate();
@@ -250,8 +250,6 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
 
 
     }
-
-
     public void openHome() {
         Boolean CheckIn = CheckInDetails.getBoolean("CheckIn", false);
         Shared_Common_Pref.Sf_Code = UserDetails.getString("Sfcode", "");
@@ -266,8 +264,6 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
         } else
             startActivity(new Intent(getApplicationContext(), Dashboard.class));
     }
-
-
     public void MaxMinDate() {
 
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -285,22 +281,17 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
         minYear = separated1[0];
         minMonth = separated1[1];
         minDay = separated1[2];
-        Log.e("Sresdfsd", minYear);
-        Log.e("Sresdfsd", minMonth);
-        Log.e("Sresdfsd", minDay);
 
     }
 
-
     /*Deviation entry type*/
     public void getDevetionType() {
-
         Map<String, String> QueryString = new HashMap<>();
         QueryString.put("axn", "table/list");
-        QueryString.put("divisionCode", Shared_Common_Pref.Div_Code);
-        QueryString.put("sfCode", Shared_Common_Pref.Sf_Code);
-        QueryString.put("rSF", Shared_Common_Pref.Sf_Code);
-        QueryString.put("State_Code", Shared_Common_Pref.StateCode);
+        QueryString.put("divisionCode", sDiv_Code);
+        QueryString.put("sfCode", sSf_Code);
+        QueryString.put("rSF",sSf_Code);
+        QueryString.put("State_Code", sStateCode);
         String commonLeaveType = "{\"tableName\":\"vwdeviationtype\",\"coloumns\":\"[\\\"id\\\",\\\"name\\\",\\\"Leave_Name\\\"]\",\"orderBy\":\"[\\\"name asc\\\"]\",\"desig\":\"mgr\"}";
 
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
@@ -313,21 +304,11 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
                 }.getType();
                 deviationEntry = gson.fromJson(new Gson().toJson(response.body()), userType);
                 for (int i = 0; i < deviationEntry.size(); i++) {
-
                     String id = String.valueOf(deviationEntry.get(i).getId());
                     String name = deviationEntry.get(i).getName();
                     Model_Pojo = new Common_Model(id, name, "flag");
-
-                    Log.e("LeaveType_Request", id);
-                    Log.e("LeaveType_Request", name);
                     modelleaveType.add(Model_Pojo);
                 }
-
-                customDialog = new CustomListViewDialog(DeviationEntry.this, modelleaveType, 8);
-                Window window = customDialog.getWindow();
-                window.setGravity(Gravity.CENTER);
-                window.setLayout(WindowManager.LayoutParams.WRAP_CONTENT, WindowManager.LayoutParams.WRAP_CONTENT);
-                customDialog.show();
             }
 
             @Override
@@ -339,38 +320,22 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
 
     /*Submit Deviation Entry*/
     public void deviationEntrySubmit() {
-
-
         Date currentTime = Calendar.getInstance().getTime();
-
-        Log.e("CurrentTime", new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date()));
-
         JSONObject deviationObject = new JSONObject();
         JSONObject deviationArray = new JSONObject();
         JSONArray jsonArray1 = new JSONArray();
         try {
-
             deviationObject.put("Deviation_Type", deivationID);
+            deviationObject.put("AppVer", myVersion);
+            deviationObject.put("AndVer", "Android "+myVersion);
             deviationObject.put("From_Date", dateInput);
             deviationObject.put("reason", "'" + remarks.getText().toString() + "'");
             deviationObject.put("Time", "'" + new SimpleDateFormat("HH:mm:ss", Locale.US).format(new Date()) + "'");
             deviationObject.put("LatLng", "'" + Currentlocation + "'");
             deviationArray.put("DeviationEntry", deviationObject);
             jsonArray1.put(deviationArray);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        String Dentry = jsonArray1.toString();
-
-        Log.d("Devaition_ENTRY_SUB", Dentry);
-
-
-        Log.e("SF_Name", Shared_Common_Pref.Sf_Name);
-        Log.e("SF_Name", Shared_Common_Pref.Div_Code);
-        Log.e("SF_Name", Shared_Common_Pref.Sf_Code);
-        Log.e("SF_Name", Shared_Common_Pref.StateCode);
         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-        Call<JsonObject> call = service.deviationSave(Shared_Common_Pref.Sf_Name, Shared_Common_Pref.Div_Code, Shared_Common_Pref.Sf_Code, Shared_Common_Pref.StateCode, "MGR", Dentry);
+        Call<JsonObject> call = service.deviationSave(sSf_Name, sDiv_Code, sSf_Code, sStateCode, "MGR", jsonArray1.toString());
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -406,6 +371,10 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
             public void onFailure(Call<JsonObject> call, Throwable t) {
             }
         });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -419,31 +388,16 @@ public class DeviationEntry extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
-
-
     private final OnBackPressedDispatcher mOnBackPressedDispatcher =
-            new OnBackPressedDispatcher(new Runnable() {
-                @Override
-                public void run() {
-              finish();
-                }
-            });
+        new OnBackPressedDispatcher(new Runnable() {
+            @Override
+            public void run() {
+                finish();
+            }
+        });
 
     @Override
     public void onBackPressed() {
-
-    }
-
-    @Override
-    public void onLocationChanged(@NonNull Location location) {
-        Log.e("LOCATION_LISTNER", String.valueOf(location.getLatitude()));
-        Log.e("LOCATION_LISTNER", String.valueOf(location.getLongitude()));
-
-        Currentlocation = location.getLatitude() + "," + location.getLongitude();
 
     }
 }
