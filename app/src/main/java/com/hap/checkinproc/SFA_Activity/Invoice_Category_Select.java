@@ -87,7 +87,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     List<Category_Universe_Modal> listt;
     Type userType;
     Gson gson;
-    TextView takeorder, ok, back, Out_Let_Name, Category_Nametext;
+    TextView takeorder, Out_Let_Name, Category_Nametext;
 
     private RecyclerView recyclerView, categorygrid, freeRecyclerview;
     LinearLayout lin_gridcategory;
@@ -109,13 +109,13 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
     RelativeLayout rlCategoryItemSearch;
     ImageView ivClose;
-    EditText etCategoryItemSearch, tvPayAmount;
+    EditText etCategoryItemSearch, etRecAmt;
     private TextView tvTotalAmount;
     private double totalvalues;
     int cashDiscount;
 
     private Integer totalQty;
-    private TextView tvBillTotItem, tvPayMode, tvDate, tvOutStanding, tvTotOutstanding;
+    private TextView tvBillTotItem, tvPayMode, tvDate, tvOutStanding, tvTotOutstanding, tvInvAmt, tvPayAmt;
     private double taxVal, totCGST, totSGST, totIGST;
 
     RelativeLayout rlPayment, rlCredit, rlCash;
@@ -145,8 +145,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
             categorygrid.setLayoutManager(layoutManager);
 
-            ok = findViewById(R.id.ok);
-            back = findViewById(R.id.back);
             mDCRMode = sharedCommonPref.getvalue(Shared_Common_Pref.DCRMode);
             common_class.getDataFromApi(Constants.Todaydayplanresult, this, false);
             common_class.getDataFromApi(Constants.TodayOrderDetails_List, this, false);
@@ -165,20 +163,20 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             rlCash = findViewById(R.id.rlPayTypeCash);
             tvDate = findViewById(R.id.tvDate);
             tvPayMode = findViewById(R.id.tvPayMode);
-            tvPayAmount = findViewById(R.id.tvPayAmount);
+            etRecAmt = findViewById(R.id.etRecAmt);
             cbCash = findViewById(R.id.cbCash);
             cbCredit = findViewById(R.id.cbCredit);
             llPayMode = findViewById(R.id.llPayMode);
             rlAddProduct = findViewById(R.id.rlAddProduct);
             tvOutStanding = findViewById(R.id.tvOutstanding);
             tvTotOutstanding = findViewById(R.id.tvTotOutstanding);
+            tvInvAmt = findViewById(R.id.tvInvAMt);
+            tvPayAmt = findViewById(R.id.tvPayAmt);
 
             Out_Let_Name.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
             Product_ModalSetAdapter = new ArrayList<>();
             gson = new Gson();
-            ok.setOnClickListener(this);
             takeorder.setOnClickListener(this);
-            back.setOnClickListener(this);
             rlCategoryItemSearch.setOnClickListener(this);
             ivClose.setOnClickListener(this);
             rlPayment.setOnClickListener(this);
@@ -309,7 +307,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
             });
 
 
-            tvPayAmount.addTextChangedListener(new TextWatcher() {
+            etRecAmt.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -495,7 +493,6 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 moveProductScreen();
                 break;
 
-
             case R.id.rlPayTypeCash:
                 cbCash.setChecked(false);
                 break;
@@ -613,7 +610,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         OutletItem.put("ordertype", "invoice");
                         // OutletItem.put("outstandAmt", outstandAmt);
 
-                        OutletItem.put("PAYAmount", tvPayAmount.getText().toString());
+                        OutletItem.put("PAYAmount", etRecAmt.getText().toString());
 
                         if (cbCredit.isChecked())
                             OutletItem.put("payType", "Credit");
@@ -826,6 +823,9 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         tvCashDiscount.setText("₹ " + formatter.format(cashDiscount));
         tvTax.setText("₹ " + formatter.format(taxVal));
         //  tvPayAmount.setText("" + (int) totalvalues);
+
+        tvInvAmt.setText("₹ " + formatter.format(totalvalues));
+        tvPayAmt.setText("₹ " + formatter.format(totalvalues + outstandAmt));
 
         tvTotOutstanding.setText("₹ " + formatter.format(outstandAmt + (totalvalues - payAmt)));
 

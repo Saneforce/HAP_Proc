@@ -69,7 +69,8 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     Common_Class common_class;
     List<Trans_Order_Details_Offline> InvoiceorderDetails_List;
     List<Product_Details_Modal> Order_Outlet_Filter;
-    TextView netamount, cashdiscount, gstrate, totalfreeqty, totalqty, totalitem, subtotal, invoicedate, retaileAddress, billnumber, retailername, retailerroute, back;
+    TextView netamount, cashdiscount, gstrate, totalfreeqty, totalqty, totalitem, subtotal, invoicedate, retaileAddress, billnumber,
+            retailername, retailerroute, back, tvOrderType, tvRetailorPhone, tvDistributorPh, tvDistributorName;
     DatabaseHandler db;
 
     ImageView ok, ivPrint;
@@ -112,8 +113,13 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             retailerroute = findViewById(R.id.retailerroute);
             ok = findViewById(R.id.ok);
             btnInvoice = findViewById(R.id.btnInvoice);
+            tvDistributorName = findViewById(R.id.distributor_Name);
+            tvDistributorPh = findViewById(R.id.distPhoneNum);
+            tvOrderType = findViewById(R.id.tvTypeLabel);
+            tvRetailorPhone = findViewById(R.id.retailePhoneNum);
 
             retailername.setText(sharedCommonPref.getvalue(Constants.Retailor_Name_ERP_Code));
+            tvDistributorName.setText(sharedCommonPref.getvalue(Constants.Distributor_name));
             ivPrint = findViewById(R.id.ivPrint);
             back.setOnClickListener(this);
             ok.setOnClickListener(this);
@@ -124,10 +130,16 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
             ImageView ivToolbarHome = findViewById(R.id.toolbar_home);
             common_class.gotoHomeScreen(this, ivToolbarHome);
 
-            if (sharedCommonPref.getvalue(Constants.FLAG).equals("ORDER"))
+            if (sharedCommonPref.getvalue(Constants.FLAG).equals("ORDER")) {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.VISIBLE);
-            else
+                tvOrderType.setText("ORDER");
+            } else {
                 findViewById(R.id.llCreateInvoice).setVisibility(View.GONE);
+                tvOrderType.setText("TAX INVOICE");
+            }
+
+            tvDistributorPh.setText("");
+            tvRetailorPhone.setText("");
 
         } catch (Exception e) {
 
@@ -553,7 +565,7 @@ public class Print_Invoice_Activity extends AppCompatActivity implements View.On
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse,String key) {
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
         if (apiDataResponse != null && !apiDataResponse.equals("")) {
             orderInvoiceDetailData();
         }

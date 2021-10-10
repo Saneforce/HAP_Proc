@@ -1,7 +1,5 @@
 package com.hap.checkinproc.SFA_Activity;
 
-import static android.Manifest.permission.CALL_PHONE;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
@@ -11,7 +9,6 @@ import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
@@ -59,11 +56,8 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.LocationEvents;
 import com.hap.checkinproc.Interface.Master_Interface;
-import com.hap.checkinproc.Model_Class.ModeOfTravel;
 import com.hap.checkinproc.R;
-import com.hap.checkinproc.SFA_Adapter.Outlet_Info_Adapter;
 import com.hap.checkinproc.SFA_Adapter.RetailerNearByADP;
-import com.hap.checkinproc.SFA_Adapter.Route_View_Adapter;
 import com.hap.checkinproc.SFA_Model_Class.Dashboard_View_Model;
 import com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List;
 import com.hap.checkinproc.adapters.ExploreMapAdapter;
@@ -88,6 +82,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -98,7 +93,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     private RecyclerView recyclerView, rclRetail;
     Type userType;
     Common_Class common_class;
-    TextView Createoutlet, latitude, longitude, availableoutlets, btnNearme, btnExplore,cAddress;
+    TextView Createoutlet, latitude, longitude, availableoutlets, btnNearme, btnExplore, cAddress;
     EditText txSearchRet;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> Retailer_Modal_List;
     List<com.hap.checkinproc.SFA_Model_Class.Retailer_Modal_List> ShowRetailer_Modal_List;
@@ -118,7 +113,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     private int _xDelta;
     private int _yDelta, ht;
 
-    String TAG = "Nearby_Outlets",CheckInfo = "CheckInDetail", UserInfo = "MyPrefs";
+    String TAG = "Nearby_Outlets", CheckInfo = "CheckInDetail", UserInfo = "MyPrefs";
 
     ImageView ivFilterKeysMenu, ivNearMe, ivExplore;
     CustomListViewDialog customDialog;
@@ -141,6 +136,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     private JSONArray oldData;
     private Marker marker;
     JsonArray jOutlets;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         try {
@@ -195,62 +191,68 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             latitude.setText("Locating Please Wait...");
             new LocationFinder(getApplication(), new LocationEvents() {
                 @Override
-                public void OnLocationRecived(Location location) {;
-                    if(location==null){
+                public void OnLocationRecived(Location location) {
+                    ;
+                    if (location == null) {
                         availableoutlets.setText("Location Not Detacted.");
-                        Toast.makeText(Nearby_Outlets.this,"Location Not Detacted. Please Try Again.",Toast.LENGTH_LONG).show();
+                        Toast.makeText(Nearby_Outlets.this, "Location Not Detacted. Please Try Again.", Toast.LENGTH_LONG).show();
                         return;
                     }
 
-                    Shared_Common_Pref.Outletlat=location.getLatitude();
-                    Shared_Common_Pref.Outletlong=location.getLongitude();
+                    Shared_Common_Pref.Outletlat = location.getLatitude();
+                    Shared_Common_Pref.Outletlong = location.getLongitude();
                     latitude.setText("Lat : " + location.getLatitude());
                     longitude.setText("Lng : " + location.getLongitude());
-                    getCompleteAddressString(location.getLatitude(),location.getLongitude());
-                    JSONObject jsonObject=new JSONObject();
+                    getCompleteAddressString(location.getLatitude(), location.getLongitude());
+                    JSONObject jsonObject = new JSONObject();
                     try {
-                        jsonObject.put("SF",UserDetails.getString("Sfcode",""));
-                        jsonObject.put("Div",UserDetails.getString("Divcode",""));
-                        jsonObject.put("Lat",location.getLatitude());
-                        jsonObject.put("Lng",location.getLongitude());
+                        jsonObject.put("SF", UserDetails.getString("Sfcode", ""));
+                        jsonObject.put("Div", UserDetails.getString("Divcode", ""));
+                        jsonObject.put("Lat", location.getLatitude());
+                        jsonObject.put("Lng", location.getLongitude());
                         ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
-                        service.getDataArrayList("get/fencedOutlet",jsonObject.toString()).enqueue(new Callback<JsonArray>() {
+                        service.getDataArrayList("get/fencedOutlet", jsonObject.toString()).enqueue(new Callback<JsonArray>() {
                             @Override
                             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                                jOutlets=response.body();
-                                availableoutlets.setText("Available Outlets :" + "\t" + jOutlets.size());
-                                recyclerView.setAdapter(new RetailerNearByADP(jOutlets, R.layout.route_dashboard_recyclerview,
-                                         getApplicationContext(), new AdapterOnClick() {
-                                    @Override
-                                    public void onIntentClick(int position) {
-                                     JsonObject jItm=jOutlets.get(position).getAsJsonObject();
+                                try {
+                                    jOutlets = response.body();
+                                    availableoutlets.setText("Available Outlets :" + "\t" + jOutlets.size());
+                                    recyclerView.setAdapter(new RetailerNearByADP(jOutlets, R.layout.route_dashboard_recyclerview,
+                                            getApplicationContext(), new AdapterOnClick() {
+                                        @Override
+                                        public void onIntentClick(int position) {
+                                            try {
+                                                JsonObject jItm = jOutlets.get(position).getAsJsonObject();
 
-                                        Shared_Common_Pref.Outler_AddFlag = "0";
-                                        Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
-                                        Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
-                                        Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
-                                        Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
-                                        Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
-                                        //common_class.CommonIntentwithFinish(Route_Product_Info.class);
-                                        shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
-                                        shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
-                                        shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
+                                                Shared_Common_Pref.Outler_AddFlag = "0";
+                                                Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
+                                                Shared_Common_Pref.OutletCode = jItm.get("Code").getAsString();
+                                                Shared_Common_Pref.DistributorCode = jItm.get("DistCode").getAsString();
+                                                Shared_Common_Pref.DistributorName = jItm.get("Distributor").getAsString();
+                                                Shared_Common_Pref.Route_Code = shared_common_pref.getvalue(Constants.Route_Id);
+                                                //common_class.CommonIntentwithFinish(Route_Product_Info.class);
+                                                shared_common_pref.save(Constants.Retailor_Address, jItm.get("Add2").getAsString());
+                                                shared_common_pref.save(Constants.Retailor_ERP_Code, jItm.get("ERP").getAsString());
+                                                shared_common_pref.save(Constants.Retailor_Name_ERP_Code, jItm.get("Name").getAsString().toUpperCase() + "~" + jItm.get("ERP").getAsString());
 //                                        if (jItm.get("Mobile").getAsString().equalsIgnoreCase("") || jItm.get("Owner_Name").getAsString().equalsIgnoreCase(""))
 //                                            common_class.CommonIntentwithoutFinish(AddNewRetailer.class);
 //                                        else
-                                            common_class.CommonIntentwithoutFinish(Invoice_History.class);
-                                    }
-                                }));
+                                                common_class.CommonIntentwithoutFinish(Invoice_History.class);
+                                            } catch (Exception e) {
+
+                                            }
+                                        }
+                                    }));
+                                } catch (Exception e) {
+
+                                }
                             }
 
                             @Override
                             public void onFailure(Call<JsonArray> call, Throwable t) {
-                                Log.d("Fence",t.getMessage());
+                                Log.d("Fence", t.getMessage());
                             }
                         });
-
-
-
 
 
                     } catch (JSONException e) {
@@ -312,13 +314,134 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void SearchRetailers(){
-        JsonArray srhOutlets=new JsonArray();
-        for (int sr=0;sr<jOutlets.size();sr++){
-            JsonObject jItm=jOutlets.get(sr).getAsJsonObject();
-            String itmname=jItm.get("Name").getAsString().toUpperCase();
-            String sSchText=txSearchRet.getText().toString().toUpperCase();
-            if((";"+itmname).indexOf(";"+sSchText)>-1){
+    public void removeMarkedPlaces(JSONArray data) {
+
+        try {
+            if (common_class.isNetworkAvailable(this)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                JSONObject HeadItem = new JSONObject();
+
+
+                HeadItem.put("lat", laty);
+                HeadItem.put("lng", lngy);
+                HeadItem.put("date", Common_Class.GetDate());
+                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
+
+                Call<ResponseBody> call = service.getMarkedData(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+                                if (jsonObject.getBoolean("success")) {
+
+                                    Set<String> stationCodes = new HashSet<String>();
+                                    JSONArray tempArray = new JSONArray();
+
+
+                                    for (int i = 0; i < data.length(); i++) {
+                                        String stationCode = jsonObject.getString("Data");
+                                        if (stationCodes.contains(stationCode)) {
+                                            continue;
+                                        } else {
+                                            stationCodes.add(stationCode);
+                                            tempArray.put(data.getJSONObject(i));
+                                        }
+
+                                    }
+
+                                    Log.e(TAG, " total size:" + data.length() + " FilterSize: " + tempArray.length());
+
+
+                                    for (int i = 0; i < tempArray.length(); i++) {
+                                        JSONObject json = tempArray.getJSONObject(i);
+                                        String lat = json.getJSONObject("geometry").getJSONObject("location").getString("lat");
+                                        String lng = json.getJSONObject("geometry").getJSONObject("location").getString("lng");
+                                        String name = json.getString("name");
+                                        String place_id = json.getString("place_id");
+                                        String vicinity = json.getString("vicinity");
+                                        String photoo = "", reference = "", height = "", width = "";
+
+                                        try {
+                                            JSONArray jsonA = json.getJSONArray("photos");
+                                            JSONObject jo = jsonA.getJSONObject(0);
+                                            JSONArray ja = jo.getJSONArray("html_attributions");
+                                            //JSONObject jo1=ja.getJSONObject(0);
+                                            photoo = ja.getString(0);
+                                            reference = jo.getString("photo_reference");
+                                            height = jo.getString("height");
+                                            width = jo.getString("width");
+                                            Log.v("direction_latt", name + "phototss" + photoo);
+
+                                        } catch (JSONException e) {
+                                        }
+
+
+                                        Log.v("direction_latt", name + "phototss");
+                                        LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
+
+                                        marker = map.addMarker(new MarkerOptions().position(latLng)
+                                                .title((name)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                                        mark.add(marker);
+
+
+                                    }
+
+                                    resData = tempArray;
+
+                                    drDetail();
+
+
+                                }
+                            }
+
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>", t.toString());
+
+
+                    }
+                });
+            } else {
+                Toast.makeText(this, "No Internet Connection", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+
+    }
+
+
+    private void SearchRetailers() {
+        JsonArray srhOutlets = new JsonArray();
+        for (int sr = 0; sr < jOutlets.size(); sr++) {
+            JsonObject jItm = jOutlets.get(sr).getAsJsonObject();
+            String itmname = jItm.get("Name").getAsString().toUpperCase();
+            String sSchText = txSearchRet.getText().toString().toUpperCase();
+            if ((";" + itmname).indexOf(";" + sSchText) > -1) {
                 srhOutlets.add(jItm);
             }
         }
@@ -326,8 +449,8 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         recyclerView.setAdapter(new RetailerNearByADP(srhOutlets, R.layout.route_dashboard_recyclerview,
                 getApplicationContext(), new AdapterOnClick() {
             @Override
-            public void onIntentClick(JsonObject item,int position) {
-                JsonObject jItm=item;
+            public void onIntentClick(JsonObject item, int position) {
+                JsonObject jItm = item;
 
                 Shared_Common_Pref.Outler_AddFlag = "0";
                 Shared_Common_Pref.OutletName = jItm.get("Name").getAsString().toUpperCase();
@@ -407,7 +530,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             case R.id.llNearMe:
                 llExplore.setBackgroundColor(Color.TRANSPARENT);
                 btnExplore.setTextColor(Color.BLACK);
-                ivExplore.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
+                ivExplore.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimaryDark), android.graphics.PorterDuff.Mode.MULTIPLY);
 
                 llNearMe.setBackgroundResource(R.drawable.blue_bg);
                 btnNearme.setTextColor(Color.WHITE);
@@ -418,7 +541,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             case R.id.llExplore:
                 llNearMe.setBackgroundColor(Color.TRANSPARENT);
                 btnNearme.setTextColor(Color.BLACK);
-                ivNearMe.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
+                ivNearMe.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimaryDark), android.graphics.PorterDuff.Mode.MULTIPLY);
 
                 llExplore.setBackgroundResource(R.drawable.blue_bg);
                 btnExplore.setTextColor(Color.WHITE);
@@ -434,7 +557,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             case R.id.btnNearme:
                 llExplore.setBackgroundColor(Color.TRANSPARENT);
                 btnExplore.setTextColor(Color.BLACK);
-                ivExplore.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
+                ivExplore.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimaryDark), android.graphics.PorterDuff.Mode.MULTIPLY);
 
                 llNearMe.setBackgroundResource(R.drawable.blue_bg);
                 btnNearme.setTextColor(Color.WHITE);
@@ -445,7 +568,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             case R.id.btnExplore:
                 llNearMe.setBackgroundColor(Color.TRANSPARENT);
                 btnNearme.setTextColor(Color.BLACK);
-                ivNearMe.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimary), android.graphics.PorterDuff.Mode.MULTIPLY);
+                ivNearMe.setColorFilter(ContextCompat.getColor(this, R.color.colorPrimaryDark), android.graphics.PorterDuff.Mode.MULTIPLY);
 
                 llExplore.setBackgroundResource(R.drawable.blue_bg);
                 btnExplore.setTextColor(Color.WHITE);
@@ -495,6 +618,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
         }
         return strAdd;
     }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         try {
@@ -695,7 +819,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
 //            }
         } catch (Exception e) {
             shared_common_pref.save(Constants.PLACE_ID_URL, "");
-           // shared_common_pref.save(Constants.SHOP_PHOTO, "");
+            // shared_common_pref.save(Constants.SHOP_PHOTO, "");
         }
     }
 
@@ -744,43 +868,43 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
             Log.e(TAG, "nextPageToken:" + nextPageToken);
 
 
-            for (int i = 0; i < resData.length(); i++) {
-                JSONObject json = resData.getJSONObject(i);
-                String lat = json.getJSONObject("geometry").getJSONObject("location").getString("lat");
-                String lng = json.getJSONObject("geometry").getJSONObject("location").getString("lng");
-                String name = json.getString("name");
-                String place_id = json.getString("place_id");
-                String vicinity = json.getString("vicinity");
-                String photoo = "", reference = "", height = "", width = "";
+            removeMarkedPlaces(resData);
 
-                try {
-                    JSONArray jsonA = json.getJSONArray("photos");
-                    JSONObject jo = jsonA.getJSONObject(0);
-                    JSONArray ja = jo.getJSONArray("html_attributions");
-                    //JSONObject jo1=ja.getJSONObject(0);
-                    photoo = ja.getString(0);
-                    reference = jo.getString("photo_reference");
-                    height = jo.getString("height");
-                    width = jo.getString("width");
-                    Log.v("direction_latt", name + "phototss" + photoo);
-
-                } catch (JSONException e) {
-                }
-
-
-                Log.v("direction_latt", name + "phototss");
-                LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
+//            for (int i = 0; i < resData.length(); i++) {
+//                JSONObject json = resData.getJSONObject(i);
+//                String lat = json.getJSONObject("geometry").getJSONObject("location").getString("lat");
+//                String lng = json.getJSONObject("geometry").getJSONObject("location").getString("lng");
+//                String name = json.getString("name");
+//                String place_id = json.getString("place_id");
+//                String vicinity = json.getString("vicinity");
+//                String photoo = "", reference = "", height = "", width = "";
+//
+//                try {
+//                    JSONArray jsonA = json.getJSONArray("photos");
+//                    JSONObject jo = jsonA.getJSONObject(0);
+//                    JSONArray ja = jo.getJSONArray("html_attributions");
+//                    //JSONObject jo1=ja.getJSONObject(0);
+//                    photoo = ja.getString(0);
+//                    reference = jo.getString("photo_reference");
+//                    height = jo.getString("height");
+//                    width = jo.getString("width");
+//                    Log.v("direction_latt", name + "phototss" + photoo);
+//
+//                } catch (JSONException e) {
+//                }
+//
+//
+//                Log.v("direction_latt", name + "phototss");
+//                LatLng latLng = new LatLng(Double.parseDouble(lat), Double.parseDouble(lng));
+//
 //                marker = map.addMarker(new MarkerOptions().position(latLng)
-//                        .title(name).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-
-                marker = map.addMarker(new MarkerOptions().position(latLng)
-                        .title((name)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                mark.add(marker);
-
-
-            }
-
-            drDetail();
+//                        .title((name)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+//                mark.add(marker);
+//
+//
+//            }
+//
+//              drDetail();
 
 
         } catch (Exception e) {
@@ -864,6 +988,7 @@ public class Nearby_Outlets extends AppCompatActivity implements View.OnClickLis
     public void drDetail() {
         try {
             if (explore == null) {
+
                 explore = new ExploreMapAdapter(Nearby_Outlets.this, resData, String.valueOf(Shared_Common_Pref.Outletlat), String.valueOf(Shared_Common_Pref.Outletlong));
                 rclRetail.setAdapter(explore);
                 explore.notifyDataSetChanged();

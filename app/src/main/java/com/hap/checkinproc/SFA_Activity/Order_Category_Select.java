@@ -503,16 +503,16 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.tvOtherBrand:
-                common_class.CommonIntentwithFinish(OtherBrandActivity.class);
+                common_class.commonDialog(this, OtherBrandActivity.class);
                 break;
             case R.id.tvQPS:
-                common_class.CommonIntentwithFinish(QPSActivity.class);
+                common_class.commonDialog(this, QPSActivity.class);
                 break;
             case R.id.tvPOP:
-                common_class.CommonIntentwithFinish(POPActivity.class);
+                common_class.commonDialog(this, POPActivity.class);
                 break;
             case R.id.tvCoolerInfo:
-                common_class.CommonIntentwithFinish(CoolerInfoActivity.class);
+                common_class.commonDialog(this, CoolerInfoActivity.class);
                 break;
 
             case R.id.takeorder:
@@ -720,7 +720,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
         }
 
 
-
         mProdct_Adapter = new Prodct_Adapter(Getorder_Array_List, R.layout.product_pay_recyclerview_edit, getApplicationContext(), -1);
         recyclerView.setAdapter(mProdct_Adapter);
         new Prodct_Adapter(Getorder_Array_List, R.layout.product_pay_recyclerview_edit, getApplicationContext(), -1).notifyDataSetChanged();
@@ -903,7 +902,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
     }
 
     @Override
-    public void onLoadDataUpdateUI(String apiDataResponse,String key) {
+    public void onLoadDataUpdateUI(String apiDataResponse, String key) {
 
     }
 
@@ -1483,7 +1482,6 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
 
     }
-
 
 
     public class Free_Adapter extends RecyclerView.Adapter<Free_Adapter.MyViewHolder> {

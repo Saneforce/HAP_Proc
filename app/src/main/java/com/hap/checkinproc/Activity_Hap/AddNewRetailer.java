@@ -89,7 +89,8 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
     Common_Model mCommon_model_spinner;
     List<ReatilRouteModel> mRetailerDetailsModels;
     Gson gson;
-    EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail, edt_pin_codeedit, edt_gst, etPhoneNo2;
+    EditText addRetailerName, owner_name, addRetailerAddress, addRetailerCity, addRetailerPhone, addRetailerEmail,
+            edt_pin_codeedit, edt_gst, etPhoneNo2, edt_outstanding;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
     JSONArray mainArray;
     JSONObject docMasterObject;
@@ -164,6 +165,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             ivPhotoShop = findViewById(R.id.ivShopPhoto);
             mSubmit = findViewById(R.id.submit_button);
             etPhoneNo2 = findViewById(R.id.edt_new_phone2);
+            edt_outstanding = findViewById(R.id.edt_retailer_outstanding);
 
 
             copypaste.setOnClickListener(this);
@@ -188,7 +190,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
 
                 txtRetailerRoute.setText(shared_common_pref.getvalue("RouteName"));
                 CurrentLocationsAddress.setText("" + Shared_Common_Pref.OutletAddress);
-                getCompleteAddressString(Shared_Common_Pref.Outletlat,Shared_Common_Pref.Outletlong);
+                getCompleteAddressString(Shared_Common_Pref.Outletlat, Shared_Common_Pref.Outletlong);
                 headtext.setText("Create Outlet");
             } else {
                 retailercodevisible.setVisibility(View.VISIBLE);
@@ -471,6 +473,7 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
         }
         return strAdd;
     }
+
     void getDbstoreData(String listType) {
         try {
             JSONArray jsonArray = db.getMasterData(listType);
@@ -875,6 +878,11 @@ public class AddNewRetailer extends AppCompatActivity implements Master_Interfac
             reportObject.put("unlisted_doctor_address", "'" + addRetailerAddress.getText().toString().replace("\n", "") + "'");
             reportObject.put("unlisted_doctor_phone", "'" + addRetailerPhone.getText().toString() + "'");
             reportObject.put("unlisted_doctor_secondphone", "'" + etPhoneNo2.getText().toString());
+            if (edt_outstanding.getText().toString().equals(""))
+                reportObject.put("outstanding_amount", 0);
+
+            else
+                reportObject.put("outstanding_amount", edt_outstanding.getText().toString());
             reportObject.put("unlisted_doctor_cityname", "'" + addRetailerCity.getText().toString() + "'");
             reportObject.put("unlisted_doctor_landmark", "''");
             reportObject.put("unlisted_doctor_mobiledate", common_class.addquote(Common_Class.GetDatewothouttime()));

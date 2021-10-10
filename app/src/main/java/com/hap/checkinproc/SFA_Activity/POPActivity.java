@@ -259,16 +259,16 @@ public class POPActivity extends AppCompatActivity implements View.OnClickListen
                 fromDatePickerDialog.show();
                 break;
             case R.id.tvOrder:
-                common_class.CommonIntentwithFinish(Order_Category_Select.class);
+                common_class.commonDialog(this,Order_Category_Select.class);
                 break;
             case R.id.tvOtherBrand:
-                common_class.CommonIntentwithFinish(OtherBrandActivity.class);
+                common_class.commonDialog(this,OtherBrandActivity.class);
                 break;
             case R.id.tvQPS:
-                common_class.CommonIntentwithFinish(QPSActivity.class);
+                common_class.commonDialog(this,QPSActivity.class);
                 break;
             case R.id.tvCoolerInfo:
-                common_class.CommonIntentwithFinish(CoolerInfoActivity.class);
+                common_class.commonDialog(this,CoolerInfoActivity.class);
                 break;
             case R.id.ivAddPOP:
                 popAddList.add(new Product_Details_Modal("", "", "", 0, ""));

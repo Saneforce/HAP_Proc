@@ -302,7 +302,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:padding="@dimen/C5dp"
-                                app:tint="#059161"
+                                app:tint="@color/colorPrimary"
                                 android:src="@drawable/report"/>
                         </LinearLayout>
                     </LinearLayout>

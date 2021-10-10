@@ -80,7 +80,7 @@
                             android:layout_height="wrap_content"
                             android:padding="@dimen/C10dp"
                             android:src="@drawable/ic_round_explore_24"
-                            app:tint="@color/colorPrimary"></ImageView>
+                            ></ImageView>
 
                         <TextView
                             android:id="@+id/btnExplore"

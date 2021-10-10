@@ -6,29 +6,39 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hap.checkinproc.Common_Class.Common_Class;
 import com.hap.checkinproc.Common_Class.Constants;
 import com.hap.checkinproc.Common_Class.Shared_Common_Pref;
+import com.hap.checkinproc.Interface.ApiClient;
+import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Nearby_Outlets;
-import com.hap.checkinproc.common.DatabaseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.ViewHolder> {
 
@@ -65,6 +75,7 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
     public void notifyData(JSONArray array) {
         this.array = array;
         notifyDataSetChanged();
+
     }
 
     @Override
@@ -77,7 +88,7 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
 
             String place_id = json.getString("place_id");
 
-           // DatabaseHandler db = new DatabaseHandler(context);
+            // DatabaseHandler db = new DatabaseHandler(context);
 
             Shared_Common_Pref shared_common_pref = new Shared_Common_Pref(context);
 
@@ -92,20 +103,20 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
             Retailer_Modal_List = gson.fromJson(outletserializableob, userType);
 
 
-            for (int i = 0; i < Retailer_Modal_List.size(); i++) {
+           /* for (int i = 0; i < Retailer_Modal_List.size(); i++) {
                 Retailer_Modal_List.get(i).setPlace_id("ChIJ6fBt_tVnUjoRVxxz1mgBipI");
                 if (Retailer_Modal_List.get(i).getPlace_id().equals(place_id)) {
-                    holder.btnAddToList.setText("Marked");
+                  //  holder.btnAddToList.setText("Marked");
                     holder.btnAddToList.setBackgroundResource(R.drawable.button_greenbg);
                     Log.v("ExploreAdapter: ", position + ":Marked");
                     break;
                 } else {
-                    holder.btnAddToList.setText("Direction");
+                   // holder.btnAddToList.setText("Direction");
                     holder.btnAddToList.setBackgroundResource(R.drawable.button_blueg);
                     Log.v("ExploreAdapter: ", position + ":Direction");
                 }
 
-            }
+            }*/
 
 
             if (json.has("photos")) {
@@ -144,6 +155,7 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
                         .into(holder.shopPhoto);
             }
 
+
         } catch (Exception e) {
 
 
@@ -168,6 +180,21 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
         });
 
 
+        holder.ivMarked.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    submitMarkedPlace(array.getJSONObject(position).getString("place_id"), position);
+
+
+                } catch (Exception e) {
+
+                }
+
+            }
+        });
+
+
        /* holder.btn_visit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -180,6 +207,153 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
 
     }
 
+    private void submitMarkedPlace(String placeId, int pos) {
+        Common_Class common_class = new Common_Class(context);
+        try {
+            if (common_class.isNetworkAvailable(context)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                JSONObject HeadItem = new JSONObject();
+
+                HeadItem.put("placeid", placeId);
+                HeadItem.put("lat", laty);
+                HeadItem.put("lng", lngy);
+                HeadItem.put("date", Common_Class.GetDate());
+                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
+
+                Call<ResponseBody> call = service.submitMarkedData(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+                                if (jsonObject.getBoolean("success")) {
+                                    common_class.showMsg(Nearby_Outlets.nearby_outlets, jsonObject.getString("Msg"));
+                                    array.remove(pos);
+                                    notifyDataSetChanged();
+                                }
+
+                            }
+
+                        } catch (Exception e) {
+                            Log.v("fail>>", e.getMessage());
+
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>", t.toString());
+
+
+                    }
+                });
+            } else {
+                Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+    }
+
+    public void removeMarkedPlaces() {
+
+        try {
+            Common_Class common_class = new Common_Class(context);
+            if (common_class.isNetworkAvailable(context)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                JSONObject HeadItem = new JSONObject();
+
+
+                HeadItem.put("lat", laty);
+                HeadItem.put("lng", lngy);
+                HeadItem.put("date", Common_Class.GetDate());
+                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
+
+                Call<ResponseBody> call = service.getMarkedData(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+                                if (jsonObject.getBoolean("success")) {
+
+                                    JSONArray filterData = array;
+
+                                    for (int j = 0; j < filterData.length(); j++) {
+
+                                        if (jsonObject.getString("Data").indexOf(filterData.getJSONObject(j).getString("place_id")) > 0) {
+
+                                            filterData.remove(j);
+
+                                        }
+
+
+                                    }
+
+                                    array = filterData;
+                                    notifyDataSetChanged();
+                                } else {
+                                    notifyDataSetChanged();
+                                }
+
+                            }
+
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>", t.toString());
+
+
+                    }
+                });
+            } else {
+                Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+
+    }
+
+
     @Override
     public int getItemCount() {
         return array.length();
@@ -190,7 +364,11 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
         ImageView shopPhoto;
         TextView txt_dr, txt_add;
         LinearLayout rl_popup;
-        Button btnAddToList;
+        // Button btnAddToList;
+
+        CardView cvParent;
+
+        ImageView btnAddToList, ivMarked;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -199,7 +377,9 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
             txt_add = (TextView) itemView.findViewById(R.id.ShopAddr);
             shopPhoto = (ImageView) itemView.findViewById(R.id.ShopPhoto);
             rl_popup = (LinearLayout) itemView.findViewById(R.id.rl_popup);
-            btnAddToList = (Button) itemView.findViewById(R.id.btnAddtoList);
+            btnAddToList = (ImageView) itemView.findViewById(R.id.btnAddtoList);
+            ivMarked = (ImageView) itemView.findViewById(R.id.ivMarked);
+            // cvParent=(CardView) itemView.findViewById(R.id.)
             // btn_route=(Button)itemView.findViewById(R.id.btn_route);
            /* btn_visit=(Button)itemView.findViewById(R.id.btn_visit);
             img_profile=(ImageView)itemView.findViewById(R.id.img_profile);*/
@@ -207,4 +387,6 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
 
         }
     }
+
+
 }

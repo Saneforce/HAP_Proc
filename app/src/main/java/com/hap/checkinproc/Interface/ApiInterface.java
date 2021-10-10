@@ -522,6 +522,14 @@ public interface ApiInterface {
     Call<ResponseBody> submitPayData(@Field("data") String body);
 
     @FormUrlEncoded
+    @POST("Db_v310.php?axn=save/placeid")
+    Call<ResponseBody> submitMarkedData(@Field("data") String body);
+
+    @FormUrlEncoded
+    @POST("Db_v310.php?axn=get/placeid")
+    Call<ResponseBody> getMarkedData(@Field("data") String body);
+
+    @FormUrlEncoded
     @POST("Db_v310.php?axn=get/prevorderqty")
     Call<ResponseBody> getPreOrderQty(@Field("data") String body);
 
