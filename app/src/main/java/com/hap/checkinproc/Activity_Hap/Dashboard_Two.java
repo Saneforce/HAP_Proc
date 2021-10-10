@@ -60,6 +60,7 @@ import retrofit2.Response;
 
 import static com.hap.checkinproc.Common_Class.Constants.Distributor_List;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -778,6 +779,8 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                     catch (JSONException ex){
 
                                     }
+                                    JSONArray jsonArray = db.getMasterData(Distributor_List);
+
                                     ApiClient.getClient().create(ApiInterface.class)
                                     .getDataArrayList("get/distributor",jParam.toString())
                                     .enqueue(new Callback<JsonArray>()
@@ -789,6 +792,9 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                                //         .save(Distributor_List, response.body().toString());
                                                 db.deleteMasterData(Distributor_List);
                                                 db.addMasterData(Distributor_List,response.body().toString());
+                                                if(jsonArray.length()<1){
+                                                    startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
+                                                }
                                             }
                                             catch (Exception e) {
 
@@ -801,7 +807,9 @@ public class Dashboard_Two extends AppCompatActivity implements View.OnClickList
                                             Log.d(Tag, String.valueOf(t));
                                         }
                                     });
-                                    startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
+                                    if(jsonArray.length()>0) {
+                                        startActivity(new Intent(getApplicationContext(), SFA_Activity.class));
+                                    }
                                     /*Shared_Common_Pref.Sync_Flag = "0";
                                     com.hap.checkinproc.Common_Class.Common_Class common_class = new com.hap.checkinproc.Common_Class.Common_Class(Dashboard_Two.this);
 

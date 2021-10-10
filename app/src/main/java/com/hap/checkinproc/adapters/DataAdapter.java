@@ -152,13 +152,20 @@ public class DataAdapter extends RecyclerView.Adapter<DataAdapter.FruitViewHolde
         return new Filter() {
             @Override
             protected FilterResults performFiltering(CharSequence charSequence) {
-                String charString = charSequence.toString();
+                String charString = charSequence.toString().toLowerCase().trim().replaceAll("\\s", "");
                 List<Common_Model> filteredList = new ArrayList<>();
+                List<Common_Model> filteredany = new ArrayList<>();
                 for (Common_Model row : contactList) {
-                    if (row.getName().toLowerCase().trim().replaceAll("\\s", "").contains(charString.toLowerCase().trim().replaceAll("\\s", ""))) {
+                    String sName=row.getName().toLowerCase().trim().replaceAll("\\s", "");
+                    String getAddress = row.getAddress().toLowerCase().trim().replaceAll("\\s", "");
+                    String getPhone = row.getPhone().toLowerCase().trim().replaceAll("\\s", "");
+                    if ((";"+sName).contains(";"+charString)||(";"+getAddress).contains(";"+charString)||(";"+getPhone).contains(";"+charString)) {
                         filteredList.add(row);
+                    } else if (sName.contains(charString)|| getAddress.contains(charString)||getPhone.contains(charString)) {
+                        filteredany.add(row);
                     }
                 }
+                filteredList.addAll(filteredany);
                 contactListFiltered = filteredList;
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = contactListFiltered;

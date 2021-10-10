@@ -957,7 +957,8 @@ public void getSalesCounts()
                 Model_Pojo = new Common_Model(id, name, flag);
                 if (listType.equals(Constants.Distributor_List)) {
                     String Add2 = jsonObject1.optString("Addr2");
-                    Model_Pojo = new Common_Model( name,id, flag,Add2,"");
+                    String Mob = jsonObject1.optString("Mobile");
+                    Model_Pojo = new Common_Model( name,id, flag,Add2,Mob);
                     distributor_master.add(Model_Pojo);
                 } else if (listType.equals(Constants.Rout_List)) {
                     Log.e("STOCKIST_CODE", jsonObject1.optString("stockist_code"));
