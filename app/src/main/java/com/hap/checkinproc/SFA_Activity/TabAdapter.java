@@ -40,10 +40,10 @@ public class TabAdapter extends FragmentStatePagerAdapter {
             fragment = new AllDataFragment(Retailer_Modal_ListFilter, position);
         } else if (position == 1) {
             OutletFilter("2");
-            fragment = new Dashboard_Route.PendingFragment(Retailer_Modal_ListFilter, position);
+            fragment = new AllDataFragment(Retailer_Modal_ListFilter, position);
         } else if (position == 2) {
             OutletFilter("3");
-            fragment = new CompleteFragment(Retailer_Modal_ListFilter, position);
+            fragment = new AllDataFragment(Retailer_Modal_ListFilter, position);
         }
         return fragment;
     }

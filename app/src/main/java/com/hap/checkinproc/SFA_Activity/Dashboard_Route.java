@@ -422,41 +422,6 @@ public class Dashboard_Route extends AppCompatActivity implements Main_Model.Mas
 
             createTabFragment();
 
-            viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-
-                @Override
-                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-                    Log.e("viewPager:", "onPageScrolled:" + position);
-                }
-
-                @Override
-                public void onPageSelected(int position) {
-                    scrollPosition = position;
-                    Log.e("viewPager:", "onPageSelected:" + position);
-
-                    // OutletFilter("t", String.valueOf(position + 1), false);
-
-
-        //                    adapter = new TabAdapter(getSupportFragmentManager(), tabLayout, Retailer_Modal_ListFilter);
-        //                    viewPager.setAdapter(adapter);
-        //                    tabLayout.setupWithViewPager(viewPager);
-
-
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                    if (state == ViewPager.SCROLL_STATE_IDLE) {
-                        // OutletFilter("t", String.valueOf(scrollPosition));
-                        //adapter.notifyDataSetChanged();
-
-
-                        // Toast.makeText(getApplicationContext(), "" + scrollPosition, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
         } catch (Exception e) {
             Log.e("Retailor List:ex ", e.getMessage());
 
@@ -486,26 +451,31 @@ public void getSalesCounts()
         apiInterface.getDataArrayList("get/salessumry",jParam.toString()).enqueue(new Callback<JsonArray>() {
             @Override
             public void onResponse(Call<JsonArray> call, Response<JsonArray> response) {
-                JsonArray jRes=response.body();
-                if(jRes.size()>0){
-                    JsonObject jItm=jRes.get(0).getAsJsonObject();
-                   double invVal=  jItm.get("InvVal").getAsDouble();
-                    smryOrd.setText(jItm.get("Orders").getAsString());
-                    smryNOrd.setText(jItm.get("NOrders").getAsString());
-                    smryNOOrd.setText(jItm.get("NoOrder").getAsString());
-                    smryInv.setText(jItm.get("InvCnt").getAsString());
-                    smryInvVal.setText("₹" + new DecimalFormat("##0.00").format(invVal));
-                }else{
+                try {
+                    JsonArray jRes = response.body();
+                    if (jRes.size() > 0) {
+                        JsonObject jItm = jRes.get(0).getAsJsonObject();
+                        double invVal = jItm.get("InvVal").getAsDouble();
+                        smryOrd.setText(jItm.get("Orders").getAsString());
+                        smryNOrd.setText(jItm.get("NOrders").getAsString());
+                        smryNOOrd.setText(jItm.get("NoOrder").getAsString());
+                        smryInv.setText(jItm.get("InvCnt").getAsString());
+                        smryInvVal.setText("₹" + new DecimalFormat("##0.00").format(invVal));
+                    } else {
 
-                    smryOrd.setText("0");
-                    smryNOrd.setText("0");
-                    smryNOOrd.setText("0");
-                    smryInv.setText("0");
-                    smryInvVal.setText("₹0.00");
+                        smryOrd.setText("0");
+                        smryNOrd.setText("0");
+                        smryNOOrd.setText("0");
+                        smryInv.setText("0");
+                        smryInvVal.setText("₹0.00");
+                    }
+
+                    updSale = false;
+                    //if(StopedUpdate==false) updateSales();
                 }
+                catch (Exception e){
 
-                updSale=false;
-                //if(StopedUpdate==false) updateSales();
+                }
             }
 
             @Override
@@ -1109,19 +1079,6 @@ public void getSalesCounts()
 
 
             return inflater.inflate(R.layout.fragment_tab_outlet, container, false);
-        }
-
-        @Override
-        public void setUserVisibleHint(boolean isVisibleToUser) {
-            super.setUserVisibleHint(isVisibleToUser);
-            if (isVisibleToUser) {
-                // Refresh your fragment here
-                //   getFragmentManager().beginTransaction().detach(this).attach(this).commit();
-
-                // updateData();
-
-
-            }
         }
 
 

@@ -95,4 +95,6 @@
     <string name="map_api_key">AIzaSyAER5hPywUW-5DRlyKJZEfsqgZlaqytxoU</string>
     <string name="dash">-</string>
     <string name="rs">\u20B9</string>
+    <string name="outstanding_amt">Outstanding Amount</string>
+    <string name="retailer_outstand_hint">Enter the Outstanding Amount</string>
 </resources>

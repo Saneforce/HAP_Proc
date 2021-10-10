@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -24,7 +25,6 @@ import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.R;
 import com.hap.checkinproc.SFA_Activity.Nearby_Outlets;
-import com.hap.checkinproc.SFA_Activity.PaymentActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -75,6 +75,7 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
     public void notifyData(JSONArray array) {
         this.array = array;
         notifyDataSetChanged();
+
     }
 
     @Override
@@ -154,6 +155,7 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
                         .into(holder.shopPhoto);
             }
 
+
         } catch (Exception e) {
 
 
@@ -182,7 +184,9 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
             @Override
             public void onClick(View v) {
                 try {
-                    submitMarkedPlace(json.getString("place_id"));
+                    submitMarkedPlace(array.getJSONObject(position).getString("place_id"), position);
+
+
                 } catch (Exception e) {
 
                 }
@@ -203,7 +207,7 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
 
     }
 
-    private void submitMarkedPlace(String placeId) {
+    private void submitMarkedPlace(String placeId, int pos) {
         Common_Class common_class = new Common_Class(context);
         try {
             if (common_class.isNetworkAvailable(context)) {
@@ -211,11 +215,11 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
 
                 JSONObject HeadItem = new JSONObject();
 
-                HeadItem.put("placeId", placeId);
-                HeadItem.put("lat", Shared_Common_Pref.Outletlat);
-                HeadItem.put("lng", Shared_Common_Pref.Outletlong);
+                HeadItem.put("placeid", placeId);
+                HeadItem.put("lat", laty);
+                HeadItem.put("lng", lngy);
                 HeadItem.put("date", Common_Class.GetDate());
-
+                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
 
                 Call<ResponseBody> call = service.submitMarkedData(HeadItem.toString());
                 call.enqueue(new Callback<ResponseBody>() {
@@ -236,12 +240,15 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
                                 JSONObject jsonObject = new JSONObject(is.toString());
 
                                 if (jsonObject.getBoolean("success")) {
-
+                                    common_class.showMsg(Nearby_Outlets.nearby_outlets, jsonObject.getString("Msg"));
+                                    array.remove(pos);
+                                    notifyDataSetChanged();
                                 }
 
                             }
 
                         } catch (Exception e) {
+                            Log.v("fail>>", e.getMessage());
 
 
                         }
@@ -264,6 +271,88 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
         }
     }
 
+    public void removeMarkedPlaces() {
+
+        try {
+            Common_Class common_class = new Common_Class(context);
+            if (common_class.isNetworkAvailable(context)) {
+                ApiInterface service = ApiClient.getClient().create(ApiInterface.class);
+
+                JSONObject HeadItem = new JSONObject();
+
+
+                HeadItem.put("lat", laty);
+                HeadItem.put("lng", lngy);
+                HeadItem.put("date", Common_Class.GetDate());
+                HeadItem.put("divCode", Shared_Common_Pref.Div_Code);
+
+                Call<ResponseBody> call = service.getMarkedData(HeadItem.toString());
+                call.enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        InputStreamReader ip = null;
+                        StringBuilder is = new StringBuilder();
+                        String line = null;
+                        try {
+                            if (response.isSuccessful()) {
+                                ip = new InputStreamReader(response.body().byteStream());
+                                BufferedReader bf = new BufferedReader(ip);
+                                while ((line = bf.readLine()) != null) {
+                                    is.append(line);
+                                    Log.v("Res>>", is.toString());
+                                }
+
+                                JSONObject jsonObject = new JSONObject(is.toString());
+
+                                if (jsonObject.getBoolean("success")) {
+
+                                    JSONArray filterData = array;
+
+                                    for (int j = 0; j < filterData.length(); j++) {
+
+                                        if (jsonObject.getString("Data").indexOf(filterData.getJSONObject(j).getString("place_id")) > 0) {
+
+                                            filterData.remove(j);
+
+                                        }
+
+
+                                    }
+
+                                    array = filterData;
+                                    notifyDataSetChanged();
+                                } else {
+                                    notifyDataSetChanged();
+                                }
+
+                            }
+
+
+                        } catch (Exception e) {
+
+                            Log.v("fail>>", e.getMessage());
+
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                        Log.v("fail>>", t.toString());
+
+
+                    }
+                });
+            } else {
+                Toast.makeText(context, "No Internet Connection", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.v("fail>>", e.getMessage());
+
+
+        }
+
+    }
+
 
     @Override
     public int getItemCount() {
@@ -277,6 +366,8 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
         LinearLayout rl_popup;
         // Button btnAddToList;
 
+        CardView cvParent;
+
         ImageView btnAddToList, ivMarked;
 
         public ViewHolder(View itemView) {
@@ -288,6 +379,7 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
             rl_popup = (LinearLayout) itemView.findViewById(R.id.rl_popup);
             btnAddToList = (ImageView) itemView.findViewById(R.id.btnAddtoList);
             ivMarked = (ImageView) itemView.findViewById(R.id.ivMarked);
+            // cvParent=(CardView) itemView.findViewById(R.id.)
             // btn_route=(Button)itemView.findViewById(R.id.btn_route);
            /* btn_visit=(Button)itemView.findViewById(R.id.btn_visit);
             img_profile=(ImageView)itemView.findViewById(R.id.img_profile);*/
@@ -295,4 +387,6 @@ public class ExploreMapAdapter extends RecyclerView.Adapter<ExploreMapAdapter.Vi
 
         }
     }
+
+
 }

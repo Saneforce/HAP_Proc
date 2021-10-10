@@ -18,6 +18,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -44,6 +45,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.hap.checkinproc.Activity_Hap.Dashboard;
 import com.hap.checkinproc.Activity_Hap.SFA_Activity;
+import com.hap.checkinproc.Interface.AlertBox;
 import com.hap.checkinproc.Interface.ApiClient;
 import com.hap.checkinproc.Interface.ApiInterface;
 import com.hap.checkinproc.Interface.UpdateResponseUI;
@@ -597,6 +599,20 @@ public class Common_Class {
         return pickDate;
     }
 
+    public void commonDialog(Activity activity, Class moveActivity) {
+        AlertDialogBox.showDialog(activity, "HAP Check-In", "Do you confirm to cancel Cart?", "Yes", "No", false, new AlertBox() {
+            @Override
+            public void PositiveMethod(DialogInterface dialog, int id) {
+                CommonIntentwithFinish(moveActivity);
+            }
+
+            @Override
+            public void NegativeMethod(DialogInterface dialog, int id) {
+
+            }
+        });
+    }
+
 
 //    public boolean checkValueStore(Activity activity, String key) {
 //        DatabaseHandler db = new DatabaseHandler(activity);
@@ -814,6 +830,7 @@ public class Common_Class {
         private boolean isInRange(int a, int b, int c) {
             return b > a ? c >= a && c <= b : c >= b && c <= a;
         }
+
     }
 
 
