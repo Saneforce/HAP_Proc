@@ -32,6 +32,14 @@
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/C10dp" />
+        <LinearLayout
+            android:id="@+id/undrCate"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/colorPrimaryDark"
+            android:visibility="gone"/>
+
     </LinearLayout>
 
 </RelativeLayout>

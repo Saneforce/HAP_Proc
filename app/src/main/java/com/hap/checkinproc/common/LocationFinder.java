@@ -124,7 +124,10 @@ public class LocationFinder {
             Location location = locationList.get(locationList.size() - 1);
             if(running<timeout) mlocEvents.OnLocationRecived(location);
             Log.i("MapsActivity", "Location: " + location.getLatitude() + " " + location.getLongitude());
-            mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+            try
+            {
+                mFusedLocationClient.removeLocationUpdates(mLocationCallback);
+            }catch (Exception e){}
             mFusedLocationClient=null;
             handler.removeCallbacks(runnable);
         }

@@ -147,12 +147,6 @@
                             android:layout_weight="1"
                             android:orientation="vertical">
                             <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="Order"
-                                android:textSize="9sp"/>
-                            <TextView
                                 android:id="@+id/smryOrd"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -162,6 +156,13 @@
                                 android:textStyle="bold"
                                 android:textColor="@color/colorPrimaryDark"
                                 android:textSize="16sp"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:text="Order"
+                                android:textSize="9sp"/>
+
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="@dimen/C2dp"
@@ -174,12 +175,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="New Order"
-                                android:textSize="9sp"/>
                             <TextView
                                 android:id="@+id/smryNOrd"
                                 android:layout_width="match_parent"
@@ -190,6 +185,12 @@
                                 android:textColor="@color/lightBlueDark"
                                 android:textAlignment="center"
                                 android:textSize="16sp"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:text="New Order"
+                                android:textSize="9sp"/>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="@dimen/C2dp"
@@ -202,12 +203,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
                             android:orientation="vertical">
-                            <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="No Order"
-                                android:textSize="9sp"/>
                             <TextView
                                 android:id="@+id/smryNOOrd"
                                 android:layout_width="match_parent"
@@ -218,6 +213,12 @@
                                 android:textColor="@color/Extended"
                                 android:textAlignment="center"
                                 android:textSize="16sp"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:text="No Order"
+                                android:textSize="9sp"/>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="@dimen/C2dp"
@@ -231,12 +232,6 @@
                             android:layout_weight="1"
                             android:orientation="vertical">
                             <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="Invoice"
-                                android:textSize="9sp"/>
-                            <TextView
                                 android:id="@+id/smryInv"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -246,6 +241,12 @@
                                 android:textColor="@color/colorPrimaryDark"
                                 android:textAlignment="center"
                                 android:textSize="16sp"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:text="Invoice"
+                                android:textSize="9sp"/>
                         </LinearLayout>
                         <LinearLayout
                             android:layout_width="@dimen/C2dp"
@@ -258,12 +259,6 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
                             <TextView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:textAlignment="center"
-                                android:text="Value"
-                                android:textSize="9sp"/>
-                            <TextView
                                 android:id="@+id/smryInvVal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -273,6 +268,12 @@
                                 android:textColor="@color/colorPrimaryDark"
                                 android:textAlignment="center"
                                 android:textSize="16sp"/>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAlignment="center"
+                                android:text="Value"
+                                android:textSize="9sp"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="1dp"
@@ -302,7 +303,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:padding="@dimen/C5dp"
-                                app:tint="@color/colorPrimary"
+                                app:tint="@color/colorAccent"
                                 android:src="@drawable/report"/>
                         </LinearLayout>
                     </LinearLayout>

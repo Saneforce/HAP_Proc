@@ -916,7 +916,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
-            public LinearLayout gridcolor;
+            public LinearLayout gridcolor,undrCate;
             TextView icon;
             ImageView ivCategoryIcon;
 
@@ -927,7 +927,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                 icon = view.findViewById(R.id.textView);
                 gridcolor = view.findViewById(R.id.gridcolor);
                 ivCategoryIcon = view.findViewById(R.id.ivCategoryIcon);
-
+                undrCate=view.findViewById(R.id.undrCate);
 
             }
         }
@@ -978,6 +978,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
                         if (pholder != null) {
                             pholder.icon.setTextColor(getResources().getColor(R.color.grey_500));
                             pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                            pholder.undrCate.setVisibility(View.GONE);
                         }
                         pholder = holder;
                         selectedPos = holder.getAdapterPosition();
@@ -985,6 +986,7 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                         holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                         holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
+                        holder.undrCate.setVisibility(View.VISIBLE);
                     }
                 });
 
@@ -993,6 +995,8 @@ public class Order_Category_Select extends AppCompatActivity implements View.OnC
 
                     holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                     holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
+                    holder.undrCate.setVisibility(View.VISIBLE);
+                    pholder = holder;
                 } else {
                     holder.icon.setTextColor(getResources().getColor(R.color.grey_500));
                     holder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));

@@ -118,7 +118,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     private TextView tvBillTotItem, tvPayMode, tvDate, tvOutStanding, tvTotOutstanding, tvInvAmt, tvPayAmt;
     private double taxVal, totCGST, totSGST, totIGST;
 
-    RelativeLayout rlPayment, rlCredit, rlCash;
+    RelativeLayout rlPayment;
 
     CheckBox cbCredit, cbCash;
     LinearLayout llPayMode;
@@ -126,7 +126,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
     private List<Common_Model> payList = new ArrayList<>();
 
     String orderId = "";
-    private LinearLayout rlAddProduct;
+    private LinearLayout rlAddProduct,rlCredit, rlCash;
     private int outstandAmt;
     private double payAmt;
 
@@ -710,6 +710,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         findViewById(R.id.rlSearchParent).setVisibility(View.GONE);
         findViewById(R.id.llBillHeader).setVisibility(View.VISIBLE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.VISIBLE);
+        rlAddProduct.setVisibility(View.VISIBLE);
         lin_gridcategory.setVisibility(View.GONE);
         takeorder.setText("SUBMIT");
 
@@ -947,7 +948,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
         public class MyViewHolder extends RecyclerView.ViewHolder {
 
-            public LinearLayout gridcolor;
+            public LinearLayout gridcolor,undrCate;
             TextView icon;
             ImageView ivCategoryIcon;
 
@@ -958,6 +959,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                 icon = view.findViewById(R.id.textView);
                 gridcolor = view.findViewById(R.id.gridcolor);
                 ivCategoryIcon = view.findViewById(R.id.ivCategoryIcon);
+                undrCate=view.findViewById(R.id.undrCate);
 
 
             }
@@ -1010,6 +1012,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
                         if (pholder != null) {
                             pholder.icon.setTextColor(getResources().getColor(R.color.grey_500));
                             pholder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
+                            pholder.undrCate.setVisibility(View.GONE);
                         }
                         pholder = holder;
                         selectedPos = holder.getAdapterPosition();
@@ -1017,6 +1020,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                         holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                         holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
+                        holder.undrCate.setVisibility(View.VISIBLE);
                     }
                 });
 
@@ -1025,6 +1029,8 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
 
                     holder.icon.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
                     holder.icon.setTypeface(Typeface.DEFAULT_BOLD);
+                    holder.undrCate.setVisibility(View.VISIBLE);
+                    pholder = holder;
                 } else {
                     holder.icon.setTextColor(getResources().getColor(R.color.grey_500));
                     holder.icon.setTypeface(Typeface.defaultFromStyle(Typeface.NORMAL));
@@ -1607,6 +1613,7 @@ public class Invoice_Category_Select extends AppCompatActivity implements View.O
         findViewById(R.id.rlCategoryItemSearch).setVisibility(View.GONE);
         findViewById(R.id.llBillHeader).setVisibility(View.GONE);
         findViewById(R.id.llPayNetAmountDetail).setVisibility(View.GONE);
+        rlAddProduct.setVisibility(View.GONE);
         findViewById(R.id.cdFreeQtyParent).setVisibility(View.GONE);
         takeorder.setText("PROCEED TO CART");
         showOrderItemList(selectedPos, "");
